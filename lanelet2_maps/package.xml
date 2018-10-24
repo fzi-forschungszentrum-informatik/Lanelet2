@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lanelet2_maps</name>
+  <version>0.8.0</version>
+  <description>Example maps in the lanelet2-format</description>
+
+  <license>BSD</license>
+  <maintainer email="fabian.poggenhans@kit.edu">Fabian Poggenhans</maintainer>
+  <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
+  <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mrt_cmake_modules</build_depend>
+  <exec_depend>lanelet2_core</exec_depend>
+</package>

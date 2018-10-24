@@ -1,0 +1,113 @@
+#include <Forward.h>
+#include <gtest/gtest.h>
+#include <lanelet2_core/LaneletMap.h>
+#include "RoutingGraph.h"
+#include "RoutingGraphContainer.h"
+#include "test_routing_map.h"
+
+using namespace lanelet;
+using namespace lanelet::routing;
+using namespace lanelet::routing::tests;
+
+class RoutingGraphContainerTest : public RoutingGraphTest {
+ public:
+  RoutingGraphContainerTest() {
+    std::vector<RoutingGraphConstPtr> graphs{testData.vehicleGraph, testData.pedestrianGraph};
+    container = std::make_unique<RoutingGraphContainer>(graphs);
+  }
+
+ public:
+  RoutingGraphContainerUPtr container;
+};
+
+class RouteRoutingGraphContainerTest : public RoutingGraphContainerTest {
+ public:
+  void getAndCheckRoute(const RoutingGraphConstPtr& graph, Id from, Id to, routing::RoutingCostId routingCostId = 0) {
+    ASSERT_NE(graph->passableMap()->laneletLayer.find(from), graph->passableMap()->laneletLayer.end());
+    ConstLanelet fromLanelet{*graph->passableMap()->laneletLayer.find(from)};
+    ASSERT_NE(graph->passableMap()->laneletLayer.find(to), graph->passableMap()->laneletLayer.end());
+    ConstLanelet toLanelet{*graph->passableMap()->laneletLayer.find(to)};
+    Optional<Route> tempRoute = graph->getRoute(fromLanelet, toLanelet, routingCostId);
+    ASSERT_TRUE(!!tempRoute);
+    route = std::make_unique<Route>(std::move(*tempRoute));
+  }
+
+ public:
+  std::unique_ptr<Route> route;
+};
+
+TEST_F(RoutingGraphContainerTest, ConflictingInGraph) {  // NOLINT
+  ConstLanelet pedestrianLanelet{*laneletMap->laneletLayer.find(2031)};
+  ConstLanelets conflictingVehicle{container->conflictingInGraph(pedestrianLanelet, 0)};
+  ASSERT_EQ(conflictingVehicle.size(), 1);
+  EXPECT_EQ(conflictingVehicle[0], *laneletMap->laneletLayer.find(2020));
+
+  ConstLanelets conflictingPedestrian{container->conflictingInGraph(pedestrianLanelet, 1)};
+  EXPECT_EQ(conflictingPedestrian.size(), 0);
+}
+
+TEST_F(RoutingGraphContainerTest, ConflictingInGraphs) {  // NOLINT
+  ConstLanelet pedestrianLanelet{*laneletMap->laneletLayer.find(2031)};
+  RoutingGraphContainer::ConflictingInGraphs result{container->conflictingInGraphs(pedestrianLanelet)};
+  ASSERT_EQ(result.size(), 2);
+
+  ConstLanelets conflictingVehicle{result[0].second};
+  ASSERT_EQ(conflictingVehicle.size(), 1);
+  EXPECT_EQ(conflictingVehicle[0], *laneletMap->laneletLayer.find(2020));
+
+  ConstLanelets conflictingPedestrian{result[1].second};
+  EXPECT_EQ(conflictingPedestrian.size(), 0);
+}
+
+TEST_F(RouteRoutingGraphContainerTest, ConflictingOfRouteInGraph) {  // NOLINT
+  getAndCheckRoute(container->routingGraphs()[0], 2017, 2024);
+  ConstLanelets conflictingVehicle{container->conflictingOfRouteInGraph(route.get(), 0)};
+  EXPECT_EQ(conflictingVehicle.size(), 2);
+
+  ConstLanelets conflictingPedestrian{container->conflictingOfRouteInGraph(route.get(), 1)};
+  EXPECT_EQ(conflictingPedestrian.size(), 1);
+}
+
+TEST_F(RouteRoutingGraphContainerTest, ConflictingOfRouteInGraphs) {  // NOLINT
+  getAndCheckRoute(container->routingGraphs()[0], 2017, 2024);
+  RoutingGraphContainer::ConflictingInGraphs result{container->conflictingOfRouteInGraphs(route.get(), 0)};
+  ASSERT_EQ(result.size(), 2);
+
+  ConstLanelets conflictingVehicle{result[0].second};
+  EXPECT_EQ(conflictingVehicle.size(), 2);
+
+  ConstLanelets conflictingPedestrian{result[1].second};
+  EXPECT_EQ(conflictingPedestrian.size(), 1);
+}
+
+TEST_F(RoutingGraphContainerTest, ConflictingInGraph3dFits) {  // NOLINT
+  ConstLanelet bridgeLanelet{*laneletMap->laneletLayer.find(2032)};
+  ConstLanelets conflictingVehicle{container->conflictingInGraph(bridgeLanelet, 0, 2.)};
+  EXPECT_EQ(conflictingVehicle.size(), 0);
+
+  conflictingVehicle = container->conflictingInGraph(lanelets.find(2005)->second, 0, 2.);
+  ASSERT_EQ(conflictingVehicle.size(), 1);
+  EXPECT_TRUE(conflictingVehicle.front() == lanelets.find(2006)->second);
+
+  conflictingVehicle = container->conflictingInGraph(lanelets.find(2006)->second, 0, 2.);
+  ASSERT_EQ(conflictingVehicle.size(), 1);
+  EXPECT_TRUE(conflictingVehicle.front() == lanelets.find(2005)->second);
+
+  ConstLanelets conflictingPedestrian{container->conflictingInGraph(bridgeLanelet, 1, 2.)};
+  EXPECT_EQ(conflictingPedestrian.size(), 0);
+}
+
+TEST_F(RoutingGraphContainerTest, ConflictingInGraph3dDoesntFit) {  // NOLINT
+  ConstLanelet bridgeLanelet{*laneletMap->laneletLayer.find(2032)};
+  ConstLanelets conflictingVehicle{container->conflictingInGraph(bridgeLanelet, 0, 4.)};
+  EXPECT_EQ(conflictingVehicle.size(), 2);
+
+  conflictingVehicle = container->conflictingInGraph(lanelets.find(2005)->second, 0, 4.);
+  EXPECT_EQ(conflictingVehicle.size(), 2);
+
+  conflictingVehicle = container->conflictingInGraph(lanelets.find(2006)->second, 0, 4.);
+  EXPECT_EQ(conflictingVehicle.size(), 2);
+
+  ConstLanelets conflictingPedestrian{container->conflictingInGraph(bridgeLanelet, 1, 4.)};
+  EXPECT_EQ(conflictingPedestrian.size(), 0);
+}

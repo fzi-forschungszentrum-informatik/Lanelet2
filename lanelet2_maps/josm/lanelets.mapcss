@@ -1,0 +1,237 @@
+canvas {
+    background-color: #ffffff;
+    text-color: #ffffff;
+    error-color: #ffffff;
+}
+
+way >[index=1] node
+{
+    symbol-shape: square;
+	symbol-stroke-color: green;
+	symbol-fill-color: green;
+	symbol-stroke-width: 0.05;
+}
+
+way >[index=-1] node
+{
+    symbol-shape: square;
+	symbol-stroke-color: green;
+	symbol-fill-color: green;
+	symbol-stroke-width: 0.05;
+}
+
+way {
+    font-size: 15;
+    text-color: white;
+    text-halo-color: black;
+    text-halo-radius: 5;
+}
+
+relation > way::foo{
+    width: 4;
+    opacity: 1;
+}
+
+relation >[ref_line] way[type=stop] {  
+    width: 8; 
+    color: red; 
+    opacity: 1; 
+}
+
+relation >[ref_line] way[type!=stop] {  
+    width: 6; 
+    color: orange; 
+    opacity: 1; 
+}
+
+relation[type=regulatory_element][subtype=speed_limit] >[refers] way[type=traffic_sign]
+{
+	width: 15;
+	color: green;
+}
+way[type=traffic_sign][subtype=de274] >[index=2] node
+{
+    text: "type";
+	icon-height: 30;
+	z-index: 5;
+    icon-image: "style_images/274-zone-30.gif";
+}
+
+way[type=traffic_sign][subtype=de274-53] >[index=2] node
+{
+    text: "type";
+	icon-height: 30;
+	z-index: 5;
+    icon-image: "style_images/274-53-tempolimit-30.png";
+}
+way[type=traffic_sign][subtype=de274-55] >[index=2] node
+{
+    text: "type";
+	icon-height: 30;
+	z-index: 5;
+    icon-image: "style_images/274-55-tempolimit-50.png";
+}
+way[type=traffic_sign][subtype=de274-56] >[index=2] node
+{
+    text: "type";
+	icon-height: 30;
+	z-index: 5;
+    icon-image: "style_images/274-56-tempolimit-60.png";
+}
+way[type=traffic_sign][subtype=de274-57] >[index=2] node
+{
+    text: "type";
+	icon-height: 30;
+	z-index: 5;
+    icon-image: "style_images/274-57-tempolimit-70.png";
+}
+way[type=traffic_sign][subtype=de274-60] >[index=2] node
+{
+    text: "type";
+	icon-height: 30;
+	z-index: 5;
+    icon-image: "style_images/274-53-tempolimit-100.png";
+}
+way[type=traffic_sign][subtype=de274-62] >[index=2] node
+{
+    text: "type";
+	icon-height: 30;
+	z-index: 5;
+    icon-image: "style_images/274-53-tempolimit-120.png";
+}
+way[type=traffic_sign][subtype=de205] >[index=2] node {
+	icon-height: 40;
+	z-index: 5;
+    icon-image: "style_images/205-vorfahrt-gewaehren.png";
+}
+way[type=traffic_sign][subtype=de202]  >[index=2] node {
+	icon-height: 40;
+	z-index: 5;
+    icon-image: "style_images/202-einfahrt-verboten.gif";
+}
+way[type=traffic_sign][subtype=de301] >[index=2] node {
+	icon-height: 40;
+	z-index: 5;
+    icon-image: "style_images/301-vorfahrt.png";
+}
+way[type=traffic_sign][subtype=de306] >[index=2] node {
+	icon-height: 40;
+	z-index: 5;
+    icon-image: "style_images/306-vorfahrtsstrasse.gif";
+}
+
+
+relation[type=regulatory_element][subtype=speed_limit] >[refers] way[type=traffic_light]
+{
+	width: 15;
+	color: red;
+}
+way[type=traffic_light] >[index=2] node {
+	icon-height: 40;
+	z-index: 5;
+    icon-image: "style_images/traffic_light.png";
+}
+
+area[subtype=parking] 
+{
+    fill-color: blue;
+}
+area[subtype=exit] 
+{
+    fill-color: yellow;
+}
+area[subtype=traffic_island]
+{
+    text: "subtype";
+    fill-color: red;
+}
+area[subtype=keepout]
+{
+    fill-color: red;
+}
+area[subtype=building]
+{
+    fill-color: black;
+}
+area[subtype=walkway]
+{
+    fill-color: gray;
+}
+
+area[subtype=vegetation] {
+    fill-color: green;
+}
+
+area[subtype=road_border]
+{
+    text: "subtype";
+	width: 6;
+	color: green;
+}
+
+area[subtype=zig-zag]
+{
+	text: "subtype";
+	width: 3;
+	color: orange;
+	fill-color: orange;
+}
+area[subtype=keepout]
+{
+	text: "subtype";
+	width: 4;
+	color: red;
+	fill-color: darkred;
+}
+area[subtype=zebra]
+{
+	text: "subtype";
+	width: 7;
+	color: darkgreen;
+	fill-color: darkgreen;
+}
+
+area[subtype=building]
+{
+	text: "subtype";
+	width: 7;
+	color: black;
+	fill-color: black;
+}
+
+
+relation >[right] way::relation_right {
+    text: eval("-------------- right --------------------");
+    text-offset: -15;
+}
+
+relation >[right] way::foo {
+    color: green;
+}
+
+relation >[left] way::foo {
+    color: blue;
+}
+
+relation >[left] way::relation_left {
+    text: eval("-------------- left --------------------");
+    text-offset: 15;
+}
+
+
+relation[one_way=no] >[left] way::foo {
+    width: 6;
+}
+relation[one_way=no] >[right] way::foo {
+    width: 6;
+}
+
+area[subtype=vegetation] {
+    fill-color: green;
+}
+
+area[subtype=walkway] {
+    fill-color: gray;
+}
+
+

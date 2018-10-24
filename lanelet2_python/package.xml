@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lanelet2_python</name>
+  <version>0.8.0</version>
+  <description>Python bindings for lanelet2</description>
+
+  <license>BSD</license>
+  <maintainer email="fabian.poggenhans@kit.edu">Fabian Poggenhans</maintainer>
+  <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
+  <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mrt_cmake_modules</build_depend>
+  <test_depend>gtest</test_depend>
+  <depend>lanelet2_core</depend>
+  <depend>lanelet2_io</depend>
+  <depend>lanelet2_routing</depend>
+  <depend>lanelet2_traffic_rules</depend>
+  <depend>lanelet2_projection</depend>
+  <depend>boost-python</depend>
+  <export>
+  </export>
+</package>

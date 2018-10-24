@@ -1,0 +1,354 @@
+[
+  {
+    "description": "object destroyed immediately after creation; did you mean to name the object?", 
+    "check_name": "misc-unused-raii", 
+    "location": {
+      "path": "python_api/projection.cpp", 
+      "lines": {
+        "begin": 10, 
+        "end": 10
+      }
+    }, 
+    "fingerprint": "a3ca5c285124ed783173b1f44bab0076", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "object destroyed immediately after creation; did you mean to name the object?", 
+    "check_name": "misc-unused-raii", 
+    "location": {
+      "path": "python_api/routing.cpp", 
+      "lines": {
+        "begin": 54, 
+        "end": 54
+      }
+    }, 
+    "fingerprint": "d7de0ccce2a157bd78fb0b71032309a3", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "object destroyed immediately after creation; did you mean to name the object?", 
+    "check_name": "misc-unused-raii", 
+    "location": {
+      "path": "python_api/routing.cpp", 
+      "lines": {
+        "begin": 58, 
+        "end": 58
+      }
+    }, 
+    "fingerprint": "9ab7b6a0ea215db9f91dedb1fa096901", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "object destroyed immediately after creation; did you mean to name the object?", 
+    "check_name": "misc-unused-raii", 
+    "location": {
+      "path": "python_api/routing.cpp", 
+      "lines": {
+        "begin": 64, 
+        "end": 64
+      }
+    }, 
+    "fingerprint": "883cbbb11148baef96640bb86d760ca2", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "object destroyed immediately after creation; did you mean to name the object?", 
+    "check_name": "misc-unused-raii", 
+    "location": {
+      "path": "python_api/projection.cpp", 
+      "lines": {
+        "begin": 10, 
+        "end": 10
+      }
+    }, 
+    "fingerprint": "a3ca5c285124ed783173b1f44bab0076", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "object destroyed immediately after creation; did you mean to name the object?", 
+    "check_name": "misc-unused-raii", 
+    "location": {
+      "path": "python_api/routing.cpp", 
+      "lines": {
+        "begin": 54, 
+        "end": 54
+      }
+    }, 
+    "fingerprint": "d7de0ccce2a157bd78fb0b71032309a3", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "object destroyed immediately after creation; did you mean to name the object?", 
+    "check_name": "misc-unused-raii", 
+    "location": {
+      "path": "python_api/routing.cpp", 
+      "lines": {
+        "begin": 58, 
+        "end": 58
+      }
+    }, 
+    "fingerprint": "9ab7b6a0ea215db9f91dedb1fa096901", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "object destroyed immediately after creation; did you mean to name the object?", 
+    "check_name": "misc-unused-raii", 
+    "location": {
+      "path": "python_api/routing.cpp", 
+      "lines": {
+        "begin": 64, 
+        "end": 64
+      }
+    }, 
+    "fingerprint": "883cbbb11148baef96640bb86d760ca2", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "invalid case style for protected member 'areaData_'", 
+    "check_name": "readability-identifier-naming", 
+    "location": {
+      "path": "include/lanelet2_core/primitives/Area.h", 
+      "lines": {
+        "begin": 326, 
+        "end": 326
+      }
+    }, 
+    "fingerprint": "59b85773b3ef82e452c98e3d803472cf", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "invalid case style for protected member 'laneletData_'", 
+    "check_name": "readability-identifier-naming", 
+    "location": {
+      "path": "include/lanelet2_core/primitives/Lanelet.h", 
+      "lines": {
+        "begin": 329, 
+        "end": 329
+      }
+    }, 
+    "fingerprint": "3c10549031d30b98307c338fce8db471", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "invalid case style for protected member 'inverted_'", 
+    "check_name": "readability-identifier-naming", 
+    "location": {
+      "path": "include/lanelet2_core/primitives/Lanelet.h", 
+      "lines": {
+        "begin": 330, 
+        "end": 330
+      }
+    }, 
+    "fingerprint": "364db3255451f53c87df3d8b623be161", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "redundant 'distanceToBorder3d' declaration", 
+    "check_name": "readability-redundant-declaration", 
+    "location": {
+      "path": "include/lanelet2_core/geometry/Polygon.h", 
+      "lines": {
+        "begin": 314, 
+        "end": 314
+      }
+    }, 
+    "fingerprint": "f95628db2716bd179d891c360b496cbe", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "invalid case style for protected member 'elements_'", 
+    "check_name": "readability-identifier-naming", 
+    "location": {
+      "path": "include/lanelet2_core/LaneletMap.h", 
+      "lines": {
+        "begin": 259, 
+        "end": 259
+      }
+    }, 
+    "fingerprint": "36d99b506714b83d29cb738084dc13a8", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "invalid case style for protected member 'tree_'", 
+    "check_name": "readability-identifier-naming", 
+    "location": {
+      "path": "include/lanelet2_core/LaneletMap.h", 
+      "lines": {
+        "begin": 261, 
+        "end": 261
+      }
+    }, 
+    "fingerprint": "cb84886f3f5a74798da9e3c78c232103", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "redundant 'distanceToBorder3d' declaration", 
+    "check_name": "readability-redundant-declaration", 
+    "location": {
+      "path": "include/lanelet2_core/geometry/Polygon.h", 
+      "lines": {
+        "begin": 253, 
+        "end": 253
+      }
+    }, 
+    "fingerprint": "98cdc6d92d5902824a1f32161e1e59f5", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "redundant 'projectedBorderPoint3d' declaration", 
+    "check_name": "readability-redundant-declaration", 
+    "location": {
+      "path": "include/lanelet2_core/geometry/Polygon.h", 
+      "lines": {
+        "begin": 312, 
+        "end": 312
+      }
+    }, 
+    "fingerprint": "65be55174d6519502a0faab318088f63", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "redundant 'touches2d' declaration", 
+    "check_name": "readability-redundant-declaration", 
+    "location": {
+      "path": "include/lanelet2_core/geometry/Polygon.h", 
+      "lines": {
+        "begin": 318, 
+        "end": 318
+      }
+    }, 
+    "fingerprint": "2fc119c2244885c5da19bb4824512463", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "redundant 'overlaps2d' declaration", 
+    "check_name": "readability-redundant-declaration", 
+    "location": {
+      "path": "include/lanelet2_core/geometry/Polygon.h", 
+      "lines": {
+        "begin": 321, 
+        "end": 321
+      }
+    }, 
+    "fingerprint": "7f27a2d822f4dcf5832400e3124c16fe", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "redundant 'overlaps3d' declaration", 
+    "check_name": "readability-redundant-declaration", 
+    "location": {
+      "path": "include/lanelet2_core/geometry/Polygon.h", 
+      "lines": {
+        "begin": 325, 
+        "end": 325
+      }
+    }, 
+    "fingerprint": "ec520eb6b63767294020e0cb7a8a781d", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "Forming reference to null pointer", 
+    "check_name": "clang-analyzer-core.NonNullParamChecker", 
+    "location": {
+      "path": "../../../../../../../usr/include/boost/geometry/index/detail/rtree/node/variant_dynamic.hpp", 
+      "lines": {
+        "begin": 186, 
+        "end": 186
+      }
+    }, 
+    "fingerprint": "821a43b1e8e5517c5ab4f75e0c086dd4", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "macro argument should be enclosed in parentheses", 
+    "check_name": "misc-macro-parentheses", 
+    "location": {
+      "path": "include/lanelet2_core/LaneletMap.h", 
+      "lines": {
+        "begin": 488, 
+        "end": 488
+      }
+    }, 
+    "fingerprint": "af0a06b5683612bfba962fda54789374", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }, 
+  {
+    "description": "macro argument should be enclosed in parentheses", 
+    "check_name": "misc-macro-parentheses", 
+    "location": {
+      "path": "include/lanelet2_core/LaneletMap.h", 
+      "lines": {
+        "begin": 492, 
+        "end": 492
+      }
+    }, 
+    "fingerprint": "3b78e479dfc89bf24da0f85c7d3e83af", 
+    "type": "issue", 
+    "categories": [
+      "Style"
+    ]
+  }
+]

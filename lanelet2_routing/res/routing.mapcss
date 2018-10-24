@@ -1,0 +1,105 @@
+canvas {
+    fill-color: white;
+    text-color: #ffffff;
+    error-color: #ffffff;
+}
+
+node[lane_id]::lane_id
+{
+	text: "lane_id";
+	text-offset: 9;
+	font-size: 12;
+}
+
+node[id]::id
+{
+	text: "id";
+	text-offset: -9;
+	text-color: orange;
+	font-size: 12;
+}
+
+node[id][shortest_path]::id
+{
+	text: "id";
+	text-offset: -9;
+	text-color: red;
+	font-size: 12;
+}
+
+way[relation]
+{
+    width: 3;
+    color: #c0c0c0;	
+}
+
+way[relation]
+{
+	text: relation;
+	text-position: line;
+	text-offset: 12;
+	font-size: 14;
+}
+
+way[relation_reverse]::relation_reverse
+{
+	text: relation_reverse;
+	text-color: blue;
+	text-position: line;
+	text-offset: -12;
+	font-size: 14;
+}
+
+/* Used in routes where multiple relations can exist */
+way[relation_1]::relation_1
+{
+	text: relation_1;
+	text-position: line;
+	text-offset: 12;
+	font-size: 14;
+}
+
+way[relation_reverse_1]::relation_reverse_1
+{
+	text: relation_reverse_1;
+	text-position: line;
+    text-offset: -12;
+    font-size: 14;
+}
+
+way[relation_2]::relation_2
+{
+	text: relation_2;
+	text-position: line;
+    text-offset: 34;
+    font-size: 14;
+}
+
+
+way[relation_reverse_2]::relation_reverse_2
+{
+	text: relation_reverse_2;
+	text-position: line;
+	text-offset: -34;
+	font-size: 14;
+}
+
+way[relation_3]::relation_3
+{
+	text: eval("Reached maximum number of relations in mapstyle.css");
+	text-position: line;
+	text-offset: 54;
+	font-size: 14;
+	text-color: red;
+}
+
+
+way[relation_reverse_3]::relation_reverse_3
+{
+	text: eval("Reached maximum number of reverse relations in mapstyle.css");
+	text-position: line;
+	text-offset: -54;
+	font-size: 14;
+	text-color: red;
+}
+

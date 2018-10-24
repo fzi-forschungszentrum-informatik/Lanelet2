@@ -1,0 +1,5 @@
+*~
+*.pyc
+setup.py
+CMakeLists.txt.user
+

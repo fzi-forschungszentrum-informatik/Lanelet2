@@ -1,0 +1,241 @@
+# Lanelet2 routing
+
+The routing module for lanelet2.
+
+For a short version of this you can also look at [the presentation](doc/Presentation/Lanelet2 Routing.pdf).
+
+This readme covers some basics. The API offers more than that.
+
+# 1. Components and Vocabulary
+## How to create a Routing Graph
+![](doc/Images/components.png)
+
+The needed components to create a routing graph are:
+
+**Routing Cost Modules:**
+* They generically determine the routing cost for travelling along a lanelet/area
+* Can be e.g. length, travel time
+* You can dynamically select between them when querying the routing graph
+* **You can easily plug in your own routing cost calculation**
+* *Influences the prefered path*
+
+**Traffic Rules for a Specific Participant** (see [lanelet2_traffic_rules](../lanelet2_traffic_rules/README.md))
+* Determines which lanelets/areas are passable
+* *Influences the possible paths*
+    
+**Lanelet Map:** (see [lanelet2_core](../lanelet2_core/README.md))
+* Map with Lanelets, Areas, Regulatory Elements, ...
+
+## Relations
+Lanelets that are part of a routing graph can have relations to each other:
+![](doc/Images/max-hose.png)
+
+The possible relations are:
+    * `left`, `right` (reachable via lane change)
+    * `adjacent left`, `adjacent right` (lanelets that are neigbours but not reachable via lane change)
+    * `succeeding` (1:1 relation between two subsequent lanelets), `merging` (n:1 relation between lanelets), `diverging` (1:n relation between lanelets)
+    * `conflicting` (intersecting lanelets/areas)
+    * `area` (reachable area to lanelet/area relation)
+
+## Routes and (Driving) Routes
+![](doc/Images/route_and_route.png)
+
+### Shortest route
+ * A shortest path from A to B, possibly with intermediate points
+ * Data-wise simply a vector of lanelets
+
+### (Driving) Route
+ * Includes all **directly** adjacent lanelets of a route that can used to reach B
+ * Data-wise an own class that holds relations between the lanelets
+ * Answers queries regarding relations within the route (e.g. left, right, ...)
+ * Independent from the routing graph
+ * Determines and returns lanes
+    * `Lane` is a number of consecutive lanelets in a route until they end, merge or diverge
+
+### Reachable sets/reachable paths
+ * Used to determine the options that a specific traffic participant has from a given lanelet/area
+ * Query the possible routes without exceeding one of the specified routing costs
+
+## Route vs Path vs Sequence
+When querying data in the routing graph, you will come across the terms _route_, _path_ and _sequence_. They have a special meaning.
+
+A *route* means all the lanelets that can be used to a destination without driving a different road. They can be connected by a generic sequence of lane changes and successors.
+
+A *path* (LaneletPath or LaneletOrAreaPath) is an ordered list of Lanelets/Areas that lead to the destination. They can be connected by lane changes.
+
+A *sequence* (LaneletSequence) is a sequence of subsequent Lanelets that is not separaed by a lane change (think of it as a _lane_). It does not necessary lead to a destination, instead it ends when a lane change is required. In the example image, the lanelets A, D, B form a valid _sequence_ (and also a valid _path_), while the lanelets A, D, E are a valid _path_, but not a valid _sequence_.
+
+![](doc/Images/shortest_path_and_route.png)
+
+
+
+# 2. Code Usage
+
+## Create a routing graph
+
+```cpp
+using namespace lanelet;
+
+// Load a map
+LaneletMapPtr map = load("map.osm");
+
+// Initialize traffic rules
+TrafficRulesPtr trafficRules{TrafficRulesFactory::instance().create(Locations::Germany, Participants::Vehicle)};
+
+// Optional: Initalize routing costs
+double laneChangeCost = 2;
+RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost)};
+
+// Optional: Initialize config for routing graph:
+RoutingGraph::Configuration routingGraphConf;
+routingGraphConf.emplace(std::make_pair(RoutingGraph::ParticipantHeight, Attribute("2.")));
+
+// Create routing graph
+RoutingGraphPtr graph = std::make_shared<RoutingGraph>(map, trafficRules /*, costPtrs, routingGraphConf*/);
+```
+
+The python interface works similarly:
+```python
+import lanelet2
+map = lanelet2.io.load("map.osm")
+trafficRules = lanelet2.traffic_rules.create(lanelet2.traffic_rules.Locations.Germany, lanelet2.traffic_rules.Participants.Vehicle)
+graph = lanelet2.routing.RoutingGraph(map, trafficRules)
+```
+## Get a shortest path
+
+```cpp
+CompoundLanelets shortestPath = graph->shortestPath(fromLanelet, toLanelet);
+```
+* `shortestPath` will be empty if there's no route.
+* there's also `shortestPathWithIntermediate`
+
+in python:
+```python
+shortestPath = graph.shortestPath(fromLanelet, toLanelet)
+```
+## Get and write a route
+
+```cpp
+    Optional<Route> route = graph->getRoute(fromLanelet, toLanelet, routingCostId);
+    if (route) {
+        write("route.osm", *route->getLaneletMap());
+    }
+```
+* `Optional` will be uninitialized (false) if there's no route
+* This lanelet map will include all lanelets that are part of the route
+* As said, a route is independent from the routing graph
+
+in python:
+```python
+route = graph.getRoute(fromLanelet, toLanelet, routingCostId)
+if route:
+    lanelet2.io.write("route.osm", route.getLaneletMap())
+```
+
+## Left, right, following lanelets
+
+```cpp
+// Get routable left lanelet if it exists
+Optional<ConstLanelet> left{graph->left(fromLanelet)};
+// Get non-routable left lanelet if it exists
+Optional<ConstLanelet> adjacentLeft{graph->adjacentLeft(fromLanelet)};
+// Get following lanelets
+ConstLanelets following{graph->following(fromLanelet)};
+```
+* Also available: `right`, `adjacentRight`, `lefts`, `rights`, `conflicting`
+
+Alternatively: 
+ or queries that return relations:
+```cpp
+// Get relations to all left lanelets
+LaneletRelations leftRelations = graph->leftRelations(
+                                                fromLanelet);
+```
+There's `leftRelations` that returns a vector of pairs of LaneletRelations whereas RelationType can be 'left' or 'adjacentLeft' in this case
+
+# 3. Export and Debugging Routing Graphs
+
+![](Images/lanelet_map_routing_graph.png)
+
+## LaneletMap with Routing Information
+
+```cpp
+LaneletMapConstPtr debugLaneletMap = graph->getDebugLaneletMap(RoutingCostId(0));
+write(std::string("routing_graph.osm"), *debugLaneletMap);
+```
+This one is best viewed in [JOSM](https://josm.openstreetmap.de/) and using a custom map style css which is to be found in `res/routing.mapcss`. [This gif](https://josm.openstreetmap.de/attachment/wiki/Styles/addstyle.gif) shows, how to add a style to JOSM, except that one needs to press the `+` button in the configuration menu and specify the file.
+
+Most of the information is to be found in the attributes. The line strings that connect lanelets do have a direction. The name of the forth-direction is generally to be found left/above the line and the reverse relation right/under the string.
+
+## DOT (GraphViz) and GraphML (xml-based) file export
+ 
+```cpp
+graph->exportGraphViz("~/graph.gv");
+graph->exportGraphML("~/graph.graphml");
+``` 
+These can then be viewed with a graph viewer like [Gephi](https://gephi.org/). The downside compared to the laneletMap export is, that the lanelets aren't localized. 
+
+# 4. Routes
+
+Example route through `Oststadtkreisel`:
+
+![](doc/Images/lanelet_map_route_oststadtkreisel_small.png)
+
+
+Output of `getDebugLaneletMap()` function:
+
+![](doc/Images/lanelet_map_route.png)
+
+## Example relational queries on routes:
+
+```cpp
+// Get left lanelet of example lanelet 'll'
+Optional<ConstLaneletRelation> left = route->leftRelation(ll);
+// Get conflicting lanelets of 'll'
+ConstLanelets conflicting = route->conflictingInRoute(ll);
+
+```
+Note that a route just returns relations to lanelets that can be used to reach the goal.
+## Other example queries:
+
+```cpp
+// Get underlying shortest path
+ConstLanelets shortestPath = route->shortestPath();
+// Get the full lane of a given lanelet 'll'
+ConstLanelets fullLane = route->fullLane(ll);
+// Get remaining lane of a given lanelet 'll'
+ConstLanelets remainingLane = route->remainingLane(ll);
+```
+
+# 5. Interconnect Routing Graphs of Different Participants
+A `RoutingGraphContainer` can be used to *connect* graphs of different participants to get information about conflicting lanelets.
+## Create a RoutingGraphContainer
+
+```cpp
+std::vector<RoutingGraphPtr> graphs;
+graphs.emplace_back(vehicleGraphLaneletMap);
+graphs.emplace_back(pedestrianGraphLaneletMap);
+RoutingGraphContainer container(graphs);
+```
+## Example queries
+The last parameter *participantHeight* is optional and decides wheter conflicting lanelets are determined in 2D or 3D.
+
+### Query for a single lanelet
+
+```cpp
+double heightClearance{4.}; // Height of the traffic participant
+// Query a single graph for conflicting lanelets
+size_t routingGraphId{0};   // E.g. 0 for the first graph
+ConstLanelets conflictingVehicle{container->conflictingInGraph(bridgeLanelet, routingGraphId, heightClearance)};
+// Query all graphs for conflicting lanelets
+RoutingGraphContainer::ConflictingInGraphs conflicting{container->conflictingInGraphs(bridgeLanelet, heightClearance)};
+```
+
+### Query for a whole route
+
+```cpp
+// Conflicting lanelets of a route in a single graph
+ConstLanelets conflictingVehicle{container->conflictingOfRouteInGraph(routePtr, routingGraphId)};
+// Conflicting lanelets of a route in all graphs
+RoutingGraphContainer::ConflictingInGraphs result{container->conflictingOfRouteInGraphs(routePtr, heightClearance)};
+```

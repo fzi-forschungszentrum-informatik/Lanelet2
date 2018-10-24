@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lanelet2_projection</name>
+  <version>0.8.0</version>
+  <description>Lanelet2 Projecion library for lat/lon to local x/y conversion</description>
+
+  <license>BSD</license>
+  <maintainer email="jan-hendrik.pauls@kit.edu">Jan-Hendrik Pauls</maintainer>
+  <author email="jan-hendrik.pauls@kit.edu">Jan-Hendrik Pauls</author>
+  <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mrt_cmake_modules</build_depend>
+  <test_depend>gtest</test_depend>
+  <depend>lanelet2_io</depend>
+  <depend>libgeographic-dev</depend>
+
+
+  <export>
+    <rosdoc config="../rosdoc.yaml" />
+  </export>
+</package>

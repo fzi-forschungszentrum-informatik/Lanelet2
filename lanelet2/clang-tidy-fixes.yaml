@@ -1,0 +1,808 @@
+---
+MainSourceFile:  /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/test/test_regulatory_element.cpp
+Diagnostics:     
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  mrt-eigen-alignment
+    Message:         'Missing aligned allocator for this container value type (aka ''section<class boost::geometry::model::box<class Eigen::Matrix<double, 2, 1, 0, 2, 1> >, 2>'').'
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      9857
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+        Offset:          9830
+        Length:          142
+        ReplacementText: ''
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''elements_'''
+    FileOffset:      9094
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+        Offset:          9094
+        Length:          9
+        ReplacementText: elements
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/src/LaneletMap.cpp
+        Offset:          10669
+        Length:          9
+        ReplacementText: elements
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/src/LaneletMap.cpp
+        Offset:          10915
+        Length:          9
+        ReplacementText: elements
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/src/LaneletMap.cpp
+        Offset:          11158
+        Length:          9
+        ReplacementText: elements
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''tree_'''
+    FileOffset:      9185
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+        Offset:          9185
+        Length:          5
+        ReplacementText: tree
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/src/LaneletMap.cpp
+        Offset:          10692
+        Length:          5
+        ReplacementText: tree
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/src/LaneletMap.cpp
+        Offset:          10938
+        Length:          5
+        ReplacementText: tree
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/src/LaneletMap.cpp
+        Offset:          11181
+        Length:          5
+        ReplacementText: tree
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      7722
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''projectedBorderPoint3d'' declaration'
+    FileOffset:      9731
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      9857
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+        Offset:          9830
+        Length:          142
+        ReplacementText: ''
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''touches2d'' declaration'
+    FileOffset:      10026
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''overlaps2d'' declaration'
+    FileOffset:      10140
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''overlaps3d'' declaration'
+    FileOffset:      10295
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-analyzer-core.NonNullParamChecker
+    Message:         Forming reference to null pointer
+    FileOffset:      5981
+    FilePath:        /usr/include/boost/geometry/index/detail/rtree/node/variant_dynamic.hpp
+    Replacements:    
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      9857
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+        Offset:          9830
+        Length:          142
+        ReplacementText: ''
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      7722
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''projectedBorderPoint3d'' declaration'
+    FileOffset:      9731
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      9857
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+        Offset:          9830
+        Length:          142
+        ReplacementText: ''
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''touches2d'' declaration'
+    FileOffset:      10026
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''overlaps2d'' declaration'
+    FileOffset:      10140
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''overlaps3d'' declaration'
+    FileOffset:      10295
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      7722
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''projectedBorderPoint3d'' declaration'
+    FileOffset:      9731
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      9857
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+        Offset:          9830
+        Length:          142
+        ReplacementText: ''
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''touches2d'' declaration'
+    FileOffset:      10026
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''overlaps2d'' declaration'
+    FileOffset:      10140
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''overlaps3d'' declaration'
+    FileOffset:      10295
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''elements_'''
+    FileOffset:      9094
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+        Offset:          9094
+        Length:          9
+        ReplacementText: elements
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''tree_'''
+    FileOffset:      9185
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+        Offset:          9185
+        Length:          5
+        ReplacementText: tree
+  - DiagnosticName:  misc-macro-parentheses
+    Message:         macro argument should be enclosed in parentheses
+    FileOffset:      18120
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+        Offset:          18120
+        Length:          0
+        ReplacementText: '('
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+        Offset:          18124
+        Length:          0
+        ReplacementText: ')'
+  - DiagnosticName:  misc-macro-parentheses
+    Message:         macro argument should be enclosed in parentheses
+    FileOffset:      18375
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+        Offset:          18375
+        Length:          0
+        ReplacementText: '('
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/LaneletMap.h
+        Offset:          18379
+        Length:          0
+        ReplacementText: ')'
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      7722
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''projectedBorderPoint3d'' declaration'
+    FileOffset:      9731
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      9857
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+        Offset:          9830
+        Length:          142
+        ReplacementText: ''
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''touches2d'' declaration'
+    FileOffset:      10026
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''overlaps2d'' declaration'
+    FileOffset:      10140
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''overlaps3d'' declaration'
+    FileOffset:      10295
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-redundant-declaration
+    Message:         'redundant ''distanceToBorder3d'' declaration'
+    FileOffset:      9857
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/Polygon.h
+        Offset:          9830
+        Length:          142
+        ReplacementText: ''
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'unsupported argument ''bounds-strict'' to option ''fsanitize='''
+    FileOffset:      0
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''areaData_'''
+    FileOffset:      11081
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          10712
+        Length:          9
+        ReplacementText: areaData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Area.h
+        Offset:          11081
+        Length:          9
+        ReplacementText: areaData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''laneletData_'''
+    FileOffset:      11790
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11352
+        Length:          12
+        ReplacementText: laneletData
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11790
+        Length:          12
+        ReplacementText: laneletData
+  - DiagnosticName:  readability-identifier-naming
+    Message:         'invalid case style for protected member ''inverted_'''
+    FileOffset:      11811
+    FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+    Replacements:    
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11384
+        Length:          9
+        ReplacementText: inverted
+      - FilePath:        /home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_core/include/lanelet2_core/geometry/impl/../../primitives/Lanelet.h
+        Offset:          11811
+        Length:          9
+        ReplacementText: inverted
+...

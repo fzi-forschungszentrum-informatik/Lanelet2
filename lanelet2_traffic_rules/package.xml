@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lanelet2_traffic_rules</name>
+  <version>0.8.0</version>
+  <description>Package for interpreting traffic rules in a lanelet map</description>
+
+  <license>BSD</license>
+  <maintainer email="fabian.poggenhans@kit.edu">Fabian Poggenhans</maintainer>
+  <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
+  <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mrt_cmake_modules</build_depend>
+  <test_depend>gtest</test_depend>
+  <depend>lanelet2_core</depend>
+  <export>
+    <rosdoc config="../rosdoc.yaml" />
+  </export>
+</package>
