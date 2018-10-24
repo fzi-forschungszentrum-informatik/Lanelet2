@@ -501,7 +501,7 @@ class ConstLineString3d : public ConstLineStringImpl<Point3d> {
   ConstLineString3d invert() const noexcept { return ConstLineString3d{constData(), !inverted()}; }
 };
 
-//! @brief A normal 2d linestring with mutable data
+//! @brief A normal 3d linestring with mutable data
 //! @ingroup LineStringPrimitives
 //! @ingroup Primitives
 class LineString3d : public LineStringImpl<ConstLineString3d> {
