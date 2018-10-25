@@ -1,2 +1,139 @@
-#version=1.4
-include: "https://raw.githubusercontent.com/KIT-MRT/mrt_cmake_modules/master/ci_templates/default_catkin_project.yml"
+variables:
+  GIT_STRATEGY: none
+  LANELET2_PACKAGES: lanelet2_core lanelet2_io lanelet2_projection lanelet2_python lanelet2_routing lanelet2_traffic_rules
+# Cache build results between building and testing
+cache:
+  paths:
+  - catkin_ws/
+stages:
+  - build
+  - test
+  - deploy
+
+# Prepare workspace and checkout the code. This will be executed before every stage
+before_script:
+  # Environment variablen setzen
+  - export SHELL="/bin/bash"
+  # Prepare workspace (in folder catkin_ws)
+  - sudo apt-get update
+  - mrt ci prepare $CI_PROJECT_NAME -c $CI_COMMIT_SHA
+  - cd catkin_ws
+  # add current branch name to branch management
+  - mrt ws branches add $CI_COMMIT_REF_NAME
+
+build:
+  stage: build
+  script:
+  # Build project and resolve deps at the same time in debug mode
+  - mrt catkin build -s -rd --debug --default_yes --no-status $CI_PROJECT_NAME
+  # generate documentation
+  - mrt doc clean && mrt doc build
+  - cp -r build_debug/workspace_doc_*/html ../doxygen
+  # make doxygen documentation available in gitlab
+  artifacts:
+    name: doxygen
+    paths:
+    - doxygen
+    expire_in: 6 mos
+    
+general_code_quality:
+  stage: build
+  image: docker:stable
+  before_script: []
+  cache: {}
+  variables:
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: fetch
+  allow_failure: true
+  services:
+    - docker:stable-dind
+  script:
+    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+    - docker run
+        --env SOURCE_CODE="$PWD"
+        --volume "$PWD":/code
+        --volume /var/run/docker.sock:/var/run/docker.sock
+        "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+    - chmod a+rw gl-code-quality-report.json
+  artifacts:
+    paths: [gl-code-quality-report.json]
+   
+
+.test: &test_job
+  stage: test
+  coverage: '/lines......: \d+.\d+\%/'
+  script:
+  # Build code again, in case caching didn't work
+  - mrt catkin build -s -rd --debug --default_yes --no-status $PACKAGE
+  # Run tests
+  - source devel_debug/setup.bash
+  - mrt catkin run_tests --no-status $PACKAGE --no-deps
+  # Summarize results
+  - catkin_test_results --verbose build_debug/$PACKAGE
+  - cp -r build_debug/$PACKAGE/coverage .. || true
+  # make coverage information available in gitlab
+  artifacts:
+    name: coverage
+    paths:
+    - coverage
+    expire_in: 6 mos
+    reports:
+      junit: catkin_ws/build_debug/$PACKAGE/test_results/$PACKAGE/*.xml
+
+test_lanelet2_core:
+  <<: *test_job
+  variables:
+    PACKAGE: lanelet2_core
+
+test_lanelet2_io:
+  <<: *test_job
+  variables:
+    PACKAGE: lanelet2_io
+    
+test_lanelet2_projection:
+  <<: *test_job
+  variables:
+    PACKAGE: lanelet2_projection
+    
+test_lanelet2_python:
+  <<: *test_job
+  variables:
+    PACKAGE: lanelet2_python
+    
+test_lanelet2_routing:
+  <<: *test_job
+  variables:
+    PACKAGE: lanelet2_routing
+    
+test_lanelet2_core:
+  <<: *test_job
+  variables:
+    PACKAGE: lanelet2_traffic_rules
+    
+code_quality:
+  allow_failure: true
+  artifacts:
+    paths: [gl-code-quality-report.json]
+  script:
+  # Build code again, in case caching didn't work
+  - mrt catkin build -s -rd --debug --default_yes --no-status $CI_PROJECT_NAME
+  - source devel_debug/setup.bash
+  - cp ../gl-code-quality-report.json codeclimate.json || true
+  - mrt ci run_clang_tidy -e $LANELET2_PACKAGES
+  - cp codeclimate.json ../gl-code-quality-report.json
+
+pages:
+  before_script: []
+  stage: deploy
+  script:
+  # everything in the public folder will be available as website
+  - mkdir public
+  - cp -r coverage public/ || true
+  - cp -r doxygen public/
+  artifacts:
+    paths:
+    - public
+  only:
+  # only execute for master branch
+  - master
+
