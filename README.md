@@ -5,17 +5,17 @@
 Lanelet2 is a C++ library with ROS support for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core prinicples to handle the upcoming challenges of future maps.
 
 Features:
-- *2D and 3D* support
-- *Consistent modification*: if one point is modified, all owning objects see the change
+- **2D and 3D** support
+- **Consistent modification**: if one point is modified, all owning objects see the change
 - Supports **lane changes**, routing through areas, etc.
-- *Separated routing* for pedestrians, vehicles, bikes, etc.
-- Many *constomization points* to add new traffic rules, routing costs, parsers, etc.
-- *ROS interface* for communicating parts of a lanelet map via ROS
-- *Simple convenience functions* for common tasks when handling maps
-- *Accurate Projection* between the lan/lon world and local coordinates
-- *IO Interface* for reading and writing e.g. _osm_ data formats
-- *Python2* bindings for the whole C++ interface
-- *Boost Geometry* support for all thinkable kinds of geometry calculations on map primitives
+- **Separated routing** for pedestrians, vehicles, bikes, etc.
+- Many **constomization points** to add new traffic rules, routing costs, parsers, etc.
+- **ROS interface** for communicating parts of a lanelet map via ROS
+- **Simple convenience functions** for common tasks when handling maps
+- **Accurate Projection** between the lan/lon world and local coordinates
+- **IO Interface** for reading and writing e.g. _osm_ data formats
+- **Python2** bindings for the whole C++ interface
+- **Boost Geometry** support for all thinkable kinds of geometry calculations on map primitives
 - Released under the [**BSD 3-Clause license**](LICENSE)
 
 ![](lanelet2_core/doc/images/lanelet2_example_image.png)
