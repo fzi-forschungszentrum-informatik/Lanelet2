@@ -80,7 +80,8 @@ namespace bg = boost::geometry;
 namespace bgi = bg::index;
 namespace bgm = boost::geometry::model;
 using Segment = bgm::pointing_segment<const BasicPoint3d>;
-using Box = bgm::box<bgm::point<double, 3, boost::geometry::cs::cartesian>>;
+using Segment2d = bgm::segment<BasicPoint2d>;
+using Box = bgm::box<bgm::point<double, 2, boost::geometry::cs::cartesian>>;
 using Node = std::pair<Box, Segment>;
 using RTree = bgi::rtree<Node, bgi::linear<8>>;
 
@@ -112,7 +113,7 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineStringT& l1
   std::pair<BasicPoint3d, BasicPoint3d> closestPair;
   for (auto it = bg::segments_begin(*smallerRange); it != bg::segments_end(*smallerRange); ++it) {
     Box queryBox;
-    bg::envelope(*it, queryBox);
+    bg::envelope(Segment2d(utils::to2D(*it->first), utils::to2D(*it->second)), queryBox);
     for (auto qIt = tree.qbegin(bgi::nearest(queryBox, greaterRange->size())); qIt != tree.qend();
          ++qIt, first = false) {
       auto& nearest = *qIt;

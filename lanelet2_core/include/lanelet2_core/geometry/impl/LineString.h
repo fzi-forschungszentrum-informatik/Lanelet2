@@ -3,6 +3,7 @@
 #include "../../primitives/Traits.h"
 #include "../GeometryHelper.h"
 #include "../Point.h"
+#include <boost/geometry/algorithms/intersection.hpp>
 
 namespace lanelet {
 namespace geometry {
