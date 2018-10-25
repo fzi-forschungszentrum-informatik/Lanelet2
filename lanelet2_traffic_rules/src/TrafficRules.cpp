@@ -60,7 +60,7 @@ bool TrafficRules::canPass(const ConstLanelet& from, const ConstLanelet& to) con
 }
 
 Optional<ConstLineString3d> determineCommonLine(const ConstLanelet& ll, const ConstArea& ar) {
-  return utils::findIf(ar.outerBound(), [&p1 = ll.leftBound().back(), &p2 = ll.rightBound().back() ](auto& boundLs) {
+  return utils::findIf(ar.outerBound(), [ p1 = ll.leftBound().back(), p2 = ll.rightBound().back() ](auto& boundLs) {
     return (boundLs.back() == p1 && boundLs.front() == p2);
   });
 }

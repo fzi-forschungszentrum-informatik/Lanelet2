@@ -55,7 +55,7 @@ class RoutingCostDistance : public RoutingCost {
   }
   inline double getCostSucceeding(const TrafficRules& /*trafficRules*/, const ConstLaneletOrArea& from,
                                   const ConstLaneletOrArea& to) const override {
-    auto getLength = [this](auto& lltOrArea) { return length(lltOrArea); };
+    auto getLength = [this](auto& lltOrArea) -> double { return this->length(lltOrArea); };
     return (from.applyVisitor(getLength) + to.applyVisitor(getLength)) / 2;
   }
   inline double getCostLaneChange(const TrafficRules& /*trafficRules*/, const ConstLanelets& from,
@@ -63,8 +63,8 @@ class RoutingCostDistance : public RoutingCost {
     if (minChangeLength_ <= 0.) {
       return laneChangeCost_;
     }
-    auto totalLength =
-        std::accumulate(from.begin(), from.end(), 0., [this](double acc, auto& llt) { return acc + length(llt); });
+    auto totalLength = std::accumulate(from.begin(), from.end(), 0.,
+                                       [this](double acc, auto& llt) { return acc + this->length(llt); });
     return totalLength >= minChangeLength_ ? laneChangeCost_ : std::numeric_limits<double>::max();
   }
 
@@ -95,13 +95,15 @@ class RoutingCostTravelTime : public RoutingCost {
       return laneChangeCost_;
     }
     auto changeTime = std::accumulate(from.begin(), from.end(), 0., [this, &trafficRules](double acc, auto& llt) {
-      return acc + travelTime(trafficRules, llt);
+      return acc + this->travelTime(trafficRules, llt);
     });
     return changeTime >= minChangeTime_ ? laneChangeCost_ : std::numeric_limits<double>::max();
   }
   inline double getCostSucceeding(const TrafficRules& trafficRules, const ConstLaneletOrArea& from,
                                   const ConstLaneletOrArea& to) const override {
-    auto getTravelTime = [&trafficRules, this](auto& lltOrArea) { return travelTime(trafficRules, lltOrArea); };
+    auto getTravelTime = [&trafficRules, this](auto& lltOrArea) -> double {
+      return this->travelTime(trafficRules, lltOrArea);
+    };
     return (from.applyVisitor(getTravelTime) + to.applyVisitor(getTravelTime)) / 2;
   }
 
