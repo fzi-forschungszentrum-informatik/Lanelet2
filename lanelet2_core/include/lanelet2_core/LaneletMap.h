@@ -242,8 +242,10 @@ class PrimitiveLayer {
   void add(const PrimitiveT& element);
   void remove(Id element);
 
+  // NOLINTNEXTLINE
   Map elements_;  //!< the list of elements in this layer
   struct Tree;
+  // NOLINTNEXTLINE
   std::unique_ptr<Tree> tree_;  //!< Hides boost trees from you/the compiler
 };
 

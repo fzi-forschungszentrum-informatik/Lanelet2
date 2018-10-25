@@ -1,5 +1,11 @@
 #pragma once
+#include <boost/version.hpp>
+#if BOOST_VERSION > 105800
+#include <string.h>  // NOLINT
 #include <boost/geometry/algorithms/relate.hpp>
+#else
+#include <boost/geometry/algorithms/detail/relate/relate.hpp>
+#endif
 #include "../../primitives/Lanelet.h"
 #include "../../primitives/LineString.h"
 #include "../Polygon.h"
@@ -79,8 +85,15 @@ IfLL<Lanelet1T, bool> overlaps2d(const Lanelet1T& lanelet, const Lanelet2T& othe
   }
   CompoundHybridPolygon2d p1(lanelet.polygon2d());
   CompoundHybridPolygon2d p2(otherLanelet.polygon2d());
+
+#if BOOST_VERSION > 105800
   using Mask = boost::geometry::de9im::static_mask<'T', '*', '*', '*', '*', '*', '*', '*', '*'>;
   return boost::geometry::relate(p1, p2, Mask());
+#else
+  // boost 1.58 did not officially support "relate"
+  using Mask = boost::geometry::detail::relate::static_mask<'T', '*', '*', '*', '*', '*', '*', '*', '*'>;
+  return boost::geometry::detail::relate::relate<Mask>(p1, p2);
+#endif
 }
 
 template <typename Lanelet1T, typename Lanelet2T>

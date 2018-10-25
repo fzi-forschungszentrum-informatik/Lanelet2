@@ -1,6 +1,3 @@
-// this is for emacs file handling -*- mode: c++; c-basic-offset: 2;
-// indent-tabs-mode: nil -*-
-
 #pragma once
 #include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/geometry/algorithms/length.hpp>

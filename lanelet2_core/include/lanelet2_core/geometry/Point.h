@@ -2,6 +2,7 @@
 #include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/geometries/geometries.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
+#include <boost/geometry/strategies/strategies.hpp>
 #include "../primitives/Point.h"
 
 /***********************************************************************

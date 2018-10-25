@@ -2,7 +2,7 @@
 
 #include "../primitives/Area.h"
 #include "../primitives/Lanelet.h"
-#include "impl/Polygon.h"
+#include "Polygon.h"
 
 namespace lanelet {
 namespace geometry {
