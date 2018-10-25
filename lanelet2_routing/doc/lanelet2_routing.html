@@ -114,8 +114,8 @@ layout: false
 # 1. Motivation
 * Maps are needed for various aspects of autonomous driving<br>
 
-<img src="Images/mind_map_marked.svg" alt="Drawing" style="padding-right: 30px; width: 400px;"/>
-<img src="Images/lanelet_map.png" alt="Drawing" style="width: 250px;"/>
+<img src="images/mind_map_marked.svg" alt="Drawing" style="padding-right: 30px; width: 400px;"/>
+<img src="images/lanelet_map.png" alt="Drawing" style="width: 250px;"/>
 
 * Add routing semantics to lanelet information in map
     * Provide routing graphs different traffic participants
@@ -127,7 +127,7 @@ layout: false
 ---
 
 # 2. Components
-<img src="Images/components.svg" alt="Drawing" style="float: left; width: 450px;  padding-right:40px;"/>
+<img src="images/components.svg" alt="Drawing" style="float: left; width: 450px;  padding-right:40px;"/>
 
 
 **Routing Cost Modules:**
@@ -146,7 +146,6 @@ layout: false
 ---
 
 # 2. Routing Graph
-.pull-strong-left[
 Answer queries regarding relations to other lanelets
 * Possible relations:
     * `left`, `right` (routable)
@@ -159,12 +158,9 @@ Reachable set of lanelets:
 
 Possible routes:
 * Routes that can be taken starting at a given lanelet
-]
-.pull-light-right[
-<img src="Images/max-hose.svg" alt="Drawing" style="float: right; width: 150px;"/>
 
+<img src="images/max-hose.svg" alt="Drawing" style="width: 450px;"/>
 
-]
 ---
 
 # 2. Routing Graph
@@ -185,10 +181,10 @@ Possible routes:
 
 .pull-light-right[
 ##### Shortest Path:
-<img src="Images/straight_shortest_path.svg" alt="Drawing" style="float: right; width: 200px; padding-bottom:20px;"/>
+<img src="images/straight_shortest_path.svg" alt="Drawing" style="float: right; width: 200px; padding-bottom:20px;"/>
 
 ##### Route:
-<img src="Images/straight_route.svg" alt="Drawing" style="float: right; width: 200px;"/>
+<img src="images/straight_route.svg" alt="Drawing" style="float: right; width: 200px;"/>
 ]
 
 
@@ -243,11 +239,11 @@ Export into:
 
 .pull-strong-left[
 #### Lanelet Map
-<img src="Images/lanelet_map_routing.svg" alt="Drawing" style="width: 550px;"/>
+<img src="images/lanelet_map_routing.svg" alt="Drawing" style="width: 550px;"/>
 ]
 .pull-light-right[
 #### Graph
-<img src="Images/graph_view_gephi2.png" alt="Drawing" style="width: 200px;"/>
+<img src="images/graph_view_gephi.png" alt="Drawing" style="width: 200px;"/>
 ]
 
 ---
@@ -296,7 +292,7 @@ write(std::string("route.osm"), *route->getLaneletMap());
 # 6. Routes
 Example route through `Oststadtkreisel`:
 
-<img src="Images/lanelet_map_route_oststadtkreisel.png" alt="Drawing" style="width: 670px;"/>
+<img src="images/lanelet_map_route_oststadtkreisel.jpg" alt="Drawing" style="width: 670px;"/>
 
 
 ---
@@ -304,7 +300,7 @@ Example route through `Oststadtkreisel`:
 # 6. Routes
 Output of `getDebugLaneletMap()` function:
 
-<img src="Images/lanelet_map_route.svg" alt="Drawing" style="width: 670px;"/>
+<img src="images/lanelet_map_route.svg" alt="Drawing" style="width: 670px;"/>
 
 
 ---
@@ -345,7 +341,7 @@ ConstLanelets remainingLane = route->remainingLane(ll);
 
 
 .pull-light-right[
-<img src="Images/josm_styles.png" alt="Drawing" style="width: 200px;"/>
+<img src="images/josm_styles.png" alt="Drawing" style="width: 200px;"/>
 ]
 
 
