@@ -19,7 +19,7 @@ void handleErrorsOrThrow(const ErrorMessages& errors, ErrorMessages* targetErrs)
 }
 }  // namespace
 
-std::unique_ptr<LaneletMap> load(const std::string& filename, ErrorMessages* errors, const Origin& origin,
+std::unique_ptr<LaneletMap> load(const std::string& filename, const Origin& origin, ErrorMessages* errors,
                                  const io::Configuration& params) {
   return load(filename, defaultProjection(origin), errors, params);
 }
@@ -36,8 +36,8 @@ std::unique_ptr<LaneletMap> load(const std::string& filename, const Projector& p
   return map;
 }
 
-std::unique_ptr<LaneletMap> load(const std::string& filename, const std::string& parserName, ErrorMessages* errors,
-                                 const Origin& origin, const io::Configuration& params) {
+std::unique_ptr<LaneletMap> load(const std::string& filename, const std::string& parserName, const Origin& origin,
+                                 ErrorMessages* errors, const io::Configuration& params) {
   return load(filename, parserName, defaultProjection(origin), errors, params);
 }
 
@@ -58,7 +58,7 @@ std::vector<std::string> supportedParserExtensions() {
   return io_handlers::ParserFactory::instance().availableExtensions();
 }
 
-void write(const std::string& filename, const LaneletMap& map, ErrorMessages* errors, const Origin& origin,
+void write(const std::string& filename, const LaneletMap& map, const Origin& origin, ErrorMessages* errors,
            const io::Configuration& params) {
   write(filename, map, defaultProjection(origin), errors, params);
 }
@@ -70,8 +70,8 @@ void write(const std::string& filename, const LaneletMap& map, const Projector& 
   handleErrorsOrThrow<WriteError>(err, errors);
 }
 
-void write(const std::string& filename, const LaneletMap& map, const std::string& writerName, ErrorMessages* errors,
-           const Origin& origin, const io::Configuration& params) {
+void write(const std::string& filename, const LaneletMap& map, const std::string& writerName, const Origin& origin,
+           ErrorMessages* errors, const io::Configuration& params) {
   write(filename, map, writerName, defaultProjection(origin), errors, params);
 }
 

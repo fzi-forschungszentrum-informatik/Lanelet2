@@ -20,7 +20,7 @@ using Errors = std::vector<std::string>;
 
 namespace {
 // register with factories
-static RegisterParser<OsmHandler> regParser;
+static RegisterParser<OsmParser> regParser;
 using traits::to2D;
 bool isValid(const LineStrings3d& lss) {
   BasicPolygon2d ls(utils::concatenate(lss, [](const auto& elem) { return to2D(elem).basicLineString(); }));
@@ -377,7 +377,7 @@ class FromFileLoader {  // NOLINT
 };
 }  // namespace
 
-std::unique_ptr<LaneletMap> OsmHandler::parse(const std::string& filename, ErrorMessages& errors) const {
+std::unique_ptr<LaneletMap> OsmParser::parse(const std::string& filename, ErrorMessages& errors) const {
   // read xml
   pugi::xml_document doc;
   auto result = doc.load_file(filename.c_str());
@@ -391,7 +391,7 @@ std::unique_ptr<LaneletMap> OsmHandler::parse(const std::string& filename, Error
   return map;
 }
 
-std::unique_ptr<LaneletMap> OsmHandler::fromOsmFile(const osm::File& file, ErrorMessages& errors) const {
+std::unique_ptr<LaneletMap> OsmParser::fromOsmFile(const osm::File& file, ErrorMessages& errors) const {
   return FromFileLoader::loadMap(file, projector(), errors);
 }
 }  // namespace io_handlers

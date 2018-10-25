@@ -14,7 +14,7 @@ using Errors = std::vector<std::string>;
 
 namespace {
 // register with factories
-static RegisterWriter<OsmHandler> regWriter;
+static RegisterWriter<OsmWriter> regWriter;
 
 class ToFileWriter {
  public:
@@ -247,7 +247,7 @@ class ToFileWriter {
 
 }  // namespace
 
-void OsmHandler::write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors) const {
+void OsmWriter::write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors) const {
   auto file = toOsmFile(laneletMap, errors);
   auto doc = osm::write(*file);
   auto res = doc->save_file(filename.c_str());
@@ -256,7 +256,7 @@ void OsmHandler::write(const std::string& filename, const LaneletMap& laneletMap
   }
 }
 
-std::unique_ptr<osm::File> OsmHandler::toOsmFile(const LaneletMap& laneletMap, ErrorMessages& errors) const {
+std::unique_ptr<osm::File> OsmWriter::toOsmFile(const LaneletMap& laneletMap, ErrorMessages& errors) const {
   return ToFileWriter::writeMap(laneletMap, projector(), errors);
 }
 }  // namespace io_handlers

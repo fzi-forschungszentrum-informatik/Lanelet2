@@ -15,9 +15,10 @@ T writeAndLoad(const T& value, TT(LaneletMap::*layer)) {
 
   ErrorMessages errsWrite;
   ErrorMessages errsLoad;
-  auto projector = defaultProjection();
-  io_handlers::OsmHandler parser(projector);
-  auto file = parser.toOsmFile(llmap, errsWrite);
+  auto projector = defaultProjection(Origin({0, 0, 0}));
+  io_handlers::OsmParser parser(projector);
+  io_handlers::OsmWriter writer(projector);
+  auto file = writer.toOsmFile(llmap, errsWrite);
   auto loadedMap = parser.fromOsmFile(*file, errsLoad);
   EXPECT_TRUE(errsWrite.empty());
   EXPECT_TRUE(errsLoad.empty());
@@ -81,7 +82,7 @@ TEST(OsmHandler, writeMapWithIncompleteRegelem) {  // NOLINT
   auto regElem = test_setup::setUpRegulatoryElement(num);
   lanelet::LaneletMap map({}, {}, {{regElem->id(), regElem}}, {}, {}, {});
   ErrorMessages errsWrite;
-  io_handlers::OsmHandler parser(defaultProjection());
+  io_handlers::OsmWriter parser(defaultProjection(Origin({0, 0, 0})));
   auto file = parser.toOsmFile(map, errsWrite);
   EXPECT_GT(errsWrite.size(), 0);
 }
@@ -91,7 +92,7 @@ TEST(OsmHandler, writeMapWithIncompleteLanelet) {  // NOLINT
   auto llt = test_setup::setUpLanelet(num);
   lanelet::LaneletMap map({{llt.id(), llt}}, {}, {}, {}, {}, {});
   ErrorMessages errsWrite;
-  io_handlers::OsmHandler parser(defaultProjection());
+  io_handlers::OsmWriter parser(defaultProjection(Origin({0, 0, 0})));
   auto file = parser.toOsmFile(map, errsWrite);
   EXPECT_GT(errsWrite.size(), 0);
 }
@@ -103,12 +104,13 @@ TEST(OsmHandler, writeMapWithLaneletAndAreaToFile) {  // NOLINT
   auto ll = test_setup::setUpLanelet(num);
   map->add(ar);
   map->add(ll);
-  auto filename = std::string(std::tmpnam(nullptr)) + ".osm";
-  write(filename, *map);
-  EXPECT_NO_THROW(load(filename));
+  auto filename = std::string(std::tmpnam(nullptr)) + ".osm";  // NOLINT
+  Origin origin({49, 8.4, 0});
+  write(filename, *map, origin);
+  EXPECT_NO_THROW(load(filename, origin));
 }
 
 TEST(OsmHandler, loadActualMap) {  // NOLINT
-  auto map = load("test_data/mapping_example.osm");
+  auto map = load("test_data/mapping_example.osm", Origin({49, 8.4, 0}));
   EXPECT_NE(0, map->laneletLayer.size());
 }

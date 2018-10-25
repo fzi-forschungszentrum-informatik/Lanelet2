@@ -30,7 +30,12 @@ class IOHandler {  // NOLINT
    */
   static constexpr const char* name() { return ""; }
 
-  const Projector& projector() const { return *projector_; }
+  const Projector& projector() const {
+    if (projector_->origin().isDefault) {
+      handleDefaultProjector();
+    }
+    return *projector_;
+  }
 
   const io::Configuration config() { return *config_; }
 
@@ -43,6 +48,9 @@ class IOHandler {  // NOLINT
   const io::Configuration* config_{};  //!< config object for additional parameters.
                                        //! Parser should always use default parameters
                                        //! if parameters are missing
+
+  //! using a default projector is not allowed. The implementations define how this issue is handled.
+  virtual void handleDefaultProjector() const = 0;
 };
 }  // namespace io_handlers
 }  // namespace lanelet

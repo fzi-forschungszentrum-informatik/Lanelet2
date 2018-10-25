@@ -5,11 +5,15 @@
 #include <vector>
 
 namespace lanelet {
-//!< When transforming between global and local coordinates, this offset will be
-//!< applied to the lat/lon coordinates
+//!< When transforming between global and local coordinates, this offset will be applied to the lat/lon coordinates.
+//! The object is also used to determine a senseful local coordinate system (e.g. choosing the correct UTM tile).
 struct Origin {
+  explicit Origin(const GPSPoint& position) : position{position}, isDefault{false} {}
+  Origin() = default;
+
   static Origin defaultOrigin() { return {}; }
-  GPSPoint position;
+  GPSPoint position;     //! The position of the origin
+  bool isDefault{true};  //! The Parser/Writer check for this if appropriate to make sure they are using a valid origin
 };
 
 //! Base class for implementing projection models. To use your own projection,
@@ -18,15 +22,17 @@ class Projector {  // NOLINT
  public:
   using Ptr = std::shared_ptr<Projector>;
   explicit Projector(Origin origin = Origin::defaultOrigin()) : origin_{origin} {}
+  Projector(Projector&& rhs) noexcept = default;
+  Projector& operator=(Projector&& rhs) noexcept = default;
+  Projector(const Projector& rhs) = default;
+  Projector& operator=(const Projector& rhs) = default;
   virtual ~Projector() noexcept = default;
 
-  //! @brief Project a point from lat/lon coordinates to a local coordinate
-  //! system
+  //! @brief Project a point from lat/lon coordinates to a local coordinate system
   //! @throws ForwardProjectionError if projection is impossible
   virtual BasicPoint3d forward(const GPSPoint& p) const = 0;
 
-  //! @brief Project a point from local coordinates to global lat/lon
-  //! coordinates
+  //! @brief Project a point from local coordinates to global lat/lon coordinates
   //! @throws ReverseProjectionError if projection is impossible
   virtual GPSPoint reverse(const BasicPoint3d& p) const = 0;
 
@@ -41,8 +47,8 @@ namespace projection {
 /**
  * @brief implements a simple spherical mercator projection.
  *
- * Will be too unprecise for most calculations, but its fast and needs no
- * external dependencies. If you want more, check out lanelet2_projection!
+ * Will be too unprecise for most calculations, but its fast and needs no external dependencies. If you want more, check
+ * out lanelet2_projection! This is the same projection that was used by lanelet1.
  */
 class SphericalMercatorProjector : public Projector {
  public:

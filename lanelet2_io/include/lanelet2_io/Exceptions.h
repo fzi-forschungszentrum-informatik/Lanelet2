@@ -64,4 +64,11 @@ class ForwardProjectionError : public ParseError {
 class ReverseProjectionError : public WriteError {
   using WriteError::WriteError;
 };
+
+/**
+ * @brief Thrown when a user attempts to load a map with georeferenced data without providing an origin.
+ */
+class DefaultProjectionNotAllowedError : public IOError {
+  using IOError::IOError;
+};
 }  // namespace lanelet
