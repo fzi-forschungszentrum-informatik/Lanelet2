@@ -167,24 +167,21 @@ void RoutingGraphBuilder::addFollowingEdges(const Lanelet& ll) {
       pointsToLanelets_.equal_range(orderedIdPair(ll.leftBound().back().id(), ll.rightBound().back().id()));
   // Following
   ConstLanelets following;
-  std::for_each(endPointsLanelets.first, endPointsLanelets.second,
-                [&ll, &trafficRules = this->trafficRules_, &following ](auto it) {
-                  if (geometry::follows(ll, it.second) && trafficRules.canPass(ll, it.second)) {
-                    following.push_back(it.second);
-                  };
-                });
+  std::for_each(endPointsLanelets.first, endPointsLanelets.second, [&ll, this, &following](auto it) {
+    if (geometry::follows(ll, it.second) && this->trafficRules_.canPass(ll, it.second)) {
+      following.push_back(it.second);
+    };
+  });
   if (following.empty()) {
     return;
   }
   // find out if there are several previous merging lanelets
   ConstLanelets merging;
-  std::for_each(
-      endPointsLanelets.first, endPointsLanelets.second,
-      [&following, &trafficRules = this->trafficRules_, &merging ](auto it) {
-        if (geometry::follows(it.second, following.front()) && trafficRules.canPass(it.second, following.front())) {
-          merging.push_back(it.second);
-        };
-      });
+  std::for_each(endPointsLanelets.first, endPointsLanelets.second, [&following, this, &merging](auto it) {
+    if (geometry::follows(it.second, following.front()) && this->trafficRules_.canPass(it.second, following.front())) {
+      merging.push_back(it.second);
+    };
+  });
   RelationType relation;
   if (merging.size() == 1 && following.size() == 1) {
     relation = RelationType::Successor;

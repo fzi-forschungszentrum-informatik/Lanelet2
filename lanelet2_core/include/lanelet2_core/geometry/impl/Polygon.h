@@ -31,7 +31,7 @@ IfPoly<Polygon3dT, double> distanceToBorder3d(const Polygon3dT& poly1, const Pol
 
 template <typename PolygonT>
 IfPoly<PolygonT, bool> touches2d(const PolygonT& poly1, const PolygonT& poly2) {
-  auto rotatedNext = [& ls = poly2](auto iter) { return iter + 1 == ls.end() ? ls.begin() : iter + 1; };
+  auto rotatedNext = [&](auto iter) { return iter + 1 == poly2.end() ? poly2.begin() : iter + 1; };
   for (auto i = 0u; i < poly1.numSegments(); ++i) {
     auto segment = poly1.segment(i);
     auto second = std::find(poly2.begin(), poly2.end(), segment.second);
