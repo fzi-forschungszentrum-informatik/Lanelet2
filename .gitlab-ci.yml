@@ -88,7 +88,8 @@ general_code_quality:
   - mrt catkin run_tests --no-status $PACKAGE --no-deps
   # Summarize results
   - catkin_test_results --verbose build_debug/$PACKAGE
-  - cp -r build_debug/$PACKAGE/coverage .. || true
+  - mkdir
+  - cp -r build_debug/$PACKAGE/coverage ../coverage/$PACKAGE || true
   # make coverage information available in gitlab
   artifacts:
     name: coverage
