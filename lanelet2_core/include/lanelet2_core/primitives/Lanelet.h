@@ -297,8 +297,8 @@ class ConstWeakLanelet {
   bool expired() const noexcept { return laneletData_.expired(); }
 
  protected:
-  std::weak_ptr<const LaneletData> laneletData_;
-  bool inverted_{false};
+  std::weak_ptr<const LaneletData> laneletData_;  // NOLINT
+  bool inverted_{false};                          // NOLINT
 };
 
 //! Used internally by RegulatoryElements to avoid cyclic dependencies.

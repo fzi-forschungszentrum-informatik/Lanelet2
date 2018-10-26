@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/geometry/algorithms/intersection.hpp>
 #include "../../primitives/LineString.h"
 #include "../../primitives/Traits.h"
 #include "../GeometryHelper.h"

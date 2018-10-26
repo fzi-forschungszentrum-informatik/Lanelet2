@@ -35,8 +35,8 @@ You can find more documentation in the individual packages and in doxygen commen
 Lanelet2 uses [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html) for building and is targeted towards Linux.
 
 ### Dependencies
-* `Boost` (from 1.56)
-* `eigen`
+* `Boost` (from 1.58)
+* `eigen3`
 * [`mrt_cmake_modules`](https://github.com/KIT-MRT/mrt_cmake_modules), a CMake helper library
 * `pugixml` (for lanelet2_io)
 * `boost-python/python2` (for lanelet2_python)
@@ -45,21 +45,20 @@ Lanelet2 uses [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html)
 
 For Ubuntu (assuming you have ROS [installed](http://wiki.ros.org/ROS/Installation)):
 ```shell
-sudo apt-get install libboost-dev libeigen3-dev libgeographic-dev libpython-dev libboost-python-dev python-catkin-tools
+sudo apt-get install libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
 ```
 
 ### Building
 As usual with Catkin, you have to crate a workspace and clone all required packages there. Then you can build:
 ```shell
-mkdir catkin_ws
-cd catkin_ws
-wstool init src
+mkdir catkin_ws && cd catkin_ws && mkdir src
+catkin init
 cd src
 git clone https://github.com/KIT-MRT/mrt_cmake_modules.git
 git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
+cd ..
 catkin build
 ```
-
 
 ## Examples
 Examples and common use cases in both C++ and Python can be found [here](lanelet2_examples/README.md).
