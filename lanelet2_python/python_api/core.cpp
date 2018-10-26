@@ -608,6 +608,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   auto left = static_cast<LineString3d (Lanelet::*)()>(&Lanelet::leftBound);
   auto right = static_cast<LineString3d (Lanelet::*)()>(&Lanelet::rightBound);
+  auto regelems = static_cast<const RegulatoryElementPtrs& (Lanelet::*)()>(&Lanelet::regulatoryElements);
 
   class_<Lanelet, bases<ConstLanelet>>(
       "Lanelet", "The famous lanelet primitive",
@@ -617,8 +618,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("centerline", &Lanelet::centerline, &Lanelet::setCenterline, "Centerline of the lanelet")
       .add_property("leftBound", left, &Lanelet::setLeftBound, "Left boundary of lanelet")
       .add_property("rightBound", right, &Lanelet::setRightBound, "Right boundary of lanelet")
-      .add_property("regulatoryElements",
-                    make_function(&Lanelet::regulatoryElements, return_value_policy<return_by_value>()),
+      .add_property("regulatoryElements", make_function(regelems, return_value_policy<return_by_value>()),
                     "Regulatory elements of the lanelet")
       .def("trafficLights", regelemAs<TrafficLight>, "traffic light regulatory elements")
       .def("trafficSigns", regelemAs<TrafficSign>, "traffic sign regulatory elements")

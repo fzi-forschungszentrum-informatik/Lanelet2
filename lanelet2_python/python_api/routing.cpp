@@ -50,14 +50,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<RoutingCostPtrs>();
 
   // Routing costs
-  class_<RoutingCost, boost::noncopyable, std::shared_ptr<RoutingCost>>(
+  class_<RoutingCost, boost::noncopyable, std::shared_ptr<RoutingCost>>(  // NOLINT
       "RoutingCost", "Object for calculating routing costs between lanelets", no_init);
 
-  class_<RoutingCostDistance, bases<RoutingCost>, std::shared_ptr<RoutingCostDistance>>(
+  class_<RoutingCostDistance, bases<RoutingCost>, std::shared_ptr<RoutingCostDistance>>(  // NOLINT
       "RoutingCostDistance", "Distance based routing cost calculation object",
       init<double, double>((arg("laneChangeCost"), arg("minLaneChangeDistance") = 0)));
 
-  class_<RoutingCostTravelTime, bases<RoutingCost>, std::shared_ptr<RoutingCostTravelTime>>(
+  class_<RoutingCostTravelTime, bases<RoutingCost>, std::shared_ptr<RoutingCostTravelTime>>(  // NOLINT
       "RoutingCostDistance", "Travel time based routing cost calculation object",
       init<double, double>((arg("laneChangeCost"), arg("minLaneChangeTime"))));
 
