@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lanelet2 is a C++ library with ROS support for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core prinicples to handle the upcoming challenges of future maps.
+Lanelet2 is a C++ library for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core prinicples to handle the upcoming challenges of future maps.
 
 Features:
 - **2D and 3D** support
@@ -10,7 +10,6 @@ Features:
 - Supports **lane changes**, routing through areas, etc.
 - **Separated routing** for pedestrians, vehicles, bikes, etc.
 - Many **constomization points** to add new traffic rules, routing costs, parsers, etc.
-- **ROS interface** for communicating parts of a lanelet map via ROS
 - **Simple convenience functions** for common tasks when handling maps
 - **Accurate Projection** between the lan/lon world and local coordinates
 - **IO Interface** for reading and writing e.g. _osm_ data formats
@@ -41,9 +40,8 @@ Lanelet2 uses [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html)
 * `pugixml` (for lanelet2_io)
 * `boost-python/python2` (for lanelet2_python)
 * `geographiclib` (for lanelet2_projection)
-* `ROS` (for lanelet2_interface_ros and lanelet2_msgs_ros)
 
-For Ubuntu (assuming you have ROS [installed](http://wiki.ros.org/ROS/Installation)):
+For Ubuntu (assuming you the ROS package repository [installed](http://wiki.ros.org/ROS/Installation)):
 ```shell
 sudo apt-get install libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
 ```
