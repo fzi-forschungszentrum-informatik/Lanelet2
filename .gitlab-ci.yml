@@ -124,7 +124,7 @@ test_lanelet2_routing:
   variables:
     PACKAGE: lanelet2_routing
     
-test_lanelet2_core:
+test_lanelet2_traffic_rules:
   <<: *test_job
   variables:
     PACKAGE: lanelet2_traffic_rules
