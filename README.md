@@ -73,13 +73,17 @@ Examples and common use cases in both C++ and Python can be found [here](lanelet
 
 ## Citation
 
-If you are using Lanelet2 for scientific research, we would be pleased if you would cite our publication:
-```bibtex
-@inproceedings {
-  author   = {Poggenhans, Fabian and Pauls, Jan-Hendrik and Janosovits, Johannes and Orf, Stefan and Naumann, Maximilian and Kuhnt, Florian and Mayr, Matthias},
-  booktitle = {2018 IEEE 21th International Conference on Intelligent Transportation Systems (ITSC)},
-  title     = {{Lanelet2: A High-Definition Map Framework for the Future of Automated Driving}},
-  year      = {2018}
+If you are using Lanelet2 for scientific research, we would be pleased if you would cite our [publication](http://www.mrt.kit.edu/z/publ/download/2018/Poggenhans2018Lanelet2.pdf):
+```latex
+@inproceedings{poggenhans2018lanelet2,
+  title     = {Lanelet2: A High-Definition Map Framework for the Future of Automated Driving},
+  author    = {Poggenhans, Fabian and Pauls, Jan-Hendrik and Janosovits, Johannes and Orf, Stefan and Naumann, Maximilian and Kuhnt, Florian and Mayr, Matthias},
+  booktitle = {Proc.\ IEEE Intell.\ Trans.\ Syst.\ Conf.},
+  year      = {2018},
+  address   = {Hawaii, USA},
+  owner     = {poggenhans},
+  month     = {November},
+  Url={http://www.mrt.kit.edu/z/publ/download/2018/Poggenhans2018Lanelet2.pdf}
 }
 ```
 
