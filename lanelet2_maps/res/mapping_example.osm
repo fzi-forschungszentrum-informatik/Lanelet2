@@ -1362,16 +1362,16 @@
   <node id='41112' visible='true' version='1' lat='49.00487081668' lon='8.41435119443' />
   <node id='41114' visible='true' version='1' lat='49.00478723963' lon='8.41472737424' />
   <node id='41116' action='modify' visible='true' version='1' lat='49.00480065574' lon='8.41499056634'>
-    <tag k='ele' v='3m' />
+    <tag k='ele' v='3' />
   </node>
   <node id='41118' action='modify' visible='true' version='1' lat='49.00483056753' lon='8.41500665959'>
-    <tag k='ele' v='3m' />
+    <tag k='ele' v='3' />
   </node>
   <node id='41120' action='modify' visible='true' version='1' lat='49.00470278268' lon='8.41556958787'>
-    <tag k='ele' v='3m' />
+    <tag k='ele' v='3' />
   </node>
   <node id='41122' action='modify' visible='true' version='1' lat='49.00466759224' lon='8.41555952959'>
-    <tag k='ele' v='3m' />
+    <tag k='ele' v='3' />
   </node>
   <node id='41124' visible='true' version='1' lat='49.00482264971' lon='8.41474380311' />
   <node id='41126' visible='true' version='1' lat='49.00484882252' lon='8.41475754943' />
@@ -2283,8 +2283,7 @@
   <node id='42734' visible='true' version='1' lat='49.00850276378' lon='8.42974573307' />
   <node id='42736' visible='true' version='1' lat='49.00848648945' lon='8.42967934839' />
   <node id='42738' visible='true' version='1' lat='49.00844338444' lon='8.42964515023' />
-  <node id='42740' visible='true' version='1' lat='49.00845130169' lon='8.42975847356' />
-  <node id='42742' visible='true' version='1' lat='49.00842623039' lon='8.42973500423' />
+  <node id='42740' visible='true' version='1' lat='49.00845130169' lon='8.42975847356' />  <node id='42742' visible='true' version='1' lat='49.00842623039' lon='8.42973500423' />
   <node id='42744' visible='true' version='1' lat='49.00841215527' lon='8.4296498441' />
   <node id='42746' visible='true' version='1' lat='49.00839060273' lon='8.4296947711' />
   <node id='42748' visible='true' version='1' lat='49.00842403115' lon='8.42961765759' />
@@ -10200,7 +10199,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='42526' visible='true' version='1'>
@@ -10212,7 +10211,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='43672' visible='true' version='1'>
@@ -10224,7 +10223,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='43685' visible='true' version='1'>
@@ -10236,7 +10235,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='43694' visible='true' version='1'>
@@ -10248,7 +10247,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44962' visible='true' version='1'>
@@ -10257,7 +10256,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44964' visible='true' version='1'>
@@ -10266,7 +10265,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44966' visible='true' version='1'>
@@ -10275,43 +10274,43 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44968' visible='true' version='1'>
     <member type='way' ref='43658' role='left' />
-    <member type='relation' ref='45236' role='regulatory_ment' />
-    <member type='relation' ref='45230' role='regulatory_ment' />
-    <member type='relation' ref='45224' role='regulatory_ment' />
+    <member type='relation' ref='45236' role='regulatory_element' />
+    <member type='relation' ref='45230' role='regulatory_element' />
+    <member type='relation' ref='45224' role='regulatory_element' />
     <member type='way' ref='43722' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44970' visible='true' version='1'>
     <member type='way' ref='43654' role='left' />
-    <member type='relation' ref='45236' role='regulatory_ment' />
-    <member type='relation' ref='45230' role='regulatory_ment' />
-    <member type='relation' ref='45224' role='regulatory_ment' />
+    <member type='relation' ref='45236' role='regulatory_element' />
+    <member type='relation' ref='45230' role='regulatory_element' />
+    <member type='relation' ref='45224' role='regulatory_element' />
     <member type='way' ref='43658' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44972' visible='true' version='1'>
     <member type='way' ref='43720' role='left' />
-    <member type='relation' ref='45236' role='regulatory_ment' />
-    <member type='relation' ref='45230' role='regulatory_ment' />
-    <member type='relation' ref='45222' role='regulatory_ment' />
+    <member type='relation' ref='45236' role='regulatory_element' />
+    <member type='relation' ref='45230' role='regulatory_element' />
+    <member type='relation' ref='45222' role='regulatory_element' />
     <member type='way' ref='43654' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44974' visible='true' version='1'>
@@ -10320,7 +10319,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44976' visible='true' version='1'>
@@ -10329,7 +10328,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44978' visible='true' version='1'>
@@ -10338,7 +10337,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44980' visible='true' version='1'>
@@ -10347,7 +10346,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44982' visible='true' version='1'>
@@ -10356,7 +10355,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44984' visible='true' version='1'>
@@ -10365,7 +10364,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44986' visible='true' version='1'>
@@ -10375,7 +10374,7 @@
     <tag k='location' v='city' />
     <tag k='one_way' v='false' />
     <tag k='pedestrian' v='true' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='false' />
   </relation>
   <relation id='44988' visible='true' version='1'>
@@ -10384,7 +10383,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44990' visible='true' version='1'>
@@ -10393,7 +10392,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44992' visible='true' version='1'>
@@ -10402,7 +10401,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44994' visible='true' version='1'>
@@ -10411,7 +10410,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44996' visible='true' version='1'>
@@ -10420,7 +10419,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='44998' visible='true' version='1'>
@@ -10429,7 +10428,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45000' visible='true' version='1'>
@@ -10438,7 +10437,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45002' visible='true' version='1'>
@@ -10447,7 +10446,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45004' visible='true' version='1'>
@@ -10456,7 +10455,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45006' visible='true' version='1'>
@@ -10465,7 +10464,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45008' visible='true' version='1'>
@@ -10474,7 +10473,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45010' visible='true' version='1'>
@@ -10483,7 +10482,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45012' visible='true' version='1'>
@@ -10492,29 +10491,29 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45014' visible='true' version='1'>
     <member type='way' ref='43776' role='left' />
-    <member type='relation' ref='45230' role='regulatory_ment' />
-    <member type='relation' ref='45226' role='regulatory_ment' />
+    <member type='relation' ref='45230' role='regulatory_element' />
+    <member type='relation' ref='45226' role='regulatory_element' />
     <member type='way' ref='43768' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45016' visible='true' version='1'>
     <member type='way' ref='43768' role='left' />
-    <member type='relation' ref='45230' role='regulatory_ment' />
-    <member type='relation' ref='45226' role='regulatory_ment' />
+    <member type='relation' ref='45230' role='regulatory_element' />
+    <member type='relation' ref='45226' role='regulatory_element' />
     <member type='way' ref='43772' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45018' visible='true' version='1'>
@@ -10523,7 +10522,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45020' visible='true' version='1'>
@@ -10532,7 +10531,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45022' visible='true' version='1'>
@@ -10541,7 +10540,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45024' visible='true' version='1'>
@@ -10550,7 +10549,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45026' visible='true' version='1'>
@@ -10559,7 +10558,7 @@
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45028' visible='true' version='1'>
@@ -10571,7 +10570,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45030' visible='true' version='1'>
@@ -10583,7 +10582,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45032' visible='true' version='1'>
@@ -10595,7 +10594,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45034' visible='true' version='1'>
@@ -10614,7 +10613,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45038' visible='true' version='1'>
@@ -10626,7 +10625,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45040' visible='true' version='1'>
@@ -10638,7 +10637,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45042' visible='true' version='1'>
@@ -10660,7 +10659,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45048' visible='true' version='1'>
@@ -10672,7 +10671,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45050' visible='true' version='1'>
@@ -10684,7 +10683,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45052' visible='true' version='1'>
@@ -10696,7 +10695,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45054' visible='true' version='1'>
@@ -10708,7 +10707,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45056' visible='true' version='1'>
@@ -10720,7 +10719,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45058' visible='true' version='1'>
@@ -10732,7 +10731,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45060' visible='true' version='1'>
@@ -10744,7 +10743,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45062' visible='true' version='1'>
@@ -10756,7 +10755,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45064' visible='true' version='1'>
@@ -10768,7 +10767,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45066' visible='true' version='1'>
@@ -10780,7 +10779,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45068' visible='true' version='1'>
@@ -10792,14 +10791,14 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45070' visible='true' version='1'>
     <member type='way' ref='43832' role='left' />
-    <member type='relation' ref='45230' role='regulatory_ment' />
-    <member type='relation' ref='45236' role='regulatory_ment' />
-    <member type='relation' ref='45232' role='regulatory_ment' />
+    <member type='relation' ref='45230' role='regulatory_element' />
+    <member type='relation' ref='45236' role='regulatory_element' />
+    <member type='relation' ref='45232' role='regulatory_element' />
     <member type='way' ref='43828' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
@@ -10807,7 +10806,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45072' visible='true' version='1'>
@@ -10819,7 +10818,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45074' visible='true' version='1'>
@@ -10831,7 +10830,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45076' visible='true' version='1'>
@@ -10843,7 +10842,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45078' visible='true' version='1'>
@@ -10855,7 +10854,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45080' visible='true' version='1'>
@@ -10867,14 +10866,14 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45082' visible='true' version='1'>
     <member type='way' ref='43828' role='left' />
-    <member type='relation' ref='45230' role='regulatory_ment' />
-    <member type='relation' ref='45234' role='regulatory_ment' />
-    <member type='relation' ref='45236' role='regulatory_ment' />
+    <member type='relation' ref='45230' role='regulatory_element' />
+    <member type='relation' ref='45234' role='regulatory_element' />
+    <member type='relation' ref='45236' role='regulatory_element' />
     <member type='way' ref='43650' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
@@ -10882,7 +10881,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45084' visible='true' version='1'>
@@ -10894,7 +10893,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45086' visible='true' version='1'>
@@ -10906,14 +10905,14 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45088' visible='true' version='1'>
     <member type='way' ref='43650' role='left' />
-    <member type='relation' ref='45230' role='regulatory_ment' />
-    <member type='relation' ref='45234' role='regulatory_ment' />
-    <member type='relation' ref='45236' role='regulatory_ment' />
+    <member type='relation' ref='45230' role='regulatory_element' />
+    <member type='relation' ref='45234' role='regulatory_element' />
+    <member type='relation' ref='45236' role='regulatory_element' />
     <member type='way' ref='43836' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
@@ -10921,7 +10920,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45090' visible='true' version='1'>
@@ -10933,7 +10932,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45092' visible='true' version='1'>
@@ -10945,7 +10944,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45094' visible='true' version='1'>
@@ -10957,7 +10956,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45096' visible='true' version='1'>
@@ -10969,7 +10968,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45098' visible='true' version='1'>
@@ -10981,7 +10980,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45100' visible='true' version='1'>
@@ -10993,7 +10992,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45102' visible='true' version='1'>
@@ -11005,7 +11004,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45104' visible='true' version='1'>
@@ -11017,7 +11016,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45106' visible='true' version='1'>
@@ -11029,7 +11028,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45108' visible='true' version='1'>
@@ -11041,7 +11040,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45110' visible='true' version='1'>
@@ -11053,7 +11052,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45112' visible='true' version='1'>
@@ -11065,7 +11064,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45114' visible='true' version='1'>
@@ -11077,7 +11076,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45116' visible='true' version='1'>
@@ -11089,7 +11088,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45118' visible='true' version='1'>
@@ -11101,7 +11100,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45120' visible='true' version='1'>
@@ -11113,7 +11112,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45122' visible='true' version='1'>
@@ -11125,7 +11124,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45124' visible='true' version='1'>
@@ -11137,7 +11136,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45126' visible='true' version='1'>
@@ -11149,7 +11148,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45128' visible='true' version='1'>
@@ -11161,7 +11160,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45130' visible='true' version='1'>
@@ -11173,7 +11172,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45132' visible='true' version='1'>
@@ -11185,13 +11184,13 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45134' visible='true' version='1'>
     <member type='way' ref='43900' role='left' />
-    <member type='relation' ref='45236' role='regulatory_ment' />
-    <member type='relation' ref='45218' role='regulatory_ment' />
+    <member type='relation' ref='45236' role='regulatory_element' />
+    <member type='relation' ref='45218' role='regulatory_element' />
     <member type='way' ref='43640' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
@@ -11199,13 +11198,13 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45136' visible='true' version='1'>
     <member type='way' ref='43640' role='left' />
-    <member type='relation' ref='45236' role='regulatory_ment' />
-    <member type='relation' ref='45218' role='regulatory_ment' />
+    <member type='relation' ref='45236' role='regulatory_element' />
+    <member type='relation' ref='45218' role='regulatory_element' />
     <member type='way' ref='43896' role='right' />
     <tag k='bicycle' v='yes' />
     <tag k='location' v='city' />
@@ -11213,7 +11212,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45138' visible='true' version='1'>
@@ -11244,7 +11243,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45142' visible='true' version='1'>
@@ -11256,7 +11255,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45144' visible='true' version='1'>
@@ -11268,7 +11267,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45146' visible='true' version='1'>
@@ -11280,7 +11279,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45148' visible='true' version='1'>
@@ -11292,7 +11291,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45150' visible='true' version='1'>
@@ -11304,7 +11303,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45152' visible='true' version='1'>
@@ -11326,7 +11325,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45156' visible='true' version='1'>
@@ -11338,7 +11337,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45158' visible='true' version='1'>
@@ -11384,7 +11383,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45166' visible='true' version='1'>
@@ -11396,7 +11395,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45168' visible='true' version='1'>
@@ -11420,7 +11419,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45172' visible='true' version='1'>
@@ -11431,7 +11430,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45174' visible='true' version='1'>
@@ -11442,7 +11441,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45176' visible='true' version='1'>
@@ -11478,7 +11477,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45182' visible='true' version='1'>
@@ -11490,7 +11489,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45184' visible='true' version='1'>
@@ -11526,7 +11525,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45190' visible='true' version='1'>
@@ -11538,7 +11537,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45192' visible='true' version='1'>
@@ -11550,7 +11549,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45194' visible='true' version='1'>
@@ -11562,7 +11561,7 @@
     <tag k='pedestrian' v='true' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45196' visible='true' version='1'>
@@ -11572,7 +11571,7 @@
     <tag k='one_way' v='yes' />
     <tag k='pedestrian' v='no' />
     <tag k='train' v='yes' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45198' visible='true' version='1'>
@@ -11582,7 +11581,7 @@
     <tag k='one_way' v='yes' />
     <tag k='pedestrian' v='no' />
     <tag k='train' v='yes' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45200' visible='true' version='1'>
@@ -11605,7 +11604,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45204' visible='true' version='1'>
@@ -11639,7 +11638,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45210' visible='true' version='1'>
@@ -11651,7 +11650,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45212' visible='true' version='1'>
@@ -11663,7 +11662,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45214' visible='true' version='1'>
@@ -11675,7 +11674,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45216' visible='true' version='1'>
@@ -11687,7 +11686,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45218' visible='true' version='1'>
@@ -11695,27 +11694,27 @@
     <member type='way' ref='49639' role='refers' />
     <member type='way' ref='44960' role='refers' />
     <tag k='subtype' v='traffic_light' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
   </relation>
   <relation id='45222' visible='true' version='1'>
     <member type='way' ref='43728' role='ref_line' />
     <member type='way' ref='85888' role='refers' />
     <tag k='subtype' v='traffic_light' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
   </relation>
   <relation id='45224' visible='true' version='1'>
     <member type='way' ref='43728' role='ref_line' />
     <member type='way' ref='85844' role='refers' />
     <member type='way' ref='85876' role='refers' />
     <tag k='subtype' v='traffic_light' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
   </relation>
   <relation id='45226' visible='true' version='1'>
     <member type='way' ref='43584' role='ref_line' />
     <member type='way' ref='85775' role='refers' />
     <member type='way' ref='85807' role='refers' />
     <tag k='subtype' v='traffic_light' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
   </relation>
   <relation id='45230' visible='true' version='1'>
     <member type='way' ref='43584' role='ref_line' />
@@ -11729,7 +11728,7 @@
     <member type='relation' ref='45014' role='yield' />
     <member type='relation' ref='45016' role='yield' />
     <tag k='subtype' v='right_of_way' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
     <tag k='when' v='fallback' />
     <tag k='yield_type' v='yield_to' />
   </relation>
@@ -11737,14 +11736,14 @@
     <member type='way' ref='43548' role='ref_line' />
     <member type='way' ref='77713' role='refers' />
     <tag k='subtype' v='traffic_light' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
   </relation>
   <relation id='45234' visible='true' version='1'>
     <member type='way' ref='43548' role='ref_line' />
     <member type='way' ref='77702' role='refers' />
     <member type='way' ref='69690' role='refers' />
     <tag k='subtype' v='traffic_light' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
   </relation>
   <relation id='45236' visible='true' version='1'>
     <member type='way' ref='43548' role='ref_line' />
@@ -11759,7 +11758,7 @@
     <member type='relation' ref='45134' role='yield' />
     <member type='relation' ref='45136' role='yield' />
     <tag k='subtype' v='right_of_way' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
     <tag k='when' v='fallback' />
   </relation>
   <relation id='45238' visible='true' version='1'>
@@ -11839,7 +11838,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45254' visible='true' version='1'>
@@ -11851,7 +11850,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45256' visible='true' version='1'>
@@ -11863,7 +11862,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45258' visible='true' version='1'>
@@ -11875,7 +11874,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45260' visible='true' version='1'>
@@ -11887,7 +11886,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45262' visible='true' version='1'>
@@ -11899,7 +11898,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45264' visible='true' version='1'>
@@ -11911,7 +11910,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45266' visible='true' version='1'>
@@ -11923,7 +11922,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45268' visible='true' version='1'>
@@ -11935,7 +11934,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45270' visible='true' version='1'>
@@ -11947,7 +11946,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45272' visible='true' version='1'>
@@ -11959,7 +11958,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45274' visible='true' version='1'>
@@ -11971,7 +11970,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45276' visible='true' version='1'>
@@ -11983,7 +11982,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45278' visible='true' version='1'>
@@ -11995,7 +11994,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45280' visible='true' version='1'>
@@ -12007,7 +12006,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45282' visible='true' version='1'>
@@ -12019,7 +12018,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45284' visible='true' version='1'>
@@ -12031,7 +12030,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45286' visible='true' version='1'>
@@ -12043,7 +12042,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45288' visible='true' version='1'>
@@ -12055,7 +12054,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45290' visible='true' version='1'>
@@ -12067,7 +12066,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45292' visible='true' version='1'>
@@ -12079,7 +12078,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45294' visible='true' version='1'>
@@ -12091,7 +12090,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45296' visible='true' version='1'>
@@ -12103,7 +12102,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45298' visible='true' version='1'>
@@ -12115,7 +12114,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45300' visible='true' version='1'>
@@ -12127,7 +12126,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45302' visible='true' version='1'>
@@ -12139,7 +12138,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45304' visible='true' version='1'>
@@ -12151,7 +12150,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45306' visible='true' version='1'>
@@ -12163,7 +12162,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45308' visible='true' version='1'>
@@ -12175,7 +12174,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45310' visible='true' version='1'>
@@ -12187,7 +12186,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45312' visible='true' version='1'>
@@ -12199,7 +12198,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45314' visible='true' version='1'>
@@ -12211,7 +12210,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45316' visible='true' version='1'>
@@ -12223,7 +12222,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45318' visible='true' version='1'>
@@ -12235,7 +12234,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45320' visible='true' version='1'>
@@ -12247,7 +12246,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45322' visible='true' version='1'>
@@ -12259,7 +12258,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45324' visible='true' version='1'>
@@ -12271,7 +12270,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45326' visible='true' version='1'>
@@ -12283,7 +12282,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45328' visible='true' version='1'>
@@ -12295,7 +12294,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45330' visible='true' version='1'>
@@ -12307,7 +12306,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45332' visible='true' version='1'>
@@ -12319,7 +12318,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45334' visible='true' version='1'>
@@ -12331,7 +12330,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45336' visible='true' version='1'>
@@ -12343,7 +12342,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45338' visible='true' version='1'>
@@ -12355,7 +12354,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45340' visible='true' version='1'>
@@ -12367,7 +12366,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45342' visible='true' version='1'>
@@ -12379,7 +12378,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45344' visible='true' version='1'>
@@ -12391,7 +12390,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45346' visible='true' version='1'>
@@ -12403,7 +12402,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45348' visible='true' version='1'>
@@ -12415,7 +12414,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45350' visible='true' version='1'>
@@ -12427,7 +12426,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45352' visible='true' version='1'>
@@ -12438,7 +12437,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45354' visible='true' version='1'>
@@ -12450,7 +12449,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45356' visible='true' version='1'>
@@ -12462,7 +12461,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45358' visible='true' version='1'>
@@ -12474,7 +12473,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45360' visible='true' version='1'>
@@ -12486,7 +12485,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45362' visible='true' version='1'>
@@ -12498,7 +12497,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45364' visible='true' version='1'>
@@ -12510,7 +12509,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45366' visible='true' version='1'>
@@ -12522,7 +12521,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45368' visible='true' version='1'>
@@ -12534,7 +12533,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45370' visible='true' version='1'>
@@ -12546,7 +12545,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45372' visible='true' version='1'>
@@ -12595,7 +12594,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45378' visible='true' version='1'>
@@ -12607,7 +12606,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45380' visible='true' version='1'>
@@ -12618,7 +12617,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45382' visible='true' version='1'>
@@ -12630,7 +12629,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45384' visible='true' version='1'>
@@ -12642,7 +12641,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45386' visible='true' version='1'>
@@ -12678,7 +12677,7 @@
   <relation id='45390' visible='true' version='1'>
     <member type='way' ref='44952' role='refers' />
     <tag k='subtype' v='speed_limit' />
-    <tag k='type' v='regulatory_ment' />
+    <tag k='type' v='regulatory_element' />
   </relation>
   <relation id='45392' visible='true' version='1'>
     <member type='way' ref='44804' role='left' />
@@ -12688,7 +12687,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='highway' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45394' visible='true' version='1'>
@@ -12699,7 +12698,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='highway' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45396' visible='true' version='1'>
@@ -12710,7 +12709,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='highway' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45398' visible='true' version='1'>
@@ -12721,7 +12720,7 @@
     <tag k='pedestrian' v='false' />
     <tag k='region' v='de' />
     <tag k='subtype' v='highway' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45400' visible='true' version='1'>
@@ -12732,7 +12731,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='highway' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45402' visible='true' version='1'>
@@ -12743,7 +12742,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='highway' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45404' visible='true' version='1'>
@@ -12754,7 +12753,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='highway' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45406' visible='true' version='1'>
@@ -12765,7 +12764,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='highway' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicles' v='no' />
   </relation>
   <relation id='45408' visible='true' version='1'>
@@ -12815,7 +12814,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45414' visible='true' version='1'>
@@ -12827,7 +12826,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45416' visible='true' version='1'>
@@ -13047,7 +13046,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45456' visible='true' version='1'>
@@ -13073,7 +13072,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45460' visible='true' version='1'>
@@ -13085,7 +13084,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45462' visible='true' version='1'>
@@ -13097,7 +13096,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45464' visible='true' version='1'>
@@ -13109,7 +13108,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45466' visible='true' version='1'>
@@ -13121,7 +13120,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45468' visible='true' version='1'>
@@ -13133,7 +13132,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45470' visible='true' version='1'>
@@ -13145,7 +13144,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45472' visible='true' version='1'>
@@ -13157,7 +13156,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45474' visible='true' version='1'>
@@ -13169,7 +13168,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45476' visible='true' version='1'>
@@ -13181,7 +13180,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45478' visible='true' version='1'>
@@ -13193,7 +13192,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45480' visible='true' version='1'>
@@ -13205,7 +13204,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45482' visible='true' version='1'>
@@ -13217,7 +13216,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45484' visible='true' version='1'>
@@ -13229,7 +13228,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45486' visible='true' version='1'>
@@ -13536,7 +13535,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45544' visible='true' version='1'>
@@ -13548,7 +13547,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45546' visible='true' version='1'>
@@ -13560,7 +13559,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45548' visible='true' version='1'>
@@ -13572,7 +13571,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45550' visible='true' version='1'>
@@ -13584,7 +13583,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45552' visible='true' version='1'>
@@ -13596,7 +13595,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45554' visible='true' version='1'>
@@ -13608,7 +13607,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45556' visible='true' version='1'>
@@ -13620,7 +13619,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45558' visible='true' version='1'>
@@ -13632,7 +13631,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45560' visible='true' version='1'>
@@ -13644,7 +13643,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45562' visible='true' version='1'>
@@ -13656,7 +13655,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45564' visible='true' version='1'>
@@ -13668,7 +13667,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45566' visible='true' version='1'>
@@ -13680,7 +13679,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45568' visible='true' version='1'>
@@ -13718,7 +13717,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='45574' visible='true' version='1'>
@@ -13730,7 +13729,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45576' visible='true' version='1'>
@@ -13742,7 +13741,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45578' visible='true' version='1'>
@@ -13754,7 +13753,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45580' visible='true' version='1'>
@@ -13766,7 +13765,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='45582' visible='true' version='1'>
@@ -13778,7 +13777,7 @@
     <tag k='pedestrian' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='no' />
   </relation>
   <relation id='50348' visible='true' version='1'>
@@ -13790,7 +13789,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='32215298016831761' visible='true' version='1'>
@@ -13802,7 +13801,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='104180959442016125' visible='true' version='1'>
@@ -13814,7 +13813,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='137834999382935054' visible='true' version='1'>
@@ -13826,7 +13825,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='146105097596474585' visible='true' version='1'>
@@ -13838,7 +13837,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='236893084089463991' visible='true' version='1'>
@@ -13850,7 +13849,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='299801135556229805' visible='true' version='1'>
@@ -13862,7 +13861,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='329661501650965856' visible='true' version='1'>
@@ -13874,7 +13873,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='374340466209181523' visible='true' version='1'>
@@ -13886,7 +13885,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='442585512667267394' visible='true' version='1'>
@@ -13898,7 +13897,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='493910511394665656' visible='true' version='1'>
@@ -13910,7 +13909,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='584797533045363980' visible='true' version='1'>
@@ -13922,7 +13921,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='585125576327414600' visible='true' version='1'>
@@ -13934,7 +13933,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='647618925042582206' visible='true' version='1'>
@@ -13946,7 +13945,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='738566528952162269' visible='true' version='1'>
@@ -13958,7 +13957,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='805058864315633006' visible='true' version='1'>
@@ -13970,7 +13969,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='882345970527846776' visible='true' version='1'>
@@ -13982,7 +13981,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='984250743551948171' visible='true' version='1'>
@@ -13994,7 +13993,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1090413704220797690' visible='true' version='1'>
@@ -14006,7 +14005,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1181845994370657488' visible='true' version='1'>
@@ -14018,7 +14017,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1230696026783469716' visible='true' version='1'>
@@ -14030,7 +14029,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1233497489963677373' visible='true' version='1'>
@@ -14042,7 +14041,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1234379034591142988' visible='true' version='1'>
@@ -14054,7 +14053,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1309969941904883021' visible='true' version='1'>
@@ -14066,7 +14065,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1375323336322835582' visible='true' version='1'>
@@ -14078,7 +14077,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1490339216733857237' visible='true' version='1'>
@@ -14090,7 +14089,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1507837371260062763' visible='true' version='1'>
@@ -14102,7 +14101,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1604899560552226700' visible='true' version='1'>
@@ -14114,7 +14113,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1785705568830251339' visible='true' version='1'>
@@ -14126,7 +14125,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1847807341669006157' visible='true' version='1'>
@@ -14138,7 +14137,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1900110162825233936' visible='true' version='1'>
@@ -14150,7 +14149,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1967009324258694641' visible='true' version='1'>
@@ -14162,7 +14161,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1982879017437833417' visible='true' version='1'>
@@ -14174,7 +14173,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1989239315666164064' visible='true' version='1'>
@@ -14186,7 +14185,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='1993127157384578621' visible='true' version='1'>
@@ -14198,7 +14197,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2004357198674984315' visible='true' version='1'>
@@ -14210,7 +14209,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2178541420781414387' visible='true' version='1'>
@@ -14222,7 +14221,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2284311893438003411' visible='true' version='1'>
@@ -14234,7 +14233,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2406796994303637602' visible='true' version='1'>
@@ -14246,7 +14245,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2488177370187451685' visible='true' version='1'>
@@ -14258,7 +14257,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2494187620681288553' visible='true' version='1'>
@@ -14270,7 +14269,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2501538042390187229' visible='true' version='1'>
@@ -14282,7 +14281,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2506949279349802532' visible='true' version='1'>
@@ -14294,7 +14293,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2629117211428231733' visible='true' version='1'>
@@ -14306,7 +14305,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2630419999660053416' visible='true' version='1'>
@@ -14318,7 +14317,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2815701990836374505' visible='true' version='1'>
@@ -14330,7 +14329,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2875883881497262985' visible='true' version='1'>
@@ -14342,7 +14341,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='2981562299451081503' visible='true' version='1'>
@@ -14354,7 +14353,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3055700409747041357' visible='true' version='1'>
@@ -14366,7 +14365,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3065808502060875935' visible='true' version='1'>
@@ -14378,7 +14377,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3093071314729702331' visible='true' version='1'>
@@ -14390,7 +14389,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3096645840465895340' visible='true' version='1'>
@@ -14402,7 +14401,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3115863563472957956' visible='true' version='1'>
@@ -14414,7 +14413,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3196075855580673794' visible='true' version='1'>
@@ -14426,7 +14425,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3322836406896645644' visible='true' version='1'>
@@ -14438,7 +14437,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3372255899520750209' visible='true' version='1'>
@@ -14450,7 +14449,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3535038449830291886' visible='true' version='1'>
@@ -14462,7 +14461,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3592489247503589951' visible='true' version='1'>
@@ -14474,7 +14473,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3670769534662493708' visible='true' version='1'>
@@ -14486,7 +14485,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3766022379599666264' visible='true' version='1'>
@@ -14498,7 +14497,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3766978479898785248' visible='true' version='1'>
@@ -14510,7 +14509,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3871405854776721782' visible='true' version='1'>
@@ -14522,7 +14521,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='3966054957584072627' visible='true' version='1'>
@@ -14534,7 +14533,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4025272606550902343' visible='true' version='1'>
@@ -14546,7 +14545,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4096028023390365527' visible='true' version='1'>
@@ -14558,7 +14557,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4138841661201604349' visible='true' version='1'>
@@ -14570,7 +14569,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4189184195328241898' visible='true' version='1'>
@@ -14582,7 +14581,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4294877725170241388' visible='true' version='1'>
@@ -14594,7 +14593,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4374554816280829709' visible='true' version='1'>
@@ -14606,7 +14605,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4388755663905652130' visible='true' version='1'>
@@ -14618,7 +14617,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4414071615662925017' visible='true' version='1'>
@@ -14630,7 +14629,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4667234218878130709' visible='true' version='1'>
@@ -14642,7 +14641,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4693469271421012934' visible='true' version='1'>
@@ -14654,7 +14653,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4819270741178254817' visible='true' version='1'>
@@ -14666,7 +14665,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4828442271883631201' visible='true' version='1'>
@@ -14678,7 +14677,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4838042488308346637' visible='true' version='1'>
@@ -14690,7 +14689,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4939294930088669192' visible='true' version='1'>
@@ -14702,7 +14701,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4971743209403573582' visible='true' version='1'>
@@ -14714,7 +14713,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4984045098209185265' visible='true' version='1'>
@@ -14726,7 +14725,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='4997125851566631431' visible='true' version='1'>
@@ -14738,7 +14737,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5118910481164513340' visible='true' version='1'>
@@ -14750,7 +14749,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5203507687316292638' visible='true' version='1'>
@@ -14762,7 +14761,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5219605276379452838' visible='true' version='1'>
@@ -14774,7 +14773,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5499728065004547155' visible='true' version='1'>
@@ -14786,7 +14785,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5500878114409909220' visible='true' version='1'>
@@ -14798,7 +14797,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5576711776832046743' visible='true' version='1'>
@@ -14810,7 +14809,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5608083412546920899' visible='true' version='1'>
@@ -14822,7 +14821,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5662180970588112254' visible='true' version='1'>
@@ -14834,7 +14833,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5820064232837944307' visible='true' version='1'>
@@ -14846,7 +14845,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5872433480342781773' visible='true' version='1'>
@@ -14858,7 +14857,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5950390889582504921' visible='true' version='1'>
@@ -14870,7 +14869,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='5994571573834976945' visible='true' version='1'>
@@ -14882,7 +14881,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6010873249177339358' visible='true' version='1'>
@@ -14894,7 +14893,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6012398680329441872' visible='true' version='1'>
@@ -14906,7 +14905,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6037691286361354304' visible='true' version='1'>
@@ -14918,7 +14917,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6051755935835805602' visible='true' version='1'>
@@ -14930,7 +14929,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6160829422260087896' visible='true' version='1'>
@@ -14942,7 +14941,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6200113967165995538' visible='true' version='1'>
@@ -14954,7 +14953,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6241521636797569241' visible='true' version='1'>
@@ -14966,7 +14965,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6264043605759549266' visible='true' version='1'>
@@ -14978,7 +14977,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6296448398140990640' visible='true' version='1'>
@@ -14990,7 +14989,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6435386096984456936' visible='true' version='1'>
@@ -15002,7 +15001,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6507148803034981613' visible='true' version='1'>
@@ -15014,7 +15013,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6587744829884096258' visible='true' version='1'>
@@ -15027,7 +15026,7 @@
     <tag k='railway' v='yes' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6722104362058561355' visible='true' version='1'>
@@ -15039,7 +15038,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6771979691019578165' visible='true' version='1'>
@@ -15051,7 +15050,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6863241492471799904' visible='true' version='1'>
@@ -15063,7 +15062,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6905469033316639457' visible='true' version='1'>
@@ -15075,7 +15074,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6911248270169482253' visible='true' version='1'>
@@ -15087,7 +15086,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6923355182620813640' visible='true' version='1'>
@@ -15099,7 +15098,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6980464299688733498' visible='true' version='1'>
@@ -15111,7 +15110,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='6994307814782407283' visible='true' version='1'>
@@ -15123,7 +15122,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7195674799508775743' visible='true' version='1'>
@@ -15135,7 +15134,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7326074532659563937' visible='true' version='1'>
@@ -15147,7 +15146,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7395562882005622250' visible='true' version='1'>
@@ -15159,7 +15158,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7402914969115001621' visible='true' version='1'>
@@ -15171,7 +15170,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7599071200282796306' visible='true' version='1'>
@@ -15183,7 +15182,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7634496477757533080' visible='true' version='1'>
@@ -15195,7 +15194,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7683991892595990902' visible='true' version='1'>
@@ -15207,7 +15206,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7697222576222483732' visible='true' version='1'>
@@ -15219,7 +15218,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7711382928694550045' visible='true' version='1'>
@@ -15231,7 +15230,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7713903556798291715' visible='true' version='1'>
@@ -15243,7 +15242,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7859042241037394600' visible='true' version='1'>
@@ -15255,7 +15254,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='7906681650004026038' visible='true' version='1'>
@@ -15267,7 +15266,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8000743559438839841' visible='true' version='1'>
@@ -15279,7 +15278,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8057105352138418295' visible='true' version='1'>
@@ -15291,7 +15290,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8159759251987551368' visible='true' version='1'>
@@ -15303,7 +15302,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8278298097919170101' visible='true' version='1'>
@@ -15315,7 +15314,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8295342500107575335' visible='true' version='1'>
@@ -15327,7 +15326,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8319424567269301985' visible='true' version='1'>
@@ -15339,7 +15338,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8396043010843852718' visible='true' version='1'>
@@ -15351,7 +15350,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8410819687057750073' visible='true' version='1'>
@@ -15363,7 +15362,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8601933696747810962' visible='true' version='1'>
@@ -15375,7 +15374,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8607646396414175765' visible='true' version='1'>
@@ -15387,7 +15386,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8691549135950706455' visible='true' version='1'>
@@ -15399,7 +15398,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8717970484406193818' visible='true' version='1'>
@@ -15411,7 +15410,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8770581255578109950' visible='true' version='1'>
@@ -15423,7 +15422,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='8788265173405290791' visible='true' version='1'>
@@ -15435,7 +15434,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='9037740909199276460' visible='true' version='1'>
@@ -15447,7 +15446,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='9123153028072835627' visible='true' version='1'>
@@ -15459,7 +15458,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='9178926741377113721' visible='true' version='1'>
@@ -15471,7 +15470,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='9187600893603114095' visible='true' version='1'>
@@ -15483,7 +15482,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
   <relation id='9191509550669907524' visible='true' version='1'>
@@ -15495,7 +15494,7 @@
     <tag k='pedestrian' v='no' />
     <tag k='region' v='de' />
     <tag k='subtype' v='normal' />
-    <tag k='type' v='lant' />
+    <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
 </osm>
