@@ -6,7 +6,7 @@ This file describes the architectural decisions which have been made so far and 
 
 <!-- yUML: http://yuml.me/edit/4b9af2c7 or source: %2F%2F Cool Class Diagram, [Primitive|getId();getAttributes();setId();setAttributes()]^-[LineString＃Lanelet], [Primitive]^-[Point＃RegulatoryElement], [PrimitiveData|id;attributes]^-[LineStringData＃LaneletData], [PrimitiveData]^-[Point＃RegulatoryElement], [LineString＃Lanelet]->[LineStringData＃LaneletData], [LineString＃Lanelet]^-[InvertedLineString＃InvertedLanelet], [InvertedLineString＃InvertedLanelet]->[LineStringData＃LaneletData] -->
 
-![Architecture](architecture.png)
+![Architecture](images/architecture.png)
 
 The ＃ symbol stands for alternative readings:  
 LineString and Lanelet (and the corresponding InvertedX and XData) are actually two boxes, but share the same inheritance and association and thus have been compacted into one class.  
@@ -68,7 +68,7 @@ If two lanelets are crossing each other, the routing layer will be able to tell 
 
 Max hose problem consists of two streets with one lane per direction. However, they are connected via a single-lane street without any border between the driving directions. The actual problem is how to represent it and the solution is depicted here:
 
-![Max Hose](max_hose_problem_small.png)
+![Max Hose](images/max_hose_problem_small.png)
 
 Lanelets 1, 3 and 5 are obvious. 1 and 5 share the common LineString in the center which is actually *on* the dashed lane marking. To connect lanelet 3 with 1 and 5, we currently *need* lanelets 2 (vertically striped) and 4 (horizontally striped) which have one border/LineString of virtual type (red). Also, they are by default mutually conflicting like 3 is with itself (see above).
 
