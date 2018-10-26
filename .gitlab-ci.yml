@@ -45,7 +45,7 @@ build_mrt:
   - mrt catkin build -s -rd --debug --default_yes --no-status $CI_PROJECT_NAME
   # generate documentation
   - mrt doc clean && mrt doc build
-  - cp -r build_debug/workspace_doc_*/html ../doxygen
+  - cp -r build_debug/workspace_doc_* ../doxygen
   # make doxygen documentation available in gitlab
   artifacts:
     name: doxygen
