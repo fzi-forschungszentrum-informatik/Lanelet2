@@ -293,8 +293,6 @@ IfPoly<Polygon2dT, BoundingBox2d> boundingBox2d(const Polygon2dT& polygon) {
 template <typename Polygon3dT>
 IfPoly<Polygon3dT, std::pair<BasicPoint3d, BasicPoint3d>> projectedBorderPoint3d(const Polygon3dT& l1,
                                                                                  const Polygon3dT& l2);
-template <typename Polygon3dT>
-IfPoly<Polygon3dT, double> distanceToBorder3d(const Polygon3dT& poly1, const Polygon3dT& poly2);
 
 template <typename PolygonT>
 IfPoly<PolygonT, bool> touches2d(const PolygonT& poly1, const PolygonT& poly2);

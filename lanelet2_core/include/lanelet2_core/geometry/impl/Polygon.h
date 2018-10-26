@@ -1,6 +1,11 @@
 #pragma once
 #include "../../primitives/Polygon.h"
 #include "../Point.h"
+#if BOOST_VERSION > 105800
+#include <boost/geometry/algorithms/relate.hpp>
+#else
+#include <boost/geometry/algorithms/detail/relate/relate.hpp>
+#endif
 
 namespace lanelet {
 namespace geometry {
@@ -42,8 +47,13 @@ IfPoly<Polygon2dT, bool> overlaps2d(const Polygon2dT& poly1, const Polygon2dT& p
   if (touches2d(poly1, poly2)) {
     return false;
   }
+#if BOOST_VERSION > 105800
+  using Mask = boost::geometry::de9im::static_mask<'T', '*', '*', '*', '*', '*', '*', '*', '*'>;
+  return boost::geometry::relate(utils::toHybrid(poly1), utils::toHybrid(poly2), Mask());
+#else
   using Mask = boost::geometry::detail::relate::static_mask<'T', '*', '*', '*', '*', '*', '*', '*', '*'>;
   return boost::geometry::detail::relate::relate<Mask>(utils::toHybrid(poly1), utils::toHybrid(poly2));
+#endif
 }
 
 template <typename Polygon3dT>

@@ -287,7 +287,7 @@ class ConstWeakArea {
   bool expired() const noexcept { return areaData_.expired(); }
 
  protected:
-  std::weak_ptr<const AreaData> areaData_;
+  std::weak_ptr<const AreaData> areaData_;  // NOLINT
 };
 
 /**

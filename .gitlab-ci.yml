@@ -21,7 +21,24 @@ before_script:
   # add current branch name to branch management
   - mrt ws branches add $CI_COMMIT_REF_NAME
 
-build:
+# Tests installing on a plain system
+build_vanilla:
+  image: ros
+  cache: {}
+  before_script: []
+  stage: build
+  script:
+    - apt-get update
+    - apt-get install -y libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
+    - mkdir catkin_ws && cd catkin_ws && mkdir src
+    - catkin init
+    - cd src
+    - git clone https://github.com/KIT-MRT/mrt_cmake_modules.git
+    - git clone $CI_REPOSITORY_URL -b $CI_COMMIT_REF_NAME
+    - cd ..
+    - catkin build
+
+build_mrt:
   stage: build
   script:
   # Build project and resolve deps at the same time in debug mode
@@ -35,6 +52,7 @@ build:
     paths:
     - doxygen
     expire_in: 6 mos
+
     
 general_code_quality:
   stage: build
