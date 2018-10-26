@@ -111,8 +111,6 @@ SpeedLimitInformation GermanVehicle::speedLimit(const ConstArea& /*area*/) const
   return {1_kmh, false};
 }
 
-bool GermanVehicle::canPassImpl(const ConstLanelet& from, const ConstLanelet& to) const { return true; }
-
 LaneChangeType GermanVehicle::laneChangeType(const ConstLineString3d& boundary) const {
   LaneChangeType type;
   auto result = getHardcodedChangeType(boundary);
@@ -133,8 +131,6 @@ LaneChangeType GermanVehicle::laneChangeType(const ConstLineString3d& boundary) 
   }
   return type;
 }
-
-bool GermanVehicle::canOvertakeLeft(const ConstLanelet& /*lanelet*/) const { return true; }
 
 bool GermanVehicle::canOvertakeRight(const ConstLanelet& lanelet) const {
   return lanelet.attributeOr(AttributeName::Location, AttributeValueString::Urban) != AttributeValueString::Urban;
