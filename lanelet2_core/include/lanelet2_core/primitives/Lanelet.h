@@ -266,6 +266,7 @@ class Lanelet : public Primitive<ConstLanelet> {
     return false;
   }
 
+  using Primitive::regulatoryElements;
   using Primitive::regulatoryElementsAs;
 
   //! Get the regulatoryElements that could be converted to RegElemT
