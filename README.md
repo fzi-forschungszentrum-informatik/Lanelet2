@@ -70,6 +70,7 @@ Examples and common use cases in both C++ and Python can be found [here](lanelet
 * **lanelet2_routing** implements the routing graph for routing or reachable set or queries as well as collision checking
 * **lanelet2_maps** provides example maps and functionality to visualise and modify them easily in JOSM
 * **lanelet2_python** implements the python interface for lanelet2
+* **lanelet2_validation** provides checks to ensure a valid lanelet2 map
 
 ## Citation
 

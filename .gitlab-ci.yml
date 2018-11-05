@@ -128,6 +128,11 @@ test_lanelet2_traffic_rules:
   <<: *test_job
   variables:
     PACKAGE: lanelet2_traffic_rules
+
+test_lanelet2_validation:
+  <<: *test_job
+  variables:
+    PACKAGE: lanelet2_validation
     
 code_quality:
   allow_failure: true
