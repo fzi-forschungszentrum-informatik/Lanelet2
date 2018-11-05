@@ -1207,7 +1207,7 @@
   <node id='40930' visible='true' version='1' lat='49.00527577834' lon='8.4159563678'>
     <tag k='type' v='traffic_sign' />
   </node>
-  <node id='40932' visible='true' version='1' lat='49.00517502949' lon='8.41590585046'>
+  <node id='40932' action='modify' visible='true' version='1' lat='49.0051733806' lon='8.41590518017'>
     <tag k='subtype' v='de301' />
     <tag k='type' v='traffic_sign' />
   </node>
@@ -2283,7 +2283,8 @@
   <node id='42734' visible='true' version='1' lat='49.00850276378' lon='8.42974573307' />
   <node id='42736' visible='true' version='1' lat='49.00848648945' lon='8.42967934839' />
   <node id='42738' visible='true' version='1' lat='49.00844338444' lon='8.42964515023' />
-  <node id='42740' visible='true' version='1' lat='49.00845130169' lon='8.42975847356' />  <node id='42742' visible='true' version='1' lat='49.00842623039' lon='8.42973500423' />
+  <node id='42740' visible='true' version='1' lat='49.00845130169' lon='8.42975847356' />
+  <node id='42742' visible='true' version='1' lat='49.00842623039' lon='8.42973500423' />
   <node id='42744' visible='true' version='1' lat='49.00841215527' lon='8.4296498441' />
   <node id='42746' visible='true' version='1' lat='49.00839060273' lon='8.4296947711' />
   <node id='42748' visible='true' version='1' lat='49.00842403115' lon='8.42961765759' />
@@ -2500,7 +2501,7 @@
   <node id='77712' visible='true' version='1' lat='49.00517943485' lon='8.41590766947' />
   <node id='77714' visible='true' version='1' lat='49.0051799019' lon='8.41590797069' />
   <node id='81722' visible='true' version='1' lat='49.00517578828' lon='8.4159062729' />
-  <node id='81731' visible='true' version='1' lat='49.00517543573' lon='8.41590607782' />
+  <node id='81731' action='delete' visible='true' version='1' lat='49.00517543573' lon='8.41590607782' />
   <node id='81734' visible='true' version='1' lat='49.0052769402' lon='8.41595687788' />
   <node id='81745' visible='true' version='1' lat='49.00527643722' lon='8.41595663143' />
   <node id='85772' visible='true' version='1' lat='49.0049505624' lon='8.41551104475' />
@@ -2706,7 +2707,7 @@
   <node id='9123062362481117369' visible='true' version='1' lat='49.00319601978' lon='8.42480619851' />
   <node id='9168130196183352310' visible='true' version='1' lat='49.00284646147' lon='8.42458853427' />
   <node id='9205694161876915621' visible='true' version='1' lat='49.00352278952' lon='8.42354044285' />
-  <way id='-56629' action='modify' visible='true'>
+  <way id='-41265' action='modify' visible='true'>
     <nd ref='40152' />
     <nd ref='39076' />
     <nd ref='39074' />
@@ -8954,10 +8955,11 @@
     <tag k='subtype' v='red_yellow_green' />
     <tag k='type' v='traffic_light' />
   </way>
-  <way id='81723' visible='true' version='1'>
+  <way id='81723' action='modify' visible='true' version='1'>
     <nd ref='40932' />
-    <nd ref='81731' />
     <nd ref='81722' />
+    <tag k='subtype' v='de301' />
+    <tag k='type' v='traffic_sign' />
   </way>
   <way id='81735' visible='true' version='1'>
     <nd ref='40930' />
