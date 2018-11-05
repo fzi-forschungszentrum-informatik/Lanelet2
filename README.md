@@ -28,7 +28,7 @@ You can find more documentation in the individual packages and in doxygen commen
 - [Read here](lanelet2_core/doc/Architecture.md) for a primer on the **software architecture** of lanelet2.
 - There is also some [documentation](lanelet2_core/doc/GeometryPrimer.md) on the geometry calculations you can do with lanelet2 primitives.
 - If you are interested in Lanelet2's **projections**, you will find more [here](lanelet2_projection/doc/Map_Projections_Coordinate_Systems.md).
-- To get more information on how to create valid maps, see [here](lanelet2_projection/doc/Mapping.md).
+- To get more information on how to create valid maps, see [here](lanelet2_maps/README.md).
 
 ## Installation
 Lanelet2 uses [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html) for building and is targeted towards Linux.

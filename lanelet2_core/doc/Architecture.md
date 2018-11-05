@@ -1,82 +1,49 @@
 # Architecture
 
-This file describes the architectural decisions which have been made so far and in particular why we decided like we did.
+This file describes the technical architectural architecture of lanelet2. For information on the representation of lanelet and its primitives, please read first [here](LaneletPrimitives.md).
 
-## Overview
+# Principles
 
-<!-- yUML: http://yuml.me/edit/4b9af2c7 or source: %2F%2F Cool Class Diagram, [Primitive|getId();getAttributes();setId();setAttributes()]^-[LineString＃Lanelet], [Primitive]^-[Point＃RegulatoryElement], [PrimitiveData|id;attributes]^-[LineStringData＃LaneletData], [PrimitiveData]^-[Point＃RegulatoryElement], [LineString＃Lanelet]->[LineStringData＃LaneletData], [LineString＃Lanelet]^-[InvertedLineString＃InvertedLanelet], [InvertedLineString＃InvertedLanelet]->[LineStringData＃LaneletData] -->
+## Data sharing
+In lanelet two, everything that has an Id is unique across the whole map. Because multiple primitives can reference the same element, it is therefore not possible to duplicate/copy the information of a lanelet primitive. If that was possible, modifying the information would leave the map in an invalid state, because other elements that reference it would not be notified of the change.
 
-![Architecture](images/architecture.png)
+To solve this issue, Lanelet2's primitive do not actually store data. Instead, they hold a *pointer* to the real, uncopyable data object. This means they only provide a *view* on the underlying map data. This means that Lanelet2 primitives can be copied without regret, because all copies still point to the same underlying data object. If the data is modified through one of the primtives, all other copies can observe the change.
 
-The ＃ symbol stands for alternative readings:  
-LineString and Lanelet (and the corresponding InvertedX and XData) are actually two boxes, but share the same inheritance and association and thus have been compacted into one class.  
-Point and RegulartoryElement are only placeholders for non-invertible elements of the map.
+This gives some interesting properties. Firstly, primitives can be copied extremely fast, because only the pointer is copied, not the data. Secondly, this means that we can provide different views on the data. One example is that we can give you a 2D view and a 3D view on the data, e.g. a Point2d that returns x and y coordinates but not the z coordinate. You can convert this point back to Point3d without losing information, because in the underlying data, the z-coordinate was always there. Linestrings behave similar. A `LineString3d` returns `Point3d`, a `LineString2d` gives you `Point2d`.
 
-## Goals
+We can also easily *invert* Linestrings and Lanelets with this technique. An inverted Linestring simply returns the underlying data in reversed order. You will not even notice it is inverted, because it still behaves in the same way as a non-inverted one. The effort of creating the inverted Linestring is - you guessed it - just the effort of copying a pointer!
 
-### Identity
+Like this we can make sure that modifying the map is alwasy consistent. All primitives will observe the change. However there are two exceptions to this, and they are related to caching: The **centerline** of a lanelet is calculated based on the left and right bound at the time it was first requested. If the points of a left or right bounds were modified, the Lanelet can not notice the change and still returns the now wrong centerline. You have to reset the centerline of the lanelet yourself. The second issue is within the laneletMap itself. It holds some precalculated Tree structures to efficiently query closest points or usages of a point. If one of the points is modified, the query will still run on the old tree structure. So the general message is: When you plan to modify the map, know what you are doing!
 
-Each final element is supposed to have an id that is unique within the whole map. Therefore, each creation of a final element requires a query to a central id counter that is then uniformly increased. For temporary elements, we introduced the id INVAL_ID so no ids are wasted and the (thread-safe and thus expensive) id querying can be omitted.
+## Composability
+Since Lanelet2's primitives, especially *Lanelets* represent an atomic section of the map, it is often important to compose these atomic parts together to create *compound* objects. These compound primitives behave in the same way as the primitives they are composed of, but internally access their data. This is also driven by the pointer-based concept introduced above: The compound objects simply hold a list of pointers instead of a single one. As an example, you can compose multiple `Linestring3d` to one `CompoundLineString3d`. It behaves like a single linestring, gives you its `size()` in points acces to the individual points while still internally accessing the data of the actual linestrings. You can also compose Polygons from Linestrings, LaneletSet from Lanelets, and so on.
 
-### Data Singularity
+## Const correctness
+Since modifying the map can make cached data invalid, and since modification affects the whole map, Lanelet2 offers some protection against unwanted modification. This is related to *const correctness*: If an object ist passed to a function as `const`, not only the data of the object itself is immutable, but also the data derived from it and all the copies that you make. 
 
-As each element only represents a view on a map data point, we enforce shared pointers. This avoids copies of one single element that could be changed independently which would inevitably lead to data corruption in form of divergence.
+E.g. if a function accepts a Linestring as `const Linestring3d`, its data is immutable. If you access a point of the linestring, you get a `ConstPoint3d`, that allows you to access its data, but not modify it. It is not possible to convert a `ConstPoint3d` back to a `Point3d`. This means, if you call a function that accepts a `const LineString3d` or even a `ConstLineString3d`, you can be 100% sure that you map data will not be modified.
 
-### Modularity
+## Modularity
+We are aware of the fact that roads can be very different in different countries and different places. Some things can be hard to squeeze into the typical map format. Also, the requirements on the map can be very different. To account for this, we tried to make Lanelet2 as flexible as possible by adding customization points where you can plugin your customized solution. Also the modularity of lanelet2 aims to make it as simple as possible to add new functionality in the future.
 
-The elements of the lanelet map (like Points, LineStrings, Lanelets, RegulatoryElements etc.) should be visible as parallel modules with shared functionality (an id and attributes). This results in the common Primitive parent class.
+Part of the flexibility concept is that the tags that are used on objects can be extended without any limits. This way you can easily add more specific information to your maps that you are missing. New, custom Regulatory Elements can be added to accout for difficult traffic situations. Also Lanelet2 can be extended for different countries and different road participants by adding new `TrafficRules` objects which are used by Lanelet2 to interpret the map data. New parsers and writers for new map formats can be added and registered while still using the same good old `load`/`write` function.
 
-### Invertibility
+## Geometry calculations
+Lanelet2's objects meant to be directly usable for geometry calculations. They are all registered with boost::geometry, meaning the follwing is easily possible: `double d = boost::geometry::distance(laneletPoint1, laneletPoint2)`. If laneletPoint1/2 is a 2D point, you will get the result in 2D, else in 3D. 
 
-Some of the elements (like LineStrings and Lanelets) should be invertible, but the InvertedX should only represent another view on the very same data. Furthermore, you should be able to treat an InvertedX like an X. These requirements result in the common XData class that stores the actual data. 
+However, there are limitations to this that originate from the fact that the ConstCorrectness concept and boost::geometry do not play well with each other, because boost::geometry gets confused by the different point types used when things are used in a const and a non-const context. If you want to know more how to solve this problem and avoid pages and pages of compiler errors from boost's feared template code, read our [Geometry Primer](GeometryPrimer.md) on this.
 
-InvertedX then inherits from X and inverts the setter and getter operations on the actual data (i.e. points() of an InvertedLineString returns the inverted_points() of the underlying LineStringData object).
+# Overview and Interaction
+If you don't know Lanelet2's basic primitives yet, better read [here](LaneletPrimitives.md) first!
 
-### Caching
+Here, we want to introduce the basic terms and object that you will be confronted with when using lanelet2 and how they interact:
+* **Primitive** any lanelet2 primitive and their derivates (`Lanelet`, `ConstLanelet`, `LineString2d`, etc)
+* **LaneletMap** a laneletMap is the basic storage container for primitives. It is separated in layers, one for each primitive type and offers different ways to access its data (by a BoundingBox, by id, by nearest point, etc). It does **not** provide routing functionality.
+* **TrafficRules** a traffic rules object interprets the map. E.g. it reports if a lanelet `isPassable`, or if lane changes are possible between two lanelets. A traffic rule object interprets the map from the perspective of one road participant type. A vehicle TrafficRule object will therefore give completely different results on a specific lanelet than a pedestrian TrafficRule object.
+* **RoutingCost** these classes are used by the routing graph to determine costs when driving from one Lanelet/Area to another one. It could be by travelled distance, by travel time but there are no limits for more advanced routing cost functions. You can also choose the cost of lane changes so that routes with few, preferably long lane changes are preferred.
+* **RoutingGraph** a routing graph is built from a LaneletMap, TrafficRules and RoutingCost objects. One routing graph is only for one single participant: The one that the TrafficRules belong to. With the routing graph, you can make all kinds of queries to determine where you or someone else can go/drive.
+* **Route** a route is something returned by the graph when you query a route from A to B. It contains a structure of all the lanelets that you can use on the way with the lowest routing cost, including all possible lane changes.
+* **LaneletPath** or **Path** in general is a sequence of lanelets returned by the RoutingGraph that are directly adjacent and have the lowest routing cost to the destination. "Adjacent" means that they can also be connected by a lane change, not only by following the lanelet in a straight direction.
+* **LaneletSequence** a list of directly succeeding lanelets that can be reached without lane changes. A **LaneletSequence** is the special case of a **LaneletPath** where no lane change is necessary.
+* **Projector** projectors are used by the IO module to convert between maps that store date in the WGS84 (lat/lon) format and the local coordinates used by Lanelet2. There are many different projections that all have different properties, so you should choose the one that fits best to you. If in doubt, use UTM.
 
-As some operations (like inversion) might be needed quite often in some contexts, but never in some ohters, we will cache some data. Caching is done in the XData objects as thus cache invalidation is rather simple. 
-
-If an object is not invertible, caching can be done directly within the object.
-
-## Layers
-
-The lanelet2 map and thus liblanelet2 have three hiearchical layers which are connected in a bottom-up approach:
-
-- Physical objects like lane markings, curbs, trees, signs etc. form the foundation of the map. They form the physical layer which is expressed using Points and LineStrings.
-- Lanelets comprise of such physical objects, in particular LineStrings. They form a lane-level map which planning users can use.
-- Above the lanelets, there is a further layer which handles routing (in a routing graph that knows connectivity of single lanelets), traffic rules etc.
-
-## Routing Modes
-
-There are three basic operation modes for the routing/querying:
-
-- In normal operation, the lanelet map does routing over lanelets that are connected in the routing graph. If lanelets are drivable in both directions, they can be part of a route. Using the InvertedLanelet wrapper, this opposite direction driving should be transparent for the user. 
-- For overtaking or similar maneuvers, the user can query for connected lanelets even though they are then inverted. In this mode, **the user** has to check whether a lanelet should be left ASAP as it is driven in the wrong direction or whether the current lanelet is correctly oriented and can be driven safely.
-- For freespace planning, there is a query mode on the physical layers. In a region growing-like manner, for a certain range and a given position, all drivble space is returned that is given by a user-defined border tpye (like road border, solid line marking, curb, ...). **Important:** This requires an end-of-world border for the whole map!
-
-## Further Issues
-
-##### Inverted lanelets and driving in the opposite direction
-
-To check whether a lanelet is currently driven in opposite direction, the library will take into account left and right border as well as an *isDrivableInBothDirections* (or similar named) attribute. Left and right border uniquely define the direction of a lanelet. If it is not drivable in both directions, *oppositeDirection* can be true.
-
-##### Conflicting lanelets
-
-If two lanelets are crossing each other, the routing layer will be able to tell this. This will also be true for lanelets which are drivable in both directions as they natively conflict with their InvertedLanelets.
-
-##### How to resolve Max' hose problem
-
-Max hose problem consists of two streets with one lane per direction. However, they are connected via a single-lane street without any border between the driving directions. The actual problem is how to represent it and the solution is depicted here:
-
-![Max Hose](images/max_hose_problem_small.png)
-
-Lanelets 1, 3 and 5 are obvious. 1 and 5 share the common LineString in the center which is actually *on* the dashed lane marking. To connect lanelet 3 with 1 and 5, we currently *need* lanelets 2 (vertically striped) and 4 (horizontally striped) which have one border/LineString of virtual type (red). Also, they are by default mutually conflicting like 3 is with itself (see above).
-
-Similar situations are the connection parts of roundabouts that can be resolved in a similar manner using lanelets with virtual borders.
-
-Virtual borders are there for the normal mode routing. Should a sidestepping maneuver be necessary, the region growing mode can be used to find the actual (physical) road border.
-
-
-##### Exceptions
-
-All exceptions are called XError and shall inherit from LaneletError.
