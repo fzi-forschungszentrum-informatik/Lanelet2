@@ -80,7 +80,7 @@ class CompoundLineStringImpl {
   using const_iterator =  // NOLINT
       internal::SelectCompoundLsIteratorT<ConstPointType>;
   using iterator = const_iterator;  // NOLINT
-  using BasicLineString = std::vector<BasicPointType>;
+  using BasicLineString = internal::SelectBasicLineStringT<BasicPointType>;
   using SegmentType = Segment<ConstPointType>;
   /**
    * @brief Construct from a vector of ConstLineString3d
