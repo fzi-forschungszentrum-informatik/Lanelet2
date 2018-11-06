@@ -18,15 +18,15 @@ Lanelet2 also supports more precise projections. Consider switching to one of th
 
 ## Main differences a lanelet1 user should know
 
-Design:
+Map format specification:
 * Traffic light handling, parking places and event regions have been redesigned/replaced.
-* Borders of lanelets no actually have a meaning and are used to infer lane change maneuvers.
+* Borders of lanelets now actually have a meaning and are used to infer lane change maneuvers.
 * Lanelet2 distinguishes between map representation and interpretation. Depending on the road user, the map is interpreted differently.
 * Lanelets can only have one single left and one single right bound (this is required for the lane change feature).
 * A new `Area` type has been introduced to handle places of undirected traffic (Parking lots, pedestrian walks, etc).
 
 Implementation:
-* The implemenentation has been completely redesigned without respect to backwards compability. Expect to have lots of code changes when migrating. *But they are worth it!*
+* The implemenentation has been completely redesigned without respect to backwards compatibility. Expect to have lots of code changes when migrating. *But they are worth it!*
 * Lanelet2 converts geographic coordinates to a local metric coordinate system when loading the map. This results in higher performance when working on the map data and allows more complex projection methods.
 * Maps can be safely modified, copied and saved.
 * LineStrip has been renamed to LineString.
