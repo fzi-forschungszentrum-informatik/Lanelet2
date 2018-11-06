@@ -4,7 +4,7 @@ Validation package for lanelet2. Runs checks on common mapping errors and report
 
 ## Usage
 
-Building this package will create the program `lanelet2_maps`. To test a map, simply run `lanelet2_validate <mymap>`, or better `lanelet2_validate <mymap> --lat <lat> --lon <lon>`, where lat/lon is the origin of your map. The tool will output errors and warnings that were found in your map.
+Building this package will create the program `lanelet2_validate`. To test a map, simply run `lanelet2_validate <mymap>`, or better `lanelet2_validate <mymap> --lat <lat> --lon <lon>`, where lat/lon is the origin of your map. The tool will output errors and warnings that were found in your map.
 
 For advanced usage, try `lanelet2_maps --help`.
 
