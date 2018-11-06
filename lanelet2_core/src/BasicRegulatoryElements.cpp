@@ -26,6 +26,14 @@ bool findAndErase(const T& primitive, RuleParameters& member) {
 }
 
 template <typename T>
+Optional<T> tryGetFront(const std::vector<T>& vec) {
+  if (vec.empty()) {
+    return {};
+  }
+  return vec.front();
+}
+
+template <typename T>
 RuleParameters toRuleParameters(const std::vector<T>& primitives) {
   return utils::transform(primitives, [](const auto& elem) { return RuleParameter(elem); });
 }
@@ -40,9 +48,12 @@ void updateTrafficSigns(TrafficSignsWithType trafficSigns) {
 }
 
 RegulatoryElementDataPtr constructTrafficLightData(Id id, const AttributeMap& attributes,
-                                                   const LineStrings3d& trafficLights, const LineString3d& stopLine) {
-  RuleParameterMap rpm = {{RoleNameString::Refers, toRuleParameters(trafficLights)},
-                          {RoleNameString::RefLine, {stopLine}}};
+                                                   const LineStrings3d& trafficLights,
+                                                   const Optional<LineString3d>& stopLine) {
+  RuleParameterMap rpm = {{RoleNameString::Refers, toRuleParameters(trafficLights)}};
+  if (!!stopLine) {
+    rpm.insert({RoleNameString::RefLine, {*stopLine}});
+  }
   auto data = std::make_shared<RegulatoryElementData>(id, rpm, attributes);
   data->attributes[AttributeName::Type] = AttributeValueString::RegulatoryElement;
   data->attributes[AttributeName::Subtype] = AttributeValueString::TrafficLight;
@@ -98,18 +109,20 @@ TrafficLight::TrafficLight(const RegulatoryElementDataPtr& data) : RegulatoryEle
   if (getParameters<ConstLineString3d>(RoleName::Refers).empty()) {
     throw InvalidInputError("No traffic light defined!");
   }
-  if (getParameters<ConstLineString3d>(RoleName::RefLine).size() != 1) {
-    throw InvalidInputError("There must exist exacly one stop line!");
+  if (getParameters<ConstLineString3d>(RoleName::RefLine).size() > 1) {
+    throw InvalidInputError("There not exist more than one stop line!");
   }
 }
 
 TrafficLight::TrafficLight(Id id, const AttributeMap& attributes, const LineStrings3d& trafficLights,
-                           const LineString3d& stopLine)
+                           const Optional<LineString3d>& stopLine)
     : TrafficLight(constructTrafficLightData(id, attributes, trafficLights, stopLine)) {}
 
-ConstLineString3d TrafficLight::stopLine() const { return getParameters<ConstLineString3d>(RoleName::RefLine).front(); }
+Optional<ConstLineString3d> TrafficLight::stopLine() const {
+  return tryGetFront(getParameters<ConstLineString3d>(RoleName::RefLine));
+}
 
-LineString3d TrafficLight::stopLine() { return getParameters<LineString3d>(RoleName::RefLine).front(); }
+Optional<LineString3d> TrafficLight::stopLine() { return tryGetFront(getParameters<LineString3d>(RoleName::RefLine)); }
 
 ConstLineStrings3d TrafficLight::trafficLights() const { return getParameters<ConstLineString3d>(RoleName::Refers); }
 
@@ -124,6 +137,8 @@ bool TrafficLight::removeTrafficLight(const LineString3d& primitive) {
 }
 
 void TrafficLight::setStopLine(const LineString3d& stopLine) { parameters()[RoleName::RefLine] = {stopLine}; }
+
+void TrafficLight::removeStopLine() { parameters()[RoleName::RefLine] = {}; }
 
 RightOfWay::RightOfWay(const RegulatoryElementDataPtr& data) : RegulatoryElement(data) {
   if (getParameters<WeakLanelet>(RoleName::RightOfWay).empty()) {
