@@ -278,6 +278,8 @@ class GenericRegulatoryElement final : public Primitive<RegulatoryElement> {
   template <typename PrimitiveT>
   void addParameter(RoleName role, const PrimitiveT& primitive);
 
+  using Primitive<RegulatoryElement>::getParameters;
+
   //! getter for all parameters of a regulatory element.
   RuleParameterMap& parameters() noexcept { return data()->parameters; }
 };

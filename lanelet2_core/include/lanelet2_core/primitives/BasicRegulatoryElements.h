@@ -19,7 +19,7 @@ class TrafficLight : public RegulatoryElement {
   //! Directly construct a stop line from its required rule parameters.
   //! Might modify the input data in oder to get correct tags.
   static Ptr make(Id id, const AttributeMap& attributes, const LineStrings3d& trafficLights,
-                  const LineString3d& stopLine) {
+                  const Optional<LineString3d>& stopLine = {}) {
     return Ptr{new TrafficLight(id, attributes, trafficLights, stopLine)};
   }
 
@@ -27,8 +27,8 @@ class TrafficLight : public RegulatoryElement {
    * @brief get the stop line for the traffic light
    * @return the stop line as LineString
    */
-  ConstLineString3d stopLine() const;
-  LineString3d stopLine();
+  Optional<ConstLineString3d> stopLine() const;
+  Optional<LineString3d> stopLine();
 
   /**
    * @brief get the relevant traffic lights
@@ -62,9 +62,13 @@ class TrafficLight : public RegulatoryElement {
    */
   void setStopLine(const LineString3d& stopLine);
 
+  //! Deletes the stop line
+  void removeStopLine();
+
  protected:
   friend class RegisterRegulatoryElement<TrafficLight>;
-  TrafficLight(Id id, const AttributeMap& attributes, const LineStrings3d& trafficLights, const LineString3d& stopLine);
+  TrafficLight(Id id, const AttributeMap& attributes, const LineStrings3d& trafficLights,
+               const Optional<LineString3d>& stopLine);
   explicit TrafficLight(const RegulatoryElementDataPtr& data);
 };
 
