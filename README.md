@@ -9,7 +9,7 @@ Features:
 - **Consistent modification**: if one point is modified, all owning objects see the change
 - Supports **lane changes**, routing through areas, etc.
 - **Separated routing** for pedestrians, vehicles, bikes, etc.
-- Many **constomization points** to add new traffic rules, routing costs, parsers, etc.
+- Many **customization points** to add new traffic rules, routing costs, parsers, etc.
 - **Simple convenience functions** for common tasks when handling maps
 - **Accurate Projection** between the lan/lon world and local coordinates
 - **IO Interface** for reading and writing e.g. _osm_ data formats
