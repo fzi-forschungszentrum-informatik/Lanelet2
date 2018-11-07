@@ -2,13 +2,13 @@
 
 The routing module for lanelet2.
 
-For a short version of this you can also look at [the presentation](doc/Presentation/Lanelet2 Routing.pdf).
+For a short version of this you can also look at [the presentation](https://htmlpreview.github.io/?https://github.com/fzi-forschungszentrum-informatik/Lanelet2/blob/master/lanelet2_routing/doc/lanelet2_routing.html). If some images do not render correctly, please clone the repository and open the html file in your browser.
 
 This readme covers some basics. The API offers more than that.
 
 # 1. Components and Vocabulary
 ## How to create a Routing Graph
-![](doc/Images/components.png)
+![](doc/images/components.png)
 
 The needed components to create a routing graph are:
 
@@ -22,13 +22,13 @@ The needed components to create a routing graph are:
 **Traffic Rules for a Specific Participant** (see [lanelet2_traffic_rules](../lanelet2_traffic_rules/README.md))
 * Determines which lanelets/areas are passable
 * *Influences the possible paths*
-    
+
 **Lanelet Map:** (see [lanelet2_core](../lanelet2_core/README.md))
 * Map with Lanelets, Areas, Regulatory Elements, ...
 
 ## Relations
 Lanelets that are part of a routing graph can have relations to each other:
-![](doc/Images/max-hose.png)
+![](doc/images/max-hose.png)
 
 The possible relations are:
     * `left`, `right` (reachable via lane change)
@@ -38,7 +38,7 @@ The possible relations are:
     * `area` (reachable area to lanelet/area relation)
 
 ## Routes and (Driving) Routes
-![](doc/Images/route_and_route.png)
+![](doc/images/route_and_route.png)
 
 ### Shortest route
  * A shortest path from A to B, possibly with intermediate points
@@ -65,7 +65,7 @@ A *path* (LaneletPath or LaneletOrAreaPath) is an ordered list of Lanelets/Areas
 
 A *sequence* (LaneletSequence) is a sequence of subsequent Lanelets that is not separaed by a lane change (think of it as a _lane_). It does not necessary lead to a destination, instead it ends when a lane change is required. In the example image, the lanelets A, D, B form a valid _sequence_ (and also a valid _path_), while the lanelets A, D, E are a valid _path_, but not a valid _sequence_.
 
-![](doc/Images/shortest_path_and_route.png)
+![](doc/images/shortest_path_and_route.png)
 
 
 
@@ -155,7 +155,7 @@ There's `leftRelations` that returns a vector of pairs of LaneletRelations where
 
 # 3. Export and Debugging Routing Graphs
 
-![](Images/lanelet_map_routing_graph.png)
+![](doc/images/lanelet_map_routing_graph.png)
 
 ## LaneletMap with Routing Information
 
@@ -179,12 +179,12 @@ These can then be viewed with a graph viewer like [Gephi](https://gephi.org/). T
 
 Example route through `Oststadtkreisel`:
 
-![](doc/Images/lanelet_map_route_oststadtkreisel_small.png)
+![](doc/images/lanelet_map_route_oststadtkreisel_small.png)
 
 
 Output of `getDebugLaneletMap()` function:
 
-![](doc/Images/lanelet_map_route.png)
+![](doc/images/lanelet_map_route.png)
 
 ## Example relational queries on routes:
 
@@ -218,7 +218,7 @@ graphs.emplace_back(pedestrianGraphLaneletMap);
 RoutingGraphContainer container(graphs);
 ```
 ## Example queries
-The last parameter *participantHeight* is optional and decides wheter conflicting lanelets are determined in 2D or 3D.
+The last parameter *participantHeight* is optional and decides whether conflicting lanelets are determined in 2D or 3D.
 
 ### Query for a single lanelet
 
