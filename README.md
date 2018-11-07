@@ -11,7 +11,7 @@ Features:
 - **Separated routing** for pedestrians, vehicles, bikes, etc.
 - Many **customization points** to add new traffic rules, routing costs, parsers, etc.
 - **Simple convenience functions** for common tasks when handling maps
-- **Accurate Projection** between the lan/lon world and local coordinates
+- **Accurate Projection** between the lat/lon geographic world and local metric coordinates
 - **IO Interface** for reading and writing e.g. _osm_ data formats
 - **Python2** bindings for the whole C++ interface
 - **Boost Geometry** support for all thinkable kinds of geometry calculations on map primitives
