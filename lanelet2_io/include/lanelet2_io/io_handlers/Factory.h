@@ -4,9 +4,9 @@
 #include <functional>
 #include <map>
 #include <string>
-#include "Configuration.h"
+#include "../Configuration.h"
+#include "../Projection.h"
 #include "Parser.h"
-#include "Projection.h"
 #include "Writer.h"
 
 namespace lanelet {

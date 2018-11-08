@@ -1,9 +1,9 @@
 #pragma once
 #include <lanelet2_core/LaneletMap.h>
 #include <memory>
-#include "Exceptions.h"
+#include "../Exceptions.h"
+#include "../Projection.h"
 #include "IoHandler.h"
-#include "Projection.h"
 
 namespace lanelet {
 namespace io_handlers {
