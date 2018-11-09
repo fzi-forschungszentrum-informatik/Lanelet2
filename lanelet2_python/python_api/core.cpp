@@ -231,7 +231,7 @@ class IsLineString : public def_visitor<IsLineString<LsT>> {
   void visit(ClassT& c) const {
     c.def("__setitem__", setItemWrapper<LsT, typename LsT::PointType>)
         .def("__delitem__", delItemWrapper<LsT>)
-        .def("append", &LineString2d::push_back)
+        .def("append", &LsT::push_back)
         .def("__iter__", iterator<LsT>())
         .def("__len__", &LsT::size)
         .def("inverted", &LsT::inverted);
@@ -303,6 +303,7 @@ auto wrapLayer(const char* layerName) {
       .def("get", get, "Gets a point with specified Id")
       .def("__iter__", iterator<LayerT>())
       .def("__len__", &LayerT::size)
+      .def("__getitem__", +[](LayerT& self, Id idx) { return self.get(idx); })
       .def("search", search, "Search in a search area")
       .def("nearest", nearest, "Get nearest n points")
       .def("uniqueId", &LayerT::uniqueId);
@@ -340,7 +341,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__div__", divWrapper<BasicPoint2d, double>)
       .def(self_ns::str(self_ns::self));
 
-  class_<Eigen::Vector2d>("Vecto2d", "A simple point", no_init)
+  class_<Eigen::Vector2d>("Vector2d", "A simple point", no_init)
       .add_property("x", getXWrapper<BasicPoint2d>, setXWrapper<BasicPoint2d>, "x coordinate")
       .add_property("y", getYWrapper<BasicPoint2d>, setYWrapper<BasicPoint2d>, "y coordinate")
       .def("__add__", addWrapper<BasicPoint2d>)
@@ -368,10 +369,15 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("min", +[](BoundingBox2d& self) { return self.min(); })
       .add_property("max", +[](BoundingBox2d& self) { return self.max(); });
 
+  class_<BoundingBox3d>("BoundingBox3d", init<BasicPoint3d, BasicPoint3d>("BoundingBox3d(minPoint, maxPoint"))
+      .add_property("min", +[](BoundingBox3d& self) { return self.min(); })
+      .add_property("max", +[](BoundingBox3d& self) { return self.max(); });
+
   boost::python::to_python_converter<Attribute, AttributeToPythonStr>();
 
   using ::converters::IterableConverter;
   using ::converters::OptionalConverter;
+  using ::converters::ToOptionalConverter;
   using ::converters::VariantConverter;
   using ::converters::VectorToListConverter;
   using ::converters::WeakConverter;
@@ -430,8 +436,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   OptionalConverter<ConstRuleParameter>();
   OptionalConverter<RegulatoryElement>();
 
-  implicitly_convertible<LineString3d, Optional<LineString3d>>();
-
   WeakConverter<WeakLanelet>();
   WeakConverter<WeakArea>();
 
@@ -448,6 +452,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .fromPython<Areas>()
       .fromPython<ConstAreas>()
       .fromPython<RegulatoryElementPtrs>();
+
+  ToOptionalConverter().fromPython<LineString3d>();
 
   class_<AttributeMap>("AttributeMap", init<>("AttributeMap()")).def(IsHybridMap<AttributeMap>());
 
@@ -666,6 +672,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(IsPrimitive<Area>())
       .add_property("outerBound", getRefFunc(outerBound), &Area::setOuterBound)
       .add_property("innerBounds", getRefFunc(innerBounds), &Area::setInnerBounds)
+      .add_property("regulatoryElements", +[](Area& self) { return self.regulatoryElements(); },
+                    "Regulatory elements of the area")
+      .def("addRegulatoryElement", &Area::addRegulatoryElement)
+      .def("removeRegulatoryElement", &Area::removeRegulatoryElement)
       .def("outerBoundPolygon", &Area::outerBoundPolygon)
       .def("innerBoundPolygon", &Area::innerBoundPolygons);
 
@@ -684,7 +694,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<TrafficLight, boost::noncopyable, std::shared_ptr<TrafficLight>, bases<RegulatoryElement>>(
       "TrafficLight", "A traffic light regulatory element", no_init)
       .def("__init__", make_constructor(&TrafficLight::make, default_call_policies(),
-                                        (arg("id"), arg("attributes"), arg("trafficLights"), arg("stopLine"))))
+                                        (arg("id"), arg("attributes"), arg("trafficLights"),
+                                         arg("stopLine") = Optional<LineString3d>())))
       .add_property("stopLine", +[](TrafficLight& self) { return self.stopLine(); }, &TrafficLight::setStopLine)
       .add_property("trafficLights", +[](TrafficLight& self) { return self.trafficLights(); })
       .def("addTrafficLight", &TrafficLight::addTrafficLight)
