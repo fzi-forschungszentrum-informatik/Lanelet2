@@ -133,6 +133,11 @@ test_lanelet2_validation:
   <<: *test_job
   variables:
     PACKAGE: lanelet2_validation
+
+test_lanelet2_examples:
+  <<: *test_job
+  variables:
+    PACKAGE: lanelet2_examples
     
 code_quality:
   allow_failure: true
