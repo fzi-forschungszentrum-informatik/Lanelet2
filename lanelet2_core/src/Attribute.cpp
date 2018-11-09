@@ -143,6 +143,7 @@ void Attribute::setValue(const std::string& value) {
 }
 
 // see https://regexr.com/3knio
+// lanelet types
 constexpr const char AttributeValueString::Node[];
 constexpr const char AttributeValueString::Way[];
 constexpr const char AttributeValueString::Relation[];
@@ -168,6 +169,8 @@ constexpr const char AttributeValueString::Visualization[];
 constexpr const char AttributeValueString::ZigZag[];
 constexpr const char AttributeValueString::LiftGate[];
 constexpr const char AttributeValueString::JerseyBarrier[];
+constexpr const char AttributeValueString::Gate[];
+constexpr const char AttributeValueString::Door[];
 constexpr const char AttributeValueString::Trajectory[];
 constexpr const char AttributeValueString::Rail[];
 constexpr const char AttributeValueString::Bump[];
@@ -197,11 +200,15 @@ constexpr const char AttributeValueString::Red[];
 constexpr const char AttributeValueString::Yellow[];
 
 // Lanelet types
-constexpr const char AttributeValueString::PlayStreet[];
-constexpr const char AttributeValueString::Normal[];
-constexpr const char AttributeValueString::MainRoad[];
+constexpr const char AttributeValueString::Road[];
 constexpr const char AttributeValueString::Highway[];
+constexpr const char AttributeValueString::PlayStreet[];
+constexpr const char AttributeValueString::BusLane[];
 constexpr const char AttributeValueString::EmergencyLane[];
+constexpr const char AttributeValueString::BicycleLane[];
+constexpr const char AttributeValueString::Walkway[];
+constexpr const char AttributeValueString::SharedWalkway[];
+constexpr const char AttributeValueString::Crosswalk[];
 constexpr const char AttributeValueString::Stairs[];
 
 // Lanelet location tag
@@ -213,45 +220,53 @@ constexpr const char AttributeValueString::Private[];
 constexpr const char AttributeValueString::Parking[];
 constexpr const char AttributeValueString::Freespace[];
 constexpr const char AttributeValueString::Vegetation[];
-constexpr const char AttributeValueString::Walkway[];
 constexpr const char AttributeValueString::Building[];
 constexpr const char AttributeValueString::TrafficIsland[];
 constexpr const char AttributeValueString::Exit[];
 
-// regulatory elements
+// Regulatory elements
 constexpr const char AttributeValueString::TrafficLight[];
 constexpr const char AttributeValueString::TrafficSign[];
 constexpr const char AttributeValueString::SpeedLimit[];
 constexpr const char AttributeValueString::RightOfWay[];
 
-// yielding
-constexpr const char AttributeValueString::YieldTo[];
-constexpr const char AttributeValueString::YieldFrom[];
-constexpr const char AttributeValueString::Equal[];
-constexpr const char AttributeValueString::RightBeforeLeft[];
-
 // other
 constexpr const char AttributeNamesString::Type[];
 constexpr const char AttributeNamesString::Subtype[];
 constexpr const char AttributeNamesString::OneWay[];
-constexpr const char AttributeNamesString::LaneChange[];
-constexpr const char AttributeNamesString::Accessible[];
-constexpr const char AttributeNamesString::YieldType[];
+constexpr const char AttributeNamesString::ParticipantVehicle[];
+constexpr const char AttributeNamesString::ParticipantPedestrian[];
 constexpr const char AttributeNamesString::SpeedLimit[];
-constexpr const char AttributeNamesString::Vehicle[];
-constexpr const char AttributeNamesString::LaneChangeLeft[];
-constexpr const char AttributeNamesString::LaneChangeRight[];
 constexpr const char AttributeNamesString::Location[];
 constexpr const char AttributeNamesString::Dynamic[];
-constexpr const char AttributeNamesString::Pedestrian[];
-constexpr const char AttributeNamesString::Bicycle[];
-constexpr const char AttributeNamesString::Train[];
-constexpr const char AttributeNamesString::Emergency[];
-constexpr const char AttributeNamesString::SignType[];
 
-// unused attributes
+// attributes not used in fast lookup
+// on linestrings
+constexpr const char AttributeNamesString::LaneChange[];
+constexpr const char AttributeNamesString::LaneChangeLeft[];
+constexpr const char AttributeNamesString::LaneChangeRight[];
+
+// on lanelets/areas
+constexpr const char AttributeNamesString::SpeedLimitMandatory[];
 constexpr const char AttributeNamesString::Area[];
-constexpr const char AttributeNamesString::Reason[];
+constexpr const char AttributeNamesString::Fallback[];
+constexpr const char AttributeNamesString::Width[];
+constexpr const char AttributeNamesString::Height[];
+constexpr const char AttributeNamesString::Temporary[];
+
+// participants
+constexpr const char Participants::Vehicle[];
+constexpr const char Participants::VehicleBus[];
+constexpr const char Participants::VehicleCar[];
+constexpr const char Participants::VehicleCarElectric[];
+constexpr const char Participants::VehicleCarCombustion[];
+constexpr const char Participants::VehicleTruck[];
+constexpr const char Participants::VehicleMotorcycle[];
+constexpr const char Participants::VehicleTaxi[];
+constexpr const char Participants::VehicleEmergency[];
+constexpr const char Participants::Pedestrian[];
+constexpr const char Participants::Bicycle[];
+constexpr const char Participants::Train[];
 
 constexpr AttributeNamesItem AttributeNamesString::Map[];
 

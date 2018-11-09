@@ -183,19 +183,11 @@ enum class AttributeName {
   Type,
   Subtype,
   OneWay,
-  LaneChange,
-  Accessible,
-  YieldType,
+  ParticipantVehicle,
+  ParticipantPedestrian,
   SpeedLimit,
-  Vehicle,
-  LaneChangeLeft,
-  LaneChangeRight,
   Location,
-  Dynamic,
-  Pedestrian,
-  Bicycle,
-  Train,
-  Emergency
+  Dynamic
 };
 
 using AttributeNamesItem = std::pair<const char*, const AttributeName>;
@@ -209,43 +201,52 @@ struct AttributeNamesString {
   static constexpr const char Type[] = "type";
   static constexpr const char Subtype[] = "subtype";
   static constexpr const char OneWay[] = "one_way";
-  static constexpr const char LaneChange[] = "lane_change";
-  static constexpr const char Accessible[] = "accessible";
-  static constexpr const char YieldType[] = "yield_type";
+  static constexpr const char ParticipantVehicle[] = "participant:vehicle";
+  static constexpr const char ParticipantPedestrian[] = "participant:pedestrian";
   static constexpr const char SpeedLimit[] = "speed_limit";
-  static constexpr const char Vehicle[] = "vehicle";
-  static constexpr const char LaneChangeLeft[] = "lane_change:left";
-  static constexpr const char LaneChangeRight[] = "lane_change:right";
   static constexpr const char Location[] = "location";
   static constexpr const char Dynamic[] = "dynamic";
-  static constexpr const char Pedestrian[] = "pedestrian";
-  static constexpr const char Bicycle[] = "bicycle";
-  static constexpr const char Train[] = "train";
-  static constexpr const char Emergency[] = "emergency";
 
   // attributes not used in fast lookup
+  // on linestrings
+  static constexpr const char LaneChange[] = "lane_change";
+  static constexpr const char LaneChangeLeft[] = "lane_change:left";
+  static constexpr const char LaneChangeRight[] = "lane_change:right";
+
+  // on lanelets/areas
+  static constexpr const char SpeedLimitMandatory[] = "speed_limit_mandatory";
+  static constexpr const char Participant[] = "participant";
   static constexpr const char Area[] = "area";
-  static constexpr const char Reason[] = "reason";
-  static constexpr const char SignType[] = "sign_type";
+  static constexpr const char Fallback[] = "fallback";
+  static constexpr const char Width[] = "width";
+  static constexpr const char Height[] = "height";
+  static constexpr const char Temporary[] = "temporary";
 
   static constexpr AttributeNamesItem Map[] = {{Type, AttributeName::Type},
                                                {Subtype, AttributeName::Subtype},
                                                {OneWay, AttributeName::OneWay},
-                                               {LaneChange, AttributeName::LaneChange},
-                                               {Accessible, AttributeName::Accessible},
-                                               {YieldType, AttributeName::YieldType},
+                                               {ParticipantVehicle, AttributeName::ParticipantVehicle},
+                                               {ParticipantPedestrian, AttributeName::ParticipantPedestrian},
                                                {SpeedLimit, AttributeName::SpeedLimit},
-                                               {Vehicle, AttributeName::Vehicle},
-                                               {LaneChangeLeft, AttributeName::LaneChangeLeft},
-                                               {LaneChangeRight, AttributeName::LaneChangeRight},
-                                               {Dynamic, AttributeName::Dynamic},
                                                {Location, AttributeName::Location},
-                                               {Pedestrian, AttributeName::Pedestrian},
-                                               {Bicycle, AttributeName::Bicycle},
-                                               {Train, AttributeName::Train},
-                                               {Emergency, AttributeName::Emergency}};
+                                               {Dynamic, AttributeName::Dynamic}};
 };
 
+//! parts of tag that have to be combined with either Participants:, OneWay: or SpeedLimit to generate an override.
+struct Participants {
+  static constexpr const char Vehicle[] = "vehicle";
+  static constexpr const char VehicleBus[] = "vehicle:bus";
+  static constexpr const char VehicleCar[] = "vehicle:car";
+  static constexpr const char VehicleCarElectric[] = "vehicle:car:electric";
+  static constexpr const char VehicleCarCombustion[] = "vehicle:car:combustion";
+  static constexpr const char VehicleTruck[] = "vehicle:truck";
+  static constexpr const char VehicleMotorcycle[] = "vehicle:motorcycle";
+  static constexpr const char VehicleTaxi[] = "vehicle:taxi";
+  static constexpr const char VehicleEmergency[] = "vehicle:emergency";
+  static constexpr const char Pedestrian[] = "pedestrian";
+  static constexpr const char Bicycle[] = "bicycle";
+  static constexpr const char Train[] = "train";
+};
 /**
  * @brief Common values for attributes are defined here.
  *
@@ -278,6 +279,8 @@ struct AttributeValueString {
   static constexpr const char ZigZag[] = "zig-zag";
   static constexpr const char LiftGate[] = "lift_gate";
   static constexpr const char JerseyBarrier[] = "jersey_barrier";
+  static constexpr const char Gate[] = "gate";
+  static constexpr const char Door[] = "door";
   static constexpr const char Trajectory[] = "trajectory";
   static constexpr const char Rail[] = "rail";
   static constexpr const char Bump[] = "bump";
@@ -307,11 +310,15 @@ struct AttributeValueString {
   static constexpr const char Yellow[] = "yellow";
 
   // Lanelet types
-  static constexpr const char PlayStreet[] = "play_street";
-  static constexpr const char Normal[] = "normal";
-  static constexpr const char MainRoad[] = "main_road";
+  static constexpr const char Road[] = "road";
   static constexpr const char Highway[] = "highway";
+  static constexpr const char PlayStreet[] = "play_street";
   static constexpr const char EmergencyLane[] = "emergency_lane";
+  static constexpr const char BusLane[] = "bus_lane";
+  static constexpr const char BicycleLane[] = "bicycle_lane";
+  static constexpr const char Walkway[] = "walkway";
+  static constexpr const char SharedWalkway[] = "shared_walkway";
+  static constexpr const char Crosswalk[] = "crosswalk";
   static constexpr const char Stairs[] = "stairs";
 
   // Lanelet location tag
@@ -323,7 +330,6 @@ struct AttributeValueString {
   static constexpr const char Parking[] = "parking";
   static constexpr const char Freespace[] = "freespace";
   static constexpr const char Vegetation[] = "vegetation";
-  static constexpr const char Walkway[] = "walkway";
   static constexpr const char Building[] = "building";
   static constexpr const char TrafficIsland[] = "traffic_island";
   static constexpr const char Exit[] = "exit";
@@ -333,12 +339,6 @@ struct AttributeValueString {
   static constexpr const char TrafficSign[] = "traffic_sign";
   static constexpr const char SpeedLimit[] = "speed_limit";
   static constexpr const char RightOfWay[] = "right_of_way";
-
-  // yielding
-  static constexpr const char YieldTo[] = "yield_to";
-  static constexpr const char YieldFrom[] = "yield_from";
-  static constexpr const char Equal[] = "equal";
-  static constexpr const char RightBeforeLeft[] = "right_before_left";
 };
 
 inline std::ostream& operator<<(std::ostream& stream, const Attribute& obj) { return stream << obj.value(); }
