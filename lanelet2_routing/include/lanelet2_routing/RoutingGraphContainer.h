@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Route.h>
-#include <RoutingGraph.h>
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <algorithm>
 #include <unordered_set>
+#include "Route.h"
+#include "RoutingGraph.h"
 
 namespace lanelet {
 namespace routing {
