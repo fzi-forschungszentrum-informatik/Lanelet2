@@ -36,6 +36,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   auto trafficRules = import("lanelet2.traffic_rules");
   using namespace lanelet::routing;
 
+  using converters::IterableConverter;
   using converters::OptionalConverter;
   using converters::VectorToListConverter;
   OptionalConverter<Route>();
@@ -48,6 +49,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<RelationTypes>();
   VectorToListConverter<RouteElementRelations>();
   VectorToListConverter<RoutingCostPtrs>();
+  VectorToListConverter<LaneletPaths>();
+
+  // Register interable conversions.
+  IterableConverter().fromPython<RoutingCostPtrs>();
+
+  implicitly_convertible<std::shared_ptr<RoutingCostDistance>, RoutingCostPtr>();
+  implicitly_convertible<std::shared_ptr<RoutingCostTravelTime>, RoutingCostPtr>();
+  implicitly_convertible<LaneletMapPtr, LaneletMapConstPtr>();
 
   // Routing costs
   class_<RoutingCost, boost::noncopyable, std::shared_ptr<RoutingCost>>(  // NOLINT
@@ -59,7 +68,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<RoutingCostTravelTime, bases<RoutingCost>, std::shared_ptr<RoutingCostTravelTime>>(  // NOLINT
       "RoutingCostDistance", "Travel time based routing cost calculation object",
-      init<double, double>((arg("laneChangeCost"), arg("minLaneChangeTime"))));
+      init<double, double>((arg("laneChangeCost"), arg("minLaneChangeTime") = 0)));
 
   auto possR1 = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, double, RoutingCostId, bool) const>(
       &RoutingGraph::possiblePaths);

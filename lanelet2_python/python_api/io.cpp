@@ -30,7 +30,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   auto core = import("lanelet2.core");
   auto proj = import("lanelet2.projection");
 
-  class_<Origin, std::shared_ptr<Origin>>("Origin", init<>()).add_property("position", &Origin::position);
+  class_<Origin, std::shared_ptr<Origin>>("Origin", init<>())
+      .def(init<GPSPoint>())
+      .add_property("position", &Origin::position);
 
   def("load", loadProjectorWrapper, (arg("filename"), arg("projector") = DefaultProjector()));
   def("load", loadWrapper, (arg("filename"), arg("origin")));

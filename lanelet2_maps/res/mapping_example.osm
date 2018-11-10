@@ -10192,6 +10192,42 @@
     <tag k='subtype' v='dashed' />
     <tag k='type' v='line_thick' />
   </way>
+  <relation id='42973' version='1' visible='true'>
+    <member type='way' ref='43226' role='left' />
+    <member type='way' ref='43196' role='right' />
+    <tag k='bicycle' v='yes' />
+    <tag k='location' v='city' />
+    <tag k='one_way' v='no' />
+    <tag k='pedestrian' v='yes' />
+    <tag k='region' v='de' />
+    <tag k='subtype' v='normal' />
+    <tag k='type' v='lanelet' />
+    <tag k='vehicle' v='no' />
+  </relation>
+  <relation id='42977' version='1' visible='true'>
+    <member type='way' ref='43164' role='left' />
+    <member type='way' ref='3746950994407121322' role='right' />
+    <tag k='bicycle' v='yes' />
+    <tag k='location' v='city' />
+    <tag k='one_way' v='no' />
+    <tag k='pedestrian' v='yes' />
+    <tag k='region' v='de' />
+    <tag k='subtype' v='normal' />
+    <tag k='type' v='lanelet' />
+    <tag k='vehicle' v='no' />
+  </relation>
+  <relation id='42997' version='1' visible='true'>
+    <member type='way' ref='43230' role='left' />
+    <member type='way' ref='43208' role='right' />
+    <tag k='bicycle' v='yes' />
+    <tag k='location' v='city' />
+    <tag k='one_way' v='no' />
+    <tag k='pedestrian' v='yes' />
+    <tag k='region' v='de' />
+    <tag k='subtype' v='normal' />
+    <tag k='type' v='lanelet' />
+    <tag k='vehicle' v='no' />
+  </relation>
   <relation id='42440' visible='true' version='1'>
     <member type='way' ref='44574' role='left' />
     <member type='way' ref='44584' role='right' />
@@ -14202,7 +14238,7 @@
     <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
-  <relation id='2004357198674984315' visible='true' version='1'>
+  <relation id='4984315' visible='true' version='1'>
     <member type='way' ref='6935024047423830842' role='left' />
     <member type='way' ref='4654649110534223344' role='right' />
     <tag k='bicycle' v='yes' />
@@ -14622,7 +14658,7 @@
     <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
-  <relation id='4414071615662925017' visible='true' version='1'>
+  <relation id='2925017' visible='true' version='1'>
     <member type='way' ref='43244' role='left' />
     <member type='way' ref='4406727741069666934' role='right' />
     <tag k='bicycle' v='yes' />
@@ -14718,7 +14754,7 @@
     <tag k='type' v='lanelet' />
     <tag k='vehicle' v='yes' />
   </relation>
-  <relation id='4984045098209185265' visible='true' version='1'>
+  <relation id='185265' visible='true' version='1'>
     <member type='way' ref='43232' role='left' />
     <member type='way' ref='2053119275757392434' role='right' />
     <tag k='bicycle' v='yes' />

@@ -55,6 +55,39 @@ struct IterableConverter {
     data->convertible = storage;
   }
 };
+struct ToOptionalConverter {
+  /// @note Registers converter from a python interable type to the
+  ///       provided type.
+  template <typename OptionalT>
+  ToOptionalConverter& fromPython() {
+    boost::python::converter::registry::push_back(&ToOptionalConverter::convertible,
+                                                  &ToOptionalConverter::construct<OptionalT>,
+                                                  boost::python::type_id<lanelet::Optional<OptionalT>>());
+    // Support chaining.
+    return *this;
+  }
+
+  /// @brief Check PyObject
+  static void* convertible(PyObject* object) { return object; }
+
+  /// @brief Convert PyObject to C++ type.
+  template <typename OptionalT>
+  static void construct(PyObject* object, boost::python::converter::rvalue_from_python_stage1_data* data) {
+    namespace python = boost::python;
+    // Object is a borrowed reference, so create a handle indicting it is
+    // borrowed for proper reference counting.
+    python::handle<> handle(python::borrowed(object));
+    using StorageType = python::converter::rvalue_from_python_storage<lanelet::Optional<OptionalT>>;
+    void* storage = reinterpret_cast<StorageType*>(data)->storage.bytes;  // NOLINT
+
+    if (object == Py_None) {
+      new (storage) lanelet::Optional<OptionalT>();
+    } else {
+      new (storage) lanelet::Optional<OptionalT>(python::extract<OptionalT>(object));
+    }
+    data->convertible = storage;
+  }
+};
 
 template <typename T>
 struct VariantToObject : boost::static_visitor<PyObject*> {
