@@ -33,7 +33,7 @@ Note that the values in the following table are just the values inferred by defa
 | **stairs**  | **-**        | Well ... stairs                  | Pedestrians      | Average pedestrian walking speed |
 
 ### Overriding
-Since the inferred information above might be incorrect in some situations, it can be overridden by explicitly participants or speed limit. If one of the participants is set like this, the *subtype* and *location* tags are ignored and all other participants are assumed to be disallowed. The allowed participants then have to be set one by one.
+Since the inferred information above might be incorrect in some situations, it can be overridden by explicitly specifying participants or speed limit. If one of the participants is set like this, the *subtype* and *location* tags are ignored and all other participants are assumed to be disallowed. The allowed participants then have to be set one by one.
 
 The following particiants can be used to define individual special situations. They are prefixed with the type of information they are supposed to override. Values are always *yes* or *no*:
 * vehicle (affects all "motorized" participants) *OR*
@@ -52,11 +52,11 @@ To override the participant information, prefix the participants with *participa
 
 The normal *vehicle* tag can not be combined with any *vehicle:xxx* tag. If one of the *vehicle:xxx* tags is defined, all other *vehicle:xxx* tags must be set individually.
 
-The speed limit can be overridden separately by using one of the follwing tags:
+The speed limit can be overridden separately by using the follwing tags (*speed_limit* must be set, *speed_limit_mandatory* is optional):
 * *speed_limit* (any velocity, preferably with unit, e.g. `5 km/h`, no unit is inferred as `km/h`)
 * *speed_limit_mandatory* (yes or no, default is yes)
 
-For an even finer overriding behaviour, use *speed_limit:xxx* and *speed_limit_mandatory:xxx*, where xxx is one of the participants from above.
+For an even finer overriding behaviour, use *speed_limit:xxx* and *speed_limit_mandatory:xxx*, where xxx is one of the participants from above. If the fine overriding is used and no match can be found for the current participant, *speed_limit* is returned. If it is not set, 0 km/h is returned.
 
 Note that the speed limit can be overriden by `RegulatoryElements`.
 
