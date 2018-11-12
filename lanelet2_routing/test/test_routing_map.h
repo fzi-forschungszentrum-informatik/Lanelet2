@@ -16,8 +16,8 @@ namespace tests {
 
 inline RoutingGraphPtr setUpGermanVehicleGraph(LaneletMap& map, double laneChangeCost = 2.,
                                                double participantHeight = 2.) {
-  TrafficRulesPtr trafficRules{
-      TrafficRulesFactory::instance().create(Locations::Germany, Participants::Vehicle, TrafficRules::Configuration())};
+  traffic_rules::TrafficRulesPtr trafficRules{traffic_rules::TrafficRulesFactory::instance().create(
+      Locations::Germany, Participants::Vehicle, traffic_rules::TrafficRules::Configuration())};
   RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost),
                            std::make_shared<RoutingCostTravelTime>(laneChangeCost)};
   RoutingGraph::Configuration configuration;
@@ -26,13 +26,15 @@ inline RoutingGraphPtr setUpGermanVehicleGraph(LaneletMap& map, double laneChang
 }
 
 inline RoutingGraphPtr setUpGermanPedestrianGraph(LaneletMap& map, double laneChangeCost = 2.) {
-  TrafficRulesPtr trafficRules{TrafficRulesFactory::instance().create(Locations::Germany, Participants::Pedestrian)};
+  traffic_rules::TrafficRulesPtr trafficRules{
+      traffic_rules::TrafficRulesFactory::instance().create(Locations::Germany, Participants::Pedestrian)};
   RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost)};
   return RoutingGraph::build(map, *trafficRules, costPtrs);
 }
 
 inline RoutingGraphPtr setUpGermanBicycleGraph(LaneletMap& map, double laneChangeCost = 2.) {
-  TrafficRulesPtr trafficRules{TrafficRulesFactory::instance().create(Locations::Germany, Participants::Bicycle)};
+  traffic_rules::TrafficRulesPtr trafficRules{
+      traffic_rules::TrafficRulesFactory::instance().create(Locations::Germany, Participants::Bicycle)};
   RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost)};
   return RoutingGraph::build(map, *trafficRules, costPtrs);
 }
@@ -64,23 +66,20 @@ class RoutingGraphTestData {
   void addLaneletVehicle(const LineString3d& left, const LineString3d& right) {
     laneletId++;
     Lanelet ll{laneletId, left, right};
-    ll.setAttribute(AttributeNamesString::Vehicle, true);
-    ll.setAttribute(AttributeNamesString::Bicycle, true);
+    ll.setAttribute(AttributeName::Subtype, AttributeValueString::Road);
     lanelets.insert(std::make_pair(laneletId, ll));
   }
 
   void addLaneletPedestrian(const LineString3d& left, const LineString3d& right) {
     laneletId++;
     Lanelet ll{laneletId, left, right};
-    ll.setAttribute(AttributeNamesString::Pedestrian, true);
-    ll.setAttribute(AttributeNamesString::Vehicle, false);
+    ll.setAttribute(AttributeName::Subtype, AttributeValueString::Crosswalk);
     lanelets.insert(std::make_pair(laneletId, ll));
   }
 
   void addAreaPedestrian(const LineStrings3d& outerBound) {
     Area area(areaId, outerBound);
-    area.setAttribute(AttributeNamesString::Pedestrian, true);
-    area.setAttribute(AttributeNamesString::Vehicle, false);
+    area.setAttribute(AttributeName::Subtype, AttributeValueString::Crosswalk);
     areas.emplace(areaId, area);
     areaId++;
   }
@@ -212,7 +211,7 @@ class RoutingGraphTestData {
   void initLineStrings() {
     lines.clear();
     addLine(Points3d{points.at(1), points.at(2)});  // l1001
-    lines.at(1001).setAttribute(AttributeName::LaneChange, true);
+    lines.at(1001).setAttribute(AttributeNamesString::LaneChange, true);
     addLine(Points3d{points.at(4), points.at(5)});
     addLine(Points3d{points.at(2), points.at(3)});
     addLine(Points3d{points.at(5), points.at(6)});
@@ -236,13 +235,13 @@ class RoutingGraphTestData {
     addLine(Points3d{points.at(15), points.at(18)});
     lines.at(1019).setAttribute(AttributeName::Type, AttributeValueString::Virtual);
     addLine(Points3d{points.at(15), points.at(19)});
-    lines.at(1020).setAttribute(AttributeName::LaneChange, true);
+    lines.at(1020).setAttribute(AttributeNamesString::LaneChange, true);
     addLine(Points3d{points.at(16), points.at(20)});  // ls1021
     addLine(Points3d{points.at(17), points.at(21)});
     addLine(Points3d{points.at(18), points.at(22)});
-    lines.at(1023).setAttribute(AttributeName::LaneChange, true);
+    lines.at(1023).setAttribute(AttributeNamesString::LaneChange, true);
     addLine(Points3d{points.at(19), points.at(23)});
-    lines.at(1024).setAttribute(AttributeName::LaneChange, true);
+    lines.at(1024).setAttribute(AttributeNamesString::LaneChange, true);
     addLine(Points3d{points.at(20), points.at(24)});
     addLine(Points3d{points.at(25), points.at(28)});  // ls1026
     addLine(Points3d{points.at(26), points.at(29)});
@@ -295,7 +294,7 @@ class RoutingGraphTestData {
     addLine(Points3d{points.at(63), points.at(64)});  // ls1061
     lines.at(1061).setAttribute(AttributeName::Type, AttributeValueString::Virtual);
     addLine(Points3d{points.at(64), points.at(65)});  // ls1062
-    lines.at(1062).setAttribute(AttributeName::LaneChange, true);
+    lines.at(1062).setAttribute(AttributeNamesString::LaneChange, true);
     addLine(Points3d{points.at(48), points.at(66)});  // ls1063
     addLine(Points3d{points.at(66), points.at(67)});  // ls1064
     addLine(Points3d{points.at(67), points.at(68)});  // ls1065
@@ -371,7 +370,7 @@ class RoutingGraphTestData {
     lanelets.at(2020).setAttribute(AttributeName::OneWay, false);
     addLaneletVehicle(lines.at(1037).invert(), lines.at(1035).invert());
     addLaneletVehicle(lines.at(1036), lines.at(1038));
-    lanelets.at(2022).setAttribute(AttributeName::Bicycle, false);
+    lanelets.at(2022).setAttribute(AttributeNamesString::Subtype, AttributeValueString::Highway);
     addLaneletVehicle(lines.at(1040).invert(), lines.at(1039).invert());
     addLaneletVehicle(lines.at(1040), lines.at(1041));  // ll2024
     addLaneletVehicle(lines.at(1042), lines.at(1043));

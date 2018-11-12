@@ -4,59 +4,37 @@
     <group name="Lanelets">
         <item name="City road" icon="presets/transport/way/way_secondary.svg" type="relation" preset_name_label="true">
             <key key="type" value="lanelet"/>
-            <key key="pedestrian" value="no"/>
             <key key="one_way" value="yes"/>
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Road name" default="" use_last_as_default="force"/>
             <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="force" />
-            <combo key="subtype" text="Subtype" values="normal,play_street,main_road,highway" default="normal" use_last_as_default="force"/>
-            <space />
-            <check key="vehicle" text="Vehicles allowed" default="on" use_last_as_default="force"/>            
+            <combo key="subtype" text="Subtype" values="road,play_street,main_road,highway" default="road" use_last_as_default="force"/>
             <roles>
                 <role key="left" text="left border" requisite="required" type="way" count="1" />
                 <role key="right" text="right border" requisite="required" type="way" count="1" />
                 <role key="regulatory_element" text="regulatory element" requisite="optional" type="relation"/>
             </roles>
-            <optional>
-                <check key="vehicle:truck" text="Truck allowed" use_last_as_default="force"/>
-                <check key="vehicle:bus" text="Bus allowed" use_last_as_default="force"/>
-                <check key="vehicle:taxi" text="Taxi allowed" use_last_as_default="force"/>
-                <check key="pedestrian" text="Pedestrians allowed" use_last_as_default="force"/>
-                <check key="bicycle" default="on" text="Bicycles allowed"/>
-                <check key="one_way:bicycle" text="One way for bicycles" use_last_as_default="force"/>
-            </optional>
         </item> <!-- Lanelet -->
         <item name="Two-way road" icon="presets/transport/way/way_service.svg" type="relation" preset_name_label="true">
             <key key="type" value="lanelet"/>
-            <key key="pedestrian" value="no"/>
             <key key="one_way" value="no"/>
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Road name" default="" use_last_as_default="force"/>
             <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="force" />
-            <combo key="subtype" text="Subtype" values="normal,play_street,main_road,highway" default="normal" use_last_as_default="force"/>
-            <space />
-            <check key="vehicle" text="Vehicles allowed" default="on" use_last_as_default="force"/>            
+            <combo key="subtype" text="Subtype" values="road,play_street,main_road,highway" default="road" use_last_as_default="force"/>
             <roles>
                 <role key="left" text="left border" requisite="required" type="way" count="1" />
                 <role key="right" text="right border" requisite="required" type="way" count="1" />
                 <role key="regulatory_element" text="regulatory element" requisite="optional" type="relation"/>
             </roles>
-            <optional>
-                <check key="vehicle:truck" text="Truck allowed" use_last_as_default="force"/>
-                <check key="vehicle:bus" text="Bus allowed" use_last_as_default="force"/>
-                <check key="vehicle:taxi" text="Taxi allowed" use_last_as_default="force"/>
-                <check key="bicycle" default="on" text="Bicycles allowed"/>
-                <check key="one_way:bicycle" text="One way for bicycles" use_last_as_default="force"/>
-            </optional>
         </item> <!-- Lanelet -->
 
         <item name="Pedestrian way" icon="presets/transport/way/way_pedestrian.svg" type="relation" preset_name_label="true">
             <key key="type" value="lanelet"/>
-            <key key="pedestrian" value="yes"/>
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Road name" default="" use_last_as_default="force"/>
             <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="force" />
-            <combo key="subtype" text="Subtype" values="normal,stairs" default="normal" use_last_as_default="force"/>
+            <combo key="subtype" text="Subtype" values="walkway,crosswalk,stairs" default="walkway" use_last_as_default="force"/>
             <space />
             <check key="one_way" text="One way" default="off"/>
             <check key="bicycle" text="Bicycles allowed" default="on"/>
@@ -66,49 +44,44 @@
                 <role key="right" text="right border" requisite="required" type="way"  count="1"/>
                 <role key="regulatory_element" text="regulatory element" requisite="optional" type="relation"/>
             </roles>
-            <optional>
-                <check key="vehicle:truck" text="Truck allowed" use_last_as_default="force"/>
-                <check key="vehicle:bus" text="Bus allowed" use_last_as_default="force"/>
-                <check key="vehicle:taxi" text="Taxi allowed" use_last_as_default="force"/>
-                <check key="vehicle" text="Vehicles allowed" default="off" use_last_as_default="force"/>
-                <check key="one_way:bicycle" text="One way for bicycles" use_last_as_default="force"/>
-            </optional>
         </item> <!-- Lanelet -->
         <item name="Train rails" icon="presets/transport/railway/rail.svg" type="relation" preset_name_label="true">
             <key key="type" value="lanelet"/>
-            <key key="pedestrian" value="no"/>
-            <key key="bicycle" value="no"/>
-            <key key="vehicle" value="no"/>
-            <key key="train" value="yes"/>
+            <key key="participant:pedestrian" value="no"/>
+            <key key="participant:bicycle" value="no"/>
+            <key key="participant:vehicle" value="no"/>
+            <key key="participant:train" value="yes"/>
             <check key="one_way" text="One way" default="on"/>            
             <roles>
                 <role key="left" text="left border" requisite="required" type="way" count="1" />
                 <role key="right" text="right border" requisite="required" type="way" count="1" />
             </roles>
         </item> <!-- Lanelet -->
-        <item name="Emergency lane" icon="presets/service/firebrigade.svg" type="relation" preset_name_label="true">
+        <item name="Emergency lane" icon="presets/vehicle/firebrigade.svg" type="relation" preset_name_label="true">
             <key key="type" value="lanelet"/>
-            <key key="pedestrian" value="no"/>
-            <key key="one_way" value="yes"/>
-            <key key="vehicles" value="no"/>
-            <check key="emergency" value="yes"/>
+            <combo key="subtype" value="emergency_lane"/>
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Road name" default="" use_last_as_default="force"/>
             <combo key="location" text="Location" values="city,urban,private" default="urban" use_last_as_default="force" />
-            <combo key="subtype" text="Subtype" values="normal,play_street,main_road,highway" default="highway" use_last_as_default="force"/>
             <space />       
             <roles>
                 <role key="left" text="left border" requisite="required" type="way" count="1" />
                 <role key="right" text="right border" requisite="required" type="way" count="1" />
                 <role key="regulatory_element" text="regulatory element" requisite="optional" type="relation"/>
             </roles>
-            <optional>
-                <check key="vehicle:truck" text="Truck allowed" use_last_as_default="force"/>
-                <check key="vehicle:bus" text="Bus allowed" use_last_as_default="force"/>
-                <check key="vehicle:taxi" text="Taxi allowed" use_last_as_default="force"/>
-                <check key="bicycle" text="Bicycles allowed"/>
-                <check key="one_way:bicycle" text="One way for bicycles" use_last_as_default="force"/>
-            </optional>
+        </item> <!-- Lanelet -->
+        <item name="Bike lane" icon="presets/vehicle/bicycle_rental.svg" type="relation" preset_name_label="true">
+            <key key="type" value="lanelet"/>
+            <combo key="subtype" value="bicycle_lane"/>
+            <text key="region" text="Region" default="de" use_last_as_default="force"/>
+            <text key="name" text="Road name" default="" use_last_as_default="force"/>
+            <combo key="location" text="Location" values="city,urban,private" default="urban" use_last_as_default="force" />
+            <space />       
+            <roles>
+                <role key="left" text="left border" requisite="required" type="way" count="1" />
+                <role key="right" text="right border" requisite="required" type="way" count="1" />
+                <role key="regulatory_element" text="regulatory element" requisite="optional" type="relation"/>
+            </roles>
         </item>
     </group>
     
@@ -118,7 +91,6 @@
             <key key="subtype" value="vegetation"/>
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Area name" default="" use_last_as_default="force"/>
-            <check key="accessible" text="Accessible" default="yes" use_last_as_default="force" />
             
             <roles>
                 <role key="outer" text="left border" requisite="required" type="way" />
@@ -128,12 +100,8 @@
         <item name="Pedestrian area" icon="presets/transport/way/dedicated_footway.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="walkway"/>
-            <key key="pedestrian" value="yes"/>
-            <key key="accessible" value="yes"/>
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Area name" default="" use_last_as_default="force"/>
-            
-            <check key="bicycle" text="Bicycles allowed" default="on"/>
             
             <roles>
                 <role key="outer" text="left border" requisite="required" type="way" />
@@ -143,7 +111,6 @@
         <item name="Parking" icon="presets/vehicle/parking/parking.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="parking"/>
-            <key key="accessible" value="yes"/>
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Area name" default="" use_last_as_default="force"/>
             
@@ -155,10 +122,6 @@
         <item name="Keepout" icon="presets/vehicle/restriction/motorcar.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="keepout"/>
-            <key key="vehicle" value="no"/>
-            <key key="pedestrian" value="no"/>
-            <key key="bicycle" value="no"/>
-            <key key="accessible" value="yes"/>
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Area name" default="" use_last_as_default="force"/>                       
             <roles>
@@ -169,10 +132,6 @@
         <item name="Building" icon="presets/accommodation/basic_hut.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="building"/>
-            <key key="vehicle" value="no"/>
-            <key key="pedestrian" value="no"/>
-            <key key="bicycle" value="no"/>
-            <key key="accessible" value="no"/>
             <roles>
                 <role key="outer" text="left border" requisite="required" type="way" />
                 <role key="inner" text="right border" requisite="optional" type="way" />
@@ -181,10 +140,6 @@
         <item name="Traffic island" icon="presets/vehicle/island.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="traffic_island"/>
-            <key key="vehicle" value="no"/>
-            <key key="pedestrian" value="no"/>
-            <key key="bicycle" value="no"/>
-            <key key="accessible" value="yes"/>
             <roles>
                 <role key="outer" text="left border" requisite="required" type="way" />
                 <role key="inner" text="right border" requisite="optional" type="way" />
@@ -193,10 +148,6 @@
         <item name="House exit" icon="presets/misc/entrance_exit.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="exit"/>
-            <key key="vehicle" value="yes"/>
-            <key key="pedestrian" value="yes"/>
-            <key key="bicycle" value="yes"/>
-            <key key="accessible" value="yes"/>
             <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="force" />
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Area name" default="" use_last_as_default="force"/>                       
@@ -208,10 +159,6 @@
         <item name="Freespace" icon="presets/misc/no_icon.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="freespace"/>
-            <key key="vehicle" value="no"/>
-            <key key="pedestrian" value="no"/>
-            <key key="bicycle" value="no"/>
-            <key key="accessible" value="yes"/>
             <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="force" />
             <text key="region" text="Region" default="de" use_last_as_default="force"/>
             <text key="name" text="Area name" default="" use_last_as_default="force"/>                       

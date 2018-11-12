@@ -34,7 +34,8 @@ void part1CreatingAndUsingRoutingGraphs() {
   // The choice of the traffic object influences from which perspective the routing graph will be generated. We will
   // make a routing graph for vehicles:
   LaneletMapPtr map = load(exampleMapPath, projection::UtmProjector(Origin({49, 8.4})));
-  TrafficRulesPtr trafficRules = TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle);
+  traffic_rules::TrafficRulesPtr trafficRules =
+      traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle);
   routing::RoutingGraphUPtr routingGraph = routing::RoutingGraph::build(*map, *trafficRules);
 
   // the routing graph can be used to query thre different kinds of information: Neighbourhood relations for a
@@ -89,7 +90,8 @@ void part1CreatingAndUsingRoutingGraphs() {
 void part2UsingRoutes() {
   using namespace lanelet;
   LaneletMapPtr map = load(exampleMapPath, projection::UtmProjector(Origin({49, 8.4})));
-  TrafficRulesPtr trafficRules = TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle);
+  traffic_rules::TrafficRulesPtr trafficRules =
+      traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle);
   routing::RoutingGraphUPtr routingGraph = routing::RoutingGraph::build(*map, *trafficRules);
   ConstLanelet lanelet = map->laneletLayer.get(4984315);
   ConstLanelet toLanelet = map->laneletLayer.get(2925017);
@@ -127,8 +129,10 @@ void part3UsingRoutingGraphContainers() {
   // It finds conflicts between individual participants by comparing the topology of the different graphs.
   using namespace lanelet;
   LaneletMapPtr map = load(exampleMapPath, projection::UtmProjector(Origin({49, 8.4})));
-  TrafficRulesPtr trafficRules = TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle);
-  TrafficRulesPtr pedestrianRules = TrafficRulesFactory::create(Locations::Germany, Participants::Pedestrian);
+  traffic_rules::TrafficRulesPtr trafficRules =
+      traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle);
+  traffic_rules::TrafficRulesPtr pedestrianRules =
+      traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Pedestrian);
   routing::RoutingGraphConstPtr vehicleGraph = routing::RoutingGraph::build(*map, *trafficRules);
   routing::RoutingGraphConstPtr pedestrGraph = routing::RoutingGraph::build(*map, *pedestrianRules);
   routing::RoutingGraphContainer graphs({vehicleGraph, pedestrGraph});

@@ -12,7 +12,7 @@ class LaneChangeLaneletsCollector;
 
 class RoutingGraphBuilder {
  public:
-  RoutingGraphBuilder(const TrafficRules& trafficRules, const RoutingCostPtrs& routingCosts,
+  RoutingGraphBuilder(const traffic_rules::TrafficRules& trafficRules, const RoutingCostPtrs& routingCosts,
                       const RoutingGraph::Configuration& config);
 
   RoutingGraphUPtr build(LaneletMap& laneletMap);
@@ -22,8 +22,8 @@ class RoutingGraphBuilder {
   using PointsLaneletMapIt = PointsLaneletMap::iterator;
   using PointsLaneletMapResult = std::pair<PointsLaneletMapIt, PointsLaneletMapIt>;
 
-  Lanelets getPassableLanelets(LaneletLayer& lanelets, const TrafficRules& trafficRules);
-  Areas getPassableAreas(AreaLayer& areas, const TrafficRules& trafficRules);
+  Lanelets getPassableLanelets(LaneletLayer& lanelets, const traffic_rules::TrafficRules& trafficRules);
+  Areas getPassableAreas(AreaLayer& areas, const traffic_rules::TrafficRules& trafficRules);
   void appendBidirectionalLanelets(Lanelets& llts);
   void addLaneletsToGraph(Lanelets& llts);
   void addAreasToGraph(Areas& areas);
@@ -53,7 +53,7 @@ class RoutingGraphBuilder {
   std::unique_ptr<Graph> graph_;
   PointsLaneletMap pointsToLanelets_;  ///< A map of tuples (first or last left and right boundary points) to lanelets
   std::set<Id> bothWaysLaneletIds_;
-  const TrafficRules& trafficRules_;
+  const traffic_rules::TrafficRules& trafficRules_;
   const RoutingCostPtrs& routingCosts_;
   const RoutingGraph::Configuration& config_;
 };

@@ -35,12 +35,13 @@ void part1UsingTrafficRules() {
   // to get information where we can drive, we need a traffic rule object o do the interpretation for us.
   // we use the traffic rules factory to get an traffic rules object that interprets the lanelets from the perspective
   // of a german vehicle.
-  TrafficRulesPtr trafficRules = TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle);
-  TrafficRulesPtr pedestrianRules = TrafficRulesFactory::create(Locations::Germany, Participants::Pedestrian);
+  traffic_rules::TrafficRulesPtr trafficRules =
+      traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle);
+  traffic_rules::TrafficRulesPtr pedestrianRules =
+      traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Pedestrian);
 
   // now we can ask the traffic rules specific things about the lanelet. For now, we have not added any tags, so we
   // get a default interpretation of the lanelet:
-  right.attributes()[AttributeName::Vehicle] = true;
   assert(trafficRules->canPass(right));      // lanelets are by default "road" lanelets
   assert(!pedestrianRules->canPass(right));  // and not passable for pedestrians.
   // by default, lanelets are one-directional, so inverted lanelets are also not passable
@@ -50,7 +51,7 @@ void part1UsingTrafficRules() {
   assert(!trafficRules->canPass(right, left));
 
   // we can also query the speed limit. Without tags we get the speed limit for urban roads
-  SpeedLimitInformation limit = trafficRules->speedLimit(right);
+  traffic_rules::SpeedLimitInformation limit = trafficRules->speedLimit(right);
   assert(limit.speedLimit == 50_kmh);
   assert(limit.isMandatory);  // mandatory means we must not exceed the speed limit
 
@@ -58,6 +59,7 @@ void part1UsingTrafficRules() {
   middleLs.attributes()[AttributeName::Type] = AttributeValueString::LineThin;
   middleLs.attributes()[AttributeName::Subtype] = AttributeValueString::Dashed;
   right.attributes()[AttributeName::Type] = AttributeValueString::Lanelet;
+  right.attributes()[AttributeName::Subtype] = AttributeValueString::Road;
   right.attributes()[AttributeName::Location] = AttributeValueString::Nonurban;
   left.attributes() = right.attributes();
   next.attributes() = right.attributes();
@@ -83,4 +85,11 @@ void part1UsingTrafficRules() {
       SpeedLimit::make(utils::getId(), {}, {{sign}, "de274-60"});  // id of a speed limit 60 sign in germany
   right.addRegulatoryElement(speedLimit);
   assert(trafficRules->speedLimit(right).speedLimit == 60_kmh);
+
+  // if the type of the lanelet is changed from road to walkway, it is no longer drivable for vehicles:
+  right.attributes()[AttributeName::Subtype] = AttributeValueString::Crosswalk;
+  assert(!trafficRules->canPass(right));
+
+  // but instead, it is passable for pedestrians
+  assert(pedestrianRules->canPass(right));
 }

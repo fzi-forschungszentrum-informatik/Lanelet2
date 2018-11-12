@@ -8,32 +8,12 @@
 using namespace std::string_literals;
 
 namespace lanelet {
+namespace traffic_rules {
+
 namespace {
 RegisterTrafficRules<GermanVehicle> gvRules(Locations::Germany, Participants::Vehicle);
 RegisterTrafficRules<GermanPedestrian> gpRules(Locations::Germany, Participants::Pedestrian);
-
-template <typename Key, typename Value>
-Value getMapOrDefault(const std::map<Key, Value>& map, Key key, Value defaultVal) {
-  auto elem = map.find(key);
-  if (elem == map.end()) {
-    return defaultVal;
-  }
-  return elem->second;
-}
-
-LaneChangeType getChangeType(const std::string& type, const std::string& subtype) {
-  // clang-format off
-  const static std::map<std::pair<std::string, std::string>, LaneChangeType>
-      ChangeType{
-        {{AttributeValueString::LineThin, AttributeValueString::Dashed}, LaneChangeType::Both},
-        {{AttributeValueString::LineThick, AttributeValueString::Dashed}, LaneChangeType::Both},
-        {{AttributeValueString::LineThin, AttributeValueString::DashedStraight}, LaneChangeType::ToRight},
-        {{AttributeValueString::LineThick, AttributeValueString::DashedStraight}, LaneChangeType::ToRight},
-        {{AttributeValueString::LineThin, AttributeValueString::StraightDashed}, LaneChangeType::ToLeft},
-        {{AttributeValueString::LineThick, AttributeValueString::StraightDashed}, LaneChangeType::ToLeft}};
-  // clang-format on
-  return getMapOrDefault(ChangeType, std::make_pair(type, subtype), LaneChangeType::None);
-}
+RegisterTrafficRules<GermanBicycle> gbRules(Locations::Germany, Participants::Bicycle);
 
 Velocity trafficSignToVelocity(const std::string& typeString) {
   using namespace lanelet::units::literals;
@@ -55,118 +35,22 @@ Velocity trafficSignToVelocity(const std::string& typeString) {
     throw lanelet::InterpretationError("Unabe to interpret the velocity information from " + typeString);
   }
 }
-
-Optional<LaneChangeType> getHardcodedChangeType(const ConstLineString3d& boundary) {
-  if (boundary.hasAttribute(AttributeName::LaneChange)) {
-    if (boundary.attributeOr(AttributeName::LaneChange, false)) {
-      return {true, LaneChangeType::Both};
-    }
-    return {true, LaneChangeType::None};
-  }
-  if (boundary.hasAttribute(AttributeName::LaneChangeLeft)) {
-    if (boundary.attributeOr(AttributeName::LaneChangeLeft, false)) {
-      if (boundary.attributeOr(AttributeName::LaneChangeRight, false)) {
-        return {true, LaneChangeType::Both};
-      }
-      return {true, LaneChangeType::ToLeft};
-    }
-    return {true, LaneChangeType::None};
-  }
-  if (boundary.hasAttribute(AttributeName::LaneChangeRight)) {
-    if (boundary.attributeOr(AttributeName::LaneChangeRight, false)) {
-      return {true, LaneChangeType::ToRight};
-    }
-    return {true, LaneChangeType::None};
-  }
-  return {false, LaneChangeType::None};
-}
 }  // namespace
 
-SpeedLimitInformation GermanVehicle::speedLimit(const ConstLanelet& lanelet) const {
-  auto speedLimits = lanelet.regulatoryElementsAs<SpeedLimit>();
-  if (!speedLimits.empty()) {
-    return {trafficSignToVelocity(speedLimits.front()->type())};
-  }
-  using namespace lanelet::units::literals;
-  std::string subtype = lanelet.attributeOr(AttributeName::Subtype, AttributeValueString::Normal);
-  if (subtype == AttributeValueString::Highway || subtype == AttributeValueString::EmergencyLane) {
-    return {130_kmh, false};
-  }
-  if (subtype == AttributeValueString::PlayStreet) {
-    return {7_kmh};  //!< @todo this is not really defined
-  }
-  std::string location = lanelet.attributeOr(AttributeName::Location, AttributeValueString::Urban);
-  if (location == AttributeValueString::Urban) {
-    return {50_kmh};
-  }
-  if (location == AttributeValueString::Nonurban) {
-    return {100_kmh};
-  }
-  // location is garbage
-  return {Velocity(50_kmh)};
-}
-
-SpeedLimitInformation GermanVehicle::speedLimit(const ConstArea& /*area*/) const {
-  using namespace lanelet::units::literals;
-  return {1_kmh, false};
-}
-
-LaneChangeType GermanVehicle::laneChangeType(const ConstLineString3d& boundary) const {
-  LaneChangeType type;
-  auto result = getHardcodedChangeType(boundary);
-  if (!!result) {
-    type = *result;
-  } else {
-    type = getChangeType(boundary.attributeOr(AttributeName::Type, ""s),
-                         boundary.attributeOr(AttributeName::Subtype, ""s));
-  }
-  // handle inverted ls
-  if (boundary.inverted()) {
-    if (type == LaneChangeType::ToLeft) {
-      return LaneChangeType::ToRight;
-    }
-    if (type == LaneChangeType::ToRight) {
-      return LaneChangeType::ToLeft;
+Optional<SpeedLimitInformation> GermanVehicle::speedLimit(const RegulatoryElementConstPtrs& regelems) const {
+  for (auto& regelem : regelems) {
+    auto speedLimit = std::dynamic_pointer_cast<const SpeedLimit>(regelem);
+    if (!!speedLimit) {
+      return SpeedLimitInformation{trafficSignToVelocity(speedLimit->type()), true};
     }
   }
-  return type;
+  return {};
 }
 
-bool GermanVehicle::canOvertakeRight(const ConstLanelet& lanelet) const {
-  return lanelet.attributeOr(AttributeName::Location, AttributeValueString::Urban) != AttributeValueString::Urban;
+CountrySpeedLimits germanSpeedLimits() {
+  using namespace units::literals;
+  return {{50_kmh}, {100_kmh}, {130_kmh, false}, {130_kmh, false}, {7_kmh}, {5_kmh}, {20_kmh}};
 }
 
-SpeedLimitInformation GermanPedestrian::speedLimit(const ConstLanelet& /*lanelet*/) const {
-  using namespace lanelet::units::literals;
-  return SpeedLimitInformation{4_kmh, false};
-}
-
-SpeedLimitInformation GermanPedestrian::speedLimit(const ConstArea& /*area*/) const {
-  using namespace lanelet::units::literals;
-  return SpeedLimitInformation{4_kmh, false};
-}
-
-LaneChangeType GermanPedestrian::laneChangeType(const ConstLineString3d& boundary) const {
-  auto result = getHardcodedChangeType(boundary);
-  if (!result) {
-    auto type = boundary.attributeOr(AttributeName::Type, ""s);
-    auto subtype = boundary.attributeOr(AttributeName::Subtype, ""s);
-    if ((type == AttributeValueString::Curbstone && subtype == AttributeValueString::Low) ||
-        type == AttributeValueString::Virtual) {
-      result = LaneChangeType::Both;
-    } else {
-      result = LaneChangeType::None;
-    }
-  }
-  if (boundary.inverted()) {
-    if (result == LaneChangeType::ToLeft) {
-      return LaneChangeType::ToRight;
-    }
-    if (result == LaneChangeType::ToRight) {
-      return LaneChangeType::ToLeft;
-    }
-  }
-  return *result;
-}
-
+}  // namespace traffic_rules
 }  // namespace lanelet

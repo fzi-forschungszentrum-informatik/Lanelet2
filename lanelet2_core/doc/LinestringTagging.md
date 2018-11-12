@@ -32,6 +32,7 @@ There are much more tags (all imply lane changing is not possible):
 * zebra_marking (lanelets for pedestrians)
 * pedestrian_marking (lines on pedestrian crossings)
 * bike_marking (i.e. dashed line for bikes)
+* stop_line
 * keepout
 * virtual
 * jersey_barrier

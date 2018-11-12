@@ -278,8 +278,8 @@ class ConfigurationInitialization : public ::testing::Test {
   LaneletMapPtr emptyMap = std::make_shared<LaneletMap>();
 
   // Initialize traffic rules and routing cost calculation module
-  TrafficRulesPtr trafficRules{
-      TrafficRulesFactory::instance().create(Locations::Germany, Participants::Vehicle, TrafficRules::Configuration())};
+  traffic_rules::TrafficRulesPtr trafficRules{traffic_rules::TrafficRulesFactory::instance().create(
+      Locations::Germany, Participants::Vehicle, traffic_rules::TrafficRules::Configuration())};
 
   RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(RoutingCostDistance{2.})};
 
@@ -288,14 +288,14 @@ class ConfigurationInitialization : public ::testing::Test {
 };
 
 TEST_F(ConfigurationInitialization, EmptyConfig) {  // NOLINT
-  EXPECT_NO_THROW(RoutingGraphPtr graph = RoutingGraph::build(*emptyMap, *trafficRules, costPtrs, routingGraphConf));
+  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs, routingGraphConf));
 }
 
 TEST_F(ConfigurationInitialization, Config) {  // NOLINT
   routingGraphConf.emplace(std::make_pair(RoutingGraph::ParticipantHeight, Attribute("2.")));
-  EXPECT_NO_THROW(RoutingGraphPtr graph = RoutingGraph::build(*emptyMap, *trafficRules, costPtrs, routingGraphConf));
+  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs, routingGraphConf));
 }
 
 TEST_F(ConfigurationInitialization, NoConfig) {  // NOLINT
-  EXPECT_NO_THROW(RoutingGraphPtr graph = RoutingGraph::build(*emptyMap, *trafficRules, costPtrs));
+  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs));
 }

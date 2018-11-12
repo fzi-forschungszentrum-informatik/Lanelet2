@@ -198,7 +198,7 @@ RoutingGraph::RoutingGraph(RoutingGraph&& /*other*/) noexcept = default;
 RoutingGraph& RoutingGraph::operator=(RoutingGraph&& /*other*/) noexcept = default;
 RoutingGraph::~RoutingGraph() = default;
 
-RoutingGraphUPtr RoutingGraph::build(LaneletMap& laneletMap, const TrafficRules& trafficRules,
+RoutingGraphUPtr RoutingGraph::build(LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
                                      const RoutingCostPtrs& routingCosts, RoutingGraph::Configuration config) {
   return RoutingGraphBuilder(trafficRules, routingCosts, config).build(laneletMap);
 }

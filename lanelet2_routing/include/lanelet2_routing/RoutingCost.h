@@ -28,7 +28,7 @@ class RoutingCost {  // NOLINT
    *  @return Routing cost for passing this lanelet
       @note The calculated cost will be assigned to the edge in the graph between 'from' and 'to'. So typically this
    should represent the cost of passing the 'from'-lanelet with regards of going into the 'to'-lanelet.*/
-  virtual double getCostSucceeding(const TrafficRules& trafficRules, const ConstLaneletOrArea& from,
+  virtual double getCostSucceeding(const traffic_rules::TrafficRules& trafficRules, const ConstLaneletOrArea& from,
                                    const ConstLaneletOrArea& to) const = 0;
 
   /** @brief Get the cost of the lane change between two adjacent lanelets
@@ -38,7 +38,7 @@ class RoutingCost {  // NOLINT
    *  @return Routing cost of the lane change
       @note The calculated cost will be assigned to the edge in the graph between 'from' and 'to'. So typically this
    should represent some artificial cost for a lane change. */
-  virtual double getCostLaneChange(const TrafficRules& trafficRules, const ConstLanelets& from,
+  virtual double getCostLaneChange(const traffic_rules::TrafficRules& trafficRules, const ConstLanelets& from,
                                    const ConstLanelets& to) const = 0;
 };
 
@@ -53,12 +53,12 @@ class RoutingCostDistance : public RoutingCost {
       throw InvalidInputError("Lane change cost must be positive, but it is " + std::to_string(laneChangeCost_));
     }
   }
-  inline double getCostSucceeding(const TrafficRules& /*trafficRules*/, const ConstLaneletOrArea& from,
+  inline double getCostSucceeding(const traffic_rules::TrafficRules& /*trafficRules*/, const ConstLaneletOrArea& from,
                                   const ConstLaneletOrArea& to) const override {
     auto getLength = [this](auto& lltOrArea) -> double { return this->length(lltOrArea); };
     return (from.applyVisitor(getLength) + to.applyVisitor(getLength)) / 2;
   }
-  inline double getCostLaneChange(const TrafficRules& /*trafficRules*/, const ConstLanelets& from,
+  inline double getCostLaneChange(const traffic_rules::TrafficRules& /*trafficRules*/, const ConstLanelets& from,
                                   const ConstLanelets& /*to*/) const noexcept override {
     if (minChangeLength_ <= 0.) {
       return laneChangeCost_;
@@ -89,7 +89,7 @@ class RoutingCostTravelTime : public RoutingCost {
     }
   }
 
-  inline double getCostLaneChange(const TrafficRules& trafficRules, const ConstLanelets& from,
+  inline double getCostLaneChange(const traffic_rules::TrafficRules& trafficRules, const ConstLanelets& from,
                                   const ConstLanelets& /*to*/) const noexcept override {
     if (minChangeTime_ <= 0.) {
       return laneChangeCost_;
@@ -99,7 +99,7 @@ class RoutingCostTravelTime : public RoutingCost {
     });
     return changeTime >= minChangeTime_ ? laneChangeCost_ : std::numeric_limits<double>::max();
   }
-  inline double getCostSucceeding(const TrafficRules& trafficRules, const ConstLaneletOrArea& from,
+  inline double getCostSucceeding(const traffic_rules::TrafficRules& trafficRules, const ConstLaneletOrArea& from,
                                   const ConstLaneletOrArea& to) const override {
     auto getTravelTime = [&trafficRules, this](auto& lltOrArea) -> double {
       return this->travelTime(trafficRules, lltOrArea);
@@ -108,8 +108,8 @@ class RoutingCostTravelTime : public RoutingCost {
   }
 
  private:
-  double travelTime(const TrafficRules& trafficRules, const ConstLanelet& ll) const;
-  double travelTime(const TrafficRules& trafficRules, const ConstArea& ar) const;
+  double travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstLanelet& ll) const;
+  double travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstArea& ar) const;
   const Velocity maxSpeed_;                      // NOLINT
   const double laneChangeCost_, minChangeTime_;  // NOLINT
 };

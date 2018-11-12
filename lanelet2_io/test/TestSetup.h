@@ -81,7 +81,7 @@ inline RegulatoryElementPtr setUpGenericRegulatoryElement(int& num) {
   return RegulatoryElementFactory::create(GenericRegulatoryElement::RuleName, getId(num), RuleParameterMap{});
 }
 
-inline Lanelet setUpLanelet(int& num, const std::string& type = AttributeValueString::Normal) {
+inline Lanelet setUpLanelet(int& num, const std::string& type = AttributeValueString::Road) {
   auto regelem = setUpRegulatoryElement(num);
   return Lanelet(getId(num), setUpLineString(num), setUpLineString(num),
                  AttributeMap{{AttributeNamesString::Subtype, type}}, {regelem});
