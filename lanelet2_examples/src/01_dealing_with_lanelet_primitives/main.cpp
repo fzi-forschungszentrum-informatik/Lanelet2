@@ -38,11 +38,11 @@ int main() {
 void part0Primitives() {
   using namespace lanelet;
   using namespace lanelet::units::literals;  // this enables us to use _kmh for velocities
-  // there are many concepts that are similar across all primitives of lanelet2 one. Once you have understood one of
+  // there are many concepts that are similar across all primitives of lanelet2. Once you have understood one of
   // them, you can also understand the rest.
 
-  // here is how you create a point in 3d with an Id and the x, y and z coordinates. We will go into details on points
-  // later. the getId() function gives us a unique id so that we can not accidentally have the same id twice. This
+  // Here is how you create a point in 3d with an Id and the x, y and z coordinates. We will go into details on points
+  // later. The getId() function gives us a unique id so that we can not accidentally have the same id twice. This
   // would have strange effects once we add these points to a LaneletMap. Every lanelet object has such a unique Id.
   Point3d p(utils::getId(), 0, 0, 0);
 
@@ -70,7 +70,7 @@ void part0Primitives() {
   assert(!!p.attribute("pi").asDouble());  // returns an optional value that is only valid if conversion was sucessful
   assert(p.attribute("velocity").asVelocity() == 5_kmh);
 
-  // when you are not sure an attribute exists, you can use attributeOr for convenience. When the attribute does not
+  // when you are not sure an attribute exists, you can use "attributeOr" for convenience. When the attribute does not
   // exist or can not be converted to the type you passed as default value, the default value is returned:
   assert(p.attributeOr("nonexistent", -1) == -1);
   assert(p.attributeOr("type", 0) == 0);  // "point" can not be converted to a number
@@ -88,14 +88,14 @@ void part0Primitives() {
   // still the const version can observe changes:
   p.z() = 3;
   assert(pConst.z() == 3);
-  // actually, and this is more advanced, we dont not even have to make a copy, because internally Point3d inherits
+  // actually, and this is more advanced, we do not even have to make a copy, because internally Point3d inherits
   // from ConstPoint3d
   ConstPoint3d& pConstRef = p;
   // pConstRef is now a reference to the const part of the point:
   assert(pConstRef.z() == 3);
 
   // we can convert things to const, but we can not get back. Once it is const, there is no way to get the const away.
-  // This is important, because that any function that takes a const object is guaranteed to be unable to modify it,
+  // This is important, because any function that takes a const object is guaranteed to be unable to modify it,
   // no matter what.
 
   // Point3d pNonConst = pConst; // not possible
@@ -166,7 +166,8 @@ void part2LineStrings() {
   ls.attributes()[AttributeName::Type] = AttributeValueString::LineThin;
   ls.attributes()[AttributeName::Subtype] = AttributeValueString::Dashed;
 
-  // instead of looping over individual points, you can also loop over individual segments:
+  // instead of looping over individual points, you can also loop over individual segments. A segment consists of two
+  // neighbouring points in the LineString:
   assert(ls.numSegments() >= 2);
   Segment3d segment = ls.segment(1);
   assert(segment.first == p2);
