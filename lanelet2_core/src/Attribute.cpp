@@ -49,6 +49,8 @@ Attribute::Attribute(int value) : value_(std::to_string(value)) {}
 
 Attribute::Attribute(double value) : value_(std::to_string(value)) {}
 
+Attribute::Attribute(const Velocity& value) : value_{std::to_string(units::KmHQuantity(value).value())} {}
+
 Optional<bool> Attribute::asBool() const {
   // try load from cache
   auto val = load<bool>(cache_);
@@ -249,6 +251,7 @@ constexpr const char AttributeNamesString::LaneChangeRight[];
 // on lanelets/areas
 constexpr const char AttributeNamesString::SpeedLimitMandatory[];
 constexpr const char AttributeNamesString::Area[];
+constexpr const char AttributeNamesString::Participant[];
 constexpr const char AttributeNamesString::Fallback[];
 constexpr const char AttributeNamesString::Width[];
 constexpr const char AttributeNamesString::Height[];

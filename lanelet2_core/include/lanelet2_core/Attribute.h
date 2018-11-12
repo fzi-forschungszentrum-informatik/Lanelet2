@@ -42,6 +42,7 @@ class Attribute {
   Attribute(Id value);                                          // NOLINT
   Attribute(int value);                                         // NOLINT
   Attribute(double value);                                      // NOLINT
+  Attribute(const Velocity& value);                             // NOLINT
 
   /**
    * @brief interpret this attribute as bool value
@@ -234,6 +235,10 @@ struct AttributeNamesString {
 
 //! parts of tag that have to be combined with either Participants:, OneWay: or SpeedLimit to generate an override.
 struct Participants {
+  //! Obtain the tag for the participant override
+  static std::string tag(const std::string& participant) {
+    return AttributeNamesString::Participant + (":" + participant);
+  }
   static constexpr const char Vehicle[] = "vehicle";
   static constexpr const char VehicleBus[] = "vehicle:bus";
   static constexpr const char VehicleCar[] = "vehicle:car";
@@ -344,4 +349,11 @@ struct AttributeValueString {
 inline std::ostream& operator<<(std::ostream& stream, const Attribute& obj) { return stream << obj.value(); }
 
 using AttributeMap = HybridMap<Attribute, decltype(AttributeNamesString::Map)&, AttributeNamesString::Map>;
+
+inline std::ostream& operator<<(std::ostream& stream, const AttributeMap& obj) {
+  for (auto& o : obj) {
+    stream << o.first << ": " << o.second << " ";
+  }
+  return stream;
+}
 }  // namespace lanelet

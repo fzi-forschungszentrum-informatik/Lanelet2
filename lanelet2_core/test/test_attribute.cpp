@@ -59,12 +59,15 @@ TEST(Attribute, doubleConversion) {  // NOLINT
 
 TEST(Attribute, velocityConversion) {  // NOLINT
   using namespace units;
+  using namespace units::literals;
   EXPECT_DOUBLE_EQ(0.1, KmHQuantity(*Attribute("0.1").asVelocity()).value());
   EXPECT_DOUBLE_EQ(0.1, Attribute("0.1 mps").asVelocity()->value());
   EXPECT_DOUBLE_EQ(0.1, Attribute("0.1mps").asVelocity()->value());
   EXPECT_DOUBLE_EQ(0.1, KmHQuantity(*Attribute("0.1 kmh").asVelocity()).value());
   EXPECT_DOUBLE_EQ(0.1, KmHQuantity(*Attribute("0.1 km/h").asVelocity()).value());
   EXPECT_DOUBLE_EQ(0.1, MPHQuantity(*Attribute("0.1 m/h").asVelocity()).value());
+  EXPECT_DOUBLE_EQ(0.1, KmHQuantity(*Attribute(0.1_kmh).asVelocity()).value());
+  EXPECT_DOUBLE_EQ(0.1, Velocity(*Attribute(0.1_mps).asVelocity()).value());
   EXPECT_FALSE(Attribute("0a").asVelocity());
 }
 
