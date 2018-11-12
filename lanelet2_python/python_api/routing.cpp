@@ -27,7 +27,7 @@ Optional<std::shared_ptr<lanelet::routing::Route>> getRouteViaWrapper(const lane
   return std::make_shared<lanelet::routing::Route>(std::move(*route));
 }
 
-routing::RoutingGraphPtr makeRoutingGraph(LaneletMap& laneletMap, const TrafficRules& trafficRules,
+routing::RoutingGraphPtr makeRoutingGraph(LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
                                           const routing::RoutingCostPtrs& routingCosts) {
   return routing::RoutingGraph::build(laneletMap, trafficRules, routingCosts);
 }

@@ -3,21 +3,18 @@
 #include <lanelet2_core/primitives/Lanelet.h>
 
 namespace lanelet {
+namespace traffic_rules {
+
 struct SpeedLimitInformation {
   Velocity speedLimit;     //!< The current speed limit (must not be Inf)
   bool isMandatory{true};  //!< False if speed limit is only a recommendation
 };
 
-enum class LaneChangeType { ToRight, ToLeft, Both, None };
-
 class TrafficRules;
 using TrafficRulesPtr = std::shared_ptr<TrafficRules>;
 using TrafficRulesUPtr = std::unique_ptr<TrafficRules>;
 
-/**
- * @brief Class for inferring traffic rules for lanelets
- *
- */
+//! Class for inferring traffic rules for lanelets and areas
 class TrafficRules {  // NOLINT
  public:
   using Configuration = std::map<std::string, Attribute>;
@@ -26,7 +23,7 @@ class TrafficRules {  // NOLINT
    * @brief Constructor
    * @param config a configuration for traffic rules. This can be necessary for
    * very specialized rule objects (ie considering the time of day or the
-   * weather)
+   * weather). The config must have at least two entries: participant and location.
    */
   explicit TrafficRules(Configuration config = Configuration()) : config_{std::move(config)} {}
   virtual ~TrafficRules();
@@ -38,10 +35,10 @@ class TrafficRules {  // NOLINT
    * lanelet is passable for a pedestrian but not for a vehicle. Orientation is
    * important. It is not possible to pass an inverted oneWay Lanelet.
    */
-  virtual bool canPass(const ConstLanelet& lanelet) const;
+  virtual bool canPass(const ConstLanelet& lanelet) const = 0;
 
   //! returns whether it is allowed to pass/drive on this area
-  virtual bool canPass(const ConstArea& area) const;
+  virtual bool canPass(const ConstArea& area) const = 0;
 
   /**
    * @brief returns whether it is allowed to pass/drive from a lanelet to
@@ -52,17 +49,17 @@ class TrafficRules {  // NOLINT
    * and finally checks if any traffic rule prevents to pass between the
    * lanelets.
    */
-  virtual bool canPass(const ConstLanelet& from, const ConstLanelet& to) const;
-  virtual bool canPass(const ConstLanelet& from, const ConstArea& to) const;
-  virtual bool canPass(const ConstArea& from, const ConstLanelet& to) const;
-  virtual bool canPass(const ConstArea& from, const ConstArea& to) const;
+  virtual bool canPass(const ConstLanelet& from, const ConstLanelet& to) const = 0;
+  virtual bool canPass(const ConstLanelet& from, const ConstArea& to) const = 0;
+  virtual bool canPass(const ConstArea& from, const ConstLanelet& to) const = 0;
+  virtual bool canPass(const ConstArea& from, const ConstArea& to) const = 0;
 
   /**
    * @brief determines if a lane change can be made between two lanelets
    *
    * The orientation of the lanelets is important here as well.
    */
-  bool canChangeLane(const ConstLanelet& from, const ConstLanelet& to) const;
+  virtual bool canChangeLane(const ConstLanelet& from, const ConstLanelet& to) const = 0;
 
   //! returns speed limit on this lanelet.
   virtual SpeedLimitInformation speedLimit(const ConstLanelet& lanelet) const = 0;
@@ -71,7 +68,7 @@ class TrafficRules {  // NOLINT
   virtual SpeedLimitInformation speedLimit(const ConstArea& area) const = 0;
 
   //! returns whether a lanelet can be driven in one direction only
-  virtual bool isOneWay(const ConstLanelet& lanelet) const;
+  virtual bool isOneWay(const ConstLanelet& lanelet) const = 0;
 
   /**
    * @brief returns whether dynamic traffic rules apply to this lanelet.
@@ -81,18 +78,7 @@ class TrafficRules {  // NOLINT
    * are dynamic and how to handle them. This makes the values returned by the
    * other functions unreliable. Handling of dynamic rules is not covered here.
    */
-  virtual bool hasDynamicRules(const ConstLanelet& lanelet) const;
-
-  /**
-   * @brief checks whether traffic restrictions change between lanelets.
-   */
-  virtual bool hasSameTrafficRules(const ConstLanelet& lanelet, const ConstLanelet& other) const;
-
-  virtual bool canOvertakeLeft(const ConstLanelet& lanelet) const = 0;
-
-  virtual bool canOvertakeRight(const ConstLanelet& lanelet) const = 0;
-
-  virtual bool rightHandTraffic() const = 0;
+  virtual bool hasDynamicRules(const ConstLanelet& lanelet) const = 0;
 
   /**
    * @brief configuration for this traffic rules object
@@ -103,25 +89,14 @@ class TrafficRules {  // NOLINT
    * @brief the traffic participant the rules are valid for (e.g. vehicle, car,
    * pedestrian, etc)
    */
-  std::string participant() const;
+  const std::string& participant() const;
 
   /**
    * @brief the the location the rules are valid for
    *
    * Should be ISO country code
    */
-  std::string location() const;
-
- protected:
-  //! implementation for canPass that checks whether it is allowed to pass from
-  //! "from" to "to".
-  virtual bool canPassImpl(const ConstLanelet& from, const ConstLanelet& to) const = 0;
-
-  /**
-   * @brief checks which types of lange changes are allowed along this boundary
-   * to make a lane switch from one lanelet to another.
-   */
-  virtual LaneChangeType laneChangeType(const ConstLineString3d& boundary) const = 0;
+  const std::string& location() const;
 
  private:
   Configuration config_;
@@ -131,4 +106,5 @@ std::ostream& operator<<(std::ostream& stream, const SpeedLimitInformation& obj)
 
 std::ostream& operator<<(std::ostream& stream, const TrafficRules& obj);
 
+}  // namespace traffic_rules
 }  // namespace lanelet

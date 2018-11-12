@@ -80,8 +80,8 @@ class LaneChangeLaneletsCollector {
   LaneChangeMap::iterator currPos_{laneChanges_.end()};
 };
 
-RoutingGraphBuilder::RoutingGraphBuilder(const TrafficRules& trafficRules, const RoutingCostPtrs& routingCosts,
-                                         const RoutingGraph::Configuration& config)
+RoutingGraphBuilder::RoutingGraphBuilder(const traffic_rules::TrafficRules& trafficRules,
+                                         const RoutingCostPtrs& routingCosts, const RoutingGraph::Configuration& config)
     : graph_{std::make_unique<Graph>(routingCosts.size())},
       trafficRules_{trafficRules},
       routingCosts_{routingCosts},
@@ -99,7 +99,8 @@ RoutingGraphUPtr RoutingGraphBuilder::build(LaneletMap& laneletMap) {
   return RoutingGraphUPtr{new RoutingGraph(std::move(graph_), std::move(passableMap))};
 }
 
-Lanelets RoutingGraphBuilder::getPassableLanelets(LaneletLayer& lanelets, const TrafficRules& trafficRules) {
+Lanelets RoutingGraphBuilder::getPassableLanelets(LaneletLayer& lanelets,
+                                                  const traffic_rules::TrafficRules& trafficRules) {
   Lanelets llts;
   llts.reserve(lanelets.size());
   std::copy_if(lanelets.begin(), lanelets.end(), std::back_inserter(llts),
@@ -107,7 +108,7 @@ Lanelets RoutingGraphBuilder::getPassableLanelets(LaneletLayer& lanelets, const 
   return llts;
 }
 
-Areas RoutingGraphBuilder::getPassableAreas(AreaLayer& areas, const TrafficRules& trafficRules) {
+Areas RoutingGraphBuilder::getPassableAreas(AreaLayer& areas, const traffic_rules::TrafficRules& trafficRules) {
   Areas ars;
   ars.reserve(areas.size());
   std::copy_if(areas.begin(), areas.end(), std::back_inserter(ars),

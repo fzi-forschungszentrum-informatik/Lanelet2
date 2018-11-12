@@ -48,13 +48,13 @@ void runMapValidators(std::vector<DetectedIssues>& issues, const Regexes& regexe
 }
 
 void runRuleValidators(std::vector<DetectedIssues>& issues, const Regexes& regexes, const LaneletMap& map,
-                       const std::vector<TrafficRulesUPtr>& rules) {
+                       const std::vector<traffic_rules::TrafficRulesUPtr>& rules) {
   auto validators = ValidatorFactory::instance().createTrafficRuleValidators(regexes);
   append(issues, runValidators(validators, [&map, &rules](auto& validator) { return validator(map, rules); }));
 }
 
 void runRoutingGraphValidators(std::vector<DetectedIssues>& issues, const Regexes& regexes, LaneletMap& map,
-                               const std::vector<TrafficRulesUPtr>& rules) {
+                               const std::vector<traffic_rules::TrafficRulesUPtr>& rules) {
   auto routingGraphValidators = ValidatorFactory::instance().createRoutingGraphValidators(regexes);
   if (routingGraphValidators.empty()) {
     return;
@@ -83,7 +83,7 @@ std::vector<DetectedIssues> validateMap(LaneletMap& map, const ValidationConfig&
   runMapValidators(issues, regexes, map);
 
   auto trafficRules = utils::transform(config.participants, [&config](auto& participant) {
-    return TrafficRulesFactory::create(config.location, participant);
+    return traffic_rules::TrafficRulesFactory::create(config.location, participant);
   });
 
   runRuleValidators(issues, regexes, map, trafficRules);

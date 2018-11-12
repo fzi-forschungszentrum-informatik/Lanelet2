@@ -8,7 +8,8 @@ namespace {
 RegisterRoutingGraphValidator<RoutingGraphIsValid> reg;
 }  // namespace
 
-Issues RoutingGraphIsValid::operator()(const routing::RoutingGraph& graph, const TrafficRules& /*rules*/) {
+Issues RoutingGraphIsValid::operator()(const routing::RoutingGraph& graph,
+                                       const traffic_rules::TrafficRules& /*rules*/) {
   auto errors = graph.checkValidity(false);
   return utils::transform(errors, [](auto& error) { return Issue(Severity::Error, error); });
 }

@@ -448,14 +448,14 @@ namespace geometry {
 /**
  * @brief returns the nearest n primitives to a point.
  * @return vector of the n closest primitives together with their distance in
- * descending order.
+ * ascending order.
  *
  * Other than than LaneletLayer::nearest, this returns the actually closest
  * primitives, not only the closest bounding boxes.
  * This comes at a slightly higher cost, because more primitives from the R-Tree
  * need to be checked.
  *
- * Example: `Lanelets closeLanelets = findNearest(laneletMap.laneletLayer,
+ * Example: `std::vector<std::pair<double, Lanelet> closeLanelets = findNearest(laneletMap.laneletLayer,
  * BasicPoint2d(1,0,0), 5);`
  */
 template <typename PrimT>

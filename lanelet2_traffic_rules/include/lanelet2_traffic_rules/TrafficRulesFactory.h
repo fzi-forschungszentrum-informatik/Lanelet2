@@ -6,15 +6,9 @@ struct Locations {
   static constexpr char Germany[] = "de";
 };
 
-struct Participants {
-  static constexpr char Vehicle[] = "vehicle";
-  static constexpr char Car[] = "car";
-  static constexpr char Bus[] = "bus";
-  static constexpr char Truck[] = "truck";
-  static constexpr char Bicycle[] = "bicycle";
-  static constexpr char Pedestrian[] = "pedestrian";
-  static constexpr const char* VehicleTypes[]{Car, Bus, Truck};
-};
+// participants are defined in lanelet2_core/Attributes.h
+
+namespace traffic_rules {
 
 class TrafficRulesFactory {
  public:
@@ -65,4 +59,5 @@ class RegisterTrafficRules {
         +[](const TrafficRules::Configuration& config) -> TrafficRulesUPtr { return std::make_unique<T>(config); });
   }
 };
+}  // namespace traffic_rules
 }  // namespace lanelet

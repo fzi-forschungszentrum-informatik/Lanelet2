@@ -78,12 +78,12 @@ TEST_F(LaneletTest, bounds) {  // NOLINT
 
 TEST_F(LaneletTest, attributes) {  // NOLINT
   ritterLanelet.setAttribute("test", "value");
-  ritterLanelet.setAttribute(AttributeName::Subtype, AttributeValueString::Normal);
+  ritterLanelet.setAttribute(AttributeName::Subtype, AttributeValueString::Road);
   EXPECT_TRUE(ritterLanelet.hasAttribute("test"));
   EXPECT_EQ("value"s, ritterLanelet.attribute("test").value());
   EXPECT_EQ("value"s, constRitterLanelet.attribute("test").value());
-  EXPECT_EQ(ritterLanelet.attribute(AttributeName::Subtype), AttributeValueString::Normal);
-  EXPECT_EQ(constRitterLanelet.attribute(AttributeName::Subtype), AttributeValueString::Normal);
+  EXPECT_EQ(ritterLanelet.attribute(AttributeName::Subtype), AttributeValueString::Road);
+  EXPECT_EQ(constRitterLanelet.attribute(AttributeName::Subtype), AttributeValueString::Road);
   EXPECT_THROW(ritterLanelet.attribute("doesnotexist"), NoSuchAttributeError);
 }
 

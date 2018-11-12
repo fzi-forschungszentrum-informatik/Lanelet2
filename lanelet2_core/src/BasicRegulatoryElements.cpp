@@ -222,9 +222,6 @@ LineStrings3d TrafficSign::trafficSigns() { return getParameters<LineString3d>(R
 std::string TrafficSign::type() const {
   auto signs = trafficSigns();
   if (signs.empty()) {
-    if (this->hasAttribute(AttributeNamesString::SignType)) {
-      return attribute(AttributeNamesString::SignType).value();
-    }
     throw InvalidInputError("Regulatory element can not determine the type of the traffic sign!");
   }
   if (signs.front().hasAttribute(AttributeName::Subtype)) {

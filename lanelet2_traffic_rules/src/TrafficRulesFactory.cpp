@@ -4,25 +4,13 @@ namespace lanelet {
 
 constexpr char Locations::Germany[];
 
-constexpr char Participants::Vehicle[];
-constexpr char Participants::Car[];
-constexpr char Participants::Bus[];
-constexpr char Participants::Truck[];
-constexpr char Participants::Bicycle[];
-constexpr char Participants::Pedestrian[];
-constexpr const char* Participants::VehicleTypes[];
-
-namespace {
-bool isVehicleType(const std::string& t) {
-  return std::find(std::begin(Participants::VehicleTypes), std::end(Participants::VehicleTypes), t);
-}
-}  // namespace
-
+namespace traffic_rules {
 TrafficRulesUPtr TrafficRulesFactory::create(const std::string& location, const std::string& participant,
                                              TrafficRules::Configuration configuration) {
   auto& registry = instance().registry_;
   auto elem = registry.find(std::make_pair(location, participant));
-  if (elem == registry.end() && isVehicleType(participant)) {
+  const std::string vehicle = Participants::Vehicle;
+  if (participant.compare(0, vehicle.size(), vehicle) == 0) {
     // second try for vehicle types
     elem = registry.find(std::make_pair(location, std::string(Participants::Vehicle)));
   }
@@ -44,4 +32,5 @@ TrafficRulesFactory& TrafficRulesFactory::instance() {
   static TrafficRulesFactory factory;
   return factory;
 }
+}  // namespace traffic_rules
 }  // namespace lanelet

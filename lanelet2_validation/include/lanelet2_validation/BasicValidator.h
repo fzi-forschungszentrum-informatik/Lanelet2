@@ -27,7 +27,7 @@ using MapValidatorUPtrs = std::vector<MapValidatorUPtr>;
 class TrafficRuleValidator {  // NOLINT
  public:
   constexpr const char* name() { return ""; }
-  virtual Issues operator()(const LaneletMap& map, const std::vector<TrafficRulesUPtr>& rules) = 0;
+  virtual Issues operator()(const LaneletMap& map, const std::vector<traffic_rules::TrafficRulesUPtr>& rules) = 0;
   virtual ~TrafficRuleValidator() = default;
 };
 using TrafficRuleValidatorUPtr = std::unique_ptr<TrafficRuleValidator>;
@@ -38,7 +38,7 @@ class RoutingGraphValidator {  // NOLINTs
  public:
   constexpr const char* name() { return ""; }
   //! The RoutingGraphValidator is called together with the rules with which it was created.
-  virtual Issues operator()(const routing::RoutingGraph& graph, const TrafficRules& rules) = 0;
+  virtual Issues operator()(const routing::RoutingGraph& graph, const traffic_rules::TrafficRules& rules) = 0;
   virtual ~RoutingGraphValidator() = default;
 };
 using RoutingGraphValidatorUPtr = std::unique_ptr<RoutingGraphValidator>;
