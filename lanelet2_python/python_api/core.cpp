@@ -455,7 +455,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   ToOptionalConverter().fromPython<LineString3d>();
 
-  class_<AttributeMap>("AttributeMap", init<>("AttributeMap()")).def(IsHybridMap<AttributeMap>());
+  class_<AttributeMap>("AttributeMap", init<>("AttributeMap()"))
+      .def(IsHybridMap<AttributeMap>())
+      .def(self_ns::str(self_ns::self));
 
   class_<RuleParameterMap>("RuleParameterMap", init<>("RuleParameterMap()")).def(IsHybridMap<RuleParameterMap>());
 
