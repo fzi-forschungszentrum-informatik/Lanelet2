@@ -41,7 +41,7 @@ class RoutingGraph {
    *  @param trafficRules Traffic rules that apply to find passable lanelets
    *  @param routingCosts One or more ways to calculate routing costs
    *  @param config Optional configuration */
-  static RoutingGraphUPtr build(LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
+  static RoutingGraphUPtr build(const LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
                                 const RoutingCostPtrs& routingCosts = defaultRoutingCosts(),
                                 Configuration config = Configuration());
 
@@ -295,14 +295,12 @@ class RoutingGraph {
   /**
    * Constructs the routing graph. Don't call this directly, use RoutingGraph::make instead.
    */
-  RoutingGraph(std::unique_ptr<Graph>&& graph, lanelet::LaneletMapPtr&& passableMap);
+  RoutingGraph(std::unique_ptr<Graph>&& graph, lanelet::LaneletMapConstPtr&& passableMap);
 
  private:
   //! Documentation to be found in the cpp file.
-  friend class RouteBuilder;
-  Lanelet getMutableLanelet(const ConstLanelet& ll) const;
-  std::unique_ptr<Graph> graph_;      ///< Wrapper of the routing graph
-  LaneletMapPtr passableLaneletMap_;  ///< Lanelet map of all passable lanelets
+  std::unique_ptr<Graph> graph_;           ///< Wrapper of the routing graph
+  LaneletMapConstPtr passableLaneletMap_;  ///< Lanelet map of all passable lanelets
 };
 
 }  // namespace routing

@@ -198,7 +198,7 @@ RoutingGraph::RoutingGraph(RoutingGraph&& /*other*/) noexcept = default;
 RoutingGraph& RoutingGraph::operator=(RoutingGraph&& /*other*/) noexcept = default;
 RoutingGraph::~RoutingGraph() = default;
 
-RoutingGraphUPtr RoutingGraph::build(LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
+RoutingGraphUPtr RoutingGraph::build(const LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
                                      const RoutingCostPtrs& routingCosts, RoutingGraph::Configuration config) {
   return RoutingGraphBuilder(trafficRules, routingCosts, config).build(laneletMap);
 }
@@ -768,14 +768,8 @@ RoutingGraph::Errors RoutingGraph::checkValidity(bool throwOnError) const {
   return errors;
 }
 
-RoutingGraph::RoutingGraph(std::unique_ptr<Graph>&& graph, LaneletMapPtr&& passableLaneletMap)
+RoutingGraph::RoutingGraph(std::unique_ptr<Graph>&& graph, LaneletMapConstPtr&& passableLaneletMap)
     : graph_{std::move(graph)}, passableLaneletMap_{std::move(passableLaneletMap)} {}
 
-//! Helper function to retrieve to mutable Lanelet from a ConstLanelet. Needed to create new LaneletMaps.
-Lanelet RoutingGraph::getMutableLanelet(const ConstLanelet& ll) const {
-  auto laneletId{passableLaneletMap_->laneletLayer.find(ll.id())};
-  assert(laneletId != passableLaneletMap_->laneletLayer.end() && "Lanelet not found");
-  return *laneletId;
-}
 }  // namespace routing
 }  // namespace lanelet

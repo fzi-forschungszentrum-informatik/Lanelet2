@@ -15,27 +15,27 @@ class RoutingGraphBuilder {
   RoutingGraphBuilder(const traffic_rules::TrafficRules& trafficRules, const RoutingCostPtrs& routingCosts,
                       const RoutingGraph::Configuration& config);
 
-  RoutingGraphUPtr build(LaneletMap& laneletMap);
+  RoutingGraphUPtr build(const LaneletMap& laneletMap);
 
  private:
   using PointsLaneletMap = std::multimap<IdPair, ConstLanelet>;
   using PointsLaneletMapIt = PointsLaneletMap::iterator;
   using PointsLaneletMapResult = std::pair<PointsLaneletMapIt, PointsLaneletMapIt>;
 
-  Lanelets getPassableLanelets(LaneletLayer& lanelets, const traffic_rules::TrafficRules& trafficRules);
-  Areas getPassableAreas(AreaLayer& areas, const traffic_rules::TrafficRules& trafficRules);
-  void appendBidirectionalLanelets(Lanelets& llts);
-  void addLaneletsToGraph(Lanelets& llts);
-  void addAreasToGraph(Areas& areas);
-  void addEdges(const Lanelets& lanelets, const LaneletLayer& passableLanelets);
-  void addEdges(const Areas& areas, const LaneletLayer& passableLanelets, const AreaLayer& passableAreas);
-  void addFollowingEdges(const Lanelet& ll);
-  void addSidewayEdge(LaneChangeLaneletsCollector& laneChangeLanelets, const Lanelet& ll,
+  ConstLanelets getPassableLanelets(const LaneletLayer& lanelets, const traffic_rules::TrafficRules& trafficRules);
+  ConstAreas getPassableAreas(const AreaLayer& areas, const traffic_rules::TrafficRules& trafficRules);
+  void appendBidirectionalLanelets(ConstLanelets& llts);
+  void addLaneletsToGraph(ConstLanelets& llts);
+  void addAreasToGraph(ConstAreas& areas);
+  void addEdges(const ConstLanelets& lanelets, const LaneletLayer& passableLanelets);
+  void addEdges(const ConstAreas& areas, const LaneletLayer& passableLanelets, const AreaLayer& passableAreas);
+  void addFollowingEdges(const ConstLanelet& ll);
+  void addSidewayEdge(LaneChangeLaneletsCollector& laneChangeLanelets, const ConstLanelet& ll,
                       const ConstLineString3d& bound, const RelationType& relation);
-  void addConflictingEdge(const Lanelet& ll, const LaneletLayer& passableLanelets);
+  void addConflictingEdge(const ConstLanelet& ll, const LaneletLayer& passableLanelets);
   void addLaneChangeEdges(LaneChangeLaneletsCollector& laneChanges, const RelationType& relation);
-  void addAreaEdge(const Area& area, const LaneletLayer& passableLanelets);
-  void addAreaEdge(const Area& area, const AreaLayer& passableAreas);
+  void addAreaEdge(const ConstArea& area, const LaneletLayer& passableLanelets);
+  void addAreaEdge(const ConstArea& area, const AreaLayer& passableAreas);
 
   //! Helper function to read the participant height from the configuration
   Optional<double> participantHeight() const;

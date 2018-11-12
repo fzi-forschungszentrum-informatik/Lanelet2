@@ -167,6 +167,7 @@ using LaneletMapPtr = std::shared_ptr<LaneletMap>;
 using LaneletMapUPtr = std::unique_ptr<LaneletMap>;
 using LaneletMapConstUPtr = std::unique_ptr<const LaneletMap>;
 using LaneletMapConstPtr = std::shared_ptr<const LaneletMap>;
+using LaneletMapConstUPtr = std::unique_ptr<const LaneletMap>;
 using LaneletMapPtrs = std::vector<LaneletMapPtr>;
 using LaneletMapConstPtrs = std::vector<LaneletMapConstPtr>;
 
