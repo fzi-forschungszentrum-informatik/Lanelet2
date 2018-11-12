@@ -41,7 +41,7 @@ class RoutingGraph {
    *  @param trafficRules Traffic rules that apply to find passable lanelets
    *  @param routingCosts One or more ways to calculate routing costs
    *  @param config Optional configuration */
-  static RoutingGraphUPtr build(LaneletMap& laneletMap, const TrafficRules& trafficRules,
+  static RoutingGraphUPtr build(LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
                                 const RoutingCostPtrs& routingCosts = defaultRoutingCosts(),
                                 Configuration config = Configuration());
 
