@@ -87,10 +87,10 @@ RoutingGraphBuilder::RoutingGraphBuilder(const traffic_rules::TrafficRules& traf
       routingCosts_{routingCosts},
       config_{config} {}
 
-RoutingGraphUPtr RoutingGraphBuilder::build(LaneletMap& laneletMap) {
+RoutingGraphUPtr RoutingGraphBuilder::build(const LaneletMap& laneletMap) {
   auto passableLanelets = getPassableLanelets(laneletMap.laneletLayer, trafficRules_);
   auto passableAreas = getPassableAreas(laneletMap.areaLayer, trafficRules_);
-  auto passableMap = utils::createMap(passableLanelets, passableAreas);
+  auto passableMap = utils::createConstMap(passableLanelets, passableAreas);
   appendBidirectionalLanelets(passableLanelets);
   addLaneletsToGraph(passableLanelets);
   addAreasToGraph(passableAreas);
@@ -99,25 +99,26 @@ RoutingGraphUPtr RoutingGraphBuilder::build(LaneletMap& laneletMap) {
   return RoutingGraphUPtr{new RoutingGraph(std::move(graph_), std::move(passableMap))};
 }
 
-Lanelets RoutingGraphBuilder::getPassableLanelets(LaneletLayer& lanelets,
-                                                  const traffic_rules::TrafficRules& trafficRules) {
-  Lanelets llts;
+ConstLanelets RoutingGraphBuilder::getPassableLanelets(const LaneletLayer& lanelets,
+                                                       const traffic_rules::TrafficRules& trafficRules) {
+  ConstLanelets llts;
   llts.reserve(lanelets.size());
   std::copy_if(lanelets.begin(), lanelets.end(), std::back_inserter(llts),
-               [&trafficRules](Lanelet& llt) { return trafficRules.canPass(llt); });
+               [&trafficRules](const ConstLanelet& llt) { return trafficRules.canPass(llt); });
   return llts;
 }
 
-Areas RoutingGraphBuilder::getPassableAreas(AreaLayer& areas, const traffic_rules::TrafficRules& trafficRules) {
-  Areas ars;
+ConstAreas RoutingGraphBuilder::getPassableAreas(const AreaLayer& areas,
+                                                 const traffic_rules::TrafficRules& trafficRules) {
+  ConstAreas ars;
   ars.reserve(areas.size());
   std::copy_if(areas.begin(), areas.end(), std::back_inserter(ars),
-               [&trafficRules](Area& area) { return trafficRules.canPass(area); });
+               [&trafficRules](const ConstArea& area) { return trafficRules.canPass(area); });
   return ars;
 }
 
-void RoutingGraphBuilder::appendBidirectionalLanelets(Lanelets& llts) {
-  std::deque<Lanelet> invLanelets;
+void RoutingGraphBuilder::appendBidirectionalLanelets(ConstLanelets& llts) {
+  std::deque<ConstLanelet> invLanelets;
   for (auto& ll : llts) {
     if (!trafficRules_.isOneWay(ll) && trafficRules_.canPass(ll.invert())) {
       invLanelets.push_back(ll.invert());
@@ -127,20 +128,20 @@ void RoutingGraphBuilder::appendBidirectionalLanelets(Lanelets& llts) {
   llts.insert(llts.end(), invLanelets.begin(), invLanelets.end());
 }
 
-void RoutingGraphBuilder::addLaneletsToGraph(Lanelets& llts) {
+void RoutingGraphBuilder::addLaneletsToGraph(ConstLanelets& llts) {
   for (auto& ll : llts) {
     graph_->addVertex(ll);
     addPointsToSearchIndex(ll);
   }
 }
 
-void RoutingGraphBuilder::addAreasToGraph(Areas& areas) {
+void RoutingGraphBuilder::addAreasToGraph(ConstAreas& areas) {
   for (auto& ar : areas) {
     graph_->addVertex(ar);
   }
 }
 
-void RoutingGraphBuilder::addEdges(const Lanelets& lanelets, const LaneletLayer& passableLanelets) {
+void RoutingGraphBuilder::addEdges(const ConstLanelets& lanelets, const LaneletLayer& passableLanelets) {
   LaneChangeLaneletsCollector leftToRight, rightToLeft;
   // Check relations between lanelets
   for (auto const& ll : lanelets) {
@@ -155,7 +156,7 @@ void RoutingGraphBuilder::addEdges(const Lanelets& lanelets, const LaneletLayer&
   addLaneChangeEdges(leftToRight, RelationType::Right);
 }
 
-void RoutingGraphBuilder::addEdges(const Areas& areas, const LaneletLayer& passableLanelets,
+void RoutingGraphBuilder::addEdges(const ConstAreas& areas, const LaneletLayer& passableLanelets,
                                    const AreaLayer& passableAreas) {
   for (const auto& area : areas) {
     addAreaEdge(area, passableLanelets);
@@ -163,7 +164,7 @@ void RoutingGraphBuilder::addEdges(const Areas& areas, const LaneletLayer& passa
   }
 }
 
-void RoutingGraphBuilder::addFollowingEdges(const Lanelet& ll) {
+void RoutingGraphBuilder::addFollowingEdges(const ConstLanelet& ll) {
   auto endPointsLanelets =
       pointsToLanelets_.equal_range(orderedIdPair(ll.leftBound().back().id(), ll.rightBound().back().id()));
   // Following
@@ -201,7 +202,7 @@ void RoutingGraphBuilder::addFollowingEdges(const Lanelet& ll) {
   }
 }
 
-void RoutingGraphBuilder::addSidewayEdge(LaneChangeLaneletsCollector& laneChangeLanelets, const Lanelet& ll,
+void RoutingGraphBuilder::addSidewayEdge(LaneChangeLaneletsCollector& laneChangeLanelets, const ConstLanelet& ll,
                                          const ConstLineString3d& bound, const RelationType& relation) {
   auto directlySideway = [&relation, &ll](const ConstLanelet& sideLl) {
     return relation == RelationType::AdjacentLeft ? geometry::leftOf(sideLl, ll) : geometry::rightOf(sideLl, ll);
@@ -219,7 +220,7 @@ void RoutingGraphBuilder::addSidewayEdge(LaneChangeLaneletsCollector& laneChange
   }
 }
 
-void RoutingGraphBuilder::addConflictingEdge(const Lanelet& ll, const LaneletLayer& passableLanelets) {
+void RoutingGraphBuilder::addConflictingEdge(const ConstLanelet& ll, const LaneletLayer& passableLanelets) {
   // Conflicting
   ConstLanelets results = passableLanelets.search(geometry::boundingBox2d(ll));
   ConstLanelet other;
@@ -271,7 +272,7 @@ void RoutingGraphBuilder::addLaneChangeEdges(LaneChangeLaneletsCollector& laneCh
   }
 }
 
-void RoutingGraphBuilder::addAreaEdge(const Area& area, const LaneletLayer& passableLanelets) {
+void RoutingGraphBuilder::addAreaEdge(const ConstArea& area, const LaneletLayer& passableLanelets) {
   auto candidates = passableLanelets.search(geometry::boundingBox2d(area));
   for (auto& candidate : candidates) {
     bool canPass = false;
@@ -302,7 +303,7 @@ void RoutingGraphBuilder::addAreaEdge(const Area& area, const LaneletLayer& pass
   }
 }
 
-void RoutingGraphBuilder::addAreaEdge(const Area& area, const AreaLayer& passableAreas) {
+void RoutingGraphBuilder::addAreaEdge(const ConstArea& area, const AreaLayer& passableAreas) {
   auto candidates = passableAreas.search(geometry::boundingBox2d(area));
   for (auto& candidate : candidates) {
     if (candidate == area) {

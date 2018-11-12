@@ -418,6 +418,7 @@ LaneletMapUPtr createMap(const Polygons3d& fromPolygons);
 LaneletMapUPtr createMap(const Lanelets& fromLanelets);
 LaneletMapUPtr createMap(const Areas& fromAreas);
 LaneletMapUPtr createMap(const Lanelets& fromLanelets, const Areas& fromAreas);
+LaneletMapConstUPtr createConstMap(const ConstLanelets& fromLanelets, const ConstAreas& fromAreas);
 
 /**
  * @brief returns a unique id by incrementing a counter each time this is

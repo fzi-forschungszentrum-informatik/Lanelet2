@@ -796,6 +796,17 @@ LaneletMapUPtr createMap(const Polygons3d& fromPolygons) {
                                       toMap(fromPolygons), LineStringLayer::Map(), toMap(points));
 }
 
+LaneletMapConstUPtr createConstMap(const ConstLanelets& fromLanelets, const ConstAreas& fromAreas) {
+  // sorry, we temporarily have to const cast our primitives back to non-const to be able to create a const map. Its not
+  // beautiful but valid.
+  auto lanelets = utils::transform(fromLanelets, [](const ConstLanelet& llt) {
+    return Lanelet(std::const_pointer_cast<LaneletData>(llt.constData()), llt.inverted());
+  });
+  auto areas = utils::transform(
+      fromAreas, [](const ConstArea& ar) { return Area(std::const_pointer_cast<AreaData>(ar.constData())); });
+  return createMap(lanelets, areas);
+}
+
 namespace {
 static std::atomic<Id> currId{1000};
 }  // namespace

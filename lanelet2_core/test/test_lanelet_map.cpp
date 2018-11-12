@@ -287,3 +287,9 @@ TEST_F(LaneletMapTest, findUsagesInPolygon) {  // NOLINT
     EXPECT_TRUE(polys.empty());
   });
 }
+
+TEST_F(LaneletMapTest, createConstMap) {  // NOLINT
+  auto map = utils::createConstMap(ConstLanelets{ll1, ll2}, ConstAreas{ar1});
+  EXPECT_TRUE(map->laneletLayer.exists(ll1.id()));
+  EXPECT_TRUE(map->areaLayer.exists(ar1.id()));
+}

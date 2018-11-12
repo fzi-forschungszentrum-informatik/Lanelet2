@@ -339,7 +339,7 @@ Optional<Route> RouteBuilder::createRoutefromElements(const LaneletPath& path) {
   std::unordered_map<Id, Lanelet> laneletMap;
   std::unordered_map<Id, Point3d> pointMap;
   std::unordered_map<Id, LineString3d> lineStringMap;
-  Lanelets routeLanelets;
+  ConstLanelets routeLanelets;
   // Determine conflicting lanelets, check relations and assign final lane IDs
   for (auto& elementsIt : elements) {
     const auto conf{graph_.conflicting(elementsIt.first)};
@@ -360,9 +360,9 @@ Optional<Route> RouteBuilder::createRoutefromElements(const LaneletPath& path) {
       laneIdIt = assignLaneId(laneIdMap, laneId, firstInLane, elementsIt.second->initLaneId());
     }
     elementsIt.second->setLaneId(laneIdIt->second);
-    routeLanelets.push_back(graph_.getMutableLanelet(elementsIt.first));
+    routeLanelets.push_back(elementsIt.first);
   }
-  LaneletMapPtr routeMap = utils::createMap(routeLanelets);
+  LaneletMapConstPtr routeMap = utils::createConstMap(routeLanelets, {});
   return Route(path, elements, firstInLane, routeMap, laneId - startId);
 }
 
