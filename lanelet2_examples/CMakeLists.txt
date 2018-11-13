@@ -22,6 +22,7 @@ find_package(AutoDeps REQUIRED COMPONENTS ${DEPENDEND_PACKAGES})
 mrt_add_to_ide(README.md .gitlab-ci.yml)
 
 add_definitions(-DPKG_DIR="${CMAKE_CURRENT_LIST_DIR}")
+set(MRT_FORCE_PYTHON_COVERAGE 1)
 
 ########################
 ## add python modules ##
