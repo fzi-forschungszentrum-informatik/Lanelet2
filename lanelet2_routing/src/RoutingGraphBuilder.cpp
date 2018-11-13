@@ -120,7 +120,7 @@ ConstAreas RoutingGraphBuilder::getPassableAreas(const AreaLayer& areas,
 void RoutingGraphBuilder::appendBidirectionalLanelets(ConstLanelets& llts) {
   std::deque<ConstLanelet> invLanelets;
   for (auto& ll : llts) {
-    if (!trafficRules_.isOneWay(ll) && trafficRules_.canPass(ll.invert())) {
+    if (trafficRules_.canPass(ll.invert())) {
       invLanelets.push_back(ll.invert());
       bothWaysLaneletIds_.emplace(ll.id());
     }
