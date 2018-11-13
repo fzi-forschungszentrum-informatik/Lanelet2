@@ -109,8 +109,3 @@ TEST(OsmHandler, writeMapWithLaneletAndAreaToFile) {  // NOLINT
   write(filename, *map, origin);
   EXPECT_NO_THROW(load(filename, origin));
 }
-
-TEST(OsmHandler, loadActualMap) {  // NOLINT
-  auto map = load("test_data/mapping_example.osm", Origin({49, 8.4, 0}));
-  EXPECT_NE(0, map->laneletLayer.size());
-}
