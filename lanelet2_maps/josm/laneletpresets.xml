@@ -214,13 +214,13 @@
             <combo key="type" text="Line Type" values="line_thick,line_thin" use_last_as_default="force" />
             <key key="subtype" value="dashed"/>
         </item>
-        <item name="Straight line" icon="presets/transport/airport/taxiway.svg" type="way,closedway" preset_name_label="true">
+        <item name="Solid line" icon="presets/transport/airport/taxiway.svg" type="way,closedway" preset_name_label="true">
             <combo key="type" text="Line Type" values="line_thick,line_thin" use_last_as_default="force" />
-            <key key="subtype" value="straight"/>
+            <key key="subtype" value="solid"/>
         </item>
         <item name="Other line" icon="presets/transport/way/way_service.svg" type="way,closedway" preset_name_label="true">
             <combo key="type" text="Line Type" values="line_thick,line_thin,zig-zag,zebra,pedestrian,bicycle,stop" use_last_as_default="force" />
-            <combo key="subtype" text="Line Type" values="straight,dashed,dashed_straight,straight_dashed,straight_straight" use_last_as_default="force" />
+            <combo key="subtype" text="Line Type" values="solid,dashed,dashed_solid,solid_dashed,solid_solid" use_last_as_default="force" />
         </item>
         <item name="Road border" icon="presets/leisure/garden.svg" type="way,closedway" preset_name_label="true">
             <key key="type" value="road_border"/>

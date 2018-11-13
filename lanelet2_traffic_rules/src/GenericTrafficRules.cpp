@@ -30,10 +30,10 @@ LaneChangeType getChangeType(const std::string& type, const std::string& subtype
   const static LaneChangeMap VehicleChangeType{
       {{AttributeValueString::LineThin, AttributeValueString::Dashed}, LaneChangeType::Both},
       {{AttributeValueString::LineThick, AttributeValueString::Dashed}, LaneChangeType::Both},
-      {{AttributeValueString::LineThin, AttributeValueString::DashedStraight}, LaneChangeType::ToRight},
-      {{AttributeValueString::LineThick, AttributeValueString::DashedStraight}, LaneChangeType::ToRight},
-      {{AttributeValueString::LineThin, AttributeValueString::StraightDashed}, LaneChangeType::ToLeft},
-      {{AttributeValueString::LineThick, AttributeValueString::StraightDashed}, LaneChangeType::ToLeft}};
+      {{AttributeValueString::LineThin, AttributeValueString::DashedSolid}, LaneChangeType::ToRight},
+      {{AttributeValueString::LineThick, AttributeValueString::DashedSolid}, LaneChangeType::ToRight},
+      {{AttributeValueString::LineThin, AttributeValueString::SolidDashed}, LaneChangeType::ToLeft},
+      {{AttributeValueString::LineThick, AttributeValueString::SolidDashed}, LaneChangeType::ToLeft}};
   const static LaneChangeMap PedestrianChangeType{
       {{AttributeValueString::Curbstone, AttributeValueString::Low}, LaneChangeType::Both}};
 
@@ -109,6 +109,9 @@ bool isDrivingDir(const lanelet::ConstLanelet& ll, const std::string& participan
   if (hasOverride(ll.attributes(), AttributeNamesString::OneWay)) {
     return !getOverride(ll.attributes(), AttributeNamesString::OneWay,
                         AttributeNamesString::OneWay + (":" + participant), true);
+  }
+  if (participant == Participants::Pedestrian) {
+    return true;
   }
   return false;
 }
@@ -269,6 +272,7 @@ SpeedLimitInformation getSpeedLimitFromType(const AttributeMap& attributes, cons
       {{Value::Nonurban, Value::Highway}, &CountrySpeedLimits::vehicleNonurbanHighway},
       {{Value::Urban, Value::PlayStreet}, &CountrySpeedLimits::playStreet},
       {{Value::Nonurban, Value::PlayStreet}, &CountrySpeedLimits::playStreet},
+      {{Value::Urban, Value::Exit}, &CountrySpeedLimits::vehicleUrbanRoad},
   };
   if (participant == Participants::Pedestrian) {
     return countryLimits.pedestrian;
@@ -332,6 +336,7 @@ Optional<bool> GenericTrafficRules::canPass(const std::string& type, const std::
       {Value::BicycleLane, {Participants::Bicycle}},
       {Value::PlayStreet, {Participants::Pedestrian, Participants::Bicycle, Participants::Vehicle}},
       {Value::EmergencyLane, {Participants::VehicleEmergency}},
+      {Value::Exit, {Participants::Pedestrian, Participants::Bicycle, Participants::Vehicle}},
       {Value::Walkway, {Participants::Pedestrian}},
       {Value::Crosswalk, {Participants::Pedestrian}},
       {Value::Stairs, {Participants::Pedestrian}},
@@ -345,16 +350,7 @@ Optional<bool> GenericTrafficRules::canPass(const std::string& type, const std::
 }
 
 bool GenericTrafficRules::isOneWay(const ConstLanelet& lanelet) const {
-  using namespace std::string_literals;
-  auto oneWay = lanelet.attributeOr(AttributeName::OneWay, Optional<bool>());
-  if (!!oneWay) {
-    return *oneWay;
-  }
-  if (hasOverride(lanelet.attributes(), AttributeNamesString::OneWay)) {
-    return getOverride(lanelet.attributes(), AttributeNamesString::OneWay,
-                       AttributeNamesString::OneWay + ":"s + participant(), true);
-  }
-  return true;
+  return isDrivingDir(lanelet, participant()) != isDrivingDir(lanelet.invert(), participant());
 }
 
 std::ostream& operator<<(std::ostream& stream, const SpeedLimitInformation& obj) {

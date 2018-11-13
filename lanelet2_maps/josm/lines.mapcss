@@ -51,32 +51,32 @@ way[type=line_thin][!subtype], way[type=line_thin][subtype=straight]
         width: 10;
         color: white;
 }
-way[type=line_thick][!subtype], way[type=line_thick][subtype=straight]
+way[type=line_thick][!subtype], way[type=line_thick][subtype=solid]
 {
 	text: "type";
         width: 15;
         color: white;
 }
-way[type=line_thin][subtype=straight_straight]
+way[type=line_thin][subtype=solid_solid]
 {
 	text: "type";
         width: 10;
         color: white;
 }
-way[type=line_thick][subtype=straight_straight]
+way[type=line_thick][subtype=solid_solid]
 {
         text: "type";
         width: 10;
         color: white;
 }
-way[type=line_thin][subtype=straight_dashed], way[type=line_thin][subtype=dashed_straight]
+way[type=line_thin][subtype=solid_dashed], way[type=line_thin][subtype=dashed_solid]
 {
         text: "type";
         width: 10;
         color: white;
 	dashes:5,1;
 }
-way[type=line_thick][subtype=straight_dashed], way[type=line_thick][subtype=dashed_straight]
+way[type=line_thick][subtype=solid_dashed], way[type=line_thick][subtype=dashed_solid]
 {
         text: "type";
         width: 10;
@@ -91,7 +91,7 @@ way[type=pedestrian_marking]
 	width: 3;
 	color: greenyellow;
 }
-way[type=bicycle_marking]
+way[type=bike_marking]
 {
 	text: "type";
 	width: 3;
@@ -215,8 +215,6 @@ way[type=road_border]
     text: "type";
     width: 6;
     color: green;
-    fill-color: green;
-    fill-opacity: 0.8;
 }
 way[type=zig-zag]
 {
@@ -282,19 +280,19 @@ way[type=arrow][subtype=right] >[index=1] node
 	icon-height: 30;
 	icon-image: "style_images/pf-r.png";
 }
-way[type=arrow][subtype=left-right] >[index=1] node
+way[type=arrow][subtype=left_right] >[index=1] node
 {
 	text: "type";
 	icon-height: 30;
 	icon-image: "style_images/pf-lr.png";
 }
-way[type=arrow][subtype=straight-left] >[index=1] node
+way[type=arrow][subtype=straight_left] >[index=1] node
 {
 	text: "type";
 	icon-height: 30;
 	icon-image: "style_images/pf-gl.png";
 }
-way[type=arrow][subtype=straight-right] >[index=1] node
+way[type=arrow][subtype=straight_right] >[index=1] node
 {
 	text: "type";
 	icon-height: 30;

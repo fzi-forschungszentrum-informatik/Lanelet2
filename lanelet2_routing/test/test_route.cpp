@@ -72,7 +72,7 @@ class RouteMaxHoseRightLeft : public TestRoute {
   Id to{2016};
 };
 
-class RouteMaxHoseLeftRightDashedStraight : public TestRoute {
+class RouteMaxHoseLeftRightDashedSolid : public TestRoute {
  public:
   void SetUp() override { setUpRoute(from, to); }
 
@@ -80,7 +80,7 @@ class RouteMaxHoseLeftRightDashedStraight : public TestRoute {
   Id to{2025};
 };
 
-class RouteMaxHoseLeftRightDashedStraightFurther : public TestRoute {
+class RouteMaxHoseLeftRightDashedSolidFurther : public TestRoute {
  public:
   void SetUp() override { setUpRoute(from, to); }
 
@@ -88,7 +88,7 @@ class RouteMaxHoseLeftRightDashedStraightFurther : public TestRoute {
   Id to{2027};
 };
 
-class RouteStraightDashed : public TestRoute {
+class RouteSolidDashed : public TestRoute {
  public:
   void SetUp() override { setUpRoute(from, to); }
 
@@ -96,7 +96,7 @@ class RouteStraightDashed : public TestRoute {
   Id to{2026};
 };
 
-class RouteStraightDashedWithAdjacent : public TestRoute {
+class RouteSolidDashedWithAdjacent : public TestRoute {
  public:
   void SetUp() override { setUpRoute(from, to); }
 
@@ -125,8 +125,8 @@ class AllRoutesTest : public T {};
 
 using AllRoutes =
     testing::Types<Route1, Route2, Route3, Route4, RouteMaxHoseLeftRight, RouteMaxHoseRightLeft,
-                   RouteMaxHoseLeftRightDashedStraight, RouteMaxHoseLeftRightDashedStraightFurther, RouteStraightDashed,
-                   RouteStraightDashedWithAdjacent, RouteSplittedDiverging, RouteSplittedDivergingAndMerging>;
+                   RouteMaxHoseLeftRightDashedSolid, RouteMaxHoseLeftRightDashedSolidFurther, RouteSolidDashed,
+                   RouteSolidDashedWithAdjacent, RouteSplittedDiverging, RouteSplittedDivergingAndMerging>;
 
 TYPED_TEST_CASE(AllRoutesTest, AllRoutes);
 
@@ -290,7 +290,7 @@ TEST_F(RouteMaxHoseRightLeft, Lanes) {  // NOLINT
   EXPECT_EQ(route->numLanes(), 1);  // NOLINT
 }
 
-TEST_F(RouteMaxHoseLeftRightDashedStraight, Lanes) {  // NOLINT
+TEST_F(RouteMaxHoseLeftRightDashedSolid, Lanes) {  // NOLINT
   auto remainingLane{route->remainingLane(lanelets.find(2020)->second)};
   EXPECT_EQ(remainingLane.size(), 4);  // NOLINT
   EXPECT_FALSE(std::find(std::begin(remainingLane), std::end(remainingLane),
@@ -303,32 +303,32 @@ TEST_F(RouteMaxHoseLeftRightDashedStraight, Lanes) {  // NOLINT
   EXPECT_EQ(route->numLanes(), 1);  // NOLINT
 }
 
-TEST_F(RouteMaxHoseLeftRightDashedStraight, DashedStraightLineRegarded) {  // NOLINT
+TEST_F(RouteMaxHoseLeftRightDashedSolid, DashedSolidLineRegarded) {  // NOLINT
   EXPECT_FALSE(!!route->rightRelation(lanelets.find(2025)->second));
 }
 
-TEST_F(RouteMaxHoseLeftRightDashedStraightFurther, Lanes) {  // NOLINT
-  EXPECT_EQ(route->numLanes(), 1);                           // NOLINT
+TEST_F(RouteMaxHoseLeftRightDashedSolidFurther, Lanes) {  // NOLINT
+  EXPECT_EQ(route->numLanes(), 1);                        // NOLINT
   EXPECT_TRUE(route->remainingLane(lanelets.find(2026)->second).empty());
 }
 
-TEST_F(RouteMaxHoseLeftRightDashedStraightFurther, Elements) {  // NOLINT
-  EXPECT_EQ(route->size(), 7);                                  // NOLINT
+TEST_F(RouteMaxHoseLeftRightDashedSolidFurther, Elements) {  // NOLINT
+  EXPECT_EQ(route->size(), 7);                               // NOLINT
 }
 
-TEST_F(RouteMaxHoseLeftRightDashedStraightFurther, DashedStraightLineRegarded) {  // NOLINT
+TEST_F(RouteMaxHoseLeftRightDashedSolidFurther, DashedSolidLineRegarded) {  // NOLINT
   EXPECT_FALSE(!!route->rightRelation(lanelets.find(2025)->second));
 }
 
-TEST_F(RouteStraightDashed, Lanes) {  // NOLINT
-  EXPECT_EQ(route->numLanes(), 2);    // NOLINT
+TEST_F(RouteSolidDashed, Lanes) {   // NOLINT
+  EXPECT_EQ(route->numLanes(), 2);  // NOLINT
 }
 
-TEST_F(RouteStraightDashedWithAdjacent, Lanes) {  // NOLINT
-  EXPECT_EQ(route->numLanes(), 2);                // NOLINT
+TEST_F(RouteSolidDashedWithAdjacent, Lanes) {  // NOLINT
+  EXPECT_EQ(route->numLanes(), 2);             // NOLINT
 }
 
-TEST_F(RouteStraightDashedWithAdjacent, AdjacentLaneletInRoute) {  // NOLINT
+TEST_F(RouteSolidDashedWithAdjacent, AdjacentLaneletInRoute) {  // NOLINT
   ASSERT_TRUE(!!route->rightRelation(lanelets.find(2025)->second));
   EXPECT_EQ(*route->rightRelation(lanelets.find(2025)->second),  // NOLINT
             (LaneletRelation{lanelets.find(2026)->second, RelationType::Right}));
