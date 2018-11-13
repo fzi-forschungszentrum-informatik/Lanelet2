@@ -11,10 +11,10 @@ Tagging linestrings as lane boundary correctly is important, because Lanelet2 us
 
 | **type** | **subtype** | **description** | **lane change?** | 
 |----------|-------------|-----------------|------------------|
-|line_thin | straight    | a straight lane marking | no       |
+|line_thin | solid    | a solid lane marking | no       |
 |line_thin | dashed      | a dashed lane marking | yes        |
-|line_thin | dashed_straight | a marking that is dashed on the right and straight on the left | left->right: yes |
-|line_thin | straight_dashed | the other way around | right->left: yes |
+|line_thin | dashed_solid | a marking that is dashed on the right and solid on the left | left->right: yes |
+|line_thin | solid_dashed | the other way around | right->left: yes |
 |line_thick | same as above for thin |     |                  |
 |curbstone | high        | a curbstone that is to high for a vehicle to drive over | no |
 |curbstone | low         | curb that is low and can be driven for a vehicle | no |
@@ -32,7 +32,6 @@ There are much more tags (all imply lane changing is not possible):
 * zebra_marking (lanelets for pedestrians)
 * pedestrian_marking (lines on pedestrian crossings)
 * bike_marking (i.e. dashed line for bikes)
-* stop_line
 * keepout
 * virtual
 * jersey_barrier
@@ -67,6 +66,7 @@ subtype:
 * straight
 * straight_left
 * straight_right
+* left_right
 
 Other type:
 * stop_line

@@ -178,11 +178,17 @@ constexpr const char AttributeValueString::Rail[];
 constexpr const char AttributeValueString::Bump[];
 
 // line subtypes
-constexpr const char AttributeValueString::Straight[];
+constexpr const char AttributeValueString::Solid[];
 constexpr const char AttributeValueString::Dashed[];
-constexpr const char AttributeValueString::DashedStraight[];
-constexpr const char AttributeValueString::StraightDashed[];
-constexpr const char AttributeValueString::StraightStraight[];
+constexpr const char AttributeValueString::DashedSolid[];
+constexpr const char AttributeValueString::SolidDashed[];
+constexpr const char AttributeValueString::SolidSolid[];
+constexpr const char AttributeValueString::Straight[];
+constexpr const char AttributeValueString::Left[];
+constexpr const char AttributeValueString::Right[];
+constexpr const char AttributeValueString::StraightLeft[];
+constexpr const char AttributeValueString::StraightRight[];
+constexpr const char AttributeValueString::LeftRight[];
 constexpr const char AttributeValueString::High[];
 constexpr const char AttributeValueString::Low[];
 
@@ -193,6 +199,7 @@ constexpr const char AttributeValueString::Post[];
 constexpr const char AttributeValueString::Symbol[];
 constexpr const char AttributeValueString::Start[];
 constexpr const char AttributeValueString::End[];
+constexpr const char AttributeValueString::Dot[];
 
 // Traffic light types
 constexpr const char AttributeValueString::RedYellowGreen[];
@@ -247,6 +254,8 @@ constexpr const char AttributeNamesString::Dynamic[];
 constexpr const char AttributeNamesString::LaneChange[];
 constexpr const char AttributeNamesString::LaneChangeLeft[];
 constexpr const char AttributeNamesString::LaneChangeRight[];
+constexpr const char AttributeNamesString::Name[];
+constexpr const char AttributeNamesString::Region[];
 
 // on lanelets/areas
 constexpr const char AttributeNamesString::SpeedLimitMandatory[];
