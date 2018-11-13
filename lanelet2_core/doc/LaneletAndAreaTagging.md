@@ -27,6 +27,7 @@ Note that the values in the following table are just the values inferred by defa
 | **bus_lane** | **urban**       | Lane for buses                   | Bus, Emergency, Taxi | City speed limit |
 | **bus_lane** | **urban**       | Lane for buses                   | Bus, Emergency, Taxi | Nonurban speed limit |
 | **bicycle_lane** | **-**   | A lane that is usable only for bikes | Bikes        | Average bike speed |
+| **exit**    | **urban**    | Exit area of a house or garage that crosses the crosswalk   | Vehicles, bikes, pedestrians | Urban speed limit |
 | **walkway** | **-**        | A part of a way for pedestrians  | Pedestrians      | Average pedestrian walking speed |
 | **shared_walkway** | **-** | A way shared by bikes and pedestrians | Bikes, Pedestrians | Average bike/pedestrian speed |
 | **crosswalk** | **-**      | A part of a crosswalk            | Pedestrians      | Average pedestrian walking speed |
@@ -93,6 +94,8 @@ Note that the lane change restrictions are not inferred based on the lanelet tag
 ### Direction
 
 By default, lanelets are one-directional. The direction is determined by the order in which the left and right bound is set. Whether a lanelet is one- or bi-directional is determined by the *one_way* tag. If it is set to *no*, the lanelet is bidirectional. The *one_way* tag can be further specialized to define the direction for different participants. This can be done by appending the type of the participant (as in Overriding), e.g. `one_way:bicycle=no`. This would mean that the lanelet is one-directional for all participants, except bicycles. `one_way` and `one_way:xxxx` can not be used in combination.
+
+Pedestrians use lanelets always bi-directional, unless overriden.
 
 ## Area specific
 

@@ -52,12 +52,14 @@ CommandLineConfig parseCommandLine(int argc, const char* argv[]) {
 }
 
 void printAllIssues(const std::vector<DetectedIssues>& issues) {
-  for (auto& issue : issues) {
-    auto issueFromCheck = utils::transform(
-        issue.issues, [& check = issue.checkName](auto& issue) { return issue.buildReport() + " [" + check + "]"; });
-    std::cout << buildMessageFromStrings(issueFromCheck);
+  auto allIssues = buildReport(issues);
+  for (auto& issue : allIssues.first) {
+    std::cerr << issue << '\n';
   }
-  std::cout << issues.size() << " issues found.\n";
+  for (auto& issue : allIssues.second) {
+    std::cout << issue << '\n';
+  }
+  std::cout << allIssues.first.size() + allIssues.second.size() << " issues found.\n";
 }
 
 int runFromConfig(const CommandLineConfig& config) {
@@ -69,7 +71,10 @@ int runFromConfig(const CommandLineConfig& config) {
     if (checks.empty()) {
       std::cout << "No checks found matching '" << config.validationConfig.checksFilter << "'\n";
     } else {
-      std::cout << "Will use following checks:\n" << buildMessageFromStrings(checks);
+      std::cout << "Will use following checks:\n";
+      for (auto& check : checks) {
+        std::cout << check << '\n';
+      }
     }
     return 0;
   }

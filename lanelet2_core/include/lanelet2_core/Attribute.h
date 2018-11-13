@@ -213,6 +213,8 @@ struct AttributeNamesString {
   static constexpr const char LaneChange[] = "lane_change";
   static constexpr const char LaneChangeLeft[] = "lane_change:left";
   static constexpr const char LaneChangeRight[] = "lane_change:right";
+  static constexpr const char Name[] = "name";
+  static constexpr const char Region[] = "region";
 
   // on lanelets/areas
   static constexpr const char SpeedLimitMandatory[] = "speed_limit_mandatory";
@@ -291,11 +293,17 @@ struct AttributeValueString {
   static constexpr const char Bump[] = "bump";
 
   // line subtypes
-  static constexpr const char Straight[] = "straight";
+  static constexpr const char Solid[] = "solid";
   static constexpr const char Dashed[] = "dashed";
-  static constexpr const char DashedStraight[] = "dashed_straight";
-  static constexpr const char StraightDashed[] = "straight_dashed";
-  static constexpr const char StraightStraight[] = "straight_straight";
+  static constexpr const char DashedSolid[] = "dashed_solid";
+  static constexpr const char SolidDashed[] = "solid_dashed";
+  static constexpr const char SolidSolid[] = "solid_solid";
+  static constexpr const char Straight[] = "straight";
+  static constexpr const char Left[] = "left";
+  static constexpr const char Right[] = "right";
+  static constexpr const char StraightLeft[] = "straight_left";
+  static constexpr const char StraightRight[] = "straight_right";
+  static constexpr const char LeftRight[] = "left_right";
   static constexpr const char High[] = "high";
   static constexpr const char Low[] = "low";
 
@@ -306,6 +314,7 @@ struct AttributeValueString {
   static constexpr const char Symbol[] = "symbol";
   static constexpr const char Start[] = "start";
   static constexpr const char End[] = "end";
+  static constexpr const char Dot[] = "dot";
 
   // Traffic light types
   static constexpr const char RedYellowGreen[] = "red_yellow_green";

@@ -12,6 +12,8 @@ using Strings = std::vector<std::string>;
 struct DetectedIssues {
   DetectedIssues() = default;
   DetectedIssues(std::string checkName, Issues issues) : checkName{std::move(checkName)}, issues{std::move(issues)} {}
+  Issues errors() const;
+  Issues warnings() const;
   std::string checkName;
   Issues issues;
 };
@@ -24,8 +26,8 @@ struct ValidationConfig {
   GPSPoint origin;
 };
 
-//! Constructs an error message from a sequence of strings.
-std::string buildMessageFromStrings(const Strings& strs);
+//! Generates the issue report
+std::pair<Strings, Strings> buildReport(std::vector<DetectedIssues> issues);
 
 //! Reports the available checks for the given filter. Empty will return all.
 Strings availabeChecks(const std::string& filterString);

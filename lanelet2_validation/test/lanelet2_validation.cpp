@@ -20,5 +20,16 @@ TEST(Validator, pointsTooClose) {  // NOLINT
   auto map = lanelet::utils::createMap(lanelet::Points3d{p1, p2});
   lanelet::validation::ValidationConfig config;
   config.checksFilter = "mapping.points_too_close";
-  EXPECT_LT(0, lanelet::validation::validateMap(*map, config).size());
+  auto issues = lanelet::validation::validateMap(*map, config);
+  auto report = lanelet::validation::buildReport(issues);
+  EXPECT_LT(0, report.second.size());
+  EXPECT_EQ(0, report.first.size());
+}
+
+TEST(Validator, invalidMap) {  // NOLINT
+  lanelet::validation::ValidationConfig config;
+  auto issues = lanelet::validation::validateMap("/totally/nonexistent/fantasy/path", config);
+  auto report = lanelet::validation::buildReport(issues);
+  EXPECT_EQ(0, report.second.size());
+  EXPECT_LT(0, report.first.size());
 }

@@ -67,13 +67,44 @@ void runRoutingGraphValidators(std::vector<DetectedIssues>& issues, const Regexe
 }
 }  // namespace
 
-std::string buildMessageFromStrings(const Strings& strs) {
-  using namespace std::string_literals;
-  return std::accumulate(strs.begin(), strs.end(), ""s, [](auto accum, const auto& str) { return accum + str + '\n'; });
+Issues DetectedIssues::errors() const {
+  Issues errors;
+  for (auto& issue : issues) {
+    if (issue.severity == Severity::Error) {
+      errors.push_back(issue);
+    }
+  }
+  return errors;
+}
+
+Issues DetectedIssues::warnings() const {
+  Issues warning;
+  for (auto& issue : issues) {
+    if (issue.severity == Severity::Warning) {
+      warning.push_back(issue);
+    }
+  }
+  return warning;
 }
 
 Strings availabeChecks(const std::string& filterString) {
   return ValidatorFactory::instance().availableValidators(parseFilterString(filterString));
+}
+
+std::pair<Strings, Strings> buildReport(std::vector<DetectedIssues> issues) {
+  std::pair<Strings, Strings> report;
+  for (auto& issue : issues) {
+    auto buildReports = [& check = issue.checkName](auto& issue) { return issue.buildReport() + " [" + check + "]"; };
+    auto errorsFromCheck = utils::transform(issue.errors(), buildReports);
+    if (!errorsFromCheck.empty()) {
+      report.first.insert(report.first.end(), errorsFromCheck.begin(), errorsFromCheck.end());
+    }
+    auto warningsFromCheck = utils::transform(issue.warnings(), buildReports);
+    if (!warningsFromCheck.empty()) {
+      report.second.insert(report.second.end(), warningsFromCheck.begin(), warningsFromCheck.end());
+    }
+  }
+  return report;
 }
 
 std::vector<DetectedIssues> validateMap(LaneletMap& map, const ValidationConfig& config) {
@@ -101,7 +132,8 @@ std::vector<DetectedIssues> validateMap(const std::string& mapFilename, const Va
     Strings errors;
     map = lanelet::load(mapFilename, projector, &errors);
     if (!errors.empty()) {
-      issues.emplace_back("general", Issues{Issue(Severity::Error, buildMessageFromStrings(errors))});
+      issues.emplace_back("general",
+                          utils::transform(errors, [](auto& error) { return Issue(Severity::Error, error); }));
     }
   } catch (lanelet::LaneletError& err) {
     return {{"general", {Issue(Severity::Error, "Failed to load map: "s + err.what())}}};

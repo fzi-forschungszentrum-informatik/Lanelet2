@@ -254,6 +254,7 @@ TEST_F(GermanTrafficRulesPedestrian, canNotWalkOnVehicleLanelet) {  // NOLINT
 }
 
 TEST_F(GermanTrafficRulesPedestrian, canNotGoBackFromOneWayLanelet) {  // NOLINT
+  next.setAttribute(AttrStr::OneWay + std::string(":") + Participants::Pedestrian, true);
   EXPECT_FALSE(germanPedestrian->canPass(next.invert(), lanelet.invert()));
 }
 
@@ -438,15 +439,15 @@ TEST_F(GermanTrafficRulesVehicle, canNotLaneChangeLaneIfNotDrivable) {  // NOLIN
   left.setAttribute(Participants::tag(Participants::Vehicle), false);
   EXPECT_FALSE(germanVehicle->canChangeLane(lanelet, left));
 }
-TEST_F(GermanTrafficRulesVehicle, canLaneChangeRightViaDashedStraightLine) {  // NOLINT
+TEST_F(GermanTrafficRulesVehicle, canLaneChangeRightViaDashedSolidLine) {  // NOLINT
   ls3.setAttribute(Attr::Type, Value::LineThin);
-  ls3.setAttribute(Attr::Subtype, Value::DashedStraight);
+  ls3.setAttribute(Attr::Subtype, Value::DashedSolid);
   EXPECT_TRUE(germanVehicle->canChangeLane(left, lanelet));
   EXPECT_FALSE(germanVehicle->canChangeLane(lanelet, left));
 }
-TEST_F(GermanTrafficRulesVehicle, canNotLaneChangeViaStraightLine) {  // NOLINT
+TEST_F(GermanTrafficRulesVehicle, canNotLaneChangeViaSolidLine) {  // NOLINT
   ls3.setAttribute(Attr::Type, Value::LineThin);
-  ls3.setAttribute(Attr::Subtype, Value::Straight);
+  ls3.setAttribute(Attr::Subtype, Value::Solid);
   EXPECT_FALSE(germanVehicle->canChangeLane(lanelet, left));
 }
 
@@ -459,7 +460,7 @@ TEST_F(GermanTrafficRulesVehicle, canNotLaneChangeIfOverridden) {  // NOLINT
 
 TEST_F(GermanTrafficRulesVehicle, canLaneChangeInverted) {  // NOLINT
   ls3.setAttribute(Attr::Type, Value::LineThin);
-  ls3.setAttribute(Attr::Subtype, Value::StraightDashed);
+  ls3.setAttribute(Attr::Subtype, Value::SolidDashed);
   lanelet.setAttribute(Attr::OneWay, false);
   left.setAttribute(Attr::OneWay, false);
   EXPECT_TRUE(germanVehicle->canChangeLane(lanelet.invert(), left.invert()));
@@ -474,7 +475,7 @@ TEST_F(GermanTrafficRulesVehicle, canNotLaneChangeOnVirtualLine) {  // NOLINT
 
 TEST_F(GermanTrafficRulesVehicle, canLaneChangeBothSidesExplicitly) {  // NOLINT
   ls3.setAttribute(Attr::Type, Value::LineThin);
-  ls3.setAttribute(Attr::Subtype, Value::Straight);
+  ls3.setAttribute(Attr::Subtype, Value::Solid);
   ls3.setAttribute(AttrStr::LaneChange, true);
   EXPECT_TRUE(germanVehicle->canChangeLane(lanelet, left));
   EXPECT_TRUE(germanVehicle->canChangeLane(left, lanelet));

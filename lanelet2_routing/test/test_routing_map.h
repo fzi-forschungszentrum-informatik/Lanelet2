@@ -266,7 +266,7 @@ class RoutingGraphTestData {
     addLine(Points3d{points.at(39), points.at(42)});
     addLine(Points3d{points.at(40), points.at(43)});
     lines.at(1043).setAttribute(AttributeName::Type, AttributeValueString::LineThin);
-    lines.at(1043).setAttribute(AttributeName::Subtype, AttributeValueString::DashedStraight);
+    lines.at(1043).setAttribute(AttributeName::Subtype, AttributeValueString::DashedSolid);
     addLine(Points3d{points.at(41), points.at(44)});  // ls1044
     addLine(Points3d{points.at(42), points.at(45)});
     addLine(Points3d{points.at(43), points.at(46)});  // ls1046
@@ -274,7 +274,7 @@ class RoutingGraphTestData {
     addLine(Points3d{points.at(45), points.at(48)});
     addLine(Points3d{points.at(46), points.at(49)});
     lines.at(1049).setAttribute(AttributeName::Type, AttributeValueString::LineThin);
-    lines.at(1049).setAttribute(AttributeName::Subtype, AttributeValueString::StraightDashed);
+    lines.at(1049).setAttribute(AttributeName::Subtype, AttributeValueString::SolidDashed);
     addLine(Points3d{points.at(47), points.at(50)});  // ls1050
     addLine(Points3d{points.at(51), points.at(53)});  // ls1051
     addLine(Points3d{points.at(52), points.at(54)});  // ls1052
@@ -284,7 +284,7 @@ class RoutingGraphTestData {
     addLine(Points3d{points.at(59), points.at(60)});  // ls1056
     addLine(Points3d{points.at(60), points.at(61)});  // ls1057
     lines.at(1057).setAttribute(AttributeName::Type, AttributeValueString::LineThin);
-    lines.at(1057).setAttribute(AttributeName::Subtype, AttributeValueString::Straight);
+    lines.at(1057).setAttribute(AttributeName::Subtype, AttributeValueString::Solid);
     addLine(Points3d{points.at(49), points.at(62)});  // ls1058
     lines.at(1058).setAttribute(AttributeName::Type, AttributeValueString::Virtual);
     addLine(Points3d{points.at(62), points.at(64)});  // ls1059
@@ -400,11 +400,11 @@ class RoutingGraphTestData {
     addLaneletVehicle(lines.at(1084), lines.at(1085));     // ll2049
 
     // area
-    addLaneletPedestrian(lines.at(1086), lines.at(1087));           // ll2050
+    addLaneletPedestrian(lines.at(1086), lines.at(1087));  // ll2050
+    lanelets.at(2050).setAttribute(AttributeName::OneWay, true);
     addLaneletPedestrian(lines.at(1101), lines.at(1089));           // ll2051
     addLaneletPedestrian(lines.at(1093).invert(), lines.at(1100));  // ll2052
     addLaneletPedestrian(lines.at(1098), lines.at(1099));           // ll2053
-    lanelets.at(2053).setAttribute(AttributeName::OneWay, false);
   }
 
   void initAreas() {

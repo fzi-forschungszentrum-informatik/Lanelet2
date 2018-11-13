@@ -1,5 +1,6 @@
 #include "validators/mapping/PointsTooClose.h"
 #include "ValidatorFactory.h"
+#include "lanelet2_core/geometry/Point.h"
 
 namespace lanelet {
 namespace validation {

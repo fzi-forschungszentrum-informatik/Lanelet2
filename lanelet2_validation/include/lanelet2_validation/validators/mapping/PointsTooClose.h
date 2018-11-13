@@ -1,7 +1,6 @@
-#include "BasicValidator.h"
-#include "lanelet2_core/geometry/Point.h"
-
 #include <lanelet2_core/LaneletMap.h>
+#include "BasicValidator.h"
+
 namespace lanelet {
 namespace validation {
 
