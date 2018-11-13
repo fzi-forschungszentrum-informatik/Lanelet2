@@ -768,8 +768,8 @@ RoutingGraph::Errors RoutingGraph::checkValidity(bool throwOnError) const {
   return errors;
 }
 
-RoutingGraph::RoutingGraph(std::unique_ptr<Graph>&& graph, LaneletMapConstPtr&& passableLaneletMap)
-    : graph_{std::move(graph)}, passableLaneletMap_{std::move(passableLaneletMap)} {}
+RoutingGraph::RoutingGraph(std::unique_ptr<Graph>&& graph, LaneletMapConstPtr&& passableMap)
+    : graph_{std::move(graph)}, passableLaneletMap_{std::move(passableMap)} {}
 
 }  // namespace routing
 }  // namespace lanelet
