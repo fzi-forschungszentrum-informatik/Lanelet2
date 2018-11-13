@@ -96,7 +96,7 @@ RoutingGraphUPtr RoutingGraphBuilder::build(const LaneletMap& laneletMap) {
   addAreasToGraph(passableAreas);
   addEdges(passableLanelets, passableMap->laneletLayer);
   addEdges(passableAreas, passableMap->laneletLayer, passableMap->areaLayer);
-  return RoutingGraphUPtr{new RoutingGraph(std::move(graph_), std::move(passableMap))};
+  return std::make_unique<RoutingGraph>(std::move(graph_), std::move(passableMap));
 }
 
 ConstLanelets RoutingGraphBuilder::getPassableLanelets(const LaneletLayer& lanelets,
