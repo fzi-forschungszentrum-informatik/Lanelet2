@@ -4,10 +4,10 @@ This page tells you about the general tags that you should use to annotate your 
 
 **Note:** All tags are always lowercase.
 
-In general there are three different context in which Linestrings are used: As Lanelet/Area boundary, as a Symbol on the road or as traffic sign/light.
+In general there are three different context in which linestrings are used: As lanelet/area boundary, as a Symbol on the road or as traffic sign/light.
 
 ## As Lane Boundary
-Tagging linestrings as lane boundary correctly is important, because Lanelet2 uses the type to determine possible lane changes. If Lanelet2 can not determine the type, Lanelet2 will assume that lane changes are not possible. Here is a list of the most important ones:
+Tagging linestrings as lane boundary correctly is important, because Lanelet2 uses the type to determine possible lane changes. If Lanelet2 cannot determine the type, Lanelet2 will assume that lane changes are not possible. Here is a list of the most important ones:
 
 | **type** | **subtype** | **description** | **lane change?** | 
 |----------|-------------|-----------------|------------------|
@@ -43,7 +43,7 @@ Feel free to "invent" new types if these do not satisfy your needs, but be aware
 
 ### Lane Change
 If you are unhappy with the types derived by default, you can overwrite it with these tags:
-* lane_change=yes (lane change in both dirctions possible) *OR*
+* lane_change=yes (lane change in both directions possible) *OR*
 * lane_change:left=<yes/no>, lane_change:right=<yes/no>. Both pairs have to be set if this is used.
 
 ### More, Optional Tags
@@ -68,7 +68,7 @@ subtype:
 * straight_right
 * left_right
 
-Other type:
+Other types:
 * stop_line
 * zig-zag
 * lift_gate

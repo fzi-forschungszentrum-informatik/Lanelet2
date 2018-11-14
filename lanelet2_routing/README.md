@@ -32,7 +32,7 @@ Lanelets that are part of a routing graph can have relations to each other:
 
 The possible relations are:
     * `left`, `right` (reachable via lane change)
-    * `adjacent left`, `adjacent right` (lanelets that are neigbours but not reachable via lane change)
+    * `adjacent left`, `adjacent right` (lanelets that are neighbours but not reachable via lane change)
     * `succeeding` (1:1 relation between two subsequent lanelets), `merging` (n:1 relation between lanelets), `diverging` (1:n relation between lanelets)
     * `conflicting` (intersecting lanelets/areas)
     * `area` (reachable area to lanelet/area relation)
@@ -52,7 +52,7 @@ The possible relations are:
  * Determines and returns lanes
     * `Lane` is a number of consecutive lanelets in a route until they end, merge or diverge
 
-### Reachable sets/reachable paths
+### Reachable Sets/Reachable Paths
  * Used to determine the options that a specific traffic participant has from a given lanelet/area
  * Query the possible routes without exceeding one of the specified routing costs
 
@@ -63,15 +63,13 @@ A *route* means all the lanelets that can be used to a destination without drivi
 
 A *path* (LaneletPath or LaneletOrAreaPath) is an ordered list of Lanelets/Areas that lead to the destination. They can be connected by lane changes.
 
-A *sequence* (LaneletSequence) is a sequence of subsequent Lanelets that is not separaed by a lane change (think of it as a _lane_). It does not necessary lead to a destination, instead it ends when a lane change is required. In the example image, the lanelets A, D, B form a valid _sequence_ (and also a valid _path_), while the lanelets A, D, E are a valid _path_, but not a valid _sequence_.
+A *sequence* (LaneletSequence) is a sequence of subsequent Lanelets that is not separated by a lane change (think of it as a _lane_). It does not necessary lead to a destination, instead it ends when a lane change is required. In the example image, the lanelets A, D, B form a valid _sequence_ (and also a valid _path_), while the lanelets A, D, E are a valid _path_, but not a valid _sequence_.
 
 ![](doc/images/shortest_path_and_route.png)
 
-
-
 # 2. Code Usage
 
-## Create a routing graph
+## Create a Routing Graph
 
 ```cpp
 using namespace lanelet;
@@ -132,7 +130,7 @@ if route:
     lanelet2.io.write("route.osm", route.getLaneletMap())
 ```
 
-## Left, right, following lanelets
+## Left, Right, Following Lanelets
 
 ```cpp
 // Get routable left lanelet if it exists
@@ -186,7 +184,7 @@ Output of `getDebugLaneletMap()` function:
 
 ![](doc/images/lanelet_map_route.png)
 
-## Example relational queries on routes:
+## Example Relational Queries on Routes:
 
 ```cpp
 // Get left lanelet of example lanelet 'll'
@@ -217,7 +215,7 @@ graphs.emplace_back(vehicleGraphLaneletMap);
 graphs.emplace_back(pedestrianGraphLaneletMap);
 RoutingGraphContainer container(graphs);
 ```
-## Example queries
+## Example Queries
 The last parameter *participantHeight* is optional and decides whether conflicting lanelets are determined in 2D or 3D.
 
 ### Query for a single lanelet
@@ -231,7 +229,7 @@ ConstLanelets conflictingVehicle{container->conflictingInGraph(bridgeLanelet, ro
 RoutingGraphContainer::ConflictingInGraphs conflicting{container->conflictingInGraphs(bridgeLanelet, heightClearance)};
 ```
 
-### Query for a whole route
+### Query for a Whole Route
 
 ```cpp
 // Conflicting lanelets of a route in a single graph

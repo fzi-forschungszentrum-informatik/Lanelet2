@@ -20,6 +20,6 @@
   <test_depend>gtest</test_depend>
   <test_depend>rosbash</test_depend>
   <export>
-    <!-- Other tools can request additional information be placed here -->
+    <rosdoc config="../rosdoc.yaml" />
   </export>
 </package>

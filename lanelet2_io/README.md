@@ -10,7 +10,7 @@ Currently available IO modules are:
 
 
 ## Projections
-Most IO modules require a projection from WGS84 (lat/lon) to a local metric coordinate system. To make sure the loaded map is correct in itself it is **very important** to chose the correct origin and the correct projector. 
+Most IO modules require a projection from WGS84 (lat/lon) to a local metric coordinate system. To make sure the loaded map is correct in itself it is **very important** to choose the correct origin and the correct projector.
 
 The origin should be as close to where the map is as possible.
 
