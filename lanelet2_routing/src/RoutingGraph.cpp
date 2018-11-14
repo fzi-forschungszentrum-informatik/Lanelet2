@@ -491,9 +491,9 @@ ConstLaneletOrAreas RoutingGraph::reachableSetIncludingAreas(const ConstLaneletO
   return reachableSet;
 }
 
-LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& lanelet, double minRoutingCost,
+LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, double minRoutingCost,
                                          RoutingCostId routingCostId, bool allowLaneChanges) const {
-  auto start = graph_->getVertex(lanelet);
+  auto start = graph_->getVertex(startPoint);
   if (!start) {
     return {};
   };
