@@ -266,6 +266,9 @@ constexpr const char AttributeNamesString::Width[];
 constexpr const char AttributeNamesString::Height[];
 constexpr const char AttributeNamesString::Temporary[];
 
+// on regulatory elements
+constexpr const char AttributeNamesString::SignType[];
+
 // participants
 constexpr const char Participants::Vehicle[];
 constexpr const char Participants::VehicleBus[];

@@ -25,14 +25,13 @@ Velocity trafficSignToVelocity(const std::string& typeString) {
   try {
     return StrToVelocity.at(typeString);
   } catch (std::out_of_range&) {
-    // not really standard conforming: try to interpret typeString as velocity
-    // directly
+    // try to interpret typeString directly as velocity
     Attribute asAttribute(typeString);
     auto velocity = asAttribute.asVelocity();
     if (!!velocity) {
       return *velocity;
     }
-    throw lanelet::InterpretationError("Unabe to interpret the velocity information from " + typeString);
+    throw lanelet::InterpretationError("Unable to interpret the velocity information from " + typeString);
   }
 }
 }  // namespace

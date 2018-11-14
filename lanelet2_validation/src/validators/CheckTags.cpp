@@ -134,8 +134,8 @@ const std::vector<std::string>& mandatoryAreaTags() {
 
 const std::vector<std::string>& knownRegelemTags() {
   using Attr = AttributeNamesString;
-  const static std::vector<std::string> Tags{Attr::Type, Attr::Subtype, Attr::Dynamic, Attr::SpeedLimit,
-                                             Attr::Fallback};
+  const static std::vector<std::string> Tags{Attr::Dynamic,    Attr::Fallback, Attr::SignType,
+                                             Attr::SpeedLimit, Attr::Subtype,  Attr::Type};
   return Tags;
 }
 
