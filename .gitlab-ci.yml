@@ -147,9 +147,10 @@ code_quality:
   # Build code again, in case caching didn't work
   - mrt catkin build -s -rd --debug --default_yes --no-status $CI_PROJECT_NAME
   - source devel_debug/setup.bash
-  - cp ../gl-code-quality-report.json codeclimate.json || true
+  - cd src/lanelet2
+  - cp ../../../gl-code-quality-report.json codeclimate.json || true
   - mrt ci run_clang_tidy -e $LANELET2_PACKAGES
-  - cp codeclimate.json ../gl-code-quality-report.json
+  - cp codeclimate.json ../../../gl-code-quality-report.json
 
 pages:
   before_script: []
