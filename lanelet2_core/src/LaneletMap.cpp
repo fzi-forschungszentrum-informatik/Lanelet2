@@ -634,9 +634,6 @@ void LaneletMap::add(const RegulatoryElementPtr& regElem) {
   if (!regElem) {
     throw NullptrError("Empty regulatory element passed to add()!");
   }
-  if (regElem->parameters().empty()) {
-    throw InvalidInputError("Regulatory element without members passed to add()!");
-  }
   if (regElem->id() == InvalId) {
     regElem->setId(regulatoryElementLayer.uniqueId());
   } else if (regulatoryElementLayer.exists(regElem->id())) {
