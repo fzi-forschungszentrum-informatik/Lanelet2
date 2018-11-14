@@ -43,7 +43,7 @@ class RoutingGraph {
    *  @param config Optional configuration */
   static RoutingGraphUPtr build(const LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
                                 const RoutingCostPtrs& routingCosts = defaultRoutingCosts(),
-                                Configuration config = Configuration());
+                                const Configuration& config = Configuration());
 
   //! The graph can not be copied, only moved
   RoutingGraph() = delete;

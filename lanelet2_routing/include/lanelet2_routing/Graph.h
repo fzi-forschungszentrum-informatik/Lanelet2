@@ -125,8 +125,8 @@ struct EdgeCostFilter {
 
 /** @brief Helper struct to implement PImpl slim down the header file.
  *  Provides various filtered views on graphs needed to answer queries. */
-struct FilteredGraphContainer {
-  FilteredGraphContainer() = default;
+struct FilteredGraphContainer {  // NOLINT
+  FilteredGraphContainer() = delete;
   explicit FilteredGraphContainer(const GraphType& graph)
       : left{FilteredGraph(graph, EdgeCostFilter(graph, 0, RelationType::Left))},
         adjacentLeft{FilteredGraph(graph, EdgeCostFilter(graph, 0, RelationType::AdjacentLeft))},

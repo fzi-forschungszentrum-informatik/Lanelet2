@@ -199,7 +199,7 @@ RoutingGraph& RoutingGraph::operator=(RoutingGraph&& /*other*/) noexcept = defau
 RoutingGraph::~RoutingGraph() = default;
 
 RoutingGraphUPtr RoutingGraph::build(const LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
-                                     const RoutingCostPtrs& routingCosts, RoutingGraph::Configuration config) {
+                                     const RoutingCostPtrs& routingCosts, const RoutingGraph::Configuration& config) {
   return RoutingGraphBuilder(trafficRules, routingCosts, config).build(laneletMap);
 }
 
@@ -408,7 +408,7 @@ std::vector<ConstLaneletOrAreas> possiblePathsImpl(const GraphType::vertex_descr
     return true;
   };
   while (!candidates.empty()) {
-    const PossibleRoutesInfo candidate = std::move(candidates.top());
+    PossibleRoutesInfo candidate = candidates.top();
     candidates.pop();
     bool continued = false;
     for (std::tie(edgesIt, edgesEnd) = out_edges(candidate.vertexId, graph); edgesIt != edgesEnd; ++edgesIt) {
@@ -433,7 +433,7 @@ std::vector<ConstLaneletOrAreas> possiblePathsImpl(const GraphType::vertex_descr
       continued = true;
     }
     if (!continued && keepBeforeStop) {
-      result.emplace_back(std::move(candidate.laneletsOrAreas));
+      result.emplace_back(candidate.laneletsOrAreas);
     }
   }
   return result;
@@ -601,15 +601,15 @@ LineString3d createLineString(const Point2d& from, const Point2d& to, RelationTy
 class DebugMapBuilder {
  public:
   using LaneletOrAreaPair = std::pair<ConstLaneletOrArea, ConstLaneletOrArea>;
-  DebugMapBuilder(const FilteredGraph& graph) : graph_{graph} {}
+  explicit DebugMapBuilder(const FilteredGraph& graph) : graph_{graph} {}
   LaneletMapPtr run(const LaneletOrAreaToVertex& loa) {
     LaneletMapPtr output = std::make_shared<LaneletMap>();
     for (auto& vertex : loa) {
       visitVertex(vertex);
     }
-    auto lineStrings = utils::transform(lineStringMap, [](auto& mapLs) { return mapLs.second; });
+    auto lineStrings = utils::transform(lineStringMap_, [](auto& mapLs) { return mapLs.second; });
     auto map = utils::createMap(lineStrings);
-    for (auto& p : pointMap) {
+    for (auto& p : pointMap_) {
       map->add(utils::to3D(p.second));
     }
     return map;
@@ -632,31 +632,31 @@ class DebugMapBuilder {
   }
 
   void addPoint(const ConstLaneletOrArea& point) {
-    auto inMap = pointMap.find(point);
-    if (inMap == pointMap.end()) {
-      pointMap.emplace(point, createPoint<Point2d>(point));
+    auto inMap = pointMap_.find(point);
+    if (inMap == pointMap_.end()) {
+      pointMap_.emplace(point, createPoint<Point2d>(point));
     }
   }
 
   void addEdge(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to, EdgeInfo edge) {
     auto pair = getPair(from, to);
-    auto inMap = lineStringMap.find(pair);
-    if (inMap != lineStringMap.end()) {
+    auto inMap = lineStringMap_.find(pair);
+    if (inMap != lineStringMap_.end()) {
       inMap->second.setAttribute("relation_reverse", relationToString(edge.relation));
       inMap->second.setAttribute("routing_cost_reverse", std::to_string(edge.routingCost));
 
     } else {
-      auto pFrom = pointMap.at(from);
-      auto pTo = pointMap.at(to);
+      auto pFrom = pointMap_.at(from);
+      auto pTo = pointMap_.at(to);
       LineString3d lineString3d{createLineString(pFrom, pTo, edge.relation, edge.routingCost)};
-      lineStringMap.emplace(pair, lineString3d);
+      lineStringMap_.emplace(pair, lineString3d);
     }
   }
 
  private:
   const FilteredGraph& graph_;
-  std::unordered_map<LaneletOrAreaPair, LineString3d> lineStringMap;  // Stores all relations
-  std::unordered_map<ConstLaneletOrArea, Point2d> pointMap;           // Stores all 'edges'
+  std::unordered_map<LaneletOrAreaPair, LineString3d> lineStringMap_;  // Stores all relations
+  std::unordered_map<ConstLaneletOrArea, Point2d> pointMap_;           // Stores all 'edges'
 };
 
 LaneletMapPtr RoutingGraph::getDebugLaneletMap(RoutingCostId routingCostId, bool includeAdjacent,

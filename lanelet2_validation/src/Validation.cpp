@@ -60,7 +60,15 @@ void runRoutingGraphValidators(std::vector<DetectedIssues>& issues, const Regexe
     return;
   }
   for (auto& rule : rules) {
-    auto routingGraph = routing::RoutingGraph::build(map, *rule);
+    routing::RoutingGraphPtr routingGraph;
+    try {
+      routingGraph = routing::RoutingGraph::build(map, *rule);
+    } catch (LaneletError& err) {
+      std::stringstream msg;
+      msg << "Failed to create routing graph for " << *rule << ": " << err.what();
+      issues.emplace_back("general", Issues{Issue(Severity::Error, msg.str())});
+      continue;
+    }
     append(issues, runValidators(routingGraphValidators,
                                  [&routingGraph, &rule](auto& validator) { return validator(*routingGraph, *rule); }));
   }

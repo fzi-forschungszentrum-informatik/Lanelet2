@@ -166,6 +166,7 @@ std::vector<RouteElementRawPtrs> moveCandidatesToPendingReturnRawPtrs(std::vecto
                                                                       std::vector<RouteElementUPtrs>& pending,
                                                                       bool checkPrevious = true) {
   std::vector<RouteElementRawPtrs> result;
+  result.reserve(candidates.size());
   for (auto& it : candidates) {
     result.emplace_back(moveCandidatesToPendingReturnRawPtrs(it, pending, checkPrevious));
   }
@@ -175,7 +176,7 @@ std::vector<RouteElementRawPtrs> moveCandidatesToPendingReturnRawPtrs(std::vecto
 
 Optional<Route> RouteBuilder::getRouteFromShortestPath(const LaneletPath& path) {
   // Set up variables
-  elements.reserve(path.size());
+  elements_.reserve(path.size());
   RouteElement::LaneId initLaneId{0};  // Initial lane IDs used when finding elements of the route
   RouteElement* previousElement = nullptr;
 
@@ -189,22 +190,22 @@ Optional<Route> RouteBuilder::getRouteFromShortestPath(const LaneletPath& path) 
 
     // If the relation if left or right, these lanelets have already been handled
     if (relation == RelationType::Left || relation == RelationType::Right) {
-      auto element = elements.find(*pathIt);
+      auto element = elements_.find(*pathIt);
       // It can happen that the new lanelet is not in 'elements' if the relation on the way back was
       // 'adjacent_left' or 'adjacent_right'. In that case it must be moved from 'pending' to 'elements'
-      if (element == elements.end()) {
-        Optional<RouteElement*> besidesElement = searchInPending(*pathIt, pending);
+      if (element == elements_.end()) {
+        Optional<RouteElement*> besidesElement = searchInPending(*pathIt, pending_);
         assert(besidesElement);
         std::vector<RouteElement*> pendingToElements{*besidesElement};
         addPendingToElements(pendingToElements);
-        element = elements.find(*pathIt);
+        element = elements_.find(*pathIt);
       }
       previousElement = element->second.get();
       continue;
     }
 
     std::vector<RouteElement*> elementsQueue;  // (Pending) elements that should become part of the route
-    Optional<RouteElement*> thisElement = searchInPending(*pathIt, pending);
+    Optional<RouteElement*> thisElement = searchInPending(*pathIt, pending_);
     if (!!relation && !!thisElement) {
       // This is the case when the previous relationship was diverging and it can be found in pending
       elementsQueue.emplace_back(*thisElement);
@@ -235,7 +236,7 @@ Optional<Route> RouteBuilder::getRouteFromShortestPath(const LaneletPath& path) 
         (*thisElement)->addPrevious(previousElement);
         previousElement->addFollowing(*thisElement);
       }
-      addToElements(elements, firstInLane, newElement);
+      addToElements(elements_, firstInLane_, newElement);
       processMergingLanelets(elementsQueue, initLaneId, *thisElement, previousElement, relation);
     }
 
@@ -258,7 +259,7 @@ void RouteBuilder::addPendingToElements(std::vector<RouteElement*>& elementsQueu
   while (!elementsQueue.empty()) {
     RouteElement* thisElement = elementsQueue.front();
     elementsQueue.erase(elementsQueue.begin());
-    for (auto pendingGroupIt = pending.begin(); pendingGroupIt != pending.end(); pendingGroupIt++) {
+    for (auto pendingGroupIt = pending_.begin(); pendingGroupIt != pending_.end(); pendingGroupIt++) {
       bool found{false};
       for (const auto& pendingElement : *pendingGroupIt) {
         if (pendingElement.get() == thisElement) {
@@ -281,13 +282,13 @@ void RouteBuilder::addPendingToElements(std::vector<RouteElement*>& elementsQueu
           RouteElementRelations previous{pendingElement->previous()};
           for (const auto& element : previous) {
             element.routeElement->addFollowing(pendingElement.get());
-            if (elements.find(element.routeElement->lanelet()) == elements.end()) {
+            if (elements_.find(element.routeElement->lanelet()) == elements_.end()) {
               elementsQueue.emplace_back(element.routeElement);
             }
           }
-          addToElements(elements, firstInLane, pendingElement);
+          addToElements(elements_, firstInLane_, pendingElement);
         }
-        pending.erase(pendingGroupIt);
+        pending_.erase(pendingGroupIt);
         break;
       }
     }
@@ -304,9 +305,9 @@ std::vector<RouteElement*> RouteBuilder::addPreviousRelations(RouteElement* newE
   std::vector<RouteElement*> pendingToRemove;
   const LaneletRelations previous{graph_.previousRelations(newElement->lanelet(), false)};
   for (auto const& previousIt : previous) {
-    const auto previousElement = elements.find(previousIt.lanelet);
+    const auto previousElement = elements_.find(previousIt.lanelet);
     // Search in elements
-    if (previousElement != elements.end()) {
+    if (previousElement != elements_.end()) {
       newElement->addPrevious(previousElement->second.get());
       if (directlyConnected) {
         previousElement->second->addFollowing(newElement);
@@ -314,7 +315,7 @@ std::vector<RouteElement*> RouteBuilder::addPreviousRelations(RouteElement* newE
       continue;
     }
     // Search in pending elements
-    for (auto const& pendingIt : pending) {
+    for (auto const& pendingIt : pending_) {
       for (auto const& pendingElement : pendingIt) {
         if (pendingElement->lanelet() == previousIt.lanelet) {
           newElement->addPrevious(pendingElement.get());
@@ -341,15 +342,15 @@ Optional<Route> RouteBuilder::createRoutefromElements(const LaneletPath& path) {
   std::unordered_map<Id, LineString3d> lineStringMap;
   ConstLanelets routeLanelets;
   // Determine conflicting lanelets, check relations and assign final lane IDs
-  for (auto& elementsIt : elements) {
+  for (auto& elementsIt : elements_) {
     const auto conf{graph_.conflicting(elementsIt.first)};
     elementsIt.second->addConflictingInMap(conf);
     for (auto const& confIt : conf) {
       if (!confIt.isLanelet()) {
         continue;
       }
-      const auto element = elements.find(*confIt.lanelet());
-      if (element != elements.end()) {
+      const auto element = elements_.find(*confIt.lanelet());
+      if (element != elements_.end()) {
         elementsIt.second->addConflictingInRoute(element->second.get());
       }
     }
@@ -357,13 +358,13 @@ Optional<Route> RouteBuilder::createRoutefromElements(const LaneletPath& path) {
     elementsIt.second->checkPrevious();
     auto laneIdIt{laneIdMap.find(elementsIt.second->initLaneId())};
     if (laneIdIt == laneIdMap.end()) {
-      laneIdIt = assignLaneId(laneIdMap, laneId, firstInLane, elementsIt.second->initLaneId());
+      laneIdIt = assignLaneId(laneIdMap, laneId, firstInLane_, elementsIt.second->initLaneId());
     }
     elementsIt.second->setLaneId(laneIdIt->second);
     routeLanelets.push_back(elementsIt.first);
   }
   LaneletMapConstPtr routeMap = utils::createConstMap(routeLanelets, {});
-  return Route(path, elements, firstInLane, routeMap, laneId - startId);
+  return Route(path, elements_, firstInLane_, routeMap, laneId - startId);
 }
 
 /** @brief Determines all the lanelets that are part of a diverging-situation
@@ -449,7 +450,7 @@ std::vector<RouteElementUPtrs> RouteBuilder::divergingToPending(RouteElement* el
     initLaneId++;  // Diverging lanelets always form new lanes
     RouteElement::LaneId thisLaneId{initLaneId};
     for (const auto& laneElement : laneIt) {
-      Optional<RouteElement*> thisElement{searchInPending(laneElement, pending)};
+      Optional<RouteElement*> thisElement{searchInPending(laneElement, pending_)};
       if (!thisElement) {
         RouteElementUPtr newElement{std::make_unique<RouteElement>(RouteElement(laneElement, thisLaneId))};
         thisElement = newElement.get();
@@ -464,8 +465,8 @@ std::vector<RouteElementUPtrs> RouteBuilder::divergingToPending(RouteElement* el
         }
         assert(previousLanelets.size() == 1 && "No support for multiple previous elements yet");
         auto previousEl = boost::make_optional(false, static_cast<RouteElement*>(nullptr));
-        auto previousInElements{elements.find(previousLanelets.front())};
-        if (previousInElements != elements.end()) {
+        auto previousInElements{elements_.find(previousLanelets.front())};
+        if (previousInElements != elements_.end()) {
           previousEl = previousInElements->second.get();
         } else if (utils::anyOf(currentCandidates, [&previousLanelets](auto& candidate) {
                      return candidate->lanelet() == previousLanelets.front();
@@ -483,7 +484,7 @@ std::vector<RouteElementUPtrs> RouteBuilder::divergingToPending(RouteElement* el
                    })) {
           previousEl = searchInPending(previousLanelets.front(), newPending);
         } else {
-          previousEl = searchInPending(previousLanelets.front(), pending);
+          previousEl = searchInPending(previousLanelets.front(), pending_);
           if (!previousEl) {
             throw InvalidObjectStateError("Missing predecessor route element for lanelet " +
                                           std::to_string(laneElement.id()) +
@@ -510,11 +511,11 @@ std::vector<RouteElementUPtrs> RouteBuilder::divergingToPending(RouteElement* el
 RouteElement::LaneId RouteBuilder::initlaneIdForRoute(const ConstLanelet& lanelet, RouteElement::LaneId& initLaneId) {
   LaneletRelations previous{graph_.previousRelations(lanelet, false)};
   if (!previous.empty() && previous.front().relationType == RelationType::Successor) {
-    const auto previousIt = elements.find(previous.front().lanelet);
-    if (previousIt != elements.end()) {
+    const auto previousIt = elements_.find(previous.front().lanelet);
+    if (previousIt != elements_.end()) {
       return previousIt->second->initLaneId();
     }
-    for (auto const& pendingIt : pending) {
+    for (auto const& pendingIt : pending_) {
       for (auto const& pendingElement : pendingIt) {
         if (pendingElement->lanelet() == previous.front().lanelet) {
           return pendingElement->initLaneId();
@@ -549,7 +550,7 @@ void RouteBuilder::processMergingLanelets(std::vector<RouteElement*>& elementsQu
   mergingLanes.erase(std::remove_if(mergingLanes.begin(), mergingLanes.end(),
                                     [&previousElement](auto& it) { return it.front() == previousElement->lanelet(); }));
   bool progress{false};
-  std::vector<ConstLanelets>::iterator lanesIt = mergingLanes.begin();
+  auto lanesIt = mergingLanes.begin();
   while (!mergingLanes.empty()) {
     bool progressWithThisLane{false};
     RouteElementUPtr mergingCandidate =
@@ -573,7 +574,7 @@ void RouteBuilder::processMergingLanelets(std::vector<RouteElement*>& elementsQu
           std::vector<RouteElement*> newPendingToElements{addPreviousRelations(furtherElement.get(), true)};
           elementsQueue.insert(elementsQueue.end(), newPendingToElements.begin(), newPendingToElements.end());
           lastElement = furtherElement.get();
-          addToElements(elements, firstInLane, furtherElement);
+          addToElements(elements_, firstInLane_, furtherElement);
         }
         lastElement->addFollowing(thisElement);
         thisElement->addPrevious(lastElement);
@@ -582,7 +583,7 @@ void RouteBuilder::processMergingLanelets(std::vector<RouteElement*>& elementsQu
         thisElement->addPrevious(mergingCandidate.get());
       }
       addPendingToElements(elementsQueue);
-      addToElements(elements, firstInLane, mergingCandidate);
+      addToElements(elements_, firstInLane_, mergingCandidate);
       lanesIt = mergingLanes.erase(lanesIt);
     }
     // Abort condition: We didn't find any new lanelets in any lane that overlap with diverging lanelets
@@ -625,14 +626,14 @@ void RouteBuilder::processLeftSide(RouteElement::LaneId& initLaneId, RouteElemen
         directLeft = false;
       }
       if (!currentCandidates.empty() && leftIt.relationType == RelationType::AdjacentLeft) {
-        RouteElementUPtrs newPendingTemp{moveCandidatesToPending(currentCandidates, pending, true, true)};
+        RouteElementUPtrs newPendingTemp{moveCandidatesToPending(currentCandidates, pending_, true, true)};
         if (newPendingTemp.empty()) {
           closerToRoute = nullptr;
         }
-        RouteElementRawPtrs newPendingRawPtrs{moveCandidatesToPendingReturnRawPtrs(newPendingTemp, pending, false)};
+        RouteElementRawPtrs newPendingRawPtrs{moveCandidatesToPendingReturnRawPtrs(newPendingTemp, pending_, false)};
         for (auto& it : newPendingRawPtrs) {
           std::vector<RouteElementUPtrs> newDiverging{divergingToPending(it, initLaneId)};
-          moveCandidatesToPending(newDiverging, pending, false);
+          moveCandidatesToPending(newDiverging, pending_, false);
         }
       }
       newElement =
@@ -659,7 +660,7 @@ void RouteBuilder::processLeftSide(RouteElement::LaneId& initLaneId, RouteElemen
       }
       if (directLeft && directLeftBack) {
         closerToRoute = newElement.get();
-        addToElements(elements, firstInLane, newElement);
+        addToElements(elements_, firstInLane_, newElement);
         elementsQueue.insert(elementsQueue.end(), newPendingToElements.begin(), newPendingToElements.end());
       } else {
         closerToRoute = newElement.get();
@@ -674,14 +675,14 @@ void RouteBuilder::processLeftSide(RouteElement::LaneId& initLaneId, RouteElemen
     if (preferPendingToElements) {
       std::move(currentCandidates.begin(), currentCandidates.end(), std::back_inserter(newPendingTemp));
     } else {
-      RouteElementUPtrs newPendingTempTemp{moveCandidatesToPending(currentCandidates, pending, !directLeft, true)};
+      RouteElementUPtrs newPendingTempTemp{moveCandidatesToPending(currentCandidates, pending_, !directLeft, true)};
       std::move(newPendingTempTemp.begin(), newPendingTempTemp.end(), std::back_inserter(newPendingTemp));
     }
     for (auto& it : newPendingTemp) {
       std::vector<RouteElementUPtrs> newDiverging{divergingToPending(it.get(), initLaneId, newPendingTemp)};
-      moveCandidatesToPending(newDiverging, pending, false);
+      moveCandidatesToPending(newDiverging, pending_, false);
     }
-    pending.emplace_back(std::move(newPendingTemp));
+    pending_.emplace_back(std::move(newPendingTemp));
   }
   addPendingToElements(elementsQueue);
 }
@@ -707,14 +708,14 @@ void RouteBuilder::processRightSide(RouteElement::LaneId& initLaneId, RouteEleme
         directRight = false;
       }
       if (!currentCandidates.empty() && rightIt.relationType == RelationType::AdjacentRight) {
-        RouteElementUPtrs newPendingTemp{moveCandidatesToPending(currentCandidates, pending, true, true)};
+        RouteElementUPtrs newPendingTemp{moveCandidatesToPending(currentCandidates, pending_, true, true)};
         if (newPendingTemp.empty()) {
           closerToRoute = nullptr;
         }
-        RouteElementRawPtrs newPendingRawPtrs{moveCandidatesToPendingReturnRawPtrs(newPendingTemp, pending, false)};
+        RouteElementRawPtrs newPendingRawPtrs{moveCandidatesToPendingReturnRawPtrs(newPendingTemp, pending_, false)};
         for (auto& it : newPendingRawPtrs) {
           std::vector<RouteElementUPtrs> newDiverging{divergingToPending(it, initLaneId)};
-          moveCandidatesToPending(newDiverging, pending, false);
+          moveCandidatesToPending(newDiverging, pending_, false);
         }
       }
       newElement = std::make_unique<RouteElement>(
@@ -741,7 +742,7 @@ void RouteBuilder::processRightSide(RouteElement::LaneId& initLaneId, RouteEleme
       }
       if (directRight && directRightBack && !preferPendingToElements) {
         closerToRoute = newElement.get();
-        addToElements(elements, firstInLane, newElement);
+        addToElements(elements_, firstInLane_, newElement);
         elementsQueue.insert(elementsQueue.end(), newPendingToElements.begin(), newPendingToElements.end());
       } else {
         closerToRoute = newElement.get();
@@ -756,14 +757,14 @@ void RouteBuilder::processRightSide(RouteElement::LaneId& initLaneId, RouteEleme
     if (preferPendingToElements) {
       std::move(currentCandidates.begin(), currentCandidates.end(), std::back_inserter(newPendingTemp));
     } else {
-      RouteElementUPtrs newPendingTempTemp{moveCandidatesToPending(currentCandidates, pending, !directRight, true)};
+      RouteElementUPtrs newPendingTempTemp{moveCandidatesToPending(currentCandidates, pending_, !directRight, true)};
       std::move(newPendingTempTemp.begin(), newPendingTempTemp.end(), std::back_inserter(newPendingTemp));
     }
     for (auto& it : newPendingTemp) {
       std::vector<RouteElementUPtrs> newDiverging{divergingToPending(it.get(), initLaneId, newPendingTemp)};
-      moveCandidatesToPending(newDiverging, pending, false);
+      moveCandidatesToPending(newDiverging, pending_, false);
     }
-    pending.emplace_back(std::move(newPendingTemp));
+    pending_.emplace_back(std::move(newPendingTemp));
   }
   addPendingToElements(elementsQueue);
 }
@@ -777,7 +778,7 @@ void RouteBuilder::processRightSide(RouteElement::LaneId& initLaneId, RouteEleme
 void RouteBuilder::recursiveDivergingToPending(RouteElement::LaneId& initLaneId, RouteElement* thisElement) {
   std::vector<RouteElementUPtrs> newDiverging{divergingToPending(thisElement, initLaneId)};
   std::vector<RouteElementRawPtrs> newPendingForDiverging{
-      moveCandidatesToPendingReturnRawPtrs(newDiverging, pending, false)};
+      moveCandidatesToPendingReturnRawPtrs(newDiverging, pending_, false)};
   if (!newPendingForDiverging.empty() && !newPendingForDiverging.front().empty()) {
     std::vector<std::vector<RouteElementRawPtrs>> divergingQueue;
     divergingQueue.emplace_back(newPendingForDiverging);
@@ -785,7 +786,7 @@ void RouteBuilder::recursiveDivergingToPending(RouteElement::LaneId& initLaneId,
       for (const auto& it : divergingQueue.front()) {
         for (const auto& elementIt : it) {
           std::vector<RouteElementUPtrs> newDiverging{divergingToPending(elementIt, initLaneId)};
-          auto newRawPtrs{moveCandidatesToPendingReturnRawPtrs(newDiverging, pending, false)};
+          auto newRawPtrs{moveCandidatesToPendingReturnRawPtrs(newDiverging, pending_, false)};
           if (!newRawPtrs.empty()) {
             divergingQueue.emplace_back(newRawPtrs);
           }

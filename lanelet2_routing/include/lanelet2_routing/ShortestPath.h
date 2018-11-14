@@ -46,16 +46,6 @@ struct ShortestPath {
   const G& graph;          ///< Routing graph
   const VertexType start;  ///< Start vertex
 
-  std::vector<VertexType> predecessors_;             ///< All predecessors passed to reach the goal
-  std::vector<double> distances_;                    ///< Routing cost of all steps
-  std::vector<boost::default_color_type> colorMap_;  ///< Color map to avoid repetitive calculations
-
-  //! Basic check if vertex ID is reasonable
-  void abortIfVertexInvalid(const VertexType v) {
-    if (v < 0 || v >= boost::num_vertices(graph)) {
-      throw InvalidInputError("Invalid input vertex with number " + std::to_string(v));
-    }
-  }
   ShortestPath() = delete;
 
   /** @brief Constructor of a shortest path search with a defined start vertex.
@@ -79,13 +69,13 @@ struct ShortestPath {
 
     // Only perform search if goal vertex has not been visited
     if (colorMap_[target] == boost::default_color_type::white_color) {
-      DijkstraGoalVisitor<VertexType> goal_visitor(target, &colorMap_);
+      DijkstraGoalVisitor<VertexType> goalVisitor(target, &colorMap_);
       try {
         boost::dijkstra_shortest_paths(graph, start,
                                        boost::predecessor_map(predecessors_.data())
                                            .distance_map(distances_.data())
                                            .weight_map(get(&EdgeInfo::routingCost, graph))
-                                           .visitor(goal_visitor));
+                                           .visitor(goalVisitor));
       } catch (const FoundGoalError&) {  //! Thrown regulary to avoid exploitation of unneeded vertices
       }
     }
@@ -105,6 +95,7 @@ struct ShortestPath {
     return sp;
   }
 
+ private:
   //! Simple helper function to determine if the target has been reached.
   bool reached(const VertexType target) {
     abortIfVertexInvalid(target);
@@ -123,6 +114,17 @@ struct ShortestPath {
       return {};
     };
   }
+
+  //! Basic check if vertex ID is reasonable
+  void abortIfVertexInvalid(const VertexType v) {
+    if (v < 0 || v >= boost::num_vertices(graph)) {
+      throw InvalidInputError("Invalid input vertex with number " + std::to_string(v));
+    }
+  }
+
+  std::vector<VertexType> predecessors_;             ///< All predecessors passed to reach the goal
+  std::vector<double> distances_;                    ///< Routing cost of all steps
+  std::vector<boost::default_color_type> colorMap_;  ///< Color map to avoid repetitive calculations
 };
 
 }  // namespace routing

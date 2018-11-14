@@ -22,15 +22,15 @@ inline std::istream& operator>>(std::istream& is, const RelationType& /*r*/) { r
 template <class Graph>
 class VertexWriterGraphViz {
  public:
-  explicit VertexWriterGraphViz(const Graph* g) : graph(g) {}
+  explicit VertexWriterGraphViz(const Graph* g) : graph_(g) {}
   template <class VertexOrEdge>
   void operator()(std::ostream& out, const VertexOrEdge& v) const {
-    const Id id{(*graph)[v].laneletOrArea.id()};
+    const Id id{(*graph_)[v].laneletOrArea.id()};
     out << "[label=\"" << id << "\" lanelet=\"" << id << "\"]";
   }
 
  private:
-  const Graph* graph;
+  const Graph* graph_;
 };
 
 /** @brief Internal edge writer for graphViz file export.
@@ -38,20 +38,20 @@ class VertexWriterGraphViz {
 template <class Graph>
 class EdgeWriterGraphViz {
  public:
-  explicit EdgeWriterGraphViz(const Graph* g) : graph(g) {}
+  explicit EdgeWriterGraphViz(const Graph* g) : graph_(g) {}
   template <class VertexOrEdge>
   void operator()(std::ostream& out, const VertexOrEdge& v) const {
-    const RelationType relation{(*graph)[v].relation};
+    const RelationType relation{(*graph_)[v].relation};
     out << "[label=\"" << relationToString(relation) << "\" color=\"" << relationToColor(relation);
     if (relation != RelationType::AdjacentLeft && relation != RelationType::AdjacentRight &&
         relation != RelationType::Conflicting) {
-      out << "\" weight=\"" << (*graph)[v].routingCost;
+      out << "\" weight=\"" << (*graph_)[v].routingCost;
     }
-    out << "\" routingCostId=\"" << (*graph)[v].costId << "\"]";
+    out << "\" routingCostId=\"" << (*graph_)[v].costId << "\"]";
   }
 
  private:
-  const Graph* graph;
+  const Graph* graph_;
 };
 
 /** @brief Implementation of graphViz export function
