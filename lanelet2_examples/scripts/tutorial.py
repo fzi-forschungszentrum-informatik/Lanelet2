@@ -120,7 +120,6 @@ def part6routing():
     assert len(graph.possiblePaths(lanelet, 100, 0, False)) == 1
 
     route = graph.getRoute(lanelet, toLanelet)
-    assert len(route.fullLane(lanelet)) > 3
 
 
 def get_linestring_at_x(x):

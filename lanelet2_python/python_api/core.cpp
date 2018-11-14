@@ -22,7 +22,7 @@ struct AttributeFromPythonStr {
     boost::python::converter::registry::push_back(&convertible, &construct, boost::python::type_id<Attribute>());
   }
 
-  static void* convertible(PyObject* objPtr) { return PyString_Check(objPtr) ? objPtr : nullptr; }
+  static void* convertible(PyObject* objPtr) { return PyString_Check(objPtr) ? objPtr : nullptr; }  // NOLINT
 
   static void construct(PyObject* objPtr, boost::python::converter::rvalue_from_python_stage1_data* data) {
     const char* value = PyString_AsString(objPtr);
@@ -33,6 +33,55 @@ struct AttributeFromPythonStr {
     void* storage = reinterpret_cast<StorageType*>(data)->storage.bytes;  // NOLINT
     new (storage) Attribute(value);
     data->convertible = storage;
+  }
+};
+
+struct DictToAttributeMapConverter {
+  DictToAttributeMapConverter() { converter::registry::push_back(&convertible, &construct, type_id<AttributeMap>()); }
+  static void* convertible(PyObject* obj) {
+    if (!PyDict_CheckExact(obj)) {  // NOLINT
+      return nullptr;
+    }
+    return obj;
+  }
+  static void construct(PyObject* obj, converter::rvalue_from_python_stage1_data* data) {
+    dict d(borrowed(obj));
+    list keys = d.keys();
+    list values = d.values();
+    AttributeMap attributes;
+    for (auto i = 0u; i < len(keys); ++i) {
+      std::string key = extract<std::string>(keys[i]);
+      std::string value = extract<std::string>(values[i]);
+      attributes.insert(std::make_pair(key, value));
+    }
+    using StorageType = converter::rvalue_from_python_storage<AttributeMap>;
+    void* storage = reinterpret_cast<StorageType*>(data)->storage.bytes;  // NOLINT
+    new (storage) AttributeMap(attributes);
+    data->convertible = storage;
+  }
+};
+
+struct LineStringOrPolygonToObject {
+  static PyObject* convert(const lanelet::LineStringOrPolygon3d& v) {
+    if (v.isPolygon()) {
+      return incref(object(*v.polygon()).ptr());
+    }
+    if (v.isLineString()) {
+      return incref(object(*v.lineString()).ptr());
+    }
+    return incref(object().ptr());
+  }
+};
+
+struct ConstLineStringOrPolygonToObject {
+  static PyObject* convert(const lanelet::ConstLineStringOrPolygon3d& v) {
+    if (v.isPolygon()) {
+      return incref(object(*v.polygon()).ptr());
+    }
+    if (v.isLineString()) {
+      return incref(object(*v.lineString()).ptr());
+    }
+    return incref(object().ptr());
   }
 };
 
@@ -404,12 +453,15 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<ConstRuleParameters>();
   VectorToListConverter<RegulatoryElementPtrs>();
   VectorToListConverter<RegulatoryElementConstPtrs>();
+  VectorToListConverter<LineStringsOrPolygons3d>();
+  VectorToListConverter<ConstLineStringsOrPolygons3d>();
   VectorToListConverter<std::vector<TrafficLight::Ptr>>();
   VectorToListConverter<std::vector<TrafficSign::Ptr>>();
   VectorToListConverter<std::vector<SpeedLimit::Ptr>>();
   VectorToListConverter<std::vector<RightOfWay::Ptr>>();
   VectorToListConverter<std::vector<std::string>>();
   AttributeFromPythonStr();
+  DictToAttributeMapConverter();
 
   OptionalConverter<Point2d>();
   OptionalConverter<Point3d>();
@@ -451,9 +503,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .fromPython<ConstLanelets>()
       .fromPython<Areas>()
       .fromPython<ConstAreas>()
-      .fromPython<RegulatoryElementPtrs>();
+      .fromPython<RegulatoryElementPtrs>()
+      .fromPython<LineStringsOrPolygons3d>()
+      .fromPython<ConstLineStringsOrPolygons3d>();
 
   ToOptionalConverter().fromPython<LineString3d>();
+
+  to_python_converter<LineStringOrPolygon3d, LineStringOrPolygonToObject>();
+  to_python_converter<ConstLineStringOrPolygon3d, ConstLineStringOrPolygonToObject>();
+  implicitly_convertible<LineString3d, LineStringOrPolygon3d>();
+  implicitly_convertible<Polygon3d, LineStringOrPolygon3d>();
+  implicitly_convertible<ConstLineString3d, ConstLineStringOrPolygon3d>();
+  implicitly_convertible<ConstPolygon3d, ConstLineStringOrPolygon3d>();
 
   class_<AttributeMap>("AttributeMap", init<>("AttributeMap()"))
       .def(IsHybridMap<AttributeMap>())
@@ -581,7 +642,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(IsPrimitive<Polygon2d>());
 
   class_<Polygon3d>("Polygon3d", "A three-dimensional lanelet polygon",
-                    init<Id, Points3d, AttributeMap>("Polygon3d(Id, point_list, attributes"))
+                    init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap())))
       .def(IsLineString<Polygon3d>())
       .def(IsPrimitive<Polygon3d>());
 
@@ -719,20 +780,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("removeStopLine", &RightOfWay::removeStopLine)
       .def("getManeuver", &RightOfWay::getManeuver, "get maneuver for a lanelet")
       .def("rightOfWayLanelets", +[](RightOfWay& self) { return self.rightOfWayLanelets(); })
-      .def("rightOfWayLanelets", +[](const RightOfWay& self) { return self.rightOfWayLanelets(); })
       .def("addRightOfWayLanelet", &RightOfWay::addRightOfWayLanelet)
       .def("removeRightOfWayLanelet", &RightOfWay::removeRightOfWayLanelet)
       .def("yieldLanelets", +[](RightOfWay& self) { return self.yieldLanelets(); })
-      .def("yieldLanelets", +[](const RightOfWay& self) { return self.yieldLanelets(); })
       .def("addYieldLanelet", &RightOfWay::addYieldLanelet)
       .def("removeYieldLanelet", &RightOfWay::removeYieldLanelet);
   implicitly_convertible<std::shared_ptr<RightOfWay>, RegulatoryElementPtr>();
 
-  class_<TrafficSignsWithType, std::shared_ptr<TrafficSignsWithType>>("TrafficSignWithType", no_init)
-      .def("__init__", make_constructor(+[](LineStrings3d ls) {
+  class_<TrafficSignsWithType, std::shared_ptr<TrafficSignsWithType>>("TrafficSignsWithType", no_init)
+      .def("__init__", make_constructor(+[](LineStringsOrPolygons3d ls) {
              return std::make_shared<TrafficSignsWithType>(TrafficSignsWithType{ls});
            }))
-      .def("__init__", make_constructor(+[](LineStrings3d ls, std::string type) {
+      .def("__init__", make_constructor(+[](LineStringsOrPolygons3d ls, std::string type) {
              return std::make_shared<TrafficSignsWithType>(TrafficSignsWithType{ls, type});
            }))
       .add_property("trafficSigns", &TrafficSignsWithType::trafficSigns)
@@ -745,13 +804,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                          arg("cancellingTrafficSigns") = TrafficSignsWithType{},
                                          arg("refLines") = LineStrings3d(), arg("cancelLines") = LineStrings3d())))
       .def("trafficSigns", +[](TrafficSign& self) { return self.trafficSigns(); })
-      .def("trafficSigns", +[](const TrafficSign& self) { return self.trafficSigns(); })
       .def("cancellingTrafficSigns", +[](TrafficSign& self) { return self.cancellingTrafficSigns(); })
-      .def("cancellingTrafficSigns", +[](const TrafficSign& self) { return self.cancellingTrafficSigns(); })
       .def("refLines", +[](TrafficSign& self) { return self.refLines(); })
-      .def("refLines", +[](const TrafficSign& self) { return self.refLines(); })
       .def("cancelLines", +[](TrafficSign& self) { return self.cancelLines(); })
-      .def("cancelLines", +[](const TrafficSign& self) { return self.cancelLines(); })
       .def("addTrafficSign", &TrafficSign::addTrafficSign)
       .def("removeTrafficSign", &TrafficSign::removeTrafficSign)
       .def("addRefLine", &TrafficSign::addRefLine)

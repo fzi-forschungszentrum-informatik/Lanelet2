@@ -47,8 +47,9 @@ void part1BasicRegulatoryElements() {
   TrafficLight::Ptr tlRegelem = trafficLightRegelems.front();          // here it is with its correct type.
   assert(tlRegelem->constData() == trafficLightRegelem->constData());  // they are actually the same.
 
-  // from traffic lights we can directly get the relevant lights and the stop line (we didnt set one, but we could)
-  LineString3d theLight = tlRegelem->trafficLights().front();
+  // from traffic lights we can directly get the relevant lights and the stop line (we didnt set one, but we could).
+  // since traffic lights can either be a polygon or a linestring, we get an object that represents both.
+  LineStringOrPolygon3d theLight = tlRegelem->trafficLights().front();
   assert(theLight == trafficLight);
 
   // we can also modify it, and since regulatory element data is shared, this also affects the lanelet that holds it

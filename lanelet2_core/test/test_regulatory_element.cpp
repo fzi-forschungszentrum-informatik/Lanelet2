@@ -21,6 +21,7 @@ class RegulatoryElementTest : public ::testing::Test {
     ls3 = LineString3d(++id, Points3d{p3, p1});
     ls4 = LineString3d(++id, Points3d{p4, p2});
     ls5 = LineString3d(++id, Points3d{p5, p6});
+    poly1 = Polygon3d(++id, Points3d{p1, p2, p3});
 
     ll1 = Lanelet(++id, ls1, ls2);
     ll2 = Lanelet(++id, ls2, ls3);
@@ -42,6 +43,7 @@ class RegulatoryElementTest : public ::testing::Test {
   Id id{0};
   Point3d p1, p2, p3, p4, p5, p6;
   LineString3d ls1, ls2, ls3, ls4, ls5, ls6;
+  Polygon3d poly1;
   Lanelet ll1, ll2, ll3;
   Area ar;
   RegulatoryElementDataPtr regelemData;
@@ -128,8 +130,7 @@ TEST_F(RegulatoryElementTest, TrafficLightWorksAsExpected) {  // NOLINT
 }
 
 // ============ Traffic Sign ===========================
-TEST_F(RegulatoryElementTest,  // NOLINT
-       FactoryCannotConstructInvalidTrafficSign) {
+TEST_F(RegulatoryElementTest, FactoryCannotConstructInvalidTrafficSign) {  // NOLINT
   EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::TrafficSign, regelemData), InvalidInputError);
 }
 
@@ -141,7 +142,7 @@ TEST_F(RegulatoryElementTest, FactoryConstructsTrafficSign) {  // NOLINT
 }
 
 TEST_F(RegulatoryElementTest, ConstructValidTrafficSign) {  // NOLINT
-  auto ts = TrafficSign::make(++id, AttributeMap(), {{ls5}, "de205"}, {}, {ls4});
+  auto ts = TrafficSign::make(++id, AttributeMap(), {{ls5}, "de205"}, {{poly1}, "de206"}, {ls4});
   ts->addRefLine(ls5);
   EXPECT_EQ(2, ts->refLines().size());
 
@@ -150,13 +151,15 @@ TEST_F(RegulatoryElementTest, ConstructValidTrafficSign) {  // NOLINT
 
   EXPECT_EQ(ts->type(), "de205");
 
+  EXPECT_EQ(ts->cancelType(), "de206");
+  EXPECT_TRUE(ts->removeCancellingTrafficSign(poly1));
+
   ts->addCancellingTrafficSign(ls2);
   EXPECT_THROW(ts->cancelType(), InvalidInputError);
 }
 
 // ============ Speed limit ===========================
-TEST_F(RegulatoryElementTest,  // NOLINT
-       FactoryCannotConstructInvalidSpeedLimit) {
+TEST_F(RegulatoryElementTest, FactoryCannotConstructInvalidSpeedLimit) {  // NOLINT
   EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::SpeedLimit, regelemData), InvalidInputError);
 }
 TEST_F(RegulatoryElementTest, FactoryConstructsSpeedLimit) {  // NOLINT
@@ -167,8 +170,7 @@ TEST_F(RegulatoryElementTest, FactoryConstructsSpeedLimit) {  // NOLINT
 }
 
 // ============ Right of way ===========================
-TEST_F(RegulatoryElementTest,  // NOLINT
-       FactoryCannotConstructInvalidRightOfWay) {
+TEST_F(RegulatoryElementTest, FactoryCannotConstructInvalidRightOfWay) {  // NOLINT
   EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::RightOfWay, regelemData), InvalidInputError);
 }
 
