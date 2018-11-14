@@ -99,7 +99,8 @@ void part3QueryingInformation() {
   auto laneletsOwningLinestring = laneletMap.laneletLayer.findUsages(mapLanelet.leftBound());
   assert(laneletsOwningLinestring.size() == 1 && laneletsOwningLinestring.front() == mapLanelet);
   // find regelems with linestrings
-  auto regelemsOwningLs = laneletMap.regulatoryElementLayer.findUsages(trafficLight->trafficLights().front());
+  auto regelemsOwningLs =
+      laneletMap.regulatoryElementLayer.findUsages(*trafficLight->trafficLights().front().lineString());
   assert(regelemsOwningLs.size() == 1 && regelemsOwningLs.front() == trafficLight);
   // find lanelets with regelems
   auto laneletsOwningRegelems = laneletMap.laneletLayer.findUsages(trafficLight);

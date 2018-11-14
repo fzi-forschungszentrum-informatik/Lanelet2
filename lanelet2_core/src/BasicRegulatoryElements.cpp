@@ -7,11 +7,9 @@
 #include "utility/Utilities.h"
 
 namespace std {
-// namespace {
 bool operator==(const lanelet::LaneletDataConstWptr& lhs, const lanelet::LaneletDataConstWptr& rhs) {
   return !lhs.expired() && !rhs.expired() && lhs.lock() == rhs.lock();
 }
-//}  // namespace
 }  // namespace std
 namespace lanelet {
 namespace {
@@ -35,14 +33,44 @@ Optional<T> tryGetFront(const std::vector<T>& vec) {
 
 template <typename T>
 RuleParameters toRuleParameters(const std::vector<T>& primitives) {
-  return utils::transform(primitives, [](const auto& elem) { return RuleParameter(elem); });
+  return utils::transform(primitives, [](const auto& elem) { return static_cast<RuleParameter>(elem); });
+}
+
+template <>
+RuleParameters toRuleParameters(const std::vector<LineStringOrPolygon3d>& primitives) {
+  return utils::transform(primitives, [](const auto& elem) { return elem.asRuleParameter(); });
+}
+
+LineStringsOrPolygons3d getLsOrPoly(const RuleParameterMap& paramsMap, RoleName role) {
+  auto params = paramsMap.find(role);
+  if (params == paramsMap.end()) {
+    return {};
+  }
+
+  LineStringsOrPolygons3d result;
+  for (auto& param : params->second) {
+    auto l = boost::get<LineString3d>(&param);
+    if (l) {
+      result.push_back(*l);
+    }
+    auto p = boost::get<Polygon3d>(&param);
+    if (p) {
+      result.push_back(*p);
+    }
+  }
+  return result;
+}
+
+ConstLineStringsOrPolygons3d getConstLsOrPoly(const RuleParameterMap& params, RoleName role) {
+  return utils::transform(getLsOrPoly(params, role),
+                          [](auto& lsOrPoly) { return static_cast<ConstLineStringOrPolygon3d>(lsOrPoly); });
 }
 
 void updateTrafficSigns(TrafficSignsWithType trafficSigns) {
   if (!trafficSigns.type.empty()) {
-    for (auto& trafficSign : trafficSigns.trafficSigns) {
-      trafficSign.setAttribute(AttributeName::Type, AttributeValueString::TrafficSign);
-      trafficSign.setAttribute(AttributeName::Subtype, trafficSigns.type);
+    for (auto& sign : trafficSigns.trafficSigns) {
+      sign.applyVisitor([](auto prim) { prim.setAttribute(AttributeName::Type, AttributeValueString::TrafficSign); });
+      sign.applyVisitor([&](auto prim) { prim.setAttribute(AttributeName::Subtype, trafficSigns.type); });
     }
   }
 }
@@ -124,16 +152,18 @@ Optional<ConstLineString3d> TrafficLight::stopLine() const {
 
 Optional<LineString3d> TrafficLight::stopLine() { return tryGetFront(getParameters<LineString3d>(RoleName::RefLine)); }
 
-ConstLineStrings3d TrafficLight::trafficLights() const { return getParameters<ConstLineString3d>(RoleName::Refers); }
-
-LineStrings3d TrafficLight::trafficLights() { return getParameters<LineString3d>(RoleName::Refers); }
-
-void TrafficLight::addTrafficLight(const LineString3d& primitive) {
-  parameters()[RoleName::Refers].emplace_back(primitive);
+ConstLineStringsOrPolygons3d TrafficLight::trafficLights() const {
+  return getConstLsOrPoly(parameters(), RoleName::Refers);
 }
 
-bool TrafficLight::removeTrafficLight(const LineString3d& primitive) {
-  return findAndErase(primitive, parameters().find(RoleName::Refers)->second);
+LineStringsOrPolygons3d TrafficLight::trafficLights() { return getLsOrPoly(parameters(), RoleName::Refers); }
+
+void TrafficLight::addTrafficLight(const LineStringOrPolygon3d& primitive) {
+  parameters()[RoleName::Refers].emplace_back(primitive.asRuleParameter());
+}
+
+bool TrafficLight::removeTrafficLight(const LineStringOrPolygon3d& primitive) {
+  return findAndErase(primitive.asRuleParameter(), parameters().find(RoleName::Refers)->second);
 }
 
 void TrafficLight::setStopLine(const LineString3d& stopLine) { parameters()[RoleName::RefLine] = {stopLine}; }
@@ -215,30 +245,34 @@ TrafficSign::TrafficSign(Id id, const AttributeMap& attributes, const TrafficSig
     : TrafficSign(
           constructTrafficSignData(id, attributes, trafficSigns, cancellingTrafficSigns, refLines, cancelLines)) {}
 
-ConstLineStrings3d TrafficSign::trafficSigns() const { return getParameters<ConstLineString3d>(RoleName::Refers); }
+ConstLineStringsOrPolygons3d TrafficSign::trafficSigns() const {
+  return getConstLsOrPoly(parameters(), RoleName::Refers);
+}
 
-LineStrings3d TrafficSign::trafficSigns() { return getParameters<LineString3d>(RoleName::Refers); }
+LineStringsOrPolygons3d TrafficSign::trafficSigns() { return getLsOrPoly(parameters(), RoleName::Refers); }
 
 std::string TrafficSign::type() const {
   auto signs = trafficSigns();
   if (signs.empty()) {
     throw InvalidInputError("Regulatory element can not determine the type of the traffic sign!");
   }
-  if (signs.front().hasAttribute(AttributeName::Subtype)) {
-    const auto& attr = signs.front().attribute(AttributeName::Subtype);
+  if (signs.front().applyVisitor([](auto& prim) { return prim.hasAttribute(AttributeName::Subtype); })) {
+    const auto& attr = signs.front().applyVisitor([](auto& prim) { return prim.attribute(AttributeName::Subtype); });
     return attr.value();
   }
   throw InvalidInputError("Regulatory element has a traffic sign without subtype attribute!");
-}
+}  // namespace lanelet
 
 ConstLineStrings3d TrafficSign::refLines() const { return getParameters<ConstLineString3d>(RoleName::RefLine); }
 
 LineStrings3d TrafficSign::refLines() { return getParameters<LineString3d>(RoleName::RefLine); }
 
-void TrafficSign::addTrafficSign(const LineString3d& sign) { parameters()[RoleName::Refers].emplace_back(sign); }
+void TrafficSign::addTrafficSign(const LineStringOrPolygon3d& sign) {
+  parameters()[RoleName::Refers].emplace_back(sign.asRuleParameter());
+}
 
-bool TrafficSign::removeTrafficSign(const LineString3d& sign) {
-  return findAndErase(sign, parameters().find(RoleName::Refers)->second);
+bool TrafficSign::removeTrafficSign(const LineStringOrPolygon3d& sign) {
+  return findAndErase(sign.asRuleParameter(), parameters().find(RoleName::Refers)->second);
 }
 
 void TrafficSign::addRefLine(const LineString3d& line) { parameters()[RoleName::RefLine].emplace_back(line); }
@@ -263,29 +297,27 @@ SpeedLimit::SpeedLimit(Id id, const AttributeMap& attributes, const TrafficSigns
 
 SpeedLimit::SpeedLimit(const RegulatoryElementDataPtr& data) : TrafficSign(data) {}
 
-void TrafficSign::addCancellingTrafficSign(const LineString3d& sign) {
-  parameters()[RoleName::Cancels].emplace_back(sign);
+void TrafficSign::addCancellingTrafficSign(const LineStringOrPolygon3d& sign) {
+  parameters()[RoleName::Cancels].emplace_back(sign.asRuleParameter());
 }
 
-bool TrafficSign::removeCancellingTrafficSign(const LineString3d& sign) {
-  return findAndErase(sign, parameters().find(RoleName::Cancels)->second);
+bool TrafficSign::removeCancellingTrafficSign(const LineStringOrPolygon3d& sign) {
+  return findAndErase(sign.asRuleParameter(), parameters().find(RoleName::Cancels)->second);
 }
 
-ConstLineStrings3d TrafficSign::cancellingTrafficSigns() const {
-  return getParameters<ConstLineString3d>(RoleName::Cancels);
+ConstLineStringsOrPolygons3d TrafficSign::cancellingTrafficSigns() const {
+  return getConstLsOrPoly(parameters(), RoleName::Cancels);
 }
 
-LineStrings3d TrafficSign::cancellingTrafficSigns() { return getParameters<LineString3d>(RoleName::Cancels); }
+LineStringsOrPolygons3d TrafficSign::cancellingTrafficSigns() { return getLsOrPoly(parameters(), RoleName::Cancels); }
 
 std::string TrafficSign::cancelType() const {
   auto signs = cancellingTrafficSigns();
-  if (signs.front().hasAttribute(AttributeName::Subtype)) {
-    const auto& attr = signs.front().attribute(AttributeName::Subtype);
+  if (signs.front().applyVisitor([](auto& prim) { return prim.hasAttribute(AttributeName::Subtype); })) {
+    const auto& attr = signs.front().applyVisitor([](auto& prim) { return prim.attribute(AttributeName::Subtype); });
     return attr.value();
   }
-  throw InvalidInputError(
-      "Regulatory element has a cancelling traffic sign without subtype "
-      "attribute!");
+  throw InvalidInputError("Regulatory element has a cancelling traffic sign without subtype attribute!");
 }
 
 ConstLineStrings3d TrafficSign::cancelLines() const { return getParameters<ConstLineString3d>(RoleName::CancelLine); }

@@ -3,6 +3,7 @@
 #include <string>
 #include "../Forward.h"
 #include "LineString.h"
+#include "LineStringOrPolygon.h"
 #include "RegulatoryElement.h"
 
 namespace lanelet {
@@ -37,8 +38,8 @@ class TrafficLight : public RegulatoryElement {
    * There might be multiple traffic lights but they are required to show the
    * same signal.
    */
-  ConstLineStrings3d trafficLights() const;
-  LineStrings3d trafficLights();
+  ConstLineStringsOrPolygons3d trafficLights() const;
+  LineStringsOrPolygons3d trafficLights();
 
   /**
    * @brief add a new traffic light
@@ -47,14 +48,14 @@ class TrafficLight : public RegulatoryElement {
    * Traffic lights are represented as linestrings that start at the left edge
    * of a traffic light and end at the right edge.
    */
-  void addTrafficLight(const LineString3d& primitive);
+  void addTrafficLight(const LineStringOrPolygon3d& primitive);
 
   /**
    * @brief remove a traffic light
    * @param primitive the primitive
    * @return true if the traffic light existed and was removed
    */
-  bool removeTrafficLight(const LineString3d& primitive);
+  bool removeTrafficLight(const LineStringOrPolygon3d& primitive);
 
   /**
    * @brief set a new stop line, overwrite the old one
@@ -143,10 +144,10 @@ class RightOfWay : public RegulatoryElement {
 
 //! Used as input argument to create TrafficSign regElem
 struct TrafficSignsWithType {
-  LineStrings3d trafficSigns;  //!< Lists relevant traffic signs
-  std::string type{""};        //! Lists their type. If empty, it is assumed that this
-                               //! is found in the attributes of trafficSigns.
-                               //! the format is <country-code><ID>, eg de205.
+  LineStringsOrPolygons3d trafficSigns;  //!< Lists relevant traffic signs
+  std::string type{""};                  //! Lists their type. If empty, it is assumed that this
+                                         //! is found in the attributes of trafficSigns.
+                                         //! the format is <country-code><ID>, eg de205.
 };
 
 //! @brief Expresses a generic traffic sign rule
@@ -176,8 +177,8 @@ class TrafficSign : public RegulatoryElement {
   //! returns the traffic signs
   /** There might be multiple but they are all required to show the same symbol.
    */
-  ConstLineStrings3d trafficSigns() const;
-  LineStrings3d trafficSigns();
+  ConstLineStringsOrPolygons3d trafficSigns() const;
+  LineStringsOrPolygons3d trafficSigns();
 
   //! get the id/number of the sign(s)
   /** The id is in the format [country-code][ID], e.g. de205.
@@ -194,8 +195,8 @@ class TrafficSign : public RegulatoryElement {
   LineStrings3d refLines();
 
   //! get list of cancellingTrafficSigns, if existing
-  ConstLineStrings3d cancellingTrafficSigns() const;
-  LineStrings3d cancellingTrafficSigns();
+  ConstLineStringsOrPolygons3d cancellingTrafficSigns() const;
+  LineStringsOrPolygons3d cancellingTrafficSigns();
 
   //! Type of the cancelling traffic signs
   std::string cancelType() const;
@@ -208,16 +209,16 @@ class TrafficSign : public RegulatoryElement {
   /** Traffic signs are represented as linestrings that start at the left edge
    * and end at the right edge of a traffic sign.
    */
-  void addTrafficSign(const LineString3d& sign);
+  void addTrafficSign(const LineStringOrPolygon3d& sign);
 
   //! remove a traffic sign and returns true on success
-  bool removeTrafficSign(const LineString3d& sign);
+  bool removeTrafficSign(const LineStringOrPolygon3d& sign);
 
   //! Add new cancelling traffic sign
-  void addCancellingTrafficSign(const LineString3d& sign);
+  void addCancellingTrafficSign(const LineStringOrPolygon3d& sign);
 
   //! remove a cancelling traffic sign, returns true on success
-  bool removeCancellingTrafficSign(const LineString3d& sign);
+  bool removeCancellingTrafficSign(const LineStringOrPolygon3d& sign);
 
   //! Add a new reference line
   void addRefLine(const LineString3d& line);
