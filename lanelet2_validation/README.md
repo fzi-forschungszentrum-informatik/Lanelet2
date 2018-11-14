@@ -1,4 +1,4 @@
-# Lanelet2 validation
+# Lanelet2 Validation
 
 Validation package for lanelet2. Runs checks on common mapping errors and reports them.
 
@@ -8,14 +8,14 @@ Building this package will create the program `lanelet2_validate`. To test a map
 
 For advanced usage, try `lanelet2_validate --help`.
 
-## Adding your own validators
+## Adding Your Own Validators
 
 Before implementing your check, choose a suitable validator. There are three different types of validators:
 * *Map validators* validate the primitives in the map and search for obvious mapping issues (tags, positioning, etc.)
-* *Traffic rule validators* look for primitives that can not be interpreted with the traffic rules chose by the user
+* *Traffic rule validators* look for primitives that cannot be interpreted with the traffic rules chose by the user
 * *Routing graph validators* check for issues in the routing graph, such as isolated nodes.
 
-Validators should check for one single thing only. Bettter implement too much validators than too few.
+Validators should check for one single thing only. Better implement too much validators than too few.
 
 To implement a validator, inherit from one of the base classes [BasicValidator.cpp](include/BasicValidator.cpp),
 and implement its operator() and the `name()` function. The name should be in the format "<check_type>.<check_name>".

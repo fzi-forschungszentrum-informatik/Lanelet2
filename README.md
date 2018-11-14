@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lanelet2 is a C++ library for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core prinicples to handle the upcoming challenges of future maps.
+Lanelet2 is a C++ library for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core principles to handle the upcoming challenges of future maps.
 
 Features:
 - **2D and 3D** support
@@ -23,7 +23,7 @@ Lanelet2 is the successor of the old [liblanelet](https://github.com/phbender/li
 
 ## Documentation
 
-You can find more documentation in the individual packages and in doxygen comments. Here is an overview on the most imporant topics:
+You can find more documentation in the individual packages and in doxygen comments. Here is an overview on the most important topics:
 - [Here](lanelet2_core/doc/LaneletPrimitives.md) is more information on the basic primitives that make up a Lanelet2 map.
 - [Read here](lanelet2_core/doc/Architecture.md) for a primer on the **software architecture** of lanelet2.
 - There is also some [documentation](lanelet2_core/doc/GeometryPrimer.md) on the geometry calculations you can do with lanelet2 primitives.
@@ -32,6 +32,8 @@ You can find more documentation in the individual packages and in doxygen commen
 
 ## Installation
 Lanelet2 uses [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html) for building and is targeted towards Linux.
+
+At least C++14 is required.
 
 ### Dependencies
 * `Boost` (from 1.58)
@@ -68,7 +70,7 @@ Examples and common use cases in both C++ and Python can be found [here](lanelet
 * **lanelet2_traffic_rules** provides support to interpret the traffic rules encoded in a map
 * **lanelet2_projection** for projecting maps from WGS84 (lat/lon) to local metric coordinates
 * **lanelet2_routing** implements the routing graph for routing or reachable set or queries as well as collision checking
-* **lanelet2_maps** provides example maps and functionality to visualise and modify them easily in JOSM
+* **lanelet2_maps** provides example maps and functionality to visualize and modify them easily in JOSM
 * **lanelet2_python** implements the python interface for lanelet2
 * **lanelet2_validation** provides checks to ensure a valid lanelet2 map
 * **lanelet2_examples** contains tutorials for working with Lanelet2 in C++ and Python

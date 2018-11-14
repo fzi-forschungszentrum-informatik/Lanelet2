@@ -32,7 +32,7 @@ In summary:
 ## Understanding Boost Geometry's Errors
 
 Boost geometry is known for outputting endless lines of compiler errors when used in the wrong way. Here are some hints to find out what you did wrong (sometimes you have to look closely for the actual error in many lines of instanciated templates). They are related to GCC's error messages, but other compilers will output similar stuff:
-* Something about "no member named 'set' in boost::geometry::traits::access [...]: You used a const primitive (or you used a nutable primitive and Boost converted it into a const by a mistake). Try using the hybrid version.
+* Something about "no member named 'set' in boost::geometry::traits::access [...]: You used a const primitive (or you used a mutable primitive and Boost converted it into a const by a mistake). Try using the hybrid version.
 * Some error including "NOT_IMPLEMENTED_FOR_THIS_POINT_TYPE" together with some *no matching function for call to assertion failed": This is a very generic error and the error message may be misleading. One reason could be that you forgot to include some `lanelet2_core/geometry` headers. Other reasons could be that you used the function on a primitive it was not implemented for (refer to Boosts documentation for that) or that it was not implemented for this particular dimension. Especially 3D operations are often not implemented in boost::geometry.
 * Something with "You mixed matrices of different sizes". This is actually an error from `Eigen`. It means you passed a `BasicPoint3d` where a `BasicPoint2d` was expected (or vice versa).
 * Something with "no matching member function for call to '_init1'", also from `Eigen`: You passed a wrong type where a BasicPoint2d/3d was expected.

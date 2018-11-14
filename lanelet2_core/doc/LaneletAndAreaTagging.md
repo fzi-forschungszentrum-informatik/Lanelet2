@@ -1,14 +1,14 @@
-# Tagging Lanelets And Areas
+# Tagging Lanelets and Areas
 
-This page explains the general mapping scheme for lanelets. The tags are used by Lanelet2 to infer information on the traffic rules here. All Lanelets and Areas must be "self sustained" which means that all traffic restrictions that apply to a lanelet must be determined just by looking at the lanelet. The following important informations have to be determinable:
-- The driving direction (only for lanelets, by default assumed to be one-directional)
+This page explains the general mapping scheme for Lanelets. The tags are used by Lanelet2 to infer information on the traffic rules here. All Lanelets and Areas must be "self sustained" which means that all traffic restrictions that apply to a lanelet must be determined just by looking at the Lanelet. The following important informations have to be determinable:
+- The driving direction (only for Lanelets, by default assumed to be one-directional)
 - The road users that the lanelet is for (by default for vehicles only)
 - The speed limit (by default the maximum speed for urban regions)
 
 No tags are mandatory, but if you want your map to behave reasonably, you should make sure that at least these things can be correctly inferred.
 
 
-## Subtype And Location
+## Subtype and Location
 
 The **subtype** tag determines what the actual type of the lanelet is. It is used to determine the participants that are allowed to use the lanelet as well as partly to determine the speed limit in the absence of *SpeedLimit* regulatory elements. The location tag is used to distinguish between urban and nonurban regions which can (depending on the country) affect the speed limit.
 
@@ -76,14 +76,14 @@ Consider a lanelet with the following tags:
 | participant:pedestrian | yes    |
 | one_way:pedestrian | no |
 
-Since overriding is used, the subtype/location combination is ignored when determining allowed participants. This means that only the following participants are allowed: Taxi, Bus, Pedestrian. Because the speed limit is not overriden, it could be determined (depending on the country) as 50 km/h (the speed limit for vehicles in cities) for taxis and buses and as non-mandatory 4km/h for pedestrians, since the average walking speed of a pedestrian is assumed to be 4 km/h which is smaller than 50 km/h.
+Since overriding is used, the subtype/location combination is ignored when determining allowed participants. This means that only the following participants are allowed: Taxi, Bus, Pedestrian. Because the speed limit is not overridden, it could be determined (depending on the country) as 50 km/h (the speed limit for vehicles in cities) for taxis and buses and as non-mandatory 4km/h for pedestrians, since the average walking speed of a pedestrian is assumed to be 4 km/h which is smaller than 50 km/h.
 
 The *one_way* tag - see the section "Direction" below - allows pedestrians in both directions (which is generally a good idea).
 
 ## Other, Optional Tags
 * road_name (the name of the road)
 * road_surface (dirt, asphalt, concrete, ...)
-* region: the ISO 3166-2 code for the country in which this Lanelet/Area is situated. The traffic rules might check this tag to ensure they are working on the correct part of the map.
+* region: the ISO 3166-2 code for the country in which this lanelet/area is situated. The traffic rules might check this tag to ensure they are working on the correct part of the map.
 
 ## Lanelet Specific
 
@@ -93,13 +93,13 @@ Note that the lane change restrictions are not inferred based on the lanelet tag
 
 ### Direction
 
-By default, lanelets are one-directional. The direction is determined by the order in which the left and right bound is set. Whether a lanelet is one- or bi-directional is determined by the *one_way* tag. If it is set to *no*, the lanelet is bidirectional. The *one_way* tag can be further specialized to define the direction for different participants. This can be done by appending the type of the participant (as in Overriding), e.g. `one_way:bicycle=no`. This would mean that the lanelet is one-directional for all participants, except bicycles. `one_way` and `one_way:xxxx` can not be used in combination.
+By default, Lanelets are one-directional. The direction is determined by the order in which the left and right bound is set. Whether a lanelet is one- or bi-directional is determined by the *one_way* tag. If it is set to *no*, the lanelet is bidirectional. The *one_way* tag can be further specialized to define the direction for different participants. This can be done by appending the type of the participant (as in Overriding), e.g. `one_way:bicycle=no`. This would mean that the lanelet is one-directional for all participants, except bicycles. `one_way` and `one_way:xxxx` can not be used in combination.
 
-Pedestrians use lanelets always bi-directional, unless overriden.
+Pedestrians use lanelets always bi-directional, unless overridden.
 
-## Area specific
+## Area Specific
 
-All Areas have `type=multipolygon` (!) for compability reasons with the osm file format. `type=area` is possible too but will be overwritten when writing map data to an .osm file.
+All areas have `type=multipolygon` (!) for compability reasons with the osm file format. `type=area` is possible too but will be overwritten when writing map data to an .osm file.
 
 ### More subtypes
 
