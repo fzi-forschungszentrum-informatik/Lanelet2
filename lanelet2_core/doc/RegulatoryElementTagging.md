@@ -45,7 +45,7 @@ A traffic sign generically expresses a restriction that is expressed by a traffi
 
 Speed limits work very similar to traffic signs. If they are put up by a traffic sign, they simply reference this treffic sign. Similar for the *ref_line* and the *cancels* role. The `TrafficRules` class then takes care of interpreting the speed limit from the `subtype` of the referenced traffic sign.
 
-Alternatively, if the speed limit does not originate from a traffic sign, a `speed_limit` tag can be used to define the speed limit. The value should contain the unit, eg "50 km/h". mph or mps or similar units are possible as well. If no unit is given, km/h is assumed
+Alternatively, if the speed limit does not originate from a traffic sign, a `sign_type` tag can be used to define the speed limit. The value should contain the unit, eg "50 km/h". mph or mps or similar units are possible as well. If no unit is given, km/h is assumed
 
 ### Traffic Light
 

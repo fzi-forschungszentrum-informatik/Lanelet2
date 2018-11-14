@@ -253,14 +253,18 @@ LineStringsOrPolygons3d TrafficSign::trafficSigns() { return getLsOrPoly(paramet
 
 std::string TrafficSign::type() const {
   auto signs = trafficSigns();
-  if (signs.empty()) {
-    throw InvalidInputError("Regulatory element can not determine the type of the traffic sign!");
-  }
-  if (signs.front().applyVisitor([](auto& prim) { return prim.hasAttribute(AttributeName::Subtype); })) {
+  if (!signs.empty() &&
+      signs.front().applyVisitor([](auto& prim) { return prim.hasAttribute(AttributeName::Subtype); })) {
     const auto& attr = signs.front().applyVisitor([](auto& prim) { return prim.attribute(AttributeName::Subtype); });
     return attr.value();
   }
-  throw InvalidInputError("Regulatory element has a traffic sign without subtype attribute!");
+  if (!signs.empty()) {
+    throw InvalidInputError("Regulatory element has a traffic sign without subtype attribute!");
+  }
+  if (hasAttribute(AttributeNamesString::SignType)) {
+    return attribute(AttributeNamesString::SignType).value();
+  }
+  throw InvalidInputError("Regulatory element can not determine the type of the traffic sign!");
 }  // namespace lanelet
 
 ConstLineStrings3d TrafficSign::refLines() const { return getParameters<ConstLineString3d>(RoleName::RefLine); }
@@ -311,13 +315,17 @@ ConstLineStringsOrPolygons3d TrafficSign::cancellingTrafficSigns() const {
 
 LineStringsOrPolygons3d TrafficSign::cancellingTrafficSigns() { return getLsOrPoly(parameters(), RoleName::Cancels); }
 
-std::string TrafficSign::cancelType() const {
+Optional<std::string> TrafficSign::cancelType() const {
   auto signs = cancellingTrafficSigns();
-  if (signs.front().applyVisitor([](auto& prim) { return prim.hasAttribute(AttributeName::Subtype); })) {
+  if (!signs.empty() &&
+      signs.front().applyVisitor([](auto& prim) { return prim.hasAttribute(AttributeName::Subtype); })) {
     const auto& attr = signs.front().applyVisitor([](auto& prim) { return prim.attribute(AttributeName::Subtype); });
     return attr.value();
   }
-  throw InvalidInputError("Regulatory element has a cancelling traffic sign without subtype attribute!");
+  if (!signs.empty()) {
+    throw InvalidInputError("Regulatory element has a cancelling traffic sign without subtype attribute!");
+  }
+  return {};
 }
 
 ConstLineStrings3d TrafficSign::cancelLines() const { return getParameters<ConstLineString3d>(RoleName::CancelLine); }

@@ -198,8 +198,8 @@ class TrafficSign : public RegulatoryElement {
   ConstLineStringsOrPolygons3d cancellingTrafficSigns() const;
   LineStringsOrPolygons3d cancellingTrafficSigns();
 
-  //! Type of the cancelling traffic signs
-  std::string cancelType() const;
+  //! Type of the cancelling traffic signs if they exist
+  Optional<std::string> cancelType() const;
 
   //! gets the line(s) from which a sign becomes invalid.
   ConstLineStrings3d cancelLines() const;
@@ -264,6 +264,13 @@ class SpeedLimit : public TrafficSign {
                   const TrafficSignsWithType& cancellingTrafficSigns = {}, const LineStrings3d& refLines = {},
                   const LineStrings3d& cancelLines = {}) {
     return Ptr(new SpeedLimit(id, attributes, trafficSigns, cancellingTrafficSigns, refLines, cancelLines));
+  }
+
+  //! Create a speed limit regulatory element only from a type or speed limit without actual sign
+  static Ptr make(Id id, AttributeMap attributes, const std::string& signType, const LineStrings3d& refLines = {},
+                  const LineStrings3d& cancelLines = {}) {
+    attributes.insert(std::make_pair(AttributeNamesString::SignType, signType));
+    return Ptr(new SpeedLimit(id, attributes, {}, {}, refLines, cancelLines));
   }
 
  protected:

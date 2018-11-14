@@ -225,6 +225,9 @@ struct AttributeNamesString {
   static constexpr const char Height[] = "height";
   static constexpr const char Temporary[] = "temporary";
 
+  // on regulatory elements
+  static constexpr const char SignType[] = "sign_type";
+
   static constexpr AttributeNamesItem Map[] = {{Type, AttributeName::Type},
                                                {Subtype, AttributeName::Subtype},
                                                {OneWay, AttributeName::OneWay},

@@ -151,7 +151,8 @@ TEST_F(RegulatoryElementTest, ConstructValidTrafficSign) {  // NOLINT
 
   EXPECT_EQ(ts->type(), "de205");
 
-  EXPECT_EQ(ts->cancelType(), "de206");
+  ASSERT_TRUE(!!ts->cancelType());
+  EXPECT_EQ(*ts->cancelType(), "de206");
   EXPECT_TRUE(ts->removeCancellingTrafficSign(poly1));
 
   ts->addCancellingTrafficSign(ls2);

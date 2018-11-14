@@ -388,6 +388,13 @@ TEST_F(GermanTrafficRulesVehicle, determinesSpeedLimit30) {  // NOLINT
   EXPECT_TRUE(limit.isMandatory);
 }
 
+TEST_F(GermanTrafficRulesVehicle, determinesSpeedLimitFromTag) {  // NOLINT
+  lanelet.addRegulatoryElement(lanelet::SpeedLimit::make(12, {}, "55 kmh"));
+  auto limit = germanVehicle->speedLimit(lanelet);
+  EXPECT_EQ(limit.speedLimit, 55_kmh);
+  EXPECT_TRUE(limit.isMandatory);
+}
+
 TEST_F(GermanTrafficRulesVehicle, determinesSpeedLimit50) {  // NOLINT
   lanelet.setAttribute(Attr::Location, Value::Nonurban);
   lanelet.addRegulatoryElement(getSpeedLimit("de274-50"));
