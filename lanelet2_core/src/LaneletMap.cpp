@@ -308,8 +308,18 @@ struct PrimitiveLayer<T>::Tree {
     rTree = RTree(nodes);
   }
 
-  void insert(const T& elem) { rTree.insert(treeNode(elem)); }
-  void erase(const T& elem) { rTree.remove(treeNode(elem)); }
+  void insert(const T& elem) {
+    TreeNode node = treeNode(elem);
+    if (!node.first.isEmpty()) {
+      rTree.insert(node);
+    }
+  }
+  void erase(const T& elem) {
+    TreeNode node = treeNode(elem);
+    if (!node.first.isEmpty()) {
+      rTree.remove(node);
+    }
+  }
   RTree rTree;
   UsageLookup<T> usage;
 };

@@ -117,6 +117,14 @@ TEST_F(LaneletMapTest, AddRegelemWorks) {  // NOLINT
   EXPECT_TRUE(map.pointLayer.exists(p1.id()));
 }
 
+TEST_F(LaneletMapTest, CanAddEmptyRegelem) {  // NOLINT
+  LaneletMap map;
+  auto regelemData = std::make_shared<RegulatoryElementData>(InvalId);
+  auto regelem = lanelet::RegulatoryElementFactory::create("", regelemData);
+  map.add(regelem);
+  EXPECT_NE(InvalId, regelem->id());
+}
+
 TEST_F(LaneletMapTest, CanAddExistingElement) {  // NOLINT
   EXPECT_EQ(map->areaLayer.size(), 1);
   map->add(ar1);
