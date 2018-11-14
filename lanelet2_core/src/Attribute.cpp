@@ -250,6 +250,9 @@ constexpr const char AttributeNamesString::Location[];
 constexpr const char AttributeNamesString::Dynamic[];
 
 // attributes not used in fast lookup
+// on points
+constexpr const char AttributeNamesString::Ele[];
+
 // on linestrings
 constexpr const char AttributeNamesString::LaneChange[];
 constexpr const char AttributeNamesString::LaneChangeLeft[];
