@@ -209,6 +209,9 @@ struct AttributeNamesString {
   static constexpr const char Dynamic[] = "dynamic";
 
   // attributes not used in fast lookup
+  // on points
+  static constexpr const char Ele[] = "ele";
+
   // on linestrings
   static constexpr const char LaneChange[] = "lane_change";
   static constexpr const char LaneChangeLeft[] = "lane_change:left";

@@ -20,7 +20,7 @@ After that, you can access the presets via Presets->lanelet2. For faster access,
 Lanelet2 utilizes the [osm xml format](https://wiki.openstreetmap.org/wiki/OSM_XML) as default format to read and write map data. To do this, a simple mapping is done by the library to "transform" lanelet primitives into osm primitives. The Id will be the Id of the primitive (we recommend to use positive Ids, because some OSM editors treat negative Ids as something modifyable and will continue to change them), attributes will be translated to tags of the OSM primitive.
 
 ### Points
-Points are directly transformed to OSM *Nodes*.
+Points are directly transformed to OSM *Nodes*. The "ele" tag is used to represent the z-coordinate of the point. It denotes the distance to the earth ellipsoid in WGS84.
 
 ### LineStrings
 LineStrings are transformed to OSM *Ways*.

@@ -22,7 +22,7 @@ bool startsWith(const std::string& str, const std::string& substr) {  // NOLINT
 
 const std::vector<std::string>& knownPointTags() {
   using Attr = AttributeNamesString;
-  const static std::vector<std::string> Tags{Attr::Type, Attr::Subtype};
+  const static std::vector<std::string> Tags{Attr::Ele, Attr::Type, Attr::Subtype};
   return Tags;
 }
 
