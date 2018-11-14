@@ -110,10 +110,7 @@ bool isDrivingDir(const lanelet::ConstLanelet& ll, const std::string& participan
     return !getOverride(ll.attributes(), AttributeNamesString::OneWay,
                         AttributeNamesString::OneWay + (":" + participant), true);
   }
-  if (participant == Participants::Pedestrian) {
-    return true;
-  }
-  return false;
+  return participant == Participants::Pedestrian;
 }
 
 template <typename T>

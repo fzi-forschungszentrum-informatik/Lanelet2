@@ -30,7 +30,7 @@ class RouteBuilder {
    * to the goal. So in the context of the route this is not a diverging situation but rather it's just one lanelet
    * (the right one) is following its predecessor. We would say that they are part of the same lane since there's no
    * other way to go. */
-  RouteBuilder(const RoutingGraph& g) : graph_{g} {}
+  explicit RouteBuilder(const RoutingGraph& g) : graph_{g} {}
   Optional<Route> getRouteFromShortestPath(const LaneletPath& path);
 
  private:
@@ -55,9 +55,9 @@ class RouteBuilder {
   void recursiveDivergingToPending(RouteElement::LaneId& initLaneId, RouteElement* thisElement);
 
   const RoutingGraph& graph_;
-  std::vector<RouteElementUPtrs> pending;
-  std::unordered_map<ConstLanelet, RouteElementUPtr> elements;  // These are going to part of the route
-  std::map<RouteElement::LaneId, RouteElement*> firstInLane;    // First elements of each lane
+  std::vector<RouteElementUPtrs> pending_;
+  std::unordered_map<ConstLanelet, RouteElementUPtr> elements_;  // These are going to part of the route
+  std::map<RouteElement::LaneId, RouteElement*> firstInLane_;    // First elements of each lane
 };
 
 }  // namespace routing

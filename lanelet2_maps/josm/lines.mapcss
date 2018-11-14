@@ -45,7 +45,7 @@ way[type=line_thick][subtype=dashed]
         color: white;
         dashes:100,50;
 }
-way[type=line_thin][!subtype], way[type=line_thin][subtype=straight]
+way[type=line_thin][!subtype], way[type=line_thin][subtype=solid]
 {
 	text: "type";
         width: 10;

@@ -26,7 +26,7 @@ class LaneChangeLaneletsCollector {
 
   LaneChangeLaneletsCollector() = default;
   void add(ConstLanelet from, ConstLanelet to) {
-    laneChanges_.emplace(from, LaneChangeInfo{to, false});
+    laneChanges_.emplace(std::move(from), LaneChangeInfo{std::move(to), false});
     currPos_ = laneChanges_.begin();
   }
 
