@@ -80,6 +80,10 @@ general_code_quality:
 .test: &test_job
   stage: test
   coverage: '/lines......: \d+.\d+\%/'
+  cache:
+    paths:
+    - catkin_ws/
+    policy: pull
   script:
   # Build code again, in case caching didn't work
   - mrt catkin build -s -rd --debug --default_yes --no-status $PACKAGE
@@ -141,13 +145,19 @@ test_lanelet2_examples:
     
 code_quality:
   allow_failure: true
+  cache:
+    paths:
+    - catkin_ws/
+    policy: pull
   artifacts:
     paths: [gl-code-quality-report.json]
   script:
+  - cat ../gl-code-quality-report.json || true
   # Build code again, in case caching didn't work
   - mrt catkin build -s -rd --debug --default_yes --no-status $CI_PROJECT_NAME
   - source devel_debug/setup.bash
   - cd src/lanelet2
+  - rm codeclimate.json || true
   - cp ../../../gl-code-quality-report.json codeclimate.json || true
   - mrt ci run_clang_tidy -e $LANELET2_PACKAGES
   - cp codeclimate.json ../../../gl-code-quality-report.json

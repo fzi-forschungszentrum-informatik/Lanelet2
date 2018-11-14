@@ -391,7 +391,7 @@ std::vector<ConstLanelets> RouteBuilder::determineMergingLanes(const ConstLanele
  *  @return A vector of individual lanes */
 std::vector<ConstLanelets> RouteBuilder::determineLanesImpl(
     const ConstLanelets& initialSplit,
-    std::function<ConstLanelets(const RoutingGraph&, ConstLanelet, bool)> nextLanelets) const {
+    const std::function<ConstLanelets(const RoutingGraph&, ConstLanelet, bool)>& nextLanelets) const {
   std::unordered_set<ConstLanelet> involvedLanelets(initialSplit.begin(), initialSplit.end());
   std::vector<ConstLanelets> lanes;
   for (const auto& it : initialSplit) {

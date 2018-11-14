@@ -41,7 +41,7 @@ class RouteBuilder {
   std::vector<ConstLanelets> determineMergingLanes(const ConstLanelets& merging);
   std::vector<ConstLanelets> determineLanesImpl(
       const ConstLanelets& initialSplit,
-      std::function<ConstLanelets(const RoutingGraph&, ConstLanelet, bool)> nextLanelets) const;
+      const std::function<ConstLanelets(const RoutingGraph&, ConstLanelet, bool)>& nextLanelets) const;
   std::vector<RouteElementUPtrs> divergingToPending(RouteElement* element, RouteElement::LaneId& initLaneId,
                                                     const RouteElementUPtrs& currentCandidates = RouteElementUPtrs());
   RouteElement::LaneId initlaneIdForRoute(const ConstLanelet& lanelet, RouteElement::LaneId& initLaneId);
