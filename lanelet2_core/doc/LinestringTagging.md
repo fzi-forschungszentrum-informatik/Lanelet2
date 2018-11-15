@@ -9,7 +9,7 @@ In general there are three different context in which linestrings are used: As l
 ## As Lane Boundary
 Tagging linestrings as lane boundary correctly is important, because Lanelet2 uses the type to determine possible lane changes. If Lanelet2 cannot determine the type, Lanelet2 will assume that lane changes are not possible. Here is a list of the most important ones:
 
-| **type** | **subtype** | **description** | **lane change?** | 
+| **type** | **subtype** | **description** | **lane change?** |
 |----------|-------------|-----------------|------------------|
 |line_thin | solid    | a solid lane marking | no       |
 |line_thin | dashed      | a dashed lane marking | yes        |
@@ -23,12 +23,12 @@ Tagging linestrings as lane boundary correctly is important, because Lanelet2 us
 
 Notice the difference between curbstone and road_border: A road border indicates the end of potentially passable area (e.g. start of vegetation) while a curbstone means that there is passable space (e.g. sidewalk) on the other side of the curb.
 
-Line markings are generally characterized by its centerline. 
+Line markings are generally characterized by its centerline.
 
 There are much more tags (all imply lane changing is not possible):
 * guard_rail
-* wall 
-* fence 
+* wall
+* fence
 * zebra_marking (lanelets for pedestrians)
 * pedestrian_marking (lines on pedestrian crossings)
 * bike_marking (i.e. dashed line for bikes)
@@ -47,8 +47,8 @@ If you are unhappy with the types derived by default, you can overwrite it with 
 * lane_change:left=<yes/no>, lane_change:right=<yes/no>. Both pairs have to be set if this is used.
 
 ### More, Optional Tags
-* **width** with of the line (in m)
-* **height** height of line (in m)
+* **width** with of the line (in m). The linestring then represents the *centerline* of the object.
+* **height** height of line (in m). The linestring then represents the *lower outline/lowest edge* of the object.
 * **temporary** to indicate lines from construction sites (yes/no)
 
 ### Individual Dashes
@@ -80,8 +80,12 @@ The symbol can be represented either by its outline or by its centerline. If it 
 ## Traffic Signs
 Traffic signs all have `type=traffic_sign`. Additionally, they have a "subtype"-tag that contains the actual type of the traffic sign. The type is encoded as ISO 3166 region code + traffic sign number (e.g. de206 for a german stop sign).
 
+Traffic signs can be represented either by their outline (as polygon) or by a linestring where the first point is the left edge of the sign and the last point is the right edge of the sign. Optionally the height tag can be used to encode the size of the sign in z (not the height above ground, use the z-coordinate for that). The linestring marks the *lower edge* of the sign.
+
 ## Traffic Lights
-Traffic signs have `type=traffic_light`. The `subtype` tag can be used to add further information on the traffic light:
+Traffic signs have `type=traffic_light`. Similar to traffic signs, they can be represented either by a polygon or a linestring.
+
+The `subtype` tag can be used to add further information on the traffic light:
 * red_yellow_green
 * red_yellow
 * red

@@ -1,6 +1,6 @@
 # Lanelet Primitives
 
-Lanelet2 divides the world into a hierachical structure of five (actually six) different primitives: Points, linestrings, lanelets, areas and regulatory elements. The sixth, Polygons, are not used to transport mapping information, but rather serve as a means to add customized information about an area to the map (e.g. a region of interest).
+Lanelet2 divides the world into a hierachical structure of six different primitives: Points, linestrings, polygons, lanelets, areas and regulatory elements.
 
 This article focuses on how the primitives are meant to be used, what properties they have and how they are meant to be used. For the technical side, please refer to the [architecture](Architecture.md) page.
 
@@ -36,9 +36,9 @@ The tags used to define the individual linestrings are explained [here](Linestri
 
 ## Polygon
 
-Polygons are very similar to linestrings, but form an area. It is implicitly assumed that the first and the last point of the polygon are connected to close the shape. 
- 
-As mentioned above, and because of their similarity to linestrings, they are rarely used in a Lanelet2 map and are used to transport customized information on a certain region in the map.
+Polygons are very similar to linestrings, but form an area. It is implicitly assumed that the first and the last point of the polygon are connected to close the shape.
+
+Polygons, are rarely used to transport mapping information (except for e.g. traffic signs). Instead, they often serve as a means to add customized information about an area to the map (e.g. a region of interest).
 
 ## Lanelet
 

@@ -25,6 +25,9 @@ Points are directly transformed to OSM *Nodes*. The "ele" tag is used to represe
 ### LineStrings
 LineStrings are transformed to OSM *Ways*.
 
+### Polygons
+Polygons are OSM *Ways* as well but are identified by a tag *area=yes*. Start point = end point is not sufficient and also not necessary.
+
 ### Lanelets
 Lanelets are represented as OSM *relations* with a tag `type=lanelet`. The right bound is a relation with role `right`, the left bound is a role with role `left`, the centerline (if present) is a relation with role `centerline` and all regulatory elements are relations with the role `regulatory_element`.
 
