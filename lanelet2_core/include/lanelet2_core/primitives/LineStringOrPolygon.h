@@ -38,7 +38,7 @@ class LineStringOrPolygonBase {
   //! convert to linestring (type is not checked)
   explicit operator const LineStringT&() const { return boost::get<LineStringT>(lsOrPoly_); }
 
-  //! convert to area (type is not checked)
+  //! convert to polygon (type is not checked)
   explicit operator const PolygonT&() const { return boost::get<PolygonT>(lsOrPoly_); }
 
   //! apply a generic visitor
@@ -47,12 +47,12 @@ class LineStringOrPolygonBase {
     return boost::apply_visitor(visitor, lsOrPoly_);
   }
 
-  //! get the id of the lanelet or area
+  //! get the id of the linestring or polygon
   Id id() const {
     return applyVisitor([](auto& elem) { return elem.id(); });
   }
 
-  //! get the attributes of the lanelet or area
+  //! get the attributes of the linestring or polygon
   const AttributeMap& attributes() const {
     return applyVisitor([](auto& elem) -> const AttributeMap& { return elem.attributes(); });
   }
@@ -62,7 +62,7 @@ class LineStringOrPolygonBase {
     return applyVisitor([](auto& elem) { return elem.template regulatoryElementAs<T>(); });
   }
 
-  //! return the managed lanelet
+  //! return the managed linestring
   Optional<LineStringT> lineString() const {
     auto ls = boost::get<LineStringT>(&lsOrPoly_);
     if (ls != nullptr) {
@@ -71,7 +71,7 @@ class LineStringOrPolygonBase {
     return {};
   }
 
-  //! get the managed area
+  //! get the managed polygon
   Optional<PolygonT> polygon() const {
     auto poly = boost::get<PolygonT>(&lsOrPoly_);
     if (poly != nullptr) {
