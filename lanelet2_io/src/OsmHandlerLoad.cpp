@@ -277,8 +277,14 @@ class FromFileLoader {  // NOLINT
         auto newMember = getOrGetDummy(points_, member->id, currElemId);
         rules[memberPair.first].emplace_back(newMember);
       } else if (member->type() == AttributeValueString::Way) {
-        auto newMember = getOrGetDummy(lineStrings_, member->id, currElemId);
-        rules[memberPair.first].emplace_back(newMember);
+        // can either be linestring or polygon
+        if (polygons_.find(member->id) != polygons_.end()) {
+          auto newMember = getOrGetDummy(polygons_, member->id, currElemId);
+          rules[memberPair.first].emplace_back(newMember);
+        } else {
+          auto newMember = getOrGetDummy(lineStrings_, member->id, currElemId);
+          rules[memberPair.first].emplace_back(newMember);
+        }
       } else if (member->type() == AttributeValueString::Relation) {
         // could be lanelet or area. regulatory element is not allowed.
         auto type = member->attributes.find(AttributeNamesString::Type);

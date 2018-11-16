@@ -75,7 +75,7 @@ TEST_F(LaneletSequenceTest, ConstructFromLaneletSequences) {  // NOLINT
 }
 
 TEST_F(LaneletSequenceTest, RegulatoryElementExtraction) {  // NOLINT
-  auto tl = TrafficLight::make(++id, AttributeMap(), LineStrings3d({left1, right1}), left1);
+  auto tl = TrafficLight::make(++id, AttributeMap(), LineStringsOrPolygons3d({left1, right1}), left1);
   auto ts = TrafficSign::make(++id, AttributeMap(), {{left2}, "de205"}, {}, {right2});
   ll1.addRegulatoryElement(tl);
   ll2.addRegulatoryElement(ts);
