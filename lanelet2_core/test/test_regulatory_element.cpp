@@ -129,6 +129,14 @@ TEST_F(RegulatoryElementTest, TrafficLightWorksAsExpected) {  // NOLINT
   EXPECT_EQ(2, tl->trafficLights().size());
 }
 
+TEST_F(RegulatoryElementTest, TrafficLightCreationFomPolygonWorks) {  // NOLINT
+  auto tl = TrafficLight::make(++id, {}, {poly1});
+  auto lights = tl->trafficLights();
+  ASSERT_FALSE(lights.empty());
+  EXPECT_TRUE(lights.front().isPolygon());
+  EXPECT_EQ(lights.front(), poly1);
+}
+
 // ============ Traffic Sign ===========================
 TEST_F(RegulatoryElementTest, FactoryCannotConstructInvalidTrafficSign) {  // NOLINT
   EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::TrafficSign, regelemData), InvalidInputError);

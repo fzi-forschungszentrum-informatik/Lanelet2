@@ -76,7 +76,7 @@ void updateTrafficSigns(TrafficSignsWithType trafficSigns) {
 }
 
 RegulatoryElementDataPtr constructTrafficLightData(Id id, const AttributeMap& attributes,
-                                                   const LineStrings3d& trafficLights,
+                                                   const LineStringsOrPolygons3d& trafficLights,
                                                    const Optional<LineString3d>& stopLine) {
   RuleParameterMap rpm = {{RoleNameString::Refers, toRuleParameters(trafficLights)}};
   if (!!stopLine) {
@@ -134,15 +134,15 @@ constexpr char TrafficSign::RuleName[];
 constexpr char SpeedLimit::RuleName[];
 
 TrafficLight::TrafficLight(const RegulatoryElementDataPtr& data) : RegulatoryElement(data) {
-  if (getParameters<ConstLineString3d>(RoleName::Refers).empty()) {
+  if (getConstLsOrPoly(data->parameters, RoleName::Refers).empty()) {
     throw InvalidInputError("No traffic light defined!");
   }
   if (getParameters<ConstLineString3d>(RoleName::RefLine).size() > 1) {
-    throw InvalidInputError("There not exist more than one stop line!");
+    throw InvalidInputError("There can not exist more than one stop line!");
   }
 }
 
-TrafficLight::TrafficLight(Id id, const AttributeMap& attributes, const LineStrings3d& trafficLights,
+TrafficLight::TrafficLight(Id id, const AttributeMap& attributes, const LineStringsOrPolygons3d& trafficLights,
                            const Optional<LineString3d>& stopLine)
     : TrafficLight(constructTrafficLightData(id, attributes, trafficLights, stopLine)) {}
 
