@@ -119,7 +119,12 @@ def part6routing():
     assert len(graph.reachableSet(lanelet, 100, 0)) > 10
     assert len(graph.possiblePaths(lanelet, 100, 0, False)) == 1
 
+    # here we query a route through the lanelets and get all the vehicle lanelets that conflict with the shortest path
+    # in that route
     route = graph.getRoute(lanelet, toLanelet)
+    path = route.shortestPath()
+    confLlts = [llt for llt in route.allConflictingInMap() if llt not in path]
+    assert len(confLlts) > 0
 
 
 def get_linestring_at_x(x):
