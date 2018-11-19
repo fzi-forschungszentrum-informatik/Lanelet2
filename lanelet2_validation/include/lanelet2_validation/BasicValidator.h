@@ -15,7 +15,7 @@ namespace validation {
 class MapValidator {  // NOLINT
  public:
   virtual ~MapValidator() = default;
-  constexpr const char* name() { return ""; }
+  constexpr static const char* name() { return ""; }
   virtual Issues operator()(const LaneletMap& map) = 0;
 };
 using MapValidatorUPtr = std::unique_ptr<MapValidator>;
@@ -26,7 +26,7 @@ using MapValidatorUPtrs = std::vector<MapValidatorUPtr>;
 //! reported issues can be stored.
 class TrafficRuleValidator {  // NOLINT
  public:
-  constexpr const char* name() { return ""; }
+  constexpr static const char* name() { return ""; }
   virtual Issues operator()(const LaneletMap& map, const std::vector<traffic_rules::TrafficRulesUPtr>& rules) = 0;
   virtual ~TrafficRuleValidator() = default;
 };
@@ -36,7 +36,7 @@ using TrafficRuleValidatorUPtrs = std::vector<TrafficRuleValidatorUPtr>;
 //! A routing graph validator works similar, but instead uses the routing graph of a map to detect issues
 class RoutingGraphValidator {  // NOLINTs
  public:
-  constexpr const char* name() { return ""; }
+  constexpr static const char* name() { return ""; }
   //! The RoutingGraphValidator is called together with the rules with which it was created.
   virtual Issues operator()(const routing::RoutingGraph& graph, const traffic_rules::TrafficRules& rules) = 0;
   virtual ~RoutingGraphValidator() = default;
