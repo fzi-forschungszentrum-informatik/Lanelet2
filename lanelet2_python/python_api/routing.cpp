@@ -44,6 +44,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   OptionalConverter<RelationType>();
   OptionalConverter<LaneletRelation>();
   OptionalConverter<RouteElementRelation>();
+  OptionalConverter<LaneletPath>();
 
   VectorToListConverter<LaneletRelations>();
   VectorToListConverter<RelationTypes>();
@@ -81,10 +82,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                       init<ConstLanelets>(arg("lanelets")))
       .def("__iter__", iterator<LaneletPath>())
       .def("__len__", &LaneletPath::size)
+      .def("__getitem__", wrappers::getItem<LaneletPath>, return_internal_reference<>())
       .def("getRemainingLane", +[](const LaneletPath& self, ConstLanelet llt) { return self.getRemainingLane(llt); },
            "get the sequence of remaining lanelets without a lane change")
       .def(self == self)   // NOLINT
-      .def(self != self);  // NOLINT;
+      .def(self != self);  // NOLINT
 
   class_<RoutingGraph, boost::noncopyable, RoutingGraphPtr>(
       "RoutingGraph",
@@ -199,6 +201,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                                             "The famous route object that marks a route from A to B, "
                                                             "including all lanelets that can be used",
                                                             no_init)
+      .def("shortestPath", &Route::shortestPath, "Returns the shortest path along this route",
+           return_internal_reference<>())
       .def("fullLane", &Route::fullLane, "Returns the complete lane a Lanelet belongs to")
       .def("remainingLane", &Route::remainingLane, "Returns that remaining lane a Lanelet belongs to")
       .def("length2d", &Route::length2d, "2d length of shortest path")

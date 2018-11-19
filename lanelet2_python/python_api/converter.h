@@ -7,6 +7,48 @@
 //#include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
+namespace wrappers {
+namespace py = boost::python;
+template <typename T>
+auto getItem(T& obj, int64_t index) -> decltype(obj[0]) {
+  if (index < 0) {
+    index += obj.size();
+  }
+  if (index >= 0 && size_t(index) < obj.size()) {
+    return obj[size_t(index)];
+  }
+  PyErr_SetString(PyExc_IndexError, "index out of range");
+  py::throw_error_already_set();
+  return obj[0];
+}
+
+template <typename T, typename ValT>
+void setItem(T& obj, int64_t index, ValT value) {
+  if (index < 0) {
+    index += obj.size();
+  }
+  if (index >= 0 && size_t(index) < obj.size()) {
+    obj[size_t(index)] = value;
+    return;
+  }
+  PyErr_SetString(PyExc_IndexError, "index out of range");
+  py::throw_error_already_set();
+}
+
+template <typename T>
+void delItem(T& obj, int64_t index) {
+  if (index < 0) {
+    index += obj.size();
+  }
+  if (index >= 0 && size_t(index) < obj.size()) {
+    obj.erase(std::next(obj.begin(), index));
+    return;
+  }
+  PyErr_SetString(PyExc_IndexError, "index out of range");
+  py::throw_error_already_set();
+}
+}  // namespace wrappers
+
 namespace converters {
 namespace py = boost::python;
 

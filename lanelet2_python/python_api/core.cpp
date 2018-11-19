@@ -6,6 +6,7 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 #include <lanelet2_core/primitives/GPSPoint.h>
+#include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
 #include <lanelet2_core/primitives/RegulatoryElement.h>
 #include "converter.h"
@@ -80,6 +81,18 @@ struct ConstLineStringOrPolygonToObject {
     }
     if (v.isLineString()) {
       return incref(object(*v.lineString()).ptr());
+    }
+    return incref(object().ptr());
+  }
+};
+
+struct ConstLaneletOrAreaToObject {
+  static PyObject* convert(const lanelet::ConstLaneletOrArea& v) {
+    if (v.isArea()) {
+      return incref(object(*v.area()).ptr());
+    }
+    if (v.isLanelet()) {
+      return incref(object(*v.lanelet()).ptr());
     }
     return incref(object().ptr());
   }
@@ -167,45 +180,6 @@ double getZWrapper(const T& obj) {
   return obj.z();
 }
 
-template <typename T>
-auto getItemWrapper(T& obj, int64_t index) -> decltype(obj[0]) {
-  if (index < 0) {
-    index += obj.size();
-  }
-  if (index >= 0 && size_t(index) < obj.size()) {
-    return obj[size_t(index)];
-  }
-  PyErr_SetString(PyExc_IndexError, "index out of range");
-  throw_error_already_set();
-  return obj[0];
-}
-
-template <typename T, typename ValT>
-void setItemWrapper(T& obj, int64_t index, ValT value) {
-  if (index < 0) {
-    index += obj.size();
-  }
-  if (index >= 0 && size_t(index) < obj.size()) {
-    obj[size_t(index)] = value;
-    return;
-  }
-  PyErr_SetString(PyExc_IndexError, "index out of range");
-  throw_error_already_set();
-}
-
-template <typename T>
-void delItemWrapper(T& obj, int64_t index) {
-  if (index < 0) {
-    index += obj.size();
-  }
-  if (index >= 0 && size_t(index) < obj.size()) {
-    obj.erase(std::next(obj.begin(), index));
-    return;
-  }
-  PyErr_SetString(PyExc_IndexError, "index out of range");
-  throw_error_already_set();
-}
-
 template <typename Func>
 auto getRefFunc(Func&& f) {
   return make_function(std::forward<Func>(f), return_internal_reference<>());
@@ -260,11 +234,11 @@ class IsConstLineString : public def_visitor<IsConstLineString<LsT, InternalRef>
   }
   template <bool InternalRefVal, typename ClassT>
   std::enable_if_t<InternalRefVal> addGetitem(ClassT& c) const {
-    c.def("__getitem__", getItemWrapper<LsT>, return_internal_reference<>());
+    c.def("__getitem__", wrappers::getItem<LsT>, return_internal_reference<>());
   }
   template <bool InternalRefVal, typename ClassT>
   std::enable_if_t<!InternalRefVal> addGetitem(ClassT& c) const {
-    c.def("__getitem__", getItemWrapper<LsT>, return_value_policy<return_by_value>());
+    c.def("__getitem__", wrappers::getItem<LsT>, return_value_policy<return_by_value>());
   }
 
  private:
@@ -278,8 +252,8 @@ class IsLineString : public def_visitor<IsLineString<LsT>> {
  public:
   template <typename ClassT>
   void visit(ClassT& c) const {
-    c.def("__setitem__", setItemWrapper<LsT, typename LsT::PointType>)
-        .def("__delitem__", delItemWrapper<LsT>)
+    c.def("__setitem__", wrappers::setItem<LsT, typename LsT::PointType>)
+        .def("__delitem__", wrappers::delItem<LsT>)
         .def("append", &LsT::push_back)
         .def("__iter__", iterator<LsT>())
         .def("__len__", &LsT::size)
@@ -288,7 +262,7 @@ class IsLineString : public def_visitor<IsLineString<LsT>> {
   }
   template <typename ClassT>
   void addGetitem(ClassT& c) const {
-    c.def("__getitem__", getItemWrapper<LsT>, return_internal_reference<>());
+    c.def("__getitem__", wrappers::getItem<LsT>, return_internal_reference<>());
   }
 };
 
@@ -455,6 +429,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<RegulatoryElementConstPtrs>();
   VectorToListConverter<LineStringsOrPolygons3d>();
   VectorToListConverter<ConstLineStringsOrPolygons3d>();
+  VectorToListConverter<ConstLaneletOrAreas>();
   VectorToListConverter<std::vector<TrafficLight::Ptr>>();
   VectorToListConverter<std::vector<TrafficSign::Ptr>>();
   VectorToListConverter<std::vector<SpeedLimit::Ptr>>();
@@ -511,10 +486,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   to_python_converter<LineStringOrPolygon3d, LineStringOrPolygonToObject>();
   to_python_converter<ConstLineStringOrPolygon3d, ConstLineStringOrPolygonToObject>();
+  to_python_converter<ConstLaneletOrArea, ConstLaneletOrAreaToObject>();
   implicitly_convertible<LineString3d, LineStringOrPolygon3d>();
   implicitly_convertible<Polygon3d, LineStringOrPolygon3d>();
   implicitly_convertible<ConstLineString3d, ConstLineStringOrPolygon3d>();
   implicitly_convertible<ConstPolygon3d, ConstLineStringOrPolygon3d>();
+  implicitly_convertible<ConstLanelet, ConstLaneletOrArea>();
+  implicitly_convertible<ConstArea, ConstLaneletOrArea>();
 
   class_<AttributeMap>("AttributeMap", init<>("AttributeMap()"))
       .def(IsHybridMap<AttributeMap>())
@@ -712,7 +690,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__iter__", iterator<LaneletSequence>())
       .def("__len__", &LaneletSequence::size)
       .def("inverted", &LaneletSequence::inverted)
-      .def("__getitem__", getItemWrapper<LaneletSequence>, return_internal_reference<>());
+      .def("__getitem__", wrappers::getItem<LaneletSequence>, return_internal_reference<>());
 
   class_<ConstArea>("ConstArea", "Represents an area, potentially with holes, in the map",
                     boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
