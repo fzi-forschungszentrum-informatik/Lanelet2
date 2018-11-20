@@ -35,7 +35,7 @@ class LaneletData : public PrimitiveData {
   const LineString3d& leftBound() { return leftBound_; }
 
   const ConstLineString3d& rightBound() const { return rightBound_; }
-  LineString3d& rightBound() { return rightBound_; }
+  const LineString3d& rightBound() { return rightBound_; }
 
   RegulatoryElementConstPtrs regulatoryElements() const {
     return utils::transform(regulatoryElements_, [](const auto& elem) { return RegulatoryElementConstPtr(elem); });
