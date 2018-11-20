@@ -1,5 +1,7 @@
 # Lanelet2
 
+![build](https://www.mrt.kit.edu/z/gitlab/lanelet2/pipeline.svg) ![coverage](https://www.mrt.kit.edu/z/gitlab/lanelet2/coverage.svg)
+
 ## Overview
 
 Lanelet2 is a C++ library for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core principles to handle the upcoming challenges of future maps.
