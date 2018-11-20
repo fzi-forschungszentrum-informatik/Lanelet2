@@ -826,6 +826,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("add", selectAdd<const RegulatoryElementPtr&>());
 
   def("getId", static_cast<Id (&)()>(utils::getId), "Returns a unique id");
+  def("registerId", &utils::registerId, "Registers an id");
 
   def("createMapFromPoints", createMapWrapper<Points3d>, "Create map from primitives");
   def("createMapFromLineStrings", createMapWrapper<LineStrings3d>, "Create map from primitives");
