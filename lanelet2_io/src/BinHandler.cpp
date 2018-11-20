@@ -23,6 +23,8 @@ void BinWriter::write(const std::string& filename, const LaneletMap& laneletMap,
   }
   boost::archive::binary_oarchive oa(fs);
   oa << laneletMap;
+  auto idCounter = utils::getId();
+  oa << idCounter;
 }
 
 std::unique_ptr<LaneletMap> BinParser::parse(const std::string& filename, ErrorMessages& /*errors*/) const {
@@ -33,6 +35,9 @@ std::unique_ptr<LaneletMap> BinParser::parse(const std::string& filename, ErrorM
   std::unique_ptr<LaneletMap> laneletMap = std::make_unique<LaneletMap>();
   boost::archive::binary_iarchive ia(fs);
   ia >> *laneletMap;
+  Id idCounter;
+  ia >> idCounter;
+  utils::registerId(idCounter);
   return laneletMap;
 }
 }  // namespace io_handlers
