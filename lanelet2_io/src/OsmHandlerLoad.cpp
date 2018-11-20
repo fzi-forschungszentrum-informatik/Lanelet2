@@ -381,6 +381,13 @@ class FromFileLoader {  // NOLINT
   LineStringLayer::Map lineStrings_;
   PointLayer::Map points_;
 };
+
+template <typename MapT>
+void registerIds(const MapT& map) {
+  if (!map.empty()) {
+    utils::registerId(map.rbegin()->first);
+  }
+}
 }  // namespace
 
 std::unique_ptr<LaneletMap> OsmParser::parse(const std::string& filename, ErrorMessages& errors) const {
@@ -393,6 +400,10 @@ std::unique_ptr<LaneletMap> OsmParser::parse(const std::string& filename, ErrorM
   osm::Errors osmReadErrors;
   auto file = lanelet::osm::read(doc, &osmReadErrors);
   auto map = fromOsmFile(file, errors);
+  // make sure ids in the file are known to Lanelet2 id management.
+  registerIds(file.nodes);
+  registerIds(file.ways);
+  registerIds(file.relations);
   errors = buildErrorMessage("Errors ocurred while parsing Lanelet Map:", utils::concatenate({osmReadErrors, errors}));
   return map;
 }
