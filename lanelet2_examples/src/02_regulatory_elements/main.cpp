@@ -38,7 +38,7 @@ void part1BasicRegulatoryElements() {
   assert(lanelet.regulatoryElements().size() == 1);
 
   // to get the regulatory element back, we can either get it like this
-  RegulatoryElementPtr regelem = lanelet.regulatoryElements()[1];
+  RegulatoryElementPtr regelem = lanelet.regulatoryElements()[0];
 
   // but we can also ask the lanelet to give it to use with its actual type using regulatoryElementAs:
   assert(lanelet.regulatoryElementsAs<SpeedLimit>().empty());  // no speed limits
