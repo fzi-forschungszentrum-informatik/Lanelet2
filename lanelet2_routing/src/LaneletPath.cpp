@@ -8,7 +8,7 @@ LaneletSequence LaneletPath::getRemainingLane(LaneletPath::const_iterator lanele
   ConstLanelets lane;
   while (laneletPosition != lanelets_.end()) {
     lane.push_back(*laneletPosition);
-    if (laneletPosition + 1 == lanelets_.end() || geometry::follows(*laneletPosition, *std::next(laneletPosition))) {
+    if (laneletPosition + 1 == lanelets_.end() || !geometry::follows(*laneletPosition, *std::next(laneletPosition))) {
       break;
     }
     ++laneletPosition;
