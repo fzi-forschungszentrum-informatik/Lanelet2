@@ -242,8 +242,9 @@ TEST_F(GermanVehicleGraph, possiblePathsMinLanelets) {  // NOLINT
   auto routes = graph->possiblePaths(lanelets.at(2001), 2, false);
   EXPECT_EQ(routes.size(), 1);
   auto& firstRoute = *routes.begin();
-  EXPECT_EQ(firstRoute.size(), 2);
+  ASSERT_EQ(firstRoute.size(), 2);
   EXPECT_TRUE(containsLanelet(firstRoute, 2002));
+  EXPECT_EQ(firstRoute.getRemainingLane(firstRoute.begin()).size(), firstRoute.size());
 
   routes = graph->possiblePaths(lanelets.at(2001), 30, false);
   EXPECT_EQ(routes.size(), 0);
