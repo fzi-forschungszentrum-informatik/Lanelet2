@@ -37,6 +37,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<Origin, std::shared_ptr<Origin>>("Origin", init<>())
       .def(init<GPSPoint>())
+      .def("__init__", make_constructor(
+                           +[](double lat, double lon, double alt) {
+                             return std::make_shared<Origin>(GPSPoint{lat, lon, alt});
+                           },
+                           default_call_policies(), (arg("lat") = 0., arg("lon") = 0., arg("lon") = 0)))
       .add_property("position", &Origin::position);
 
   def("load", loadProjectorWrapper, (arg("filename"), arg("projector") = DefaultProjector()));
