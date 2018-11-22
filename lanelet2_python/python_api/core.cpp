@@ -543,7 +543,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                            +[](double lat, double lon, double alt) {
                              return std::make_shared<GPSPoint>(GPSPoint({lat, lon, alt}));
                            },
-                           default_call_policies(), (arg("lat") = 0., arg("lon") = 0., arg("lon") = 0)))
+                           default_call_policies(), (arg("lat") = 0., arg("lon") = 0., arg("alt") = 0)))
       .add_property("lat", &GPSPoint::lat)
       .add_property("lon", &GPSPoint::lon)
       .add_property("alt", &GPSPoint::ele);

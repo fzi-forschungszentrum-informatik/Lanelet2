@@ -89,7 +89,7 @@ def part4reading_and_writing():
     lanelet = get_a_lanelet()
     map.add(lanelet)
     path = os.path.join(tempfile.mkdtemp(), 'mapfile.osm')
-    projector = UtmProjector(lanelet2.io.Origin(lanelet2.core.GPSPoint(49, 8.4)))
+    projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
     lanelet2.io.write(path, map, projector)
     mapLoad, errors = lanelet2.io.loadRobust(path, projector)
     assert not errors
@@ -108,7 +108,7 @@ def part5traffic_rules():
 
 def part6routing():
     # and this as well
-    projector = UtmProjector(lanelet2.io.Origin(lanelet2.core.GPSPoint(49, 8.4)))
+    projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
     map = lanelet2.io.load(example_file, projector)
     traffic_rules = lanelet2.traffic_rules.create(lanelet2.traffic_rules.Locations.Germany,
                                                  lanelet2.traffic_rules.Participants.Vehicle)
