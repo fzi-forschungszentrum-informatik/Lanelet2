@@ -23,6 +23,21 @@ bool pointIsLeftOf(const PointT& pSeg1, const PointT& pSeg2, const PointT& p) {
   return crossProd(PointT(pSeg2 - pSeg1), PointT(p - pSeg1)).z() > 0;
 }
 
+template <typename LineStringT>
+LineStringT invert(const LineStringT& ls) {
+  return ls.invert();
+}
+
+template <>
+inline BasicLineString2d invert(const BasicLineString2d& ls) {
+  return BasicLineString2d{ls.rbegin(), ls.rend()};
+}
+
+template <>
+inline BasicLineString3d invert(const BasicLineString3d& ls) {
+  return BasicLineString3d{ls.rbegin(), ls.rend()};
+}
+
 template <typename LineStringT, typename BasicPointT>
 bool isLeftOf(const LineStringT& ls, const BasicPointT& p, const helper::ProjectedPoint<BasicPointT>& projectedPoint) {
   BasicPointT pSeg1 = projectedPoint.result->segmentPoint1;
@@ -85,10 +100,10 @@ std::vector<double> accumulatedLengthRatios(const LineStringT& lineString) {
 }
 
 template <typename LineStringT>
-traits::BasicPointT<typename LineStringT::PointType> interpolatedPointAtDistance(LineStringT lineString, double dist) {
+traits::BasicPointT<traits::PointType<LineStringT>> interpolatedPointAtDistance(LineStringT lineString, double dist) {
   assert(!lineString.empty());
   if (dist < 0) {
-    lineString = lineString.invert();
+    lineString = internal::invert(lineString);
     dist = -dist;
   }
 
@@ -108,11 +123,11 @@ traits::BasicPointT<typename LineStringT::PointType> interpolatedPointAtDistance
 }
 
 template <typename LineStringT>
-typename LineStringT::PointType nearestPointAtDistance(LineStringT lineString, double dist) {
+traits::PointType<LineStringT> nearestPointAtDistance(LineStringT lineString, double dist) {
   using traits::toBasicPoint;
   assert(!lineString.empty());
   if (dist < 0) {
-    lineString = lineString.invert();
+    lineString = internal::invert(lineString);
     dist = -dist;
   }
   double currentCumulativeLength = 0.0;

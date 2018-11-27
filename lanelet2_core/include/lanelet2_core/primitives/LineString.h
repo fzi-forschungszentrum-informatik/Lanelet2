@@ -33,12 +33,20 @@ struct PrimitiveTraits<BasicLineString2d> {
   using Category = LineStringTag;
 };
 template <>
+struct LineStringTraits<BasicLineString2d> : public PrimitiveTraits<BasicLineString2d> {
+  using PointType = BasicPoint2d;
+};
+template <>
 struct PrimitiveTraits<BasicLineString3d> {
   using ConstType = BasicLineString3d;
   using MutableType = BasicLineString3d;
   using TwoDType = BasicLineString2d;
   using ThreeDType = BasicLineString3d;
   using Category = LineStringTag;
+};
+template <>
+struct LineStringTraits<BasicLineString3d> : public PrimitiveTraits<BasicLineString3d> {
+  using PointType = BasicPoint3d;
 };
 template <typename PointT>
 struct PrimitiveTraits<Segment<PointT>> {
@@ -47,6 +55,10 @@ struct PrimitiveTraits<Segment<PointT>> {
   using TwoDType = Segment<TwoD<PointT>>;
   using ThreeDType = Segment<ThreeD<PointT>>;
   using Category = LineStringTag;
+};
+template <typename PointT>
+struct LineStringTraits<Segment<PointT>> : public PrimitiveTraits<Segment<PointT>> {
+  using PointType = PointT;
 };
 
 }  // namespace traits

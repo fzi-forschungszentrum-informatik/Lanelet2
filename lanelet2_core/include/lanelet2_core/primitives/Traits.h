@@ -137,6 +137,12 @@ struct PointTraits : PrimitiveTraits<PointT> {
   static constexpr Dimensions Dimension = PointT::Dimension;
 };
 
+//! Specialization of traits for linestrings
+template <typename LineStringT>
+struct LineStringTraits : PrimitiveTraits<LineStringT> {
+  using PointType = typename LineStringT::PointType;
+};
+
 template <typename PointT>
 using BasicPointT = typename PointTraits<PointT>::BasicPoint;
 
@@ -166,6 +172,9 @@ template <typename PrimT, typename TagT>
 constexpr bool isCategory() {
   return std::is_same<typename PrimitiveTraits<PrimT>::Category, TagT>::value;
 }
+
+template <typename LineStringT>
+using PointType = typename LineStringTraits<LineStringT>::PointType;
 
 template <typename PrimT>
 Id getId(const PrimT& prim) {
