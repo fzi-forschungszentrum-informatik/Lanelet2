@@ -136,7 +136,7 @@ ArcCoordinates toArcCoordinates(const LineString2dT& lineString, const BasicPoin
  * if <0).
  */
 template <typename LineStringT>
-traits::BasicPointT<typename LineStringT::PointType> interpolatedPointAtDistance(LineStringT lineString, double dist);
+traits::BasicPointT<traits::PointType<LineStringT>> interpolatedPointAtDistance(LineStringT lineString, double dist);
 
 /**
  * @brief returns the cosest point to a position on the linestring
@@ -150,7 +150,7 @@ traits::BasicPointT<typename LineStringT::PointType> interpolatedPointAtDistance
  * if <0).
  */
 template <typename LineStringT>
-typename LineStringT::PointType nearestPointAtDistance(LineStringT lineString, double dist);
+traits::PointType<LineStringT> nearestPointAtDistance(LineStringT lineString, double dist);
 
 //! Get the surrounding axis-aligned bounding box in 3d
 template <typename LineString3dT>

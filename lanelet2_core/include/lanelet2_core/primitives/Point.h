@@ -50,6 +50,14 @@ struct PrimitiveTraits<BasicPoint2d> {
   using Category = PointTag;
 };
 template <>
+struct PrimitiveTraits<Eigen::Vector2d> {
+  using ConstType = BasicPoint2d;
+  using MutableType = BasicPoint2d;
+  using TwoDType = BasicPoint2d;
+  using ThreeDType = BasicPoint3d;
+  using Category = PointTag;
+};
+template <>
 struct PointTraits<BasicPoint3d> : PrimitiveTraits<BasicPoint3d> {
   using BasicPoint = BasicPoint3d;
   using ConstPoint = typename PrimitiveTraits<BasicPoint3d>::ConstType;
@@ -59,6 +67,14 @@ struct PointTraits<BasicPoint3d> : PrimitiveTraits<BasicPoint3d> {
 };
 template <>
 struct PointTraits<BasicPoint2d> : PrimitiveTraits<BasicPoint2d> {
+  using BasicPoint = BasicPoint2d;
+  using ConstPoint = typename PrimitiveTraits<BasicPoint2d>::ConstType;
+  using MutablePoint = typename PrimitiveTraits<BasicPoint2d>::MutableType;
+  static constexpr bool IsPrimitive = false;
+  static constexpr Dimensions Dimension = Dimensions::Three;
+};
+template <>
+struct PointTraits<Eigen::Vector2d> : PrimitiveTraits<Eigen::Vector2d> {
   using BasicPoint = BasicPoint2d;
   using ConstPoint = typename PrimitiveTraits<BasicPoint2d>::ConstType;
   using MutablePoint = typename PrimitiveTraits<BasicPoint2d>::MutableType;
