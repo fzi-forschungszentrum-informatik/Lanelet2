@@ -39,6 +39,7 @@ class Attribute {
   Attribute(const std::string& value) : value_{value} {}        // NOLINT
   Attribute(std::string&& value) : value_{std::move(value)} {}  // NOLINT
   Attribute(const char* value) : value_(value) {}               // NOLINT
+  Attribute(bool value);                                        // NOLINT
   Attribute(Id value);                                          // NOLINT
   Attribute(int value);                                         // NOLINT
   Attribute(double value);                                      // NOLINT
