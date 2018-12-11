@@ -70,19 +70,9 @@ inline Id getId<RegulatoryElementPtr>(const RegulatoryElementPtr& obj) {
 
 template <typename T>
 std::unordered_map<Id, T> toMap(const std::vector<T>& vec) {
-  class IdPairConverter {
-   public:
-    const std::pair<Id, T>& convert(const T& p) const {
-      v_ = std::pair<Id, T>(getId(p), p);
-      return v_;
-    }
-
-   private:
-    mutable std::pair<Id, T> v_;
-  };
-  using It =
-      internal::TransformIterator<typename std::vector<T>::const_iterator, const std::pair<Id, T>, IdPairConverter>;
-  return std::unordered_map<Id, T>(It(vec.begin()), It(vec.end()));
+  using Map = std::unordered_map<Id, T>;
+  auto elems = utils::transform(vec, [](auto& elem) { return typename Map::value_type(getId(elem), elem); });
+  return std::unordered_map<Id, T>(std::make_move_iterator(elems.begin()), std::make_move_iterator(elems.end()));
 }
 
 LineString3d uglyRemoveConst(const ConstLineString3d& ls) {

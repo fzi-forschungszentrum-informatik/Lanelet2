@@ -68,7 +68,18 @@ def qdump__lanelet__LineString3d(d, value):
 def qdump__lanelet__ConstLineString3d(d, value):
     qdump__lanelet__LineString3d(d,value)
 
-    
+def qdump__lanelet__Polygon3d(d, value):
+    qdump__lanelet__LineString3d(d,value)
+
+def qdump__lanelet__ConstPolygon3d(d, value):
+    qdump__lanelet__ConstLineString3d(d,value)
+
+def qdump__lanelet__Polygon2d(d, value):
+    qdump__lanelet__LineString2d(d,value)
+
+def qdump__lanelet__ConstPolygon2d(d, value):
+    qdump__lanelet__ConstLineString2d(d,value)
+
 def qdump__lanelet__Point3d(d, value):
     data = value["constData_"]["_M_ptr"].dereference()
     d.putValue(data["id"].integer())
@@ -111,7 +122,6 @@ def qdump__lanelet__Lanelet(d, value):
             d.putSubItem("rightBound", data["rightBound_"])
             d.putSubItem("regulatoryElements", data["regulatoryElements_"])
             d.putSubItem("centerline", data["centerline_"])
-            d.putSubItem("polygon", data["polygon_"])
             d.putSubItem("inverted", value["inverted_"])
 
 

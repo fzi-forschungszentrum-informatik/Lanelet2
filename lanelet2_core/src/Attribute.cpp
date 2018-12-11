@@ -43,13 +43,17 @@ T* load(const std::shared_ptr<Attribute::Cache>& cache) {
 }
 }  // namespace
 
-Attribute::Attribute(Id value) : value_(std::to_string(value)) {}
+Attribute::Attribute(Id value) : value_(std::to_string(value)) { store(cache_, value); }
 
-Attribute::Attribute(int value) : value_(std::to_string(value)) {}
+Attribute::Attribute(bool value) : value_(std::to_string(value)) { store(cache_, value); }
 
-Attribute::Attribute(double value) : value_(std::to_string(value)) {}
+Attribute::Attribute(int value) : value_(std::to_string(value)) { store(cache_, value); }
 
-Attribute::Attribute(const Velocity& value) : value_{std::to_string(units::KmHQuantity(value).value())} {}
+Attribute::Attribute(double value) : value_(std::to_string(value)) { store(cache_, value); }
+
+Attribute::Attribute(const Velocity& value) : value_{std::to_string(units::KmHQuantity(value).value())} {
+  store(cache_, value);
+}
 
 Optional<bool> Attribute::asBool() const {
   // try load from cache
