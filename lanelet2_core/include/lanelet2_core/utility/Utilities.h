@@ -51,9 +51,8 @@ struct ReserveIfNecessary<std::vector<T>> {
   void operator()(std::vector<T>& c, size_t size) const { c.reserve(size); }
 };
 
-template <typename ContainerT>
-auto concatenate(ContainerT&& c) {
-  using VectorT = std::decay_t<decltype(*std::begin(c))>;
+template <typename VectorT, typename ContainerT>
+VectorT concatenate(ContainerT&& c) {
   VectorT conced;
   const auto size = sum(c, [](auto& elem) { return elem.size(); });
   ReserveIfNecessary<VectorT>()(conced, size);
@@ -64,9 +63,8 @@ auto concatenate(ContainerT&& c) {
   return conced;
 }
 
-template <typename ContainerT, typename Func>
-auto concatenate(ContainerT&& c, Func f) {
-  using VectorT = std::decay_t<decltype(f(*c.begin()))>;
+template <typename VectorT, typename ContainerT, typename Func>
+VectorT concatenate(ContainerT&& c, Func f) {
   VectorT conced;
   MoveIf<true> move;
   for (auto& elem : c) {
@@ -250,12 +248,14 @@ auto sum(Range&& r, Func f) {
  */
 template <typename ContainerT>
 auto concatenate(ContainerT&& c) {
-  return detail::concatenate(std::forward<ContainerT>(c));
+  using VectorT = std::decay_t<decltype(*std::begin(c))>;
+  return detail::concatenate<VectorT>(std::forward<ContainerT>(c));
 }
 
 template <typename T>
 auto concatenate(std::initializer_list<T>&& c) {
-  return detail::concatenate(std::move(c));
+  using VectorT = std::decay_t<decltype(*std::begin(c))>;
+  return detail::concatenate<VectorT>(std::move(c));
 }
 
 /**
@@ -264,12 +264,14 @@ auto concatenate(std::initializer_list<T>&& c) {
  */
 template <typename ContainerT, typename Func>
 auto concatenate(ContainerT&& c, Func f) {
-  return detail::concatenate(std::forward<ContainerT>(c), f);
+  using VectorT = std::decay_t<decltype(f(*c.begin()))>;
+  return detail::concatenate<VectorT>(std::forward<ContainerT>(c), f);
 }
 
 template <typename T, typename Func>
 auto concatenate(std::initializer_list<T>&& c, Func f) {
-  return detail::concatenate(std::move(c), f);
+  using VectorT = std::decay_t<decltype(f(*c.begin()))>;
+  return detail::concatenate<VectorT>(std::move(c), f);
 }
 
 /**
