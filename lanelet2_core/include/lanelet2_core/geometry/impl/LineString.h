@@ -84,8 +84,14 @@ double rangedLength(LineStringIterator start, LineStringIterator end) {
 template <typename LineStringT>
 std::vector<double> lengthRatios(const LineStringT& lineString) {
   std::vector<double> lengths;
+  if (lineString.size() <= 1) {
+    return lengths;
+  }
+  if (lineString.size() == 2) {
+    return {1.};
+  }
   const auto totalLength = length(lineString);
-  lengths.reserve(lineString.empty() ? 0 : lineString.size() - 1);
+  lengths.reserve(lineString.size() - 1);
   helper::forEachPair(lineString.begin(), lineString.end(), [&lengths, &totalLength](const auto& p1, const auto& p2) {
     lengths.push_back(distance(p1, p2) / totalLength);
   });

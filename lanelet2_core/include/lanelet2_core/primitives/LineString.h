@@ -35,6 +35,7 @@ struct PrimitiveTraits<BasicLineString2d> {
 template <>
 struct LineStringTraits<BasicLineString2d> : public PrimitiveTraits<BasicLineString2d> {
   using PointType = BasicPoint2d;
+  using HybridType = BasicLineString2d;
 };
 template <>
 struct PrimitiveTraits<BasicLineString3d> {
@@ -47,6 +48,7 @@ struct PrimitiveTraits<BasicLineString3d> {
 template <>
 struct LineStringTraits<BasicLineString3d> : public PrimitiveTraits<BasicLineString3d> {
   using PointType = BasicPoint3d;
+  using HybridType = BasicLineString3d;
 };
 template <typename PointT>
 struct PrimitiveTraits<Segment<PointT>> {
@@ -59,6 +61,7 @@ struct PrimitiveTraits<Segment<PointT>> {
 template <typename PointT>
 struct LineStringTraits<Segment<PointT>> : public PrimitiveTraits<Segment<PointT>> {
   using PointType = PointT;
+  using HybridType = Segment<traits::BasicPointT<PointT>>;
 };
 
 }  // namespace traits
@@ -707,7 +710,7 @@ bool has(const ConstLineStringImpl<PointT>& ls, Id id) {
 
 namespace traits {
 template <typename LineStringT>
-using HybridT = typename LineStringT::HybridType;
+using HybridT = typename LineStringTraits<LineStringT>::HybridType;
 
 template <typename LineStringT>
 constexpr auto toHybrid(const LineStringT ls) {
