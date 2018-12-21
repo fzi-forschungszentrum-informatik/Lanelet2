@@ -4,7 +4,7 @@
 #pragma GCC diagnostic ignored "-Wignored-attributes"
 #pragma GCC diagnostic ignored "-Wint-in-bool-context"
 #endif
-#include <Eigen/Dense>
+#include <Eigen/Core>
 #pragma GCC diagnostic pop
 #include <utility>
 #include "../Forward.h"

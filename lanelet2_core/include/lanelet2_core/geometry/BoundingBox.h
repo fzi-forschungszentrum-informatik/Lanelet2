@@ -26,7 +26,7 @@ inline BoundingBox3d boundingBox3d(const BoundingBox3d& b) { return b; }
  * @param p point to to this for
  * @return the bounding box
  */
-inline BoundingBox2d boundingBox2d(const ConstPoint2d& p) { return BoundingBox2d(p.basicPoint2d(), p.basicPoint2d()); }
+inline BoundingBox2d boundingBox2d(const ConstPoint2d& p) { return {p.basicPoint2d(), p.basicPoint2d()}; }
 
 /**
  * @brief calculates a (very small) 3d bounding box around a point
