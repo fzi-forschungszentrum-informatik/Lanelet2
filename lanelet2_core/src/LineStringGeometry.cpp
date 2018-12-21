@@ -150,7 +150,7 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedBorderPoint3d(const ConstHybridPo
 
 std::pair<BasicPoint3d, BasicPoint3d> projectedBorderPoint3d(const CompoundHybridPolygon3d& l1,
                                                              const CompoundHybridPolygon3d& l2) {
-  return projectedPoint3dImpl(l1, l2);
+  return projectedPoint3dImpl(l1, l2);  // NOLINT
 }
 
 }  // namespace internal

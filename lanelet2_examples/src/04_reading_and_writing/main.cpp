@@ -10,6 +10,15 @@
 
 namespace {
 std::string exampleMapPath = std::string(PKG_DIR) + "/../lanelet2_maps/res/mapping_example.osm";
+
+std::string tempfile(const std::string& name) {
+  char tmpDir[] = "/tmp/lanelet2_example_XXXXXX";
+  auto file = mkdtemp(tmpDir);
+  if (file == nullptr) {
+    throw lanelet::IOError("Failed to open a temporary file for writing");
+  }
+  return std::string(file) + '/' + name;
+}
 }  // namespace
 
 void part1LoadingAndWriting();
@@ -36,8 +45,7 @@ void part1LoadingAndWriting() {
 
   // we can also load and write into an internal binary format. It is not human readable but loading is much faster
   // than from .osm:
-  std::string filename = tmpnam(nullptr);
-  write(filename + ".bin", *map);  // we do not need a projector to write to bin
+  write(tempfile("map.bin"), *map);  // we do not need a projector to write to bin
 
   // if the map could not be parsed, exceptoins are thrown. Alternatively, you can provide an error struct. Then
   // lanelet2 will load the map as far as possible and write all the errors that occured to the error object that you

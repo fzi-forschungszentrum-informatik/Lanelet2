@@ -141,6 +141,7 @@ struct PointTraits : PrimitiveTraits<PointT> {
 template <typename LineStringT>
 struct LineStringTraits : PrimitiveTraits<LineStringT> {
   using PointType = typename LineStringT::PointType;
+  using HybridType = typename LineStringT::HybridType;
 };
 
 template <typename PointT>

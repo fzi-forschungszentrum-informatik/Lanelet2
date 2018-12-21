@@ -169,8 +169,18 @@ def qdump__lanelet__Attribute(d, value):
         with Children(d):
             d.putSubItem("cache_", value["cache_"])
             d.putSubItem("value_", value["value_"])
-            
-            
+
+def qdump__lanelet__RegulatoryElement(d, value):
+    data = value["constData_"]["_M_ptr"].dereference()
+    d.putValue(data["id"].integer())
+    d.putNumChild(3)
+    if d.isExpanded():
+        with Children(d):
+            d.putSubItem("id", data["id"])
+            d.putSubItem("attributes", data["attributes"])
+            d.putSubItem("parameters", data["parameters"])
+
+
 def qdump__lanelet__PrimitiveLayer(d, value):
     umap = value["elements_"]
     d.putItemCount(unorderedMapSize(umap))

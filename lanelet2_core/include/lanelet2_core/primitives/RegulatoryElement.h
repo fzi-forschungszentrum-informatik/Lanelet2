@@ -172,7 +172,6 @@ class MutableParameterVisitor : public boost::static_visitor<void> {  // NOLINT
 //! @ingroup ConstPrimitives
 class RegulatoryElement  // NOLINT
     : public ConstPrimitive<RegulatoryElementData>,
-      public std::enable_shared_from_this<RegulatoryElement>,
       private boost::noncopyable {
  public:
   using ConstType = RegulatoryElement;
