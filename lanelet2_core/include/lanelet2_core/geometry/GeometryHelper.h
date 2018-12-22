@@ -1,5 +1,6 @@
 #pragma once
 #include <boost/geometry/strategies/cartesian/distance_projected_point.hpp>
+#include <memory>
 
 namespace lanelet {
 namespace helper {
