@@ -39,7 +39,7 @@ class Mercator : public Projector {
     return {lat, lon, p.z()};
   }
 
-  BasicPoint3d offset_;
+  BasicPoint3d offset_{};
   static constexpr double RMajor{6378137.0};
   static constexpr double RMinor{6356752.3142};
   static constexpr double Eccent{0.081819190928906924};  //=std::sqrt(1.0 - RMinor*RMinor/RMajor/RMajor)

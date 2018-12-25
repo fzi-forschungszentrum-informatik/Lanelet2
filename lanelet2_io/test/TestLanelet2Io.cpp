@@ -16,9 +16,9 @@ TEST(lanelet2_io, registryTest) {  // NOLINT
 TEST(lanelet2_io, exceptionTest) {  // NOLINT
   auto nonsenseExtension = std::string(std::tmpnam(nullptr)) + ".unsupported_extension";
   std::FILE* tmpf = std::fopen(nonsenseExtension.c_str(), "wb+");
-  EXPECT_THROW(lanelet::load(nonsenseExtension), lanelet::UnsupportedExtensionError);
-  EXPECT_THROW(lanelet::load(nonsenseExtension, "nonexisting_parser"), lanelet::UnsupportedIOHandlerError);
-  EXPECT_THROW(lanelet::load("/nonexisting/file/with/known/extension.osm"), lanelet::FileNotFoundError);
+  EXPECT_THROW(lanelet::load(nonsenseExtension), lanelet::UnsupportedExtensionError);                        // NOLINT
+  EXPECT_THROW(lanelet::load(nonsenseExtension, "nonexisting_parser"), lanelet::UnsupportedIOHandlerError);  // NOLINT
+  EXPECT_THROW(lanelet::load("/nonexisting/file/with/known/extension.osm"), lanelet::FileNotFoundError);     // NOLINT
   std::fclose(tmpf);
   std::remove(nonsenseExtension.c_str());
 }

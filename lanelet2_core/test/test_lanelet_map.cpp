@@ -126,9 +126,9 @@ TEST_F(LaneletMapTest, CanAddEmptyRegelem) {  // NOLINT
 }
 
 TEST_F(LaneletMapTest, CanAddExistingElement) {  // NOLINT
-  EXPECT_EQ(map->areaLayer.size(), 1);
+  EXPECT_EQ(map->areaLayer.size(), 1ul);
   map->add(ar1);
-  testConstAndNonConst([](auto& map) { EXPECT_EQ(map->areaLayer.size(), 1); });
+  testConstAndNonConst([](auto& map) { EXPECT_EQ(map->areaLayer.size(), 1ul); });
 }
 
 TEST_F(LaneletMapTest, AddAssignsCorrectId) {  // NOLINT
@@ -146,8 +146,8 @@ TEST_F(LaneletMapTest, FindWorks) {  // NOLINT
 
 TEST_F(LaneletMapTest, FindThrowsIfNotExistent) {  // NOLINT
   testConstAndNonConst([](auto& map) {
-    EXPECT_THROW(map->laneletLayer.get(InvalId), NoSuchPrimitiveError);
-    EXPECT_THROW(map->laneletLayer.get(-5), NoSuchPrimitiveError);
+    EXPECT_THROW(map->laneletLayer.get(InvalId), NoSuchPrimitiveError);  // NOLINT
+    EXPECT_THROW(map->laneletLayer.get(-5), NoSuchPrimitiveError);       // NOLINT
   });
 }
 
@@ -161,7 +161,7 @@ TEST_F(LaneletMapTest, emptyWorks) {  // NOLINT
 TEST_F(LaneletMapTest, nearestWorksForPoints) {  // NOLINT
   testConstAndNonConst([this](auto& map) {
     auto pts = map->pointLayer.nearest(Point2d(p3), 1);
-    ASSERT_EQ(pts.size(), 1);
+    ASSERT_EQ(pts.size(), 1ul);
     EXPECT_EQ(pts[0], p3);
   });
 }
@@ -170,7 +170,7 @@ TEST_F(LaneletMapTest, nearestWorksForLanelets) {  // NOLINT
   map->add(ll2);
   testConstAndNonConst([this](auto& map) {
     auto llts = map->laneletLayer.nearest(Point2d(p2), 1);
-    ASSERT_EQ(llts.size(), 1);
+    ASSERT_EQ(llts.size(), 1ul);
     EXPECT_EQ(llts[0], ll1);
   });
 }
@@ -180,7 +180,7 @@ TEST_F(LaneletMapTest, findWorksForPoints) {  // NOLINT
   testConstAndNonConst([this](auto& map) {
     auto pts = map->pointLayer.search(BoundingBox2d(BasicPoint2d(0, 0.2), BasicPoint2d(2, 1)));
     auto in = [pts](const Point3d& p) { return std::find(pts.begin(), pts.end(), p) != pts.end(); };
-    ASSERT_EQ(pts.size(), 5);
+    ASSERT_EQ(pts.size(), 5ul);
     EXPECT_TRUE(in(p1));
     EXPECT_TRUE(in(p2));
     EXPECT_TRUE(in(p5));
@@ -193,7 +193,7 @@ TEST_F(LaneletMapTest, findWorksForLanelets) {  // NOLINT
   map->add(ll2);
   testConstAndNonConst([this](auto& map) {
     auto llts = map->laneletLayer.search(BoundingBox2d(BasicPoint2d(0, 0.7), BasicPoint2d(2, 1)));
-    ASSERT_EQ(llts.size(), 1);
+    ASSERT_EQ(llts.size(), 1ul);
     EXPECT_EQ(llts[0], ll1);
   });
 }
@@ -201,7 +201,7 @@ TEST_F(LaneletMapTest, findWorksForLanelets) {  // NOLINT
 TEST_F(LaneletMapTest, findWithLargeBoxWorksForLanelets) {  // NOLINT
   testConstAndNonConst([this](auto& map) {
     auto llts = map->laneletLayer.search(BoundingBox2d(BasicPoint2d(-5, -5), BasicPoint2d(5, 5)));
-    ASSERT_EQ(llts.size(), 1);
+    ASSERT_EQ(llts.size(), 1ul);
     EXPECT_EQ(llts[0], ll1);
   });
 }
@@ -210,7 +210,7 @@ TEST_F(LaneletMapTest, findNearestWorksForLanelets) {  // NOLINT
   this->map = utils::createMap({ll1, ll2});
   testConstAndNonConst([this](auto& map) {
     auto llts = geometry::findNearest(map->laneletLayer, BasicPoint2d(0, -10), 10);
-    ASSERT_EQ(2, llts.size());
+    ASSERT_EQ(2ul, llts.size());
     EXPECT_DOUBLE_EQ(9, llts.front().first);
     EXPECT_EQ(ll2, llts.front().second);
   });
@@ -219,7 +219,7 @@ TEST_F(LaneletMapTest, findNearestWorksForLanelets) {  // NOLINT
 TEST_F(LaneletMapTest, findNearestWorksForRegElems) {  // NOLINT
   testConstAndNonConst([this](auto& map) {
     auto regElem = geometry::findNearest(map->regulatoryElementLayer, BasicPoint2d(0, -1), 10);
-    ASSERT_EQ(1, regElem.size());
+    ASSERT_EQ(1ul, regElem.size());
     EXPECT_DOUBLE_EQ(1, regElem.front().first);
     EXPECT_EQ(regelem1, regElem.front().second);
   });
@@ -235,7 +235,7 @@ TEST_F(LaneletMapTest, findNearestWorksForComplexRegElems) {  // NOLINT
   this->map->add(ll1);
   testConstAndNonConst([this, regelem](auto& map) {
     auto regElem = geometry::findNearest(map->regulatoryElementLayer, BasicPoint2d(0, -1), 10);
-    ASSERT_EQ(1, regElem.size());
+    ASSERT_EQ(1ul, regElem.size());
     EXPECT_DOUBLE_EQ(0, regElem.front().first);
     EXPECT_EQ(regelem, regElem.front().second);
   });
@@ -245,14 +245,14 @@ TEST_F(LaneletMapTest, findNearestWorksOnEmptyMap) {  // NOLINT
   this->map = utils::createMap(Points3d());
   testConstAndNonConst([](auto& map) {
     auto pts = geometry::findNearest(map->pointLayer, BasicPoint2d(0, -10), 10);
-    ASSERT_EQ(0, pts.size());
+    ASSERT_EQ(0ul, pts.size());
   });
 }
 
 TEST_F(LaneletMapTest, findUsagesInLanelet) {  // NOLINT
   testConstAndNonConst([this](auto& map) {
     auto llts = utils::findUsagesInLanelets(*map, p4);
-    ASSERT_EQ(llts.size(), 1);
+    ASSERT_EQ(llts.size(), 1ul);
     EXPECT_EQ(llts[0], ll1);
   });
 }
@@ -260,7 +260,7 @@ TEST_F(LaneletMapTest, findUsagesInLanelet) {  // NOLINT
 TEST_F(LaneletMapTest, findUsagesInAreas) {  // NOLINT
   testConstAndNonConst([this](auto& map) {
     auto ars = utils::findUsagesInAreas(*map, p4);
-    ASSERT_EQ(ars.size(), 1);
+    ASSERT_EQ(ars.size(), 1ul);
     EXPECT_EQ(ars[0], ar1);
   });
 }
@@ -270,7 +270,7 @@ TEST_F(LaneletMapTest, findRegelemUsagesInLanelet) {  // NOLINT
   map->add(ll2);
   testConstAndNonConst([this](auto& map) {  // NOLINT
     auto usages = map->laneletLayer.findUsages(regelem1);
-    ASSERT_EQ(1, usages.size());
+    ASSERT_EQ(1ul, usages.size());
     EXPECT_EQ(ll2, usages[0]);
   });
 }
@@ -280,7 +280,7 @@ TEST_F(LaneletMapTest, findRegelemUsagesInArea) {  // NOLINT
   this->map = utils::createMap({ar1});
   testConstAndNonConst([this](auto& map) {
     auto usages = map->areaLayer.findUsages(regelem1);
-    ASSERT_EQ(1, usages.size());
+    ASSERT_EQ(1ul, usages.size());
     EXPECT_EQ(ar1, usages[0]);
   });
 }
@@ -288,7 +288,7 @@ TEST_F(LaneletMapTest, findRegelemUsagesInArea) {  // NOLINT
 TEST_F(LaneletMapTest, findUsagesInPolygon) {  // NOLINT
   testConstAndNonConst([this](auto& map) {
     auto polys = map->polygonLayer.findUsages(p1);
-    ASSERT_EQ(polys.size(), 1);
+    ASSERT_EQ(polys.size(), 1ul);
     EXPECT_EQ(poly1, polys[0]);
 
     polys = map->polygonLayer.findUsages(p9);

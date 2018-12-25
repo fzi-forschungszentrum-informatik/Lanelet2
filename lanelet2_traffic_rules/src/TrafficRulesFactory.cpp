@@ -2,7 +2,9 @@
 
 namespace lanelet {
 
+#if __cplusplus < 201703L
 constexpr char Locations::Germany[];
+#endif
 
 namespace traffic_rules {
 TrafficRulesUPtr TrafficRulesFactory::create(const std::string& location, const std::string& participant,

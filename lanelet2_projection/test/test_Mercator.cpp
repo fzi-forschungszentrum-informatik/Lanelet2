@@ -4,9 +4,9 @@
 TEST(Mercator, origin) {  // NOLINT
   lanelet::projection::Mercator mercatorProjection(lanelet::Origin{{45, 45, 0}});
   auto pLocal = mercatorProjection.forward({45, 45, 0});
-  EXPECT_FLOAT_EQ(pLocal.x(), 0);
-  EXPECT_FLOAT_EQ(pLocal.y(), 0);
-  EXPECT_FLOAT_EQ(pLocal.z(), 0);
+  EXPECT_DOUBLE_EQ(pLocal.x(), 0.);
+  EXPECT_DOUBLE_EQ(pLocal.y(), 0.);
+  EXPECT_DOUBLE_EQ(pLocal.z(), 0.);
 }
 
 TEST(Mercator, roundTrip) {  // NOLINT

@@ -148,6 +148,7 @@ void Attribute::setValue(const std::string& value) {
   this->value_ = value;
 }
 
+#if __cplusplus < 201703L
 // see https://regexr.com/3knio
 // lanelet types
 constexpr const char AttributeValueString::Node[];
@@ -291,5 +292,5 @@ constexpr const char Participants::Bicycle[];
 constexpr const char Participants::Train[];
 
 constexpr AttributeNamesItem AttributeNamesString::Map[];
-
+#endif
 }  // namespace lanelet

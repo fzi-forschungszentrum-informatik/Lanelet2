@@ -20,7 +20,7 @@ Lanelet bufferLanelet(Lanelet llt, double z) {
 
 void testCenterline(const ConstLineString3d& centerline, const ConstLineString3d& leftBound,
                     const ConstLineString3d& rightBound) {
-  EXPECT_GE(centerline.size(), 2);
+  EXPECT_GE(centerline.size(), 2ul);
   EXPECT_FALSE(geometry::intersects(ConstHybridLineString2d(centerline), ConstHybridLineString2d(leftBound)));
   EXPECT_FALSE(geometry::intersects(ConstHybridLineString2d(centerline), ConstHybridLineString2d(rightBound)));
 }
@@ -61,9 +61,9 @@ TEST_F(LaneletTest, id) {  // NOLINT
   EXPECT_EQ(100, constRitterLanelet.id());
 }
 
-TEST_F(LaneletTest, nullptrConstruct) {  // NOLINT
-  EXPECT_THROW(Lanelet(std::shared_ptr<LaneletData>()), NullptrError);
-  EXPECT_THROW(ConstLanelet(std::shared_ptr<LaneletData>()), NullptrError);
+TEST_F(LaneletTest, nullptrConstruct) {                                      // NOLINT
+  EXPECT_THROW(Lanelet(std::shared_ptr<LaneletData>()), NullptrError);       // NOLINT
+  EXPECT_THROW(ConstLanelet(std::shared_ptr<LaneletData>()), NullptrError);  // NOLINT
 }
 
 TEST_F(LaneletTest, bounds) {  // NOLINT
@@ -84,7 +84,7 @@ TEST_F(LaneletTest, attributes) {  // NOLINT
   EXPECT_EQ("value"s, constRitterLanelet.attribute("test").value());
   EXPECT_EQ(ritterLanelet.attribute(AttributeName::Subtype), AttributeValueString::Road);
   EXPECT_EQ(constRitterLanelet.attribute(AttributeName::Subtype), AttributeValueString::Road);
-  EXPECT_THROW(ritterLanelet.attribute("doesnotexist"), NoSuchAttributeError);
+  EXPECT_THROW(ritterLanelet.attribute("doesnotexist"), NoSuchAttributeError);  // NOLINT
 }
 
 TEST_F(LaneletTest, invert) {  // NOLINT
@@ -239,8 +239,8 @@ TEST_F(LaneletTest, weakLanelet) {  // NOLINT
 
 TEST(LaneletBasic, emptyLanelet) {  // NOLINT
   Lanelet empty;
-  EXPECT_EQ(empty.polygon2d().size(), 0);
-  EXPECT_EQ(empty.centerline().size(), 0);
+  EXPECT_EQ(empty.polygon2d().size(), 0ul);
+  EXPECT_EQ(empty.centerline().size(), 0ul);
 }
 
 Lanelet buildComplexTestCase() {

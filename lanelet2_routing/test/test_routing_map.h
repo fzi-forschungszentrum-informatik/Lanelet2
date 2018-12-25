@@ -429,7 +429,7 @@ class RoutingGraphTest : public ::testing::Test {
 
 class GermanVehicleGraph : public RoutingGraphTest {
  protected:
-  GermanVehicleGraph() { EXPECT_NO_THROW(graph->checkValidity()); }
+  GermanVehicleGraph() { EXPECT_NO_THROW(graph->checkValidity()); }  // NOLINT
 
  public:
   RoutingGraphConstPtr graph{testData.vehicleGraph};
@@ -438,7 +438,7 @@ class GermanVehicleGraph : public RoutingGraphTest {
 
 class GermanPedestrianGraph : public RoutingGraphTest {
  protected:
-  GermanPedestrianGraph() { EXPECT_NO_THROW(graph->checkValidity()); }
+  GermanPedestrianGraph() { EXPECT_NO_THROW(graph->checkValidity()); }  // NOLINT
 
  public:
   RoutingGraphConstPtr graph{testData.pedestrianGraph};
@@ -447,7 +447,7 @@ class GermanPedestrianGraph : public RoutingGraphTest {
 
 class GermanBicycleGraph : public RoutingGraphTest {
  protected:
-  GermanBicycleGraph() { EXPECT_NO_THROW(graph->checkValidity()); }
+  GermanBicycleGraph() { EXPECT_NO_THROW(graph->checkValidity()); }  // NOLINT
 
  public:
   RoutingGraphConstPtr graph{testData.bicycleGraph};

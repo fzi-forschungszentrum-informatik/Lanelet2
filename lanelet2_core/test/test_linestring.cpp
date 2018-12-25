@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include "geometry/LineString.h"
 #include "primitives/LineString.h"
-
 using namespace lanelet;
 
 class LineStringPoints : public ::testing::Test {
@@ -150,7 +149,7 @@ TYPED_TEST(PrimitiveLineStringsTest, constConversion) {  // NOLINT
 
 TYPED_TEST(AllLineStringsTest, iteration) {  // NOLINT
   auto xs = utils::transform(this->ls1, [](const auto& elem) { return elem.x(); });
-  EXPECT_EQ(3, xs.size());
+  EXPECT_EQ(3ul, xs.size());
   for (auto x : xs) {
     EXPECT_EQ(0, x);
   }
@@ -159,7 +158,7 @@ TYPED_TEST(AllLineStringsTest, iteration) {  // NOLINT
 TYPED_TEST(AllLineStringsTest, invert) {  // NOLINT
   auto invertLs = this->ls1.invert();
   auto ys = utils::transform(invertLs, [](const auto& elem) { return elem.y(); });
-  ASSERT_EQ(3, ys.size());
+  ASSERT_EQ(3ul, ys.size());
   EXPECT_EQ(0, ys[2]);
   EXPECT_EQ(2, ys[0]);
 }
@@ -187,7 +186,7 @@ TYPED_TEST(MutableLineStringsTest, invertAndInsertOne) {  // NOLINT
 TYPED_TEST(MutableLineStringsTest, invertAndErase) {  // NOLINT
   auto invertLs = this->ls1.invert();
   auto it = invertLs.erase(invertLs.begin() + 1);
-  EXPECT_EQ(2, this->ls1.size());
+  EXPECT_EQ(2ul, this->ls1.size());
   EXPECT_EQ(this->ls1.front(), *it);
 }
 
@@ -204,7 +203,7 @@ TYPED_TEST(MutableLineStringsTest, invertAndInsertMultiple) {  // NOLINT
 TYPED_TEST(MutableLineStringsTest, invertAndResize) {  // NOLINT
   auto invertLs = this->ls1.invert();
   invertLs.resize(2);
-  ASSERT_EQ(2, invertLs.size());
+  ASSERT_EQ(2ul, invertLs.size());
   EXPECT_EQ(invertLs.front(), this->p13);
   EXPECT_EQ(invertLs.back(), this->p12);
 }
@@ -265,7 +264,7 @@ TYPED_TEST(MutableLineStringsTest, boostAppend) {  // NOLINT
 
 TYPED_TEST(AllLineStringsTest, lengthRatios) {  // NOLINT
   auto lRatios = geometry::lengthRatios(this->ls1);
-  ASSERT_EQ(2, lRatios.size());
+  ASSERT_EQ(2ul, lRatios.size());
   if (traits::is2D<TypeParam>()) {
     EXPECT_DOUBLE_EQ(0.5, lRatios[0]);
   } else {
@@ -275,7 +274,7 @@ TYPED_TEST(AllLineStringsTest, lengthRatios) {  // NOLINT
 
 TYPED_TEST(AllLineStringsTest, accumulatedLengthRatios) {  // NOLINT
   auto lRatios = geometry::accumulatedLengthRatios(this->ls2);
-  ASSERT_EQ(2, lRatios.size());
+  ASSERT_EQ(2ul, lRatios.size());
   EXPECT_DOUBLE_EQ(1, lRatios[1]);
 }
 
@@ -307,7 +306,7 @@ TYPED_TEST(AllLineStringsTest, nearestPoint) {  // NOLINT
 
 TYPED_TEST(AllLineStringsTest, segments) {  // NOLINT
   auto segment = this->ls1.segment(0);
-  EXPECT_EQ(2, this->ls1.numSegments());
+  EXPECT_EQ(2ul, this->ls1.numSegments());
   EXPECT_EQ(segment.first, this->ls1[0]);
   EXPECT_EQ(segment.second, this->ls1[1]);
 }

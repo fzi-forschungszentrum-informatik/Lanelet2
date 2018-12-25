@@ -83,6 +83,7 @@ class ToConstVisitor : public RuleParameterVisitor {
 }  // namespace
 
 static RegisterRegulatoryElement<GenericRegulatoryElement> genRegelem;
+#if __cplusplus < 201703L
 constexpr char GenericRegulatoryElement::RuleName[];
 
 constexpr const char RoleNameString::Refers[];
@@ -104,6 +105,7 @@ constexpr const char RoleNameString::RegulatoryElement[];
 constexpr char RegulatoryElement::RuleName[];
 
 constexpr RoleNameString::RoleNamesItem RoleNameString::Map[];
+#endif
 
 RegulatoryElement::~RegulatoryElement() = default;
 
