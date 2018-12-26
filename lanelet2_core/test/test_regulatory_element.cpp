@@ -105,12 +105,13 @@ TEST_F(RegulatoryElementTest, hasWorksForRegelem) {  // NOLINT
 TEST_F(RegulatoryElementTest, addGenericRegulatoryElementToLanelet) {  // NOLINT
   auto regelem = RegulatoryElementFactory::create("", regelemData);
   ll1.addRegulatoryElement(regelem);
-  EXPECT_EQ(1, ll1.regulatoryElementsAs<GenericRegulatoryElement>().size());
+  EXPECT_EQ(1ul, ll1.regulatoryElementsAs<GenericRegulatoryElement>().size());
 }
 
 // ============ Traffic Light ===========================
 TEST_F(RegulatoryElementTest,  // NOLINT
        FactoryCannotConstructInvalidTrafficLight) {
+  // NOLINTNEXTLINE
   EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::TrafficLight, regelemData), InvalidInputError);
 }
 
@@ -126,7 +127,7 @@ TEST_F(RegulatoryElementTest, TrafficLightWorksAsExpected) {  // NOLINT
   tl->setStopLine(ls5);
   EXPECT_EQ(ls5, tl->stopLine());
   tl->addTrafficLight(ls1);
-  EXPECT_EQ(2, tl->trafficLights().size());
+  EXPECT_EQ(2ul, tl->trafficLights().size());
 }
 
 TEST_F(RegulatoryElementTest, TrafficLightCreationFomPolygonWorks) {  // NOLINT
@@ -139,6 +140,7 @@ TEST_F(RegulatoryElementTest, TrafficLightCreationFomPolygonWorks) {  // NOLINT
 
 // ============ Traffic Sign ===========================
 TEST_F(RegulatoryElementTest, FactoryCannotConstructInvalidTrafficSign) {  // NOLINT
+  // NOLINTNEXTLINE
   EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::TrafficSign, regelemData), InvalidInputError);
 }
 
@@ -152,7 +154,7 @@ TEST_F(RegulatoryElementTest, FactoryConstructsTrafficSign) {  // NOLINT
 TEST_F(RegulatoryElementTest, ConstructValidTrafficSign) {  // NOLINT
   auto ts = TrafficSign::make(++id, AttributeMap(), {{ls5}, "de205"}, {{poly1}, "de206"}, {ls4});
   ts->addRefLine(ls5);
-  EXPECT_EQ(2, ts->refLines().size());
+  EXPECT_EQ(2ul, ts->refLines().size());
 
   ts->addCancellingRefLine(ls1);
   EXPECT_TRUE(utils::contains(ts->cancelLines(), ls1));
@@ -164,11 +166,12 @@ TEST_F(RegulatoryElementTest, ConstructValidTrafficSign) {  // NOLINT
   EXPECT_TRUE(ts->removeCancellingTrafficSign(poly1));
 
   ts->addCancellingTrafficSign(ls2);
-  EXPECT_THROW(ts->cancelType(), InvalidInputError);
+  EXPECT_THROW(ts->cancelType(), InvalidInputError);  // NOLINT
 }
 
 // ============ Speed limit ===========================
 TEST_F(RegulatoryElementTest, FactoryCannotConstructInvalidSpeedLimit) {  // NOLINT
+  // NOLINTNEXTLINE
   EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::SpeedLimit, regelemData), InvalidInputError);
 }
 TEST_F(RegulatoryElementTest, FactoryConstructsSpeedLimit) {  // NOLINT
@@ -180,6 +183,7 @@ TEST_F(RegulatoryElementTest, FactoryConstructsSpeedLimit) {  // NOLINT
 
 // ============ Right of way ===========================
 TEST_F(RegulatoryElementTest, FactoryCannotConstructInvalidRightOfWay) {  // NOLINT
+  // NOLINTNEXTLINE
   EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::RightOfWay, regelemData), InvalidInputError);
 }
 

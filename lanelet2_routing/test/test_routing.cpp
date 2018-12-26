@@ -12,7 +12,7 @@ TEST_F(GermanPedestrianGraph, NumberOfLanelets) {  // NOLINT
   EXPECT_EQ(graph->passableMap()->laneletLayer.size(), 5);
   EXPECT_TRUE(graph->passableMap()->laneletLayer.exists(2031));
   EXPECT_TRUE(graph->passableMap()->laneletLayer.exists(2050));
-  EXPECT_EQ(graph->passableMap()->areaLayer.size(), 2);
+  EXPECT_EQ(graph->passableMap()->areaLayer.size(), 2ul);
   EXPECT_TRUE(graph->passableMap()->areaLayer.exists(3000));
   EXPECT_TRUE(graph->passableMap()->areaLayer.exists(3001));
 }
@@ -26,33 +26,33 @@ TEST_F(GermanVehicleGraph, GetShortestPath) {  // NOLINT
   // Multiple1
   auto shortestPath = graph->shortestPath(lanelets.at(2001), lanelets.at(2004), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 3);
+  EXPECT_EQ(shortestPath->size(), 3ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2001));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2003));
   EXPECT_EQ((*shortestPath)[2], lanelets.at(2004));
 
   shortestPath = graph->shortestPath(lanelets.at(2003), lanelets.at(2002), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 3);
+  EXPECT_EQ(shortestPath->size(), 3ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2003));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2001));
   EXPECT_EQ((*shortestPath)[2], lanelets.at(2002));
 
   shortestPath = graph->shortestPath(lanelets.at(2003), lanelets.at(2001), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 2);
+  EXPECT_EQ(shortestPath->size(), 2ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2003));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2001));
 
   shortestPath = graph->shortestPath(lanelets.at(2003), lanelets.at(2004), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 2);
+  EXPECT_EQ(shortestPath->size(), 2ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2003));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2004));
 
   shortestPath = graph->shortestPath(lanelets.at(2001), lanelets.at(2002), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 2);
+  EXPECT_EQ(shortestPath->size(), 2ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2001));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2002));
 
@@ -66,14 +66,14 @@ TEST_F(GermanVehicleGraph, GetShortestPath) {  // NOLINT
 TEST_F(GermanVehicleGraph, GetShortestPathMaxHose) {  // NOLINT
   auto shortestPath = graph->shortestPath(lanelets.at(2019), lanelets.at(2022), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 3);
+  EXPECT_EQ(shortestPath->size(), 3ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2019));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2020));
   EXPECT_EQ((*shortestPath)[2], lanelets.at(2022));
 
   shortestPath = graph->shortestPath(lanelets.at(2021), lanelets.at(2018), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 3);
+  EXPECT_EQ(shortestPath->size(), 3ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2021));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2020).invert());
   EXPECT_EQ((*shortestPath)[2], lanelets.at(2018));
@@ -96,14 +96,14 @@ TEST_F(GermanVehicleGraph, GetShortestPathVia1) {  // NOLINT
   interm.push_back(static_cast<ConstLanelet>(lanelets.at(2003)));
   auto shortestPath = graph->shortestPathVia(lanelets.at(2001), interm, lanelets.at(2004), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 3);
+  EXPECT_EQ(shortestPath->size(), 3ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2001));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2003));
   EXPECT_EQ((*shortestPath)[2], lanelets.at(2004));
 
   shortestPath = graph->shortestPathVia(lanelets.at(2001), interm, lanelets.at(2002), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 4);
+  EXPECT_EQ(shortestPath->size(), 4ul);
   EXPECT_EQ((*shortestPath)[0], lanelets.at(2001));
   EXPECT_EQ((*shortestPath)[1], lanelets.at(2003));
   EXPECT_EQ((*shortestPath)[2], lanelets.at(2001));
@@ -123,7 +123,7 @@ TEST_F(GermanVehicleGraph, GetShortestPathVia2) {  // NOLINT
   interm.push_back(static_cast<ConstLanelet>(lanelets.at(2007)));
   auto shortestPath = graph->shortestPathVia(lanelets.at(2001), interm, lanelets.at(2013), 0);
   ASSERT_TRUE(!!shortestPath);
-  EXPECT_EQ(shortestPath->size(), 8);
+  EXPECT_EQ(shortestPath->size(), 8ul);
   auto pathIt = shortestPath->begin();
   EXPECT_EQ(*pathIt, lanelets.at(2001));
   EXPECT_EQ(*++pathIt, lanelets.at(2003));
@@ -149,27 +149,27 @@ bool containsLanelet(const LaneletsT& reachableSet, Id lltId) {
 
 TEST_F(GermanVehicleGraph, reachableSet) {  // NOLINT
   auto reachable = graph->reachableSet(lanelets.at(2001), 0., 0);
-  EXPECT_EQ(reachable.size(), 1);
+  EXPECT_EQ(reachable.size(), 1ul);
   EXPECT_TRUE(containsLanelet(reachable, 2001));
 
   reachable = graph->reachableSet(lanelets.at(2001), 2.1, 0);
-  EXPECT_EQ(reachable.size(), 3);
+  EXPECT_EQ(reachable.size(), 3ul);
   EXPECT_TRUE(containsLanelet(reachable, 2002));
   EXPECT_TRUE(containsLanelet(reachable, 2003));
 
   reachable = graph->reachableSet(lanelets.at(2001), 100, 0);
-  EXPECT_EQ(reachable.size(), 15);  // Will fail if people extend the map
+  EXPECT_EQ(reachable.size(), 15ul);  // Will fail if people extend the map
 
   reachable = graph->reachableSet(lanelets.at(2002), 100, 0);
-  EXPECT_EQ(reachable.size(), 11);  // Will fail if people extend the map
+  EXPECT_EQ(reachable.size(), 11ul);  // Will fail if people extend the map
 }
 
 TEST_F(GermanVehicleGraph, reachableSetMaxHose) {  // NOLINT
   auto reachable = graph->reachableSet(lanelets.at(2017), 100, 0);
-  EXPECT_EQ(reachable.size(), 17);  // Will fail if people extend the map
+  EXPECT_EQ(reachable.size(), 17ul);  // Will fail if people extend the map
 
   reachable = graph->reachableSet(lanelets.at(2021), 100, 0);
-  EXPECT_EQ(reachable.size(), 4);
+  EXPECT_EQ(reachable.size(), 4ul);
 }
 
 TEST_F(GermanVehicleGraph, reachableSetInvalid) {  // NOLINT
@@ -181,7 +181,7 @@ TEST_F(GermanVehicleGraph, reachableSetInvalid) {  // NOLINT
 
 TEST_F(GermanPedestrianGraph, reachableSetCrossingWithArea) {  // NOLINT
   auto reachable = graph->reachableSetIncludingAreas(lanelets.at(2050), 100);
-  EXPECT_EQ(reachable.size(), 5);
+  EXPECT_EQ(reachable.size(), 5ul);
   EXPECT_TRUE(containsLanelet(reachable, 2050));
   EXPECT_TRUE(containsLanelet(reachable, 2053));
   EXPECT_TRUE(containsLanelet(reachable, 2052));
@@ -190,70 +190,70 @@ TEST_F(GermanPedestrianGraph, reachableSetCrossingWithArea) {  // NOLINT
 }
 TEST_F(GermanPedestrianGraph, reachableSetStartingFromArea) {  // NOLINT
   auto reachable = graph->reachableSetIncludingAreas(areas.at(3000), 100);
-  EXPECT_EQ(reachable.size(), 4);
+  EXPECT_EQ(reachable.size(), 4ul);
 }
 TEST_F(GermanPedestrianGraph, reachableSetWithAreaFromTwoWayLanelet) {  // NOLINT
   auto reachable = graph->reachableSetIncludingAreas(lanelets.at(2053).invert(), 100);
-  EXPECT_EQ(reachable.size(), 4);
+  EXPECT_EQ(reachable.size(), 4ul);
 }
 TEST_F(GermanPedestrianGraph, reachableSetWithAreaFromUnconnectedLanelet) {  // NOLINT
   auto reachable = graph->reachableSetIncludingAreas(lanelets.at(2051), 100);
-  EXPECT_EQ(reachable.size(), 1);
+  EXPECT_EQ(reachable.size(), 1ul);
 }
 
 TEST_F(GermanPedestrianGraph, possiblePathsWithAreaFromLanelet) {  // NOLINT
   auto reachable = graph->possiblePathsIncludingAreas(lanelets.at(2050), 10, 0, false);
-  ASSERT_EQ(reachable.size(), 2);
-  EXPECT_EQ(reachable[0].size(), 3);
-  EXPECT_EQ(reachable[1].size(), 3);
+  ASSERT_EQ(reachable.size(), 2ul);
+  EXPECT_EQ(reachable[0].size(), 3ul);
+  EXPECT_EQ(reachable[1].size(), 3ul);
 }
 
 TEST_F(GermanPedestrianGraph, possiblePathsWithAreaFromUnconnectedLanelet) {  // NOLINT
   auto reachable = graph->possiblePathsIncludingAreas(lanelets.at(2050), 3, false);
-  ASSERT_EQ(reachable.size(), 2);
-  EXPECT_EQ(reachable[0].size(), 3);
-  EXPECT_EQ(reachable[1].size(), 3);
+  ASSERT_EQ(reachable.size(), 2ul);
+  EXPECT_EQ(reachable[0].size(), 3ul);
+  EXPECT_EQ(reachable[1].size(), 3ul);
 }
 
 TEST_F(GermanVehicleGraph, possiblePathsMinRoutingCosts) {  // NOLINT
   // MIN ROUTING COST - With lane changes
   // Multiple 1
   auto routes = graph->possiblePaths(lanelets.at(2001), 2.2, 0, true);
-  EXPECT_EQ(routes.size(), 2);
+  EXPECT_EQ(routes.size(), 2ul);
 
   routes = graph->possiblePaths(lanelets.at(2002), 4.0, 0, true);
-  ASSERT_EQ(routes.size(), 1);
+  ASSERT_EQ(routes.size(), 1ul);
   auto& firstRoute = *routes.begin();
-  EXPECT_EQ(firstRoute.size(), 3);
+  EXPECT_EQ(firstRoute.size(), 3ul);
   EXPECT_TRUE(containsLanelet(firstRoute, 2006));
 }
 
 TEST_F(GermanVehicleGraph, possiblePathsMaxHose) {  // NOLINT
   // Max Hose Problem
   auto routes = graph->possiblePaths(lanelets.at(2017), 10.0, 0, true);
-  ASSERT_EQ(routes.size(), 1);
+  ASSERT_EQ(routes.size(), 1ul);
   auto& firstRoute = *routes.begin();
-  EXPECT_EQ(firstRoute.size(), 5);
+  EXPECT_EQ(firstRoute.size(), 5ul);
   EXPECT_TRUE(containsLanelet(firstRoute, 2024));
 }
 
 TEST_F(GermanVehicleGraph, possiblePathsMinLanelets) {  // NOLINT
   // MIN NUMBER LANELETS - With lane changes
   auto routes = graph->possiblePaths(lanelets.at(2001), 2, false);
-  EXPECT_EQ(routes.size(), 1);
+  EXPECT_EQ(routes.size(), 1ul);
   auto& firstRoute = *routes.begin();
-  ASSERT_EQ(firstRoute.size(), 2);
+  ASSERT_EQ(firstRoute.size(), 2ul);
   EXPECT_TRUE(containsLanelet(firstRoute, 2002));
   EXPECT_EQ(firstRoute.getRemainingLane(firstRoute.begin()).size(), firstRoute.size());
 
   routes = graph->possiblePaths(lanelets.at(2001), 30, false);
-  EXPECT_EQ(routes.size(), 0);
+  EXPECT_EQ(routes.size(), 0ul);
 
   routes = graph->possiblePaths(lanelets.at(2001), 10, true);
-  EXPECT_EQ(routes.size(), 0);
+  EXPECT_EQ(routes.size(), 0ul);
 
   routes = graph->possiblePaths(lanelets.at(2001), 7, true);
-  EXPECT_EQ(routes.size(), 3);
+  EXPECT_EQ(routes.size(), 3ul);
 }
 
 TEST_F(GermanVehicleGraph, possiblePathsInvalid) {  // NOLINT
@@ -261,12 +261,12 @@ TEST_F(GermanVehicleGraph, possiblePathsInvalid) {  // NOLINT
   EXPECT_THROW(graph->possiblePaths(lanelets.at(2002), 0., numCostModules, true), InvalidInputError);
   ConstLanelet invalid;
   auto routes = graph->possiblePaths(invalid, 10.0, 0, true);
-  EXPECT_EQ(routes.size(), 0);
+  EXPECT_EQ(routes.size(), 0ul);
 
   // Invalid min number lanelets
   EXPECT_THROW(graph->possiblePaths(lanelets.at(2002), 1, numCostModules, true), InvalidInputError);
   routes = graph->possiblePaths(invalid, 10, 0, true);
-  EXPECT_EQ(routes.size(), 0);
+  EXPECT_EQ(routes.size(), 0ul);
 }
 
 TEST(RoutingCostInitialization, NegativeLaneChangeCost) {  // NOLINT

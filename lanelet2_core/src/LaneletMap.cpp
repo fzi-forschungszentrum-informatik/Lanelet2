@@ -160,34 +160,34 @@ struct AddVisitor : public lanelet::internal::MutableParameterVisitor {
 
 template <typename PrimitiveT>
 struct IdSelector {
-  static constexpr unsigned offset() { return 0.; }
-  static constexpr unsigned modulo() { return 1.; }
+  static constexpr unsigned offset() { return 0; }
+  static constexpr unsigned modulo() { return 1; }
 };
 
 template <>
 struct IdSelector<RegulatoryElementPtr> {
-  static constexpr unsigned offset() { return 0.; }
-  static constexpr unsigned modulo() { return 3.; }
+  static constexpr unsigned offset() { return 0; }
+  static constexpr unsigned modulo() { return 3; }
 };
 template <>
 struct IdSelector<Area> {
-  static constexpr unsigned offset() { return 1.; }
-  static constexpr unsigned modulo() { return 3.; }
+  static constexpr unsigned offset() { return 1; }
+  static constexpr unsigned modulo() { return 3; }
 };
 template <>
 struct IdSelector<Lanelet> {
-  static constexpr unsigned offset() { return 2.; }
-  static constexpr unsigned modulo() { return 3.; }
+  static constexpr unsigned offset() { return 2; }
+  static constexpr unsigned modulo() { return 3; }
 };
 template <>
 struct IdSelector<LineString3d> {
-  static constexpr unsigned offset() { return 0.; }
-  static constexpr unsigned modulo() { return 2.; }
+  static constexpr unsigned offset() { return 0; }
+  static constexpr unsigned modulo() { return 2; }
 };
 template <>
 struct IdSelector<Polygon3d> {
-  static constexpr unsigned offset() { return 1.; }
-  static constexpr unsigned modulo() { return 2.; }
+  static constexpr unsigned offset() { return 1; }
+  static constexpr unsigned modulo() { return 2; }
 };
 
 template <typename T, typename MapT, typename KeyT, typename Func>

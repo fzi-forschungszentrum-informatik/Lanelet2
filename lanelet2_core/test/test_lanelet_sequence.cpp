@@ -79,7 +79,7 @@ TEST_F(LaneletSequenceTest, RegulatoryElementExtraction) {  // NOLINT
   auto ts = TrafficSign::make(++id, AttributeMap(), {{left2}, "de205"}, {}, {right2});
   ll1.addRegulatoryElement(tl);
   ll2.addRegulatoryElement(ts);
-  EXPECT_EQ(1, cll.regulatoryElementsAs<TrafficLight>().size());
-  EXPECT_EQ(1, cll.regulatoryElementsAs<TrafficSign>().size());
+  EXPECT_EQ(1ul, cll.regulatoryElementsAs<TrafficLight>().size());
+  EXPECT_EQ(1ul, cll.regulatoryElementsAs<TrafficSign>().size());
   EXPECT_TRUE(cll.regulatoryElementsAs<RightOfWay>().empty());
 }

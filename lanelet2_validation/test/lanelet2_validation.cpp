@@ -22,14 +22,14 @@ TEST(Validator, pointsTooClose) {  // NOLINT
   config.checksFilter = "mapping.points_too_close";
   auto issues = lanelet::validation::validateMap(*map, config);
   auto report = lanelet::validation::buildReport(issues);
-  EXPECT_LT(0, report.second.size());
-  EXPECT_EQ(0, report.first.size());
+  EXPECT_LT(0ul, report.second.size());
+  EXPECT_EQ(0ul, report.first.size());
 }
 
 TEST(Validator, invalidMap) {  // NOLINT
   lanelet::validation::ValidationConfig config;
   auto issues = lanelet::validation::validateMap("/totally/nonexistent/fantasy/path", config);
   auto report = lanelet::validation::buildReport(issues);
-  EXPECT_EQ(0, report.second.size());
-  EXPECT_LT(0, report.first.size());
+  EXPECT_EQ(0ul, report.second.size());
+  EXPECT_LT(0ul, report.first.size());
 }

@@ -23,7 +23,7 @@ TEST(testPoint, constructDestroy) {  // NOLINT
   p2.x() = 2;
   EXPECT_EQ(2, p.x());
 
-  EXPECT_THROW(Point3d(std::shared_ptr<PointData>(nullptr)), NullptrError);
+  EXPECT_THROW(Point3d(std::shared_ptr<PointData>(nullptr)), NullptrError);  // NOLINT
 }
 
 TEST(testPoint, convert) {  // NOLINT

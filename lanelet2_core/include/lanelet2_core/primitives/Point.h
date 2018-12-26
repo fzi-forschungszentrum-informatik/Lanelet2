@@ -12,6 +12,7 @@
 #include "../utility/Utilities.h"
 #include "Primitive.h"
 #include "Traits.h"
+
 namespace lanelet {
 
 using BasicPoint3d = Eigen::Vector3d;                                //!< a simple 3d-point

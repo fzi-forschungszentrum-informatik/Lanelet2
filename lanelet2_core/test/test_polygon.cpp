@@ -185,7 +185,7 @@ TYPED_TEST(HybridPolygonsTwoDTest, area) {  // NOLINT
 }
 
 TYPED_TEST(HybridPolygonsTwoDTest, centroid) {  // NOLINT
-  BasicPoint2d p;
+  BasicPoint2d p{0, 0};
   boost::geometry::centroid(this->poly3, p);
   EXPECT_DOUBLE_EQ(p.x(), 1.5);
   EXPECT_DOUBLE_EQ(p.y(), 0.5);
@@ -200,5 +200,5 @@ TYPED_TEST(AllPolygonsTest, perimeter) {  // NOLINT
 TYPED_TEST(TwoDPolygonsTest, toBasicPolygon) {  // NOLINT
   auto pBasic = this->poly3.basicPolygon();
   EXPECT_EQ(4, boost::geometry::perimeter(pBasic));
-  EXPECT_EQ(4, pBasic.size());
+  EXPECT_EQ(4ul, pBasic.size());
 }

@@ -23,7 +23,7 @@ T writeAndLoad(const T& value, TT(LaneletMap::*layer)) {
   EXPECT_TRUE(errsWrite.empty());
   EXPECT_TRUE(errsLoad.empty());
   auto& valueLayer = llmap.*layer;
-  EXPECT_EQ(1, valueLayer.size());
+  EXPECT_EQ(1ul, valueLayer.size());
   return valueLayer.get(utils::getId(value));
 }
 
@@ -84,7 +84,7 @@ TEST(OsmHandler, writeMapWithIncompleteRegelem) {  // NOLINT
   ErrorMessages errsWrite;
   io_handlers::OsmWriter parser(defaultProjection(Origin({0, 0, 0})));
   auto file = parser.toOsmFile(map, errsWrite);
-  EXPECT_GT(errsWrite.size(), 0);
+  EXPECT_GT(errsWrite.size(), 0ul);
 }
 
 TEST(OsmHandler, writeMapWithIncompleteLanelet) {  // NOLINT
@@ -94,7 +94,7 @@ TEST(OsmHandler, writeMapWithIncompleteLanelet) {  // NOLINT
   ErrorMessages errsWrite;
   io_handlers::OsmWriter parser(defaultProjection(Origin({0, 0, 0})));
   auto file = parser.toOsmFile(map, errsWrite);
-  EXPECT_GT(errsWrite.size(), 0);
+  EXPECT_GT(errsWrite.size(), 0ul);
 }
 
 TEST(OsmHandler, writeMapWithLaneletAndAreaToFile) {  // NOLINT
@@ -107,5 +107,5 @@ TEST(OsmHandler, writeMapWithLaneletAndAreaToFile) {  // NOLINT
   auto filename = std::string(std::tmpnam(nullptr)) + ".osm";  // NOLINT
   Origin origin({49, 8.4, 0});
   write(filename, *map, origin);
-  EXPECT_NO_THROW(load(filename, origin));
+  EXPECT_NO_THROW(load(filename, origin));  // NOLINT
 }

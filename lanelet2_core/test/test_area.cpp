@@ -63,9 +63,9 @@ TEST_F(TestArea, id) {  // NOLINT
 
 TEST_F(TestArea, regelem) {  // NOLINT
   area1.addRegulatoryElement(regelem);
-  EXPECT_EQ(1, area1.regulatoryElementsAs<GenericRegulatoryElement>().size());
+  EXPECT_EQ(1ul, area1.regulatoryElementsAs<GenericRegulatoryElement>().size());
   area1.removeRegulatoryElement(regelem);
-  EXPECT_EQ(0, area1.regulatoryElementsAs<GenericRegulatoryElement>().size());
+  EXPECT_TRUE(area1.regulatoryElementsAs<GenericRegulatoryElement>().empty());
 }
 
 TEST_F(TestArea, inside) {  // NOLINT

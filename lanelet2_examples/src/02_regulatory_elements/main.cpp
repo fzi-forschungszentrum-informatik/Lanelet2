@@ -107,7 +107,9 @@ class LightsOn : public lanelet::RegulatoryElement {  // we have to inherit from
   explicit LightsOn(const lanelet::RegulatoryElementDataPtr& data) : RegulatoryElement(data) {}
 };
 
+#if __cplusplus < 201703L
 constexpr char LightsOn::RuleName[];  // instanciate string in cpp file
+#endif
 }  // namespace example
 
 namespace {

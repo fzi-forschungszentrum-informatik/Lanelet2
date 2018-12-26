@@ -70,7 +70,7 @@ inline void exportGraphVizImpl(const std::string& filename, const G& g, E edgeFi
 
   VertexWriterGraphViz<G> vertexWriter(&g);
   EdgeWriterGraphViz<G> edgeWriter(&g);
-  auto fg = boost::filtered_graph<G, E, V>(g, edgeFilter, vertexFilter);
+  boost::filtered_graph<G, E, V> fg(g, edgeFilter, vertexFilter);
   boost::write_graphviz(file, fg, vertexWriter, edgeWriter);
 
   file.close();
@@ -102,9 +102,9 @@ inline void exportGraphMLImpl(const std::string& filename, const G& g, E eFilter
     throw lanelet::ExportError("Could not open file at " + filename + ".");
   }
 
-  auto filteredGraph{boost::filtered_graph<G, EdgeCostFilter>(g, eFilter, vFilter)};
+  auto filteredGraph{boost::filtered_graph<G, EdgeCostFilter>(g, eFilter, vFilter)};  // NOLINT
 
-  auto pmId = boost::get(&VertexInfo::laneletOrArea, filteredGraph);
+  auto pmId = boost::get(&VertexInfo::laneletOrArea, filteredGraph);  // NOLINT
   auto pmRelation = boost::get(&EdgeInfo::relation, filteredGraph);
   auto pmRoutingCosts = boost::get(&EdgeInfo::routingCost, filteredGraph);
 
