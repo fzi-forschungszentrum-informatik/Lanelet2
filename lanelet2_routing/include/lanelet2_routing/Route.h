@@ -186,13 +186,9 @@ class Route {
     assert(!lane.empty());
     if (lane.empty()) {
       return false;
-    } else if (!elements_.find(lane.back())->second->following().empty() &&
-               elements_.find(lane.back())->second->following().front().routeElement ==
-                   elements_.find(lane.front())->second.get()) {
-      return true;
-    } else {
-      return false;
     }
+    auto following = elements_.find(lane.back())->second->following();
+    return !following.empty() && following.front().routeElement == elements_.find(lane.front())->second.get();
   }
 };
 };  // namespace routing

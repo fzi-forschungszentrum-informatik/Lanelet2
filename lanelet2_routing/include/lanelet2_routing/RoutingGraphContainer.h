@@ -40,19 +40,17 @@ class RoutingGraphContainer {
     if (routingGraphId >= graphs_.size()) {
       throw InvalidInputError("Routing Graph ID is higher than the number of graphs.");
     }
+    auto overlaps = [lanelet, participantHeight](const ConstLanelet& ll) {
+      return participantHeight != .0 ? !geometry::overlaps3d(lanelet, ll, participantHeight)
+                                     : !geometry::overlaps2d(lanelet, ll);
+    };
     const LaneletMapConstPtr map{graphs_[routingGraphId]->passableMap()};
     ConstLanelets conflicting{map->laneletLayer.search(geometry::boundingBox2d(lanelet))};
-    conflicting.erase(std::remove(conflicting.begin(), conflicting.end(), lanelet), conflicting.end());
-    // Check if they actually overlap
-    conflicting.erase(std::remove_if(conflicting.begin(), conflicting.end(),
-                                     [lanelet, participantHeight](const ConstLanelet& ll) {
-                                       if (participantHeight != .0) {
-                                         return !geometry::overlaps3d(lanelet, ll, participantHeight);
-                                       } else {
-                                         return !geometry::overlaps2d(lanelet, ll);
-                                       }
-                                     }),
-                      conflicting.end());
+    auto begin = conflicting.begin();
+    auto end = conflicting.end();
+    end = std::remove(begin, end, lanelet);
+    end = std::remove_if(begin, end, overlaps);
+    conflicting.erase(end, conflicting.end());
     return conflicting;
   }
 

@@ -28,23 +28,22 @@ BasicPoint3d UtmProjector::forward(const GPSPoint& gps) const {
   if (zone != zone_ || northp != isInNorthernHemisphere_) {
     if (throwInPaddingArea_) {
       throw ForwardProjectionError("You have left the UTM zone or changed the hemisphere!");
-    } else {
-      // try to transfer to the desired zone
-      double xAfterTransfer, yAfterTransfer;
-      int zoneAfterTransfer;
-      try {
-        GeographicLib::UTMUPS::Transfer(zone, northp, utm.x(), utm.y(), zone_, isInNorthernHemisphere_, xAfterTransfer,
-                                        yAfterTransfer, zoneAfterTransfer);
-      } catch (GeographicLib::GeographicErr& e) {
-        throw ForwardProjectionError(e.what());
-      }
-
-      if (zoneAfterTransfer != zone_) {
-        throw ForwardProjectionError("You have left the padding area of the UTM zone!");
-      }
-      utm.x() = xAfterTransfer;
-      utm.y() = yAfterTransfer;
     }
+    // try to transfer to the desired zone
+    double xAfterTransfer, yAfterTransfer;
+    int zoneAfterTransfer;
+    try {
+      GeographicLib::UTMUPS::Transfer(zone, northp, utm.x(), utm.y(), zone_, isInNorthernHemisphere_, xAfterTransfer,
+                                      yAfterTransfer, zoneAfterTransfer);
+    } catch (GeographicLib::GeographicErr& e) {
+      throw ForwardProjectionError(e.what());
+    }
+
+    if (zoneAfterTransfer != zone_) {
+      throw ForwardProjectionError("You have left the padding area of the UTM zone!");
+    }
+    utm.x() = xAfterTransfer;
+    utm.y() = yAfterTransfer;
   }
 
   if (useOffset_) {

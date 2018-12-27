@@ -14,7 +14,7 @@ using Errors = std::vector<std::string>;
 
 namespace {
 // register with factories
-static RegisterWriter<OsmWriter> regWriter;
+RegisterWriter<OsmWriter> regWriter;
 
 class ToFileWriter {
  public:

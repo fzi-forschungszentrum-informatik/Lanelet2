@@ -26,10 +26,9 @@ Parser::Ptr ParserFactory::create(const std::string& parserName, const Projector
   if (it != inst.registry_.end()) {
     auto newObj = std::shared_ptr<Parser>(it->second(projector, config));
     return newObj;
-  } else {
-    throw UnsupportedIOHandlerError("Requested parser " + parserName +
-                                    " does not exist! Available parsers are: " + format(inst.availableParsers()));
   }
+  throw UnsupportedIOHandlerError("Requested parser " + parserName +
+                                  " does not exist! Available parsers are: " + format(availableParsers()));
 }
 
 Parser::Ptr ParserFactory::createFromExtension(const std::string& extension, const Projector& projector,
@@ -39,11 +38,9 @@ Parser::Ptr ParserFactory::createFromExtension(const std::string& extension, con
   if (it != inst.extensionRegistry_.end()) {
     auto newObj = std::shared_ptr<Parser>(it->second(projector, config));
     return newObj;
-  } else {
-    throw UnsupportedExtensionError(
-        "Requested extension " + extension +
-        " is not supported! Supported extensions are: " + format(inst.availableExtensions()));
   }
+  throw UnsupportedExtensionError("Requested extension " + extension +
+                                  " is not supported! Supported extensions are: " + format(availableExtensions()));
 }
 
 std::vector<std::string> ParserFactory::availableParsers() {
@@ -87,10 +84,9 @@ Writer::Ptr WriterFactory::create(const std::string& writerName, const lanelet::
   if (it != inst.registry_.end()) {
     auto newObj = std::shared_ptr<Writer>(it->second(projector, config));
     return newObj;
-  } else {
-    throw UnsupportedIOHandlerError("Requested writer " + writerName +
-                                    " does not exist! Available writer are: " + format(inst.availableWriters()));
   }
+  throw UnsupportedIOHandlerError("Requested writer " + writerName +
+                                  " does not exist! Available writer are: " + format(availableWriters()));
 }
 
 Writer::Ptr WriterFactory::createFromExtension(const std::string& extension, const Projector& projector,
@@ -100,11 +96,9 @@ Writer::Ptr WriterFactory::createFromExtension(const std::string& extension, con
   if (it != inst.extensionRegistry_.end()) {
     auto newObj = std::shared_ptr<Writer>(it->second(projector, config));
     return newObj;
-  } else {
-    throw UnsupportedExtensionError(
-        "Requested extension " + extension +
-        " is not supported! Supported extensions are: " + format(inst.availableExtensions()));
   }
+  throw UnsupportedExtensionError("Requested extension " + extension +
+                                  " is not supported! Supported extensions are: " + format(availableExtensions()));
 }
 
 std::vector<std::string> WriterFactory::availableWriters() {

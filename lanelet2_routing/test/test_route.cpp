@@ -11,9 +11,9 @@ class TestRoute : public GermanVehicleGraph {
  public:
   void setUpRoute(Id from, Id to, uint16_t routingCostId = 0) {
     ASSERT_TRUE(lanelets.find(from) != lanelets.end());
-    start = lanelets.find(from)->second;
+    start = lanelets.at(from);
     ASSERT_TRUE(lanelets.find(to) != lanelets.end());
-    end = lanelets.find(to)->second;
+    end = lanelets.at(to);
     Optional<Route> optRoute{graph->getRoute(start, end, routingCostId)};
     ASSERT_TRUE(!!optRoute);
     route = std::make_unique<Route>(std::move(*optRoute));
@@ -130,7 +130,7 @@ using AllRoutes =
 
 TYPED_TEST_CASE(AllRoutesTest, AllRoutes);
 
-TYPED_TEST(AllRoutesTest, CheckValidity) { EXPECT_NO_THROW(this->route->checkValidity()); }
+TYPED_TEST(AllRoutesTest, CheckValidity) { EXPECT_NO_THROW(this->route->checkValidity()); }  // NOLINT
 
 TYPED_TEST(AllRoutesTest, ShortestMapInDebugMap) {
   const auto map{this->route->getDebugLaneletMap()};
@@ -148,13 +148,13 @@ TYPED_TEST(AllRoutesTest, DebugMapCompleteness) {
   for (const auto& it : laneletMap->laneletLayer) {
     ASSERT_NE(debugMap->pointLayer.find(it.id()), debugMap->pointLayer.end());
     Point3d point{*debugMap->pointLayer.find(it.id())};
-    EXPECT_NO_THROW(point.attribute("id"));
-    EXPECT_NO_THROW(point.attribute("lane_id"));
-    EXPECT_NO_THROW(point.attribute("init_lane_id"));
+    EXPECT_NO_THROW(point.attribute("id"));            // NOLINT
+    EXPECT_NO_THROW(point.attribute("lane_id"));       // NOLINT
+    EXPECT_NO_THROW(point.attribute("init_lane_id"));  // NOLINT
   }
 
   for (const auto& it : debugMap->lineStringLayer) {
-    EXPECT_NO_THROW(it.attribute("relation_1"));
+    EXPECT_NO_THROW(it.attribute("relation_1"));  // NOLINT
   }
 }
 
@@ -179,38 +179,38 @@ bool hasLanelet(const ContainerT& llts, const ConstLanelet& llt) {
 }
 
 TEST_F(Route1, Relations) {  // NOLINT
-  LaneletRelations previous{route->previousRelations(lanelets.find(2007)->second)};
+  LaneletRelations previous{route->previousRelations(lanelets.at(2007))};
   EXPECT_EQ(previous.size(), 2ul);  // NOLINT
-  EXPECT_TRUE(hasRelation(previous, ConstLanelet(lanelets.find(2005)->second), RelationType::Merging));
-  EXPECT_TRUE(hasRelation(previous, ConstLanelet(lanelets.find(2006)->second), RelationType::Merging));
+  EXPECT_TRUE(hasRelation(previous, ConstLanelet(lanelets.at(2005)), RelationType::Merging));
+  EXPECT_TRUE(hasRelation(previous, ConstLanelet(lanelets.at(2006)), RelationType::Merging));
 
-  LaneletRelations following{route->followingRelations(lanelets.find(2007)->second)};
+  LaneletRelations following{route->followingRelations(lanelets.at(2007))};
   EXPECT_EQ(following.size(), 2ul);  // NOLINT
-  EXPECT_TRUE(hasRelation(following, ConstLanelet(lanelets.find(2008)->second), RelationType::Diverging));
-  EXPECT_TRUE(hasRelation(following, ConstLanelet(lanelets.find(2009)->second), RelationType::Diverging));
+  EXPECT_TRUE(hasRelation(following, ConstLanelet(lanelets.at(2008)), RelationType::Diverging));
+  EXPECT_TRUE(hasRelation(following, ConstLanelet(lanelets.at(2009)), RelationType::Diverging));
 }
 
 TEST_F(Route1, Conflicting) {  // NOLINT
-  auto conflictingInMap{route->conflictingInMap(lanelets.find(2009)->second)};
+  auto conflictingInMap{route->conflictingInMap(lanelets.at(2009))};
   EXPECT_EQ(conflictingInMap.size(), 1ul);  // NOLINT
-  EXPECT_TRUE(hasLanelet(conflictingInMap, lanelets.find(2008)->second));
+  EXPECT_TRUE(hasLanelet(conflictingInMap, lanelets.at(2008)));
 
-  ConstLanelets conflictingInRoute{route->conflictingInRoute(lanelets.find(2009)->second)};
+  ConstLanelets conflictingInRoute{route->conflictingInRoute(lanelets.at(2009))};
   EXPECT_EQ(conflictingInRoute.size(), 1ul);  // NOLINT
-  EXPECT_TRUE(hasLanelet(conflictingInRoute, lanelets.find(2008)->second));
+  EXPECT_TRUE(hasLanelet(conflictingInRoute, lanelets.at(2008)));
 
-  EXPECT_TRUE(route->conflictingInRoute(lanelets.find(2007)->second).empty());
-  EXPECT_TRUE(route->conflictingInMap(lanelets.find(2007)->second).empty());
+  EXPECT_TRUE(route->conflictingInRoute(lanelets.at(2007)).empty());
+  EXPECT_TRUE(route->conflictingInMap(lanelets.at(2007)).empty());
 }
 
 TEST_F(Route1, Lanes) {  // NOLINT
-  auto remainingLane{route->remainingLane(lanelets.find(2002)->second)};
+  auto remainingLane{route->remainingLane(lanelets.at(2002))};
   EXPECT_EQ(remainingLane.size(), 2ul);  // NOLINT
-  EXPECT_TRUE(hasLanelet(remainingLane, lanelets.find(2002)->second));
+  EXPECT_TRUE(hasLanelet(remainingLane, lanelets.at(2002)));
 
-  auto fullLane{route->fullLane(lanelets.find(2001)->second)};
+  auto fullLane{route->fullLane(lanelets.at(2001))};
   EXPECT_EQ(fullLane.size(), 3ul);  // NOLINT
-  EXPECT_TRUE(hasLanelet(fullLane, lanelets.find(2002)->second));
+  EXPECT_TRUE(hasLanelet(fullLane, lanelets.at(2002)));
   EXPECT_EQ(route->numLanes(), 7ul);
 }
 
@@ -251,20 +251,20 @@ TEST_F(RouteMaxHoseLeftRight, CreateRouteMaxHose1) {                      // NOL
 }
 
 TEST_F(RouteMaxHoseLeftRight, Lanes) {  // NOLINT
-  auto remainingLane{route->remainingLane(lanelets.find(2020)->second)};
+  auto remainingLane{route->remainingLane(lanelets.at(2020))};
   EXPECT_EQ(remainingLane.size(), 3ul);  // NOLINT
-  EXPECT_TRUE(std::find(std::begin(remainingLane), std::end(remainingLane),
-                        ConstLanelet(lanelets.find(2022)->second)) != std::end(remainingLane));
+  EXPECT_TRUE(std::find(std::begin(remainingLane), std::end(remainingLane), ConstLanelet(lanelets.at(2022))) !=
+              std::end(remainingLane));
 
-  auto fullLane{route->fullLane(lanelets.find(2020)->second)};
+  auto fullLane{route->fullLane(lanelets.at(2020))};
   EXPECT_EQ(fullLane.size(), 5ul);  // NOLINT
-  EXPECT_TRUE(std::find(std::begin(fullLane), std::end(fullLane), ConstLanelet(lanelets.find(2024)->second)) !=
+  EXPECT_TRUE(std::find(std::begin(fullLane), std::end(fullLane), ConstLanelet(lanelets.at(2024))) !=
               std::end(fullLane));
   EXPECT_EQ(route->numLanes(), 1ul);
 }
 
 TEST_F(RouteMaxHoseLeftRight, InvalidLane) {  // NOLINT
-  auto remainingLane{route->remainingLane(lanelets.find(2020)->second.invert())};
+  auto remainingLane{route->remainingLane(lanelets.at(2020).invert())};
   EXPECT_TRUE(remainingLane.empty());
 }
 
@@ -278,38 +278,38 @@ TEST_F(RouteMaxHoseRightLeft, CreateRouteMaxHose2) {                      // NOL
 }
 
 TEST_F(RouteMaxHoseRightLeft, Lanes) {  // NOLINT
-  auto remainingLane{route->remainingLane(lanelets.find(2020)->second.invert())};
+  auto remainingLane{route->remainingLane(lanelets.at(2020).invert())};
   EXPECT_EQ(remainingLane.size(), 3ul);  // NOLINT
-  EXPECT_TRUE(std::find(std::begin(remainingLane), std::end(remainingLane),
-                        ConstLanelet(lanelets.find(2018)->second)) != std::end(remainingLane));
+  EXPECT_TRUE(std::find(std::begin(remainingLane), std::end(remainingLane), ConstLanelet(lanelets.at(2018))) !=
+              std::end(remainingLane));
 
-  auto fullLane{route->fullLane(lanelets.find(2020)->second.invert())};
+  auto fullLane{route->fullLane(lanelets.at(2020).invert())};
   EXPECT_EQ(fullLane.size(), 5ul);  // NOLINT
-  EXPECT_TRUE(std::find(std::begin(fullLane), std::end(fullLane), ConstLanelet(lanelets.find(2021)->second)) !=
+  EXPECT_TRUE(std::find(std::begin(fullLane), std::end(fullLane), ConstLanelet(lanelets.at(2021))) !=
               std::end(fullLane));
   EXPECT_EQ(route->numLanes(), 1ul);  // NOLINT
 }
 
 TEST_F(RouteMaxHoseLeftRightDashedSolid, Lanes) {  // NOLINT
-  auto remainingLane{route->remainingLane(lanelets.find(2020)->second)};
+  auto remainingLane{route->remainingLane(lanelets.at(2020))};
   EXPECT_EQ(remainingLane.size(), 4ul);  // NOLINT
-  EXPECT_FALSE(std::find(std::begin(remainingLane), std::end(remainingLane),
-                         ConstLanelet(lanelets.find(2018)->second)) != std::end(remainingLane));
+  EXPECT_FALSE(std::find(std::begin(remainingLane), std::end(remainingLane), ConstLanelet(lanelets.at(2018))) !=
+               std::end(remainingLane));
 
-  auto fullLane{route->fullLane(lanelets.find(2020)->second)};
+  auto fullLane{route->fullLane(lanelets.at(2020))};
   EXPECT_EQ(fullLane.size(), 6ul);  // NOLINT
-  EXPECT_TRUE(std::find(std::begin(fullLane), std::end(fullLane), ConstLanelet(lanelets.find(2021)->second)) ==
+  EXPECT_TRUE(std::find(std::begin(fullLane), std::end(fullLane), ConstLanelet(lanelets.at(2021))) ==
               std::end(fullLane));
   EXPECT_EQ(route->numLanes(), 1ul);  // NOLINT
 }
 
 TEST_F(RouteMaxHoseLeftRightDashedSolid, DashedSolidLineRegarded) {  // NOLINT
-  EXPECT_FALSE(!!route->rightRelation(lanelets.find(2025)->second));
+  EXPECT_FALSE(!!route->rightRelation(lanelets.at(2025)));
 }
 
 TEST_F(RouteMaxHoseLeftRightDashedSolidFurther, Lanes) {  // NOLINT
   EXPECT_EQ(route->numLanes(), 1ul);                      // NOLINT
-  EXPECT_TRUE(route->remainingLane(lanelets.find(2026)->second).empty());
+  EXPECT_TRUE(route->remainingLane(lanelets.at(2026)).empty());
 }
 
 TEST_F(RouteMaxHoseLeftRightDashedSolidFurther, Elements) {  // NOLINT
@@ -317,7 +317,7 @@ TEST_F(RouteMaxHoseLeftRightDashedSolidFurther, Elements) {  // NOLINT
 }
 
 TEST_F(RouteMaxHoseLeftRightDashedSolidFurther, DashedSolidLineRegarded) {  // NOLINT
-  EXPECT_FALSE(!!route->rightRelation(lanelets.find(2025)->second));
+  EXPECT_FALSE(!!route->rightRelation(lanelets.at(2025)));
 }
 
 TEST_F(RouteSolidDashed, Lanes) {     // NOLINT
@@ -329,30 +329,30 @@ TEST_F(RouteSolidDashedWithAdjacent, Lanes) {  // NOLINT
 }
 
 TEST_F(RouteSolidDashedWithAdjacent, AdjacentLaneletInRoute) {  // NOLINT
-  ASSERT_TRUE(!!route->rightRelation(lanelets.find(2025)->second));
-  EXPECT_EQ(*route->rightRelation(lanelets.find(2025)->second),  // NOLINT
-            (LaneletRelation{lanelets.find(2026)->second, RelationType::Right}));
-  ASSERT_TRUE(!!route->leftRelation(lanelets.find(2026)->second));
-  EXPECT_EQ(*route->leftRelation(lanelets.find(2026)->second),  // NOLINT
-            (LaneletRelation{lanelets.find(2025)->second, RelationType::AdjacentLeft}));
-  ASSERT_TRUE(!!route->rightRelation(lanelets.find(2027)->second));
-  EXPECT_EQ(*route->rightRelation(lanelets.find(2027)->second),  // NOLINT
-            (LaneletRelation{lanelets.find(2028)->second, RelationType::AdjacentRight}));
-  ASSERT_TRUE(!!route->leftRelation(lanelets.find(2028)->second));
-  EXPECT_EQ(*route->leftRelation(lanelets.find(2028)->second),  // NOLINT
-            (LaneletRelation{lanelets.find(2027)->second, RelationType::AdjacentLeft}));
-  ASSERT_TRUE(!!route->rightRelation(lanelets.find(2029)->second));
-  EXPECT_EQ(*route->rightRelation(lanelets.find(2029)->second),  // NOLINT
-            (LaneletRelation{lanelets.find(2030)->second, RelationType::AdjacentRight}));
-  ASSERT_TRUE(!!route->leftRelation(lanelets.find(2030)->second));
-  EXPECT_EQ(*route->leftRelation(lanelets.find(2030)->second),  // NOLINT
-            (LaneletRelation{lanelets.find(2029)->second, RelationType::Left}));
+  ASSERT_TRUE(!!route->rightRelation(lanelets.at(2025)));
+  EXPECT_EQ(*route->rightRelation(lanelets.at(2025)),  // NOLINT
+            (LaneletRelation{lanelets.at(2026), RelationType::Right}));
+  ASSERT_TRUE(!!route->leftRelation(lanelets.at(2026)));
+  EXPECT_EQ(*route->leftRelation(lanelets.at(2026)),  // NOLINT
+            (LaneletRelation{lanelets.at(2025), RelationType::AdjacentLeft}));
+  ASSERT_TRUE(!!route->rightRelation(lanelets.at(2027)));
+  EXPECT_EQ(*route->rightRelation(lanelets.at(2027)),  // NOLINT
+            (LaneletRelation{lanelets.at(2028), RelationType::AdjacentRight}));
+  ASSERT_TRUE(!!route->leftRelation(lanelets.at(2028)));
+  EXPECT_EQ(*route->leftRelation(lanelets.at(2028)),  // NOLINT
+            (LaneletRelation{lanelets.at(2027), RelationType::AdjacentLeft}));
+  ASSERT_TRUE(!!route->rightRelation(lanelets.at(2029)));
+  EXPECT_EQ(*route->rightRelation(lanelets.at(2029)),  // NOLINT
+            (LaneletRelation{lanelets.at(2030), RelationType::AdjacentRight}));
+  ASSERT_TRUE(!!route->leftRelation(lanelets.at(2030)));
+  EXPECT_EQ(*route->leftRelation(lanelets.at(2030)),  // NOLINT
+            (LaneletRelation{lanelets.at(2029), RelationType::Left}));
 }
 
 TEST_F(GermanVehicleGraph, CreateRouteVia) {  // NOLINT
-  auto start{lanelets.find(2003)->second};
-  auto via{lanelets.find(2009)->second};
-  auto end{lanelets.find(2015)->second};
+  auto start{lanelets.at(2003)};
+  auto via{lanelets.at(2009)};
+  auto end{lanelets.at(2015)};
   Optional<Route> route{graph->getRouteVia(start, {via}, end, 0)};
   ASSERT_TRUE(!!route);
   EXPECT_EQ(route->size(), 15ul);                                         // NOLINT
@@ -360,8 +360,8 @@ TEST_F(GermanVehicleGraph, CreateRouteVia) {  // NOLINT
 }
 
 TEST_F(GermanVehicleGraph, CreateRouteMissingOneLanelet) {  // NOLINT
-  auto start{lanelets.find(2003)->second};
-  auto end{lanelets.find(2015)->second};
+  auto start{lanelets.at(2003)};
+  auto end{lanelets.at(2015)};
   Optional<Route> route{graph->getRoute(start, end, 0)};
   ASSERT_TRUE(!!route);
   EXPECT_EQ(route->size(), 15ul);                                         // NOLINT
@@ -369,11 +369,10 @@ TEST_F(GermanVehicleGraph, CreateRouteMissingOneLanelet) {  // NOLINT
 }
 
 TEST_F(GermanVehicleGraph, CannotCreateRoute) {  // NOLINT
-  Optional<Route> route{graph->getRoute(lanelets.find(2014)->second, lanelets.find(2007)->second, 0)};
+  Optional<Route> route{graph->getRoute(lanelets.at(2014), lanelets.at(2007), 0)};
   EXPECT_FALSE(!!route);
-
-  EXPECT_THROW(graph->getRoute(lanelets.find(2001)->second, lanelets.find(2004)->second, numCostModules),
-               lanelet::InvalidInputError);
+  // NOLINTNEXTLINE
+  EXPECT_THROW(graph->getRoute(lanelets.at(2001), lanelets.at(2004), numCostModules), lanelet::InvalidInputError);
 }
 
 TEST_F(RouteSplittedDiverging, Completeness) {               // NOLINT

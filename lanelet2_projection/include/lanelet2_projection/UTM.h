@@ -6,7 +6,7 @@ namespace lanelet {
 namespace projection {
 class UtmProjector : public Projector {
  public:
-  explicit UtmProjector(Origin origin, const bool useOffset = true, const bool throwInPaddingArea = false);
+  explicit UtmProjector(Origin origin, bool useOffset = true, bool throwInPaddingArea = false);
 
   BasicPoint3d forward(const GPSPoint& gps) const override;
 

@@ -9,7 +9,7 @@ using namespace lanelet::routing;
 using namespace lanelet::routing::tests;
 
 TEST_F(GermanPedestrianGraph, NumberOfLanelets) {  // NOLINT
-  EXPECT_EQ(graph->passableMap()->laneletLayer.size(), 5);
+  EXPECT_EQ(graph->passableMap()->laneletLayer.size(), 5ul);
   EXPECT_TRUE(graph->passableMap()->laneletLayer.exists(2031));
   EXPECT_TRUE(graph->passableMap()->laneletLayer.exists(2050));
   EXPECT_EQ(graph->passableMap()->areaLayer.size(), 2ul);
@@ -87,7 +87,7 @@ TEST_F(GermanVehicleGraph, GetShortestPathInvalid) {  // NOLINT
   auto shortestPath = graph->shortestPath(invalidLanelet, lanelets.at(2004), 0);
   EXPECT_FALSE(!!shortestPath);
 
-  EXPECT_THROW(graph->shortestPath(lanelets.at(2001), lanelets.at(2004), numCostModules), InvalidInputError);
+  EXPECT_THROW(graph->shortestPath(lanelets.at(2001), lanelets.at(2004), numCostModules), InvalidInputError);  // NOLINT
 }
 
 TEST_F(GermanVehicleGraph, GetShortestPathVia1) {  // NOLINT
@@ -139,6 +139,7 @@ TEST_F(GermanVehicleGraph, GetShortestPathViaInvalid) {  // NOLINT
   ConstLanelets interm;
   interm.push_back(static_cast<ConstLanelet>(lanelets.at(2003)));
   interm.push_back(static_cast<ConstLanelet>(lanelets.at(2007)));
+  // NOLINTNEXTLINE
   EXPECT_THROW(graph->shortestPathVia(lanelets.at(2001), interm, lanelets.at(2002), numCostModules), InvalidInputError);
 }
 
@@ -172,8 +173,8 @@ TEST_F(GermanVehicleGraph, reachableSetMaxHose) {  // NOLINT
   EXPECT_EQ(reachable.size(), 4ul);
 }
 
-TEST_F(GermanVehicleGraph, reachableSetInvalid) {  // NOLINT
-  EXPECT_THROW(graph->reachableSet(lanelets.at(2021), 0.0, numCostModules), InvalidInputError);
+TEST_F(GermanVehicleGraph, reachableSetInvalid) {                                                // NOLINT
+  EXPECT_THROW(graph->reachableSet(lanelets.at(2021), 0.0, numCostModules), InvalidInputError);  // NOLINT
   ConstLanelet invalid;
   auto reachable = graph->reachableSet(invalid, 0, 0);
   EXPECT_TRUE(reachable.empty());
@@ -258,20 +259,20 @@ TEST_F(GermanVehicleGraph, possiblePathsMinLanelets) {  // NOLINT
 
 TEST_F(GermanVehicleGraph, possiblePathsInvalid) {  // NOLINT
   // Invalid min length
-  EXPECT_THROW(graph->possiblePaths(lanelets.at(2002), 0., numCostModules, true), InvalidInputError);
+  EXPECT_THROW(graph->possiblePaths(lanelets.at(2002), 0., numCostModules, true), InvalidInputError);  // NOLINT
   ConstLanelet invalid;
   auto routes = graph->possiblePaths(invalid, 10.0, 0, true);
   EXPECT_EQ(routes.size(), 0ul);
 
   // Invalid min number lanelets
-  EXPECT_THROW(graph->possiblePaths(lanelets.at(2002), 1, numCostModules, true), InvalidInputError);
+  EXPECT_THROW(graph->possiblePaths(lanelets.at(2002), 1, numCostModules, true), InvalidInputError);  // NOLINT
   routes = graph->possiblePaths(invalid, 10, 0, true);
   EXPECT_EQ(routes.size(), 0ul);
 }
 
-TEST(RoutingCostInitialization, NegativeLaneChangeCost) {  // NOLINT
-  EXPECT_NO_THROW(RoutingCostDistance(1));
-  EXPECT_THROW(RoutingCostDistance(-1), InvalidInputError);
+TEST(RoutingCostInitialization, NegativeLaneChangeCost) {    // NOLINT
+  EXPECT_NO_THROW(RoutingCostDistance(1));                   // NOLINT
+  EXPECT_THROW(RoutingCostDistance(-1), InvalidInputError);  // NOLINT
 }
 
 class ConfigurationInitialization : public ::testing::Test {
@@ -279,7 +280,7 @@ class ConfigurationInitialization : public ::testing::Test {
   LaneletMapPtr emptyMap = std::make_shared<LaneletMap>();
 
   // Initialize traffic rules and routing cost calculation module
-  traffic_rules::TrafficRulesPtr trafficRules{traffic_rules::TrafficRulesFactory::instance().create(
+  traffic_rules::TrafficRulesPtr trafficRules{traffic_rules::TrafficRulesFactory::create(
       Locations::Germany, Participants::Vehicle, traffic_rules::TrafficRules::Configuration())};
 
   RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(RoutingCostDistance{2.})};
@@ -288,15 +289,15 @@ class ConfigurationInitialization : public ::testing::Test {
   RoutingGraph::Configuration routingGraphConf;
 };
 
-TEST_F(ConfigurationInitialization, EmptyConfig) {  // NOLINT
-  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs, routingGraphConf));
+TEST_F(ConfigurationInitialization, EmptyConfig) {                                             // NOLINT
+  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs, routingGraphConf));  // NOLINT
 }
 
-TEST_F(ConfigurationInitialization, Config) {  // NOLINT
-  routingGraphConf.emplace(std::make_pair(RoutingGraph::ParticipantHeight, Attribute("2.")));
-  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs, routingGraphConf));
+TEST_F(ConfigurationInitialization, Config) {                                                  // NOLINT
+  routingGraphConf.emplace(std::make_pair(RoutingGraph::ParticipantHeight, Attribute("2.")));  // NOLINT
+  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs, routingGraphConf));  // NOLINT
 }
 
-TEST_F(ConfigurationInitialization, NoConfig) {  // NOLINT
-  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs));
+TEST_F(ConfigurationInitialization, NoConfig) {                              // NOLINT
+  EXPECT_NO_THROW(RoutingGraph::build(*emptyMap, *trafficRules, costPtrs));  // NOLINT
 }

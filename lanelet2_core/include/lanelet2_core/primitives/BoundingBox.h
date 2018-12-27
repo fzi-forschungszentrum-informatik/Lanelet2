@@ -139,7 +139,7 @@ class BoundingBox2d {
 
     Index mult = 1;
     for (Index d = 0; d < dim(); ++d) {
-      if (mult & corner) {
+      if ((mult & corner) != 0) {
         res[d] = max_[d];
       } else {
         res[d] = min_[d];
