@@ -228,17 +228,16 @@ Optional<Route> RouteBuilder::getRouteFromShortestPath(const LaneletPath& path) 
       addPendingToElements(elementsQueue);
       previousElement = *thisElement;
       continue;
-    } else {  // normally the case - this is a new element
-      RouteElementUPtr newElement =
-          std::make_unique<RouteElement>(RouteElement(*pathIt, initlaneIdForRoute(*pathIt, initLaneId)));
-      thisElement = newElement.get();
-      if (previousElement != nullptr) {
-        (*thisElement)->addPrevious(previousElement);
-        previousElement->addFollowing(*thisElement);
-      }
-      addToElements(elements_, firstInLane_, newElement);
-      processMergingLanelets(elementsQueue, initLaneId, *thisElement, previousElement, relation);
     }
+    RouteElementUPtr newElement =
+        std::make_unique<RouteElement>(RouteElement(*pathIt, initlaneIdForRoute(*pathIt, initLaneId)));
+    thisElement = newElement.get();
+    if (previousElement != nullptr) {
+      (*thisElement)->addPrevious(previousElement);
+      previousElement->addFollowing(*thisElement);
+    }
+    addToElements(elements_, firstInLane_, newElement);
+    processMergingLanelets(elementsQueue, initLaneId, *thisElement, previousElement, relation);
 
     processLeftSide(initLaneId, *thisElement);
     processRightSide(initLaneId, *thisElement);
@@ -522,10 +521,8 @@ RouteElement::LaneId RouteBuilder::initlaneIdForRoute(const ConstLanelet& lanele
         }
       }
     }
-    return ++initLaneId;
-  } else {
-    return ++initLaneId;
   }
+  return ++initLaneId;
 }
 
 /** @brief Checks if the relation between a shortest-path-lanelet and its predecessor is 'merging' and adds the
@@ -547,8 +544,9 @@ void RouteBuilder::processMergingLanelets(std::vector<RouteElement*>& elementsQu
   ConstLanelets merging{graph_.previous(thisElement->lanelet(), false)};
   std::vector<ConstLanelets> mergingLanes{determineMergingLanes(merging)};
   assert(mergingLanes.size() >= 2);
-  mergingLanes.erase(std::remove_if(mergingLanes.begin(), mergingLanes.end(),
-                                    [&previousElement](auto& it) { return it.front() == previousElement->lanelet(); }));
+  auto toRemove = std::remove_if(mergingLanes.begin(), mergingLanes.end(),
+                                 [&previousElement](auto& it) { return it.front() == previousElement->lanelet(); });
+  mergingLanes.erase(toRemove, mergingLanes.end());
   bool progress{false};
   auto lanesIt = mergingLanes.begin();
   while (!mergingLanes.empty()) {
@@ -616,8 +614,8 @@ void RouteBuilder::processLeftSide(RouteElement::LaneId& initLaneId, RouteElemen
   bool directLeftBack{true};  // Saves wheter the shortest route can be reached using lane changes
   for (auto const& leftIt : relationsLeft) {
     RouteElementUPtr newElement;
-    Optional<RelationType> relationBack{graph_.routingRelation(leftIt.lanelet, closerToRoute->lanelet())};
-    assert(!!relationBack);
+    Optional<RelationType> relationBack(graph_.routingRelation(leftIt.lanelet, closerToRoute->lanelet()));
+    assert(!!relationBack);  // NOLINT
     if (relationBack == RelationType::AdjacentRight) {
       directLeftBack = false;
     }

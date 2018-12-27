@@ -31,10 +31,10 @@ double RoutingCostTravelTime::travelTime(const traffic_rules::TrafficRules& traf
   return units::SecondQuantity(diameter * units::Meter() / limit).value();
 }
 
-double RoutingCostDistance::length(const ConstLanelet& ll) const { return geometry::approximatedLength2d(ll); }
+double RoutingCostDistance::length(const ConstLanelet& ll) const noexcept { return geometry::approximatedLength2d(ll); }
 
-double RoutingCostDistance::length(const ConstArea& ar) const {
-  return boost::geometry::perimeter(utils::to2D(ar.outerBoundPolygon()));
+double RoutingCostDistance::length(const ConstArea& ar) const noexcept {
+  return double(boost::geometry::perimeter(utils::to2D(ar.outerBoundPolygon())));
 }
 }  // namespace routing
 }  // namespace lanelet

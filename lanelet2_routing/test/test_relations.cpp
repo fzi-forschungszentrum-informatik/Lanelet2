@@ -160,7 +160,7 @@ TEST_F(GermanVehicleGraph, FollowingWithoutLaneChangeMerging) {  // NOLINT
 TEST_F(GermanVehicleGraph, FollowingWithoutLaneChangeDiverging) {  // NOLINT
   // Single Lane -> Diverging
   ConstLanelets following = graph->following(lanelets.at(2007), false);
-  EXPECT_EQ(following.size(), 2);
+  EXPECT_EQ(following.size(), 2ul);
   EXPECT_TRUE(std::find(following.begin(), following.end(), lanelets.at(2008)) != following.end());
   EXPECT_TRUE(std::find(following.begin(), following.end(), lanelets.at(2009)) != following.end());
 }

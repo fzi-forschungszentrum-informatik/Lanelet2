@@ -1,5 +1,5 @@
 # clang tidy file installed by mrt_tools. Do not modify: This file will be overwritten.
-Checks:          '-*,mrt*,clang-analyzer-core*,clang-analyzer-deadcode*,clang-analyzer-unix*,clang-analyzer-cplusplus*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-type-vararg,google-explicit-constructor,google-global-names-in-headers,google-readability-casting,google-readability-namespace-comments,google-runtime-int,bugprone-*,performance-*,readability-*,modernize-*,misc-*'
+Checks:          '-*,mrt*,clang-analyzer-core*,clang-analyzer-deadcode*,clang-analyzer-unix*,clang-analyzer-cplusplus*,-clang-analyzer-cplusplus.NewDeleteLeaks,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-type-vararg,google-explicit-constructor,google-global-names-in-headers,google-readability-casting,google-readability-namespace-comments,google-runtime-int,bugprone-*,-bugprone-exception-escape,performance-*,readability-*,modernize-*,misc-*'
 HeaderFilterRegex: '^(?!\/usr)(?!\/opt).*\/src\/.*'
 AnalyzeTemporaryDtors: false
 CheckOptions:

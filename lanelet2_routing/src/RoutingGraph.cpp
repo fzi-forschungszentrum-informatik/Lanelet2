@@ -80,9 +80,8 @@ bool addToPath(ConstLanelets& path, const Optional<LaneletPath>& newElements) {
   if (newElements) {
     path.insert(path.end(), ++newElements->begin(), newElements->end());
     return true;  // NOLINT
-  } else {
-    return false;
   }
+  return false;
 }
 
 //! Helper function to create a new point that represents a lanelet.
@@ -120,9 +119,8 @@ Optional<ConstLaneletOrArea> neighboringImpl(const GraphType::vertex_descriptor 
   }
   if (outEdges.first != outEdges.second) {
     return graph[boost::target(*(outEdges.first), graph)].laneletOrArea;
-  } else {
-    return {};
-  };
+  }
+  return {};
 }
 
 Optional<ConstLanelet> neighboringLaneletImpl(const GraphType::vertex_descriptor vertex, const FilteredGraph& graph,

@@ -69,8 +69,8 @@ class RoutingCostDistance : public RoutingCost {
   }
 
  private:
-  double length(const ConstLanelet& ll) const;
-  double length(const ConstArea& ar) const;
+  double length(const ConstLanelet& ll) const noexcept;
+  double length(const ConstArea& ar) const noexcept;
   const double laneChangeCost_, minChangeLength_;  // NOLINT
 };
 

@@ -158,38 +158,6 @@ struct AddVisitor : public lanelet::internal::MutableParameterVisitor {
   LaneletMap* map_;
 };
 
-template <typename PrimitiveT>
-struct IdSelector {
-  static constexpr unsigned offset() { return 0; }
-  static constexpr unsigned modulo() { return 1; }
-};
-
-template <>
-struct IdSelector<RegulatoryElementPtr> {
-  static constexpr unsigned offset() { return 0; }
-  static constexpr unsigned modulo() { return 3; }
-};
-template <>
-struct IdSelector<Area> {
-  static constexpr unsigned offset() { return 1; }
-  static constexpr unsigned modulo() { return 3; }
-};
-template <>
-struct IdSelector<Lanelet> {
-  static constexpr unsigned offset() { return 2; }
-  static constexpr unsigned modulo() { return 3; }
-};
-template <>
-struct IdSelector<LineString3d> {
-  static constexpr unsigned offset() { return 0; }
-  static constexpr unsigned modulo() { return 2; }
-};
-template <>
-struct IdSelector<Polygon3d> {
-  static constexpr unsigned offset() { return 1; }
-  static constexpr unsigned modulo() { return 2; }
-};
-
 template <typename T, typename MapT, typename KeyT, typename Func>
 std::vector<T> forEachMatchInMultiMap(const MapT& map, const KeyT& key, Func&& f) {
   auto range = map.equal_range(key);
@@ -805,7 +773,7 @@ LaneletMapConstUPtr createConstMap(const ConstLanelets& fromLanelets, const Cons
 }
 
 namespace {
-static std::atomic<Id> currId{1000};
+std::atomic<Id> currId{1000};
 }  // namespace
 
 Id getId() { return currId++; }
@@ -817,7 +785,6 @@ void registerId(Id id) {
   while (current < newId && !currId.compare_exchange_weak(current, newId)) {
   }
 }
-
 }  // namespace utils
 
 namespace geometry {
