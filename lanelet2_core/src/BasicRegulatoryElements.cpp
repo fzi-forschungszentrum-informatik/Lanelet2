@@ -50,11 +50,11 @@ LineStringsOrPolygons3d getLsOrPoly(const RuleParameterMap& paramsMap, RoleName 
   LineStringsOrPolygons3d result;
   for (auto& param : params->second) {
     auto l = boost::get<LineString3d>(&param);
-    if (l) {
+    if (l != nullptr) {
       result.push_back(*l);
     }
     auto p = boost::get<Polygon3d>(&param);
-    if (p) {
+    if (p != nullptr) {
       result.push_back(*p);
     }
   }

@@ -325,9 +325,8 @@ Optional<double> RoutingGraphBuilder::participantHeight() const {
   auto height = config_.find(RoutingGraph::ParticipantHeight);
   if (height != config_.end()) {
     return height->second.asDouble();
-  } else {
-    return {};
   }
+  return {};
 }
 
 void RoutingGraphBuilder::addPointsToSearchIndex(const ConstLanelet& ll) {

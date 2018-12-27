@@ -54,9 +54,7 @@ std::unique_ptr<LaneletMap> load(const std::string& filename, const std::string&
 
 std::vector<std::string> supportedParsers() { return io_handlers::ParserFactory::availableParsers(); }
 
-std::vector<std::string> supportedParserExtensions() {
-  return io_handlers::ParserFactory::instance().availableExtensions();
-}
+std::vector<std::string> supportedParserExtensions() { return io_handlers::ParserFactory::availableExtensions(); }
 
 void write(const std::string& filename, const LaneletMap& map, const Origin& origin, ErrorMessages* errors,
            const io::Configuration& params) {

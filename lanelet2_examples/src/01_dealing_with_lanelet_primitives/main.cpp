@@ -121,7 +121,7 @@ void part1Points() {
 
   // modifying this reference to the basic point also modifies the actual point data:
   p3dBasic.z() = 4;
-  assert(p3d.z() = 4);
+  assert(p3d.z() == 4);
   // with this eigen point we can do the usual computations:
   BasicPoint3d pTwice = p3d.basicPoint() * 2;
   assert(pTwice.z() == 8);

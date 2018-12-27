@@ -254,9 +254,8 @@ struct Graph {
     auto edgeToNext{boost::edge(*fromVertex, *toVertex, g)};
     if (edgeToNext.second) {
       return g[edgeToNext.first];
-    } else {
-      return {};
-    };
+    }
+    return {};
   }
 
   //! Helper function to determine the graph vertex of a given lanelet

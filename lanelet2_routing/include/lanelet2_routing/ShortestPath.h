@@ -111,9 +111,8 @@ struct ShortestPath {
     abortIfVertexInvalid(target);
     if (reached(target)) {
       return distances_[target];
-    } else {
-      return {};
-    };
+    }
+    return {};
   }
 
   //! Basic check if vertex ID is reasonable
