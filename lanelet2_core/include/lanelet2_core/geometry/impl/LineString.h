@@ -147,9 +147,8 @@ traits::PointType<LineStringT> nearestPointAtDistance(LineStringT lineString, do
       double remainingDistance = dist - (currentCumulativeLength - currentLength);
       if (remainingDistance > currentLength / 2.0) {
         return p2;
-      } else {
-        return p1;
       }
+      return p1;
     }
   }
   return lineString.back();
@@ -174,8 +173,8 @@ ArcCoordinates toArcCoordinates(const LineString2dT& lineString, const BasicPoin
   const auto& projectedPoint = res.second;
   // find first point in segment in linestring
   double length = 0.;
-  auto accumulateLength =
-      [&length, &point = projectedPoint.result->segmentPoint1 ](const auto& first, const auto& second) {
+  auto accumulateLength = [&length, &point = projectedPoint.result->segmentPoint1](const auto& first,
+                                                                                   const auto& second) {
     if (boost::geometry::equals(first, point)) {
       return true;
     }

@@ -408,10 +408,9 @@ class LineStringImpl : public Primitive<ConstLineStringT> {
       using RViter = std::reverse_iterator<Viter>;
       auto fwIter = points().insert(internal::pointIter(position), RViter(end), RViter(start));
       return RIter(Points3d::reverse_iterator(fwIter + 1));
-    } else {
-      auto fwIter = points().insert(internal::pointIter(position), Viter(start), Viter(end));
-      return RIter(fwIter);
     }
+    auto fwIter = points().insert(internal::pointIter(position), Viter(start), Viter(end));
+    return RIter(fwIter);
   }
 
   //! inserts a new element at the end

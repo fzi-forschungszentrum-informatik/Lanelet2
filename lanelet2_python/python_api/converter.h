@@ -65,7 +65,7 @@ struct IterableConverter {
   }
 
   /// @brief Check if PyObject is iterable.
-  static void* convertible(PyObject* object) { return PyObject_GetIter(object) ? object : nullptr; }
+  static void* convertible(PyObject* object) { return PyObject_GetIter(object) != nullptr ? object : nullptr; }
 
   /// @brief Convert iterable PyObject to C++ container type.
   ///
