@@ -8,7 +8,7 @@
 #include <vector>
 
 /**
- * @namespace lanelet Basic namespace for everything in lanelet2
+ * @namespace lanelet basic namespace for everything in lanelet2
  */
 namespace lanelet {
 

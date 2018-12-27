@@ -11,8 +11,8 @@ namespace io_handlers {
 
 namespace {
 // register with factories
-static RegisterParser<BinParser> regParser;
-static RegisterWriter<BinWriter> regWriter;
+RegisterParser<BinParser> regParser;
+RegisterWriter<BinWriter> regWriter;
 
 }  // namespace
 

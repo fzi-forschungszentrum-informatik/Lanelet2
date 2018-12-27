@@ -62,8 +62,8 @@ TEST_F(UTMProjectionTest, TestForwardOutOfZoneButInPadding) {  // NOLINT
 TEST_F(UTMProjectionTest, TestForwardOutOfZoneOutOfPadding) {  // NOLINT
   // origin is in UTM zone 32
   double lonTest = 0.;  // UTM zone 31 and out of padding area of zone 32
-  ASSERT_THROW(utmProjector->forward({originLat, lonTest, 0.}), ForwardProjectionError);
-  ASSERT_THROW(utmProjectorNoOffsetThrow->forward({originLat, lonTest, 0.}), ForwardProjectionError);
+  ASSERT_THROW(utmProjector->forward({originLat, lonTest, 0.}), ForwardProjectionError);               // NOLINT
+  ASSERT_THROW(utmProjectorNoOffsetThrow->forward({originLat, lonTest, 0.}), ForwardProjectionError);  // NOLINT
 }
 
 TEST_F(UTMProjectionTest, TestReverseOutOfZoneButInPadding) {  // NOLINT

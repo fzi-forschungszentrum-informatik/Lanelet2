@@ -19,17 +19,17 @@ lanelet::RegulatoryElementPtr getSpeedLimit(const std::string& type, const lanel
 
 lanelet::traffic_rules::TrafficRulesPtr germanVehicleRules() {
   using namespace lanelet;
-  return traffic_rules::TrafficRulesFactory::instance().create(Locations::Germany, Participants::Vehicle, {});
+  return traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle, {});
 };
 
 lanelet::traffic_rules::TrafficRulesPtr germanBikeRules() {
   using namespace lanelet;
-  return traffic_rules::TrafficRulesFactory::instance().create(Locations::Germany, Participants::Bicycle, {});
+  return traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Bicycle, {});
 }
 
 lanelet::traffic_rules::TrafficRulesPtr germanPedestrianRules() {
   using namespace lanelet;
-  return traffic_rules::TrafficRulesFactory::instance().create(Locations::Germany, Participants::Pedestrian, {});
+  return traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Pedestrian, {});
 }
 
 class TrafficRules : public ::testing::Test {

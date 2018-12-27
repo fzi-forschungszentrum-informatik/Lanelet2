@@ -38,9 +38,9 @@ CommandLineConfig parseCommandLine(int argc, const char* argv[]) {
   pos.add("map_file", 1);
   po::store(po::command_line_parser(argc, argv).options(desc).positional(pos).run(), vm);
   po::notify(vm);
-  cfg.help = vm.count("help");
-  cfg.print = vm.count("print");
-  if (vm.count("map_file")) {
+  cfg.help = vm.count("help") != 0;
+  cfg.print = vm.count("print") != 0;
+  if (vm.count("map_file") != 0) {
     cfg.mapFile = vm["map_file"].as<decltype(cfg.mapFile)>();
   }
   if (cfg.help) {
@@ -83,7 +83,7 @@ int runFromConfig(const CommandLineConfig& config) {
   }
   auto issues = validateMap(config.mapFile, config.validationConfig);
   printAllIssues(issues);
-  return !issues.empty();
+  return int(!issues.empty());
 }
 
 }  // namespace validation

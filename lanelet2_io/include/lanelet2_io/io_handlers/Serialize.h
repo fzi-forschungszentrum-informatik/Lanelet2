@@ -9,31 +9,31 @@
 namespace boost {
 namespace serialization {
 template <typename Archive>
-void load(Archive& ar, lanelet::Attribute& p, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::Attribute& p, unsigned int /*version*/) {
   std::string val;
   ar& val;
   p = std::move(val);
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::Attribute& p, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::Attribute& p, unsigned int /*version*/) {
   ar& p.value();
 }
 
 template <typename Archive>
-void serialize(Archive& ar, std::pair<std::string, lanelet::Attribute>& p, const unsigned int /*version*/) {
+void serialize(Archive& ar, std::pair<std::string, lanelet::Attribute>& p, unsigned int /*version*/) {
   ar& p.first;
   ar& p.second;
 }
 
 template <typename Archive>
-void serialize(Archive& ar, std::pair<std::string, lanelet::RuleParameters>& p, const unsigned int /*version*/) {
+void serialize(Archive& ar, std::pair<std::string, lanelet::RuleParameters>& p, unsigned int /*version*/) {
   ar& p.first;
   ar& p.second;
 }
 
 template <typename Archive>
-void load(Archive& ar, lanelet::AttributeMap& p, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::AttributeMap& p, unsigned int /*version*/) {
   size_t size;
   ar& size;
   for (auto i = 0u; i < size; ++i) {
@@ -44,7 +44,7 @@ void load(Archive& ar, lanelet::AttributeMap& p, const unsigned int /*version*/)
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::AttributeMap& p, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::AttributeMap& p, unsigned int /*version*/) {
   auto size = p.size();
   ar& size;
   for (auto& elem : p) {
@@ -54,7 +54,7 @@ void save(Archive& ar, const lanelet::AttributeMap& p, const unsigned int /*vers
 }
 
 template <typename Archive>
-void load(Archive& ar, lanelet::RuleParameterMap& p, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::RuleParameterMap& p, unsigned int /*version*/) {
   size_t size;
   ar& size;
   for (auto i = 0u; i < size; ++i) {
@@ -65,7 +65,7 @@ void load(Archive& ar, lanelet::RuleParameterMap& p, const unsigned int /*versio
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::RuleParameterMap& p, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::RuleParameterMap& p, unsigned int /*version*/) {
   size_t size = p.size();
   ar& size;
   for (auto& elem : p) {
@@ -76,10 +76,10 @@ void save(Archive& ar, const lanelet::RuleParameterMap& p, const unsigned int /*
 
 //! lanelet +data
 template <typename Archive>
-void serialize(Archive& /*ar*/, lanelet::LaneletData& /*p*/, const unsigned int /*version*/) {}
+void serialize(Archive& /*ar*/, lanelet::LaneletData& /*p*/, unsigned int /*version*/) {}
 template <class Archive>
 // NOLINTNEXTLINE
-inline void save_construct_data(Archive& ar, const lanelet::LaneletData* llt, const unsigned int /*version*/) {
+inline void save_construct_data(Archive& ar, const lanelet::LaneletData* llt, unsigned int /*version*/) {
   auto lltnc = const_cast<lanelet::LaneletData*>(llt);  // NOLINT
   auto regelems = lltnc->regulatoryElements();
   ar << lltnc->id << lltnc->attributes << lltnc->leftBound() << lltnc->rightBound() << regelems;
@@ -95,7 +95,7 @@ inline void save_construct_data(Archive& ar, const lanelet::LaneletData* llt, co
 
 template <class Archive>
 // NOLINTNEXTLINE
-inline void load_construct_data(Archive& ar, lanelet::LaneletData* llt, const unsigned int /*version*/
+inline void load_construct_data(Archive& ar, lanelet::LaneletData* llt, unsigned int /*version*/
 ) {
   using namespace lanelet;
   Id id;
@@ -114,27 +114,27 @@ inline void load_construct_data(Archive& ar, lanelet::LaneletData* llt, const un
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::Lanelet& l, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::Lanelet& l, unsigned int /*version*/) {
   auto inv = l.inverted();
   auto ptr = lanelet::utils::removeConst(l.constData());
   ar << inv << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::Lanelet& l, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::Lanelet& l, unsigned int /*version*/) {
   std::shared_ptr<lanelet::LaneletData> ptr;
   bool inv;
   ar >> inv >> ptr;
   l = lanelet::Lanelet(ptr, inv);
 }
 template <typename Archive>
-void save(Archive& ar, const lanelet::ConstLanelet& l, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::ConstLanelet& l, unsigned int /*version*/) {
   auto inv = l.inverted();
   auto ptr = lanelet::utils::removeConst(l.constData());
   ar << inv << ptr;
 }
 
 template <typename Archive>
-void load(Archive& ar, lanelet::ConstLanelet& l, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::ConstLanelet& l, unsigned int /*version*/) {
   std::shared_ptr<lanelet::LaneletData> ptr;
   bool inv;
   ar >> inv >> ptr;
@@ -142,7 +142,7 @@ void load(Archive& ar, lanelet::ConstLanelet& l, const unsigned int /*version*/)
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::WeakLanelet& l, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::WeakLanelet& l, unsigned int /*version*/) {
   if (l.expired()) {
     throw lanelet::LaneletError("Can not serialize expired weak pointer!");
   }
@@ -150,7 +150,7 @@ void save(Archive& ar, const lanelet::WeakLanelet& l, const unsigned int /*versi
   ar& sp;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::WeakLanelet& l, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::WeakLanelet& l, unsigned int /*version*/) {
   lanelet::Lanelet lanelet;
   ar& lanelet;
   l = lanelet;
@@ -158,17 +158,17 @@ void load(Archive& ar, lanelet::WeakLanelet& l, const unsigned int /*version*/) 
 
 //! linestring + data
 template <typename Archive>
-void serialize(Archive& /*ar*/, lanelet::LineStringData& /*l*/, const unsigned int /*version*/) {}
+void serialize(Archive& /*ar*/, lanelet::LineStringData& /*l*/, unsigned int /*version*/) {}
 template <class Archive>
 // NOLINTNEXTLINE
-inline void save_construct_data(Archive& ar, const lanelet::LineStringData* l, const unsigned int /*version*/) {
+inline void save_construct_data(Archive& ar, const lanelet::LineStringData* l, unsigned int /*version*/) {
   auto lnc = const_cast<lanelet::LineStringData*>(l);  // NOLINT
   ar << lnc->id << lnc->attributes << lnc->points();
 }
 
 template <class Archive>
 // NOLINTNEXTLINE
-inline void load_construct_data(Archive& ar, lanelet::LineStringData* l, const unsigned int /*version*/) {
+inline void load_construct_data(Archive& ar, lanelet::LineStringData* l, unsigned int /*version*/) {
   using namespace lanelet;
   Id id;
   AttributeMap attr;
@@ -178,13 +178,13 @@ inline void load_construct_data(Archive& ar, lanelet::LineStringData* l, const u
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::LineString3d& l, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::LineString3d& l, unsigned int /*version*/) {
   auto inv = l.inverted();
   auto ptr = lanelet::utils::removeConst(l.constData());
   ar << inv << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::LineString3d& l, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::LineString3d& l, unsigned int /*version*/) {
   std::shared_ptr<lanelet::LineStringData> ptr;
   bool inv{};
   ar >> inv;
@@ -192,13 +192,13 @@ void load(Archive& ar, lanelet::LineString3d& l, const unsigned int /*version*/)
   l = lanelet::LineString3d(ptr, inv);
 }
 template <typename Archive>
-void save(Archive& ar, const lanelet::Polygon3d& l, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::Polygon3d& l, unsigned int /*version*/) {
   auto inv = l.inverted();
   auto ptr = lanelet::utils::removeConst(l.constData());
   ar << inv << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::Polygon3d& l, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::Polygon3d& l, unsigned int /*version*/) {
   std::shared_ptr<lanelet::LineStringData> ptr;
   bool inv{};
   ar >> inv;
@@ -206,14 +206,14 @@ void load(Archive& ar, lanelet::Polygon3d& l, const unsigned int /*version*/) {
   l = lanelet::Polygon3d(ptr, inv);
 }
 template <typename Archive>
-void save(Archive& ar, const lanelet::ConstLineString3d& l, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::ConstLineString3d& l, unsigned int /*version*/) {
   auto inv = l.inverted();
   auto ptr = lanelet::utils::removeConst(l.constData());
   ar << inv;
   ar << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::ConstLineString3d& l, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::ConstLineString3d& l, unsigned int /*version*/) {
   std::shared_ptr<lanelet::LineStringData> ptr;
   bool inv{};
   ar >> inv;
@@ -222,7 +222,7 @@ void load(Archive& ar, lanelet::ConstLineString3d& l, const unsigned int /*versi
 }
 
 template <typename Archive>
-void serialize(Archive& ar, lanelet::LineString2d& ls, const unsigned int /*version*/) {
+void serialize(Archive& ar, lanelet::LineString2d& ls, unsigned int /*version*/) {
   auto ls3d = lanelet::traits::to3D(ls);
   ar& ls3d;
   ls = lanelet::traits::to2D(ls3d);
@@ -230,16 +230,16 @@ void serialize(Archive& ar, lanelet::LineString2d& ls, const unsigned int /*vers
 
 //! point + data
 template <typename Archive>
-void serialize(Archive& /*ar*/, lanelet::PointData& /*l*/, const unsigned int /*version*/) {}
+void serialize(Archive& /*ar*/, lanelet::PointData& /*l*/, unsigned int /*version*/) {}
 template <class Archive>
 // NOLINTNEXTLINE
-inline void save_construct_data(Archive& ar, const lanelet::PointData* p, const unsigned int /*version*/) {
+inline void save_construct_data(Archive& ar, const lanelet::PointData* p, unsigned int /*version*/) {
   ar << p->id << p->attributes << p->point.x() << p->point.y() << p->point.z();
 }
 
 template <class Archive>
 // NOLINTNEXTLINE
-inline void load_construct_data(Archive& ar, lanelet::PointData* p, const unsigned int /*version*/) {
+inline void load_construct_data(Archive& ar, lanelet::PointData* p, unsigned int /*version*/) {
   using namespace lanelet;
   Id id;
   AttributeMap attrs;
@@ -249,22 +249,22 @@ inline void load_construct_data(Archive& ar, lanelet::PointData* p, const unsign
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::Point3d& p, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::Point3d& p, unsigned int /*version*/) {
   auto ptr = lanelet::utils::removeConst(p.constData());
   ar << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::Point3d& p, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::Point3d& p, unsigned int /*version*/) {
   std::shared_ptr<lanelet::PointData> ptr;
   ar >> ptr;
   p = lanelet::Point3d(ptr);
 }
 template <typename Archive>
-void save(Archive& ar, const lanelet::ConstPoint3d& p, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::ConstPoint3d& p, unsigned int /*version*/) {
   ar << lanelet::utils::removeConst(p.constData());
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::ConstPoint3d& p, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::ConstPoint3d& p, unsigned int /*version*/) {
   std::shared_ptr<lanelet::PointData> ptr;
   ar >> ptr;
   p = lanelet::Point3d(ptr);
@@ -272,10 +272,10 @@ void load(Archive& ar, lanelet::ConstPoint3d& p, const unsigned int /*version*/)
 
 //! area
 template <typename Archive>
-void serialize(Archive& /*ar*/, lanelet::AreaData& /*a*/, const unsigned int /*version*/) {}
+void serialize(Archive& /*ar*/, lanelet::AreaData& /*a*/, unsigned int /*version*/) {}
 template <class Archive>
 // NOLINTNEXTLINE
-inline void save_construct_data(Archive& ar, const lanelet::AreaData* a, const unsigned int /*version*/) {
+inline void save_construct_data(Archive& ar, const lanelet::AreaData* a, unsigned int /*version*/) {
   auto anc = const_cast<lanelet::AreaData*>(a);  // NOLINT
   ar << anc->id;
   ar << anc->attributes;
@@ -286,7 +286,7 @@ inline void save_construct_data(Archive& ar, const lanelet::AreaData* a, const u
 
 template <class Archive>
 // NOLINTNEXTLINE
-inline void load_construct_data(Archive& ar, lanelet::AreaData* a, const unsigned int /*version*/) {
+inline void load_construct_data(Archive& ar, lanelet::AreaData* a, unsigned int /*version*/) {
   using namespace lanelet;
   Id id;
   AttributeMap attrs;
@@ -299,29 +299,29 @@ inline void load_construct_data(Archive& ar, lanelet::AreaData* a, const unsigne
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::Area& a, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::Area& a, unsigned int /*version*/) {
   auto ptr = lanelet::utils::removeConst(a.constData());
   ar << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::Area& a, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::Area& a, unsigned int /*version*/) {
   std::shared_ptr<lanelet::AreaData> ptr;
   ar >> ptr;
   a = lanelet::Area(ptr);
 }
 template <typename Archive>
-void save(Archive& ar, const lanelet::ConstArea& a, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::ConstArea& a, unsigned int /*version*/) {
   auto ptr = lanelet::utils::removeConst(a.constData());
   ar << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::ConstArea& a, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::ConstArea& a, unsigned int /*version*/) {
   std::shared_ptr<lanelet::AreaData> ptr;
   ar >> ptr;
   a = lanelet::Area(ptr);
 }
 template <typename Archive>
-void save(Archive& ar, const lanelet::WeakArea& a, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::WeakArea& a, unsigned int /*version*/) {
   if (a.expired()) {
     throw lanelet::LaneletError("Can not serialize expired weak pointer!");
   }
@@ -329,7 +329,7 @@ void save(Archive& ar, const lanelet::WeakArea& a, const unsigned int /*version*
   ar& sp;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::WeakArea& a, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::WeakArea& a, unsigned int /*version*/) {
   lanelet::Area area;
   ar& area;
   a = area;
@@ -337,10 +337,10 @@ void load(Archive& ar, lanelet::WeakArea& a, const unsigned int /*version*/) {
 
 //! Regulatory element
 template <typename Archive>
-void serialize(Archive& /*ar*/, lanelet::RegulatoryElementData& /*r*/, const unsigned int /*version*/) {}
+void serialize(Archive& /*ar*/, lanelet::RegulatoryElementData& /*r*/, unsigned int /*version*/) {}
 template <class Archive>
 // NOLINTNEXTLINE
-inline void save_construct_data(Archive& ar, const lanelet::RegulatoryElementData* r, const unsigned int /*version*/) {
+inline void save_construct_data(Archive& ar, const lanelet::RegulatoryElementData* r, unsigned int /*version*/) {
   ar << r->id;
   ar << r->attributes;
   ar << r->parameters;
@@ -348,7 +348,7 @@ inline void save_construct_data(Archive& ar, const lanelet::RegulatoryElementDat
 
 template <class Archive>
 // NOLINTNEXTLINE
-inline void load_construct_data(Archive& ar, lanelet::RegulatoryElementData* r, const unsigned int /*version*/) {
+inline void load_construct_data(Archive& ar, lanelet::RegulatoryElementData* r, unsigned int /*version*/) {
   using namespace lanelet;
   Id id;
   AttributeMap attr;
@@ -358,12 +358,12 @@ inline void load_construct_data(Archive& ar, lanelet::RegulatoryElementData* r, 
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::RegulatoryElementPtr& r, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::RegulatoryElementPtr& r, unsigned int /*version*/) {
   auto ptr = lanelet::utils::removeConst(r->constData());
   ar << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::RegulatoryElementPtr& r, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::RegulatoryElementPtr& r, unsigned int /*version*/) {
   std::shared_ptr<lanelet::RegulatoryElementData> ptr;
   ar >> ptr;
   auto type = ptr->attributes.find(lanelet::AttributeName::Subtype);
@@ -371,12 +371,12 @@ void load(Archive& ar, lanelet::RegulatoryElementPtr& r, const unsigned int /*ve
   r = lanelet::RegulatoryElementFactory::create(subtype, ptr);
 }
 template <typename Archive>
-void save(Archive& ar, const lanelet::RegulatoryElementConstPtr& r, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::RegulatoryElementConstPtr& r, unsigned int /*version*/) {
   auto ptr = lanelet::utils::removeConst(r->constData());
   ar << ptr;
 }
 template <typename Archive>
-void load(Archive& ar, lanelet::RegulatoryElementConstPtr& r, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::RegulatoryElementConstPtr& r, unsigned int /*version*/) {
   std::shared_ptr<lanelet::RegulatoryElementData> ptr;
   ar >> ptr;
   auto type = ptr->attributes.find(lanelet::AttributeName::Subtype);
@@ -385,7 +385,7 @@ void load(Archive& ar, lanelet::RegulatoryElementConstPtr& r, const unsigned int
 }
 
 template <typename Archive>
-void save(Archive& ar, const lanelet::LaneletMap& m, const unsigned int /*version*/) {
+void save(Archive& ar, const lanelet::LaneletMap& m, unsigned int /*version*/) {
   auto& mnc = const_cast<lanelet::LaneletMap&>(m);  // NOLINT
   auto storeLayer = [&ar](auto& layer) {
     size_t size = layer.size();
@@ -403,7 +403,7 @@ void save(Archive& ar, const lanelet::LaneletMap& m, const unsigned int /*versio
 }
 
 template <typename Archive>
-void load(Archive& ar, lanelet::LaneletMap& m, const unsigned int /*version*/) {
+void load(Archive& ar, lanelet::LaneletMap& m, unsigned int /*version*/) {
   auto loadLayer = [&ar](auto& layerMap) {
     using Prim = typename std::decay_t<decltype(layerMap)>::mapped_type;
     size_t size;
@@ -439,9 +439,9 @@ BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Area);
 BOOST_SERIALIZATION_SPLIT_FREE(lanelet::WeakLanelet);
 BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Lanelet);
 BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Point3d);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::ConstPoint3d);
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::ConstPoint3d);  // NOLINT
 BOOST_SERIALIZATION_SPLIT_FREE(lanelet::LineString3d);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::ConstLineString3d);
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::ConstLineString3d);  // NOLINT
 BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Polygon3d);
 BOOST_SERIALIZATION_SPLIT_FREE(lanelet::RuleParameterMap);
 BOOST_SERIALIZATION_SPLIT_FREE(lanelet::RegulatoryElementPtr);
