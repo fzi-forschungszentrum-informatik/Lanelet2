@@ -132,6 +132,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("toArcCoordinates", lg::toArcCoordinates<ConstLineString2d>,
       "Project a point into arc coordinates of the linestring");
 
+  def("length", lg::length<ConstLineString2d>);
+  def("length", lg::length<ConstLineString3d>);
+
   def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<ConstLineString2d>);
   def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<ConstLineString3d>);
 
