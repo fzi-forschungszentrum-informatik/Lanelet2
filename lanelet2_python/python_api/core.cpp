@@ -400,6 +400,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   using ::converters::IterableConverter;
   using ::converters::OptionalConverter;
+  using ::converters::PairConverter;
   using ::converters::ToOptionalConverter;
   using ::converters::VariantConverter;
   using ::converters::VectorToListConverter;
@@ -462,6 +463,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   OptionalConverter<RuleParameter>();
   OptionalConverter<ConstRuleParameter>();
   OptionalConverter<RegulatoryElement>();
+
+  PairConverter<std::pair<BasicPoint2d, BasicPoint2d>>();
+  PairConverter<std::pair<BasicPoint3d, BasicPoint3d>>();
 
   WeakConverter<WeakLanelet>();
   WeakConverter<WeakArea>();
