@@ -176,7 +176,9 @@ struct WeakToObject {
 
 template <typename T1, typename T2>
 struct PairToPythonConverter {
-  static PyObject* convert(const std::pair<T1, T2>& pair) { return incref(make_tuple(pair.first, pair.second).ptr()); }
+  static PyObject* convert(const std::pair<T1, T2>& pair) {
+    return py::incref(py::make_tuple(pair.first, pair.second).ptr());
+  }
 };
 
 template <typename T1, typename T2>
