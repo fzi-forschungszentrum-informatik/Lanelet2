@@ -79,7 +79,7 @@ general_code_quality:
 
 .test: &test_job
   stage: test
-  coverage: '/lines......: \d+.\d+\%/'
+  coverage: '/lines: \d+.\d+\%/'
   cache:
     paths:
     - catkin_ws/
