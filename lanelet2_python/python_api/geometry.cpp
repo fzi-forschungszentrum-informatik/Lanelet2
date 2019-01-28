@@ -34,6 +34,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   namespace lg = lanelet::geometry;
 
   def("to2D", utils::to2D<Point3d>);
+  def("to2D", utils::to2D<BasicPoint3d>);
   def("to2D", utils::to2D<ConstPoint3d>);
   def("to2D", utils::to2D<LineString3d>);
   def("to2D", utils::to2D<ConstLineString3d>);
@@ -41,6 +42,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("to2D", utils::to2D<ConstPolygon3d>);
 
   def("to3D", utils::to3D<Point2d>);
+  def("to3D", utils::to2D<BasicPoint2d>);
   def("to3D", utils::to3D<ConstPoint2d>);
   def("to3D", utils::to3D<LineString2d>);
   def("to3D", utils::to3D<ConstLineString2d>);
@@ -131,6 +133,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   def("toArcCoordinates", lg::toArcCoordinates<ConstLineString2d>,
       "Project a point into arc coordinates of the linestring");
+
+  def("length", lg::length<ConstLineString2d>);
+  def("length", lg::length<ConstLineString3d>);
 
   def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<ConstLineString2d>);
   def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<ConstLineString3d>);
