@@ -199,7 +199,7 @@ struct PythonToPairConverter {
     py::tuple tuple(py::borrowed(obj));
     using StorageType = py::converter::rvalue_from_python_storage<std::pair<T1, T2>>;
     void* storage = reinterpret_cast<StorageType*>(data)->storage.bytes;  // NOLINT
-    new (storage) std::pair<T1, T2>(py::extract<T1>(tuple[0]), py::extract<T2>(tuple[1]));
+    new (storage) std::pair<T1, T2>(py::extract<T1>(tuple[0])(), py::extract<T2>(tuple[1])());
     data->convertible = storage;
   }
 };
