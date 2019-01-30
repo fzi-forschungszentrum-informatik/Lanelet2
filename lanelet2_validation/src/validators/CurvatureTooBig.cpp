@@ -34,11 +34,11 @@ Issues CurvatureTooBigChecker::operator()(const lanelet::LaneletMap& map) {
                 if (fabs(denom) < 1e-20)
                     denom = 1e-20;
                 curvature = (ddy1 * dx1 - dy1 * ddx1) / denom;
-                if(fabs(curvature) > 0.5){
+                if(std::fabs(curvature) > 0.5){
                     issues.emplace_back(
                             Severity::Warning, Primitive::Lanelet, lanelet_it->id(),
                             "Curvature at point " + std::to_string(left_bound_2d[i].id())
-                            + " is too big. This can confuse algorithms using this map.");
+                            + " is too big. This can lead to further problems");
                 }
             }
         }
