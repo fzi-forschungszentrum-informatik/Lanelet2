@@ -38,7 +38,7 @@ Issues CurvatureTooBigChecker::operator()(const lanelet::LaneletMap& map) {
                     issues.emplace_back(
                             Severity::Warning, Primitive::Lanelet, lanelet_it->id(),
                             "Curvature at point " + std::to_string(left_bound_2d[i].id())
-                            + " is too big. This can lead to further problems");
+                            + " is too big. This can confuse algorithms using this map.");
                 }
             }
         }
