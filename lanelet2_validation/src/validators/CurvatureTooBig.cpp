@@ -31,10 +31,12 @@ Issues CurvatureTooBigChecker::operator()(const lanelet::LaneletMap& map) {
                 ddy1 = y2 - 2.0 * y1 + y0;
                 // compute "curvature"
                 denom = pow(dx1 * dx1 + dy1 * dy1, 3.0 / 2.0);
-                if (fabs(denom) < 1e-20)
+                if (std::fabs(denom) < 1e-20) {
+	             denom = 1e-20;
+                }
                     denom = 1e-20;
                 curvature = (ddy1 * dx1 - dy1 * ddx1) / denom;
-                if(std::fabs(curvature) > 0.5){
+                if(fabs(curvature) > 0.5){
                     issues.emplace_back(
                             Severity::Warning, Primitive::Lanelet, lanelet_it->id(),
                             "Curvature at point " + std::to_string(left_bound_2d[i].id())
