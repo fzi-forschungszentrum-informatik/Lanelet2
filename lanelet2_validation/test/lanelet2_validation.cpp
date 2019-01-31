@@ -4,7 +4,6 @@
 #include <lanelet2_io/io_handlers/Factory.h>
 #include <lanelet2_io/io_handlers/Writer.h>
 #include <lanelet2_projection/UTM.h>
-#include <experimental/filesystem>
 #include "Cli.h"
 #include "Validation.h"
 
