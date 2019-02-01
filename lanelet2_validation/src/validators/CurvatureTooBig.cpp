@@ -28,12 +28,12 @@ double CurvatureTooBigChecker::computeCurvature(const BasicPoint2d& p1, const Ba
   return static_cast<double>((ddp.y() * dp.x() - dp.y() * ddp.x()) / denom);
 }
 
-void CurvatureTooBigChecker::checkCurvature(Issues& issues, const ConstLineString2d& line, const Id& lanelet_id) {
-  auto line_hyb = utils::toHybrid(line);
-  if (line_hyb.size() >= 3) {
-    for (size_t i = 1; i < line_hyb.size() - 1; ++i) {
-      if (std::fabs(computeCurvature(line_hyb[i - 1], line_hyb[i], line_hyb[i + 1])) > 0.5) {
-        issues.emplace_back(Severity::Warning, Primitive::Lanelet, lanelet_id,
+void CurvatureTooBigChecker::checkCurvature(Issues& issues, const ConstLineString2d& line, const Id& laneletId) {
+  auto lineHyb = utils::toHybrid(line);
+  if (lineHyb.size() >= 3) {
+    for (size_t i = 1; i < lineHyb.size() - 1; ++i) {
+      if (std::fabs(computeCurvature(lineHyb[i - 1], lineHyb[i], lineHyb[i + 1])) > 0.5) {
+        issues.emplace_back(Severity::Warning, Primitive::Lanelet, laneletId,
                             "Curvature at point " + std::to_string(line[i].id()) +
                             " is bigger than 0.5. This can confuse algorithms using this map.");
       }
