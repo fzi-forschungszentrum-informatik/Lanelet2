@@ -188,14 +188,14 @@ bool GenericTrafficRules::canPass(const ConstLanelet& from, const ConstLanelet& 
 }
 
 Optional<ConstLineString3d> determineCommonLine(const ConstLanelet& ll, const ConstArea& ar) {
-  return utils::findIf(ar.outerBound(), [ p1 = ll.leftBound().back(), p2 = ll.rightBound().back() ](auto& boundLs) {
+  return utils::findIf(ar.outerBound(), [p1 = ll.leftBound().back(), p2 = ll.rightBound().back()](auto& boundLs) {
     return (boundLs.back() == p1 && boundLs.front() == p2);
   });
 }
 Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar1, const ConstArea& ar2) {
   return utils::findIf(ar1.outerBound(), [&ar2](auto& ar1Bound) {
-    return !!utils::findIf(
-        ar2.outerBound(), [ar1Bound = ar1Bound.invert()](auto& ar2Bound) { return ar2Bound == ar1Bound; });
+    return !!utils::findIf(ar2.outerBound(),
+                           [ar1Bound = ar1Bound.invert()](auto& ar2Bound) { return ar2Bound == ar1Bound; });
   });
 }
 

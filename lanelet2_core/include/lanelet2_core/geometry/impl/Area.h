@@ -69,7 +69,7 @@ inline bool rightOf(const ConstLanelet& left, const ConstArea& area) { return le
 inline bool follows(const ConstLanelet& prev, const ConstArea& next) {
   auto outer = next.outerBound();
   return utils::anyOf(outer,
-                      [ p1 = prev.leftBound().back(), p2 = prev.rightBound().back() ](const ConstLineString3d& ls) {
+                      [p1 = prev.leftBound().back(), p2 = prev.rightBound().back()](const ConstLineString3d& ls) {
                         return (ls.front() == p1 && ls.back() == p2) || (ls.front() == p2 && ls.back() == p1);
                       });
 }
