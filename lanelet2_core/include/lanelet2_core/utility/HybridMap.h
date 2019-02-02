@@ -15,7 +15,7 @@ class ArrayView {
   static constexpr auto begin() { return std::begin(Arr); }
   static constexpr auto end() { return std::end(Arr); }
 
-  static constexpr auto findValue(const decltype(Arr[0].second) & val) {
+  static constexpr auto findValue(const decltype(Arr[0].second)& val) {
     auto it = begin();
     for (; it != end(); ++it) {
       if (it->second == val) {
@@ -24,7 +24,7 @@ class ArrayView {
     }
     return it;
   }
-  static constexpr auto findKey(const decltype(Arr[0].first) & val) {
+  static constexpr auto findKey(const decltype(Arr[0].first)& val) {
     auto it = begin();
     for (; it != end(); ++it) {
       if (strcmp(it->first, val) == 0) {
