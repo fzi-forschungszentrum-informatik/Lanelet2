@@ -1,6 +1,6 @@
 variables:
   GIT_STRATEGY: none
-  LANELET2_PACKAGES: lanelet2_core lanelet2_io lanelet2_projection lanelet2_python lanelet2_routing lanelet2_traffic_rules
+  LANELET2_PACKAGES: lanelet2_core lanelet2_io lanelet2_projection lanelet2_python lanelet2_routing lanelet2_traffic_rules lanelet2_validation
 # Cache build results between building and testing
 cache:
   paths:
