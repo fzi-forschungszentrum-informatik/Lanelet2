@@ -18,10 +18,11 @@ RegisterTrafficRules<GermanBicycle> gbRules(Locations::Germany, Participants::Bi
 Velocity trafficSignToVelocity(const std::string& typeString) {
   using namespace lanelet::units::literals;
   const static std::map<std::string, Velocity> StrToVelocity{
-      {"de274", 30_kmh},      {"de274-5", 5_kmh},     {"de274-10", 10_kmh},   {"de274-20", 20_kmh},
-      {"de274-30", 30_kmh},   {"de274-40", 40_kmh},   {"de274-50", 50_kmh},   {"de274-60", 60_kmh},
-      {"de274-70", 70_kmh},   {"de274-80", 80_kmh},   {"de274-90", 90_kmh},   {"de274-100", 100_kmh},
-      {"de274-110", 110_kmh}, {"de274-120", 120_kmh}, {"de274-130", 130_kmh}, {"de310", 50_kmh}};
+      {"de274", 30_kmh},      {"de274-5", 5_kmh},     {"de274-10", 10_kmh},   {"de274-15", 15_kmh},
+      {"de274-20", 20_kmh},   {"de274-30", 30_kmh},   {"de274-40", 40_kmh},   {"de274-50", 50_kmh},
+      {"de274-60", 60_kmh},   {"de274-70", 70_kmh},   {"de274-80", 80_kmh},   {"de274-90", 90_kmh},
+      {"de274-100", 100_kmh}, {"de274-110", 110_kmh}, {"de274-120", 120_kmh}, {"de274-130", 130_kmh},
+      {"de310", 50_kmh}};
   try {
     return StrToVelocity.at(typeString);
   } catch (std::out_of_range&) {
