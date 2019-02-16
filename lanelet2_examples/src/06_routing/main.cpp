@@ -114,8 +114,8 @@ void part2UsingRoutes() {
 
   // but we can also check for earlier possibilites of a lane change or query other relations, similar to the routing
   // graph.
-  auto left = route->rightRelation(lanelet);
-  assert(!!left);
+  auto right = route->rightRelation(lanelet);
+  assert(!!right);
 
   // finally, we can also create a lanelet map from the route that only contains the relevant primitives for the
   // chosen route:
