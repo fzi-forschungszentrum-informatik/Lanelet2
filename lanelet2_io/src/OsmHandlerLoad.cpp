@@ -347,7 +347,7 @@ class FromFileLoader {  // NOLINT
           reverse(currRing);
           if (!isValid(currRing)) {
             // most probably self-intersecting...
-            parserError(id, "Failed to generate boundary (self-intersecting?");
+            parserError(id, "Failed to generate boundary (self-intersecting?)");
             rings.pop_back();
           }
         }
