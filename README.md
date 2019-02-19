@@ -38,20 +38,22 @@ Lanelet2 uses [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html)
 At least C++14 is required.
 
 ### Dependencies
+Besides [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html), the dependencies are
 * `Boost` (from 1.58)
 * `eigen3`
 * [`mrt_cmake_modules`](https://github.com/KIT-MRT/mrt_cmake_modules), a CMake helper library
 * `pugixml` (for lanelet2_io)
 * `boost-python/python2` (for lanelet2_python)
 * `geographiclib` (for lanelet2_projection)
+* `rosbash` (for lanelet2_examples)
 
-For Ubuntu (assuming you the ROS package repository [installed](http://wiki.ros.org/ROS/Installation)):
-```shell
-sudo apt-get install libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
-```
+For Ubuntu, the steps are the following (as in the [.travis.yml](.travis.yml)):
+* set up the ROS repository ([.travis.yml#L31f](.travis.yml#L31) or [ROS wiki](http://wiki.ros.org/ROS/Installation))
+* install catkin ([.travis.yml#L37f](.travis.yml#L37))
+* install the upper lanelet2 dependencies ([.travis.yml#L41](.travis.yml#L41))
 
 ### Building
-As usual with Catkin, you have to crate a workspace and clone all required packages there. Then you can build:
+As usual with Catkin, after you have sourced the catkin cmake module, you have to create a workspace and clone all required packages there. Then you can build ([.travis.yml#L45f](.travis.yml#L45)):
 ```shell
 mkdir catkin_ws && cd catkin_ws && mkdir src
 catkin init
@@ -61,6 +63,8 @@ git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
 cd ..
 catkin build
 ```
+
+See the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2) for the full installation process, with subsequent build and test, starting at a clean Ubuntu.
 
 ## Examples
 Examples and common use cases in both C++ and Python can be found [here](lanelet2_examples/README.md).
