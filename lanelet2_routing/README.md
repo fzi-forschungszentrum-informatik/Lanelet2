@@ -37,27 +37,8 @@ The possible relations are:
     * `conflicting` (intersecting lanelets/areas)
     * `area` (reachable area to lanelet/area relation)
 
-## Routes and (Driving) Routes
-![](doc/images/route_and_route.png)
-
-### Shortest route
- * A shortest path from A to B, possibly with intermediate points
- * Data-wise simply a vector of lanelets
-
-### (Driving) Route
- * Includes all **directly** adjacent lanelets of a route that can used to reach B
- * Data-wise an own class that holds relations between the lanelets
- * Answers queries regarding relations within the route (e.g. left, right, ...)
- * Independent from the routing graph
- * Determines and returns lanes
-    * `Lane` is a number of consecutive lanelets in a route until they end, merge or diverge
-
-### Reachable Sets/Reachable Paths
- * Used to determine the options that a specific traffic participant has from a given lanelet/area
- * Query the possible routes without exceeding one of the specified routing costs
-
 ## Route vs Path vs Sequence
-When querying data in the routing graph, you will come across the terms _route_, _path_ and _sequence_. They have a special meaning.
+When querying data in the routing graph, you will come across the terms _route_, _path_ and _sequence_. They have a special meaning and are data-wise different classes.
 
 A *route* means all the lanelets that can be used to a destination without driving a different road. They can be connected by a generic sequence of lane changes and successors.
 
@@ -177,7 +158,7 @@ These can then be viewed with a graph viewer like [Gephi](https://gephi.org/). T
 
 Example route through `Oststadtkreisel`:
 
-![](doc/images/lanelet_map_route_oststadtkreisel_small.png)
+![](doc/images/lanelet_map_route_oststadtkreisel_small.jpg)
 
 
 Output of `getDebugLaneletMap()` function:
