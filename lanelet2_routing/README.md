@@ -38,7 +38,7 @@ The possible relations are:
     * `area` (reachable area to lanelet/area relation)
 
 ## Route vs Path vs Sequence
-When querying data in the routing graph, you will come across the terms _route_, _path_ and _sequence_. They have a special meaning and are data-wise different classes.
+When querying data in the routing graph, you will come across the terms _route_, _path_ and _sequence_. In contrast to a simple set of lanelets (data-wise a vector of lanelets), they have a special meaning and are data-wise different classes.
 
 A *route* means all the lanelets that can be used to a destination without driving a different road. They can be connected by a generic sequence of lane changes and successors.
 
@@ -83,9 +83,9 @@ graph = lanelet2.routing.RoutingGraph(map, trafficRules)
 ## Get a shortest path
 
 ```cpp
-CompoundLanelets shortestPath = graph->shortestPath(fromLanelet, toLanelet);
+Optional<routing::LaneletPath> shortestPath = graph->shortestPath(fromLanelet, toLanelet);
 ```
-* `shortestPath` will be empty if there's no route.
+* `Optional` will be uninitialized (false) if there's no route
 * there's also `shortestPathWithIntermediate`
 
 in python:
@@ -111,6 +111,13 @@ if route:
     lanelet2.io.write("route.osm", route.getLaneletMap())
 ```
 
+## Get a reachable set of lanelets
+
+```cpp
+double maxRoutingCost{100};
+ConstLanelets reachableSet = graph->reachableSet(lanelet, maxRoutingCost, routingCostId);
+```
+
 ## Left, Right, Following Lanelets
 
 ```cpp
@@ -123,7 +130,7 @@ ConstLanelets following{graph->following(fromLanelet)};
 ```
 * Also available: `right`, `adjacentRight`, `lefts`, `rights`, `conflicting`
 
-Alternatively: 
+Alternatively:
  or queries that return relations:
 ```cpp
 // Get relations to all left lanelets
@@ -147,12 +154,12 @@ This one is best viewed in [JOSM](https://josm.openstreetmap.de/) and using a cu
 Most of the information is to be found in the attributes. The line strings that connect lanelets do have a direction. The name of the forth-direction is generally to be found left/above the line and the reverse relation right/under the string.
 
 ## DOT (GraphViz) and GraphML (xml-based) file export
- 
+
 ```cpp
 graph->exportGraphViz("~/graph.gv");
 graph->exportGraphML("~/graph.graphml");
-``` 
-These can then be viewed with a graph viewer like [Gephi](https://gephi.org/). The downside compared to the laneletMap export is, that the lanelets aren't localized. 
+```
+These can then be viewed with a graph viewer like [Gephi](https://gephi.org/). The downside compared to the laneletMap export is, that the lanelets aren't localized.
 
 # 4. Routes
 
@@ -179,11 +186,11 @@ Note that a route just returns relations to lanelets that can be used to reach t
 
 ```cpp
 // Get underlying shortest path
-ConstLanelets shortestPath = route->shortestPath();
+Optional<routing::LaneletPath> shortestPath = route->shortestPath();
 // Get the full lane of a given lanelet 'll'
-ConstLanelets fullLane = route->fullLane(ll);
+LaneletSequence fullLane = route->fullLane(ll);
 // Get remaining lane of a given lanelet 'll'
-ConstLanelets remainingLane = route->remainingLane(ll);
+LaneletSequence remainingLane = route->remainingLane(ll);
 ```
 
 # 5. Interconnect Routing Graphs of Different Participants
