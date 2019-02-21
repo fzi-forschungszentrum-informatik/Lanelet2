@@ -2201,14 +2201,14 @@ way[type=traffic_sign][subtype=de331_2] >[index=-2] node
     z-index: 5;
     icon-image: "style_images/331.2.png";
 }
-way[type=traffic_sign][subtype=de331.1] >[index=-2] node
+way[type=traffic_sign][subtype=de331-1] >[index=-2] node
 {
     text: "type";
     icon-height: 30;
     z-index: 5;
     icon-image: "style_images/331.1.png";
 }
-way[type=traffic_sign][subtype=de331.2] >[index=-2] node
+way[type=traffic_sign][subtype=de331-2] >[index=-2] node
 {
     text: "type";
     icon-height: 30;
