@@ -47,14 +47,17 @@ Besides [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html), the 
 * `geographiclib` (for lanelet2_projection)
 * `rosbash` (for lanelet2_examples)
 
-For Ubuntu, the steps are the following (as in the [.travis.yml](.travis.yml)):
-* set up the ROS repository ([.travis.yml#L31f](.travis.yml#L31) or [ROS wiki](http://wiki.ros.org/ROS/Installation))
-* install catkin ([.travis.yml#L37f](.travis.yml#L37))
-* install the upper lanelet2 dependencies ([.travis.yml#L41](.travis.yml#L41))
+For Ubuntu, the steps are the following:
+* [Set up ROS](http://wiki.ros.org/ROS/Installation), and install at least `rospack` and `catkin` (e.g. `ros-melodic-rospack` and `ros-melodic-catkin`).
+* Install the dependencies above:
+```bash
+sudo apt-get install libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
+```
 
 ### Building
-As usual with Catkin, after you have sourced the catkin cmake module, you have to create a workspace and clone all required packages there. Then you can build ([.travis.yml#L45f](.travis.yml#L45)):
+As usual with Catkin, after you have sourced the ros installation, you have to create a workspace and clone all required packages there. Then you can build.
 ```shell
+source /opt/ros/$ROS_DISTRO/setup.bash
 mkdir catkin_ws && cd catkin_ws && mkdir src
 catkin init
 cd src
@@ -64,7 +67,7 @@ cd ..
 catkin build
 ```
 
-See the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2) for the full installation process, with subsequent build and test, starting at a clean Ubuntu.
+If unsure, see the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2). It shows the the full installation process, with subsequent build and test, starting at a clean Ubuntu installation.
 
 ## Examples
 Examples and common use cases in both C++ and Python can be found [here](lanelet2_examples/README.md).
