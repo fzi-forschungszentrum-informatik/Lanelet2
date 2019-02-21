@@ -19,7 +19,8 @@ args = parser.parse_args()
 if args.inplace:
     args.output = args.filename
 
-map = lanelet2.io.load(args.filename)
+proj = lanelet2.projection.MercatorProjector(lanelet2.io.Origin(49,8))
+map = lanelet2.io.load(args.filename, proj)
 
 
 make_positive(map.pointLayer)
@@ -29,4 +30,4 @@ make_positive(map.laneletLayer)
 make_positive(map.areaLayer)
 make_positive(map.regulatoryElementLayer)
 
-lanelet2.io.write(args.output, map)
+lanelet2.io.write(args.output, map, proj)
