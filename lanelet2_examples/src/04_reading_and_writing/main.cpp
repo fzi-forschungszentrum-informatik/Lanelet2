@@ -5,6 +5,8 @@
 #include <lanelet2_projection/UTM.h>
 #include <cstdio>
 
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+
 // we want assert statements to work in release mode
 #undef NDEBUG
 

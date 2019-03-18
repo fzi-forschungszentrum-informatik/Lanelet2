@@ -4,6 +4,8 @@
 #include <lanelet2_core/primitives/Lanelet.h>
 #include "../ExampleHelpers.h"
 
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 // we want assert statements to work in release mode
 #undef NDEBUG
 
