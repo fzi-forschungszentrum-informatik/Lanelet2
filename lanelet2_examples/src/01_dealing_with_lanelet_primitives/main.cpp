@@ -11,6 +11,9 @@
 // we want assert statements to work in release mode
 #undef NDEBUG
 
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 // we compare floats a couple of times and know this is save in this context
 #pragma GCC diagnostic ignored "-Wfloat-equal"
 
