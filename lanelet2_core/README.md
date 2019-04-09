@@ -8,4 +8,7 @@ This package contains the core library of Lanelet2:
 
 For usage examples, please refer to the [lanelet2_examples](../lanelet2_examples/README.md) package.
 
+## Debugging
 
+Debugging Lanelet objects can be annoying, because they are very deeply nested.
+To improve this, Lanelet2 offers helpers for **GDB** and **QtCreator**. Have a look [here](./res).
