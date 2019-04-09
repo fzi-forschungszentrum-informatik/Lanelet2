@@ -277,11 +277,11 @@ class RoutingGraph {
                                    bool includeConflicting = false) const;
 
   /** @brief LaneletMap that includes all passable lanelets and areas.
-   *  This map contains all passable lanelets with all primitives (linestrings, points), but no areas and no
-   * regulatory elements. It can be used to perform spacial queries e.g. for localization.
+   *  This map contains all passable lanelets and areas with all primitives (linestrings, points), but
+   *  no regulatory elements. It can be used to perform spacial queries e.g. for localization.
    *  When selecting a lanelet from this map please be aware that the routing graph may also contain the inverted
    * lanelet.
-   *  @return LaneletMap with all passable lanelets */
+   *  @return LaneletMap with all passable lanelets and areas */
   inline LaneletMapConstPtr passableMap() const noexcept { return passableLaneletMap_; }
 
   /** @brief Performs some basic sanity checks.
