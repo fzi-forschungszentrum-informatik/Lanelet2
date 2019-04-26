@@ -6,6 +6,7 @@ CMakeLists.txt.user
 devel
 build
 logs
+src
 .ros
 .catkin_tools
 .config
