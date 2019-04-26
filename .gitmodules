@@ -1,0 +1,3 @@
+[submodule "mrt_cmake_modules"]
+	path = mrt_cmake_modules
+	url = https://github.com/KIT-MRT/mrt_cmake_modules.git

@@ -33,6 +33,27 @@ You can find more documentation in the individual packages and in doxygen commen
 - To get more information on how to create valid maps, see [here](lanelet2_maps/README.md).
 
 ## Installation
+
+### Plug and play (on a Docker image)
+
+You can use the script `./build.sh` to create a docker image and `./run.sh` to access it in bash and play with the examples. 
+
+As you access the image, run these commands to have it operational.
+
+```
+source /opt/ros/kinetic/setup.bash
+catkin init
+catkin build
+source devel/setup.bash
+```
+
+And finally test it out with `python -c "import lanelet2"` (should yield nothing if installed correctly)
+
+
+### Install manually on your pc
+
+In case you want to build it in your own way (without the above Docker image) use these instructions.
+
 Lanelet2 uses [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html) for building and is targeted towards Linux.
 
 At least C++14 is required.
