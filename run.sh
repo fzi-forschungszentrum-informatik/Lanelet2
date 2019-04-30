@@ -6,21 +6,15 @@ do
     sleep 1
 done
 
+swd="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 echo "Starting container lanelet2..."
-
-mkdir -p src
-mkdir -p build
-mkdir -p devel
-mkdir -p logs
 
 docker run \
       -it \
       --rm \
       --net host \
-      -v $(pwd)/lanelet2_modules:/home/workspace/src/lanelet2 \
-      -v $(pwd)/mrt_cmake_modules:/home/workspace/src/mrt_cmake_modules \
-       -v $(pwd):/home/workspace \
-      --entrypoint bash \
-      lanelet2
+      -v $swd:/home/workspace/lanelet2_modules \
+      -v $swd/setup.sh:/home/workspace/setup.sh \
+      lanelet2:latest
 

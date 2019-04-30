@@ -38,3 +38,6 @@ RUN apt-get update && apt-get install -y \
 ENV HOME /home/workspace
 WORKDIR /home/workspace
 
+RUN mkdir /home/workspace/src \
+    && git clone https://github.com/KIT-MRT/mrt_cmake_modules.git \
+        /home/workspace/src/mrt_cmake_modules

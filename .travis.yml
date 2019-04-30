@@ -18,7 +18,7 @@ env:
   global:
     - ROS_DISTRO=kinetic
     - ROS_CI_DESKTOP="`lsb_release -cs`"  # e.g. [precise|trusty|...]
-    - CI_SOURCE_PATH=$(pwd)
+    - CI_SOURCE_PATH=$(pwd)/lanelet2_modules
     - ROS_PARALLEL_JOBS='-j8 -l6'
     # Set the python path manually to include /usr/-/python2.7/dist-packages
     # as this is where apt-get installs python packages.
