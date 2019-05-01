@@ -34,21 +34,18 @@ You can find more documentation in the individual packages and in doxygen commen
 
 ## Installation
 
-### Plug and play (on a Docker image)
+### Plug and play
 
-You can use the script `./build.sh` to create a docker image and `./run.sh` to access it in bash and play with the examples. 
-
-As you access the image, run these commands to have it operational.
+There is a Docker container from which you can test things out
 
 ```
-source /opt/ros/kinetic/setup.bash
-catkin init
-catkin build
-source devel/setup.bash
+cd docker
+./build.sh                    # will build the docker file
+./run.sh                      # starts the docker image, builds the code at start-up
+python -c "import lanelet2"   # quick check to see if all worked
 ```
 
-And finally test it out with `python -c "import lanelet2"` (should yield nothing if installed correctly)
-
+The docker image contains a link to your local lanelet2, so you can work and see changes (almost) at the same time. Work with two screens, one local and one on docker. Make your code changes locally, then run again `catkin build` on docker to recompile the code (update python modules). 
 
 ### Install manually on your pc
 
