@@ -45,7 +45,7 @@ cd docker
 python -c "import lanelet2"   # quick check to see if all worked
 ```
 
-The docker image contains a link to your local lanelet2, so you can work and see changes (almost) at the same time. Work with two screens, one local and one on docker. Make your code changes locally, then run again `catkin build` on docker to recompile the code (update python modules). 
+The docker image contains a link to your local lanelet2, so you can work and see changes (almost) at the same time. Work with two screens, one local and one on docker. Make your code changes locally, then run again `catkin build` on docker to recompile the code (update python modules).
 
 ### Install manually on your pc
 

@@ -3,13 +3,3 @@
 setup.py
 CMakeLists.txt.user
 
-devel
-build
-logs
-src
-.ros
-.catkin_tools
-.config
-.viminfo
-.bash_history
-

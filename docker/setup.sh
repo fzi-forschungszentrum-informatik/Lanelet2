@@ -19,5 +19,3 @@ catkin build
 
 echo "2. Setting environment variables"
 source devel/setup.bash
-# simple test of environment variables
-python -c "import lanelet2"
