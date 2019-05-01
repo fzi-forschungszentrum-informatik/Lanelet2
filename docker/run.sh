@@ -14,7 +14,6 @@ docker run \
       -it \
       --rm \
       --net host \
-      -v $swd:/home/workspace/lanelet2_modules \
-      -v $swd/setup.sh:/home/workspace/setup.sh \
+      -v $swd/../:/home/developer/workspace/lanelet2_modules \
       lanelet2:latest
 

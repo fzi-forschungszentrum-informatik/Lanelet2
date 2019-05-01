@@ -4,6 +4,7 @@ from ubuntu:16.04
 RUN apt-get update && apt-get install -y \
         build-essential \
         cmake \
+        sudo \
         wget \
         vim \
         nano \
@@ -33,11 +34,23 @@ RUN apt-get update && apt-get install -y \
         python-catkin-tools \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# create a user
+RUN useradd --create-home --groups sudo --shell /bin/bash developer
+RUN mkdir -p /etc/sudoers.d \
+    && echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer \
+    && chmod 0440 /etc/sudoers.d/developer
 
-# environment and entry points
-ENV HOME /home/workspace
-WORKDIR /home/workspace
+RUN echo "export ROS_HOSTNAME=localhost" >> /home/developer/.bashrc \
+    && echo "source /opt/ros/kinetic/setup.bash" >> /home/developer/.bashrc \
+    && echo "source setup.sh" >> /home/developer/.bashrc
 
-RUN mkdir /home/workspace/src \
-    && git clone https://github.com/KIT-MRT/mrt_cmake_modules.git \
-        /home/workspace/src/mrt_cmake_modules
+# environment, dependencies and entry points
+USER developer
+
+RUN mkdir -p /home/developer/workspace/src \
+    && git clone https://github.com/KIT-MRT/mrt_cmake_modules.git /home/developer/workspace/src/mrt_cmake_modules
+
+ADD setup.sh /home/developer/workspace
+
+ENV HOME /home/developer
+WORKDIR /home/developer/workspace
