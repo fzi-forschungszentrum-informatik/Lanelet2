@@ -815,10 +815,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<SpeedLimit, boost::noncopyable, std::shared_ptr<SpeedLimit>, bases<TrafficSign>>(  // NOLINT
       "SpeedLimit", "A speed limit regulatory element", no_init);
 
-  wrapLayer<AreaLayer>("AreaLayer");
-  wrapLayer<LaneletLayer>("LaneletLayer");
-  wrapLayer<PolygonLayer>("PolygonLayer");
-  wrapLayer<LineStringLayer>("LineStringLayer");
+  wrapLayer<AreaLayer>("AreaLayer")
+      .def("findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
+      .def("findUsages", +[](AreaLayer& self, LineString3d& ls) { return self.findUsages(ls); });
+  wrapLayer<LaneletLayer>("LaneletLayer")
+      .def("findUsages", +[](LaneletLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
+      .def("findUsages", +[](LaneletLayer& self, LineString3d& ls) { return self.findUsages(ls); });
+  wrapLayer<PolygonLayer>("PolygonLayer").def("findUsages", +[](PolygonLayer& self, Point3d& p) {
+    return self.findUsages(p);
+  });
+  wrapLayer<LineStringLayer>("LineStringLayer").def("findUsages", +[](LineStringLayer& self, Point3d& p) {
+    return self.findUsages(p);
+  });
   wrapLayer<PointLayer>("PointLayer");
   wrapLayer<RegulatoryElementLayer>("RegulatoryElementLayer");
 
