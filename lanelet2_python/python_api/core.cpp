@@ -411,8 +411,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   VectorToListConverter<Points3d>();
   VectorToListConverter<Points2d>();
+  VectorToListConverter<ConstPoints3d>();
+  VectorToListConverter<ConstPoints2d>();
   VectorToListConverter<LineStrings3d>();
   VectorToListConverter<LineStrings2d>();
+  VectorToListConverter<ConstLineStrings3d>();
+  VectorToListConverter<ConstLineStrings2d>();
   VectorToListConverter<BasicPolygon3d>();
   VectorToListConverter<BasicPolygon2d>();
   VectorToListConverter<Polygons3d>();
@@ -474,6 +478,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   IterableConverter()
       .fromPython<Points3d>()
       .fromPython<Points2d>()
+      .fromPython<ConstLineStrings3d>()
+      .fromPython<ConstLineStrings2d>()
       .fromPython<LineStrings3d>()
       .fromPython<LineStrings2d>()
       .fromPython<Polygons2d>()
