@@ -2,7 +2,7 @@
 import lanelet2
 import tempfile
 import os
-from lanelet2.liblanelet2_core_pyapi import AttributeMap, TrafficLight, Lanelet, LineString3d, Point2d, Point3d, getId, \
+from lanelet2.core import AttributeMap, TrafficLight, Lanelet, LineString3d, Point2d, Point3d, getId, \
     LaneletMap, BoundingBox2d, BasicPoint2d
 from lanelet2.projection import UtmProjector
 
