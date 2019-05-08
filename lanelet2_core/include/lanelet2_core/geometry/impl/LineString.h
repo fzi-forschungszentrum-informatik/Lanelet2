@@ -122,6 +122,9 @@ traits::BasicPointT<traits::PointType<LineStringT>> interpolatedPointAtDistance(
     currentCumulativeLength += currentLength;
     if (currentCumulativeLength >= dist) {
       double remainingDistance = dist - (currentCumulativeLength - currentLength);
+      if (remainingDistance < 1.e-8) {
+        return p1;
+      }
       return p1 + remainingDistance / currentLength * (p2 - p1);
     }
   }
