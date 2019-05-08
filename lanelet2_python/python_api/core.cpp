@@ -729,6 +729,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<RegulatoryElement, boost::noncopyable, RegulatoryElementPtr>(
       "RegulatoryElement", "A Regulatory element defines traffic rules that affect a lanelet", no_init)
       .def(IsConstPrimitive<RegulatoryElement>())
+      .add_property("id", &RegulatoryElement::id, &RegulatoryElement::setId)
       .add_property("parameters", static_cast<GetParamSig>(&RegulatoryElement::getParameters),
                     "the parameters (ie traffic signs, lanelets) that affect "
                     "this RegulatoryElement")
