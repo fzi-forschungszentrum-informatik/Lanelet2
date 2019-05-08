@@ -148,19 +148,27 @@ class ConstLanelet : public ConstPrimitive<LaneletData> {
   explicit ConstLanelet(const std::shared_ptr<const LaneletData>& data, bool inverted = false)
       : ConstPrimitive<lanelet::LaneletData>(data), inverted_{inverted} {}
 
-  //! returns out if this is an inverted lanelet
+  //! returns if this is an inverted lanelet
   bool inverted() const { return inverted_; }
 
   //! returns the inverted lanelet
   ConstLanelet invert() const { return ConstLanelet{constData(), !inverted()}; }
 
-  //! get the left bound
-  ConstLineString3d leftBound() const {
+  //! get the left bound.
+  ConstLineString3d leftBound() const { return leftBound3d(); }
+  //! get the left bound in 2d. To be used over leftBound where geometric calculations are required.
+  ConstLineString2d leftBound2d() const { return utils::to2D(leftBound3d()); }
+  //! get the left bound in 3d. To be used over leftBound where geometric calculations are required.
+  ConstLineString3d leftBound3d() const {
     return inverted() ? constData()->rightBound().invert() : constData()->leftBound();
   }
 
-  //! get the right bound
-  ConstLineString3d rightBound() const {
+  //! get the right bound.
+  ConstLineString3d rightBound() const { return rightBound3d(); }
+  //! get the right bound in 2d. To be used over rightBound where geometric calculations are required.
+  ConstLineString2d rightBound2d() const { return utils::to2D(rightBound3d()); }
+  //! get the right bound in 3d. To be used over rightBound where geometric calculations are required.
+  ConstLineString3d rightBound3d() const {
     return inverted() ? constData()->leftBound().invert() : constData()->rightBound();
   }
 
@@ -173,8 +181,14 @@ class ConstLanelet : public ConstPrimitive<LaneletData> {
     return constData()->regulatoryElementsAs<RegElemT>();
   }
 
-  //! get the (cached) centerline of this lanelet
-  ConstLineString3d centerline() const {
+  //! get the (cached) centerline of this lanelet.
+  ConstLineString3d centerline() const { return centerline3d(); }
+
+  //! get the (cached) centerline of this lanelet in 2d. To be used in context of geometric calculations.
+  ConstLineString2d centerline2d() const { return utils::to2D(centerline3d()); }
+
+  //! get the (cached) centerline of this lanelet in 3d. To be used in context of geometric calculations.
+  ConstLineString3d centerline3d() const {
     return inverted() ? constData()->centerline().invert() : constData()->centerline();
   }
 
@@ -216,19 +230,38 @@ class Lanelet : public Primitive<ConstLanelet> {
   Lanelet invert() const { return Lanelet{data(), !inverted()}; }
 
   using Primitive::leftBound;
+  using Primitive::leftBound2d;
+  using Primitive::leftBound3d;
   //! Get the left bound
-  LineString3d leftBound() { return inverted() ? data()->rightBound().invert() : data()->leftBound(); }
+  LineString3d leftBound() { return leftBound3d(); }
+
+  //! get the left bound in 2d. To be used over leftBound where geometric calculations are required.
+  LineString2d leftBound2d() { return utils::to2D(leftBound3d()); }
+
+  //! get the left bound in 3d. To be used over leftBound where geometric calculations are required.
+  LineString3d leftBound3d() { return inverted() ? data()->rightBound().invert() : data()->leftBound(); }
 
   using Primitive::rightBound;
+  using Primitive::rightBound2d;
+  using Primitive::rightBound3d;
   //! Get the right bound
-  LineString3d rightBound() { return inverted() ? data()->leftBound().invert() : data()->rightBound(); }
+  LineString3d rightBound() { return rightBound3d(); }
 
-  //! Sets a new left bound and resets the cache
+  //! get the right bound in 2d. To be used over rightBound where geometric calculations are required.
+  LineString2d rightBound2d() { return utils::to2D(rightBound3d()); }
+
+  //! get the right bound in 3d. To be used over rightBound where geometric calculations are required.
+  LineString3d rightBound3d() { return inverted() ? data()->leftBound().invert() : data()->rightBound(); }
+
+  //! get the right bound.
+  ConstLineString3d rightBound() const { return rightBound3d(); }
+
+  //! Sets a new left bound and resets the cached centerline
   void setLeftBound(const LineString3d& bound) {
     inverted() ? data()->setRightBound(bound.invert()) : data()->setLeftBound(bound);
   }
 
-  //! Sets a new right bound and resets the cache
+  //! Sets a new right bound and resets the cached centerline
   void setRightBound(const LineString3d& bound) {
     inverted() ? data()->setLeftBound(bound.invert()) : data()->setRightBound(bound);
   }
