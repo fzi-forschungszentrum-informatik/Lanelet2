@@ -161,12 +161,16 @@ TEST_F(RegulatoryElementTest, ConstructValidTrafficSign) {  // NOLINT
 
   EXPECT_EQ(ts->type(), "de205");
 
-  ASSERT_TRUE(!!ts->cancelType());
-  EXPECT_EQ(*ts->cancelType(), "de206");
-  EXPECT_TRUE(ts->removeCancellingTrafficSign(poly1));
+  ASSERT_TRUE(!ts->cancelTypes().empty());
+  EXPECT_EQ(ts->cancelTypes().front(), "de206");
 
-  ts->addCancellingTrafficSign(ls2);
-  EXPECT_THROW(ts->cancelType(), InvalidInputError);  // NOLINT
+  ts->addCancellingTrafficSign({{ls2}, "de207"});
+  std::vector<std::string> expect{"de206", "de207"};
+  EXPECT_EQ(ts->cancelTypes(), expect);
+
+  EXPECT_TRUE(ts->removeCancellingTrafficSign(poly1));
+  ASSERT_TRUE(!ts->cancelTypes().empty());
+  EXPECT_EQ(ts->cancelTypes().front(), "de207");
 }
 
 // ============ Speed limit ===========================

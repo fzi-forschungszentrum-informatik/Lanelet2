@@ -798,7 +798,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("addCancellingRefLine", &TrafficSign::addCancellingRefLine)
       .def("removeCancellingRefLine", &TrafficSign::removeCancellingRefLine)
       .def("type", &TrafficSign::type)
-      .def("cancelType", &TrafficSign::cancelType);
+      .def("cancelTypes", &TrafficSign::cancelTypes);
 
   implicitly_convertible<std::shared_ptr<TrafficSign>, RegulatoryElementPtr>();
 
