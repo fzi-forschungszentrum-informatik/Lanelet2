@@ -23,10 +23,21 @@ struct AttributeFromPythonStr {
     boost::python::converter::registry::push_back(&convertible, &construct, boost::python::type_id<Attribute>());
   }
 
-  static void* convertible(PyObject* objPtr) { return PyString_Check(objPtr) ? objPtr : nullptr; }  // NOLINT
+  static void* convertible(PyObject* objPtr) {
+#if PY_MAJOR_VERSION < 3
+    return PyString_Check(objPtr) ? objPtr : nullptr;  // NOLINT
+#else
+    return PyUnicode_Check(objPtr) ? objPtr : nullptr;  // NOLINT
+#endif
+  }
 
   static void construct(PyObject* objPtr, boost::python::converter::rvalue_from_python_stage1_data* data) {
+#if PY_MAJOR_VERSION < 3
     const char* value = PyString_AsString(objPtr);
+#else
+    auto pyStr = PyUnicode_AsUTF8String(objPtr);
+    const char* value = PyBytes_AsString(pyStr);
+#endif
     if (value == nullptr) {
       boost::python::throw_error_already_set();
     }
