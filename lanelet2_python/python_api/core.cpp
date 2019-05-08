@@ -624,13 +624,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(IsConstLineString<ConstPolygon3d>())
       .def(IsConstPrimitive<ConstPolygon3d>());
 
-  class_<Polygon2d>("Polygon2d", "A two-dimensional lanelet polygon",
-                    init<Id, Points3d, AttributeMap>("Polygon2d(Id, point_list, attributes"))
+  class_<Polygon2d, bases<ConstPolygon2d>>("Polygon2d", "A two-dimensional lanelet polygon",
+                                           init<Id, Points3d, AttributeMap>("Polygon2d(Id, point_list, attributes"))
       .def(IsLineString<Polygon2d>())
       .def(IsPrimitive<Polygon2d>());
 
-  class_<Polygon3d>("Polygon3d", "A three-dimensional lanelet polygon",
-                    init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap())))
+  class_<Polygon3d, bases<ConstPolygon3d>>(
+      "Polygon3d", "A three-dimensional lanelet polygon",
+      init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap())))
       .def(IsLineString<Polygon3d>())
       .def(IsPrimitive<Polygon3d>());
 
