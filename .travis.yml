@@ -35,7 +35,7 @@ install:
   # build system
   - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python-catkin-tools ros-$ROS_DISTRO-catkin
   # lanelet2 specific deps
-  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev ros-$ROS_DISTRO-rosbash
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libboost-all-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev ros-$ROS_DISTRO-rosbash
 
 before_script:
   # source ros-$ROS_DISTRO-catkin to find the catkin cmake module
