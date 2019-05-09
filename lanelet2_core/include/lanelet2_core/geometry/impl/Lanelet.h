@@ -35,25 +35,25 @@ IfLL<LaneletT, double> distance3d(const LaneletT& lanelet, const BasicPoint3d& p
 
 template <typename LaneletT>
 double distanceToCenterline2d(const LaneletT& lanelet, const BasicPoint2d& point) {
-  return distance(ConstLineString2d(lanelet.centerline()), point);
+  return distance(lanelet.centerline2d(), point);
 }
 
 template <typename LaneletT>
 double distanceToCenterline3d(const LaneletT& lanelet, const BasicPoint3d& point) {
-  return distance(lanelet.centerline(), point);
+  return distance(lanelet.centerline3d(), point);
 }
 
 template <typename LaneletT>
 IfLL<LaneletT, BoundingBox2d> boundingBox2d(const LaneletT& lanelet) {
-  BoundingBox2d bb = boundingBox2d(ConstLineString2d(lanelet.leftBound()));
-  bb.extend(boundingBox2d(ConstLineString2d(lanelet.rightBound())));
+  BoundingBox2d bb = boundingBox2d(lanelet.leftBound2d());
+  bb.extend(boundingBox2d(lanelet.rightBound2d()));
   return bb;
 }
 
 template <typename LaneletT>
 IfLL<LaneletT, BoundingBox3d> boundingBox3d(const LaneletT& lanelet) {
-  BoundingBox3d bb = boundingBox3d(lanelet.leftBound());
-  bb.extend(boundingBox3d(lanelet.rightBound()));
+  BoundingBox3d bb = boundingBox3d(lanelet.leftBound3d());
+  bb.extend(boundingBox3d(lanelet.rightBound3d()));
   return bb;
 }
 
@@ -101,8 +101,8 @@ BasicPoints2d intersectCenterlines2d(const Lanelet1T& lanelet, const Lanelet2T& 
                                      std::vector<double>* distanceThis, std::vector<double>* distanceOther) {
   //! @todo implement intersect_centerlines
   BasicPoints2d intersections;
-  const auto centerline = ConstHybridLineString2d(lanelet.centerline());
-  const auto otherCenterline = ConstHybridLineString2d(otherLanelet.centerline());
+  const auto centerline = traits::toHybrid(lanelet.centerline2d());
+  const auto otherCenterline = traits::toHybrid(otherLanelet.centerline2d());
   boost::geometry::intersection(centerline, otherCenterline, intersections);
   if (distanceThis != nullptr) {
     std::transform(intersections.begin(), intersections.end(), std::back_inserter(*distanceThis),
@@ -118,7 +118,7 @@ BasicPoints2d intersectCenterlines2d(const Lanelet1T& lanelet, const Lanelet2T& 
 template <typename Lanelet1T, typename Lanelet2T>
 IfLL<Lanelet1T, bool> intersects3d(const Lanelet1T& lanelet, const Lanelet2T& otherLanelet, double heightTolerance) {
   if (intersects2d(lanelet, otherLanelet)) {
-    auto projPts = projectedPoint3d(lanelet.centerline(), otherLanelet.centerline());
+    auto projPts = projectedPoint3d(lanelet.centerline3d(), otherLanelet.centerline3d());
     return std::abs(projPts.first.z() - projPts.second.z()) < heightTolerance;
   }
   return false;
@@ -127,7 +127,7 @@ IfLL<Lanelet1T, bool> intersects3d(const Lanelet1T& lanelet, const Lanelet2T& ot
 template <typename Lanelet1T, typename Lanelet2T>
 IfLL<Lanelet1T, bool> overlaps3d(const Lanelet1T& lanelet, const Lanelet2T& otherLanelet, double heightTolerance) {
   if (overlaps2d(lanelet, otherLanelet)) {
-    auto projPts = projectedPoint3d(lanelet.centerline(), otherLanelet.centerline());
+    auto projPts = projectedPoint3d(lanelet.centerline3d(), otherLanelet.centerline3d());
     return std::abs(projPts.first.z() - projPts.second.z()) < heightTolerance;
   }
   return false;
@@ -160,12 +160,12 @@ Velocity maxCurveSpeed(const LaneletT& /*lanelet*/, const BasicPoint2d& /*positi
 template <typename LaneletT>
 double approximatedLength2d(const LaneletT& lanelet) {
   double length = 0.;
-  auto line = lanelet.leftBound();
+  auto line = lanelet.leftBound2d();
   auto step = std::max(1ul, line.size() / 10);
   for (auto i1 = 0ul, i2 = step; i2 < line.size(); i1 += step, i2 += step) {
-    length += distance2d(line[i1], line[i2]);
+    length += distance(line[i1], line[i2]);
     if (i2 + step >= line.size()) {
-      length += distance2d(line[i2], line[line.size() - 1]);
+      length += distance(line[i2], line[line.size() - 1]);
     }
   }
   return length;
@@ -173,12 +173,12 @@ double approximatedLength2d(const LaneletT& lanelet) {
 
 template <typename LaneletT>
 double length2d(const LaneletT& lanelet) {
-  return double(length(lanelet.centerline()));
+  return double(length(lanelet.centerline2d()));
 }
 
 template <typename LaneletT>
 double length3d(const LaneletT& lanelet) {
-  return double(length(lanelet.centerline()));
+  return double(length(lanelet.centerline3d()));
 }
 
 }  // namespace geometry

@@ -28,8 +28,13 @@ class LaneletSequenceData : public boost::noncopyable {
    */
   explicit LaneletSequenceData(ConstLanelets lanelets);
 
-  const CompoundLineString3d& leftBound() const { return leftBound_; }
-  const CompoundLineString3d& rightBound() const { return rightBound_; }
+  const CompoundLineString3d& leftBound() const { return leftBound3d(); }
+  const CompoundLineString3d& leftBound3d() const { return leftBound_; }
+  CompoundLineString2d leftBound2d() const { return utils::to2D(leftBound_); }
+
+  const CompoundLineString3d& rightBound() const { return rightBound3d(); }
+  const CompoundLineString3d& rightBound3d() const { return rightBound_; }
+  CompoundLineString2d rightBound2d() const { return utils::to2D(rightBound3d()); }
   const ConstLanelets& lanelets() const { return lanelets_; }
 
   /**
@@ -128,12 +133,19 @@ class LaneletSequence {
   LaneletSequence invert() const { return {constData(), !inverted()}; }
 
   //! get the combined left bounds of all lanelets
-  CompoundLineString3d leftBound() const {
+  CompoundLineString3d leftBound() const { return leftBound3d(); }
+  //! get the left bound in 2d. To be used over leftBound where geometric calculations are required.
+  CompoundLineString2d leftBound2d() const { return utils::to2D(leftBound3d()); }
+  CompoundLineString3d leftBound3d() const {
     return inverted() ? constData()->rightBound().invert() : constData()->leftBound();
   }
 
   //! get the combined right bounds of all lanelets
-  CompoundLineString3d rightBound() const {
+  CompoundLineString3d rightBound() const { return rightBound3d(); }
+  //! get the right bound in 2d. To be used over rightBound where geometric calculations are required.
+  CompoundLineString2d rightBound2d() const { return utils::to2D(leftBound3d()); }
+  //! get the combined right bounds of all lanelets
+  CompoundLineString3d rightBound3d() const {
     return inverted() ? constData()->leftBound().invert() : constData()->rightBound();
   }
 
@@ -164,9 +176,11 @@ class LaneletSequence {
    * The start (and similarly the end point) will always be direcly in the
    * middle between the first left and right points.
    */
-  CompoundLineString3d centerline() const {
+  CompoundLineString3d centerline() const { return centerline3d(); }
+  CompoundLineString3d centerline3d() const {
     return inverted() ? constData()->centerline().invert() : constData()->centerline();
   }
+  CompoundLineString2d centerline2d() const { return utils::to2D(centerline3d()); }
 
   /**
    * @brief returns the surface covered by the lanelets as 3-dimensional

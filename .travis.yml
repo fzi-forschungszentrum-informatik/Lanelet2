@@ -33,11 +33,9 @@ before_install:
 
 install:
   # build system
-  - sudo apt-get install -y python-catkin-pkg python-catkin-tools ros-$ROS_DISTRO-catkin ros-$ROS_DISTRO-rospack
-  - sudo apt-get install -y ros-$ROS_DISTRO-ros-environment # missing dep of rospack on xenial
-
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python-catkin-tools ros-$ROS_DISTRO-catkin
   # lanelet2 specific deps
-  - sudo apt-get install -y libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev ros-$ROS_DISTRO-rosbash
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev ros-$ROS_DISTRO-rosbash
 
 before_script:
   # source ros-$ROS_DISTRO-catkin to find the catkin cmake module

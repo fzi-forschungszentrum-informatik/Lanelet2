@@ -4,6 +4,13 @@ canvas {
     error-color: #ffffff;
 }
 
+node[!type][!speed_limit]
+{
+    symbol-shape: square;
+    symbol-fill-opacity: 0;
+    symbol-stroke-opacity: 0;
+}
+
 way >[index=-1] node
 {
     symbol-shape: triangle;
@@ -26,7 +33,7 @@ node[type=change_point]
 	symbol-stroke-width: 5;
 }
 
-	
+
 /*              Ways
 ------------------------------------------------------ */
 
@@ -44,6 +51,7 @@ way[type=line_thick][subtype=dashed]
         width: 15;
         color: white;
         dashes:100,50;
+        dashes-background-color: darkgray;
 }
 way[type=line_thin][!subtype], way[type=line_thin][subtype=solid]
 {
@@ -75,6 +83,7 @@ way[type=line_thin][subtype=solid_dashed], way[type=line_thin][subtype=dashed_so
         width: 10;
         color: white;
 	dashes:5,1;
+        dashes-background-color: darkgray;
 }
 way[type=line_thick][subtype=solid_dashed], way[type=line_thick][subtype=dashed_solid]
 {
@@ -82,6 +91,23 @@ way[type=line_thick][subtype=solid_dashed], way[type=line_thick][subtype=dashed_
         width: 10;
         color: white;
 	dashes:5,1;
+        dashes-background-color: darkgray;
+}
+way[type=line_thin][subtype=solid_dashed], way[type=line_thin][subtype=solid_dashed]
+{
+        text: "type";
+        width: 10;
+        color: white;
+	dashes:5,1;
+        dashes-background-color: darkgray;
+}
+way[type=line_thick][subtype=solid_dashed], way[type=line_thick][subtype=solid_dashed]
+{
+        text: "type";
+        width: 10;
+        color: white;
+	dashes:5,1;
+        dashes-background-color: darkgray;
 }
 
 /* Other lines*/
@@ -89,7 +115,9 @@ way[type=pedestrian_marking]
 {
 	text: "type";
 	width: 3;
-	color: greenyellow;
+	color: white;
+	dashes: 5,5;
+    dashes-background-color: darkgray;
 }
 way[type=bike_marking]
 {
@@ -100,8 +128,9 @@ way[type=bike_marking]
 way[type=stop_line]
 {
 	text: "stop";
-	width: 8;
-	color: red;
+	width: 20;
+	linecap: square;
+	color: white;
 }
 way[type=marking][subtype=halt]
 {
@@ -135,7 +164,13 @@ way[type=guard_rail]
 {
     text: "type";
 	width: 4;
-	color: darkgray;
+	color: darkslategray;
+}
+way[type=jersey_barrier]
+{
+    text: "type";
+	width: 4;
+	color: darkslategray;
 }
 way[type=wall]
 {
@@ -1724,6 +1759,13 @@ way[type=traffic_sign][subtype=de274-70] >[index=-2] node
     icon-height: 30;
     z-index: 5;
     icon-image: "style_images/274-70.png";
+}
+way[type=traffic_sign][subtype=de274-80] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "style_images/274-80.png";
 }
 way[type=traffic_sign][subtype=de274-100] >[index=-2] node
 {

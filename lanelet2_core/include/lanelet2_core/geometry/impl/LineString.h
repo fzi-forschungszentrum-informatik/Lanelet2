@@ -122,6 +122,9 @@ traits::BasicPointT<traits::PointType<LineStringT>> interpolatedPointAtDistance(
     currentCumulativeLength += currentLength;
     if (currentCumulativeLength >= dist) {
       double remainingDistance = dist - (currentCumulativeLength - currentLength);
+      if (remainingDistance < 1.e-8) {
+        return p1;
+      }
       return p1 + remainingDistance / currentLength * (p2 - p1);
     }
   }
@@ -265,13 +268,16 @@ std::pair<LineString1T, LineString2T> align(LineString1T left, LineString2T righ
   if ((left.size() <= 1 && right.size() <= 1) || right.empty() || left.empty()) {
     return {left, right};
   }
+  auto getMiddlePoint = [](auto& ls) {
+    return ls.size() > 2 ? toBasicPoint(ls[ls.size() / 2]) : (toBasicPoint(ls.front()) + toBasicPoint(ls.back())) * 0.5;
+  };
   //! @todo this sadly is a bit heuristical...
-  bool rightOfLeft = signedDistance(left, toBasicPoint(right[right.size() / 2])) < 0;
+  bool rightOfLeft = signedDistance(left, getMiddlePoint(right)) < 0;
   if (!rightOfLeft && left.size() > 1) {
     left = left.invert();
   }
 
-  bool leftOfRight = signedDistance(right, toBasicPoint(left[left.size() / 2])) > 0;
+  bool leftOfRight = signedDistance(right, getMiddlePoint(left)) > 0;
   if (!leftOfRight && right.size() > 1) {
     right = right.invert();
   }

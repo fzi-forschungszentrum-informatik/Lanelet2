@@ -160,6 +160,11 @@ class TrafficSign : public RegulatoryElement {
 
   /**
    * @brief Create a valid TrafficSign object
+   *
+   * A traffic sign is usually composed of a set of traffic signs of the same type that mark the beginning of the rule.
+   * It also contains multiple traffic signs (potentially of different types) that mark the end of the rule.
+   * E.g. a 50kph section would contain all 50kph signs of this section as trafficSigns. All signs that stand at the end
+   * of this section (e.g. a 70kph sign and an end of 50kph sign) would be cancellingTrafficSigns.
    * @param id id of traffic sign rule
    * @param attributes attributes for it (might be extended if necessary)
    * @param trafficSigns list of the traffic signs defining the rule
@@ -198,8 +203,8 @@ class TrafficSign : public RegulatoryElement {
   ConstLineStringsOrPolygons3d cancellingTrafficSigns() const;
   LineStringsOrPolygons3d cancellingTrafficSigns();
 
-  //! Type of the cancelling traffic signs if they exist
-  Optional<std::string> cancelType() const;
+  //! Types of the cancelling traffic signs if they exist
+  std::vector<std::string> cancelTypes() const;
 
   //! gets the line(s) from which a sign becomes invalid.
   ConstLineStrings3d cancelLines() const;
@@ -215,7 +220,7 @@ class TrafficSign : public RegulatoryElement {
   bool removeTrafficSign(const LineStringOrPolygon3d& sign);
 
   //! Add new cancelling traffic sign
-  void addCancellingTrafficSign(const LineStringOrPolygon3d& sign);
+  void addCancellingTrafficSign(const TrafficSignsWithType& sign);
 
   //! remove a cancelling traffic sign, returns true on success
   bool removeCancellingTrafficSign(const LineStringOrPolygon3d& sign);

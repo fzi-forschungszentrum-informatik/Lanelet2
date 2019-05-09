@@ -303,8 +303,11 @@ SpeedLimit::SpeedLimit(Id id, const AttributeMap& attributes, const TrafficSigns
 
 SpeedLimit::SpeedLimit(const RegulatoryElementDataPtr& data) : TrafficSign(data) {}
 
-void TrafficSign::addCancellingTrafficSign(const LineStringOrPolygon3d& sign) {
-  parameters()[RoleName::Cancels].emplace_back(sign.asRuleParameter());
+void TrafficSign::addCancellingTrafficSign(const TrafficSignsWithType& signs) {
+  updateTrafficSigns(signs);
+  for (auto& sign : signs.trafficSigns) {
+    parameters()[RoleName::Cancels].emplace_back(sign.asRuleParameter());
+  }
 }
 
 bool TrafficSign::removeCancellingTrafficSign(const LineStringOrPolygon3d& sign) {
@@ -317,17 +320,16 @@ ConstLineStringsOrPolygons3d TrafficSign::cancellingTrafficSigns() const {
 
 LineStringsOrPolygons3d TrafficSign::cancellingTrafficSigns() { return getLsOrPoly(parameters(), RoleName::Cancels); }
 
-Optional<std::string> TrafficSign::cancelType() const {
+std::vector<std::string> TrafficSign::cancelTypes() const {
   auto signs = cancellingTrafficSigns();
-  if (!signs.empty() &&
-      signs.front().applyVisitor([](auto& prim) { return prim.hasAttribute(AttributeName::Subtype); })) {
-    const auto& attr = signs.front().applyVisitor([](auto& prim) { return prim.attribute(AttributeName::Subtype); });
-    return attr.value();
+  std::vector<std::string> types;
+  types.reserve(signs.size());
+  for (auto& sign : signs) {
+    types.push_back(sign.applyVisitor([](auto& prim) { return prim.attribute(AttributeName::Subtype); }).value());
   }
-  if (!signs.empty()) {
-    throw InvalidInputError("Regulatory element has a cancelling traffic sign without subtype attribute!");
-  }
-  return {};
+  std::sort(types.begin(), types.end());
+  types.erase(std::unique(types.begin(), types.end()), types.end());
+  return types;
 }
 
 ConstLineStrings3d TrafficSign::cancelLines() const { return getParameters<ConstLineString3d>(RoleName::CancelLine); }

@@ -32,6 +32,7 @@ build_vanilla:
     - apt-get install -y libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
     - mkdir catkin_ws && cd catkin_ws && mkdir src
     - catkin init
+    - catkin config --cmake-args -DCMAKE_BUILD_TYPE=Debug
     - cd src
     - git clone https://github.com/KIT-MRT/mrt_cmake_modules.git
     - git clone $CI_REPOSITORY_URL -b $CI_COMMIT_REF_NAME

@@ -6,6 +6,11 @@
 #include <lanelet2_core/geometry/LineString.h>
 #include <lanelet2_core/geometry/Polygon.h>
 #include <lanelet2_core/geometry/RegulatoryElement.h>
+#include <boost/geometry/geometries/register/multi_linestring.hpp>
+
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::LineStrings2d);
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstLineStrings2d);
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstHybridLineStrings2d);
 
 using namespace boost::python;
 using namespace lanelet;
@@ -30,24 +35,67 @@ lanelet::BoundingBox3d boundingBox3dFor(const T& t) {
   return lanelet::geometry::boundingBox3d(t);
 }
 
+#define TO2D_AS(X)                 \
+  {                                \
+    auto extr = extract<X>(o);     \
+    if (extr.check()) {            \
+      return object(to2D(extr())); \
+    }                              \
+  }
+
+#define TO3D_AS(X)                 \
+  {                                \
+    auto extr = extract<X>(o);     \
+    if (extr.check()) {            \
+      return object(to3D(extr())); \
+    }                              \
+  }
+
+template <typename PtT>
+double distancePointToLss(const PtT& p, object lss) {
+  auto distance = [](PtT p, auto range) {
+    return boost::geometry::distance(p, utils::transform(range, [](auto& v) { return utils::toHybrid(v); }));
+  };
+  if (auto extr = extract<ConstLineStrings2d>(lss); extr.check()) {
+    return distance(p, extr());
+  }
+  auto extr = extract<LineStrings2d>(lss);
+  return distance(p, extr());
+}
+
+object to2D(object o) {
+  using utils::to2D;
+  TO2D_AS(Point3d);
+  TO2D_AS(BasicPoint3d);
+  TO2D_AS(ConstPoint3d);
+  TO2D_AS(LineString3d);
+  TO2D_AS(LineString3d);
+  TO2D_AS(ConstLineString3d);
+  TO2D_AS(Polygon3d);
+  TO2D_AS(ConstPolygon3d);
+  return o;
+}
+
+object to3D(object o) {
+  using utils::to3D;
+  TO3D_AS(Point2d);
+  TO3D_AS(BasicPoint2d);
+  TO3D_AS(ConstPoint2d);
+  TO3D_AS(LineString2d);
+  TO3D_AS(LineString2d);
+  TO3D_AS(ConstLineString2d);
+  TO3D_AS(Polygon2d);
+  TO3D_AS(ConstPolygon2d);
+  return o;
+}
+#undef TO2D_AS
+#undef TO3D_AS
+
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   namespace lg = lanelet::geometry;
 
-  def("to2D", utils::to2D<Point3d>);
-  def("to2D", utils::to2D<BasicPoint3d>);
-  def("to2D", utils::to2D<ConstPoint3d>);
-  def("to2D", utils::to2D<LineString3d>);
-  def("to2D", utils::to2D<ConstLineString3d>);
-  def("to2D", utils::to2D<Polygon3d>);
-  def("to2D", utils::to2D<ConstPolygon3d>);
-
-  def("to3D", utils::to3D<Point2d>);
-  def("to3D", utils::to2D<BasicPoint2d>);
-  def("to3D", utils::to3D<ConstPoint2d>);
-  def("to3D", utils::to3D<LineString2d>);
-  def("to3D", utils::to3D<ConstLineString2d>);
-  def("to3D", utils::to3D<Polygon2d>);
-  def("to3D", utils::to3D<ConstPolygon2d>);
+  def("to2D", to2D);
+  def("to3D", to3D);
 
   // p2p
   def("distance", lg::distance<BasicPoint2d, BasicPoint2d>);
@@ -60,6 +108,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("distance", lg::distance<HybridLs2d, ConstPoint2d>);
   def("distance", lg::distance<ConstPoint2d, ConstLineString2d>);
   def("distance", lg::distance<ConstLineString2d, ConstPoint2d>);
+  def("distance", lg::distance<BasicPoint2d, ConstLineString2d>);
+  def("distance", lg::distance<ConstLineString2d, BasicPoint2d>);
 
   // l2l
   def("distance", +[](const ConstLineString2d& ls1, const ConstLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
@@ -68,6 +118,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   // poly2p
   def("distance", lg::distance<ConstHybridPolygon2d, BasicPoint2d>);
   def("distance", +[](const ConstPolygon2d& p1, const BasicPoint2d& p2) { return lg::distance2d(p1, p2); });
+  def("distance",
+      +[](const ConstPolygon2d& p1, const ConstPoint2d& p2) { return lg::distance2d(p1, p2.basicPoint()); });
 
   // poly2ls
   def("distance", +[](const ConstPolygon2d& p1, const ConstLineString2d& p2) { return lg::distance2d(p1, p2); });
@@ -96,6 +148,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("distance", lg::distance<HybridLs3d, ConstPoint3d>);
   def("distance", lg::distance<ConstPoint3d, ConstLineString3d>);
   def("distance", lg::distance<ConstLineString3d, ConstPoint3d>);
+
+  // p2lines
+  def("distanceToLines", distancePointToLss<ConstPoint2d>);
+  def("distanceToLines", distancePointToLss<BasicPoint2d>);
+  def("distanceToLines", distancePointToLss<ConstPoint2d>);
+  def("distanceToLines", distancePointToLss<BasicPoint2d>);
 
   // l2l
   def("distance", +[](const ConstLineString3d& ls1, const ConstLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
