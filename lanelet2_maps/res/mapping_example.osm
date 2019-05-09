@@ -12599,15 +12599,6 @@
     <tag k='subtype' v='vegetation' />
     <tag k='type' v='multipolygon' />
   </relation>
-  <relation id='45450' visible='true' version='1'>
-    <member type='way' ref='44034' role='left' />
-    <member type='way' ref='44834' role='right' />
-    <tag k='location' v='urban' />
-    <tag k='one_way' v='no' />
-    <tag k='region' v='de' />
-    <tag k='subtype' v='walkway' />
-    <tag k='type' v='lanelet' />
-  </relation>
   <relation id='45456' visible='true' version='1'>
     <member type='way' ref='44778' role='outer' />
     <member type='way' ref='44376' role='outer' />
