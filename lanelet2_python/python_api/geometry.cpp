@@ -35,20 +35,14 @@ lanelet::BoundingBox3d boundingBox3dFor(const T& t) {
   return lanelet::geometry::boundingBox3d(t);
 }
 
-#define TO2D_AS(X)                 \
-  {                                \
-    auto extr = extract<X>(o);     \
-    if (extr.check()) {            \
-      return object(to2D(extr())); \
-    }                              \
+#define TO2D_AS(X)                        \
+  if (extract<X>(o).check()) {            \
+    return object(to2D(extract<X>(o)())); \
   }
 
-#define TO3D_AS(X)                 \
-  {                                \
-    auto extr = extract<X>(o);     \
-    if (extr.check()) {            \
-      return object(to3D(extr())); \
-    }                              \
+#define TO3D_AS(X)                        \
+  if (extract<X>(o).check()) {            \
+    return object(to3D(extract<X>(o)())); \
   }
 
 template <typename PtT>
@@ -56,8 +50,9 @@ double distancePointToLss(const PtT& p, object lss) {
   auto distance = [](PtT p, auto range) {
     return boost::geometry::distance(p, utils::transform(range, [](auto& v) { return utils::toHybrid(v); }));
   };
-  if (auto extr = extract<ConstLineStrings2d>(lss); extr.check()) {
-    return distance(p, extr());
+  auto extrConst = extract<ConstLineStrings2d>(lss);
+  if (extrConst.check()) {
+    return distance(p, extrConst());
   }
   auto extr = extract<LineStrings2d>(lss);
   return distance(p, extr());
