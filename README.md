@@ -36,12 +36,18 @@ You can find more documentation in the individual packages and in doxygen commen
 
 ### Using Docker
 
-There is a Docker container from which you can test things out:
+There is a Docker container from which you can test things out. This will work on a dev environment based on Ubunu 18 and ROS Melodic.
 
 ```
 docker build -t lanelet2 .                    # builds a docker image named "lanelet2"
 docker run -it --rm lanelet2:latest /bin/bash # starts the docker image
 python -c "import lanelet2"                   # quick check to see everything is fine
+```
+
+If you want to use Ubuntu 16 and ROS Kinetic change the first line with this command~
+
+```
+docker build -t lanelet2 -f Dockerfile.kinetic .
 ```
 
 The docker image contains a link to your local lanelet2, so you can work and see changes (almost) at the same time. Work with two screens, one local and one on docker. Make your code changes locally, then run again `catkin build` on docker to recompile the code (update python modules).
