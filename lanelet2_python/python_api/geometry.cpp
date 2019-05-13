@@ -50,12 +50,10 @@ double distancePointToLss(const PtT& p, object lss) {
   auto distance = [](PtT p, auto range) {
     return boost::geometry::distance(p, utils::transform(range, [](auto& v) { return utils::toHybrid(v); }));
   };
-  auto extrConst = extract<ConstLineStrings2d>(lss);
-  if (extrConst.check()) {
-    return distance(p, extrConst());
+  if (extract<ConstLineStrings2d>(lss).check()) {
+    return distance(p, extract<ConstLineStrings2d>(lss)());
   }
-  auto extr = extract<LineStrings2d>(lss);
-  return distance(p, extr());
+  return distance(p, extract<LineStrings2d>(lss)());
 }
 
 object to2D(object o) {
