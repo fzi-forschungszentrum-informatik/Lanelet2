@@ -70,6 +70,24 @@ class SphericalMercatorProjector : public Projector {
  private:
   static constexpr double EarthRadius{6378137.0};
 };
+
+
+/**
+ * @brief a null class to allow input points that are already in geo-spatial coordinates.
+ *
+ * It will not operate any convertion to local/utm/other coordinate system
+ */
+class NullProjector : public Projector {
+ public:
+  using Projector::Projector;
+  BasicPoint3d forward(const GPSPoint& p) const override {
+    return {p.lat, p.lon, p.ele};
+  }
+
+  GPSPoint reverse(const BasicPoint3d& p) const override {
+    return {p.x(), p.y(), p.z()};
+  }
+};
 }  // namespace projection
 
 using DefaultProjector = projection::SphericalMercatorProjector;
