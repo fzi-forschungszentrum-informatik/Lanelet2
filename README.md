@@ -33,6 +33,23 @@ You can find more documentation in the individual packages and in doxygen commen
 - To get more information on how to create valid maps, see [here](lanelet2_maps/README.md).
 
 ## Installation
+
+### Using Docker
+
+There is a Docker container from which you can test things out:
+
+```
+docker build -t lanelet2 .                    # builds a docker image named "lanelet2"
+docker run -it --rm lanelet2:latest /bin/bash # starts the docker image
+python -c "import lanelet2"                   # quick check to see everything is fine
+```
+
+The docker image contains a link to your local lanelet2, so you can work and see changes (almost) at the same time. Work with two screens, one local and one on docker. Make your code changes locally, then run again `catkin build` on docker to recompile the code (update python modules).
+
+### Manual installation
+
+In case you want to build it in your own way (without the above Docker image) use these instructions.
+
 Lanelet2 uses [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html) for building and is targeted towards Linux.
 
 At least C++14 is required.
@@ -68,7 +85,7 @@ cd ..
 catkin build
 ```
 
-If unsure, see the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2). It shows the the full installation process, with subsequent build and test, starting at a clean Ubuntu installation.
+If unsure, see the [Dockerfile](Dockerfile) or the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2). It shows the the full installation process, with subsequent build and test based on a docker image with a clean ubuntu installation.
 
 ### Python3
 
