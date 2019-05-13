@@ -42,7 +42,7 @@ There is a Docker container from which you can test things out
 cd docker
 ./build.sh                    # will build the docker file
 ./run.sh                      # starts the docker image, builds the code at start-up
-python -c "import lanelet2"   # quick check to see if all worked
+python -c "from lanelet2.core import Point3d"   # quick check to see if all worked
 ```
 
 The docker image contains a link to your local lanelet2, so you can work and see changes (almost) at the same time. Work with two screens, one local and one on docker. Make your code changes locally, then run again `catkin build` on docker to recompile the code (update python modules).
