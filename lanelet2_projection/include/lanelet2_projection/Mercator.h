@@ -9,7 +9,7 @@ namespace projection {
 class Mercator : public Projector {
  public:
   explicit Mercator(const Origin& origin = Origin::defaultOrigin())
-      : Projector(origin), offset_{rawForward(origin.position)} {}
+      : Projector(origin, "Mercator"), offset_{rawForward(origin.position)} {}
 
   BasicPoint3d forward(const GPSPoint& pGps) const override { return rawForward(pGps) - offset_; }
   GPSPoint reverse(const BasicPoint3d& p) const override { return rawReverse(p + offset_); }

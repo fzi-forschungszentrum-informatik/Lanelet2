@@ -2,6 +2,7 @@
 #include <memory>
 #include "../Configuration.h"
 #include "../Projection.h"
+#include <iostream>
 
 namespace lanelet {
 using ErrorMessages = std::vector<std::string>;
@@ -31,7 +32,8 @@ class IOHandler {  // NOLINT
   static constexpr const char* name() { return ""; }
 
   const Projector& projector() const {
-    if (projector_->origin().isDefault) {
+    if (projector_->origin().isDefault
+        && projector_->name() != "NullProjector") {
       handleDefaultProjector();
     }
     return *projector_;

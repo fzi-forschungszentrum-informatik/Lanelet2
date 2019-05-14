@@ -5,7 +5,7 @@ namespace lanelet {
 namespace projection {
 
 UtmProjector::UtmProjector(Origin origin, const bool useOffset, const bool throwInPaddingArea)
-    : Projector(origin), useOffset_{useOffset}, throwInPaddingArea_{throwInPaddingArea} {
+    : Projector(origin, "UtmProjector"), useOffset_{useOffset}, throwInPaddingArea_{throwInPaddingArea} {
   double x, y;
   GeographicLib::UTMUPS::Forward(this->origin().position.lat, this->origin().position.lon, zone_,
                                  isInNorthernHemisphere_, x, y);

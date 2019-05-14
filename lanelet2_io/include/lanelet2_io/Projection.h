@@ -21,7 +21,8 @@ struct Origin {
 class Projector {  // NOLINT
  public:
   using Ptr = std::shared_ptr<Projector>;
-  explicit Projector(Origin origin = Origin::defaultOrigin()) : origin_{origin} {}
+  explicit Projector(Origin origin = Origin::defaultOrigin(),
+              const std::string& pName = "") : origin_{origin}, name_{pName} {}
   Projector(Projector&& rhs) noexcept = default;
   Projector& operator=(Projector&& rhs) noexcept = default;
   Projector(const Projector& rhs) = default;
@@ -39,8 +40,12 @@ class Projector {  // NOLINT
   //! Obtain the internal origin
   const Origin& origin() const { return origin_; }
 
+  //! Get the name of the type of projector in use (internal use mainly)
+  const std::string & name() const { return name_;}
+
  private:
   Origin origin_;
+  std::string name_;
 };
 
 namespace projection {
@@ -53,6 +58,8 @@ namespace projection {
 class SphericalMercatorProjector : public Projector {
  public:
   using Projector::Projector;
+  explicit SphericalMercatorProjector(Origin origin = Origin::defaultOrigin()) :
+                    Projector(origin, "SphericalMercatorProjector") {}
   BasicPoint3d forward(const GPSPoint& p) const override {
     const auto scale = std::cos(origin().position.lat * M_PI / 180.0);
     const double x{scale * p.lon * M_PI * EarthRadius / 180.0};
@@ -80,6 +87,8 @@ class SphericalMercatorProjector : public Projector {
 class NullProjector : public Projector {
  public:
   using Projector::Projector;
+  explicit NullProjector(Origin origin = Origin::defaultOrigin()) :
+                  Projector(origin, "NullProjector") {}
   BasicPoint3d forward(const GPSPoint& p) const override {
     return {p.lat, p.lon, p.ele};
   }
@@ -88,6 +97,8 @@ class NullProjector : public Projector {
     return {p.x(), p.y(), p.z()};
   }
 };
+
+
 }  // namespace projection
 
 using DefaultProjector = projection::SphericalMercatorProjector;
