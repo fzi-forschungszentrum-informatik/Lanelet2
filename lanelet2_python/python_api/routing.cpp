@@ -143,9 +143,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "possible routes from a given start lanelet that are "
            "'minLanelets'-long",
            (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges")))
-      .def("exportGraphML", &RoutingGraph::exportGraphML,
+      .def("exportGraphML", +[](RoutingGraph& self, const std::string& path) { self.exportGraphML(path); },
            "Export the internal graph to graphML (xml-based) file format")
-      .def("exportGraphViz", &RoutingGraph::exportGraphViz, "Export the internal graph to graphViz (DOT) file format")
+      .def("exportGraphViz", +[](RoutingGraph& self, const std::string& path) { self.exportGraphViz(path); },
+           "Export the internal graph to graphViz (DOT) file format")
       .def("getDebugLaneletMap", &RoutingGraph::getDebugLaneletMap,
            "abstract lanelet map holding the information of the routing graph",
            (arg("routingCostId") = 0, arg("includeAdjacent") = false, arg("includeConflicting") = false))
