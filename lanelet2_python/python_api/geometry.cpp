@@ -240,6 +240,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   wrapFindNearest<Point3d>();
   wrapFindNearest<LineString3d>();
+  wrapFindNearest<Polygon3d>();
   wrapFindNearest<Lanelet>();
   wrapFindNearest<Area>();
   wrapFindNearest<RegulatoryElementPtr>();
