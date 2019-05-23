@@ -226,7 +226,8 @@ class IsConstPrimitive : public def_visitor<IsConstPrimitive<PrimT>> {
   void visit(ClassT& c) const {
     namespace py = boost::python;
     c.add_property("id", &PrimT::id);
-    c.add_property("attributes", py::make_function(&PrimT::attributes, py::return_internal_reference<>()));
+    const AttributeMap& (PrimT::*attr)() const = &PrimT::attributes;
+    c.add_property("attributes", getRefFunc(attr));
     c.def(self == self);  // NOLINT
     c.def(self != self);  // NOLINT
     c.def(self_ns::str(self_ns::self));
