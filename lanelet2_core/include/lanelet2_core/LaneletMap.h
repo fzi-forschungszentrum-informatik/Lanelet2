@@ -456,8 +456,8 @@ namespace geometry {
  * This comes at a slightly higher cost, because more primitives from the R-Tree
  * need to be checked.
  *
- * Example: `std::vector<std::pair<double, Lanelet> closeLanelets = findNearest(laneletMap.laneletLayer,
- * BasicPoint2d(1,0,0), 5);`
+ * Example: `std::vector<std::pair<double, Lanelet>> closeLanelets = findNearest(laneletMap.laneletLayer,
+ * BasicPoint2d(1,0), 5);`
  */
 template <typename PrimT>
 std::vector<std::pair<double, PrimT>> findNearest(PrimitiveLayer<PrimT>& map, const BasicPoint2d& pt, unsigned count);
