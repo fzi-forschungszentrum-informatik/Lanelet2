@@ -5,7 +5,7 @@
 #pragma GCC diagnostic ignored "-Wignored-attributes"
 #pragma GCC diagnostic ignored "-Wint-in-bool-context"
 #endif
-#include <Eigen/Geometry>
+#include <eigen3/Eigen/Geometry>
 #include "Point.h"
 #pragma GCC diagnostic pop
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <lanelet2_core/LaneletMap.h>
-#include "Graph.h"
-#include "RoutingGraph.h"
+#include "lanelet2_routing/Graph.h"
+#include "lanelet2_routing/RoutingGraph.h"
 
 namespace lanelet {
 class LaneletLayer;

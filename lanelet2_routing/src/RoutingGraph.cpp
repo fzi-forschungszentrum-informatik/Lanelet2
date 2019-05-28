@@ -1,4 +1,4 @@
-#include "RoutingGraph.h"
+#include "lanelet2_routing/RoutingGraph.h"
 #include <lanelet2_core/Attribute.h>
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/LaneletMap.h>
@@ -11,15 +11,15 @@
 #include <memory>
 #include <queue>
 #include <utility>
-#include "Exceptions.h"
-#include "Forward.h"
-#include "Graph.h"
-#include "Route.h"
-#include "ShortestPath.h"
-#include "internal/RouteBuilder.h"
-#include "internal/RoutingGraphBuilder.h"
+#include "lanelet2_routing/Exceptions.h"
+#include "lanelet2_routing/Forward.h"
+#include "lanelet2_routing/Graph.h"
+#include "lanelet2_routing/Route.h"
+#include "lanelet2_routing/ShortestPath.h"
+#include "lanelet2_routing/internal/RouteBuilder.h"
+#include "lanelet2_routing/internal/RoutingGraphBuilder.h"
 
-#include "RoutingGraphVisualization.h"
+#include "lanelet2_routing/RoutingGraphVisualization.h"
 namespace lanelet {
 namespace routing {
 

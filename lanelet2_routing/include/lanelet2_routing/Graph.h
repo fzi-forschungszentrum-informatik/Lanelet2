@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Forward.h>
+#include "lanelet2_routing/Forward.h"
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/filtered_graph.hpp>
