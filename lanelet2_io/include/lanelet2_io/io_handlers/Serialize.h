@@ -5,8 +5,34 @@
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/variant.hpp>
 #include <boost/serialization/vector.hpp>
-#include <map>>
+#include <map>
 #include <set>
+
+namespace lanelet {
+namespace impl {
+// these methods are there because serializing vectors on boost 1.54 is done through a proxy object.
+// this does not work here, because we need the real, final address for RegelemDeserialization.
+// In Boost 1.60 and up, this is fixed and a simple ar<<regelems would be enough.
+template <typename Archive, typename RegelemsT>
+void saveRegelems(Archive& ar, RegelemsT regelems) {
+  auto size = regelems.size();
+  ar << size;
+  for (auto& regelem : regelems) {
+    auto ncRegelem = std::const_pointer_cast<RegulatoryElement>(regelem);
+    ar << ncRegelem;
+  }
+}
+template <typename Archive, typename RegelemsT>
+void loadRegelems(Archive& ar, RegelemsT& regelems) {
+  size_t size{};
+  ar >> size;
+  regelems.resize(size);
+  for (auto i = 0u; i < size; ++i) {
+    ar >> regelems[i];
+  }
+}
+}  // namespace impl
+}  // namespace lanelet
 
 namespace boost {
 namespace serialization {
@@ -83,8 +109,8 @@ template <class Archive>
 // NOLINTNEXTLINE
 inline void save_construct_data(Archive& ar, const lanelet::LaneletData* llt, unsigned int /*version*/) {
   auto lltnc = const_cast<lanelet::LaneletData*>(llt);  // NOLINT
-  auto regelems = lltnc->regulatoryElements();
-  ar << lltnc->id << lltnc->attributes << lltnc->leftBound() << lltnc->rightBound() << regelems;
+  ar << lltnc->id << lltnc->attributes << lltnc->leftBound() << lltnc->rightBound();
+  lanelet::impl::saveRegelems(ar, llt->regulatoryElements());
   auto hasCenterline = llt->hasCustomCenterline();
   ar << hasCenterline;
   if (hasCenterline) {
@@ -105,7 +131,7 @@ inline void load_construct_data(Archive& ar, lanelet::LaneletData* llt, unsigned
   LineString3d left, right;
   ar >> id >> attrs >> left >> right;
   new (llt) LaneletData(id, left, right, attrs);
-  ar >> llt->regulatoryElements();  // the load of regelems must happen directly to the correct location
+  lanelet::impl::loadRegelems(ar, llt->regulatoryElements());  // must happen directly to the correct memory location
   bool hasCenterline;
   ar >> hasCenterline;
   if (hasCenterline) {
@@ -283,7 +309,7 @@ inline void save_construct_data(Archive& ar, const lanelet::AreaData* a, unsigne
   ar << anc->attributes;
   ar << anc->innerBounds();
   ar << anc->outerBound();
-  ar << anc->regulatoryElements();
+  lanelet::impl::saveRegelems(ar, anc->regulatoryElements());
 }
 
 template <class Archive>
@@ -296,7 +322,7 @@ inline void load_construct_data(Archive& ar, lanelet::AreaData* a, unsigned int 
   LineStrings3d outer;
   ar >> id >> attrs >> inner >> outer;
   new (a) AreaData(id, outer, inner, attrs);
-  ar >> a->regulatoryElements();
+  lanelet::impl::loadRegelems(ar, a->regulatoryElements());
 }
 
 template <typename Archive>
@@ -434,12 +460,12 @@ void load(Archive& ar, lanelet::RegulatoryElementPtr& r, unsigned int /*version*
 
 template <typename Archive>
 void save(Archive& ar, const lanelet::RegulatoryElementConstPtr& r, unsigned int /*version*/) {
-  save(ar, const_pointer_cast<lanelet::RegulatoryElementPtr>(r), 0);
+  save(ar, const_pointer_cast<lanelet::RegulatoryElement>(r), 0);
 }
 
 template <typename Archive>
 void load(Archive& ar, lanelet::RegulatoryElementConstPtr& r, unsigned int /*version*/) {
-  load(ar, const_pointer_cast<lanelet::RegulatoryElementPtr>(r), 0);
+  load(ar, const_pointer_cast<lanelet::RegulatoryElement>(r), 0);
 }
 
 template <typename Archive>
