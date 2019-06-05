@@ -5,6 +5,8 @@
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/variant.hpp>
 #include <boost/serialization/vector.hpp>
+#include <map>>
+#include <set>
 
 namespace boost {
 namespace serialization {
@@ -101,9 +103,9 @@ inline void load_construct_data(Archive& ar, lanelet::LaneletData* llt, unsigned
   Id id;
   AttributeMap attrs;
   LineString3d left, right;
-  RegulatoryElementPtrs regelems;
-  ar >> id >> attrs >> left >> right >> regelems;
-  new (llt) LaneletData(id, left, right, attrs, regelems);
+  ar >> id >> attrs >> left >> right;
+  new (llt) LaneletData(id, left, right, attrs);
+  ar >> llt->regulatoryElements();  // the load of regelems must happen directly to the correct location
   bool hasCenterline;
   ar >> hasCenterline;
   if (hasCenterline) {
@@ -292,10 +294,9 @@ inline void load_construct_data(Archive& ar, lanelet::AreaData* a, unsigned int 
   AttributeMap attrs;
   InnerBounds inner;
   LineStrings3d outer;
-  RegulatoryElementPtrs regelems;
-
-  ar >> id >> attrs >> inner >> outer >> regelems;
-  new (a) AreaData(id, outer, inner, attrs, regelems);
+  ar >> id >> attrs >> inner >> outer;
+  new (a) AreaData(id, outer, inner, attrs);
+  ar >> a->regulatoryElements();
 }
 
 template <typename Archive>
@@ -336,14 +337,60 @@ void load(Archive& ar, lanelet::WeakArea& a, unsigned int /*version*/) {
 }
 
 //! Regulatory element
+// Regluatory elements can not be directly serialized, because we need the factory function to create regelems of the
+// correct type (ie child of RegulatoryElement)
+class RegelemSerialization {
+ public:
+  bool currentlySerializing(const lanelet::RegulatoryElementPtr& regelem) {
+    if (serializing_.find(regelem->id()) == serializing_.end()) {
+      serializing_.insert(regelem->id());
+      return false;
+    }
+    return true;
+  }  // true if this is already serialized
+ private:
+  std::set<lanelet::Id> serializing_;
+};
+class RegelemDeserialization {
+  struct DeserialInfo {
+    lanelet::RegulatoryElementPtr deserialResult;
+    std::vector<lanelet::RegulatoryElementPtr*> toDeserialize;
+  };
+
+ public:
+  bool currentlyDeserializing(lanelet::Id id, lanelet::RegulatoryElementPtr& regelem) {
+    auto res = deserial_.find(id);
+    if (res == deserial_.end()) {
+      deserial_.emplace(id, DeserialInfo{});
+      return false;
+    }
+    if (!res->second.deserialResult) {
+      // wait until done
+      res->second.toDeserialize.push_back(&regelem);
+    } else {
+      regelem = res->second.deserialResult;
+    }
+
+    return true;
+  }
+  void deserializationDone(lanelet::RegulatoryElementPtr& regelem) {
+    auto& entry = deserial_.find(regelem->id())->second;
+    for (auto& elem : entry.toDeserialize) {
+      *elem = regelem;
+    }
+    entry.deserialResult = regelem;
+  }
+
+ private:
+  std::map<lanelet::Id, DeserialInfo> deserial_;
+};
+
 template <typename Archive>
 void serialize(Archive& /*ar*/, lanelet::RegulatoryElementData& /*r*/, unsigned int /*version*/) {}
 template <class Archive>
 // NOLINTNEXTLINE
 inline void save_construct_data(Archive& ar, const lanelet::RegulatoryElementData* r, unsigned int /*version*/) {
-  ar << r->id;
-  ar << r->attributes;
-  ar << r->parameters;
+  ar << r->id << r->attributes << r->parameters;
 }
 
 template <class Archive>
@@ -359,29 +406,40 @@ inline void load_construct_data(Archive& ar, lanelet::RegulatoryElementData* r, 
 
 template <typename Archive>
 void save(Archive& ar, const lanelet::RegulatoryElementPtr& r, unsigned int /*version*/) {
+  auto id = r->id();
+  ar << id;
+  RegelemSerialization& helper = ar.template get_helper<RegelemSerialization>(&ar);
+  if (helper.currentlySerializing(r)) {
+    return;
+  }
   auto ptr = lanelet::utils::removeConst(r->constData());
   ar << ptr;
 }
+
 template <typename Archive>
 void load(Archive& ar, lanelet::RegulatoryElementPtr& r, unsigned int /*version*/) {
+  RegelemDeserialization& helper = ar.template get_helper<RegelemDeserialization>(&ar);
+  lanelet::Id id;
+  ar >> id;
+  if (helper.currentlyDeserializing(id, r)) {
+    return;
+  }
   std::shared_ptr<lanelet::RegulatoryElementData> ptr;
   ar >> ptr;
-  auto type = ptr->attributes.find(lanelet::AttributeName::Subtype);
-  auto subtype = type == ptr->attributes.end() ? "" : type->second.value();
-  r = lanelet::RegulatoryElementFactory::create(subtype, ptr);
+  auto typeAttr = ptr->attributes.find(lanelet::AttributeName::Subtype);
+  auto regeltype = typeAttr == ptr->attributes.end() ? "" : typeAttr->second.value();
+  r = lanelet::RegulatoryElementFactory::create(regeltype, ptr);
+  helper.deserializationDone(r);  // will update all other instances using this regelem
 }
+
 template <typename Archive>
 void save(Archive& ar, const lanelet::RegulatoryElementConstPtr& r, unsigned int /*version*/) {
-  auto ptr = lanelet::utils::removeConst(r->constData());
-  ar << ptr;
+  save(ar, const_pointer_cast<lanelet::RegulatoryElementPtr>(r), 0);
 }
+
 template <typename Archive>
 void load(Archive& ar, lanelet::RegulatoryElementConstPtr& r, unsigned int /*version*/) {
-  std::shared_ptr<lanelet::RegulatoryElementData> ptr;
-  ar >> ptr;
-  auto type = ptr->attributes.find(lanelet::AttributeName::Subtype);
-  auto subtype = type == ptr->attributes.end() ? "" : type->second.value();
-  r = lanelet::RegulatoryElementFactory::create(subtype, ptr);
+  load(ar, const_pointer_cast<lanelet::RegulatoryElementPtr>(r), 0);
 }
 
 template <typename Archive>
