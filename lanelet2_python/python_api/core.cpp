@@ -762,6 +762,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("roles", &RegulatoryElement::roles)
       .def("find", &RegulatoryElement::find<ConstRuleParameter>, "Returns a primitive with matching id, else None")
       .def("__len__", &RegulatoryElement::size);
+  register_ptr_to_python<RegulatoryElementConstPtr>();
 
   class_<TrafficLight, boost::noncopyable, std::shared_ptr<TrafficLight>, bases<RegulatoryElement>>(
       "TrafficLight", "A traffic light regulatory element", no_init)
