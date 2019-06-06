@@ -46,11 +46,21 @@ class BoundChecker {
   }
 
   bool intersectsLeft(const BasicSegment2d& seg) const {
-    return leftSegments_.qbegin(bgi::intersects(seg)) != leftSegments_.qend();
+    for (auto it = leftSegments_.qbegin(bgi::intersects(seg)); it != leftSegments_.qend(); ++it) {
+      if (!boost::geometry::equals(it->first, seg.first)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   bool intersectsRight(const BasicSegment2d& seg) const {
-    return rightSegments_.qbegin(bgi::intersects(seg)) != rightSegments_.qend();
+    for (auto it = rightSegments_.qbegin(bgi::intersects(seg)); it != rightSegments_.qend(); ++it) {
+      if (!boost::geometry::equals(it->first, seg.first)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   bool secondCrossesBounds(const BasicSegment2d& seg, bool left) const {
@@ -181,6 +191,10 @@ std::shared_ptr<ConstLineString3d> calculateCenterline(const ConstLineString2d& 
 
   auto leftCurrent = leftBound.begin();
   auto rightCurrent = rightBound.begin();
+  // special handling is required if the first two points are identical (i.e. the lanelet is closed at the beginning)
+  if (*leftCurrent == *rightCurrent) {
+    ++leftCurrent;
+  }
   while (leftCurrent != leftBound.end() || rightCurrent != rightBound.end()) {
     OptDistance leftCandidateDistance, rightCandidateDistance;
     ConstLineString2d::const_iterator leftCandidate, rightCandidate;
