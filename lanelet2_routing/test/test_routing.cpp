@@ -270,6 +270,27 @@ TEST_F(GermanVehicleGraph, possiblePathsInvalid) {  // NOLINT
   EXPECT_EQ(routes.size(), 0ul);
 }
 
+TEST_F(GermanVehicleGraph, possiblePathsTowardsWithoutLc) {  // NOLINT
+  auto routes = graph->possiblePathsTowards(lanelets.at(2024), 9, 0, false);
+  ASSERT_EQ(routes.size(), 1);
+  EXPECT_EQ(routes[0].front().id(), 2017);
+  EXPECT_EQ(routes[0].back().id(), 2024);
+}
+
+TEST_F(GermanVehicleGraph, possiblePathsTowardsWithLc) {  // NOLINT
+  auto routes = graph->possiblePathsTowards(lanelets.at(2015), 7, 0, true);
+  ASSERT_EQ(routes.size(), 2);
+  EXPECT_TRUE(containsLanelet(routes[0], 2009) || containsLanelet(routes[0], 2008));
+  EXPECT_TRUE(containsLanelet(routes[1], 2009) || containsLanelet(routes[1], 2008));
+}
+
+TEST_F(GermanVehicleGraph, possiblePathsTowardsMinLanelets) {  // NOLINT
+  auto routes = graph->possiblePathsTowards(lanelets.at(2015), 5, true);
+  ASSERT_EQ(routes.size(), 2);
+  EXPECT_TRUE(containsLanelet(routes[0], 2009) || containsLanelet(routes[0], 2008));
+  EXPECT_TRUE(containsLanelet(routes[1], 2009) || containsLanelet(routes[1], 2008));
+}
+
 TEST(RoutingCostInitialization, NegativeLaneChangeCost) {    // NOLINT
   EXPECT_NO_THROW(RoutingCostDistance(1));                   // NOLINT
   EXPECT_THROW(RoutingCostDistance(-1), InvalidInputError);  // NOLINT

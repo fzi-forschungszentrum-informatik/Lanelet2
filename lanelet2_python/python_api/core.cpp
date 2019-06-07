@@ -835,8 +835,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<SpeedLimit, boost::noncopyable, std::shared_ptr<SpeedLimit>, bases<TrafficSign>>(  // NOLINT
       "SpeedLimit", "A speed limit regulatory element", no_init);
 
-  class_<PrimitiveLayer<Area>, boost::noncopyable>("PrimitiveLayerArea", no_init);
-  class_<PrimitiveLayer<Lanelet>, boost::noncopyable>("PrimitiveLayerLanelet", no_init);
+  class_<PrimitiveLayer<Area>, boost::noncopyable>("PrimitiveLayerArea", no_init);        // NOLINT
+  class_<PrimitiveLayer<Lanelet>, boost::noncopyable>("PrimitiveLayerLanelet", no_init);  // NOLINT
 
   wrapLayer<AreaLayer, bases<PrimitiveLayer<Area>>>("AreaLayer")
       .def("findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })

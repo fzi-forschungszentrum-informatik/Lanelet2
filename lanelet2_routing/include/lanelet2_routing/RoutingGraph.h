@@ -241,6 +241,25 @@ class RoutingGraph {
    * count. */
   LaneletPaths possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets, bool allowLaneChanges = false) const;
 
+  /** @brief Determines possible routes that reach the given lanelet and are "minRoutingCost" long.
+   *  @return possible paths that are at least as long as specified in 'minRoutingCost'. "lanelet" itself is always
+   * included.
+   *  @param startPoint Start lanelet
+   *  @param minRoutingCost Costs that must be reached by a route.
+   *  @param routingCostId ID of the routing cost module used
+   *  @param allowLaneChanges Allow or forbid lane changes */
+  LaneletPaths possiblePathsTowards(const ConstLanelet& targetLanelet, double minRoutingCost,
+                                    RoutingCostId routingCostId = {}, bool allowLaneChanges = false) const;
+
+  /** @brief Determines possible paths from a given start lanelet that are "minLanelets"-long.
+   *  Returns possible routes that are at least as long as specified number of lanelets.
+   *  @param startPoint Start lanelet
+   *  @param minLanelets Number of lanelets a route must be long
+   *  @param allowLaneChanges Allow or forbid lane changes. Note that "lane changes" from a lanelet to an area do not
+   * count. */
+  LaneletPaths possiblePathsTowards(const ConstLanelet& targetLanelet, uint32_t minLanelets,
+                                    bool allowLaneChanges = false) const;
+
   //! Similar to RoutingGraph::possiblePaths, but also considers areas.
   LaneletOrAreaPaths possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, double minRoutingCost,
                                                  RoutingCostId routingCostId = {}, bool allowLaneChanges = false) const;
@@ -251,7 +270,7 @@ class RoutingGraph {
 
   /** @brief Export the internal graph to graphML (xml-based) file format.
    *  @param filename Fully qualified file name - ideally with extension (.graphml)
-   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting. Combine them with "&".
+   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting. Combine them with "|".
    *  @param routingCostId ID of the routing cost module
       @see exportGraphViz */
   void exportGraphML(const std::string& filename, const RelationType& edgeTypesToExclude = RelationType::None,
@@ -260,7 +279,7 @@ class RoutingGraph {
   /** @brief Export the internal graph to graphViz (DOT) file format.
    *  This format includes coloring of the edges in the graph and bears little more information than graphML export.
    *  @param filename Fully qualified file name - ideally with extension (.gv)
-   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting. Combine them with "&".
+   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting. Combine them with "|".
    *  @param routingCostId ID of the routing cost module */
   void exportGraphViz(const std::string& filename, const RelationType& edgeTypesToExclude = RelationType::None,
                       RoutingCostId routingCostId = {}) const;
