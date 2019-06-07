@@ -47,7 +47,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   OptionalConverter<LaneletPath>();
 
   VectorToListConverter<LaneletRelations>();
-  VectorToListConverter<RelationTypes>();
   VectorToListConverter<RouteElementRelations>();
   VectorToListConverter<RoutingCostPtrs>();
   VectorToListConverter<LaneletPaths>();

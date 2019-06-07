@@ -251,19 +251,19 @@ void RoutingGraphBuilder::addLaneChangeEdges(LaneChangeLaneletsCollector& laneCh
   auto getSuccessors = [this](auto beginEdgeIt, auto endEdgeIt) {
     ConstLanelets nexts;
     for (; beginEdgeIt != endEdgeIt; ++beginEdgeIt) {
-      auto& edgeInfo = graph_->graph[*beginEdgeIt];
+      auto& edgeInfo = graph_->get()[*beginEdgeIt];
       if (edgeInfo.relation == RelationType::Successor && edgeInfo.costId == 0) {
-        nexts.push_back(graph_->graph[boost::source(*beginEdgeIt, graph_->graph)].lanelet());
+        nexts.push_back(graph_->get()[boost::source(*beginEdgeIt, graph_->get())].lanelet());
       }
     }
     return nexts;
   };
   auto next = [this, &getSuccessors](const ConstLanelet& llt) {
-    auto edges = boost::out_edges(*graph_->getVertex(llt), graph_->graph);
+    auto edges = boost::out_edges(*graph_->getVertex(llt), graph_->get());
     return getSuccessors(edges.first, edges.second);
   };
   auto prev = [this, &getSuccessors](const ConstLanelet& llt) {
-    auto edges = boost::in_edges(*graph_->getVertex(llt), graph_->graph);
+    auto edges = boost::in_edges(*graph_->getVertex(llt), graph_->get());
     return getSuccessors(edges.first, edges.second);
   };
   Optional<LaneChangeLaneletsCollector::LaneChangeLanelets> laneChangeLanelets;

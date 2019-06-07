@@ -35,19 +35,6 @@ T reservedVector(size_t size) {
   return t;
 }
 
-//! Helper function to get all relation types except the provided ones.
-RelationTypes getRemainingRelations(const RelationTypes& typesToExclude) {
-  assert(std::is_sorted(typesToExclude.begin(), typesToExclude.end()));
-  RelationTypes relations;
-  for (size_t it = 0; it < numRelationTypes(); it++) {
-    auto relation = static_cast<RelationType>(it);
-    if (!std::binary_search(typesToExclude.begin(), typesToExclude.end(), relation)) {
-      relations.emplace_back(relation);
-    }
-  }
-  return relations;
-}
-
 ConstLanelets toLanelets(const ConstLaneletOrAreas& la) {
   return utils::transform(la, [](auto& la) { return static_cast<const ConstLanelet&>(la); });
 }
@@ -56,7 +43,7 @@ ConstLanelets toLanelets(const ConstLaneletOrAreas& la) {
 struct PossibleRoutesInfo;
 using PossibleRoutesInfoUPtr = std::unique_ptr<PossibleRoutesInfo>;
 struct PossibleRoutesInfo {
-  uint32_t vertexId;
+  uint32_t vertexId{};
   double totalDistance{0};
   size_t numLaneChanges{0};
   ConstLaneletOrAreas laneletsOrAreas;
@@ -171,8 +158,8 @@ ConstLaneletOrAreas getAllEdgesFromGraph(const Graph& graph, const FilteredGraph
     result.reserve(size_t(std::distance(edgeRange.first, edgeRange.second)));
     for (; edgeRange.first != edgeRange.second; edgeRange.first++) {
       auto node =
-          edgesOut ? boost::target(*edgeRange.first, graph.graph) : boost::source(*edgeRange.first, graph.graph);
-      result.emplace_back(graph.graph[node].laneletOrArea);
+          edgesOut ? boost::target(*edgeRange.first, graph.get()) : boost::source(*edgeRange.first, graph.get());
+      result.emplace_back(graph.get()[node].laneletOrArea);
     }
     return result;
   };
@@ -233,7 +220,7 @@ Optional<LaneletPath> RoutingGraph::shortestPath(const ConstLanelet& from, const
   if (vertexPath.empty()) {
     return {};
   };
-  return LaneletPath(utils::transform(vertexPath, [&graph = graph_->graph](auto& vi) { return graph[vi].lanelet(); }));
+  return LaneletPath(utils::transform(vertexPath, [&graph = graph_->get()](auto& vi) { return graph[vi].lanelet(); }));
 }
 
 Optional<LaneletPath> RoutingGraph::shortestPathVia(const ConstLanelet& start, const ConstLanelets& via,
@@ -256,7 +243,7 @@ Optional<LaneletPath> RoutingGraph::shortestPathVia(const ConstLanelet& start, c
 Optional<RelationType> RoutingGraph::routingRelation(const ConstLanelet& from, const ConstLanelet& to,
                                                      bool includeConflicting) const {
   auto edgeInfo = includeConflicting ? graph_->getEdgeInfo(from, to)
-                                     : graph_->getEdgeInfoFor(from, to, graph_->filteredGraphs().withoutConflicting);
+                                     : graph_->getEdgeInfoFor(from, to, graph_->withoutConflicting());
   if (!!edgeInfo) {
     return edgeInfo->relation;
   }
@@ -264,7 +251,7 @@ Optional<RelationType> RoutingGraph::routingRelation(const ConstLanelet& from, c
 }
 
 ConstLanelets RoutingGraph::following(const ConstLanelet& lanelet, bool withLaneChanges) const {
-  auto& subgraph = withLaneChanges ? graph_->withLaneChanges(0) : graph_->withoutLaneChanges(0);
+  auto& subgraph = withLaneChanges ? graph_->withLaneChanges() : graph_->withoutLaneChanges();
   return getLaneletEdgesFromGraph(*graph_, subgraph, lanelet, true);
 }
 
@@ -309,26 +296,23 @@ ConstLanelets RoutingGraph::besides(const ConstLanelet& lanelet) const {
 }
 
 Optional<ConstLanelet> RoutingGraph::left(const ConstLanelet& lanelet) const {
-  return ifLaneletInGraph(
-      *graph_, lanelet, [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->filteredGraphs().left); });
+  return ifLaneletInGraph(*graph_, lanelet,
+                          [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->left()); });
 }
 
 Optional<ConstLanelet> RoutingGraph::adjacentLeft(const ConstLanelet& lanelet) const {
-  return ifLaneletInGraph(*graph_, lanelet, [this](auto& vertex) {
-    return neighboringLaneletImpl(vertex, graph_->filteredGraphs().adjacentLeft);
-  });
+  return ifLaneletInGraph(*graph_, lanelet,
+                          [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->adjacentLeft()); });
 }
 
 Optional<ConstLanelet> RoutingGraph::right(const ConstLanelet& lanelet) const {
-  return ifLaneletInGraph(*graph_, lanelet, [this](auto& vertex) {
-    return neighboringLaneletImpl(vertex, graph_->filteredGraphs().right);
-  });
+  return ifLaneletInGraph(*graph_, lanelet,
+                          [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->right()); });
 }
 
 Optional<ConstLanelet> RoutingGraph::adjacentRight(const ConstLanelet& lanelet) const {
-  return ifLaneletInGraph(*graph_, lanelet, [this](auto& vertex) {
-    return neighboringLaneletImpl(vertex, graph_->filteredGraphs().adjacentRight);
-  });
+  return ifLaneletInGraph(*graph_, lanelet,
+                          [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->adjacentRight()); });
 }
 
 ConstLanelets RoutingGraph::lefts(const ConstLanelet& lanelet) const {
@@ -545,46 +529,45 @@ LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletO
     return route.laneletsOrAreas.size() >= minElements;
   };
   auto& graph = allowLaneChanges ? graph_->withAreasAndLaneChanges(0) : graph_->withAreasWithoutLaneChanges(0);
-  return utils::transform(possiblePathsImpl(*start, graph, false, stopIfMinVertices),
+  return utils::transform(possiblePathsImpl<false>(*start, graph, false, stopIfMinVertices),
                           [](auto& v) { return LaneletOrAreaPath(v); });
 }
 
-void RoutingGraph::exportGraphML(const std::string& filename, const RelationTypes& edgeTypesToExclude,
+void RoutingGraph::exportGraphML(const std::string& filename, const RelationType& edgeTypesToExclude,
                                  RoutingCostId routingCostId) const {
   if (filename.empty()) {
     throw InvalidInputError("No filename passed");
   }
-  if (routingCostId >= graph_->numRoutingCosts) {
+  if (routingCostId >= graph_->numRoutingCosts()) {
     throw InvalidInputError("Routing Cost ID is higher than the number of routing modules.");
   }
-  RelationTypes relations{getRemainingRelations(edgeTypesToExclude)};
-  exportGraphMLImpl<GraphType>(filename, graph_->graph, relations, routingCostId);
+  RelationType relations = allRelations() & ~edgeTypesToExclude;
+  exportGraphMLImpl<GraphType>(filename, graph_->get(), relations, routingCostId);
 }
 
-void RoutingGraph::exportGraphViz(const std::string& filename, const RelationTypes& edgeTypesToExclude,
+void RoutingGraph::exportGraphViz(const std::string& filename, const RelationType& edgeTypesToExclude,
                                   RoutingCostId routingCostId) const {
   if (filename.empty()) {
     throw InvalidInputError("No filename passed");
   }
-  if (routingCostId >= graph_->numRoutingCosts) {
+  if (routingCostId >= graph_->numRoutingCosts()) {
     throw InvalidInputError("Routing Cost ID is higher than the number of routing modules.");
   }
-  RelationTypes relations{getRemainingRelations(edgeTypesToExclude)};
-  exportGraphVizImpl<GraphType>(filename, graph_->graph, relations, routingCostId);
+  RelationType relations = allRelations() & ~edgeTypesToExclude;
+  exportGraphVizImpl<GraphType>(filename, graph_->get(), relations, routingCostId);
 }
 
 //! Helper function to slim down getDebugLaneletMap
-RelationTypes allowedRelationsfromConfiguration(bool includeAdjacent, bool includeConflicting) {
-  RelationTypes allowedRelations{RelationType::Successor, RelationType::Left, RelationType::Right,
-                                 RelationType::Merging, RelationType::Diverging};
+RelationType allowedRelationsfromConfiguration(bool includeAdjacent, bool includeConflicting) {
+  RelationType allowedRelations{RelationType::Successor | RelationType::Left | RelationType::Right |
+                                RelationType::Merging | RelationType::Diverging};
   if (includeAdjacent) {
-    allowedRelations.push_back(RelationType::AdjacentLeft);
-    allowedRelations.push_back(RelationType::AdjacentRight);
+    allowedRelations |= RelationType::AdjacentLeft;
+    allowedRelations |= RelationType::AdjacentRight;
   }
   if (includeConflicting) {
-    allowedRelations.push_back(RelationType::Conflicting);
+    allowedRelations |= RelationType::Conflicting;
   }
-  std::sort(allowedRelations.begin(), allowedRelations.end());
   return allowedRelations;
 }
 
@@ -661,18 +644,18 @@ class DebugMapBuilder {
 
 LaneletMapPtr RoutingGraph::getDebugLaneletMap(RoutingCostId routingCostId, bool includeAdjacent,
                                                bool includeConflicting) const {
-  if (routingCostId >= graph_->numRoutingCosts) {
+  if (routingCostId >= graph_->numRoutingCosts()) {
     throw InvalidInputError("Routing Cost ID is higher than the number of routing modules.");
   }
-  EdgeCostFilter edgeFilter(graph_->graph, routingCostId,
+  EdgeCostFilter edgeFilter(graph_->get(), routingCostId,
                             allowedRelationsfromConfiguration(includeAdjacent, includeConflicting));
-  FilteredGraph filteredGraph(graph_->graph, edgeFilter);
-  return DebugMapBuilder(filteredGraph).run(graph_->laneletOrAreaToVertex);
+  FilteredGraph filteredGraph(graph_->get(), edgeFilter);
+  return DebugMapBuilder(filteredGraph).run(graph_->vertexLookup());
 }
 
 RoutingGraph::Errors RoutingGraph::checkValidity(bool throwOnError) const {
   Errors errors;
-  for (const auto& laWithVertex : graph_->laneletOrAreaToVertex) {
+  for (const auto& laWithVertex : graph_->vertexLookup()) {
     auto& la = laWithVertex.first;
     auto ll = laWithVertex.first.lanelet();
     auto& vertex = laWithVertex.second;
@@ -680,14 +663,14 @@ RoutingGraph::Errors RoutingGraph::checkValidity(bool throwOnError) const {
     // Check left relation
     Optional<ConstLanelet> left;
     try {
-      left = neighboringLaneletImpl(vertex, graph_->filteredGraphs().left, true);
+      left = neighboringLaneletImpl(vertex, graph_->left(), true);
 
     } catch (RoutingGraphError& e) {
       errors.emplace_back(std::string("Left: ") + e.what());
     }
     Optional<ConstLanelet> adjacentLeft;
     try {
-      adjacentLeft = neighboringLaneletImpl(vertex, graph_->filteredGraphs().adjacentLeft, true);
+      adjacentLeft = neighboringLaneletImpl(vertex, graph_->adjacentLeft(), true);
     } catch (RoutingGraphError& e) {
       errors.emplace_back(std::string("Adjacent left: ") + e.what());
     }
@@ -720,13 +703,13 @@ RoutingGraph::Errors RoutingGraph::checkValidity(bool throwOnError) const {
     // Check right
     Optional<ConstLanelet> right;
     try {
-      right = neighboringLaneletImpl(vertex, graph_->filteredGraphs().right, true);
+      right = neighboringLaneletImpl(vertex, graph_->right(), true);
     } catch (RoutingGraphError& e) {
       errors.emplace_back(std::string("Right: ") + e.what());
     }
     Optional<ConstLanelet> adjacentRight;
     try {
-      adjacentRight = neighboringLaneletImpl(vertex, graph_->filteredGraphs().adjacentRight, true);
+      adjacentRight = neighboringLaneletImpl(vertex, graph_->adjacentRight(), true);
     } catch (RoutingGraphError& e) {
       errors.emplace_back(std::string("Adjacent right: ") + e.what());
     }

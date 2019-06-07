@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/primitives/Lanelet.h>
@@ -251,18 +251,18 @@ class RoutingGraph {
 
   /** @brief Export the internal graph to graphML (xml-based) file format.
    *  @param filename Fully qualified file name - ideally with extension (.graphml)
-   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting
+   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting. Combine them with "&".
    *  @param routingCostId ID of the routing cost module
       @see exportGraphViz */
-  void exportGraphML(const std::string& filename, const RelationTypes& edgeTypesToExclude = RelationTypes(),
+  void exportGraphML(const std::string& filename, const RelationType& edgeTypesToExclude = RelationType::None,
                      RoutingCostId routingCostId = {}) const;
 
   /** @brief Export the internal graph to graphViz (DOT) file format.
    *  This format includes coloring of the edges in the graph and bears little more information than graphML export.
    *  @param filename Fully qualified file name - ideally with extension (.gv)
-   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting
+   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting. Combine them with "&".
    *  @param routingCostId ID of the routing cost module */
-  void exportGraphViz(const std::string& filename, const RelationTypes& edgeTypesToExclude = RelationTypes(),
+  void exportGraphViz(const std::string& filename, const RelationType& edgeTypesToExclude = RelationType::None,
                       RoutingCostId routingCostId = {}) const;
 
   /** @brief An abstract lanelet map holding the information of the routing graph.

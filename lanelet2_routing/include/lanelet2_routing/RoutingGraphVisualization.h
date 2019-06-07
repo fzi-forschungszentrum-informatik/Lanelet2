@@ -82,7 +82,7 @@ inline void exportGraphVizImpl(const std::string& filename, const G& g, E edgeFi
  *  @param relationTypes Relations that will be included in the export
  *  @param routingCostId ID of the routing cost module */
 template <typename G>
-inline void exportGraphVizImpl(const std::string& filename, const G& g, const RelationTypes& relationTypes,
+inline void exportGraphVizImpl(const std::string& filename, const G& g, const RelationType& relationTypes,
                                RoutingCostId routingCostId = 0) {
   auto edgeFilter = EdgeCostFilter(g, routingCostId, relationTypes);
   exportGraphVizImpl(filename, g, edgeFilter);
@@ -122,7 +122,7 @@ inline void exportGraphMLImpl(const std::string& filename, const G& g, E eFilter
  *  @param relationTypes Relations that will be included in the export
  *  @param routingCostId ID of the routing cost module */
 template <typename G>
-inline void exportGraphMLImpl(const std::string& filename, const G& g, const RelationTypes& relationTypes,
+inline void exportGraphMLImpl(const std::string& filename, const G& g, const RelationType& relationTypes,
                               RoutingCostId routingCostId = 0) {
   auto edgeFilter = EdgeCostFilter(g, routingCostId, relationTypes);
   exportGraphMLImpl(filename, g, edgeFilter);
