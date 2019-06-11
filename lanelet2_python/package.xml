@@ -17,7 +17,7 @@
   <depend>lanelet2_routing</depend>
   <depend>lanelet2_traffic_rules</depend>
   <depend>lanelet2_projection</depend>
-  <depend>boost-python</depend>
+  <depend>boost</depend>
   <export>
   </export>
 </package>
