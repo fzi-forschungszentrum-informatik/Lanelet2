@@ -18,7 +18,7 @@ class Lanelet2Conan(ConanFile):
                 "geographiclib/1.49@bincrafters/stable",
                 "pugixml/1.9@bincrafters/stable")
 
-    exports_sources = "*"
+    exports_sources = "../*"
     exports = "version.txt"
 
     proj_list = [
@@ -32,7 +32,7 @@ class Lanelet2Conan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        cmake.configure()
+        cmake.configure(source_folder='conan')
         cmake.build()
 
     def package(self):

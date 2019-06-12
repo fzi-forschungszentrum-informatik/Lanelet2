@@ -8,7 +8,7 @@ set(lanelet2_core_lib_name ${PROJECT_NAME})
 ############################
 ## read source code files ##
 ############################
-file(GLOB_RECURSE lanelet2_core_source_list "${CMAKE_CURRENT_LIST_DIR}/src/**.cpp")
+file(GLOB_RECURSE lanelet2_core_source_list "${CMAKE_CURRENT_LIST_DIR}/../lanelet2_core/src/**.cpp")
 
 ###########
 ## Build ##
@@ -19,8 +19,8 @@ add_library(
 target_include_directories(
     ${lanelet2_core_lib_name}
     PUBLIC
-        "${CMAKE_CURRENT_LIST_DIR}/include"
-        "${CMAKE_CURRENT_LIST_DIR}/include/${lanelet2_core_lib_name}")
+        "${CMAKE_CURRENT_LIST_DIR}/../lanelet2_core/include"
+        "${CMAKE_CURRENT_LIST_DIR}/../lanelet2_core/include/${lanelet2_core_lib_name}")
 target_link_libraries(
     ${lanelet2_core_lib_name}
     PUBLIC
