@@ -10,6 +10,14 @@
 
 ### Using
 
+conanfile.txt
+
+```
+[requires]
+lanelet2/0.0.1@my_user/my_channel
+some_other_dependency/0.0.1@foo/bar
+```
+
 #### In an ordinary cmake project
 
 ```cmake
@@ -23,8 +31,8 @@ target_include_directories(myexec
     PUBLIC ...)
 target_link_libraries(myexec
     PUBLIC
-        CONAN_PKG::spdlog
-        CONAN_PKG::yaml-cpp)
+        CONAN_PKG::lanelet2
+        CONAN_PKG::some_other_dependency)
 ```
 
 #### In a ros project
@@ -53,6 +61,6 @@ target_include_directories(myexec
     PUBLIC ...)
 target_link_libraries(myexec
     PUBLIC
-        spdlog::spdlog
-        spdlog::yaml-cpp)
+        spdlog::lanelet2
+        spdlog::some_other_dependency)
 ```

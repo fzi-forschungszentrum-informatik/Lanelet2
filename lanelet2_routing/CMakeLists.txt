@@ -67,7 +67,7 @@ catkin_package(
 ###########
 # Add include and library directories
 include_directories(
-    include
+    include/${PROJECT_NAME}
     ${mrt_INCLUDE_DIRS}
     ${catkin_INCLUDE_DIRS}
     )
