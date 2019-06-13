@@ -2,11 +2,16 @@
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <cstdio>
+#include <fstream>
 #include "Io.h"
 #include "TestSetup.h"
 #include "gtest/gtest.h"
 
 using namespace lanelet;
+
+struct MyStuff {
+  int i{};
+};
 
 template <typename T>
 T writeAndLoad(const T& t) {
@@ -105,4 +110,12 @@ TEST(BinHandler, explicitIO) {  // NOLINT
   lanelet::write(filename, *map, "bin_handler");
 
   auto mapLoad = lanelet::load(filename, "bin_handler");
+}
+
+TEST(BinHandler, fullMap) {
+  Origin origin({49, 8.4, 0});
+  std::string filenameIn = "../../lanelet2_maps/res/mapping_example.osm";
+  auto map = lanelet::load(filenameIn, origin);
+  auto llt = map->laneletLayer.find(44968);
+  writeAndLoad(*llt);
 }

@@ -451,6 +451,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<std::vector<TrafficSign::Ptr>>();
   VectorToListConverter<std::vector<SpeedLimit::Ptr>>();
   VectorToListConverter<std::vector<RightOfWay::Ptr>>();
+  VectorToListConverter<std::vector<std::shared_ptr<const TrafficLight>>>();
+  VectorToListConverter<std::vector<std::shared_ptr<const TrafficSign>>>();
+  VectorToListConverter<std::vector<std::shared_ptr<const SpeedLimit>>>();
+  VectorToListConverter<std::vector<std::shared_ptr<const RightOfWay>>>();
   VectorToListConverter<std::vector<std::string>>();
   AttributeFromPythonStr();
   DictToAttributeMapConverter();
@@ -667,6 +671,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("centerline", &ConstLanelet::centerline, "Centerline of the lanelet")
       .add_property("leftBound", &ConstLanelet::leftBound, "Left boundary of lanelet")
       .add_property("rightBound", &ConstLanelet::rightBound, "Right boundary of lanelet")
+      .add_property("regulatoryElements",
+                    make_function(&ConstLanelet::regulatoryElements, return_value_policy<return_by_value>()),
+                    "Regulatory elements of the lanelet")
       .def("trafficLights", constRegelemAs<TrafficLight>, "traffic light regulatory elements")
       .def("trafficSigns", constRegelemAs<TrafficSign>, "traffic sign regulatory elements")
       .def("speedLimits", constRegelemAs<SpeedLimit>, "speed limit regulatory elements")
@@ -755,6 +762,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("roles", &RegulatoryElement::roles)
       .def("find", &RegulatoryElement::find<ConstRuleParameter>, "Returns a primitive with matching id, else None")
       .def("__len__", &RegulatoryElement::size);
+  register_ptr_to_python<RegulatoryElementConstPtr>();
 
   class_<TrafficLight, boost::noncopyable, std::shared_ptr<TrafficLight>, bases<RegulatoryElement>>(
       "TrafficLight", "A traffic light regulatory element", no_init)
