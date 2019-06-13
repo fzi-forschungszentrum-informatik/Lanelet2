@@ -3,3 +3,7 @@
 setup.py
 CMakeLists.txt.user
 
+# IDE
+.idea/
+cmake-build-debug/
+

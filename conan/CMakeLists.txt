@@ -4,6 +4,10 @@ project(lanelet2_conan)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Make a redundant call of `conan install` to suport CMake-first environments eg IDEs.
+execute_process(COMMAND
+    conan install ${CMAKE_SOURCE_DIR} --install-folder ${CMAKE_BINARY_DIR} --build=missing --generator=cmake)
+
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
