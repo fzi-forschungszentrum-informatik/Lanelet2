@@ -313,6 +313,8 @@ class Lanelet : public Primitive<ConstLanelet> {
 //! Conceptually similar to a std::weak_ptr.
 class ConstWeakLanelet {
  public:
+  using DataType = LaneletData;
+  using Category = traits::LaneletTag;
   using ConstType = ConstWeakLanelet;
   using MutableType = WeakLanelet;
   using TwoDType = ConstWeakLanelet;
