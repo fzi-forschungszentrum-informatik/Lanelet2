@@ -12,11 +12,18 @@ include(UseMrtAutoTarget)
 
 include(GatherDeps)
 # Remove libs which cannot be found automatically
-#list(REMOVE_ITEM DEPENDEND_PACKAGES <package name 1> <package name 2> ...)
+list(REMOVE_ITEM DEPENDEND_PACKAGES geographiclib)
 find_package(AutoDeps REQUIRED COMPONENTS ${DEPENDEND_PACKAGES})
 
 # Manually resolve removed dependend packages
 #find_package(...)
+find_path(GeographicLib_INCLUDE_DIR GeographicLib/Config.h
+  PATH_SUFFIXES GeographicLib
+  )
+set(GeographicLib_INCLUDE_DIRS ${GeographicLib_INCLUDE_DIR})
+find_library(GeographicLib_LIBRARIES
+  NAMES Geographic
+)
 
 # Mark files or folders for display in IDEs
 mrt_add_to_ide(README.md .gitlab-ci.yml)
@@ -78,8 +85,9 @@ link_directories(
 
 # Declare a cpp library
 mrt_add_library(${PROJECT_NAME}
-    INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC} 
+    INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC}
     SOURCES ${PROJECT_SOURCE_FILES_SRC}
+		LIBRARIES ${GeographicLib_LIBRARIES}
     )
 
 #############
