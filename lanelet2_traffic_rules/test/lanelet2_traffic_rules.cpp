@@ -457,6 +457,11 @@ TEST_F(GermanTrafficRulesVehicle, canNotLaneChangeViaSolidLine) {  // NOLINT
   ls3.setAttribute(Attr::Subtype, Value::Solid);
   EXPECT_FALSE(germanVehicle->canChangeLane(lanelet, left));
 }
+TEST_F(GermanTrafficRulesVehicle, canNotLaneChangeViaSolidSolidLine) {  // NOLINT
+  ls3.setAttribute(Attr::Type, Value::LineThin);
+  ls3.setAttribute(Attr::Subtype, Value::SolidSolid);
+  EXPECT_FALSE(germanVehicle->canChangeLane(lanelet, left));
+}
 
 TEST_F(GermanTrafficRulesVehicle, canNotLaneChangeIfOverridden) {  // NOLINT
   ls3.setAttribute(Attr::Type, Value::LineThin);
