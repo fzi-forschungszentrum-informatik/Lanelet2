@@ -12,7 +12,7 @@ include(UseMrtAutoTarget)
 
 include(GatherDeps)
 # Remove libs which cannot be found automatically
-list(REMOVE_ITEM DEPENDEND_PACKAGES pugixml-dev)
+#list(REMOVE_ITEM DEPENDEND_PACKAGES <package name 1> <package name 2> ...)
 find_package(AutoDeps REQUIRED COMPONENTS ${DEPENDEND_PACKAGES})
 
 # Manually resolve removed dependend packages
@@ -78,9 +78,8 @@ link_directories(
 
 # Declare a cpp library
 mrt_add_library(${PROJECT_NAME}
-    INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC}
+    INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC} 
     SOURCES ${PROJECT_SOURCE_FILES_SRC}
-		LIBRARIES pugixml
     )
 
 #############
