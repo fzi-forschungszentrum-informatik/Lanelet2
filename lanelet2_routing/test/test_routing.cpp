@@ -272,21 +272,21 @@ TEST_F(GermanVehicleGraph, possiblePathsInvalid) {  // NOLINT
 
 TEST_F(GermanVehicleGraph, possiblePathsTowardsWithoutLc) {  // NOLINT
   auto routes = graph->possiblePathsTowards(lanelets.at(2024), 9, 0, false);
-  ASSERT_EQ(routes.size(), 1);
+  ASSERT_EQ(routes.size(), 1UL);
   EXPECT_EQ(routes[0].front().id(), 2017);
   EXPECT_EQ(routes[0].back().id(), 2024);
 }
 
 TEST_F(GermanVehicleGraph, possiblePathsTowardsWithLc) {  // NOLINT
   auto routes = graph->possiblePathsTowards(lanelets.at(2015), 7, 0, true);
-  ASSERT_EQ(routes.size(), 2);
+  ASSERT_EQ(routes.size(), 2UL);
   EXPECT_TRUE(containsLanelet(routes[0], 2009) || containsLanelet(routes[0], 2008));
   EXPECT_TRUE(containsLanelet(routes[1], 2009) || containsLanelet(routes[1], 2008));
 }
 
 TEST_F(GermanVehicleGraph, possiblePathsTowardsMinLanelets) {  // NOLINT
   auto routes = graph->possiblePathsTowards(lanelets.at(2015), 5, true);
-  ASSERT_EQ(routes.size(), 2);
+  ASSERT_EQ(routes.size(), 2UL);
   EXPECT_TRUE(containsLanelet(routes[0], 2009) || containsLanelet(routes[0], 2008));
   EXPECT_TRUE(containsLanelet(routes[1], 2009) || containsLanelet(routes[1], 2008));
 }
