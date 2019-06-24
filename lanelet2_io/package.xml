@@ -14,7 +14,7 @@
   <test_depend>gtest</test_depend>
   <depend>boost</depend>
   <depend>lanelet2_core</depend>
-  <depend>pugixml</depend>
+  <depend>pugixml-dev</depend>
 
   <export>
     <rosdoc config="../rosdoc.yaml" />
