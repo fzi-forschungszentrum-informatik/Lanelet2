@@ -12,6 +12,7 @@ Tagging linestrings as lane boundary correctly is important, because Lanelet2 us
 | **type** | **subtype** | **description** | **lane change?** |
 |----------|-------------|-----------------|------------------|
 |line_thin | solid    | a solid lane marking | no       |
+|line_thin | solid_solid | a double solid lane marking | no       |
 |line_thin | dashed      | a dashed lane marking | yes        |
 |line_thin | dashed_solid | a marking that is dashed on the right and solid on the left | left->right: yes |
 |line_thin | solid_dashed | the other way around | right->left: yes |
