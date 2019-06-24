@@ -14,7 +14,7 @@ Features:
 - Many **customization points** to add new traffic rules, routing costs, parsers, etc.
 - **Simple convenience functions** for common tasks when handling maps
 - **Accurate Projection** between the lat/lon geographic world and local metric coordinates
-- **IO Interface** for reading and writing e.g. _osm_ data formats
+- **IO Interface** for reading and writing e.g. _osm_ data formats (this does not mean it can deal with _osm maps_)
 - **Python** bindings for the whole C++ interface
 - **Boost Geometry** support for all thinkable kinds of geometry calculations on map primitives
 - Released under the [**BSD 3-Clause license**](LICENSE)
@@ -92,6 +92,8 @@ If unsure, see the [Dockerfile](Dockerfile) or the [travis build log](https://tr
 The python bindings are build for your default python installation by default (which currently is python2 on most systems). To build for python3 instead of python2, create a python3 virtualenv before initializing the workspace with `catkin init`. The command `python` should point to `python3`. 
 
 After `catkin init` run `catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.6` to make sure that the correct python version is used. Then build and use as usual.
+
+*Note: With bionic and beyond, the apt package `python3-catkin-tools` conflicts with ROS melodic and should not be used. Use either the python2 version or use pip to install the python3 version.*
 
 ## Examples
 Examples and common use cases in both C++ and Python can be found [here](lanelet2_examples/README.md).
