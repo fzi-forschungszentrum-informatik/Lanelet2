@@ -252,7 +252,7 @@ class ToFileWriter {
 void OsmWriter::write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors) const {
   auto file = toOsmFile(laneletMap, errors);
   auto doc = osm::write(*file);
-  auto res = doc->save_file(filename.c_str());
+  auto res = doc->save_file(filename.c_str(), "  ");
   if (!res) {
     throw ParseError("Pugixml failed to write the map (unable to create file?)");
   }
