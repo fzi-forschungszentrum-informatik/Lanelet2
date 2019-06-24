@@ -1,5 +1,6 @@
 #include "io_handlers/OsmFile.h"
 #include <lanelet2_core/utility/Utilities.h>
+#include <boost/format.hpp>
 #include <iostream>
 
 namespace lanelet {
@@ -24,6 +25,7 @@ constexpr const char* Id = "id";
 constexpr const char* Lat = "lat";
 constexpr const char* Lon = "lon";
 constexpr const char* Version = "version";
+constexpr const char* Visible = "visible";
 constexpr const char* Elevation = "ele";
 constexpr const char* Action = "action";
 constexpr const char* Delete = "delete";
@@ -44,6 +46,13 @@ Attributes tags(const pugi::xml_node& node) {
 bool isDeleted(const pugi::xml_node& node) {
   auto action = node.attribute(keyword::Action);
   return action && std::string(action.value()) == keyword::Delete;  // NOLINT
+}
+
+std::string toJosmStyle(double d) {
+  std::string str = boost::str(boost::format{"%12.11f"} % d);
+  str.erase(str.find_last_not_of('0') + 1, std::string::npos);
+  str.erase(str.find_last_not_of('.') + 1, std::string::npos);
+  return str;
 }
 
 class OsmFileWriter {
@@ -73,11 +82,13 @@ class OsmFileWriter {
     for (const auto& node : nodes) {
       auto xmlNode = osmNode.append_child(keyword::Node);
       xmlNode.append_attribute(keyword::Id) = LongLong(node.second.id);
-      xmlNode.append_attribute(keyword::Lat) = node.second.point.lat;
-      xmlNode.append_attribute(keyword::Lon) = node.second.point.lon;
       if (node.second.id > 0) {
+        xmlNode.append_attribute(keyword::Visible) = "true";
         xmlNode.append_attribute(keyword::Version) = 1;
       }
+      xmlNode.append_attribute(keyword::Lat) = toJosmStyle(node.second.point.lat).c_str();
+      xmlNode.append_attribute(keyword::Lon) = toJosmStyle(node.second.point.lon).c_str();
+
       if (node.second.point.ele != 0.) {
         auto tagNode = xmlNode.append_child(keyword::Tag);
         tagNode.append_attribute(keyword::Key) = keyword::Elevation;
@@ -91,10 +102,11 @@ class OsmFileWriter {
     for (const auto& wayElem : ways) {
       const auto& way = wayElem.second;
       auto xmlNode = osmNode.append_child(keyword::Way);
+      xmlNode.append_attribute(keyword::Id) = LongLong(way.id);
       if (way.id > 0) {
+        xmlNode.append_attribute(keyword::Visible) = "true";
         xmlNode.append_attribute(keyword::Version) = 1;
       }
-      xmlNode.append_attribute(keyword::Id) = LongLong(way.id);
       for (const auto& node : way.nodes) {
         auto nd = xmlNode.append_child(keyword::Nd);
         nd.append_attribute(keyword::Ref) = LongLong(node->id);
@@ -109,6 +121,7 @@ class OsmFileWriter {
       auto xmlNode = osmNode.append_child(keyword::Relation);
       xmlNode.append_attribute(keyword::Id) = LongLong(relation.id);
       if (relation.id > 0) {
+        xmlNode.append_attribute(keyword::Visible) = "true";
         xmlNode.append_attribute(keyword::Version) = 1;
       }
       for (const auto& role : relation.members) {
