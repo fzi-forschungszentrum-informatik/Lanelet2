@@ -4,13 +4,6 @@ canvas {
     error-color: #ffffff;
 }
 
-node[!type][!speed_limit]
-{
-    symbol-shape: square;
-    symbol-fill-opacity: 0;
-    symbol-stroke-opacity: 0;
-}
-
 way >[index=-1] node
 {
     symbol-shape: triangle;
