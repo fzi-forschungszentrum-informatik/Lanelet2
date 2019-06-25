@@ -434,7 +434,7 @@ template <typename Archive>
 void save(Archive& ar, const lanelet::RegulatoryElementPtr& r, unsigned int /*version*/) {
   auto id = r->id();
   ar << id;
-  RegelemSerialization& helper = ar.template get_helper<RegelemSerialization>(&ar);
+  auto& helper = ar.template get_helper<RegelemSerialization>(&ar);
   if (helper.currentlySerializing(r)) {
     return;
   }
@@ -444,7 +444,7 @@ void save(Archive& ar, const lanelet::RegulatoryElementPtr& r, unsigned int /*ve
 
 template <typename Archive>
 void load(Archive& ar, lanelet::RegulatoryElementPtr& r, unsigned int /*version*/) {
-  RegelemDeserialization& helper = ar.template get_helper<RegelemDeserialization>(&ar);
+  auto& helper = ar.template get_helper<RegelemDeserialization>(&ar);
   lanelet::Id id;
   ar >> id;
   if (helper.currentlyDeserializing(id, r)) {
