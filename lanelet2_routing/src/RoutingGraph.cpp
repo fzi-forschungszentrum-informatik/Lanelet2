@@ -220,7 +220,7 @@ Optional<LaneletPath> RoutingGraph::shortestPath(const ConstLanelet& from, const
   if (vertexPath.empty()) {
     return {};
   };
-  return LaneletPath(utils::transform(vertexPath, [&graph = graph_->get()](auto& vi) { return graph[vi].lanelet(); }));
+  return LaneletPath(utils::transform(vertexPath, [&](auto& vi) { return graph_->get()[vi].lanelet(); }));
 }
 
 Optional<LaneletPath> RoutingGraph::shortestPathVia(const ConstLanelet& start, const ConstLanelets& via,
