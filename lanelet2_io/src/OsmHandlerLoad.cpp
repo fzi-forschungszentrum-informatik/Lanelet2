@@ -240,18 +240,41 @@ class FromFileLoader {  // NOLINT
       parserError(llElem.id, "Lanelet has not exactly one "s + role + " border!");
       return LineString3d(llElem.id);
     }
+    if (borderMember.first->second->type() != AttributeValueString::Way) {
+      parserError(llElem.id, "Lanelet "s + role + " border is not of type way!");
+      return LineString3d(llElem.id);
+    }
     return getOrGetDummy(lineStrings_, borderMember.first->second->id, llElem.id);
   }
 
+  LineStrings3d getLinestrings(const osm::Roles& roles, const std::string& roleName, Id refId) {
+    auto members = roles.equal_range(roleName);
+    LineStrings3d linestrings;
+    linestrings.reserve(size_t(std::distance(members.first, members.second)));
+    std::for_each(members.first, members.second, [&](auto& member) {
+      if (member.second->type() != AttributeValueString::Way) {
+        auto msg = roleName + " ring must consist of ways but id " + std::to_string(member.second->id) +
+                   " is of type " + member.second->type() + "!";
+        msg[0] = std::toupper(msg[0]);
+        this->parserError(refId, msg);
+        return;
+      }
+      auto elem = lineStrings_.find(member.second->id);
+      if (elem == lineStrings_.end()) {
+        this->parserError(refId, "Failed to get id "s + std::to_string(member.second->id) + " from map");
+        return;
+      }
+      linestrings.push_back(elem->second);
+    });
+    return linestrings;
+  }
+
   LineStrings3d getOuterRing(const osm::Relation& area) {
-    auto outerReg = area.members.equal_range(RoleNameString::Outer);
-    if (outerReg.first == outerReg.second) {
+    auto outerLs = getLinestrings(area.members, RoleNameString::Outer, area.id);
+    if (outerLs.empty()) {
       parserError(area.id, "Areas must have at least one outer border!");
       return {};
     }
-    auto outerLs = utils::transform(outerReg.first, outerReg.second, [this, &area](const auto& elem) {
-      return this->getOrGetDummy(lineStrings_, elem.second->id, area.id);
-    });
     auto outerRings = assembleBoundary(outerLs, area.id);
     if (outerRings.size() != 1) {
       parserError(area.id, "Areas must have exactly one outer ring!");
@@ -261,11 +284,7 @@ class FromFileLoader {  // NOLINT
   }
 
   std::vector<LineStrings3d> getInnerRing(const osm::Relation& area) {
-    auto innerReg = area.members.equal_range(RoleNameString::Inner);
-
-    auto innerLs = utils::transform(innerReg.first, innerReg.second, [this, &area](const auto& elem) {
-      return this->getOrGetDummy(lineStrings_, elem.second->id, area.id);
-    });
+    auto innerLs = getLinestrings(area.members, RoleNameString::Inner, area.id);
     return assembleBoundary(innerLs, area.id);
   }
 
@@ -311,8 +330,7 @@ class FromFileLoader {  // NOLINT
   }
 
   std::vector<LineStrings3d> assembleBoundary(LineStrings3d lineStrings, Id id) {
-    std::reverse(lineStrings.begin(),
-                 lineStrings.end());  // its easier to pop from a vector...
+    std::reverse(lineStrings.begin(), lineStrings.end());  // its easier to pop from a vector...
     std::vector<LineStrings3d> rings;
     rings.emplace_back(LineStrings3d());
     while (!lineStrings.empty()) {
