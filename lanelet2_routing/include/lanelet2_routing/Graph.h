@@ -46,7 +46,6 @@ struct EdgeCostFilter {
   /// @param routingCostId Edges with this routing cost ID will pass
   EdgeCostFilter(const GraphType& graph, RoutingCostId routingCostId)
       : routingCostId_{routingCostId},
-        relations_{allRelations()},
         pmRelation_{boost::get(&EdgeInfo::relation, graph)},
         pmIds_{boost::get(&EdgeInfo::costId, graph)} {}
 
@@ -68,8 +67,8 @@ struct EdgeCostFilter {
   }
 
  private:
-  RoutingCostId routingCostId_{0};
-  RelationType relations_;  ///< Relations that pass the filter
+  RoutingCostId routingCostId_{0};          ///< Id of the routing cost functor to use
+  RelationType relations_{allRelations()};  ///< Relations that pass the filter
   boost::property_map<const GraphType, RelationType EdgeInfo::*>::const_type
       pmRelation_;  ///< Property map to the relations of edges in the graph
   boost::property_map<const GraphType, RoutingCostId EdgeInfo::*>::const_type
