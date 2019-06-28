@@ -74,14 +74,16 @@ catkin_package(
 # Add include and library directories
 include_directories(
   include/${PROJECT_NAME}
+  ${PUGIXML_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
 # Declare a cpp library
 mrt_add_library(
   ${PROJECT_NAME}
-  INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC} 
+  INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC} ${PUGIXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}
   SOURCES ${PROJECT_SOURCE_FILES_SRC}
+  LIBRARIES ${PUGIXML_LIBRARIES} ${Boost_LIBRARIES}
 )
 
 #############
@@ -95,6 +97,9 @@ mrt_install(PROGRAMS scripts FILES res data)
 #############
 # Add test targets for cpp and python tests
 if (CATKIN_ENABLE_TESTING)
-  mrt_add_tests(test)
+  mrt_add_tests(
+    test
+    LIBRARIES ${PUGIXML_LIBRARIES} ${Boost_LIBRARIES}
+  )
   mrt_add_nosetests(test)
 endif()

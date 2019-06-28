@@ -15,6 +15,7 @@ find_package(mrt_cmake_modules REQUIRED)
 find_package(catkin REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED)
+find_package(Threads REQUIRED)
 
 # Mark files or folders for display in IDEs
 mrt_add_to_ide(README.md .gitlab-ci.yml)
@@ -58,7 +59,7 @@ endif()
 # DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include ${EIGEN3_INCLUDE_DIR}
-  LIBRARIES ${LIBRARY_NAME}
+  LIBRARIES ${LIBRARY_NAME} ${CMAKE_THREAD_LIBS_INIT}
   CATKIN_DEPENDS ${catkin_EXPORT_DEPENDS}
 )
 
@@ -76,12 +77,7 @@ include_directories(
 mrt_add_library(${PROJECT_NAME}
   INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC} 
   SOURCES ${PROJECT_SOURCE_FILES_SRC}
-)
-
-target_link_libraries(
-  ${PROJECT_NAME}
-  ${Boost_LIBRARIES}
-  ${catkin_LIBRARIES}
+  LIBRARIES ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${catkin_LIBRARIES}
 )
 
 #############
@@ -95,6 +91,9 @@ mrt_install(PROGRAMS scripts FILES res data doc)
 #############
 # Add test targets for cpp and python tests
 if (CATKIN_ENABLE_TESTING)
-  mrt_add_tests(test)
+  mrt_add_tests(
+    test
+    LIBRARIES ${CMAKE_THREAD_LIBS_INIT}
+  )
   mrt_add_nosetests(test)
 endif()
