@@ -57,8 +57,8 @@ endif()
 # CATKIN_DEPENDS: catkin_packages dependent projects also need
 # DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include ${mrt_EXPORT_INCLUDE_DIRS}
-  LIBRARIES ${LIBRARY_NAME} ${mrt_EXPORT_LIBRARIES}
+  INCLUDE_DIRS include ${EIGEN3_INCLUDE_DIR}
+  LIBRARIES ${LIBRARY_NAME}
   CATKIN_DEPENDS ${catkin_EXPORT_DEPENDS}
 )
 
