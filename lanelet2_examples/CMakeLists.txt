@@ -12,6 +12,7 @@ find_package(
   catkin REQUIRED COMPONENTS
   lanelet2_core
   lanelet2_io
+  lanelet2_python
   lanelet2_traffic_rules
   lanelet2_routing
   lanelet2_projection
