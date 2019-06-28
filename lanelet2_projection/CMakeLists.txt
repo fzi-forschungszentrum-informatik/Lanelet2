@@ -11,6 +11,7 @@ find_package(
   lanelet2_io
 )
 find_package(mrt_cmake_modules REQUIRED)
+find_package(GeographicLib REQUIRED)
 
 # Mark files or folders for display in IDEs
 mrt_add_to_ide(README.md .gitlab-ci.yml)
@@ -52,8 +53,8 @@ endif()
 # CATKIN_DEPENDS: catkin_packages dependent projects also need
 # DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${LIBRARY_NAME}
+  INCLUDE_DIRS include ${GeographicLib_INCLUDE_DIRS}
+  LIBRARIES ${LIBRARY_NAME} ${GeographicLib_LIBRARIES}
   CATKIN_DEPENDS ${catkin_EXPORT_DEPENDS}
 )
 

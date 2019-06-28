@@ -6,17 +6,15 @@ project(lanelet2_validation)
 ###################
 ## find packages ##
 ###################
+find_package(
+  catkin REQUIRED COMPONENTS
+  lanelet2_core
+  lanelet2_routing
+  lanelet2_io
+  lanelet2_projection
+  lanelet2_traffic_rules
+)
 find_package(mrt_cmake_modules REQUIRED)
-include(UseMrtStdCompilerFlags)
-include(UseMrtAutoTarget)
-
-include(GatherDeps)
-# Remove libs which cannot be found automatically
-#list(REMOVE_ITEM DEPENDEND_PACKAGES <package name 1> <package name 2> ...)
-find_package(AutoDeps REQUIRED COMPONENTS ${DEPENDEND_PACKAGES})
-
-# Manually resolve removed dependend packages
-#find_package(...)
 
 # Mark files or folders for display in IDEs
 mrt_add_to_ide(README.md .gitlab-ci.yml)
@@ -30,10 +28,11 @@ mrt_python_module_setup()
 
 file(GLOB PROJECT_PYTHON_SOURCE_FILES_SRC RELATIVE "${CMAKE_CURRENT_LIST_DIR}" "python_api/*.cpp")
 if (PROJECT_PYTHON_SOURCE_FILES_SRC)
-    # Add a cpp-python api library. Make sure there are no name collisions with python modules in this project
-    mrt_add_python_api( ${PROJECT_NAME}
-        FILES ${PROJECT_PYTHON_SOURCE_FILES_SRC}
-        )
+  # Add a cpp-python api library. Make sure there are no name collisions with python modules in this project
+  mrt_add_python_api(
+    ${PROJECT_NAME}
+    FILES ${PROJECT_PYTHON_SOURCE_FILES_SRC}
+  )
 endif()
 
 ############################
@@ -44,7 +43,7 @@ file(GLOB_RECURSE PROJECT_SOURCE_FILES_INC RELATIVE "${CMAKE_CURRENT_LIST_DIR}" 
 file(GLOB_RECURSE PROJECT_SOURCE_FILES_SRC RELATIVE "${CMAKE_CURRENT_LIST_DIR}" "src/*.cpp")
 
 if (PROJECT_SOURCE_FILES_SRC)
-    set(LIBRARY_NAME ${PROJECT_NAME})
+  set(LIBRARY_NAME ${PROJECT_NAME})
 endif()
 
 ###################################
@@ -57,41 +56,37 @@ endif()
 # CATKIN_DEPENDS: catkin_packages dependent projects also need
 # DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-    INCLUDE_DIRS include ${mrt_EXPORT_INCLUDE_DIRS}
-    LIBRARIES ${LIBRARY_NAME} ${mrt_EXPORT_LIBRARIES}
-    CATKIN_DEPENDS ${catkin_EXPORT_DEPENDS}
-    )
+  INCLUDE_DIRS include
+  LIBRARIES ${LIBRARY_NAME}
+  CATKIN_DEPENDS ${catkin_EXPORT_DEPENDS}
+)
 
 ###########
 ## Build ##
 ###########
 # Add include and library directories
 include_directories(
-    include/${PROJECT_NAME}
-    ${mrt_INCLUDE_DIRS}
-    ${catkin_INCLUDE_DIRS}
-    )
-
-link_directories(
-    ${mrt_LIBRARY_DIRS}
-    )
+  include/${PROJECT_NAME}
+  ${catkin_INCLUDE_DIRS}
+)
 
 # Declare a cpp library
-mrt_add_library(${PROJECT_NAME}
-    INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC} 
-    SOURCES ${PROJECT_SOURCE_FILES_SRC}
-    )
+mrt_add_library(
+  ${PROJECT_NAME}
+  INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC} 
+  SOURCES ${PROJECT_SOURCE_FILES_SRC}
+)
 
 # Add executables in "tools"
 glob_folders(TOOL_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/tools")
 if (TOOL_DIRECTORIES)
-    # Found subfolders, add executable for each subfolder
-    foreach(TOOL_DIR ${TOOL_DIRECTORIES})
-        mrt_add_executable(${TOOL_DIR} FOLDER "tools/${TOOL_DIR}")
-    endforeach()
+  # Found subfolders, add executable for each subfolder
+  foreach(TOOL_DIR ${TOOL_DIRECTORIES})
+    mrt_add_executable(${TOOL_DIR} FOLDER "tools/${TOOL_DIR}")
+  endforeach()
 else()
-    # No subfolder found, add executable and python modules for tools folder
-    mrt_add_executable(${PROJECT_NAME} FOLDER "tools")
+  # No subfolder found, add executable and python modules for tools folder
+  mrt_add_executable(${PROJECT_NAME} FOLDER "tools")
 endif()
 
 
@@ -106,6 +101,6 @@ mrt_install(PROGRAMS scripts FILES res data)
 #############
 # Add test targets for cpp and python tests
 if (CATKIN_ENABLE_TESTING)
-    mrt_add_tests(test)
-    mrt_add_nosetests(test)
+  mrt_add_tests(test)
+  mrt_add_nosetests(test)
 endif()
