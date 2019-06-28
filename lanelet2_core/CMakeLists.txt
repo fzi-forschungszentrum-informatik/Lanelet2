@@ -6,7 +6,9 @@ set(MRT_COTIRE_ENABLED 1)
 set (COTIRE_MINIMUM_NUMBER_OF_TARGET_SOURCES 1)
 set (COTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES "-j")
 
-add_definitions(-std=c++14)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
 
 ###################
 ## find packages ##

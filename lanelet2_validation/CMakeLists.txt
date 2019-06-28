@@ -3,6 +3,11 @@ set(MRT_PKG_VERSION 2.2.1)
 cmake_minimum_required(VERSION 2.8.12)
 project(lanelet2_validation)
 
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
+
 ###################
 ## find packages ##
 ###################

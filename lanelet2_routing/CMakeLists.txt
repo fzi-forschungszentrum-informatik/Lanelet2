@@ -4,7 +4,9 @@ cmake_minimum_required(VERSION 2.8.12)
 project(lanelet2_routing)
 set(MRT_COTIRE_ENABLED 1)
 
-add_definitions(-std=c++14)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
 
 ###################
 ## find packages ##
