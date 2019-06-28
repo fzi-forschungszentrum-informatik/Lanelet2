@@ -1,6 +1,7 @@
 #include <io_handlers/Serialize.h>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
+#include <boost/filesystem.hpp>
 #include <cstdio>
 #include <fstream>
 #include "Io.h"
@@ -8,6 +9,7 @@
 #include "gtest/gtest.h"
 
 using namespace lanelet;
+namespace fs = boost::filesystem;
 
 struct MyStuff {
   int i{};
@@ -97,7 +99,7 @@ TEST_F(SerializeTest, LaneletMap) {  // NOLINT
 }
 
 TEST(BinHandler, extension) {  // NOLINT
-  std::string filename = std::tmpnam(nullptr) + std::string(".bin");
+  std::string filename = fs::unique_path().string() + std::string(".bin");
   auto map = std::make_shared<lanelet::LaneletMap>();
   lanelet::write(filename, *map);
 
@@ -105,7 +107,7 @@ TEST(BinHandler, extension) {  // NOLINT
 }
 
 TEST(BinHandler, explicitIO) {  // NOLINT
-  std::string filename = std::tmpnam(nullptr) + std::string(".bin");
+  std::string filename = fs::unique_path().string() + std::string(".bin");
   auto map = std::make_shared<lanelet::LaneletMap>();
   lanelet::write(filename, *map, "bin_handler");
 

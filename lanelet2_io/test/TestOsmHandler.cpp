@@ -1,12 +1,14 @@
 #include <gtest/gtest.h>
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
+#include <boost/filesystem.hpp>
 #include <cstdio>
 #include "Io.h"
 #include "TestSetup.h"
 #include "io_handlers/OsmHandler.h"
 
 using namespace lanelet;
+namespace fs = boost::filesystem;
 
 template <typename T, typename TT>
 T writeAndLoad(const T& value, TT(LaneletMap::*layer)) {
@@ -104,7 +106,7 @@ TEST(OsmHandler, writeMapWithLaneletAndAreaToFile) {  // NOLINT
   auto ll = test_setup::setUpLanelet(num);
   map->add(ar);
   map->add(ll);
-  auto filename = std::string(std::tmpnam(nullptr)) + ".osm";  // NOLINT
+  auto filename = std::string(fs::unique_path().string()) + ".osm";  // NOLINT
   Origin origin({49, 8.4, 0});
   write(filename, *map, origin);
   EXPECT_NO_THROW(load(filename, origin));  // NOLINT

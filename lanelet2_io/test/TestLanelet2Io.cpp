@@ -1,7 +1,10 @@
 #include "gtest/gtest.h"
 
+#include "boost/filesystem.hpp"
 #include "Exceptions.h"
 #include "Io.h"
+
+namespace fs = boost::filesystem;
 
 TEST(lanelet2_io, registryTest) {  // NOLINT
   auto parseExtensions = lanelet::supportedParserExtensions();
@@ -14,7 +17,7 @@ TEST(lanelet2_io, registryTest) {  // NOLINT
 }
 
 TEST(lanelet2_io, exceptionTest) {  // NOLINT
-  auto nonsenseExtension = std::string(std::tmpnam(nullptr)) + ".unsupported_extension";
+  auto nonsenseExtension = std::string(fs::unique_path().string()) + ".unsupported_extension";
   std::FILE* tmpf = std::fopen(nonsenseExtension.c_str(), "wb+");
   EXPECT_THROW(lanelet::load(nonsenseExtension), lanelet::UnsupportedExtensionError);                        // NOLINT
   EXPECT_THROW(lanelet::load(nonsenseExtension, "nonexisting_parser"), lanelet::UnsupportedIOHandlerError);  // NOLINT
