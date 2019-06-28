@@ -12,8 +12,6 @@ add_definitions(-std=c++14)
 ## find packages ##
 ###################
 find_package(mrt_cmake_modules REQUIRED)
-
-# Manually resolve removed dependend packages
 find_package(catkin REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED)
