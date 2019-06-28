@@ -64,6 +64,7 @@ catkin_package(
 # Add include and library directories
 include_directories(
   include/${PROJECT_NAME}
+  ${GeographicLib_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -71,6 +72,7 @@ include_directories(
 mrt_add_library(${PROJECT_NAME}
   INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC} 
   SOURCES ${PROJECT_SOURCE_FILES_SRC}
+  LIBRARIES ${GeographicLib_LIBRARIES}
 )
 
 #############
