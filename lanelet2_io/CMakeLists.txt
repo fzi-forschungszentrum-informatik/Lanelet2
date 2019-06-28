@@ -56,7 +56,7 @@ endif()
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${LIBRARY_NAME}
-  CATKIN_DEPENDS ${catkin_EXPORT_DEPENDS}
+  CATKIN_DEPENDS lanelet2_core
 )
 
 ###########
