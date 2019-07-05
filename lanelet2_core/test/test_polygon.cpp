@@ -5,10 +5,30 @@
 #include "primitives/Polygon.h"
 
 using namespace lanelet;
+template <typename T>
+T toPolygon(const Polygon3d& p) {
+  return T(p);
+}
+template <>
+Polygon2d toPolygon<Polygon2d>(const Polygon3d& p) {
+  return utils::to2D(p);
+}
+template <>
+ConstPolygon2d toPolygon<ConstPolygon2d>(const Polygon3d& p) {
+  return utils::to2D(p);
+}
+template <>
+BasicPolygon2d toPolygon<BasicPolygon2d>(const Polygon3d& p) {
+  return utils::to2D(p).basicPolygon();
+}
+template <>
+BasicPolygon3d toPolygon<BasicPolygon3d>(const Polygon3d& p) {
+  return p.basicPolygon();
+}
 
 class PolygonPoints : public ::testing::Test {
- protected:
-  void SetUp() override {
+ public:
+  PolygonPoints() {
     Id id{1};
     p11 = Point3d(++id, 0., 0., 0.);
     p12 = Point3d(++id, 1., 2., 1.);
@@ -22,7 +42,6 @@ class PolygonPoints : public ::testing::Test {
     p34 = Point3d(++id, 2., 0., 2.);
   }
 
- public:
   Point3d p11, p12, p13;
   Point3d p21, p22, p23;
   Point3d p31, p32, p33, p34;
@@ -30,27 +49,29 @@ class PolygonPoints : public ::testing::Test {
 
 template <typename T>
 class PolygonTypeTest : public PolygonPoints {
- protected:
+ public:
   using PolygonT = T;
-  void SetUp() override {
-    PolygonPoints::SetUp();
+  PolygonTypeTest() {
     Id id{10};
-    poly1 =
-        PolygonT(++id, {p11, p12, p13}, AttributeMap{{AttributeNamesString::Type, AttributeValueString::Curbstone}});
-    poly2 = PolygonT(++id, {p21, p22, p23});
-    poly3 = PolygonT(++id, {p31, p32, p33, p34});
+    AttributeMap poly1Attrs{{AttributeNamesString::Type, AttributeValueString::Curbstone}};
+    poly1 = toPolygon<T>(Polygon3d{++id, {p11, p12, p13}, poly1Attrs});
+    poly2 = toPolygon<T>(Polygon3d{++id, {p21, p22, p23}});
+    poly3 = toPolygon<T>(Polygon3d{++id, {p31, p32, p33, p34}});
   }
 
- public:
   PolygonT poly1, poly2, poly3;
 };
+
+template <typename PolygonT>
+PolygonT composePolygon(std::initializer_list<ConstLineString3d> list) {
+  return PolygonT(list);
+}
 
 template <typename T>
 class CompoundPolygonTypeTest : public PolygonPoints {
  protected:
   using PolygonT = T;
-  void SetUp() override {
-    PolygonPoints::SetUp();
+  CompoundPolygonTypeTest() {
     Id id{10};
     ConstLineString3d tempLs11{++id, {p11, p12, p13}};
     ConstLineString3d tempLs21{++id, {p21, p22}};
@@ -113,6 +134,13 @@ class ThreeDPolygonsTest : public PolygonTypeTest<T> {};
 
 template <typename T>
 class TwoDPolygonsTest : public PolygonTypeTest<T> {};
+
+template <typename T>
+class ThreeDAndBasicPolygonsTest : public PolygonTypeTest<T> {};
+
+template <typename T>
+class TwoDAndBasicPolygonsTest : public PolygonTypeTest<T> {};
+
 using AllPolygons =
     testing::Types<Polygon2d, Polygon3d, ConstPolygon2d, ConstPolygon3d, ConstHybridPolygon2d, ConstHybridPolygon3d,
                    CompoundPolygon2d, CompoundPolygon3d, CompoundHybridPolygon2d, CompoundHybridPolygon3d>;
@@ -121,6 +149,10 @@ using ThreeDPolygons =
     testing::Types<Polygon3d, ConstPolygon3d, ConstHybridPolygon3d, CompoundPolygon3d, CompoundHybridPolygon3d>;
 using TwoDPolygons =
     testing::Types<Polygon2d, ConstPolygon2d, ConstHybridPolygon2d, CompoundPolygon2d, CompoundHybridPolygon2d>;
+using ThreeDAndBasicPolygons = testing::Types<BasicPolygon3d, Polygon3d, ConstPolygon3d, ConstHybridPolygon3d,
+                                              CompoundPolygon3d, CompoundHybridPolygon3d>;
+using TwoDAndBasicPolygons = testing::Types<BasicPolygon2d, Polygon2d, ConstPolygon2d, ConstHybridPolygon2d,
+                                            CompoundPolygon2d, CompoundHybridPolygon2d>;
 using MutablePolygons = testing::Types<Polygon2d, Polygon3d>;
 using PrimitivePolygons =
     testing::Types<Polygon2d, Polygon3d, ConstPolygon2d, ConstPolygon3d, ConstHybridPolygon2d, ConstHybridPolygon3d>;
@@ -133,6 +165,8 @@ using HybridPolygonsTwoD = testing::Types<ConstHybridPolygon2d, CompoundHybridPo
 TYPED_TEST_CASE(AllPolygonsTest, AllPolygons);
 TYPED_TEST_CASE(TwoDPolygonsTest, TwoDPolygons);
 TYPED_TEST_CASE(ThreeDPolygonsTest, ThreeDPolygons);
+TYPED_TEST_CASE(TwoDAndBasicPolygonsTest, TwoDAndBasicPolygons);
+TYPED_TEST_CASE(ThreeDAndBasicPolygonsTest, ThreeDAndBasicPolygons);
 TYPED_TEST_CASE(NormalPolygonsTest, NormalPolygons);
 TYPED_TEST_CASE(MutablePolygonsTest, MutablePolygons);
 TYPED_TEST_CASE(PrimitivePolygonsTest, PrimitivePolygons);
@@ -152,7 +186,7 @@ TYPED_TEST(MutablePolygonsTest, readAttributes) {  // NOLINT
   EXPECT_EQ(this->poly1.attribute(AttributeNamesString::Type), AttributeValueString::Curbstone);
 }
 
-TYPED_TEST(TwoDPolygonsTest, bounds2d) {  // NOLINT
+TYPED_TEST(TwoDAndBasicPolygonsTest, bounds2d) {  // NOLINT
   BoundingBox2d bbox = geometry::boundingBox2d(this->poly2);
   EXPECT_EQ(bbox.min().x(), 2);
   EXPECT_EQ(bbox.min().y(), 0);
@@ -160,7 +194,7 @@ TYPED_TEST(TwoDPolygonsTest, bounds2d) {  // NOLINT
   EXPECT_EQ(bbox.max().y(), 1);
 }
 
-TYPED_TEST(ThreeDPolygonsTest, bounds3d) {  // NOLINT
+TYPED_TEST(ThreeDAndBasicPolygonsTest, bounds3d) {  // NOLINT
   BoundingBox3d bbox = geometry::boundingBox3d(this->poly1);
   EXPECT_EQ(bbox.min().x(), 0);
   EXPECT_EQ(bbox.min().y(), 0);
@@ -193,7 +227,6 @@ TYPED_TEST(HybridPolygonsTwoDTest, centroid) {  // NOLINT
 
 TYPED_TEST(AllPolygonsTest, perimeter) {  // NOLINT
   auto p = boost::geometry::perimeter(this->poly3);
-
   EXPECT_DOUBLE_EQ(p, 4);
 }
 
