@@ -8,9 +8,10 @@ It contains functionality to determine right of way, speed limits and legally re
 
 ```c++
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
-lanelet::TrafficRulesPtr trafficRules = lanelet::TrafficRulesFactors::create(Locations::Germany, Participants::Vehicle);
-bool passable = trafficRules.canPass(myLanelet);
-lanelet::SpeedLimitInformation speedLimit = trafficRules.speedLimit(myLanelet);
+lanelet::traffic_rules::TrafficRulesPtr trafficRulesPtr =
+  lanelet::traffic_rules::TrafficRulesFactory::create(lanelet::Locations::Germany, lanelet::Participants::Vehicle);
+bool passable = trafficRulesPtr->canPass(myLanelet);
+lanelet::traffic_rules::SpeedLimitInformation speedLimit = trafficRulesPtr->speedLimit(myLanelet);
 ```
 
 ## Structure
