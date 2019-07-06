@@ -1,9 +1,6 @@
 #pragma once
 #include "LaneletMap.h"
 
-<<<<<<< Updated upstream
-#endif  // LANELET_MAP_TEST_CASE_H
-=======
 namespace lanelet {
 namespace test_cases {
 
@@ -90,4 +87,3 @@ class LaneletMapTestCase {
 
 }  // namespace test_cases
 }  // namespace lanelet
->>>>>>> Stashed changes

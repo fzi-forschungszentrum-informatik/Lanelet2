@@ -51,6 +51,13 @@ struct ReserveIfNecessary<std::vector<T>> {
   void operator()(std::vector<T>& c, size_t size) const { c.reserve(size); }
 };
 
+template <typename VectorT>
+inline VectorT createReserved(size_t size) {
+  VectorT vector;
+  ReserveIfNecessary<VectorT>()(vector, size);
+  return vector;
+}
+
 template <typename VectorT, typename ContainerT>
 VectorT concatenate(ContainerT&& c) {
   VectorT conced;
@@ -117,6 +124,8 @@ auto transform(Container&& c, Func f) {
   return transformed;
 }
 }  // namespace detail
+
+using detail::createReserved;
 
 //! Compares ids of primitives. Can be used for some stl algorithms
 template <typename PrimitiveT>
