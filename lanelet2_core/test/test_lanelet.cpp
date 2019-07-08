@@ -53,7 +53,6 @@ class LaneletTest : public ::testing::Test {
     right = LineString3d(++id, Points3d{p3, p4});
     other = LineString3d(++id, Points3d{p5, p6, p7});
     outside = LineString3d(++id, Points3d{p8, p9});
-
     ritterLanelet = Lanelet(++id, left, right);
     constRitterLanelet = ritterLanelet;
   }

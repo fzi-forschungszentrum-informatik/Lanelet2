@@ -156,7 +156,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("distance", +[](const HybridLs3d& ls1, const HybridLs3d& ls2) { return lg::distance3d(ls1, ls2); });
 
   // p2llt
-  def("distance", lg::distance3d<ConstLanelet>);
+  def("distance", lg::distance3d<ConstLanelet, BasicPoint3d>);
 
   // p2area
   def("distance", +[](const ConstArea& llt, const BasicPoint3d& p) { return lg::distance3d(llt, p); });
@@ -226,7 +226,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   def("inside", lg::inside<ConstLanelet>, "tests whether a point is within a lanelet");
   def("length2d", lg::length2d<ConstLanelet>, "calculate length of centerline");
-  def("approximatedLength2d", lg::approximatedLength2d<ConstLanelet>, "approximates length by sampling points along left bound");
+  def("approximatedLength2d", lg::approximatedLength2d<ConstLanelet>,
+      "approximates length by sampling points along left bound");
   def("length3d", lg::length3d<ConstLanelet>, "calculate length of centerline in 3d");
   def("distanceToCenterline2d", lg::distanceToCenterline2d<ConstLanelet>);
   def("distanceToCenterline3d", lg::distanceToCenterline3d<ConstLanelet>);
