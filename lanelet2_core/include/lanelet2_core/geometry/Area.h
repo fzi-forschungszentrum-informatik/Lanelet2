@@ -16,30 +16,6 @@ template <typename AreaT>
 IfAr<AreaT, bool> inside(const AreaT& area, const BasicPoint2d& point);
 
 /**
- * @brief Calculates distance in 2d space to a point
- * @param area area to calculate distance to.
- * @param point point to calculate distance to
- * @return 0 if point is within area, otherwise the distance
- *
- * Has linear complexity on the number of points in the area.
- */
-template <typename AreaT>
-IfAr<AreaT, double> distance2d(const AreaT& area, const BasicPoint2d& point);
-
-/**
- * @brief Calculates distance in 3d space to a point.
- * @param area area to calculate distance to.
- * @param point point to calculate distance to
- * @return metric distance to plane defined by the polygon
- *
- * Be warned that the surface defined by the area needs to be *planar* to
- * call this function.
- * Has linear complexity on the number of points in the area.
- */
-template <typename AreaT>
-IfAr<AreaT, double> distance3d(const AreaT& area, const BasicPoint3d& point);
-
-/**
  * @brief calculates an up-right 2d bounding box
  * @param area area to calculate it from
  * @return the bounding box.

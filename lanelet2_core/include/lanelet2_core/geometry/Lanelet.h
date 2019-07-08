@@ -14,17 +14,6 @@ template <typename LaneletT>
 IfLL<LaneletT, bool> inside(const LaneletT& lanelet, const BasicPoint2d& point);
 
 /**
- * @brief Calculates distance in 2d space to a point
- * @param lanelet lanelet to calculate distance to.
- * @param point point to calculate distance to
- * @return 0 if point is within lanelet, otherwise the distance
- *
- * Has linear complexity on the number of points in the lanelet.
- */
-template <typename LaneletT>
-IfLL<LaneletT, double> distance2d(const LaneletT& lanelet, const BasicPoint2d& point);
-
-/**
  * @brief approximates length by sampling points along left bound
  *
  * avoids to calculate the centerline which might be expensive.
@@ -47,19 +36,6 @@ double length2d(const LaneletT& lanelet);
  */
 template <typename LaneletT>
 double length3d(const LaneletT& lanelet);
-
-/**
- * @brief Calculates distance in 3d space to a point.
- * @param lanelet lanelet to calculate distance to.
- * @param point point to calculate distance to
- * @return metric distance to plane defined by the polygon
- *
- * Be warned that the surface defined by the lanelet needs to be *planar* to
- * call this function.
- * Has linear complexity on the number of points in the lanelet.
- */
-template <typename LaneletT>
-IfLL<LaneletT, double> distance3d(const LaneletT& lanelet, const BasicPoint3d& point);
 
 /**
  * @brief calculates distance in 2d to the centerline of a lanelet.

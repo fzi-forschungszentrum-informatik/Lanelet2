@@ -1,5 +1,6 @@
 #pragma once
 #include "../../primitives/Polygon.h"
+#include "../LineString.h"
 #include "../Point.h"
 #if BOOST_VERSION > 105800
 #include <boost/geometry/algorithms/relate.hpp>
@@ -10,6 +11,12 @@
 namespace lanelet {
 namespace geometry {
 namespace internal {
+template <typename T>
+struct GetGeometry<T, IfPoly<T, void>> {
+  static inline auto twoD(const T& geometry) { return traits::toHybrid(traits::to2D(geometry)); }
+  static inline auto threeD(const T& geometry) { return traits::toHybrid(traits::to3D(geometry)); }
+};
+
 std::pair<BasicPoint3d, BasicPoint3d> projectedBorderPoint3d(const ConstHybridPolygon3d& l1,
                                                              const ConstHybridPolygon3d& l2);
 

@@ -12,25 +12,17 @@
 
 namespace lanelet {
 namespace geometry {
+namespace internal {
+template <typename T>
+struct GetGeometry<T, IfLL<T, void>> {
+  static inline auto twoD(const T& geometry) { return traits::toHybrid(geometry.polygon2d()); }
+  static inline auto threeD(const T& geometry) { return traits::toHybrid(geometry.polygon3d()); }
+};
+}  // namespace internal
 
 template <typename LaneletT>
 IfLL<LaneletT, bool> inside(const LaneletT& lanelet, const BasicPoint2d& point) {
   return boost::geometry::covered_by(point, lanelet.polygon2d());
-}
-
-template <typename LaneletT>
-IfLL<LaneletT, double> distance2d(const LaneletT& lanelet, const BasicPoint2d& point) {
-  return distance(lanelet.polygon2d(), point);
-}
-
-template <typename LaneletT>
-IfLL<LaneletT, double> distance2d(const LaneletT& lanelet1, const LaneletT& lanelet2) {
-  return distance(traits::toHybrid(lanelet1.polygon2d()), traits::toHybrid(lanelet2.polygon2d()));
-}
-
-template <typename LaneletT>
-IfLL<LaneletT, double> distance3d(const LaneletT& lanelet, const BasicPoint3d& point) {
-  return distance(lanelet.polygon3d(), point);
 }
 
 template <typename LaneletT>
