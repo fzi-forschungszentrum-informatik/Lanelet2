@@ -362,6 +362,23 @@ template <typename T>
 constexpr bool isPolygonT() {
   return isCategory<T, traits::PolygonTag>();
 }
+
+template <>
+struct PrimitiveTraits<BasicPolygon2d> {
+  using ConstType = BasicPolygon2d;
+  using MutableType = BasicPolygon2d;
+  using TwoDType = BasicPolygon2d;
+  using ThreeDType = BasicPolygon3d;
+  using Category = PolygonTag;
+};
+template <>
+struct PrimitiveTraits<BasicPolygon3d> {
+  using ConstType = BasicPolygon3d;
+  using MutableType = BasicPolygon3d;
+  using TwoDType = BasicPolygon2d;
+  using ThreeDType = BasicPolygon3d;
+  using Category = PolygonTag;
+};
 }  // namespace traits
 template <typename T, typename RetT>
 using IfPoly = std::enable_if_t<traits::isPolygonT<T>(), RetT>;
