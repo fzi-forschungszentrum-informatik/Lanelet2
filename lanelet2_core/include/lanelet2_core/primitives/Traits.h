@@ -4,6 +4,7 @@
 namespace lanelet {
 namespace traits {
 struct PointTag {};              //! Identifies PointPrimitives
+struct BoundingBoxTag {};        //! Identifies bounding boxes
 struct LineStringTag {};         //! Identifies LineStringPrimitives
 struct PolygonTag {};            //! Identifies PolygonPrimitives
 struct LaneletTag {};            //! Identifies LaneletPrimitives
