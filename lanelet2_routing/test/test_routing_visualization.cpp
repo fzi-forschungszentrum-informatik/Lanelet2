@@ -47,6 +47,7 @@ TEST_F(GermanVehicleGraph, DebugLaneletMap) {  // NOLINT
   EXPECT_TRUE(map->pointLayer.exists(2007));
   EXPECT_TRUE(map->pointLayer.exists(2020));
   EXPECT_TRUE(map->pointLayer.exists(2032));
+  EXPECT_GT(map->lineStringLayer.size(), map->pointLayer.size());
   EXPECT_FALSE(map->pointLayer.exists(2031));
 }
 
