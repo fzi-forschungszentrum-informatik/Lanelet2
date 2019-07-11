@@ -56,7 +56,7 @@ A *sequence* (LaneletSequence) is a sequence of subsequent Lanelets that is not 
 using namespace lanelet;
 
 // Load a map
-LaneletMapPtr map = load("map.osm");
+LaneletMapPtr map = load("map.osm", Origin({49, 8})); // origin has to be close to the map data in lat/lon coordinates
 
 // Initialize traffic rules
 TrafficRulesPtr trafficRules{TrafficRulesFactory::instance().create(Locations::Germany, Participants::Vehicle)};
@@ -72,11 +72,14 @@ routingGraphConf.emplace(std::make_pair(RoutingGraph::ParticipantHeight, Attribu
 // Create routing graph
 RoutingGraphPtr graph = std::make_shared<RoutingGraph>(map, trafficRules /*, costPtrs, routingGraphConf*/);
 ```
+- The traffic rules object represents the view from which the map will be interpreted. Doing routing with vehicle traffic
+rules will yield different results than routing with e.g. bicycle traffic rules.
+- Routing for bicycles might include lanelets that are not available to (motorized)vehicles and vice versa.
 
 The python interface works similarly:
 ```python
 import lanelet2
-map = lanelet2.io.load("map.osm")
+map = lanelet2.io.load("map.osm", lanelet2.io.Origin(49, 8))
 trafficRules = lanelet2.traffic_rules.create(lanelet2.traffic_rules.Locations.Germany, lanelet2.traffic_rules.Participants.Vehicle)
 graph = lanelet2.routing.RoutingGraph(map, trafficRules)
 ```
@@ -85,30 +88,31 @@ graph = lanelet2.routing.RoutingGraph(map, trafficRules)
 ```cpp
 Optional<routing::LaneletPath> shortestPath = graph->shortestPath(fromLanelet, toLanelet);
 ```
-* `Optional` will be uninitialized (false) if there's no route
-* there's also `shortestPathWithIntermediate`
+* `Optional` will be uninitialized (false) if there's no path
+* there's also `shortestPathWithVia`
 
 in python:
 ```python
 shortestPath = graph.shortestPath(fromLanelet, toLanelet)
 ```
+In python, shortestPath simply returns `None` if there is no path.
+
 ## Get and write a route
 
 ```cpp
     Optional<Route> route = graph->getRoute(fromLanelet, toLanelet, routingCostId);
     if (route) {
-        write("route.osm", *route->getLaneletMap());
+        write("route.osm", *route->laneletMap(), Origin({49, 8}));
     }
 ```
 * `Optional` will be uninitialized (false) if there's no route
 * This lanelet map will include all lanelets that are part of the route
-* As said, a route is independent from the routing graph
 
 in python:
 ```python
 route = graph.getRoute(fromLanelet, toLanelet, routingCostId)
 if route:
-    lanelet2.io.write("route.osm", route.getLaneletMap())
+    lanelet2.io.write("route.osm", route.laneletMap(), lanelet2.io.Origin(49, 8)))
 ```
 
 ## Get a reachable set of lanelets
@@ -138,6 +142,10 @@ LaneletRelations leftRelations = graph->leftRelations(
                                                 fromLanelet);
 ```
 There's `leftRelations` that returns a vector of pairs of LaneletRelations whereas RelationType can be 'left' or 'adjacentLeft' in this case
+
+## More
+
+This is just a quick walkthrough. Advanced examples can be found in [lanelet2_examples](../lanelet2_examples/README.md).
 
 # 3. Export and Debugging Routing Graphs
 

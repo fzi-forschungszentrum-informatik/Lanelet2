@@ -853,8 +853,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   wrapLayer<PointLayer>("PointLayer");
   wrapLayer<RegulatoryElementLayer>("RegulatoryElementLayer");
 
-  class_<LaneletMap, boost::noncopyable, std::shared_ptr<LaneletMap>>("LaneletMap", "Object for managing a lanelet map",
-                                                                      init<>("LaneletMap()"))
+  class_<LaneletMap, boost::noncopyable, LaneletMapPtr>("LaneletMap", "Object for managing a lanelet map",
+                                                        init<>("LaneletMap()"))
       .def_readonly("laneletLayer", &LaneletMap::laneletLayer, "Lanelets")
       .def_readonly("areaLayer", &LaneletMap::areaLayer)
       .def_readonly("regulatoryElementLayer", &LaneletMap::regulatoryElementLayer)
@@ -867,6 +867,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("add", selectAdd<LineString3d>())
       .def("add", selectAdd<Polygon3d>())
       .def("add", selectAdd<const RegulatoryElementPtr&>());
+  register_ptr_to_python<LaneletMapConstPtr>();
 
   def("getId", static_cast<Id (&)()>(utils::getId), "Returns a unique id");
   def("registerId", &utils::registerId, "Registers an id");
