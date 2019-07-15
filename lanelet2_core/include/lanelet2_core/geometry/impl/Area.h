@@ -1,23 +1,22 @@
 #pragma once
 #include "../../primitives/Area.h"
 #include "../../primitives/Lanelet.h"
+#include "../Point.h"
 #include "../Polygon.h"
 
 namespace lanelet {
 namespace geometry {
+namespace internal {
+template <typename T>
+struct GetGeometry<T, IfAr<T, void>> {
+  static inline auto twoD(const T& geometry) { return geometry.basicPolygonWithHoles2d(); }
+  static inline auto threeD(const T& geometry) { return geometry.basicPolygonWithHoles3d(); }
+};
+}  // namespace internal
 
 template <typename AreaT>
 IfAr<AreaT, bool> inside(const AreaT& area, const BasicPoint2d& point) {
   return boost::geometry::covered_by(point, area.basicPolygonWithHoles2d());
-}
-
-template <typename AreaT>
-IfAr<AreaT, double> distance2d(const AreaT& area, const BasicPoint2d& point) {
-  return distance(area.basicPolygonWithHoles2d(), point);
-}
-template <typename AreaT>
-IfAr<AreaT, double> distance3d(const AreaT& area, const BasicPoint3d& point) {
-  return distance(area.basicPolygonWithHoles3d(), point);
 }
 
 template <typename AreaT>

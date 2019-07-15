@@ -131,8 +131,8 @@ class ConstLanelet : public ConstPrimitive<LaneletData> {
  public:
   using ConstType = ConstLanelet;
   using MutableType = Lanelet;
-  using TwoDType = Lanelet;
-  using ThreeDType = Lanelet;
+  using TwoDType = ConstLanelet;
+  using ThreeDType = ConstLanelet;
   using Category = traits::LaneletTag;
 
   //! Constructs an empty or invalid lanelet.

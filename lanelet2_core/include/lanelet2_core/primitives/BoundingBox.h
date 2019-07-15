@@ -7,6 +7,7 @@
 #endif
 #include <Eigen/Geometry>
 #include "Point.h"
+#include "Traits.h"
 #pragma GCC diagnostic pop
 
 namespace lanelet {
@@ -279,4 +280,26 @@ class BoundingBox2d {
  * Can be used as Eigen::AlignedBox2d and as boost::geometry::Box.
  */
 using BoundingBox3d = Eigen::AlignedBox3d;
+
+namespace traits {
+template <>
+struct PrimitiveTraits<BoundingBox2d> {
+  using ConstType = BoundingBox2d;
+  using MutableType = BoundingBox2d;
+  using TwoDType = BoundingBox2d;
+  using ThreeDType = BoundingBox3d;
+  using Category = BoundingBoxTag;
+};
+template <>
+struct PrimitiveTraits<BoundingBox3d> {
+  using ConstType = BoundingBox3d;
+  using MutableType = BoundingBox3d;
+  using TwoDType = BoundingBox2d;
+  using ThreeDType = BoundingBox3d;
+  using Category = BoundingBoxTag;
+};
+
+inline BoundingBox3d to3D(const BoundingBox2d& primitive) { return {to3D(primitive.min()), to3D(primitive.max())}; }
+inline BoundingBox2d to2D(const BoundingBox3d& primitive) { return {to2D(primitive.min()), to2D(primitive.max())}; }
+}  // namespace traits
 }  // namespace lanelet

@@ -8,6 +8,12 @@
 namespace lanelet {
 namespace geometry {
 namespace internal {
+template <typename T>
+struct GetGeometry<T, IfLS<T, void>> {
+  static inline auto twoD(const T& geometry) { return traits::toHybrid(traits::to2D(geometry)); }
+  static inline auto threeD(const T& geometry) { return traits::toHybrid(traits::to3D(geometry)); }
+};
+
 inline auto crossProd(const BasicPoint3d& p1, const BasicPoint3d& p2) { return p1.cross(p2).eval(); }
 inline auto crossProd(const BasicPoint2d& p1, const BasicPoint2d& p2) {
   return BasicPoint3d(p1.x(), p1.y(), 0.).cross(BasicPoint3d(p2.x(), p2.y(), 0.)).eval();
@@ -245,19 +251,9 @@ IfLS<LineString3dT, std::pair<BasicPoint3d, BasicPoint3d>> projectedPoint3d(cons
   return internal::projectedPoint3d(traits::toHybrid(l1), traits::toHybrid(l2));
 }
 
-template <typename LineStringT>
-IfLS<LineStringT, double> distance2d(const LineStringT& l1, const LineStringT& l2) {
-  return distance(traits::toHybrid(traits::to2D(l1)), traits::toHybrid(traits::to2D(l2)));
-}
-
-template <typename LineStringT>
-IfLS<LineStringT, double> distance2d(const LineStringT& l1, const BasicPoint2d& p) {
-  return distance(traits::to2D(traits::toConst(l1)), p);
-}
-
-template <typename LineString3dT>
-IfLS<LineString3dT, double> distance3d(const LineString3dT& l1, const LineString3dT& l2) {
-  auto projPoint = internal::projectedPoint3d(traits::toHybrid(l1), traits::toHybrid(l2));
+template <typename LineString3d1T, typename LineString3d2T>
+IfLS<LineString3d1T, double> distance3d(const LineString3d1T& l1, const LineString3d2T& l2) {
+  auto projPoint = internal::projectedPoint3d(traits::toHybrid(traits::to3D(l1)), traits::toHybrid(traits::to3D(l2)));
   return (projPoint.first - projPoint.second).norm();
 }
 

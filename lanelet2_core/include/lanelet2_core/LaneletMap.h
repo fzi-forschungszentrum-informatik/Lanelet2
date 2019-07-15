@@ -445,6 +445,20 @@ ConstAreas findUsagesInAreas(const LaneletMap& map, const ConstPoint3d& p);
 
 }  // namespace utils
 
+namespace traits {
+template <typename T>
+struct LayerPrimitive {
+  using Type = typename T::PrimitiveT;
+};
+template <typename T>
+struct LayerPrimitive<const T> {
+  using Type = typename T::ConstPrimitiveT;
+};
+
+template <typename T>
+using LayerPrimitiveType = typename LayerPrimitive<T>::Type;
+}  // namespace traits
+
 namespace geometry {
 /**
  * @brief returns the nearest n primitives to a point.

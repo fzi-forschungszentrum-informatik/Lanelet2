@@ -30,6 +30,7 @@ BOOST_GEOMETRY_REGISTER_SEGMENT_TEMPLATIZED(lanelet::Segment, first, second);
 
 namespace lanelet {
 namespace geometry {
+
 using boost::geometry::intersects;
 using boost::geometry::length;
 using boost::geometry::overlaps;
@@ -96,22 +97,6 @@ double signedDistance(const LineString3dT& lineString, const BasicPoint3d& p);
 template <typename LineString2dT>
 double signedDistance(const LineString2dT& lineString, const BasicPoint2d& p);
 
-//! Computes the distance of two linestings in 2d (ie ignoring z)
-template <typename LineStringT>
-IfLS<LineStringT, double> distance2d(const LineStringT& l1, const LineStringT& l2);
-
-//! Computes the distance of a linestring and a point in 2d (ie ignoring z)
-template <typename LineStringT>
-IfLS<LineStringT, double> distance2d(const LineStringT& l1, const BasicPoint2d& p);
-
-/**
- * @brief computes the distance between two lineStrings in 3d.
- *
- * There is no such implementation in boost::geometry, so we implemented our own
- * solution using an RTree for more efficient computation.
- */
-template <typename LineString3dT>
-IfLS<LineString3dT, double> distance3d(const LineString3dT& l1, const LineString3dT& l2);
 /**
  *
  * @brief Transform a point to the coordinates of the linestring
