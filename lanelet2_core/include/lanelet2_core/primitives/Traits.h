@@ -145,6 +145,13 @@ struct LineStringTraits : PrimitiveTraits<LineStringT> {
   using HybridType = typename LineStringT::HybridType;
 };
 
+//! Specialization of traits for polygons
+template <typename PolygonT>
+struct PolygonTraits : PrimitiveTraits<PolygonT> {
+  using PointType = typename PolygonT::PointType;
+  using HybridType = typename PolygonT::HybridType;
+};
+
 template <typename PointT>
 using BasicPointT = typename PointTraits<PointT>::BasicPoint;
 
