@@ -423,6 +423,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   VectorToListConverter<Points3d>();
   VectorToListConverter<Points2d>();
+  VectorToListConverter<BasicPoints3d>();
+  VectorToListConverter<std::vector<BasicPoint2d>>();
   VectorToListConverter<ConstPoints3d>();
   VectorToListConverter<ConstPoints2d>();
   VectorToListConverter<LineStrings3d>();
