@@ -690,37 +690,6 @@ inline std::ostream& operator<<(std::ostream& stream, const ConstLineString3d& o
   return stream << "]";
 }
 
-namespace utils {
-/**
- * @brief returns true if element of a lanelet primitive has a matching Id
- * @param ls the element holding other primitives
- * @param id id to look for
- * @return true if the primitive has such an element
- *
- * This function does not look for the id of the element, only its members
- * Works for linestrings and polylines.
- * A similar implementation exists for regulatory elements and lanelets.
- */
-template <typename PointT>
-bool has(const ConstLineStringImpl<PointT>& ls, Id id) {
-  return std::any_of(ls.begin(), ls.end(), [&id](const auto& elem) { return elem.id() == id; });
-}
-}  // namespace utils
-
-namespace traits {
-template <typename LineStringT>
-using HybridT = typename LineStringTraits<LineStringT>::HybridType;
-
-template <typename LineStringT>
-constexpr auto toHybrid(const LineStringT ls) {
-  return HybridT<LineStringT>(ls);
-}
-}  // namespace traits
-
-namespace utils {
-using traits::toHybrid;
-}  // namespace utils
-
 // comparison
 template <typename LhsPointT, typename RhsPointT>
 bool operator==(const ConstLineStringImpl<LhsPointT>& lhs, const ConstLineStringImpl<RhsPointT>& rhs) {
@@ -756,9 +725,50 @@ template <typename T>
 constexpr bool isLinestringT() {
   return isCategory<T, traits::LineStringTag>();
 }
+
+namespace detail {
+template <typename T, typename Enable = void>
+struct HybridType {};
+
+template <typename T>
+struct HybridType<T, std::enable_if_t<traits::isLinestringT<T>(), void>> {
+  using Type = typename LineStringTraits<T>::HybridType;
+};
+template <typename T>
+struct HybridType<T, std::enable_if_t<!traits::isLinestringT<T>(), void>> {
+  using Type = typename LineStringTraits<T>::HybridType;
+};
+}  // namespace detail
+template <typename LineStringT>
+using HybridT = typename detail::HybridType<LineStringT>::Type;
+
+template <typename LineStringT>
+constexpr auto toHybrid(const LineStringT ls) {
+  return HybridT<LineStringT>(ls);
+}
 }  // namespace traits
+
 template <typename T, typename RetT>
 using IfLS = std::enable_if_t<traits::isLinestringT<T>(), RetT>;
+
+namespace utils {
+using traits::toHybrid;
+
+/**
+ * @brief returns true if element of a lanelet primitive has a matching Id
+ * @param ls the element holding other primitives
+ * @param id id to look for
+ * @return true if the primitive has such an element
+ *
+ * This function does not look for the id of the element, only its members
+ * Works for linestrings and polylines.
+ * A similar implementation exists for regulatory elements and lanelets.
+ */
+template <typename PointT>
+bool has(const ConstLineStringImpl<PointT>& ls, Id id) {
+  return std::any_of(ls.begin(), ls.end(), [&id](const auto& elem) { return elem.id() == id; });
+}
+}  // namespace utils
 
 }  // namespace lanelet
 

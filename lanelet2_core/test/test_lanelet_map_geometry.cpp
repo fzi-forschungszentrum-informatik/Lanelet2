@@ -28,6 +28,16 @@ TEST_F(LaneletMapGeometryTest, findWithin2dLinestring) {  // NOLINT
   });
 }
 
+TEST_F(LaneletMapGeometryTest, findWithin2dBasicPolygon) {  // NOLINT
+  map->add(other);
+  testConstAndNonConst([this](auto& map) {
+    auto ls = geometry::findWithin2d(map->lineStringLayer, BasicPolygon2d(utils::to2D(outside).basicLineString()), 1.7);
+    ASSERT_EQ(4ul, ls.size());
+    EXPECT_DOUBLE_EQ(1., ls[0].first);
+    EXPECT_DOUBLE_EQ(1.5, ls.back().first);
+  });
+}
+
 TEST_F(LaneletMapGeometryTest, findWithin2dBox) {  // NOLINT
   map->add(other);
   testConstAndNonConst([this](auto& map) {
