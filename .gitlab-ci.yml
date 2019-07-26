@@ -24,14 +24,14 @@ before_script:
 # Tests installing on a plain system without mrt stuff using the provided Docker image
 .build_docker: &build_docker
   stage: build
-  image: docker:stable
+  image: docker:18.09
   only:
   - master
   - merge_requests
   before_script: []
   cache: {}
   services:
-    - docker:stable-dind
+    - docker:18.09-dind
   script:
     - export IMAGE_NAME=$CI_REGISTRY_IMAGE:$DISTRIBUTION
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY

@@ -28,6 +28,10 @@ auto wrapFindNearest() {
   return def("findNearest", func);
 }
 
+std::vector<BasicPoint2d> toBasicVector(const BasicPoints2d& pts) {
+  return utils::transform(pts, [](auto& p) { return BasicPoint2d(p.x(), p.y()); });
+}
+
 template <typename T>
 lanelet::BoundingBox2d boundingBox2dFor(const T& t) {
   return lanelet::geometry::boundingBox2d(t);
@@ -234,7 +238,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("overlaps2d", lg::overlaps2d<ConstLanelet, ConstLanelet>, "Returns true if shared area of two lanelets is >0");
   def("overlaps3d", lg::overlaps3d<ConstLanelet, ConstLanelet>, "Approximates if two lanelets overlap (area  >0) in 3d",
       (arg("lanelet1"), arg("lanelet2"), arg("heightTolerance") = 3.));
-  def("intersectCenterlines2d", lg::intersectCenterlines2d<ConstLanelet, ConstLanelet>);
+  def("intersectCenterlines2d", +[](const ConstLanelet& ll1, const ConstLanelet& ll2) {
+    return toBasicVector(lg::intersectCenterlines2d(ll1, ll2));
+  });
 
   def("leftOf", lg::leftOf<ConstLanelet, ConstLanelet>, "Returns if first lanelet is directly left of second");
   def("rightOf", lg::rightOf<ConstLanelet, ConstLanelet>, "Returns if first lanelet is directly right of second");
