@@ -113,7 +113,7 @@ class RightOfWay : public RegulatoryElement {
   ConstLanelets yieldLanelets() const;
   Lanelets yieldLanelets();
 
-  //! the stop line to stop at
+  //! get the stop line for the yield lanelets, if present
   Optional<ConstLineString3d> stopLine() const;
   Optional<LineString3d> stopLine();
 
@@ -140,6 +140,80 @@ class RightOfWay : public RegulatoryElement {
   RightOfWay(Id id, const AttributeMap& attributes, const Lanelets& rightOfWay, const Lanelets& yield,
              const Optional<LineString3d>& stopLine = {});
   explicit RightOfWay(const RegulatoryElementDataPtr& data);
+};
+
+struct LaneletWithStopLine {
+  Lanelet lanelet;
+  Optional<LineString3d> stopLine;
+};
+struct ConstLaneletWithStopLine {
+  ConstLanelet lanelet;
+  Optional<ConstLineString3d> stopLine;
+};
+using LaneletsWithStopLines = std::vector<LaneletWithStopLine>;
+
+//! @brief Defines an all way stop. These are a special form of right of way, where all lanelets have to yield, depeding
+//! on their distance to intersection.
+//! @ingroup RegulatoryElementPrimitives
+//! @ingroup Primitives
+//!
+//! The distance to the intersection is represented either by the distance to the stop line, if present, otherwise the
+//! end of the lanelet.
+class AllWayStop : public RegulatoryElement {
+ public:
+  using Ptr = std::shared_ptr<AllWayStop>;
+  static constexpr char RuleName[] = "all_way_stop";
+
+  /**
+   * @brief Create a valid all way stop object
+   * @param id id for this rule
+   * @param attributes for this rule. Might be extended if necessary
+   * @param lltsWithStop lanelets with stop line. Either all lanelets have a stop line or none.
+   * @param signs traffic signs that constitute this rule
+   * the lanelet.
+   */
+  static Ptr make(Id id, const AttributeMap& attributes, const LaneletsWithStopLines& lltsWithStop,
+                  const LineStringsOrPolygons3d& signs = {}) {
+    return Ptr{new AllWayStop(id, attributes, lltsWithStop, signs)};
+  }
+
+  //! get the lanelets that have to yield
+  ConstLanelets lanelets() const;
+  Lanelets lanelets();
+
+  //! Adds a new lanelet with stop line. This will throw if the other lanelets did not have a stop line and vice versa
+  //! @throws InvalidInputError if stop line is inconsistent
+  void addLanelet(const LaneletWithStopLine& lltWithStop);
+
+  //! Removes a lanelet and the associated stop line, if there is one
+  bool removeLanelet(const Lanelet& llt);
+
+  //! get the stop lines
+  ConstLineStrings3d stopLines() const;
+  LineStrings3d stopLines();
+
+  //! gets the stop line for a lanelet, if there is one
+  Optional<ConstLineString3d> getStopLine(const ConstLanelet& llt) const;
+  Optional<LineString3d> getStopLine(const ConstLanelet& llt);
+
+  //! get list of traffic signs that constitute this AllWayStop if existing
+  ConstLineStringsOrPolygons3d trafficSigns() const;
+  LineStringsOrPolygons3d trafficSigns();
+
+  //! Adds another traffic sign
+  /** Traffic signs are represented as linestrings that start at the left edge
+   * and end at the right edge of a traffic sign.
+   */
+  void addTrafficSign(const LineStringOrPolygon3d& sign);
+
+  //! removes a traffic sign and returns true on success
+  bool removeTrafficSign(const LineStringOrPolygon3d& sign);
+
+ protected:
+  friend class RegisterRegulatoryElement<AllWayStop>;
+  AllWayStop(Id id, const AttributeMap& attributes, const LaneletsWithStopLines& lltsWithStop,
+             const LineStringsOrPolygons3d& signs);
+  explicit AllWayStop(const RegulatoryElementDataPtr& data);
 };
 
 //! Used as input argument to create TrafficSign regElem
