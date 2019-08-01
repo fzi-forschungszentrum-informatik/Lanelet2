@@ -140,7 +140,7 @@ class FromFileLoader {  // NOLINT
 
       // look for optional centerline
       Lanelet lanelet(id, left, right, attributes);
-      if (llElem.members.find(RoleNameString::Centerline) != llElem.members.end()) {
+      if (findRole(llElem.members, RoleNameString::Centerline) != llElem.members.end()) {
         auto center = getLaneletBorder(llElem, RoleNameString::Centerline);
         lanelet.setCenterline(center);
       }
@@ -148,7 +148,7 @@ class FromFileLoader {  // NOLINT
       lanelets_.emplace(id, lanelet);
 
       // check for regulatory elements
-      if (llElem.members.count(RoleNameString::RegulatoryElement) != 0) {
+      if (findRole(llElem.members, RoleNameString::RegulatoryElement) != llElem.members.end()) {
         llWithRegulatoryElement.push_back(std::make_pair(lanelet, &llElem));
       }
     }
@@ -176,7 +176,7 @@ class FromFileLoader {  // NOLINT
       areas_.emplace(id, area);
 
       // check for regulatory elements
-      if (arElem.members.count(RoleNameString::RegulatoryElement) != 0) {
+      if (findRole(arElem.members, RoleNameString::RegulatoryElement) != arElem.members.end()) {
         arWithRegulatoryElement.push_back(std::make_pair(area, &arElem));
       }
     }
@@ -211,11 +211,10 @@ class FromFileLoader {  // NOLINT
   template <typename PrimT>
   void addRegulatoryElements(std::vector<std::pair<PrimT, const osm::Relation*>>& addTos) {
     for (auto& addTo : addTos) {
-      auto regElems = addTo.second->members.equal_range(RoleNameString::RegulatoryElement);
-      for (; regElems.first != regElems.second; ++regElems.first) {
-        auto regElem = getOrGetDummy(regulatoryElements_, regElems.first->second->id, addTo.first.id());
+      osm::forEachMember(addTo.second->members, RoleNameString::RegulatoryElement, [&](const osm::Role& role) {
+        auto regElem = getOrGetDummy(regulatoryElements_, role.second->id, addTo.first.id());
         addTo.first.addRegulatoryElement(regElem);
-      }
+      });
     }
   }
 
@@ -235,23 +234,23 @@ class FromFileLoader {  // NOLINT
   }
 
   LineString3d getLaneletBorder(const osm::Relation& llElem, const std::string& role) {
-    const auto borderMember = llElem.members.equal_range(role);
-    if (borderMember.first == llElem.members.end() || std::next(borderMember.first) != borderMember.second) {
+    size_t numMembers = 0;
+    osm::forEachMember(llElem.members, role, [&](auto& /*role*/) { ++numMembers; });
+    if (numMembers != 1) {
       parserError(llElem.id, "Lanelet has not exactly one "s + role + " border!");
       return LineString3d(llElem.id);
     }
-    if (borderMember.first->second->type() != AttributeValueString::Way) {
+    auto member = osm::findRole(llElem.members, role);
+    if (member->second->type() != AttributeValueString::Way) {
       parserError(llElem.id, "Lanelet "s + role + " border is not of type way!");
       return LineString3d(llElem.id);
     }
-    return getOrGetDummy(lineStrings_, borderMember.first->second->id, llElem.id);
+    return getOrGetDummy(lineStrings_, member->second->id, llElem.id);
   }
 
   LineStrings3d getLinestrings(const osm::Roles& roles, const std::string& roleName, Id refId) {
-    auto members = roles.equal_range(roleName);
     LineStrings3d linestrings;
-    linestrings.reserve(size_t(std::distance(members.first, members.second)));
-    std::for_each(members.first, members.second, [&](auto& member) {
+    osm::forEachMember(roles, roleName, [&](auto& member) {
       if (member.second->type() != AttributeValueString::Way) {
         auto msg = roleName + " ring must consist of ways but id " + std::to_string(member.second->id) +
                    " is of type " + member.second->type() + "!";
