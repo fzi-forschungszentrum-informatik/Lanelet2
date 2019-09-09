@@ -442,6 +442,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<Lanelets>();
   VectorToListConverter<ConstLanelets>();
   VectorToListConverter<LaneletSequences>();
+  VectorToListConverter<LaneletsWithStopLines>();
   VectorToListConverter<RuleParameters>();
   VectorToListConverter<ConstRuleParameters>();
   VectorToListConverter<RegulatoryElementPtrs>();
@@ -457,6 +458,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<std::vector<std::shared_ptr<const TrafficSign>>>();
   VectorToListConverter<std::vector<std::shared_ptr<const SpeedLimit>>>();
   VectorToListConverter<std::vector<std::shared_ptr<const RightOfWay>>>();
+  VectorToListConverter<std::vector<std::shared_ptr<const AllWayStop>>>();
   VectorToListConverter<std::vector<std::string>>();
   AttributeFromPythonStr();
   DictToAttributeMapConverter();
@@ -473,6 +475,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   OptionalConverter<LineStrings2d>();
   OptionalConverter<ConstLineStrings3d>();
   OptionalConverter<ConstLineStrings2d>();
+  OptionalConverter<LineStringsOrPolygons3d>();
   OptionalConverter<Lanelet>();
   OptionalConverter<ConstLanelet>();
   OptionalConverter<LaneletSequence>();
@@ -504,6 +507,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .fromPython<Polygons3d>()
       .fromPython<Lanelets>()
       .fromPython<ConstLanelets>()
+      .fromPython<LaneletsWithStopLines>()
       .fromPython<Areas>()
       .fromPython<ConstAreas>()
       .fromPython<RegulatoryElementPtrs>()
@@ -680,6 +684,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("trafficSigns", constRegelemAs<TrafficSign>, "traffic sign regulatory elements")
       .def("speedLimits", constRegelemAs<SpeedLimit>, "speed limit regulatory elements")
       .def("rightOfWay", constRegelemAs<RightOfWay>, "right of way regulatory elements")
+      .def("allWayStop", constRegelemAs<AllWayStop>, "all way stop regulatory elements")
       .def("invert", &ConstLanelet::invert, "Returns inverted lanelet (flipped left/right bound, etc")
       .def("inverted", &ConstLanelet::inverted, "Returns whether this lanelet has been inverted")
       .def("polygon2d", &ConstLanelet::polygon2d, "Outline of this lanelet as 2d polygon")
@@ -703,6 +708,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("trafficSigns", regelemAs<TrafficSign>, "traffic sign regulatory elements")
       .def("speedLimits", regelemAs<SpeedLimit>, "speed limit regulatory elements")
       .def("rightOfWay", regelemAs<RightOfWay>, "right of way regulatory elements")
+      .def("allWayStop", constRegelemAs<AllWayStop>, "all way stop regulatory elements")
       .def("addRegulatoryElement", &Lanelet::addRegulatoryElement)
       .def("removeRegulatoryElement", &Lanelet::removeRegulatoryElement)
       .def("invert", &Lanelet::invert, "Returns inverted lanelet (flipped left/right bound, etc")
@@ -723,6 +729,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__len__", &LaneletSequence::size)
       .def("inverted", &LaneletSequence::inverted)
       .def("__getitem__", wrappers::getItem<LaneletSequence>, return_internal_reference<>());
+
+  class_<ConstLaneletWithStopLine>("ConstLaneletWithStopLine", "A lanelet with a stopline", no_init)
+      .add_property("lanelet", &ConstLaneletWithStopLine::lanelet)
+      .add_property("stopLine", &ConstLaneletWithStopLine::stopLine);
+
+  class_<LaneletWithStopLine>("LaneletWithStopLine", "A lanelet with a stopline", no_init)
+      .add_property("lanelet", &LaneletWithStopLine::lanelet)
+      .add_property("stopLine", &LaneletWithStopLine::stopLine);
 
   class_<ConstArea>("ConstArea", "Represents an area, potentially with holes, in the map",
                     boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
@@ -798,6 +812,20 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("addYieldLanelet", &RightOfWay::addYieldLanelet)
       .def("removeYieldLanelet", &RightOfWay::removeYieldLanelet);
   implicitly_convertible<std::shared_ptr<RightOfWay>, RegulatoryElementPtr>();
+
+  class_<AllWayStop, boost::noncopyable, std::shared_ptr<AllWayStop>, bases<RegulatoryElement>>(
+      "AllWayStop", "An all way stop regulatory element", no_init)
+      .def("__init__", make_constructor(&AllWayStop::make, default_call_policies(),
+                                        (arg("id"), arg("attributes"), arg("lltsWithStop"),
+                                         arg("signs") = Optional<LineStringsOrPolygons3d>{})))
+      .def("lanelets", +[](AllWayStop& self) { return self.lanelets(); })
+      .def("stopLines", +[](AllWayStop& self) { return self.stopLines(); })
+      .def("trafficSigns", +[](AllWayStop& self) { return self.trafficSigns(); })
+      .def("addTrafficSign", &AllWayStop::addTrafficSign)
+      .def("removeTrafficSign", &AllWayStop::removeTrafficSign)
+      .def("addLanelet", &AllWayStop::addLanelet)
+      .def("removeLanelet", &AllWayStop::removeLanelet);
+  implicitly_convertible<std::shared_ptr<AllWayStop>, RegulatoryElementPtr>();
 
   class_<TrafficSignsWithType, std::shared_ptr<TrafficSignsWithType>>("TrafficSignsWithType", no_init)
       .def("__init__", make_constructor(+[](LineStringsOrPolygons3d ls) {
