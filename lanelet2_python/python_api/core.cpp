@@ -454,6 +454,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<std::vector<TrafficSign::Ptr>>();
   VectorToListConverter<std::vector<SpeedLimit::Ptr>>();
   VectorToListConverter<std::vector<RightOfWay::Ptr>>();
+  VectorToListConverter<std::vector<AllWayStop::Ptr>>();
   VectorToListConverter<std::vector<std::shared_ptr<const TrafficLight>>>();
   VectorToListConverter<std::vector<std::shared_ptr<const TrafficSign>>>();
   VectorToListConverter<std::vector<std::shared_ptr<const SpeedLimit>>>();
