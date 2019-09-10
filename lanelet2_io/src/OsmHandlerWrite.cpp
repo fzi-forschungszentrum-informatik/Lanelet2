@@ -11,10 +11,43 @@ namespace lanelet {
 namespace io_handlers {
 
 using Errors = std::vector<std::string>;
-
 namespace {
 // register with factories
 RegisterWriter<OsmWriter> regWriter;
+
+struct UnresolvedRole {
+  Id relationId{};
+  Id referencedRoleId{};
+  osm::Primitive** location{};
+};
+
+void removeAndFixPlaceholders(osm::Primitive** toRemove, osm::Roles& fromRoles,
+                              std::vector<UnresolvedRole>& placeholders) {
+  // find other placeholders that we have to fix
+  auto remIt = std::find_if(fromRoles.begin(), fromRoles.end(), [&](auto& role) { return &role.second == toRemove; });
+  std::vector<std::pair<size_t, osm::Primitive**>> placeholderLocations;
+  for (auto it = fromRoles.begin(); it != fromRoles.end(); ++it) {
+    if (it->second == nullptr && remIt != it) {
+      placeholderLocations.emplace_back(std::distance(fromRoles.begin(), it), &it->second);
+    }
+  }
+  fromRoles.erase(remIt);
+  if (placeholderLocations.empty()) {
+    return;  // nothing to update
+  }
+  // get the new locations
+  std::map<osm::Primitive**, osm::Primitive**> newLocations;
+  for (auto& loc : placeholderLocations) {
+    newLocations.emplace(loc.second, &std::next(fromRoles.begin(), long(loc.first))->second);
+  }
+  // adapt existing locations
+  for (auto& placeholder : placeholders) {
+    auto it = newLocations.find(placeholder.location);
+    if (it != newLocations.end()) {
+      placeholder.location = it->second;
+    }
+  }
+}
 
 class ToFileWriter {
  public:
@@ -26,14 +59,10 @@ class ToFileWriter {
     writer.writeWays(laneletMap);
 
     // we have to wait until lanelets/areas are written
-    UnparsedLaneletParameters unparsedLaneletParameters;
-    UnparsedAreaParameters unparsedAreaParameters;
-    std::tie(unparsedLaneletParameters, unparsedAreaParameters) =
-        writer.appendRegulatoryElements(laneletMap.regulatoryElementLayer);
+    auto unparsedLaneletAndAreaParameters = writer.appendRegulatoryElements(laneletMap.regulatoryElementLayer);
     writer.appendLanelets(laneletMap.laneletLayer);
     writer.appendAreas(laneletMap.areaLayer);
-    writer.resolveUnparsedMembers(unparsedLaneletParameters);
-    writer.resolveUnparsedMembers(unparsedAreaParameters);
+    writer.resolveUnparsedMembers(unparsedLaneletAndAreaParameters);
 
     writer.buildErrorMessage(errors);
     return std::move(writer.file_);
@@ -108,16 +137,18 @@ class ToFileWriter {
     }
   }
 
-  template <typename PrimitiveT>
-  void resolveUnparsedMembers(const std::vector<std::tuple<std::string, PrimitiveT, osm::Relation*>>& unparsedMembers) {
+  void resolveUnparsedMembers(std::vector<UnresolvedRole>& unparsedMembers) {
     auto& relations = file_->relations;
     for (const auto& param : unparsedMembers) {
-      const auto id = std::get<1>(param).id();
+      const auto id = param.relationId;
       try {
-        std::get<2>(param)->members.emplace(std::get<0>(param), &relations.at(id));
+        assert(*param.location == nullptr);
+        *param.location = &relations.at(param.referencedRoleId);
       } catch (std::out_of_range&) {
-        writeError(id, "Lanelet/Area has a regulatory element with id "s + std::to_string(std::get<2>(param)->id) +
+        writeError(id, "Regulatory element has a lanelet/area "s + std::to_string(param.referencedRoleId) +
                            " that is not in the map!");
+        // ugly part: clean up the empty dummy at  "location"
+        removeAndFixPlaceholders(param.location, relations.at(param.relationId).members, unparsedMembers);
       }
     }
   }
@@ -161,7 +192,7 @@ class ToFileWriter {
 
     void operator()(const ConstPoint3d& p) override {
       try {
-        currRelation->members.emplace(role, &file.nodes.at(p.id()));
+        currRelation->members.emplace_back(role, &file.nodes.at(p.id()));
       } catch (std::out_of_range&) {
         writer.writeError(
             id, "Regulatory element has parameters that are not in the point layer: "s + std::to_string(p.id()));
@@ -169,7 +200,7 @@ class ToFileWriter {
     }
     void operator()(const ConstLineString3d& l) override {
       try {
-        currRelation->members.emplace(role, &file.ways.at(l.id()));
+        currRelation->members.emplace_back(role, &file.ways.at(l.id()));
       } catch (std::out_of_range&) {
         writer.writeError(
             id, "Regulatory element has parameters that are not in the line string layer: "s + std::to_string(l.id()));
@@ -177,7 +208,7 @@ class ToFileWriter {
     }
     void operator()(const ConstPolygon3d& p) override {
       try {
-        currRelation->members.emplace(role, &file.ways.at(p.id()));
+        currRelation->members.emplace_back(role, &file.ways.at(p.id()));
       } catch (std::out_of_range&) {
         writer.writeError(
             id, "Regulatory element has parameters that are not in the polygon layer: "s + std::to_string(p.id()));
@@ -189,8 +220,10 @@ class ToFileWriter {
         writer.writeError(id, "Found an expired lanelet parameter with role " + role);
         return;
       }
-      // lanelets converted to the map yet
-      unparsedLaneletParameters.emplace_back(std::make_tuple(role, wll.lock(), currRelation));
+      // lanelets are not yet in the osm file
+      currRelation->members.emplace_back(role, nullptr);
+      unparsedLaneletAndAreaParameters.emplace_back(
+          UnresolvedRole{currRelation->id, wll.lock().id(), &currRelation->members.back().second});
     }
     void operator()(const ConstWeakArea& war) override {
       // try to lock
@@ -198,19 +231,19 @@ class ToFileWriter {
         writer.writeError(id, "Found an expired lanelet parameter with role " + role);
         return;
       }
-      // lanelets converted to the map yet
-      unparsedAreaParameters.emplace_back(std::make_tuple(role, war.lock(), currRelation));
+      // areas are not yet in the osm file
+      currRelation->members.emplace_back(role, nullptr);
+      unparsedLaneletAndAreaParameters.emplace_back(
+          UnresolvedRole{currRelation->id, war.lock().id(), &currRelation->members.back().second});
     }
     Id id{0};
     osm::Relation* currRelation{nullptr};
     osm::File& file;
     ToFileWriter& writer;
-    UnparsedLaneletParameters unparsedLaneletParameters;
-    UnparsedAreaParameters unparsedAreaParameters;
+    std::vector<UnresolvedRole> unparsedLaneletAndAreaParameters;
   };
 
-  std::pair<UnparsedLaneletParameters, UnparsedAreaParameters> appendRegulatoryElements(
-      const RegulatoryElementLayer& regElemLayer) {
+  std::vector<UnresolvedRole> appendRegulatoryElements(const RegulatoryElementLayer& regElemLayer) {
     WriteRegulatoryElementVisitor visitor(*file_, *this);
     for (const auto& regElem : regElemLayer) {
       const auto id = regElem->id();
@@ -221,14 +254,14 @@ class ToFileWriter {
       visitor.currRelation = &insertedRelation;
       regElem->applyVisitor(visitor);
     }
-    return std::make_pair(visitor.unparsedLaneletParameters, visitor.unparsedAreaParameters);
+    return visitor.unparsedLaneletAndAreaParameters;
   }
 
   template <typename PrimitiveMap>
   void tryInsertMembers(osm::Roles& insertMembers, const char* insertRole, Id insertId, PrimitiveMap& primitiveMap,
                         Id relationId) {
     try {
-      insertMembers.emplace(insertRole, &primitiveMap.at(insertId));
+      insertMembers.emplace_back(insertRole, &primitiveMap.at(insertId));
     } catch (std::out_of_range&) {
       writeError(relationId, "Relation has a member with id "s + std::to_string(insertId) + " that is not in the map!");
     }
