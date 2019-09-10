@@ -86,21 +86,9 @@ way[type=line_thick][subtype=solid_dashed], way[type=line_thick][subtype=dashed_
 	dashes:5,1;
         dashes-background-color: darkgray;
 }
-way[type=line_thin][subtype=solid_dashed], way[type=line_thin][subtype=solid_dashed]
+way[type=line_thin][color], way[type=line_thick][color]
 {
-        text: "type";
-        width: 10;
-        color: white;
-	dashes:5,1;
-        dashes-background-color: darkgray;
-}
-way[type=line_thick][subtype=solid_dashed], way[type=line_thick][subtype=solid_dashed]
-{
-        text: "type";
-        width: 10;
-        color: white;
-	dashes:5,1;
-        dashes-background-color: darkgray;
+    color: tag(color);
 }
 
 /* Other lines*/
