@@ -6,6 +6,9 @@ This page tells you about the general tags that you should use to annotate your 
 
 In general there are three different context in which linestrings are used: As lanelet/area boundary, as a Symbol on the road or as traffic sign/light.
 
+Linestrings are generally characterized by their centerline.
+
+
 ## As Lane Boundary
 Tagging linestrings as lane boundary correctly is important, because Lanelet2 uses the type to determine possible lane changes. If Lanelet2 cannot determine the type, Lanelet2 will assume that lane changes are not possible. Here is a list of the most important ones:
 
@@ -23,8 +26,6 @@ Tagging linestrings as lane boundary correctly is important, because Lanelet2 us
 |road_border | -         | the end of the road. | no          |
 
 Notice the difference between curbstone and road_border: A road border indicates the end of potentially passable area (e.g. start of vegetation) while a curbstone means that there is passable space (e.g. sidewalk) on the other side of the curb.
-
-Line markings are generally characterized by its centerline.
 
 There are much more tags (all imply lane changing is not possible):
 * guard_rail
@@ -50,7 +51,8 @@ If you are unhappy with the types derived by default, you can overwrite it with 
 ### More, Optional Tags
 * **width** with of the line (in m). The linestring then represents the *centerline* of the object.
 * **height** height of line (in m). The linestring then represents the *lower outline/lowest edge* of the object.
-* **temporary** to indicate lines from construction sites (yes/no)
+* **temporary** to indicate lines from construction sites (yes/no).
+* **color** of the lane marking. White is the default.
 
 ### Individual Dashes
 Since dashed lines are represented by a full connecting line and not as individual dashes, the information about the position of the dashes is lost. To keep the information, individual points that mark the start and end points of the linestring can be tagged. The `type` tag is used for that. `type=begin` marks the begin of the dash (in the orientation of the linestring), `type=end` marks the end. Other values can be used for other types:

@@ -207,12 +207,13 @@ constexpr const char AttributeValueString::Start[];
 constexpr const char AttributeValueString::End[];
 constexpr const char AttributeValueString::Dot[];
 
-// Traffic light types
+// Color / traffic light types
 constexpr const char AttributeValueString::RedYellowGreen[];
 constexpr const char AttributeValueString::RedGreen[];
 constexpr const char AttributeValueString::RedYellow[];
 constexpr const char AttributeValueString::Red[];
 constexpr const char AttributeValueString::Yellow[];
+constexpr const char AttributeValueString::White[];
 
 // Lanelet types
 constexpr const char AttributeValueString::Road[];
@@ -255,6 +256,7 @@ constexpr const char AttributeNamesString::ParticipantPedestrian[];
 constexpr const char AttributeNamesString::SpeedLimit[];
 constexpr const char AttributeNamesString::Location[];
 constexpr const char AttributeNamesString::Dynamic[];
+constexpr const char AttributeNamesString::Color[];
 
 // attributes not used in fast lookup
 // on points
