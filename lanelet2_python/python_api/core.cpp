@@ -708,7 +708,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("trafficSigns", regelemAs<TrafficSign>, "traffic sign regulatory elements")
       .def("speedLimits", regelemAs<SpeedLimit>, "speed limit regulatory elements")
       .def("rightOfWay", regelemAs<RightOfWay>, "right of way regulatory elements")
-      .def("allWayStop", constRegelemAs<AllWayStop>, "all way stop regulatory elements")
+      .def("allWayStop", regelemAs<AllWayStop>, "all way stop regulatory elements")
       .def("addRegulatoryElement", &Lanelet::addRegulatoryElement)
       .def("removeRegulatoryElement", &Lanelet::removeRegulatoryElement)
       .def("invert", &Lanelet::invert, "Returns inverted lanelet (flipped left/right bound, etc")

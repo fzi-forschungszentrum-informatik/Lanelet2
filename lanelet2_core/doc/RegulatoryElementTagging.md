@@ -25,7 +25,7 @@ The following tags can be used to add more information to a Regulatory Element (
 
 ## Parameters
 
-The main feature of a Regulatory Element is that it can reference other parts of the map that are important for the traffic restriction that they represent. These parts are called *parameters* of a Regulatory Element. Every parameter is characterized by a role (a string) that explains what he expresses within the Regulatory Element. Multiple parameters can have the same role if they do not contradict. 
+The main feature of a Regulatory Element is that it can reference other parts of the map that are important for the traffic restriction that they represent. These parts are called *parameters* of a Regulatory Element. Every parameter is characterized by a role (a string) that explains what he expresses within the Regulatory Element. Multiple parameters can have the same role if they do not contradict.
 
 An example of parameters are the traffic lights that referenced by the *refers* role of a `TrafficLight` Regulatory Element. These are the traffic lights that a vehicle has to pay attention to when driving along a specific lanelet/area that has this Regulatory Elements. Because parameters with the same role cannot contradict, this means all traffic lights must refer to the same driving direction within that intersection.
 
@@ -62,8 +62,8 @@ Only one lanelet of a chain of lanelets that belong to the same lane have to be 
 
 ### All Way Stop
 
-While in a *Right of Way* regelem, the right of way only depends on the lanelet, the right of way in an "All Way Stop" regelem depends on his distance to the intersection entry. Therefore all lanelets are potentially yield lanelets. All approaching vehicles have to stop before entering the intersection.
-The intersection entry is either defined by a stop line for each lanelet or is otherwise determined by the end of the lanelet. To avoid confusion when matching lanelets and stop lines, an *All Way Stop* regelem is only valid if either no Lanelet has a stop line or all lanelets have exactly one.
+While in a *Right of Way* regelem, the right of way only depends on the lanelet, the right of way in an [All-Way Stop](https://en.wikipedia.org/wiki/All-way_stop) regelem depends on the order of arrival and the route through the intersection. Therefore, all lanelets are potentially yield lanelets. All approaching vehicles have to stop before entering the intersection.
+The intersection entry is either defined by one stop line for each lanelet or is otherwise determined by the end of each lanelet. To avoid confusion when matching lanelets and stop lines, an *All Way Stop* regelem is only valid if either no lanelet has a stop line or all lanelets have exactly one.
 The following roles are used in an all way stop:
 * *yield*: References the lanelets that might have to yield
 * *ref_line*: The lines where *yield* lanelets have to stop. This either empty or has the same order and size as the number of lanelets in *yield*.

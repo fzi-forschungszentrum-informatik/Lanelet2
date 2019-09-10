@@ -152,13 +152,13 @@ struct ConstLaneletWithStopLine {
 };
 using LaneletsWithStopLines = std::vector<LaneletWithStopLine>;
 
-//! @brief Defines an all way stop. These are a special form of right of way, where all lanelets have to yield, depeding
-//! on their distance to intersection.
+//! @brief Defines an all way stop. These are a special form of right of way, where all lanelets have to yield,
+//! depending on the order of arrival and the route through the intersection.
 //! @ingroup RegulatoryElementPrimitives
 //! @ingroup Primitives
 //!
 //! The distance to the intersection is represented either by the distance to the stop line, if present, otherwise the
-//! end of the lanelet.
+//! distance to the end of the lanelet.
 class AllWayStop : public RegulatoryElement {
  public:
   using Ptr = std::shared_ptr<AllWayStop>;
@@ -170,14 +170,13 @@ class AllWayStop : public RegulatoryElement {
    * @param attributes for this rule. Might be extended if necessary
    * @param lltsWithStop lanelets with stop line. Either all lanelets have a stop line or none.
    * @param signs traffic signs that constitute this rule
-   * the lanelet.
    */
   static Ptr make(Id id, const AttributeMap& attributes, const LaneletsWithStopLines& lltsWithStop,
                   const LineStringsOrPolygons3d& signs = {}) {
     return Ptr{new AllWayStop(id, attributes, lltsWithStop, signs)};
   }
 
-  //! get the lanelets that have to yield
+  //! get the lanelets that potentially have to yield
   ConstLanelets lanelets() const;
   Lanelets lanelets();
 

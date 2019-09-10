@@ -418,7 +418,7 @@ void AllWayStop::addLanelet(const LaneletWithStopLine& lltWithStop) {
     throw InvalidInputError("A lanelet with stop line was added, but existing lanelets don't have a stop line!");
   }
   if (!sl.empty() && !lltWithStop.stopLine) {
-    throw InvalidInputError("A lanelet without stopline was added, but existing lanelts have a stop line!");
+    throw InvalidInputError("A lanelet without stopline was added, but existing lanelets have a stop line!");
   }
   parameters()[RoleName::Yield].emplace_back(lltWithStop.lanelet);
   if (!!lltWithStop.stopLine) {
@@ -460,7 +460,7 @@ AllWayStop::AllWayStop(const RegulatoryElementDataPtr& data) : RegulatoryElement
   }
   if (yields == parameters().end() || lines->second.size() != yields->second.size()) {
     throw InvalidInputError(
-        "Inconsistent number of lanelets and stop lines found! Either each lanelet has a stop line or none!");
+        "Inconsistent number of lanelets and stop lines found! Either one stop line per lanelet or no stop lines!");
   }
 }
 
