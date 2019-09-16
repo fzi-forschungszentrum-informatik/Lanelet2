@@ -81,7 +81,7 @@ Other types:
 The symbol can be represented either by its outline or by its centerline. If it is represented by the centerline, the linestring must only contain two points to avoid confusion with the outline.
 
 ## Traffic Signs
-Traffic signs all have `type=traffic_sign`. Additionally, they have a "subtype"-tag that contains the actual type of the traffic sign. This subtype is encoded as ISO 3166 region code + traffic sign number (e.g. `subtype=de206` [for a German stop sign](https://de.wikipedia.org/wiki/Bildtafel_der_Verkehrszeichen_in_der_Bundesrepublik_Deutschland_seit_2017#Gefahrzeichen_nach_Anlage_1_(zu_%C2%A7_40_Absatz_6_und_7_StVO))).
+Traffic signs all have `type=traffic_sign`. Additionally, they have a "subtype"-tag that contains the actual type of the traffic sign. This subtype is encoded as ISO 3166 region code + traffic sign number (e.g. `subtype=de206` [for a German stop sign](https://de.wikipedia.org/wiki/Bildtafel_der_Verkehrszeichen_in_der_Bundesrepublik_Deutschland_seit_2017#Gefahrzeichen_nach_Anlage_1_(zu_%C2%A7_40_Absatz_6_und_7_StVO)) or `subtype=usR1-1` [for a US stop sign](https://en.wikipedia.org/wiki/Road_signs_in_the_United_States#R1_Series:_Stop_and_Yield)).
 
 Traffic signs can be represented either by their outline (as polygon) or by a linestring where the first point is the left edge of the sign and the last point is the right edge of the sign. Optionally the height tag can be used to encode the size of the sign in z (not the height above ground, use the z-coordinate for that). The linestring marks the *lower edge* of the sign.
 
