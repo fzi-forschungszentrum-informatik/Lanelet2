@@ -277,7 +277,7 @@ area[subtype=building]
 
 /*              Nodes
 ------------------------------------------------------ */
-
+/* GERMANY traffic signs */
 way[type=arrow][subtype=straight] >[index=1] node
 {
 	text: "type";
@@ -2560,3 +2560,237 @@ way[type=traffic_sign][subtype=detraffic_sign] >[index=-2] node
     z-index: 5;
     icon-image: "style_images/traffic_sign.png";
 }
+
+/* USA traffic signs */
+way[type=traffic_sign][subtype=usR1-1] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-1.svg";
+}
+way[type=traffic_sign][subtype=usR1-2] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-2.svg";
+}
+way[type=traffic_sign][subtype=usR1-3P] >[index=-2] node
+{
+    text: "type";
+    icon-height: 15;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-4.svg";
+}
+way[type=traffic_sign][subtype=usR1-2aP] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-2aP.svg";
+}
+way[type=traffic_sign][subtype=usR1-5] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-5L.svg";
+}
+way[type=traffic_sign][subtype=usR1-5a] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-5aL.svg";
+}
+way[type=traffic_sign][subtype=usR1-5b] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-5bL.svg";
+}
+way[type=traffic_sign][subtype=usR1-5c] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-5cL.svg";
+}
+way[type=traffic_sign][subtype=usR1-6] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-6.svg";
+}
+way[type=traffic_sign][subtype=usR1-6a] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-6a.svg";
+}
+way[type=traffic_sign][subtype=usR1-7] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-7.svg";
+}
+way[type=traffic_sign][subtype=usR1-8] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-8.svg";
+}
+way[type=traffic_sign][subtype=usR1-9] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-9.svg";
+}
+way[type=traffic_sign][subtype=usR1-9a] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-9a.svg";
+}
+way[type=traffic_sign][subtype=usR1-10P] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R1-10P.svg";
+}
+way[type=traffic_sign][subtype=usR2-1] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R2-1.svg";
+}
+way[type=traffic_sign][subtype=usR2-2P] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R2-2.svg";
+}
+way[type=traffic_sign][subtype=usR2-3P] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R2-3.svg";
+}
+way[type=traffic_sign][subtype=usR2-4P] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R2-4.svg";
+}
+way[type=traffic_sign][subtype=usR2-5P] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R2-5P.svg";
+}
+way[type=traffic_sign][subtype=usR3-1] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R3-1.svg";
+}
+way[type=traffic_sign][subtype=usR3-2] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R3-2.svg";
+}
+way[type=traffic_sign][subtype=usR3-5R] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R3-5R.svg";
+}
+way[type=traffic_sign][subtype=usR4-7a] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R4-7a.svg";
+}
+way[type=traffic_sign][subtype=usR4-7b] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R4-7b.svg";
+}
+way[type=traffic_sign][subtype=usR4-7c] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R4-7c.svg";
+}
+way[type=traffic_sign][subtype=usR4-8a] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R4-8a.svg";
+}
+way[type=traffic_sign][subtype=usR4-8b] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R4-8b.svg";
+}
+way[type=traffic_sign][subtype=usR4-8c] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R4-8c.svg";
+}
+way[type=traffic_sign][subtype=usR5-1] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R5-1.svg";
+}
+way[type=traffic_sign][subtype=usR5-1a] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R5-1a.svg";
+}
+way[type=traffic_sign][subtype=usR6-1L] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_R6-1L.svg";
+}
+way[type=traffic_sign][subtype=usW5-1] >[index=-2] node
+{
+    text: "type";
+    icon-height: 30;
+    z-index: 5;
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_W5-1.svg";
+}
+
