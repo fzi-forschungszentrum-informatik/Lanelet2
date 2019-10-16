@@ -18,8 +18,8 @@ before_script:
   - sudo apt-get update
   - mrt ci prepare $CI_PROJECT_NAME -c $CI_COMMIT_SHA
   - cd catkin_ws
-  # add current branch name to branch management
-  - mrt ws branches add $CI_COMMIT_REF_NAME
+  # set current branch name to branch management
+  - mrt ws branches set $CI_COMMIT_REF_NAME
 
 # Tests installing on a plain system without mrt stuff using the provided Docker image
 .build_docker: &build_docker
