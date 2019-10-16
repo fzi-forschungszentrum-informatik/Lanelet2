@@ -223,7 +223,7 @@ BasicPoint2d fromArcCoordinates(const LineString2dT& lineString, const ArcCoordi
  * to the resulting line string to fulfill this guarantee.
  */
 template <typename LineString2dT>
-BasicLineString2d offset(const LineString2dT& lineString, const double distance);
+BasicLineString2d offset(const LineString2dT& lineString, double distance);
 
 /**
  * @brief create a linestring that is offset to the original one.
@@ -237,7 +237,7 @@ BasicLineString2d offset(const LineString2dT& lineString, const double distance)
  * exception is thrown when
  */
 template <typename LineString2dT>
-BasicLineString2d offsetNoThrow(const LineString2dT& lineString, const double distance);
+BasicLineString2d offsetNoThrow(const LineString2dT& lineString, double distance);
 
 /**
  * @brief find the segment on a 3d line string that is closest to a given point, determined by boost::geometry::distance

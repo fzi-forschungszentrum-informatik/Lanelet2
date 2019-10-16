@@ -453,8 +453,7 @@ TYPED_TEST(TwoDLineStringsTest, offset) {
 }
 
 TYPED_TEST(MutableLineStringsTest, closestSegment) {
-  Point3d bp3d(100000000000, 0, 1.5, 1.5);
-  traits::PointType<typename TestFixture::LineStringT> p3d(bp3d);
+  traits::PointType<typename TestFixture::LineStringT> p3d(100000000000, 0, 1.5, 1.5);
   traits::PointType<typename TestFixture::LineStringT> ref3d(this->p12);
   auto bp = utils::toBasicPoint(p3d);
   auto refp = utils::toBasicPoint(ref3d);
@@ -545,6 +544,6 @@ TEST(TwoDLineStringsTest, checkInversion) {
   p5 = BasicPoint2d(4, 0);
 
   BasicLineString2d l1{p1, p2, p3, p4, p5};
-  EXPECT_THROW(geometry::offset(l1, 2), GeometryError);
+  EXPECT_THROW(geometry::offset(l1, 2), GeometryError);  // NOLINT
   EXPECT_NO_THROW(geometry::offset(l1, 1));
 }
