@@ -207,9 +207,15 @@ area[subtype=keepout]
 {
     fill-color: red;
 }
-area[subtype=building]
+area[type=building]
 {
     fill-color: black;
+}
+way[type=building]
+{
+    color: black;
+    width: 6;
+    dashes:15,2;
 }
 area[subtype=walkway]
 {
