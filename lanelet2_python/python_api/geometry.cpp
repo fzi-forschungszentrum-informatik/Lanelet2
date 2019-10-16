@@ -128,6 +128,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   // poly2poly
   def("distance", lg::distance<ConstHybridPolygon2d, ConstHybridPolygon2d>);
   def("distance", +[](const ConstPolygon2d& p1, const ConstPolygon2d& p2) { return lg::distance2d(p1, p2); });
+  def("distance", +[](const ConstHybridPolygon2d& p1, const ConstPolygon2d& p2) { return lg::distance2d(p1, p2); });
+  def("distance", +[](const CompoundPolygon2d& p1, const ConstPolygon2d& p2) { return lg::distance2d(p1, p2); });
+  def("distance", +[](const ConstPolygon2d& p1, const ConstHybridPolygon2d& p2) { return lg::distance2d(p1, p2); });
 
   // p2llt
   def("distance", +[](const ConstLanelet& llt, const BasicPoint2d& p) { return lg::distance2d(llt, p); });

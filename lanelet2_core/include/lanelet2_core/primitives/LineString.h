@@ -641,13 +641,15 @@ class ConstHybridLineString2d : public ConstLineString2d {
   BasicIterator end() const noexcept { return basicEnd(); }
 
   //! Get first BasicPoint2d
-  BasicPointType front() const noexcept { return ConstLineString2d::front().basicPoint(); }
+  const BasicPointType& front() const noexcept { return ConstLineString2d::front().basicPoint(); }
 
   //! Get last BasicPoint2d
-  BasicPointType back() const noexcept { return ConstLineString2d::back().basicPoint(); }
+  const BasicPointType& back() const noexcept { return ConstLineString2d::back().basicPoint(); }
 
   //! access element at specific position
-  BasicPointType operator[](size_t idx) const noexcept { return ConstLineString2d::operator[](idx).basicPoint(); }
+  const BasicPointType& operator[](size_t idx) const noexcept {
+    return ConstLineString2d::operator[](idx).basicPoint();
+  }
 
   /**
    * @brief returns the n-th segment. If n equals size() -1, the segment from

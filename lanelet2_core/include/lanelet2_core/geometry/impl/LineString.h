@@ -130,13 +130,13 @@ PointVincinity makeVincinity(const LineString2dT& lineString, const size_t idx) 
   if (idx == 0) {
     return PointVincinity{BasicPoint2d::Zero(),
                           utils::toBasicPoint(lineString[idx + 1]) - utils::toBasicPoint(lineString[idx])};
-  } else if (idx + 1 == lineString.size()) {
+  }
+  if (idx + 1 == lineString.size()) {
     return PointVincinity{utils::toBasicPoint(lineString[idx]) - utils::toBasicPoint(lineString[idx - 1]),
                           BasicPoint2d::Zero()};
-  } else {
-    return PointVincinity{utils::toBasicPoint(lineString[idx]) - utils::toBasicPoint(lineString[idx - 1]),
-                          utils::toBasicPoint(lineString[idx + 1]) - utils::toBasicPoint(lineString[idx])};
   }
+  return PointVincinity{utils::toBasicPoint(lineString[idx]) - utils::toBasicPoint(lineString[idx - 1]),
+                        utils::toBasicPoint(lineString[idx + 1]) - utils::toBasicPoint(lineString[idx])};
 }
 
 /**
@@ -175,9 +175,8 @@ bool isConvex(const LineString2dT& lineString, const size_t idx, const bool offs
   if (idx != 0 && idx + 1 != lineString.size()) {
     auto isLeft = pointIsLeftOf<BasicPoint2d>(lineString[idx - 1], lineString[idx], lineString[idx + 1]);
     return offsetPositive ? !isLeft : isLeft;
-  } else {
-    return true;
   }
+  return true;
 }
 
 enum class Convexity { Concave, Convex, ConvexSharp };
@@ -187,12 +186,11 @@ Convexity getConvexity(const LineString2dT& lineString, const size_t idx, const 
                        const bool offsetPositive) {
   if (!isConvex(lineString, idx, offsetPositive)) {
     return Convexity::Concave;
-  } else {
-    if (pv.following.dot(pv.preceding) < 0) {
-      return Convexity::ConvexSharp;
-    }
-    return Convexity::Convex;
   }
+  if (pv.following.dot(pv.preceding) < 0) {
+    return Convexity::ConvexSharp;
+  }
+  return Convexity::Convex;
 }
 
 template <typename LineStringT>
@@ -341,7 +339,7 @@ struct PointSearchResult {
  * @param i segment index
  * @return coordinate of next point on the walk
  */
-inline PointSearchResult findNextPoint(const SelfIntersections2d curSegIntersections, const BasicSegment2d& seg,
+inline PointSearchResult findNextPoint(const SelfIntersections2d& curSegIntersections, const BasicSegment2d& seg,
                                        const double lastS, const size_t i) {
   if (!curSegIntersections.empty()) {
     auto possibeNextIntersection = getLowestSAbove(curSegIntersections, lastS);
@@ -408,7 +406,8 @@ inline BasicPoint2d shiftPerpendicular(const LineString2dT& lineString, const si
                                        const bool asLast, const PointVincinity& pv) {
   if (idx == 0 && asLast) {
     throw GeometryError("Can't shift first point of line string as endpoint of segment");
-  } else if (idx + 1 == lineString.size() && !asLast) {
+  }
+  if (idx + 1 == lineString.size() && !asLast) {
     throw GeometryError("Can't shift last point of line string as start point of segment");
   }
   Eigen::Vector2d perpendicular = asLast ? pv.preceding.normalized() : pv.following.normalized();
@@ -430,7 +429,8 @@ inline BasicLineString2d shiftConvexSharp(const LineString2dT& lineString, const
                                           const PointVincinity& pv) {
   if (idx == 0) {
     throw GeometryError("Can't shift first point of line string as sharp convex");
-  } else if (idx + 1 == lineString.size()) {
+  }
+  if (idx + 1 == lineString.size()) {
     throw GeometryError("Can't shift last point of line string as sharp convex");
   }
   BasicPoint2d firstP = shiftPerpendicular(lineString, idx, distance, true, pv);
@@ -454,9 +454,11 @@ inline std::pair<BasicLineString2d, bool> shiftPoint(const LineString2dT& lineSt
   auto convexity = internal::getConvexity(lineString, idx, pv, distance > 0);
   if (convexity == Convexity::Concave) {
     return std::make_pair(BasicLineString2d{shiftPerpendicular(lineString, idx, distance, true, pv)}, false);
-  } else if (convexity == Convexity::Convex) {
+  }
+  if (convexity == Convexity::Convex) {
     return std::make_pair(BasicLineString2d{shiftLateral(lineString, idx, distance, pv)}, true);
-  } else if (convexity == Convexity::ConvexSharp) {
+  }
+  if (convexity == Convexity::ConvexSharp) {
     return std::make_pair(shiftConvexSharp(lineString, idx, distance, pv), true);
   }
   throw InvalidInputError("Unknown Convexity status");
@@ -548,14 +550,12 @@ inline BasicLineString2d joinSubStrings(const std::vector<BasicLineString2d>& co
       newLS.emplace_back(np.nextPoint);
       idx = np.nextSegIdx;
       if (idx >= segMap.size()) {
-        j = ls.size();
         i = convexSubStrings.size();
         break;
       }
       lastS = np.lastS;
       if (segMap.at(idx).lineStringIdx != i) {
         i = segMap.at(idx).lineStringIdx;
-        j = segMap.at(idx).segmentIdx;
         break;
       }
     }
@@ -774,7 +774,7 @@ BasicPoint2d fromArcCoordinates(const LineString2dT& lineString, const ArcCoordi
   auto hLineString = utils::toHybrid(lineString);
   auto ratios = accumulatedLengthRatios(lineString);
   const auto llength = length(lineString);
-  size_t startIdx, endIdx;
+  size_t startIdx{}, endIdx{};
   for (size_t i = 0; i < ratios.size(); ++i) {
     if (ratios.at(i) * llength > arcCoords.length) {
       startIdx = i;
