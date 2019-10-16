@@ -181,7 +181,7 @@ class PrimitiveLayer {
    * If no such object exists, the Optional will be empty.
    */
   OptConstPrimitiveT searchUntil(const BoundingBox2d& area, const ConstSearchFunction& func) const;
-  OptPrimitiveT searchUntil(const BoundingBox2d& area, SearchFunction& func);
+  OptPrimitiveT searchUntil(const BoundingBox2d& area, const SearchFunction& func);
 
   /**
    * @brief search for the n nearest elements to a point

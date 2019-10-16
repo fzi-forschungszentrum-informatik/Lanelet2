@@ -493,7 +493,7 @@ typename PrimitiveLayer<T>::OptConstPrimitiveT PrimitiveLayer<T>::searchUntil(co
 
 template <typename T>
 typename PrimitiveLayer<T>::OptPrimitiveT PrimitiveLayer<T>::searchUntil(const BoundingBox2d& area,
-                                                                         PrimitiveLayer::SearchFunction& func) {
+                                                                         const PrimitiveLayer::SearchFunction& func) {
   return findUntilImpl<PrimitiveT>(tree_->rTree, area, func);
 }
 
