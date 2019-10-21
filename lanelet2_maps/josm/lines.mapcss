@@ -1756,3 +1756,776 @@ way[type=traffic_sign][subtype=usW5-1] >[index=-2] node
     icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=MUTCD_W5-1.svg";
 }
 
+/* SWEDEN traffic signs */
+way[type=traffic_sign][subtype=seA1-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A1-1.svg";
+}
+way[type=traffic_sign][subtype=seA1-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A1-2.svg";
+}
+way[type=traffic_sign][subtype=seA2-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A2-1.svg";
+}
+way[type=traffic_sign][subtype=seA2-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A2-2.svg";
+}
+way[type=traffic_sign][subtype=seA3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A3.svg";
+}
+way[type=traffic_sign][subtype=seA4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A4.svg";
+}
+way[type=traffic_sign][subtype=seA5-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A5-1.svg";
+}
+way[type=traffic_sign][subtype=seA6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A6.svg";
+}
+way[type=traffic_sign][subtype=seA7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A7.svg";
+}
+way[type=traffic_sign][subtype=seA8] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A8.svg";
+}
+way[type=traffic_sign][subtype=seA10] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A10.svg";
+}
+way[type=traffic_sign][subtype=seA11] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A11.svg";
+}
+way[type=traffic_sign][subtype=seA12-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A12-1.svg";
+}
+way[type=traffic_sign][subtype=seA13] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A13.svg";
+}
+way[type=traffic_sign][subtype=seA15] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A15.svg";
+}
+way[type=traffic_sign][subtype=seA16] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A16.svg";
+}
+way[type=traffic_sign][subtype=seA17] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A17.svg";
+}
+way[type=traffic_sign][subtype=seA18] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A18.svg";
+}
+way[type=traffic_sign][subtype=seA19-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A19-1.svg";
+}
+way[type=traffic_sign][subtype=seA19-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A19-2.svg";
+}
+way[type=traffic_sign][subtype=seA19-3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A19-3.svg";
+}
+way[type=traffic_sign][subtype=seA19-4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A19-4.svg";
+}
+way[type=traffic_sign][subtype=seA19-5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A19-5.svg";
+}
+way[type=traffic_sign][subtype=seA19-6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A19-6.svg";
+}
+way[type=traffic_sign][subtype=seA19-7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A19-7.svg";
+}
+way[type=traffic_sign][subtype=seA20] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A20.svg";
+}
+way[type=traffic_sign][subtype=seA22] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A22.svg";
+}
+way[type=traffic_sign][subtype=seA23-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A23-1.svg";
+}
+way[type=traffic_sign][subtype=seA24-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A24-1.svg";
+}
+way[type=traffic_sign][subtype=seA25] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A25.svg";
+}
+way[type=traffic_sign][subtype=seA26] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A26.svg";
+}
+way[type=traffic_sign][subtype=seA28] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A28.svg";
+}
+way[type=traffic_sign][subtype=seA29-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A29-1.svg";
+}
+way[type=traffic_sign][subtype=seA30] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A30.svg";
+}
+way[type=traffic_sign][subtype=seA35] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A35.svg";
+}
+way[type=traffic_sign][subtype=seA36] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A36.svg";
+}
+way[type=traffic_sign][subtype=seA37] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=weden_road_sign_A37.svg";
+}
+way[type=traffic_sign][subtype=seA40] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A40.svg";
+}
+way[type=traffic_sign][subtype=seA41] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A41.svg";
+}
+way[type=traffic_sign][subtype=seC1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C1.svg";
+}
+way[type=traffic_sign][subtype=seC2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C2.svg";
+}
+way[type=traffic_sign][subtype=seC3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C3.svg";
+}
+way[type=traffic_sign][subtype=seC4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C4.svg";
+}
+way[type=traffic_sign][subtype=seC5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C5.svg";
+}
+way[type=traffic_sign][subtype=seC6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C6.svg";
+}
+way[type=traffic_sign][subtype=seC7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C7.svg";
+}
+way[type=traffic_sign][subtype=seC8] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C8.svg";
+}
+way[type=traffic_sign][subtype=seC9] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C9.svg";
+}
+way[type=traffic_sign][subtype=seC10] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C10.svg";
+}
+way[type=traffic_sign][subtype=seC11] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C11.svg";
+}
+way[type=traffic_sign][subtype=seC12] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C12.svg";
+}
+way[type=traffic_sign][subtype=seC13] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C13.svg";
+}
+way[type=traffic_sign][subtype=seC14] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C14.svg";
+}
+way[type=traffic_sign][subtype=seC15] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C15.svg";
+}
+way[type=traffic_sign][subtype=seC16] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C16.svg";
+}
+way[type=traffic_sign][subtype=seC17] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C17.svg";
+}
+way[type=traffic_sign][subtype=seC18] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C18.svg";
+}
+way[type=traffic_sign][subtype=seC19] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C19.svg";
+}
+way[type=traffic_sign][subtype=seC20] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C20.svg";
+}
+way[type=traffic_sign][subtype=seC21] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C21.svg";
+}
+way[type=traffic_sign][subtype=seC23] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C23.svg";
+}
+way[type=traffic_sign][subtype=seC24] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C24.svg";
+}
+way[type=traffic_sign][subtype=seC26] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C26.svg";
+}
+way[type=traffic_sign][subtype=seC27] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C27.svg";
+}
+way[type=traffic_sign][subtype=seC28] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C28.svg";
+}
+way[type=traffic_sign][subtype=seC29] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C29.svg";
+}
+way[type=traffic_sign][subtype=seC30] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C30.svg";
+}
+way[type=traffic_sign][subtype=seC31-7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C31-7.svg";
+}
+way[type=traffic_sign][subtype=seC33-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C33-1.svg";
+}
+way[type=traffic_sign][subtype=seC33-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C33-2.svg";
+}
+way[type=traffic_sign][subtype=seC33-3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C33-3.svg";
+}
+way[type=traffic_sign][subtype=seC33-4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C33-4.svg";
+}
+way[type=traffic_sign][subtype=seC34-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C34-2.svg";
+}
+way[type=traffic_sign][subtype=seC34-4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C34-4.svg";
+}
+way[type=traffic_sign][subtype=seC35] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C35.svg";
+}
+way[type=traffic_sign][subtype=seC39] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C39.svg";
+}
+way[type=traffic_sign][subtype=seC44] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_C44.svg";
+}
+way[type=traffic_sign][subtype=seE20-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E20-1.svg";
+}
+way[type=traffic_sign][subtype=seE21-15] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E21-15.svg";
+}
+way[type=traffic_sign][subtype=seD1-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D1-1.svg";
+}
+way[type=traffic_sign][subtype=seD2-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D2-1.svg";
+}
+way[type=traffic_sign][subtype=seD2-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D2-2.svg";
+}
+way[type=traffic_sign][subtype=seD2-3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D2-3.svg";
+}
+way[type=traffic_sign][subtype=seD3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D3.svg";
+}
+way[type=traffic_sign][subtype=seD3] >[index=-2] node
+{
+    icon-image: "hhttps://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D3.svg";
+}
+way[type=traffic_sign][subtype=seD4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D4.svg";
+}
+way[type=traffic_sign][subtype=seD5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D5.svg";
+}
+way[type=traffic_sign][subtype=seD6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D6.svg";
+}
+way[type=traffic_sign][subtype=seD7-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D7-1.svg";
+}
+way[type=traffic_sign][subtype=seD7-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D7-2.svg";
+}
+way[type=traffic_sign][subtype=seD8] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=weden_road_sign_D8.svg";
+}
+way[type=traffic_sign][subtype=seD9] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D9.svg";
+}
+way[type=traffic_sign][subtype=seD10] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D10.svg";
+}
+way[type=traffic_sign][subtype=seD11-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_D11-1.svg";
+}
+way[type=traffic_sign][subtype=seE1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E1.svg";
+}
+way[type=traffic_sign][subtype=seE2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E2.svg";
+}
+way[type=traffic_sign][subtype=seE3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E3.svg";
+}
+way[type=traffic_sign][subtype=seE4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E4.svg";
+}
+way[type=traffic_sign][subtype=seE5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E5.svg";
+}
+way[type=traffic_sign][subtype=seE6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E6.svg";
+}
+way[type=traffic_sign][subtype=seB3-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_B3-1.svg";
+}
+way[type=traffic_sign][subtype=seE7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E7.svg";
+}
+way[type=traffic_sign][subtype=seE8] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E8.svg";
+}
+way[type=traffic_sign][subtype=seE9] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E9.svg";
+}
+way[type=traffic_sign][subtype=seE10] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E10.svg";
+}
+way[type=traffic_sign][subtype=seE11-3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E11-3.svg";
+}
+way[type=traffic_sign][subtype=seE12-3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E12-3.svg";
+}
+way[type=traffic_sign][subtype=seE13-5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E13-5.svg";
+}
+way[type=traffic_sign][subtype=seE14] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E14.svg";
+}
+way[type=traffic_sign][subtype=seE16-1-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E16-1-1.svg";
+}
+way[type=traffic_sign][subtype=seE17-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E17-1.svg";
+}
+way[type=traffic_sign][subtype=seE18] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E18.svg";
+}
+way[type=traffic_sign][subtype=seE19] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E19.svg";
+}
+way[type=traffic_sign][subtype=seE22] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E22.svg";
+}
+way[type=traffic_sign][subtype=seE23] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E23.svg";
+}
+way[type=traffic_sign][subtype=seE25] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_E25.svg";
+}
+way[type=traffic_sign][subtype=seG1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_G1.svg";
+}
+way[type=traffic_sign][subtype=seG2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_G2.svg";
+}
+way[type=traffic_sign][subtype=seG3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_G3.svg";
+}
+way[type=traffic_sign][subtype=seG4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_G4.svg";
+}
+way[type=traffic_sign][subtype=seG5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_G5.svg";
+}
+way[type=traffic_sign][subtype=seH1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H1.svg";
+}
+way[type=traffic_sign][subtype=seH2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H2.svg";
+}
+way[type=traffic_sign][subtype=seH3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H3.svg";
+}
+way[type=traffic_sign][subtype=seH5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H5.svg";
+}
+way[type=traffic_sign][subtype=seH6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H6.svg";
+}
+way[type=traffic_sign][subtype=seH7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H7.svg";
+}
+way[type=traffic_sign][subtype=seH8] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H8.svg";
+}
+way[type=traffic_sign][subtype=seH10] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H10.svg";
+}
+way[type=traffic_sign][subtype=seH11] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H11.svg";
+}
+way[type=traffic_sign][subtype=seH12] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H12.svg";
+}
+way[type=traffic_sign][subtype=seH13] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H13.svg";
+}
+way[type=traffic_sign][subtype=seH14] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H14.svg";
+}
+way[type=traffic_sign][subtype=seH15] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H15.svg";
+}
+way[type=traffic_sign][subtype=seH16] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H16.svg";
+}
+way[type=traffic_sign][subtype=seH17] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H17.svg";
+}
+way[type=traffic_sign][subtype=seH18] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H18.svg";
+}
+way[type=traffic_sign][subtype=seH19] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H19.svg";
+}
+way[type=traffic_sign][subtype=seH20] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H20.svg";
+}
+way[type=traffic_sign][subtype=seH21] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H21.svg";
+}
+way[type=traffic_sign][subtype=seH22] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_H22.svg";
+}
+way[type=traffic_sign][subtype=seF1-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F1-1.svg";
+}
+way[type=traffic_sign][subtype=seF6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F6.svg";
+}
+way[type=traffic_sign][subtype=seF21] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F21.svg";
+}
+way[type=traffic_sign][subtype=seF17] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F17.svg";
+}
+way[type=traffic_sign][subtype=seF25-3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F25-3.svg";
+}
+way[type=traffic_sign][subtype=seF26-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F26-1.svg";
+}
+way[type=traffic_sign][subtype=seF26-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F26-2.svg";
+}
+way[type=traffic_sign][subtype=seF5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F5.svg";
+}
+way[type=traffic_sign][subtype=seF4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F4.svg";
+}
+way[type=traffic_sign][subtype=seF7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F7.svg";
+}
+way[type=traffic_sign][subtype=seF27] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F27.svg";
+}
+way[type=traffic_sign][subtype=seF31-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F31-1.svg";
+}
+way[type=traffic_sign][subtype=seF31-5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F31-5.svg";
+}
+way[type=traffic_sign][subtype=seF10] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F10.svg";
+}
+way[type=traffic_sign][subtype=seF14-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F14-1.svg";
+}
+way[type=traffic_sign][subtype=seF14-3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F14-3.svg";
+}
+way[type=traffic_sign][subtype=seF14-4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F14-4.svg";
+}
+way[type=traffic_sign][subtype=seF15] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F15.svg";
+}
+way[type=traffic_sign][subtype=seF13] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F13.svg";
+}
+way[type=traffic_sign][subtype=seF9] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F9.svg";
+}
+way[type=traffic_sign][subtype=seF32] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F32.svg";
+}
+way[type=traffic_sign][subtype=seI1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_I1.svg";
+}
+way[type=traffic_sign][subtype=seI1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_I2.svg";
+}
+way[type=traffic_sign][subtype=seF35] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F35.svg";
+}
+way[type=traffic_sign][subtype=seF34] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F34.svg";
+}
+way[type=traffic_sign][subtype=seF36] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F36.svg";
+}
+way[type=traffic_sign][subtype=seF37] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F37.svg";
+}
+way[type=traffic_sign][subtype=seF38] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_F38.svg";
+}
+way[type=traffic_sign][subtype=seB1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_B1.svg";
+}
+way[type=traffic_sign][subtype=seB2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_B2.svg";
+}
+way[type=traffic_sign][subtype=seB4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_B4.svg";
+}
+way[type=traffic_sign][subtype=seB5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_B5.svg";
+}
+way[type=traffic_sign][subtype=seB6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_B6.svg";
+}
+way[type=traffic_sign][subtype=seB7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_B7.svg";
+}
+way[type=traffic_sign][subtype=seB7] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_A21.svg";
+}
+way[type=traffic_sign][subtype=seJ3-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_J3-1.svg";
+}
+way[type=traffic_sign][subtype=seT2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T2.svg";
+}
+way[type=traffic_sign][subtype=seT3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T3.svg";
+}
+way[type=traffic_sign][subtype=seT4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T4.svg";
+}
+way[type=traffic_sign][subtype=seT5] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T5.svg";
+}
+way[type=traffic_sign][subtype=seT6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T6.svg";
+}
+way[type=traffic_sign][subtype=seT7-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T7-1.svg";
+}
+way[type=traffic_sign][subtype=seT7-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T7-2.svg";
+}
+way[type=traffic_sign][subtype=seT9] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T9.svg";
+}
+way[type=traffic_sign][subtype=seT10] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T10.svg";
+}
+way[type=traffic_sign][subtype=seT14] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T14.svg";
+}
+way[type=traffic_sign][subtype=seT21-1] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T21-1.svg";
+}
+way[type=traffic_sign][subtype=seT21-2] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T21-2.svg";
+}
+way[type=traffic_sign][subtype=seT21-3] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T21-3.svg";
+}
+way[type=traffic_sign][subtype=seT21-4] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_T21-4.svg";
+}
+way[type=traffic_sign][subtype=seP6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_P6.svg";
+}
+way[type=traffic_sign][subtype=seP6] >[index=-2] node
+{
+    icon-image: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file&wpvalue=Sweden_road_sign_P7.svg";
+}
