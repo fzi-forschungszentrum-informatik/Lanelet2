@@ -169,7 +169,10 @@ class ToFileWriter {
   template <typename PrimT>
   void writeOsmWay(const PrimT& mapWay, osm::Ways& osmWays) {
     const auto id = mapWay.id();
-    const auto wayAttributes = getAttributes(mapWay.attributes());
+    auto wayAttributes = getAttributes(mapWay.attributes());
+    if (std::is_same<PrimT, ConstPolygon3d>::value) {
+      wayAttributes.emplace(AttributeNamesString::Area, "true");
+    }
     try {
       const auto wayNodes =
           utils::transform(mapWay, [& nodes = file_->nodes](const auto& elem) { return &nodes.at(elem.id()); });
