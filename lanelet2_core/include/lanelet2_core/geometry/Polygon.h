@@ -178,7 +178,7 @@ struct exterior_ring<LLPolygon3d> {
 
 template <>
 struct interior_rings<LLPolygon3d> {
-  static lanelet::BasicPolygons3d get(LLPolygon3d& p) { return p.inner; }
+  static lanelet::BasicPolygons3d& get(LLPolygon3d& p) { return p.inner; }
   static const lanelet::BasicPolygons3d& get(LLPolygon3d const& p) { return p.inner; }
 };
 
@@ -215,7 +215,7 @@ struct exterior_ring<LLPolygon2d> {
 
 template <>
 struct interior_rings<LLPolygon2d> {
-  static lanelet::BasicPolygons2d get(LLPolygon2d& p) { return p.inner; }
+  static lanelet::BasicPolygons2d& get(LLPolygon2d& p) { return p.inner; }
   static const lanelet::BasicPolygons2d& get(LLPolygon2d const& p) { return p.inner; }
 };
 }  // namespace traits
