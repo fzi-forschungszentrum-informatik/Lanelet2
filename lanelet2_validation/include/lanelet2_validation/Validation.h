@@ -26,8 +26,14 @@ struct ValidationConfig {
   GPSPoint origin;
 };
 
+//! Contains each warning/error as formatted strings
+struct IssueReport {
+  Strings warnings;
+  Strings errors;
+};
+
 //! Generates the issue report
-std::pair<Strings, Strings> buildReport(std::vector<DetectedIssues> issues);
+IssueReport buildReport(std::vector<DetectedIssues> issues);
 
 //! Reports the available checks for the given filter. Empty will return all.
 Strings availabeChecks(const std::string& filterString);
