@@ -26,8 +26,8 @@ TEST(Validator, pointsTooClose) {  // NOLINT
   config.checksFilter = "mapping.points_too_close";
   auto issues = lanelet::validation::validateMap(*map, config);
   auto report = lanelet::validation::buildReport(issues);
-  EXPECT_LT(0ul, report.second.size());
-  EXPECT_EQ(0ul, report.first.size());
+  EXPECT_LT(0ul, report.warnings.size());
+  EXPECT_EQ(0ul, report.errors.size());
 }
 
 TEST(Validator, curvatureTooBig) {  // NOLINT
@@ -40,14 +40,14 @@ TEST(Validator, curvatureTooBig) {  // NOLINT
   auto validators = lanelet::validation::availabeChecks(config.checksFilter);
   auto issues = lanelet::validation::validateMap(*map, config);
   auto report = lanelet::validation::buildReport(issues);
-  EXPECT_EQ(0ul, report.second.size());
-  EXPECT_EQ(0ul, report.first.size());
+  EXPECT_EQ(0ul, report.warnings.size());
+  EXPECT_EQ(0ul, report.errors.size());
 }
 
 TEST(Validator, invalidMap) {  // NOLINT
   lanelet::validation::ValidationConfig config;
   auto issues = lanelet::validation::validateMap("/totally/nonexistent/fantasy/path", config);
   auto report = lanelet::validation::buildReport(issues);
-  EXPECT_EQ(0ul, report.second.size());
-  EXPECT_LT(0ul, report.first.size());
+  EXPECT_EQ(0ul, report.warnings.size());
+  EXPECT_LT(0ul, report.errors.size());
 }
