@@ -30,7 +30,7 @@ It is still possible to follow a "2.5D"-Approach so that the height is generally
 Linestrings (also known as polylines or linestrips) are defined by an ordered list of points with linear interpolation in between. They are the basic building block of a lanelet map and used for any phisically observable part of the map.
 
 
-Linestrings must consist of at least one point to be valid and must not self-intersect. Linestrings must always have a *type* so that their purpose can be determined.
+Linestrings must consist of at least one point to be valid and must not self-intersect. They must not contain points repeatedly (i.e. p1->p2->p2->p3 is not allowed). Linestrings must always have a *type* so that their purpose can be determined.
 
 The tags used to define the individual linestrings are explained [here](LinestringTagging.md).
 
