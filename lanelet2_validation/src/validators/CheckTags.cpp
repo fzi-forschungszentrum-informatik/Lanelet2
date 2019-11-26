@@ -35,8 +35,8 @@ const ValueMap& knownPointValues() {
 
 const std::vector<std::string>& knownLineStringTags() {
   using Attr = AttributeNamesString;
-  const static std::vector<std::string> Tags{Attr::Type,  Attr::Subtype, Attr::LaneChange,
-                                             Attr::Width, Attr::Height,  Attr::Temporary};
+  const static std::vector<std::string> Tags{Attr::Type,   Attr::Subtype,   Attr::LaneChange, Attr::Width,
+                                             Attr::Height, Attr::Temporary, Attr::Color};
   return Tags;
 }
 

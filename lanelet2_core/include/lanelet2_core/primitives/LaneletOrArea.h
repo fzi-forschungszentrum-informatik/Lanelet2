@@ -82,13 +82,15 @@ class ConstLaneletOrArea {
     }
     return {};
   }
-
-  bool operator==(const ConstLaneletOrArea& other) const { return laneletOrArea_ == other.laneletOrArea_; }
-  bool operator!=(const ConstLaneletOrArea& other) const { return !(*this == other); }
+  //! compares this lanelet or area
+  bool equals(const ConstLaneletOrArea& other) const { return laneletOrArea_ == other.laneletOrArea_; }
 
  private:
   boost::variant<ConstLanelet, ConstArea> laneletOrArea_;
 };
+
+inline bool operator==(const ConstLaneletOrArea& lhs, const ConstLaneletOrArea& rhs) { return lhs.equals(rhs); }
+inline bool operator!=(const ConstLaneletOrArea& lhs, const ConstLaneletOrArea& rhs) { return !(lhs == rhs); }
 
 inline std::ostream& operator<<(std::ostream& stream, const ConstLaneletOrArea& obj) {
   if (obj.isArea()) {

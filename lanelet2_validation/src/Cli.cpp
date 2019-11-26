@@ -53,13 +53,13 @@ CommandLineConfig parseCommandLine(int argc, const char* argv[]) {
 
 void printAllIssues(const std::vector<DetectedIssues>& issues) {
   auto allIssues = buildReport(issues);
-  for (auto& issue : allIssues.first) {
+  for (auto& issue : allIssues.errors) {
     std::cerr << issue << '\n';
   }
-  for (auto& issue : allIssues.second) {
+  for (auto& issue : allIssues.warnings) {
     std::cout << issue << '\n';
   }
-  std::cout << allIssues.first.size() + allIssues.second.size() << " issues found.\n";
+  std::cout << allIssues.warnings.size() + allIssues.errors.size() << " issues found.\n";
 }
 
 int runFromConfig(const CommandLineConfig& config) {

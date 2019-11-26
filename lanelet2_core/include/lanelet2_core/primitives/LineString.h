@@ -171,10 +171,11 @@ class LineStringData : public PrimitiveData {
 //! @ingroup Primitives
 //!
 //! ## General
-//! LineStrings are a series of line segments defined by an ordered list of
-//! points. Lanelet2 exist in const/non-const, 2d/3d and in normal/hybrid
-//! versions.
+//! LineStrings are a series of line segments defined by an ordered list of points.
+//! A LineString consists at least of one point and must not contain the same point
+//! multiple times in succession.
 //!
+//! LineStrings exist in const/non-const, 2d/3d and in normal/hybrid versions.
 //! They all have the same interface but differ in the point types they provide.
 //! While the normal versions return Point2d or Point3d as points,
 //! the hybrid versions only return Eigen points when iterating.
@@ -641,13 +642,15 @@ class ConstHybridLineString2d : public ConstLineString2d {
   BasicIterator end() const noexcept { return basicEnd(); }
 
   //! Get first BasicPoint2d
-  BasicPointType front() const noexcept { return ConstLineString2d::front().basicPoint(); }
+  const BasicPointType& front() const noexcept { return ConstLineString2d::front().basicPoint(); }
 
   //! Get last BasicPoint2d
-  BasicPointType back() const noexcept { return ConstLineString2d::back().basicPoint(); }
+  const BasicPointType& back() const noexcept { return ConstLineString2d::back().basicPoint(); }
 
   //! access element at specific position
-  BasicPointType operator[](size_t idx) const noexcept { return ConstLineString2d::operator[](idx).basicPoint(); }
+  const BasicPointType& operator[](size_t idx) const noexcept {
+    return ConstLineString2d::operator[](idx).basicPoint();
+  }
 
   /**
    * @brief returns the n-th segment. If n equals size() -1, the segment from

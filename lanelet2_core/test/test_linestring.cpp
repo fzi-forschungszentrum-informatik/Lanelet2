@@ -16,12 +16,14 @@ class LineStringPoints : public ::testing::Test {
     p31 = Point3d(++id, -1., 0., 2.);
     p32 = Point3d(++id, 0., 1., 2.);
     p33 = Point3d(++id, 1., 2., 2.);
+    p43 = Point3d(++id, 1, 1. + sqrt(3) / 3., 0.);
   }
 
  public:
   Point3d p11, p12, p13;
   Point3d p21, p22, p23;
   Point3d p31, p32, p33;
+  Point3d p43;
 };
 
 template <typename T>
@@ -35,10 +37,11 @@ class LineStringTypeTest : public LineStringPoints {
         LineStringT(++id, {p11, p12, p13}, AttributeMap{{AttributeNamesString::Type, AttributeValueString::Curbstone}});
     ls2 = LineStringT(++id, {p21, p22, p23});
     ls3 = LineStringT(++id, {p31, p32, p33});
+    ls4 = LineStringT(++id, {p11, p12, p43});
   }
 
  public:
-  LineStringT ls1, ls2, ls3;
+  LineStringT ls1, ls2, ls3, ls4;
 };
 
 template <typename T>
@@ -52,13 +55,15 @@ class CompoundLineStringTypeTest : public LineStringPoints {
     LineString3d tempLs2 = LineString3d{++id, {p12, p13}};
     LineString3d tempLs3 = LineString3d{++id, {p21, p22}};
     LineString3d tempLs4 = LineString3d{++id, {p22, p23}};
+    LineString3d tempLs5 = LineString3d{++id, {p12, p43}};
     ls1 = LineStringT({tempLs1, tempLs2});
     ls2 = LineStringT({tempLs3, tempLs4});
     ls3 = LineStringT({LineString3d(++id, {p31, p32, p33})});
+    ls4 = LineStringT({tempLs1, tempLs5});
   }
 
  public:
-  LineStringT ls1, ls2, ls3;
+  LineStringT ls1, ls2, ls3, ls4;
 };
 
 template <typename T>
@@ -105,6 +110,9 @@ class ThreeDLineStringsTest : public LineStringTypeTest<T> {};
 
 template <typename T>
 class TwoDLineStringsTest : public LineStringTypeTest<T> {};
+
+template <typename T>
+class BasicLineStringsTest : public LineStringTypeTest<T> {};
 using AllLineStrings = testing::Types<LineString2d, LineString3d, ConstLineString2d, ConstLineString3d,
                                       ConstHybridLineString2d, ConstHybridLineString3d, CompoundLineString2d,
                                       CompoundLineString3d, CompoundHybridLineString2d, CompoundHybridLineString3d>;
@@ -121,6 +129,8 @@ using NonHybridLineStrings = testing::Types<LineString2d, LineString3d, ConstLin
 using HybridLineStrings = testing::Types<ConstHybridLineString2d, ConstHybridLineString3d, CompoundHybridLineString2d,
                                          CompoundHybridLineString3d>;
 
+using BasicLineStrings = testing::Types<BasicLineString2d, BasicLineString3d>;
+
 TYPED_TEST_CASE(AllLineStringsTest, AllLineStrings);
 TYPED_TEST_CASE(TwoDLineStringsTest, TwoDLineStrings);
 TYPED_TEST_CASE(ThreeDLineStringsTest, ThreeDLineStrings);
@@ -129,6 +139,7 @@ TYPED_TEST_CASE(MutableLineStringsTest, MutableLineStrings);
 TYPED_TEST_CASE(PrimitiveLineStringsTest, PrimitiveLineStrings);
 TYPED_TEST_CASE(NonHybridLineStringsTest, NonHybridLineStrings);
 TYPED_TEST_CASE(HybridLineStringsTest, HybridLineStrings);
+TYPED_TEST_CASE(BasicLineStringsTest, BasicLineStrings);
 
 TYPED_TEST(MutableLineStringsTest, id) {  // NOLINT
   this->ls1.setId(100);
@@ -380,4 +391,159 @@ TYPED_TEST(PrimitiveLineStringsTest, align) {  // NOLINT
 TYPED_TEST(HybridLineStringsTest, segmentLength) {  // NOLINT
   auto segment = this->ls1.segment(0);
   EXPECT_DOUBLE_EQ(geometry::length(segment), 1.);
+}
+
+/*
+ *    O
+ *    |
+ *    |
+ *    |
+ * O--X
+ *    |
+ *    |
+ *    |
+ *    O
+ */
+TYPED_TEST(TwoDLineStringsTest, fromArcCoords) {
+  Id id = 0;
+  Point3d p1 = Point3d(++id, 0., 0.);
+  Point3d p2 = Point3d(++id, 0., 10.);
+  LineString3d ls(++id, Points3d{p1, p2});
+  auto ap = geometry::fromArcCoordinates(utils::to2D(ls), ArcCoordinates({5, 2}));
+  EXPECT_TRUE(boost::geometry::equals(ap, BasicPoint2d{-2, 5}));
+}
+
+TYPED_TEST(TwoDLineStringsTest, offset) {
+  Id id = 0;
+  Point3d p1 = Point3d(++id, 1., 0.);
+  Point3d p2 = Point3d(++id, 1., 1.);
+  Point3d p3 = Point3d(++id, 4., 1.);
+  Point3d p4 = Point3d(++id, 4., 3.);
+  LineString3d ls(++id, Points3d{p1, p2, p3, p4});
+  auto ap = geometry::offset(utils::to2D(ls), 1.);
+  BasicLineString2d comp({BasicPoint2d(0, 0), BasicPoint2d(0, 2), BasicPoint2d(3, 2), BasicPoint2d(3, 3)});
+  // required due to numeric approximation errors
+  for (size_t i = 0; i < ls.size(); ++i) {
+    EXPECT_NEAR(ap[i].x(), comp[i].x(), 1e-9);
+    EXPECT_NEAR(ap[i].y(), comp[i].y(), 1e-9);
+  }
+
+  Point3d p11 = Point3d(++id, 1, 0);
+  Point3d p12 = Point3d(++id, 1, 1);
+  Point3d p13 = Point3d(++id, 0, 1);
+  Point3d p13a = Point3d(++id, 2, 1);
+  Point3d p14 = Point3d(++id, 0.5, 0);
+  Point3d p15 = Point3d(++id, 0.5, 1);
+  Point3d p16 = Point3d(++id, 1, 0.5);
+  Point3d p17 = Point3d(++id, 0, 0.5);
+  Point3d p18 = Point3d(++id, 0.5, 1.5);
+  Point3d p19 = Point3d(++id, 2, 1.5);
+
+  BasicLineString2d l1{utils::toBasicPoint(utils::to2D(p11)), utils::toBasicPoint(utils::to2D(p12)),
+                       utils::toBasicPoint(utils::to2D(p13))};
+  BasicLineString2d l2{utils::toBasicPoint(utils::to2D(p11)), utils::toBasicPoint(utils::to2D(p12)),
+                       utils::toBasicPoint(utils::to2D(p13a))};
+  auto lss = geometry::offset(l1, 0.5);
+  EXPECT_TRUE(boost::geometry::equals(
+      lss, BasicLineString2d{utils::toBasicPoint(utils::to2D(p14)), BasicPoint2d{0.5, 0.5}, BasicPoint2d{0, 0.5}}));
+  auto lss2 = geometry::offset(l2, 0.5);
+  EXPECT_TRUE(boost::geometry::equals(
+      lss2, BasicLineString2d{utils::toBasicPoint(utils::to2D(p14)), utils::toBasicPoint(utils::to2D(p18)),
+                              utils::toBasicPoint(utils::to2D(p19))}));
+}
+
+TYPED_TEST(MutableLineStringsTest, closestSegment) {
+  traits::PointType<typename TestFixture::LineStringT> p3d(100000000000, 0, 1.5, 1.5);
+  traits::PointType<typename TestFixture::LineStringT> ref3d(this->p12);
+  auto bp = utils::toBasicPoint(p3d);
+  auto refp = utils::toBasicPoint(ref3d);
+  auto cs = geometry::closestSegment(this->ls1, bp);
+  EXPECT_TRUE(boost::geometry::equals(cs.first, refp));
+
+  auto b2dcs = geometry::closestSegment(utils::to2D(this->ls1).basicLineString(), utils::to2D(bp));
+  EXPECT_TRUE(boost::geometry::equals(b2dcs.first, utils::to2D(refp)));
+  auto b3dcs = geometry::closestSegment(this->ls1.basicLineString(), bp);
+  EXPECT_TRUE(boost::geometry::equals(b3dcs.first, refp));
+}
+
+TYPED_TEST(TwoDLineStringsTest, shiftLateral) {
+  EXPECT_EQ(this->ls4.size(), 3ul);
+
+  auto shifted = geometry::internal::shiftLateral(this->ls4, 1, 1., geometry::internal::makeVincinity(this->ls4, 1));
+  EXPECT_TRUE(boost::geometry::equals(shifted, BasicPoint2d(-1, 1. + sqrt(3) / 3)));
+}
+
+/*   O   O
+ *  /|   |\
+ * O-X---X-O
+ *   |   |
+ *   O   O
+ */
+TEST(TwoDLineStringsTest, removeSelfIntersections) {
+  BasicPoint2d p1, p2, p3, p4, p5, p6, p7, p8;
+  p1 = BasicPoint2d(2, 0);
+  p2 = BasicPoint2d(2, 2);
+  p3 = BasicPoint2d(3, 1);
+  p4 = BasicPoint2d(0, 1);
+  p5 = BasicPoint2d(1, 2);
+  p6 = BasicPoint2d(1, 0);
+  p7 = BasicPoint2d(2, 1);
+  p8 = BasicPoint2d(1, 1);
+  BasicLineString2d l1{p1, p2, p3, p4, p5, p6};
+  BasicLineString2d l2{p1, p7, p8, p6};
+  auto ret = geometry::internal::removeSelfIntersections(l1);
+  EXPECT_TRUE(boost::geometry::equals(ret, l2));
+}
+
+TEST(TwoDLineStringsTest, extractConvex) {
+  BasicPoint2d p1, p2, p3, p3a, p3b, p4, p5, p6, p7, p8, p9;
+  p1 = BasicPoint2d(1, 0);
+  p2 = BasicPoint2d(1, 1);
+  p3 = BasicPoint2d(0, 1);
+  p3a = BasicPoint2d(2, 1);
+  p3b = BasicPoint2d(0, 0);
+  p4 = BasicPoint2d(0.5, 0);
+  p5 = BasicPoint2d(0.5, 1);
+  p6 = BasicPoint2d(1, 0.5);
+  p7 = BasicPoint2d(0, 0.5);
+  p8 = BasicPoint2d(0.5, 1.5);
+  p9 = BasicPoint2d(2, 1.5);
+
+  BasicLineString2d l1{p1, p2, p3};
+  BasicLineString2d l2{p1, p2, p3a};
+  BasicLineString2d l3{p1, p2, p3b};
+  auto lss = geometry::internal::extractConvex(l1, 0.5);
+  ASSERT_EQ(lss.size(), 2ul);
+  EXPECT_TRUE(boost::geometry::equals(lss.front(), BasicLineString2d{p4, p5}));
+  EXPECT_TRUE(boost::geometry::equals(lss.back(), BasicLineString2d{p6, p7}));
+  auto lss2 = geometry::internal::extractConvex(l2, 0.5);
+  ASSERT_EQ(lss2.size(), 1ul);
+  EXPECT_TRUE(boost::geometry::equals(lss2.front(), BasicLineString2d{p4, p8, p9}));
+  auto lss3 = geometry::internal::extractConvex(l3, -0.5);
+  ASSERT_EQ(lss3.size(), 1ul);
+  ASSERT_EQ(lss3.front().size(), 4ul);
+  EXPECT_TRUE(boost::geometry::equals(lss2.front(), BasicLineString2d{p4, p8, p9}));
+}
+
+/*
+ * O----O
+ * |    |
+ * |    O
+ * |
+ * |
+ * O------O
+ *
+ */
+
+TEST(TwoDLineStringsTest, checkInversion) {
+  BasicPoint2d p1, p2, p3, p4, p5;
+  p1 = BasicPoint2d(3, 3);
+  p2 = BasicPoint2d(3, 5);
+  p3 = BasicPoint2d(0, 5);
+  p4 = BasicPoint2d(0, 0);
+  p5 = BasicPoint2d(4, 0);
+
+  BasicLineString2d l1{p1, p2, p3, p4, p5};
+  EXPECT_THROW(geometry::offset(l1, 2), GeometryError);  // NOLINT
+  EXPECT_NO_THROW(geometry::offset(l1, 1));
 }

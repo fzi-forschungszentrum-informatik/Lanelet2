@@ -208,6 +208,7 @@ struct AttributeNamesString {
   static constexpr const char SpeedLimit[] = "speed_limit";
   static constexpr const char Location[] = "location";
   static constexpr const char Dynamic[] = "dynamic";
+  static constexpr const char Color[] = "color";
 
   // attributes not used in fast lookup
   // on points
@@ -323,12 +324,13 @@ struct AttributeValueString {
   static constexpr const char End[] = "end";
   static constexpr const char Dot[] = "dot";
 
-  // Traffic light types
+  // Color / traffic light types
   static constexpr const char RedYellowGreen[] = "red_yellow_green";
   static constexpr const char RedGreen[] = "red_green";
   static constexpr const char RedYellow[] = "red_yellow";
   static constexpr const char Red[] = "red";
   static constexpr const char Yellow[] = "yellow";
+  static constexpr const char White[] = "white";
 
   // Lanelet types
   static constexpr const char Road[] = "road";
@@ -360,6 +362,7 @@ struct AttributeValueString {
   static constexpr const char TrafficSign[] = "traffic_sign";
   static constexpr const char SpeedLimit[] = "speed_limit";
   static constexpr const char RightOfWay[] = "right_of_way";
+  static constexpr const char AllWayStop[] = "all_way_stop";
 };
 
 inline std::ostream& operator<<(std::ostream& stream, const Attribute& obj) { return stream << obj.value(); }

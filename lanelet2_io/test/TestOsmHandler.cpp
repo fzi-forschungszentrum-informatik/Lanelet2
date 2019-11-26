@@ -53,6 +53,13 @@ TEST(OsmHandler, writeAndLoadMapWithCenterlineLanelet) {  // NOLINT
   EXPECT_EQ(lltLoad.centerline().inverted(), centerline.inverted());
 }
 
+TEST(OsmHandler, writeAndLoadMapWithPolygon) {  // NOLINT
+  auto num = 1;
+  Polygon3d poly{test_setup::setUpLineString(num)};
+  auto polyLoad = writeAndLoad(poly, &LaneletMap::polygonLayer);
+  EXPECT_EQ(poly.id(), polyLoad.id());
+}
+
 TEST(OsmHandler, writeAndLoadMapWithOneArea) {  // NOLINT
   auto map = std::make_unique<lanelet::LaneletMap>();
   auto num = 1;

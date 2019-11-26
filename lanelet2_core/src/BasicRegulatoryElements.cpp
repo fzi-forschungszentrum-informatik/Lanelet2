@@ -14,12 +14,20 @@ bool operator==(const lanelet::LaneletDataConstWptr& lhs, const lanelet::Lanelet
 namespace lanelet {
 namespace {
 template <typename T>
-bool findAndErase(const T& primitive, RuleParameters& member) {
-  auto it = std::find(member.begin(), member.end(), RuleParameter(primitive));
-  if (it == member.end()) {
+bool findAndErase(const T& primitive, RuleParameterMap& parameters, RoleName role) {
+  auto parameterIt = parameters.find(role);
+  if (parameterIt == parameters.end()) {
     return false;
   }
-  member.erase(it);
+  auto& parameter = parameterIt->second;
+  auto it = std::find(parameter.begin(), parameter.end(), RuleParameter(primitive));
+  if (it == parameter.end()) {
+    return false;
+  }
+  parameter.erase(it);
+  if (parameter.empty()) {
+    parameters.erase(parameterIt);
+  }
   return true;
 }
 
@@ -82,7 +90,7 @@ RegulatoryElementDataPtr constructTrafficLightData(Id id, const AttributeMap& at
   if (!!stopLine) {
     rpm.insert({RoleNameString::RefLine, {*stopLine}});
   }
-  auto data = std::make_shared<RegulatoryElementData>(id, rpm, attributes);
+  auto data = std::make_shared<RegulatoryElementData>(id, std::move(rpm), attributes);
   data->attributes[AttributeName::Type] = AttributeValueString::RegulatoryElement;
   data->attributes[AttributeName::Subtype] = AttributeValueString::TrafficLight;
   return data;
@@ -97,7 +105,7 @@ RegulatoryElementDataPtr constructTrafficSignData(Id id, const AttributeMap& att
                           {RoleNameString::Cancels, toRuleParameters(cancellingTrafficSigns.trafficSigns)},
                           {RoleNameString::RefLine, toRuleParameters(refLines)},
                           {RoleNameString::CancelLine, toRuleParameters(cancelLines)}};
-  auto data = std::make_shared<RegulatoryElementData>(id, rpm, attributes);
+  auto data = std::make_shared<RegulatoryElementData>(id, std::move(rpm), attributes);
   data->attributes[AttributeName::Type] = AttributeValueString::RegulatoryElement;
   data->attributes[AttributeName::Subtype] = AttributeValueString::TrafficSign;
   return data;
@@ -114,12 +122,30 @@ RegulatoryElementDataPtr constructRightOfWayData(Id id, const AttributeMap& attr
                                                  const Lanelets& yield, const Optional<LineString3d>& stopLine) {
   RuleParameterMap rpm = {{RoleNameString::RightOfWay, toRuleParameters(rightOfWay)},
                           {RoleNameString::Yield, toRuleParameters(yield)}};
-  auto data = std::make_shared<RegulatoryElementData>(id, rpm, attributes);
+  auto data = std::make_shared<RegulatoryElementData>(id, std::move(rpm), attributes);
   data->attributes[AttributeName::Type] = AttributeValueString::RegulatoryElement;
   data->attributes[AttributeName::Subtype] = AttributeValueString::RightOfWay;
   if (stopLine) {
     data->parameters[RoleName::RefLine] = {*stopLine};
   }
+  return data;
+}
+RegulatoryElementDataPtr constructAllWayStopData(Id id, const AttributeMap& attributes,
+                                                 const LaneletsWithStopLines& lltWithStop,
+                                                 const LineStringsOrPolygons3d& signs) {
+  RuleParameters llts =
+      utils::transform(lltWithStop, [](auto& llt) { return static_cast<RuleParameter>(llt.lanelet); });
+  auto sl = utils::createReserved<RuleParameters>(lltWithStop.size());
+  utils::forEach(lltWithStop, [&](auto& stop) {
+    if (!!stop.stopLine) {
+      sl.push_back(static_cast<RuleParameter>(*stop.stopLine));
+    }
+  });
+  RuleParameterMap rpm = {
+      {RoleNameString::Yield, llts}, {RoleNameString::RefLine, sl}, {RoleNameString::Refers, toRuleParameters(signs)}};
+  auto data = std::make_shared<RegulatoryElementData>(id, std::move(rpm), attributes);
+  data->attributes[AttributeName::Type] = AttributeValueString::RegulatoryElement;
+  data->attributes[AttributeName::Subtype] = AttributeValueString::AllWayStop;
   return data;
 }
 }  // namespace
@@ -128,11 +154,13 @@ static RegisterRegulatoryElement<TrafficLight> regTraffic;
 static RegisterRegulatoryElement<RightOfWay> regRightOfWay;
 static RegisterRegulatoryElement<TrafficSign> regTrafficSign;
 static RegisterRegulatoryElement<SpeedLimit> regSpeedLimit;
+static RegisterRegulatoryElement<AllWayStop> regAllWayStop;
 #if __cplusplus < 201703L
 constexpr char TrafficLight::RuleName[];
 constexpr char RightOfWay::RuleName[];
 constexpr char TrafficSign::RuleName[];
 constexpr char SpeedLimit::RuleName[];
+constexpr char AllWayStop::RuleName[];
 #endif
 
 TrafficLight::TrafficLight(const RegulatoryElementDataPtr& data) : RegulatoryElement(data) {
@@ -165,7 +193,7 @@ void TrafficLight::addTrafficLight(const LineStringOrPolygon3d& primitive) {
 }
 
 bool TrafficLight::removeTrafficLight(const LineStringOrPolygon3d& primitive) {
-  return findAndErase(primitive.asRuleParameter(), parameters().find(RoleName::Refers)->second);
+  return findAndErase(primitive.asRuleParameter(), parameters(), RoleName::Refers);
 }
 
 void TrafficLight::setStopLine(const LineString3d& stopLine) { parameters()[RoleName::RefLine] = {stopLine}; }
@@ -228,11 +256,11 @@ void RightOfWay::addRightOfWayLanelet(const Lanelet& lanelet) {
 void RightOfWay::addYieldLanelet(const Lanelet& lanelet) { parameters()[RoleName::Yield].emplace_back(lanelet); }
 
 bool RightOfWay::removeRightOfWayLanelet(const Lanelet& lanelet) {
-  return findAndErase(lanelet, parameters().find(RoleName::RightOfWay)->second);
+  return findAndErase(lanelet, parameters(), RoleName::RightOfWay);
 }
 
 bool RightOfWay::removeYieldLanelet(const Lanelet& lanelet) {
-  return findAndErase(lanelet, parameters().find(RoleName::Yield)->second);
+  return findAndErase(lanelet, parameters(), RoleName::Yield);
 }
 
 void RightOfWay::removeStopLine() { parameters()[RoleName::RefLine] = {}; }
@@ -278,13 +306,13 @@ void TrafficSign::addTrafficSign(const LineStringOrPolygon3d& sign) {
 }
 
 bool TrafficSign::removeTrafficSign(const LineStringOrPolygon3d& sign) {
-  return findAndErase(sign.asRuleParameter(), parameters().find(RoleName::Refers)->second);
+  return findAndErase(sign.asRuleParameter(), parameters(), RoleName::Refers);
 }
 
 void TrafficSign::addRefLine(const LineString3d& line) { parameters()[RoleName::RefLine].emplace_back(line); }
 
 bool TrafficSign::removeRefLine(const LineString3d& line) {
-  return findAndErase(line, parameters().find(RoleName::RefLine)->second);
+  return findAndErase(line, parameters(), RoleName::RefLine);
 }
 
 void TrafficSign::addCancellingRefLine(const LineString3d& line) {
@@ -292,7 +320,7 @@ void TrafficSign::addCancellingRefLine(const LineString3d& line) {
 }
 
 bool TrafficSign::removeCancellingRefLine(const LineString3d& line) {
-  return findAndErase(line, parameters().find(RoleName::CancelLine)->second);
+  return findAndErase(line, parameters(), RoleName::CancelLine);
 }
 
 SpeedLimit::SpeedLimit(Id id, const AttributeMap& attributes, const TrafficSignsWithType& trafficSigns,
@@ -311,7 +339,7 @@ void TrafficSign::addCancellingTrafficSign(const TrafficSignsWithType& signs) {
 }
 
 bool TrafficSign::removeCancellingTrafficSign(const LineStringOrPolygon3d& sign) {
-  return findAndErase(sign.asRuleParameter(), parameters().find(RoleName::Cancels)->second);
+  return findAndErase(sign.asRuleParameter(), parameters(), RoleName::Cancels);
 }
 
 ConstLineStringsOrPolygons3d TrafficSign::cancellingTrafficSigns() const {
@@ -335,5 +363,105 @@ std::vector<std::string> TrafficSign::cancelTypes() const {
 ConstLineStrings3d TrafficSign::cancelLines() const { return getParameters<ConstLineString3d>(RoleName::CancelLine); }
 
 LineStrings3d TrafficSign::cancelLines() { return getParameters<LineString3d>(RoleName::CancelLine); }
+
+ConstLanelets AllWayStop::lanelets() const { return getParameters<ConstLanelet>(RoleName::Yield); }
+
+Lanelets AllWayStop::lanelets() { return utils::strong(getParameters<WeakLanelet>(RoleName::Yield)); }
+
+ConstLineStrings3d AllWayStop::stopLines() const { return getParameters<ConstLineString3d>(RoleName::RefLine); }
+
+LineStrings3d AllWayStop::stopLines() { return getParameters<LineString3d>(RoleName::RefLine); }
+
+Optional<ConstLineString3d> AllWayStop::getStopLine(const ConstLanelet& llt) const {
+  auto sl = stopLines();
+  if (sl.empty()) {
+    return {};
+  }
+  auto llts = lanelets();
+  auto it = std::find(llts.begin(), llts.end(), llt);
+  if (it == llts.end()) {
+    return {};
+  }
+  return sl.at(size_t(std::distance(llts.begin(), it)));
+}
+
+Optional<LineString3d> AllWayStop::getStopLine(const ConstLanelet& llt) {
+  auto sl = stopLines();
+  if (sl.empty()) {
+    return {};
+  }
+  auto llts = lanelets();
+  auto it = std::find(llts.begin(), llts.end(), llt);
+  if (it == llts.end()) {
+    return {};
+  }
+  return sl.at(size_t(std::distance(llts.begin(), it)));
+}
+
+ConstLineStringsOrPolygons3d AllWayStop::trafficSigns() const {
+  return getConstLsOrPoly(parameters(), RoleName::Refers);
+}
+
+LineStringsOrPolygons3d AllWayStop::trafficSigns() { return getLsOrPoly(parameters(), RoleName::Refers); }
+
+void AllWayStop::addTrafficSign(const LineStringOrPolygon3d& sign) {
+  parameters()[RoleName::Refers].push_back(sign.asRuleParameter());
+}
+
+bool AllWayStop::removeTrafficSign(const LineStringOrPolygon3d& sign) {
+  return findAndErase(sign.asRuleParameter(), parameters(), RoleName::Refers);
+}
+
+void AllWayStop::addLanelet(const LaneletWithStopLine& lltWithStop) {
+  auto sl = stopLines();
+  if (sl.empty() && !lanelets().empty() && !!lltWithStop.stopLine) {
+    throw InvalidInputError("A lanelet with stop line was added, but existing lanelets don't have a stop line!");
+  }
+  if (!sl.empty() && !lltWithStop.stopLine) {
+    throw InvalidInputError("A lanelet without stopline was added, but existing lanelets have a stop line!");
+  }
+  parameters()[RoleName::Yield].emplace_back(lltWithStop.lanelet);
+  if (!!lltWithStop.stopLine) {
+    parameters()[RoleName::RefLine].emplace_back(*lltWithStop.stopLine);
+  }
+}
+
+bool AllWayStop::removeLanelet(const Lanelet& llt) {
+  auto yieldIt = parameters().find(RoleName::Yield);
+  if (yieldIt == parameters().end()) {
+    return false;
+  }
+  auto& yieldLLts = yieldIt->second;
+  auto lltIt = std::find(yieldLLts.begin(), yieldLLts.end(), RuleParameter(llt));
+  if (lltIt == yieldLLts.end()) {
+    return false;
+  }
+  auto linesIt = parameters().find(RoleName::RefLine);
+  if (linesIt != parameters().end() && !linesIt->second.empty()) {
+    linesIt->second.erase(linesIt->second.begin() + std::distance(yieldLLts.begin(), lltIt));
+  }
+  yieldLLts.erase(lltIt);
+  return true;
+}
+
+AllWayStop::AllWayStop(Id id, const AttributeMap& attributes, const LaneletsWithStopLines& lltsWithStop,
+                       const LineStringsOrPolygons3d& signs)
+    : AllWayStop{constructAllWayStopData(id, attributes, lltsWithStop, signs)} {}
+
+AllWayStop::AllWayStop(const RegulatoryElementDataPtr& data) : RegulatoryElement{data} {
+  auto yields = parameters().find(RoleName::Yield);
+  auto lines = parameters().find(RoleName::RefLine);
+  auto row = parameters().find(RoleName::RightOfWay);
+  if (row != parameters().end() && !row->second.empty()) {
+    throw InvalidInputError("An all way stop must not have a lanelet with right of way!");
+  }
+  if (lines == parameters().end() || lines->second.empty()) {
+    return;
+  }
+  if (yields == parameters().end() || lines->second.size() != yields->second.size()) {
+    throw InvalidInputError(
+        "Inconsistent number of lanelets and stop lines found! Either one stop line per lanelet or no stop lines!");
+  }
+}
 
 }  // namespace lanelet
