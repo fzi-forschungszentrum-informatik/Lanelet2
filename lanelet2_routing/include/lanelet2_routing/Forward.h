@@ -46,29 +46,34 @@ using LaneletPaths = std::vector<LaneletPath>;
 class LaneletOrAreaPath;
 using LaneletOrAreaPaths = std::vector<LaneletOrAreaPath>;
 
-enum class RelationType : uint16_t {
-  None = 0,                    //!< No relation
-  Successor = 0b00000001,      //!< A (the only) direct, reachable successor. Not merging and not diverging.
-  Left = 0b10,                 //!< (the only) directly adjacent, reachable left neighbour
-  Right = 0b100,               //!< (the only) directly adjacent, reachable right neighbour
-  Conflicting = 0b1000,        //!< Unreachable but with overlapping shape
-  Merging = 0b10000,           //!< predecessor of a lanelet with multiple predecessors
-  Diverging = 0b100000,        //!< successor of a lanelet with multiple successors
-  AdjacentLeft = 0b1000000,    //!< directly adjacent, unreachable left neighbor
-  AdjacentRight = 0b10000000,  //!< directly adjacent, unreachable right neighbor
-  Area = 0b100000000           //!< Adjacent to a reachable area
+//! This enum expresses the types of relations lanelet2 distiguishes internally. Between two lanelets a and b (in this
+//! order), exactly one of these relation exists.
+//!
+//! @note The relation between b and a is different than between a and b. There is also no obvious
+//! symmetry. When a is left of b, b can be either right or adjacent right to b.
+enum class RelationType : uint8_t {
+  None = 0,                 //!< No relation
+  Successor = 0b1,          //!< A (the only) direct, reachable successor. Not merging and not diverging.
+  Left = 0b10,              //!< (the only) directly adjacent, reachable left neighbour
+  Right = 0b100,            //!< (the only) directly adjacent, reachable right neighbour
+  AdjacentLeft = 0b1000,    //!< directly adjacent, unreachable left neighbor
+  AdjacentRight = 0b10000,  //!< directly adjacent, unreachable right neighbor
+  Conflicting = 0b100000,   //!< Unreachable but with overlapping shape
+  Area = 0b1000000          //!< Adjacent to a reachable area
 };
 
-constexpr RelationType allRelations() { return static_cast<RelationType>(0b111111111); }
+using RelationUnderlyingType = std::underlying_type_t<RelationType>;
+
+constexpr RelationType allRelations() { return static_cast<RelationType>(0b1111111); }
 static_assert(allRelations() > RelationType::Area, "allRelations is wrong!");
 
-constexpr RelationType operator~(RelationType r) { return RelationType(~std::underlying_type_t<RelationType>(r)); }
+constexpr RelationType operator~(RelationType r) { return RelationType(~RelationUnderlyingType(r)); }
 constexpr RelationType operator&(RelationType r1, RelationType r2) {
-  return RelationType(std::underlying_type_t<RelationType>(r1) & std::underlying_type_t<RelationType>(r2));
+  return RelationType(RelationUnderlyingType(r1) & RelationUnderlyingType(r2));
 }
 constexpr RelationType operator&=(RelationType& r1, RelationType r2) { return r1 = r1 & r2; }
 constexpr RelationType operator|(RelationType r1, RelationType r2) {
-  return RelationType(std::underlying_type_t<RelationType>(r1) | std::underlying_type_t<RelationType>(r2));
+  return RelationType(std::underlying_type_t<RelationType>(r1) | RelationUnderlyingType(r2));
 }
 constexpr RelationType operator|=(RelationType& r1, RelationType r2) { return r1 = r1 | r2; }
 
@@ -83,16 +88,12 @@ inline std::string relationToString(RelationType type) {
       return "Left";
     case RelationType::Right:
       return "Right";
-    case RelationType::Conflicting:
-      return "Conflicting";
-    case RelationType::Merging:
-      return "Merging";
-    case RelationType::Diverging:
-      return "Diverging";
     case RelationType::AdjacentLeft:
       return "AdjacentLeft";
     case RelationType::AdjacentRight:
       return "AdjacentRight";
+    case RelationType::Conflicting:
+      return "Conflicting";
     case RelationType::Area:
       return "Area";
   }
@@ -111,10 +112,6 @@ inline std::string relationToColor(RelationType type) {
       return "magenta";
     case RelationType::Conflicting:
       return "red";
-    case RelationType::Merging:
-      return "orange";
-    case RelationType::Diverging:
-      return "orange";
     case RelationType::AdjacentLeft:
       return "black";
     case RelationType::AdjacentRight:

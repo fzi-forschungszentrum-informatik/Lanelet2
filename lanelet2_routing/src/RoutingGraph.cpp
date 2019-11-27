@@ -272,6 +272,7 @@ ConstLanelets RoutingGraph::previous(const ConstLanelet& lanelet, bool withLaneC
 LaneletRelations RoutingGraph::previousRelations(const ConstLanelet& lanelet, bool withLaneChanges) const {
   ConstLanelets prev{previous(lanelet, withLaneChanges)};
   LaneletRelations result;
+  result.reserve(prev.size());
   for (auto const& it : prev) {
     Optional<RelationType> relation{routingRelation(it, lanelet)};
     if (!!relation) {
@@ -500,7 +501,7 @@ LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, double 
   auto start = graph_->getVertex(startPoint);
   if (!start) {
     return {};
-  };
+  }
   auto stopIfMoreThanMinCost = [minRoutingCost](const PossibleRoutesInfo& route) {
     return route.totalDistance >= minRoutingCost;
   };
@@ -514,7 +515,7 @@ LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, uint32_
   auto start = graph_->getVertex(startPoint);
   if (!start) {
     return {};
-  };
+  }
   auto stopIfMinLanelets = [minLanelets](const PossibleRoutesInfo& route) {
     return route.laneletsOrAreas.size() >= minLanelets;
   };
@@ -528,7 +529,7 @@ LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanele
   auto start = graph_->getVertex(targetLanelet);
   if (!start) {
     return {};
-  };
+  }
   auto stopIfMoreThanMinCost = [minRoutingCost](const PossibleRoutesInfo& route) {
     return route.totalDistance >= minRoutingCost;
   };
@@ -545,7 +546,7 @@ LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanele
   auto start = graph_->getVertex(targetLanelet);
   if (!start) {
     return {};
-  };
+  }
   auto stopIfMinLanelets = [minLanelets](const PossibleRoutesInfo& route) {
     return route.laneletsOrAreas.size() >= minLanelets;
   };
@@ -563,7 +564,7 @@ LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletO
   auto start = graph_->getVertex(startPoint);
   if (!start) {
     return {};
-  };
+  }
   auto stopIfMoreThanMinCost = [minRoutingCost](const PossibleRoutesInfo& route) {
     return route.totalDistance >= minRoutingCost;
   };
@@ -578,7 +579,7 @@ LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletO
   auto start = graph_->getVertex(startPoint);
   if (!start) {
     return {};
-  };
+  }
   auto stopIfMinVertices = [minElements](const PossibleRoutesInfo& route) {
     return route.laneletsOrAreas.size() >= minElements;
   };
@@ -613,8 +614,7 @@ void RoutingGraph::exportGraphViz(const std::string& filename, const RelationTyp
 
 //! Helper function to slim down getDebugLaneletMap
 RelationType allowedRelationsfromConfiguration(bool includeAdjacent, bool includeConflicting) {
-  RelationType allowedRelations{RelationType::Successor | RelationType::Left | RelationType::Right |
-                                RelationType::Merging | RelationType::Diverging};
+  RelationType allowedRelations{RelationType::Successor | RelationType::Left | RelationType::Right};
   if (includeAdjacent) {
     allowedRelations |= RelationType::AdjacentLeft;
     allowedRelations |= RelationType::AdjacentRight;

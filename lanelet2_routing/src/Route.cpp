@@ -80,57 +80,43 @@ void addRelation(std::unordered_map<std::pair<ConstLanelet, ConstLanelet>, LineS
 }
 }  // anonymous namespace
 
-LaneletSequence Route::fullLane(const ConstLanelet& ll) {
+LaneletSequence Route::fullLane(const ConstLanelet& ll) const {
+  // go back to the first lanelet of the lane (ie the first lanelet that has not exactly one predecessor and then call
+  // remaining lane on it
   auto element = elements_.find(ll);
   if (element == elements_.end()) {
     return LaneletSequence();
-  };
-  auto storedLane = lanes_.find(element->second->laneId());
-  if (storedLane != lanes_.end()) {
-    // If this is a circular one we want it to start at 'll'. Otherwise it will start at the lanelet we queried
-    // first an will be saved.
-    if (checkCircularLanes(storedLane->second)) {
-      auto it = std::find(storedLane->second.begin(), storedLane->second.end(), ll);
-      ConstLanelets circular(it, storedLane->second.end());
-      circular.insert(std::end(circular), std::begin(storedLane->second), it);
-      return LaneletSequence(circular);
-    }
-    return LaneletSequence(storedLane->second);
   }
-  ConstLanelets lane;
-  RouteElement* firstInInitLane = firstElementsInInitLane_.find(element->second->initLaneId())->second;
-  RouteElement* firstInLaneStart = firstInInitLane;
-  while (true) {
-    const auto previous = firstInInitLane->previous();
-    if (previous.size() == 1 && previous.begin()->routeElement->laneId() == firstInLaneStart->laneId()) {
-      if (previous.begin()->routeElement != firstInLaneStart) {
-        firstInInitLane = firstElementsInInitLane_.find(previous.begin()->routeElement->initLaneId())->second;
-      } else {
-        firstInInitLane = firstInLaneStart;
-        break;
-      }
-    } else {
-      break;
+  RouteElement* begin = element->second.get();
+  RouteElement* first = begin;
+  while (first->previous().size() == 1) {
+    auto& next = first->previous().front();
+    if (next.routeElement == begin) {
+      break;  // handle looping lanelets
     }
+    first = next.routeElement;
   }
+  return remainingLane(first->lanelet());
+}
 
-  lane.emplace_back(firstInInitLane->lanelet());
-  RouteElement* start = firstInInitLane;
-  while (true) {
-    auto next = firstInInitLane->following();
-    if (next.size() == 1 && next.begin()->relationType == RelationType::Successor) {
-      if (next.begin()->routeElement != start) {
-        lane.emplace_back(next.begin()->routeElement->lanelet());
-        firstInInitLane = next.begin()->routeElement;
-      } else {
-        break;
-      }
-    } else {
-      break;
-    }
+LaneletSequence Route::remainingLane(const ConstLanelet& ll) const {
+  ConstLanelets lane;
+  auto element = elements_.find(ll);
+  if (element == elements_.end()) {
+    return lane;
   }
-  lanes_.emplace(element->second->laneId(), lane);
-  return LaneletSequence(std::move(lane));
+  lane.emplace_back(ll);
+  RouteElement* begin = element->second.get();
+  RouteElement* current = begin;
+  while (current->following().size() == 1) {
+    auto& next = current->following().front();
+    if (next.routeElement == begin) {
+      break;  // handle looping lanelets
+    }
+    lane.emplace_back(next.routeElement->lanelet());
+    current = next.routeElement;
+  }
+  return lane;
 }
 
 double Route::length2d() const {

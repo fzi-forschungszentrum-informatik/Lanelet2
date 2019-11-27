@@ -181,13 +181,13 @@ bool hasLanelet(const ContainerT& llts, const ConstLanelet& llt) {
 TEST_F(Route1, Relations) {  // NOLINT
   LaneletRelations previous{route->previousRelations(lanelets.at(2007))};
   EXPECT_EQ(previous.size(), 2ul);  // NOLINT
-  EXPECT_TRUE(hasRelation(previous, ConstLanelet(lanelets.at(2005)), RelationType::Merging));
-  EXPECT_TRUE(hasRelation(previous, ConstLanelet(lanelets.at(2006)), RelationType::Merging));
+  EXPECT_TRUE(hasRelation(previous, ConstLanelet(lanelets.at(2005)), RelationType::Successor));
+  EXPECT_TRUE(hasRelation(previous, ConstLanelet(lanelets.at(2006)), RelationType::Successor));
 
   LaneletRelations following{route->followingRelations(lanelets.at(2007))};
   EXPECT_EQ(following.size(), 2ul);  // NOLINT
-  EXPECT_TRUE(hasRelation(following, ConstLanelet(lanelets.at(2008)), RelationType::Diverging));
-  EXPECT_TRUE(hasRelation(following, ConstLanelet(lanelets.at(2009)), RelationType::Diverging));
+  EXPECT_TRUE(hasRelation(following, ConstLanelet(lanelets.at(2008)), RelationType::Successor));
+  EXPECT_TRUE(hasRelation(following, ConstLanelet(lanelets.at(2009)), RelationType::Successor));
 }
 
 TEST_F(Route1, Conflicting) {  // NOLINT

@@ -83,17 +83,7 @@ class RouteElement {
     assert(std::find_if(following_.begin(), following_.end(), [element](const RouteElementRelation& it) {
              return it.routeElement == element;
            }) == following_.end());
-    if (following_.empty()) {
-      following_.emplace_back(RouteElementRelation{element, RelationType::Successor});
-    } else if (following_.size() >= 2) {
-      following_.emplace_back(RouteElementRelation{element, RelationType::Diverging});
-      element->setCheckPrevious();
-    } else {
-      following_.front().relationType = RelationType::Diverging;
-      following_.front().routeElement->setCheckPrevious();
-      following_.emplace_back(RouteElementRelation{element, RelationType::Diverging});
-      element->setCheckPrevious();
-    }
+    following_.emplace_back(RouteElementRelation{element, RelationType::Successor});
   }
 
   //! Adds a previous route element
@@ -102,17 +92,7 @@ class RouteElement {
     assert(std::find_if(previous_.begin(), previous_.end(), [element](const RouteElementRelation& it) {
              return it.routeElement == element;
            }) == previous_.end());
-    if (previous_.empty()) {
-      previous_.emplace_back(RouteElementRelation{element, RelationType::Successor});
-    } else if (previous_.size() >= 2) {
-      previous_.emplace_back(RouteElementRelation{element, RelationType::Merging});
-      element->setCheckFollowing();
-    } else {
-      previous_.front().relationType = RelationType::Merging;
-      previous_.front().routeElement->setCheckFollowing();
-      previous_.emplace_back(RouteElementRelation{element, RelationType::Merging});
-      element->setCheckFollowing();
-    }
+    previous_.emplace_back(RouteElementRelation{element, RelationType::Successor});
   }
 
   //! Adds a conflicting element in the route
@@ -141,37 +121,8 @@ class RouteElement {
     conflictingInMap_.insert(std::end(conflictingInMap_), std::begin(conf), std::end(conf));
   }
 
-  //! Sets a check-bit for a relation sanity check after all relations are found
-  //! @see checkFollowing
-  inline void setCheckFollowing() noexcept { checkFollowing_ = true; }
-
-  //! Sets a check-bit for a relation sanity check after all relations are found
-  //! @see checkPrevious
-  inline void setCheckPrevious() noexcept { checkPrevious_ = true; }
-
   //! Sets the lane ID
   inline void setLaneId(LaneId id) noexcept { laneId_ = id; }
-
-  //! Replaces the first 'following' relation
-  //! This is needed when determine a merging-situation since we couldn't always know when creating the first relation
-  //! @note This needs to be called ideally when all elements of the route are determined
-  inline void checkFollowing() noexcept {
-    if (checkFollowing_ && !following_.empty() && following_.front().routeElement->previous().size() >= 2) {
-      assert(following_.size() == 1 && "The relation type is already 'merging'");
-      following_.front() = RouteElementRelation{following_.begin()->routeElement, RelationType::Merging};
-    }
-  }
-
-  //! Replaces the first 'previous' relation
-  //! This is needed when determine a diverging-situation since we couldn't always know when creating the first
-  //! relation
-  //! @note This needs to be called ideally when all elements of the route are determined
-  inline void checkPrevious() noexcept {
-    if (checkPrevious_ && !previous_.empty() && previous_.front().routeElement->following_.size() >= 2) {
-      assert(previous_.size() == 1 && "The relation type is already 'diverging'");
-      previous_.front() = RouteElementRelation{previous_.begin()->routeElement, RelationType::Diverging};
-    }
-  }
 
   //! Returns the ID of the referenced lanelet
   inline Id id() const { return lanelet_.id(); }
@@ -186,8 +137,6 @@ class RouteElement {
   RouteElementRelations previous_;            ///< Relation to previous route elements if they exists
   RouteElementRelations conflictingInRoute_;  ///< Relations to conflicting route elements in the route
   ConstLaneletOrAreas conflictingInMap_;      ///< Conflicting lanelets in the underlying laneletMap
-  bool checkFollowing_{false};                ///< Bit to save if following relation needs to be checked
-  bool checkPrevious_{false};                 ///< Bit to save if previous relation needs to be checked
 
   // NOLINTNEXTLINE
   const ConstLanelet lanelet_;  ///< The lanelet this route element wraps

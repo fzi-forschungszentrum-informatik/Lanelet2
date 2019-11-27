@@ -23,7 +23,7 @@ struct VertexInfo {
 struct EdgeInfo {
   RoutingCostId costId;   ///< ID of the routing cost module that was used to calculate cost
   double routingCost;     ///< Calculcated routing cost. Infinity if not routable
-  RelationType relation;  ///< Relation between the two lanelets. E.g. SUCCEEDING or CONFLICTING.
+  RelationType relation;  ///< Relation between the two lanelets. E.g. SUCCESSOR or CONFLICTING.
 };
 
 /// General graph type definitions
@@ -88,22 +88,20 @@ class Graph {
   inline const LaneletOrAreaToVertex& vertexLookup() const noexcept { return laneletOrAreaToVertex_; }
 
   const FilteredGraph& withLaneChanges(RoutingCostId routingCostId = 0) {
-    return getFilteredGraph(routingCostId, RelationType::Successor | RelationType::Merging | RelationType::Diverging |
-                                               RelationType::Left | RelationType::Right);
+    return getFilteredGraph(routingCostId, RelationType::Successor | RelationType::Left | RelationType::Right);
   }
 
   const FilteredGraph& withoutLaneChanges(RoutingCostId routingCostId = 0) {
-    return getFilteredGraph(routingCostId, RelationType::Successor | RelationType::Merging | RelationType::Diverging);
+    return getFilteredGraph(routingCostId, RelationType::Successor);
   }
 
   const FilteredGraph& withAreasAndLaneChanges(RoutingCostId routingCostId = 0) {
-    return getFilteredGraph(routingCostId, RelationType::Successor | RelationType::Merging | RelationType::Diverging |
-                                               RelationType::Left | RelationType::Right | RelationType::Area);
+    return getFilteredGraph(routingCostId,
+                            RelationType::Successor | RelationType::Left | RelationType::Right | RelationType::Area);
   }
 
   const FilteredGraph& withAreasWithoutLaneChanges(RoutingCostId routingCostId = 0) {
-    return getFilteredGraph(
-        routingCostId, RelationType::Successor | RelationType::Merging | RelationType::Diverging | RelationType::Area);
+    return getFilteredGraph(routingCostId, RelationType::Successor | RelationType::Area);
   }
 
   const FilteredGraph& left(RoutingCostId routingCostId = 0) {

@@ -182,21 +182,9 @@ void RoutingGraphBuilder::addFollowingEdges(const ConstLanelet& ll) {
   std::for_each(endPointsLanelets.first, endPointsLanelets.second, [&following, this, &merging](auto it) {
     if (geometry::follows(it.second, following.front()) && this->trafficRules_.canPass(it.second, following.front())) {
       merging.push_back(it.second);
-    };
+    }
   });
-  RelationType relation;
-  if (merging.size() == 1 && following.size() == 1) {
-    relation = RelationType::Successor;
-  } else if (merging.size() > 1 && following.size() == 1) {
-    relation = RelationType::Merging;
-  } else if (merging.size() == 1 && following.size() > 1) {
-    relation = RelationType::Diverging;
-  } else {
-    throw RoutingGraphError("Could not determine relationship between lanelets following lanelet " +
-                            std::to_string(ll.id()) +
-                            ". Lanelets that are diverging and merging at the same time are not permitted.");
-  }
-
+  RelationType relation = RelationType::Successor;
   for (auto& followingIt : following) {
     assignCosts(ll, followingIt, relation);
   }
@@ -365,8 +353,7 @@ void RoutingGraphBuilder::assignCosts(const ConstLaneletOrArea& from, const Cons
     edgeInfo.costId = rci;
     edgeInfo.relation = relation;
     auto& routingCost = *routingCosts_[rci];
-    if (relation == RelationType::Successor || relation == RelationType::Merging ||
-        relation == RelationType::Diverging || relation == RelationType::Area) {
+    if (relation == RelationType::Successor || relation == RelationType::Area) {
       edgeInfo.routingCost = routingCost.getCostSucceeding(trafficRules_, from, to);
     } else if (relation == RelationType::Left) {
       edgeInfo.routingCost = routingCost.getCostLaneChange(trafficRules_, {*from.lanelet()}, {*to.lanelet()});

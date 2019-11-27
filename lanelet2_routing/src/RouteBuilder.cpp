@@ -331,8 +331,8 @@ std::vector<RouteElement*> RouteBuilder::addPreviousRelations(RouteElement* newE
 }
 
 Optional<Route> RouteBuilder::createRoutefromElements(const LaneletPath& path) {
-  const RouteElement::LaneId startId{1000};  // Final lane IDs that are going to be valid in the route. They start
-                                             // at 1000 to allow easy distinction from the temporary ones
+  constexpr RouteElement::LaneId startId{1000};  // Final lane IDs that are going to be valid in the route. They start
+                                                 // at 1000 to allow easy distinction from the temporary ones
   RouteElement::LaneId laneId{startId};
   std::unordered_map<RouteElement::LaneId, RouteElement::LaneId> laneIdMap;  // Maps initial lane IDs to final lane IDs
   // Used for 'manual' creation of the laneletMap representing all lanelets of the route
@@ -353,8 +353,6 @@ Optional<Route> RouteBuilder::createRoutefromElements(const LaneletPath& path) {
         elementsIt.second->addConflictingInRoute(element->second.get());
       }
     }
-    elementsIt.second->checkFollowing();
-    elementsIt.second->checkPrevious();
     auto laneIdIt{laneIdMap.find(elementsIt.second->initLaneId())};
     if (laneIdIt == laneIdMap.end()) {
       laneIdIt = assignLaneId(laneIdMap, laneId, firstInLane_, elementsIt.second->initLaneId());
@@ -508,15 +506,15 @@ std::vector<RouteElementUPtrs> RouteBuilder::divergingToPending(RouteElement* el
  *  @return Lane ID that should be assigned to 'lanelet'
  *  @see @ref laneIdNotes */
 RouteElement::LaneId RouteBuilder::initlaneIdForRoute(const ConstLanelet& lanelet, RouteElement::LaneId& initLaneId) {
-  LaneletRelations previous{graph_.previousRelations(lanelet, false)};
-  if (!previous.empty() && previous.front().relationType == RelationType::Successor) {
-    const auto previousIt = elements_.find(previous.front().lanelet);
+  auto previous = graph_.previous(lanelet, false);
+  if (previous.size() == 1 && graph_.following(previous.front()).size() == 1) {
+    const auto previousIt = elements_.find(previous.front());
     if (previousIt != elements_.end()) {
       return previousIt->second->initLaneId();
     }
     for (auto const& pendingIt : pending_) {
       for (auto const& pendingElement : pendingIt) {
-        if (pendingElement->lanelet() == previous.front().lanelet) {
+        if (pendingElement->lanelet() == previous.front()) {
           return pendingElement->initLaneId();
         }
       }
@@ -538,10 +536,10 @@ RouteElement::LaneId RouteBuilder::initlaneIdForRoute(const ConstLanelet& lanele
 void RouteBuilder::processMergingLanelets(std::vector<RouteElement*>& elementsQueue, RouteElement::LaneId& initLaneId,
                                           RouteElement* thisElement, RouteElement* previousElement,
                                           const Optional<RelationType>& relation) {
-  if (!relation || *relation != RelationType::Merging || previousElement == nullptr) {
+  ConstLanelets merging{graph_.previous(thisElement->lanelet(), false)};
+  if (!relation || merging.size() <= 1 || previousElement == nullptr) {
     return;
   }
-  ConstLanelets merging{graph_.previous(thisElement->lanelet(), false)};
   std::vector<ConstLanelets> mergingLanes{determineMergingLanes(merging)};
   assert(mergingLanes.size() >= 2);
   auto toRemove = std::remove_if(mergingLanes.begin(), mergingLanes.end(),
