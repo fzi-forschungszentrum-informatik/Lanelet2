@@ -8,8 +8,9 @@ using namespace lanelet;
 
 Optional<std::shared_ptr<lanelet::routing::Route>> getRouteWrapper(const lanelet::routing::RoutingGraph& self,
                                                                    const ConstLanelet& from, const ConstLanelet& to,
-                                                                   lanelet::routing::RoutingCostId costId) {
-  auto route = self.getRoute(from, to, costId);
+                                                                   lanelet::routing::RoutingCostId costId,
+                                                                   bool withLaneChange) {
+  auto route = self.getRoute(from, to, costId, withLaneChange);
   if (!route) {
     return {};
   }
@@ -19,8 +20,9 @@ Optional<std::shared_ptr<lanelet::routing::Route>> getRouteWrapper(const lanelet
 Optional<std::shared_ptr<lanelet::routing::Route>> getRouteViaWrapper(const lanelet::routing::RoutingGraph& self,
                                                                       const ConstLanelet& from,
                                                                       const ConstLanelets& via, const ConstLanelet& to,
-                                                                      lanelet::routing::RoutingCostId costId) {
-  auto route = self.getRouteVia(from, via, to, costId);
+                                                                      lanelet::routing::RoutingCostId costId,
+                                                                      bool withLaneChange) {
+  auto route = self.getRouteVia(from, via, to, costId, withLaneChange);
   if (!route) {
     return {};
   }
@@ -97,11 +99,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                             (arg("laneletMap"), arg("trafficRules"), arg("routingCost") = defaultRoutingCosts())),
            "Initialization with default routing costs")
       .def("getRoute", getRouteWrapper, "driving route from 'start' to 'end' lanelet",
-           (arg("from"), arg("to"), arg("routingCostId") = 0))
-      .def("getRouteVia", getRouteWrapper,
-           "driving route from 'start' to 'end' lanelet using the 'via' "
-           "lanelets",
-           (arg("from"), arg("via"), arg("to"), arg("routingCostId") = 0))
+           (arg("from"), arg("to"), arg("routingCostId") = 0, arg("withLaneChanges") = true))
+      .def("getRouteVia", getRouteWrapper, "driving route from 'start' to 'end' lanelet using the 'via' lanelets",
+           (arg("from"), arg("via"), arg("to"), arg("routingCostId") = 0, arg("withLaneChanges") = true))
       .def("shortestPath", &RoutingGraph::shortestPath, "shortest path between 'start' and 'end'",
            (arg("from"), arg("to"), arg("routingCostId") = 0))
       .def("shortestPathWithVia", &RoutingGraph::shortestPathVia,
@@ -166,8 +166,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .value("Left", RelationType::Left)
       .value("Right", RelationType::Right)
       .value("Conflicting", RelationType::Conflicting)
-      .value("Merging", RelationType::Merging)
-      .value("Diverging", RelationType::Diverging)
       .value("AdjacentLeft", RelationType::AdjacentLeft)
       .value("AdjacentRight", RelationType::AdjacentRight)
       .export_values();
@@ -177,7 +175,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                                                           "that represents the relations of one "
                                                                           "single lanelet",
                                                                           init<ConstLanelet, RouteElement::LaneId>())
-      .def("initLaneId", &RouteElement::initLaneId, "temporary laneID used when creating the route")
       .def("laneId", &RouteElement::laneId, "laneID of the route element")
       .add_property("left", make_function(&RouteElement::left, return_internal_reference<>()), &RouteElement::setLeft,
                     "the relation to the left lanelet if it exists")
@@ -205,9 +202,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            return_internal_reference<>())
       .def("fullLane", &Route::fullLane, "Returns the complete lane a Lanelet belongs to")
       .def("remainingLane", &Route::remainingLane, "Returns that remaining lane a Lanelet belongs to")
+      .def("remainingShortestPath", &Route::remainingShortestPath,
+           "Returns all lanelets on the shortest path that follow the input lanelet")
       .def("length2d", &Route::length2d, "2d length of shortest path")
       .def("numLanes", &Route::numLanes, "Number of inidividual lanes")
-      .def("laneletMap", &Route::laneletMap, "laneletMap with all lanelets that are part of the route")
+      .def("laneletMap", +[](const Route& r) { return std::const_pointer_cast<LaneletMap>(r.laneletMap()); },
+           "laneletMap with all lanelets that are part of the route")
       .def("getDebugLaneletMap", &Route::getDebugLaneletMap,
            "laneletMap that represents the Lanelets of the Route "
            "and their relationship")

@@ -102,7 +102,7 @@ inline void exportGraphMLImpl(const std::string& filename, const G& g, E eFilter
     throw lanelet::ExportError("Could not open file at " + filename + ".");
   }
 
-  auto filteredGraph{boost::filtered_graph<G, EdgeCostFilter>(g, eFilter, vFilter)};  // NOLINT
+  boost::filtered_graph<G, EdgeCostFilter> filteredGraph(g, eFilter, vFilter);
 
   auto pmId = boost::get(&VertexInfo::laneletOrArea, filteredGraph);  // NOLINT
   auto pmRelation = boost::get(&EdgeInfo::relation, filteredGraph);

@@ -167,7 +167,7 @@ TEST_F(GermanVehicleGraph, reachableSet) {  // NOLINT
 
 TEST_F(GermanVehicleGraph, reachableSetMaxHose) {  // NOLINT
   auto reachable = graph->reachableSet(lanelets.at(2017), 100, 0);
-  EXPECT_EQ(reachable.size(), 17ul);  // Will fail if people extend the map
+  EXPECT_EQ(reachable.size(), 22ul);  // Will fail if people extend the map
 
   reachable = graph->reachableSet(lanelets.at(2021), 100, 0);
   EXPECT_EQ(reachable.size(), 4ul);

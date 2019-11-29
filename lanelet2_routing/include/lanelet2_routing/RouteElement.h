@@ -31,18 +31,13 @@ class RouteElement {
  public:
   using LaneId = uint16_t;
 
-  RouteElement(ConstLanelet ll, LaneId lane) : initLaneId_{lane}, lanelet_{std::move(ll)} {}
+  RouteElement(ConstLanelet ll, LaneId lane) : laneId_{lane}, lanelet_{std::move(ll)} {}
 
   //! Get the relation to the left lanelet if it exists
   inline const Optional<RouteElementRelation>& left() const noexcept { return left_; }
 
   //! Get the relation to the right lanelet if it exists
   inline const Optional<RouteElementRelation>& right() const noexcept { return right_; }
-
-  //! @brief Provides the temporary laneID used when creating the route.
-  //! This is mainly for debugging purposes, use laneId instead.
-  //! @see laneId.
-  inline LaneId initLaneId() const noexcept { return initLaneId_; }
 
   //! @brief Returns the laneID of the route element.
   //! @return LaneID of the route element
@@ -52,13 +47,13 @@ class RouteElement {
   inline const ConstLanelet& lanelet() const noexcept { return lanelet_; }
 
   //! Get relations to the previous lanelets if they exist
-  const RouteElementRelations& previous() const noexcept { return previous_; }
+  const RouteElementRawPtrs& previous() const noexcept { return previous_; }
 
   //! Get relations to the following lanelets if they exist
-  const RouteElementRelations& following() const noexcept { return following_; }
+  const RouteElementRawPtrs& following() const noexcept { return following_; }
 
   //! Get the conflicting lanelets within the route if they exist
-  const RouteElementRelations& conflictingInRoute() const noexcept { return conflictingInRoute_; }
+  const RouteElementRawPtrs& conflictingInRoute() const noexcept { return conflictingInRoute_; }
 
   //! Get the conflicting lanelets or areas within the passable lanelets in the base laneletMap if they exist
   const ConstLaneletOrAreas& conflictingInMap() const noexcept { return conflictingInMap_; }
@@ -80,37 +75,30 @@ class RouteElement {
   //! Adds a following route element
   inline void addFollowing(RouteElement* element) {
     assert(element != this);
-    assert(std::find_if(following_.begin(), following_.end(), [element](const RouteElementRelation& it) {
-             return it.routeElement == element;
-           }) == following_.end());
-    following_.emplace_back(RouteElementRelation{element, RelationType::Successor});
+    assert(std::find(following_.begin(), following_.end(), element) == following_.end());
+    following_.emplace_back(element);
   }
 
   //! Adds a previous route element
   inline void addPrevious(RouteElement* element) {
     assert(element != this);
-    assert(std::find_if(previous_.begin(), previous_.end(), [element](const RouteElementRelation& it) {
-             return it.routeElement == element;
-           }) == previous_.end());
-    previous_.emplace_back(RouteElementRelation{element, RelationType::Successor});
+    assert(std::find(previous_.begin(), previous_.end(), element) == previous_.end());
+    previous_.emplace_back(element);
   }
 
   //! Adds a conflicting element in the route
   inline void addConflictingInRoute(RouteElement* conf) {
     assert(conf != this);
-    conflictingInRoute_.emplace_back(RouteElementRelation{conf, RelationType::Conflicting});
+    conflictingInRoute_.emplace_back(conf);
   }
 
   //! Adds multiple conflicting elements in the route
   inline void addConflictingInRoute(const RouteElementRawPtrs& conf) {
-    conflictingInRoute_.reserve(conflictingInRoute_.size() + conf.size());
-    std::transform(std::begin(conf), std::end(conf), std::back_inserter(conflictingInRoute_), [](auto& conf) {
-      return RouteElementRelation{conf, RelationType::Conflicting};
-    });
+    conflictingInRoute_.insert(conflictingInRoute_.end(), conf.begin(), conf.end());
   }
 
   //! Adds a conflicting element that is a passable lanelet in the underlying laneletMap
-  inline void addConflictingInMap(const ConstLanelet& conf) {
+  inline void addConflictingInMap(const ConstLaneletOrArea& conf) {
     assert(conf != this->lanelet());
     conflictingInMap_.emplace_back(conf);
   }
@@ -128,15 +116,13 @@ class RouteElement {
   inline Id id() const { return lanelet_.id(); }
 
  private:
-  // NOLINTNEXTLINE
-  const LaneId initLaneId_{0};                ///< Temporary lane ID when creating the route. For debugging purposes
-  LaneId laneId_{0};                          ///< Final lane ID in the route
-  Optional<RouteElementRelation> left_;       ///< Relation to a left route element if it exists
-  Optional<RouteElementRelation> right_;      ///< Relation to a right route element if it exists
-  RouteElementRelations following_;           ///< Relation to following route elements if they exists
-  RouteElementRelations previous_;            ///< Relation to previous route elements if they exists
-  RouteElementRelations conflictingInRoute_;  ///< Relations to conflicting route elements in the route
-  ConstLaneletOrAreas conflictingInMap_;      ///< Conflicting lanelets in the underlying laneletMap
+  LaneId laneId_{0};                        ///< Final lane ID in the route
+  Optional<RouteElementRelation> left_;     ///< Relation to a left route element if it exists
+  Optional<RouteElementRelation> right_;    ///< Relation to a right route element if it exists
+  RouteElementRawPtrs following_;           ///< Relation to following route elements if they exists
+  RouteElementRawPtrs previous_;            ///< Relation to previous route elements if they exists
+  RouteElementRawPtrs conflictingInRoute_;  ///< Relations to conflicting route elements in the route
+  ConstLaneletOrAreas conflictingInMap_;    ///< Conflicting lanelets in the underlying laneletMap
 
   // NOLINTNEXTLINE
   const ConstLanelet lanelet_;  ///< The lanelet this route element wraps

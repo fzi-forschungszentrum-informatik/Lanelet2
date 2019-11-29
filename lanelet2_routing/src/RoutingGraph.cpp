@@ -190,52 +190,54 @@ RoutingGraphUPtr RoutingGraph::build(const LaneletMap& laneletMap, const traffic
   return RoutingGraphBuilder(trafficRules, routingCosts, config).build(laneletMap);
 }
 
-Optional<Route> RoutingGraph::getRoute(const ConstLanelet& from, const ConstLanelet& to,
-                                       RoutingCostId routingCostId) const {
-  auto optPath{shortestPath(from, to, routingCostId)};
+Optional<Route> RoutingGraph::getRoute(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId,
+                                       bool withLaneChanges) const {
+  auto optPath{shortestPath(from, to, routingCostId, withLaneChanges)};
   if (!optPath) {
     return {};
-  };
-  return RouteBuilder(*this).getRouteFromShortestPath(*optPath);
+  }
+  return RouteBuilder(*graph_).getRouteFromShortestPath(*optPath, withLaneChanges, routingCostId);
 }
 
 Optional<Route> RoutingGraph::getRouteVia(const ConstLanelet& from, const ConstLanelets& via, const ConstLanelet& to,
-                                          RoutingCostId routingCostId) const {
-  auto optPath{shortestPathVia(from, via, to, routingCostId)};
+                                          RoutingCostId routingCostId, bool withLaneChanges) const {
+  auto optPath{shortestPathVia(from, via, to, routingCostId, withLaneChanges)};
   if (!optPath) {
     return {};
-  };
-  return RouteBuilder(*this).getRouteFromShortestPath(*optPath);
+  }
+  return RouteBuilder(*graph_).getRouteFromShortestPath(*optPath, withLaneChanges, routingCostId);
 }
 
 Optional<LaneletPath> RoutingGraph::shortestPath(const ConstLanelet& from, const ConstLanelet& to,
-                                                 RoutingCostId routingCostId) const {
+                                                 RoutingCostId routingCostId, bool withLaneChanges) const {
   auto startVertex = graph_->getVertex(from);
   auto endVertex = graph_->getVertex(to);
   if (!startVertex || !endVertex) {
     return {};
-  };
-  ShortestPath<FilteredGraph> pathSearch(graph_->withLaneChanges(routingCostId), *startVertex);
+  }
+  auto& graph = withLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
+  ShortestPath<FilteredGraph> pathSearch(graph, *startVertex);
   std::deque<GraphType::vertex_descriptor> vertexPath{pathSearch.shortestPath(*endVertex)};
   if (vertexPath.empty()) {
     return {};
-  };
+  }
   return LaneletPath(utils::transform(vertexPath, [&](auto& vi) { return graph_->get()[vi].lanelet(); }));
 }
 
 Optional<LaneletPath> RoutingGraph::shortestPathVia(const ConstLanelet& start, const ConstLanelets& via,
-                                                    const ConstLanelet& end, RoutingCostId routingCostId) const {
+                                                    const ConstLanelet& end, RoutingCostId routingCostId,
+                                                    bool withLaneChanges) const {
   ConstLanelets routePoints = utils::concatenate({ConstLanelets{start}, via, ConstLanelets{end}});
 
   ConstLanelets path;
   for (size_t it = 0; it < routePoints.size() - 1; it++) {
-    auto results = shortestPath(routePoints[it], routePoints[it + 1], routingCostId);
+    auto results = shortestPath(routePoints[it], routePoints[it + 1], routingCostId, withLaneChanges);
     if (!!results && !results->empty() && path.empty()) {
       path.push_back(results->front());
     }
     if (!addToPath(path, results)) {
       return {};
-    };
+    }
   }
   return LaneletPath(path);
 }

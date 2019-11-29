@@ -27,7 +27,6 @@ ConstLaneletPointMapIt createAndAddPoint(std::unordered_map<ConstLanelet, Point2
   point.setId(lanelet.id());
   point.setAttribute("id", lanelet.id());
   point.setAttribute("lane_id", element->laneId());
-  point.setAttribute("init_lane_id", element->initLaneId());
   boost::geometry::centroid(CompoundHybridPolygon2d(lanelet.polygon2d()), point);
   const auto emplace{pointMap.emplace(lanelet, point)};
   return emplace.first;
@@ -80,6 +79,20 @@ void addRelation(std::unordered_map<std::pair<ConstLanelet, ConstLanelet>, LineS
 }
 }  // anonymous namespace
 
+LaneletPath Route::remainingShortestPath(const ConstLanelet& ll) const {
+  auto iter = std::find(shortestPath_.begin(), shortestPath_.end(), ll);
+  if (iter == shortestPath_.end()) {
+    return LaneletPath{};
+  }
+  if (!shortestPath_.empty() && shortestPath_.front() == shortestPath_.back()) {  // circular
+    ConstLanelets llts{shortestPath_.begin(), shortestPath_.end()};
+    llts.pop_back();
+    std::rotate(llts.begin(), llts.begin() + std::distance(shortestPath_.begin(), iter), llts.end());
+    return LaneletPath{llts};
+  }
+  return LaneletPath{ConstLanelets{iter, shortestPath_.end()}};
+}
+
 LaneletSequence Route::fullLane(const ConstLanelet& ll) const {
   // go back to the first lanelet of the lane (ie the first lanelet that has not exactly one predecessor and then call
   // remaining lane on it
@@ -91,10 +104,10 @@ LaneletSequence Route::fullLane(const ConstLanelet& ll) const {
   RouteElement* first = begin;
   while (first->previous().size() == 1) {
     auto& next = first->previous().front();
-    if (next.routeElement == begin) {
+    if (next == begin) {
       break;  // handle looping lanelets
     }
-    first = next.routeElement;
+    first = next;
   }
   return remainingLane(first->lanelet());
 }
@@ -105,16 +118,17 @@ LaneletSequence Route::remainingLane(const ConstLanelet& ll) const {
   if (element == elements_.end()) {
     return lane;
   }
-  lane.emplace_back(ll);
-  RouteElement* begin = element->second.get();
-  RouteElement* current = begin;
-  while (current->following().size() == 1) {
-    auto& next = current->following().front();
-    if (next.routeElement == begin) {
+  RouteElement* current = element->second.get();
+  auto laneId = current->laneId();
+  while (current->laneId() == laneId) {
+    lane.emplace_back(current->lanelet());
+    if (current->following().empty()) {
+      break;
+    }
+    current = current->following().front();
+    if (current == element->second.get()) {
       break;  // handle looping lanelets
     }
-    lane.emplace_back(next.routeElement->lanelet());
-    current = next.routeElement;
   }
   return lane;
 }
@@ -132,7 +146,10 @@ LaneletMapPtr Route::getDebugLaneletMap() const {
   for (const auto& el : elements_) {
     const auto following = el.second->following();
     if (!following.empty()) {
-      addRelation(lineStringMap, pointMap, el.second, following);
+      auto followRelation = utils::transform(following, [](auto& f) {
+        return RouteElementRelation{f, RelationType::Successor};
+      });
+      addRelation(lineStringMap, pointMap, el.second, followRelation);
     }
     const auto left = el.second->left();
     if (left) {
@@ -144,7 +161,10 @@ LaneletMapPtr Route::getDebugLaneletMap() const {
     }
     auto conflicting = el.second->conflictingInRoute();
     if (!conflicting.empty()) {
-      addRelation(lineStringMap, pointMap, el.second, conflicting);
+      auto confRelation = utils::transform(following, [](auto& f) {
+        return RouteElementRelation{f, RelationType::Conflicting};
+      });
+      addRelation(lineStringMap, pointMap, el.second, confRelation);
     }
   }
   // Mark shortest path
@@ -161,6 +181,15 @@ LaneletRelations transformRelations(const RouteElementRelations& relations) {
   return utils::transform(relations, [](auto& relation) { return static_cast<LaneletRelation>(relation); });
 }
 
+LaneletRelations transformRelations(const RouteElementRawPtrs& relations) {
+  return utils::transform(relations, [](auto& relation) {
+    return LaneletRelation{relation->lanelet(), RelationType::Successor};
+  });
+}
+ConstLanelets transformLanelets(const RouteElementRawPtrs& relations) {
+  return utils::transform(relations, [](auto& relation) { return relation->lanelet(); });
+}
+
 LaneletRelations Route::followingRelations(const ConstLanelet& lanelet) const {
   LaneletRelations result;
   const auto element = elements_.find(lanelet);
@@ -169,7 +198,12 @@ LaneletRelations Route::followingRelations(const ConstLanelet& lanelet) const {
     result = transformRelations(following);
   }
   return result;
-}  // namespace routing
+}
+
+ConstLanelets Route::following(const ConstLanelet& lanelet) const {
+  const auto element = elements_.find(lanelet);
+  return element == elements_.end() ? ConstLanelets{} : transformLanelets(element->second->following());
+}
 
 LaneletRelations Route::previousRelations(const ConstLanelet& lanelet) const {
   LaneletRelations result;
@@ -179,7 +213,12 @@ LaneletRelations Route::previousRelations(const ConstLanelet& lanelet) const {
     result = transformRelations(previous);
   }
   return result;
-}  // namespace lanelet
+}
+
+ConstLanelets Route::previous(const ConstLanelet& lanelet) const {
+  const auto element = elements_.find(lanelet);
+  return element == elements_.end() ? ConstLanelets{} : transformLanelets(element->second->previous());
+}
 
 Optional<LaneletRelation> Route::leftRelation(const ConstLanelet& lanelet) const {
   const auto element = elements_.find(lanelet);
@@ -230,13 +269,8 @@ LaneletRelations Route::rightRelations(const ConstLanelet& lanelet) const {
 }
 
 ConstLanelets Route::conflictingInRoute(const ConstLanelet& lanelet) const {
-  ConstLanelets result;
-  auto element = elements_.find(lanelet);
-  if (element != elements_.end()) {
-    return utils::transform(element->second->conflictingInRoute(),
-                            [](auto& relation) { return relation.routeElement->lanelet(); });
-  }
-  return result;
+  const auto element = elements_.find(lanelet);
+  return element == elements_.end() ? ConstLanelets{} : transformLanelets(element->second->conflictingInRoute());
 }
 
 ConstLaneletOrAreas Route::conflictingInMap(const ConstLanelet& lanelet) const {
@@ -288,57 +322,51 @@ Route::Errors Route::checkValidity(bool throwOnError) const {
     }
     const auto following{el.second->following()};
     for (const auto& follower : following) {
-      if (follower.routeElement->id() == el.first.id()) {
+      if (follower->id() == el.first.id()) {
         // Most probably a pointer is invalidated rather than two lanelets actually have the same ID.
         errors.emplace_back("Left element of " + std::to_string(el.first.id()) + " has the same ID");
       }
-      auto previous{follower.routeElement->previous()};
-      if (!utils::anyOf(previous, [&el](const auto& prev) { return prev.routeElement == el.second.get(); })) {
+      if (!utils::anyOf(follower->previous(), [&el](const auto& prev) { return prev == el.second.get(); })) {
         errors.emplace_back("Element " + std::to_string(el.first.id()) + " has a 'succeeding' relation to " +
-                            std::to_string(follower.routeElement->id()) + " but there is no relation back");
+                            std::to_string(follower->id()) + " but there is no relation back");
       }
     }
-    if (following.size() == 1 && following.front().relationType == RelationType::Successor &&
-        el.second->laneId() != following.front().routeElement->laneId()) {
+    if (following.size() == 1 && el.second->laneId() != following.front()->laneId()) {
       errors.emplace_back("Relation between lanelet " + std::to_string(el.first.id()) + " and lanelet " +
-                          std::to_string(following.front().routeElement->id()) +
+                          std::to_string(following.front()->id()) +
                           " is succeeding, but they have different lane ids " + std::to_string(el.second->laneId()) +
-                          " and " + std::to_string(following.front().routeElement->laneId()));
-    } else if (following.size() > 1 && el.second->laneId() == following.front().routeElement->laneId()) {
+                          " and " + std::to_string(following.front()->laneId()));
+    } else if (following.size() > 1 && el.second->laneId() == following.front()->laneId()) {
       errors.emplace_back("Relation between lanelet " + std::to_string(el.first.id()) + " and at least lanelet " +
-                          std::to_string(following.front().routeElement->id()) +
+                          std::to_string(following.front()->id()) +
                           " should be diverging, but they have the same lane id " +
                           std::to_string(el.second->laneId()));
     }
     const auto previous{el.second->previous()};
     for (const auto& prev : previous) {
-      if (prev.routeElement->id() == el.first.id()) {
+      if (prev->id() == el.first.id()) {
         // Most probably a pointer is invalidated rather than two lanelets actually have the same ID.
         errors.emplace_back("Left element of " + std::to_string(el.first.id()) + " has the same ID");
       }
-      auto following{prev.routeElement->following()};
-      if (!utils::anyOf(following, [&el](const auto& follower) { return follower.routeElement == el.second.get(); })) {
+      if (!utils::anyOf(prev->following(), [&el](const auto& follower) { return follower == el.second.get(); })) {
         errors.emplace_back("Element " + std::to_string(el.first.id()) + " has a 'previous' relation to " +
-                            std::to_string(prev.routeElement->id()) + " but there is no relation back");
+                            std::to_string(prev->id()) + " but there is no relation back");
       }
     }
-    if (previous.size() == 1 && previous.front().relationType == RelationType::Successor &&
-        el.second->laneId() != previous.front().routeElement->laneId()) {
+    if (previous.size() == 1 && el.second->laneId() != previous.front()->laneId()) {
       errors.emplace_back("Relation between lanelet " + std::to_string(el.first.id()) + " and lanelet " +
-                          std::to_string(previous.front().routeElement->id()) +
-                          " is succeeding, but they have different lane ids " + std::to_string(el.second->laneId()) +
-                          " and " + std::to_string(previous.front().routeElement->laneId()));
-    } else if (previous.size() > 1 && el.second->laneId() == previous.front().routeElement->laneId()) {
+                          std::to_string(previous.front()->id()) + " is succeeding, but they have different lane ids " +
+                          std::to_string(el.second->laneId()) + " and " + std::to_string(previous.front()->laneId()));
+    } else if (previous.size() > 1 && el.second->laneId() == previous.front()->laneId()) {
       errors.emplace_back("Relation between lanelet " + std::to_string(el.first.id()) + " and at least lanelet " +
-                          std::to_string(previous.front().routeElement->id()) +
+                          std::to_string(previous.front()->id()) +
                           " should be merging, but they have the same lane id " + std::to_string(el.second->laneId()));
     }
     const auto conflicting{el.second->conflictingInRoute()};
     for (const auto& conf : conflicting) {
-      if (!utils::anyOf(conf.routeElement->conflictingInRoute(),
-                        [&el](auto& other) { return el.second.get() == other.routeElement; })) {
+      if (!utils::anyOf(conf->conflictingInRoute(), [&el](auto& other) { return el.second.get() == other; })) {
         errors.emplace_back("Element " + std::to_string(el.first.id()) + " conflicts with " +
-                            std::to_string(conf.routeElement->id()) + " but not the other way round");
+                            std::to_string(conf->id()) + " but not the other way round");
       }
     }
   }

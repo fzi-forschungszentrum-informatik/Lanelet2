@@ -57,21 +57,27 @@ class RoutingGraph {
    *  @param from Start lanelet to find a shortest path
    *  @param to End lanelet to find a shortest path
    *  @param routingCostId ID of RoutingCost module to determine shortest route
-   *  @return A route of all adjacent lanelets of the shortest route that lead to 'end'. Nothing if there's not
-   * route.
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes and the route will only contain
+   *  lanelets that are reachable without lane changes
+   *  @return A route of all adjacent lanelets of the shortest route that lead to 'end'. Nothing if there's no route.
    *  @see Route */
-  Optional<Route> getRoute(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId = {}) const;
+  Optional<Route> getRoute(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId = {},
+                           bool withLaneChanges = true) const;
 
   /** @brief Get a driving route from 'start' to 'end' lanelets while going via other lanelets
    *  @param from Start lanelet to find a shortest path
    *  @param via Other lanelets to visit (in this order)
    *  @param to End lanelet to find a shortest path
    *  @param routingCostId ID of RoutingCost module to determine shortest route
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes and the route will only contain
+   *  lanelets that are reachable without lane changes
    *  @return A route of all adjacent lanelets of the shortest route that lead to 'end'. Nothing if there's not
    * route.
+   *
+   * If from and to are the same lanelet, the resulting route will form a loop.
    *  @see Route */
   Optional<Route> getRouteVia(const ConstLanelet& from, const ConstLanelets& via, const ConstLanelet& to,
-                              RoutingCostId routingCostId = {}) const;
+                              RoutingCostId routingCostId = {}, bool withLaneChanges = false) const;
 
   /** @brief Retrieve a shortest path between 'start' and 'end'.
    *
@@ -80,9 +86,10 @@ class RoutingGraph {
    * i.e. lanelets that are parallel and not only adjacent.
    *  @param from Start lanelet to find a shortest path
    *  @param to End lanelet to find a shortest path
-   *  @param routingCostId ID of RoutingCost module to determine shortest path */
-  Optional<LaneletPath> shortestPath(const ConstLanelet& from, const ConstLanelet& to,
-                                     RoutingCostId routingCostId = {}) const;
+   *  @param routingCostId ID of RoutingCost module to determine shortest path
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes */
+  Optional<LaneletPath> shortestPath(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId = {},
+                                     bool withLaneChanges = true) const;
 
   /** @brief Retrieve a shortest path between 'start' and 'end' using intermediate points.
    *  Will find a shortest path using Djikstra's shortest path algorithm and the routing cost calculated by the
@@ -92,9 +99,10 @@ class RoutingGraph {
    *  @param via Intermediate lanelets that have to be passed
    *  @param end End lanelet to find a shortest path
    *  @param routingCostId ID of RoutingCost module to determine shortest path
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes
    *  @see shortestPath */
   Optional<LaneletPath> shortestPathVia(const ConstLanelet& start, const ConstLanelets& via, const ConstLanelet& end,
-                                        RoutingCostId routingCostId = {}) const;
+                                        RoutingCostId routingCostId = {}, bool withLaneChanges = true) const;
 
   /** @brief Determines the relation between two lanelets
    *  @param from Start lanelet

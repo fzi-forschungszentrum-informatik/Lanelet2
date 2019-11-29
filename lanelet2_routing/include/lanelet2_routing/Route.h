@@ -26,38 +26,51 @@ namespace routing {
  * - A route is self-sustained in terms of that there is no relation to the RoutingGraph anymore
  * - RelationTypes within a Route refer to relations of the Elements that are part of the Route. A lanelet can have
  * fewer successors than in the routing graph if some are not part of the route
- * - Lanes have unique ids
- * - A lane goes all the way until a merging or diverging situation or if there is no succeeding lanelet. Simple
- * routes often just have one lane leading across multiple intersections.
+ * - The route is divided into lanes with individual Ids. The exact value of the id for a lane is random. Ids are not
+ * continuous.
+ * - A new lane begins at every lanelet that has not exactly one predecessor or that is part of a diverging situation.
+ * Simple routes often just have one lane leading across multiple intersections.
  * - It is recommended to check a couple of basic things with the "checkValidity" function once the Route is created
+ * - Routes can also be circular (e.g. if start and end lanelet are the same). The "last" lanelet of the route will then
+ * have the first lanelet of the route as successor.
  * */
+
+using LaneBegins = std::map<RouteElement::LaneId, RouteElement*>;
 
 class Route {
  public:
   using Errors = std::vector<std::string>;
-  Route() = delete;
+  Route() = default;
   Route(const Route& other) = delete;
   Route& operator=(const Route& other) = delete;
   Route& operator=(Route&& other) noexcept = default;
   Route(Route&& other) noexcept = default;
   ~Route() noexcept = default;
 
-  inline Route(LaneletPath shortestPath, ConstLaneletRouteElementMap& elements,
-               std::map<RouteElement::LaneId, RouteElement*> firstElementsInInitLane, LaneletMapConstPtr laneletMap,
-               RouteElement::LaneId numLanes)
+  inline Route(LaneletPath shortestPath, ConstLaneletRouteElementMap&& elements, LaneBegins firstElementsInInitLane,
+               LaneletMapConstPtr laneletMap)
       : elements_{std::move(elements)},
         shortestPath_{std::move(shortestPath)},
         firstElementsInInitLane_{std::move(firstElementsInInitLane)},
-        laneletMap_{std::move(laneletMap)},
-        numLanes_{numLanes} {}
+        laneletMap_{std::move(laneletMap)} {}
 
   /** @brief Returns the shortest path that was the base of this route */
   inline const LaneletPath& shortestPath() const noexcept { return shortestPath_; }
 
-  /** @brief Returns the complete lane a Lanelet belongs to
-   *  Circular lanes will always have 'll' as the first element.
+  /**
+   * @brief Obtains the remaining shortest path to the destination. If the route is circular, the result will always
+   * have the same length and end before the lanelet passed as input argument
+   * @param ll a lanelet on the shortest path
+   * @return shortest path where lanelet is the first element. Nothing if the lanelet is not on the shortest path.
+   */
+  LaneletPath remainingShortestPath(const ConstLanelet& ll) const;
+
+  /** @brief Returns the complete lane a Lanelet belongs to. Circular lanes will always have 'll' as the first element.
    *  @param ll Lanelet to get lane for
-   *  @return All lanelets of that route. Nothing if Lanelet is not part of the route.*/
+   *  @return All lanelets of that route. Nothing if Lanelet is not part of the route.
+   *
+   * If
+   */
   LaneletSequence fullLane(const ConstLanelet& ll) const;
 
   /** @brief Returns that remaining lane a Lanelet belongs to
@@ -70,7 +83,7 @@ class Route {
 
   /** @brief Returns the number of individual lanes
    *  @return Number of lanes */
-  inline size_t numLanes() const noexcept { return numLanes_; }
+  inline size_t numLanes() const noexcept { return firstElementsInInitLane_.size(); }
 
   /** @brief A laneletMap with all lanelets that are part of the route.
    *  @return A laneletMap with all lanelets of the route, excluding regulatory elements.
@@ -87,18 +100,29 @@ class Route {
   LaneletMapPtr getDebugLaneletMap() const;
 
   /** @brief Number of Lanelets in the route
-   *  @return Number of lanelets. */
+   *  @return Number of lanelets.
+   */
   inline size_t size() const { return elements_.size(); }
 
   /** @brief Provides information of the following lanelets within the Route
    *  @param lanelet Lanelet to get information about.
-   * @return Relations to following lanelets in the route. Nothing if 'lanelet' is not part of the route.*/
+   * @return Relations to following lanelets in the route. Nothing if 'lanelet' is not part of the route. The relation
+   * will always be "succesor"
+   */
   LaneletRelations followingRelations(const ConstLanelet& lanelet) const;
+
+  //! Similar to followingRelations but directly provides the following lanelets within the Route
+  ConstLanelets following(const ConstLanelet& lanelet) const;
 
   /** @brief Provides information of the previous lanelets within the Route
    *  @param lanelet Lanelet to get information about.
-   * @return Relations to previous lanelets in the route. Nothing if 'lanelet' is not part of the route.*/
+   * @return Relations to previous lanelets in the route. Nothing if 'lanelet' is not part of the route. The type
+   * will always be "successor".
+   */
   LaneletRelations previousRelations(const ConstLanelet& lanelet) const;
+
+  //! Similar to followingRelations but directly provides the following lanelets within the Route
+  ConstLanelets previous(const ConstLanelet& lanelet) const;
 
   /** @brief Provides information of the lanelet left of a given lanelet within the Route
    *  @note The returned lanelet can include a lanelet that can be switched or not-switched to. The relation will be
@@ -140,8 +164,10 @@ class Route {
 
   /** @brief Information about conflicting lanelets of a lanelet within all passable lanelets in the laneletMap
    *  @param lanelet Lanelet to find conflicting lanelets to
-   *  @return Vector of conflicting lanelets. Empty vector if input lanelet is not part of the route.
-   *  @see conflictingInRoute */
+   *  @return Vector of conflicting lanelets. Empty vector if input lanelet is not part of the route. Lanelets that are
+   * also conflicting in route are returned as well.
+   *  @see conflictingInRoute
+   */
   ConstLaneletOrAreas conflictingInMap(const ConstLanelet& lanelet) const;
 
   /**
@@ -161,9 +187,8 @@ class Route {
  private:
   ConstLaneletRouteElementMap elements_;  ///< All elements that are part of the map
   LaneletPath shortestPath_;              ///< The underlying shortest path used to create the route
-  std::map<RouteElement::LaneId, RouteElement*> firstElementsInInitLane_;  ///< First elements of the lanes
-  LaneletMapConstPtr laneletMap_;    ///< LaneletMap with all lanelets that are part of the route
-  RouteElement::LaneId numLanes_{};  ///< Number of lanes
+  LaneBegins firstElementsInInitLane_;    ///< First elements of the lanes
+  LaneletMapConstPtr laneletMap_;         ///< LaneletMap with all lanelets that are part of the route
 };
 };  // namespace routing
 };  // namespace lanelet
