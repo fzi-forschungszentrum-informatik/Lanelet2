@@ -92,7 +92,7 @@ general_code_quality:
 
 .test: &test_job
   stage: test
-  coverage: '/lines: \d+.\d+\%/'
+  coverage: '/lines......: \d+.\d+\%/'
   only: [branches, tags, merge_requests] # means "always"
   cache:
     paths:
