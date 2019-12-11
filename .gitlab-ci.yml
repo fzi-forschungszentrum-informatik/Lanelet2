@@ -15,7 +15,7 @@ before_script:
   # Environment variablen setzen
   - export SHELL="/bin/bash"
   # Prepare workspace (in folder catkin_ws)
-  - sudo apt-get update
+  - sudo apt-get update && sudo apt-get upgrade -y
   - mrt ci prepare $CI_PROJECT_NAME -c $CI_COMMIT_SHA
   - cd catkin_ws
   # set current branch name to branch management
