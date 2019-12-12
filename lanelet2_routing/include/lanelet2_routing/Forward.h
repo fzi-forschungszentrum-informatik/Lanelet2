@@ -8,15 +8,14 @@
 
 namespace lanelet {
 namespace routing {
-class RouteElement;
-using RouteElements = std::vector<RouteElement>;
-using RouteElementRawPtrs = std::vector<RouteElement*>;
-using RouteElementUPtr = std::unique_ptr<RouteElement>;
-using RouteElementUPtrs = std::vector<RouteElementUPtr>;
-
 using IdPair = std::pair<Id, Id>;
 
+template <typename BaseGraphT>
 class Graph;
+
+class RoutingGraphGraph;
+class RouteGraph;
+using LaneId = uint16_t;
 
 class RoutingGraph;
 using RoutingGraphPtr = std::shared_ptr<RoutingGraph>;
@@ -31,7 +30,6 @@ struct LaneletRelation;
 using LaneletRelations = std::vector<LaneletRelation>;
 
 using RouteUPtr = std::unique_ptr<Route>;
-using ConstLaneletRouteElementMap = std::unordered_map<ConstLanelet, RouteElementUPtr>;
 using Routes = std::vector<Route>;
 class RoutingCost;
 using RoutingCostPtr = std::shared_ptr<RoutingCost>;

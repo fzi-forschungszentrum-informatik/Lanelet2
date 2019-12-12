@@ -1,16 +1,12 @@
 #pragma once
-
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
-#include <algorithm>
+#include <memory>
 #include <string>
-#include <unordered_map>
-#include <utility>
 #include <vector>
 #include "Forward.h"
 #include "LaneletPath.h"
-#include "RouteElement.h"
 
 namespace lanelet {
 namespace routing {
@@ -34,25 +30,17 @@ namespace routing {
  * - Routes can also be circular (e.g. if start and end lanelet are the same). The "last" lanelet of the route will then
  * have the first lanelet of the route as successor.
  * */
-
-using LaneBegins = std::map<RouteElement::LaneId, RouteElement*>;
-
 class Route {
  public:
   using Errors = std::vector<std::string>;
-  Route() = default;
+  Route();
   Route(const Route& other) = delete;
   Route& operator=(const Route& other) = delete;
-  Route& operator=(Route&& other) noexcept = default;
-  Route(Route&& other) noexcept = default;
-  ~Route() noexcept = default;
+  Route& operator=(Route&& other) noexcept;
+  Route(Route&& other) noexcept;
+  ~Route() noexcept;
 
-  inline Route(LaneletPath shortestPath, ConstLaneletRouteElementMap&& elements, LaneBegins firstElementsInInitLane,
-               LaneletMapConstPtr laneletMap)
-      : elements_{std::move(elements)},
-        shortestPath_{std::move(shortestPath)},
-        firstElementsInInitLane_{std::move(firstElementsInInitLane)},
-        laneletMap_{std::move(laneletMap)} {}
+  Route(LaneletPath shortestPath, std::unique_ptr<RouteGraph> graph, LaneletMapConstPtr laneletMap) noexcept;
 
   /** @brief Returns the shortest path that was the base of this route */
   inline const LaneletPath& shortestPath() const noexcept { return shortestPath_; }
@@ -83,7 +71,7 @@ class Route {
 
   /** @brief Returns the number of individual lanes
    *  @return Number of lanes */
-  inline size_t numLanes() const noexcept { return firstElementsInInitLane_.size(); }
+  size_t numLanes() const;
 
   /** @brief A laneletMap with all lanelets that are part of the route.
    *  @return A laneletMap with all lanelets of the route, excluding regulatory elements.
@@ -102,7 +90,7 @@ class Route {
   /** @brief Number of Lanelets in the route
    *  @return Number of lanelets.
    */
-  inline size_t size() const { return elements_.size(); }
+  size_t size() const;
 
   /** @brief Provides information of the following lanelets within the Route
    *  @param lanelet Lanelet to get information about.
@@ -185,10 +173,9 @@ class Route {
   Errors checkValidity(bool throwOnError = false) const;
 
  private:
-  ConstLaneletRouteElementMap elements_;  ///< All elements that are part of the map
-  LaneletPath shortestPath_;              ///< The underlying shortest path used to create the route
-  LaneBegins firstElementsInInitLane_;    ///< First elements of the lanes
-  LaneletMapConstPtr laneletMap_;         ///< LaneletMap with all lanelets that are part of the route
+  std::unique_ptr<RouteGraph> graph_;  ///< The internal graph
+  LaneletPath shortestPath_;           ///< The underlying shortest path used to create the route
+  LaneletMapConstPtr laneletMap_;      ///< LaneletMap with all lanelets that are part of the route
 };
 };  // namespace routing
 };  // namespace lanelet

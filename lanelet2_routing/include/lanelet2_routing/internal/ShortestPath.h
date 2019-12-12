@@ -1,11 +1,10 @@
 #pragma once
-
-#include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+#include <boost/graph/filtered_graph.hpp>
 #include <boost/property_map/property_map.hpp>
 #include "Exceptions.h"
 #include "Graph.h"
-#include "RoutingGraph.h"
+#include "GraphUtils.h"
 
 namespace lanelet {
 namespace routing {
@@ -75,7 +74,7 @@ struct ShortestPath {
         boost::dijkstra_shortest_paths(graph, start,
                                        boost::predecessor_map(predecessors_.data())
                                            .distance_map(distances_.data())
-                                           .weight_map(get(&EdgeInfo::routingCost, graph))
+                                           .weight_map(boost::get(&EdgeInfo::routingCost, graph))
                                            .visitor(goalVisitor));
       } catch (const FoundGoalError&) {  //! Thrown regulary to avoid exploitation of unneeded vertices
       }
@@ -117,7 +116,7 @@ struct ShortestPath {
 
   //! Basic check if vertex ID is reasonable
   void abortIfVertexInvalid(const VertexType v) {
-    if (v < 0 || v >= boost::num_vertices(graph)) {
+    if (v >= boost::num_vertices(graph)) {
       throw InvalidInputError("Invalid input vertex with number " + std::to_string(v));
     }
   }

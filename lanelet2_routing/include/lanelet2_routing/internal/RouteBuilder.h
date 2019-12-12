@@ -31,12 +31,12 @@ class RouteBuilder {
    * to the goal. So in the context of the route this is not a diverging situation but rather it's just one lanelet
    * (the right one) is following its predecessor. We would say that they are part of the same lane since there's no
    * other way to go. */
-  explicit RouteBuilder(const Graph& g) : graph_{g} {}
+  explicit RouteBuilder(const RoutingGraphGraph& g) : graph_{g} {}
   Optional<Route> getRouteFromShortestPath(const LaneletPath& path, bool withLaneChanges = true,
                                            RoutingCostId costId = 0);
 
  private:
-  const Graph& graph_;
+  const RoutingGraphGraph& graph_;
 };
 
 }  // namespace routing

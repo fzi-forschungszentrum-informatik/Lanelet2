@@ -4,8 +4,8 @@
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <unordered_map>
 #include "Exceptions.h"
-#include "Graph.h"
 #include "RoutingGraph.h"
+#include "internal/Graph.h"
 
 namespace lanelet {
 namespace routing {
@@ -82,7 +82,7 @@ class LaneChangeLaneletsCollector {
 
 RoutingGraphBuilder::RoutingGraphBuilder(const traffic_rules::TrafficRules& trafficRules,
                                          const RoutingCostPtrs& routingCosts, const RoutingGraph::Configuration& config)
-    : graph_{std::make_unique<Graph>(routingCosts.size())},
+    : graph_{std::make_unique<RoutingGraphGraph>(routingCosts.size())},
       trafficRules_{trafficRules},
       routingCosts_{routingCosts},
       config_{config} {}
@@ -130,14 +130,14 @@ void RoutingGraphBuilder::appendBidirectionalLanelets(ConstLanelets& llts) {
 
 void RoutingGraphBuilder::addLaneletsToGraph(ConstLanelets& llts) {
   for (auto& ll : llts) {
-    graph_->addVertex(ll);
+    graph_->addVertex(VertexInfo{ll});
     addPointsToSearchIndex(ll);
   }
 }
 
 void RoutingGraphBuilder::addAreasToGraph(ConstAreas& areas) {
   for (auto& ar : areas) {
-    graph_->addVertex(ar);
+    graph_->addVertex(VertexInfo{ar});
   }
 }
 
@@ -172,7 +172,7 @@ void RoutingGraphBuilder::addFollowingEdges(const ConstLanelet& ll) {
   std::for_each(endPointsLanelets.first, endPointsLanelets.second, [&ll, this, &following](auto it) {
     if (geometry::follows(ll, it.second) && this->trafficRules_.canPass(ll, it.second)) {
       following.push_back(it.second);
-    };
+    }
   });
   if (following.empty()) {
     return;
@@ -341,7 +341,7 @@ void RoutingGraphBuilder::assignLaneChangeCosts(const ConstLanelets& froms, cons
       routingCosts_, [&](const RoutingCostPtr& cost) { return cost->getCostLaneChange(trafficRules_, froms, tos); });
   for (auto i = 0u; i < froms.size(); ++i) {
     for (RoutingCostId costId = 0; costId < routingCosts_.size(); ++costId) {
-      graph_->addEdge(froms[i], tos[i], EdgeInfo{costId, costs[costId], relation});
+      graph_->addEdge(froms[i], tos[i], EdgeInfo{costs[costId], costId, relation});
     }
   }
 }

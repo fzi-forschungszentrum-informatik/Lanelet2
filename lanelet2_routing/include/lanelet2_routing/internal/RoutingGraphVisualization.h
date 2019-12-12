@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Exceptions.h"
 #include "Forward.h"
-#include "Graph.h"
+#include "internal/Graph.h"
 
 namespace lanelet {
 
@@ -84,7 +84,7 @@ inline void exportGraphVizImpl(const std::string& filename, const G& g, E edgeFi
 template <typename G>
 inline void exportGraphVizImpl(const std::string& filename, const G& g, const RelationType& relationTypes,
                                RoutingCostId routingCostId = 0) {
-  auto edgeFilter = EdgeCostFilter(g, routingCostId, relationTypes);
+  auto edgeFilter = EdgeCostFilter<G>(g, routingCostId, relationTypes);
   exportGraphVizImpl(filename, g, edgeFilter);
 }
 
@@ -102,7 +102,7 @@ inline void exportGraphMLImpl(const std::string& filename, const G& g, E eFilter
     throw lanelet::ExportError("Could not open file at " + filename + ".");
   }
 
-  boost::filtered_graph<G, EdgeCostFilter> filteredGraph(g, eFilter, vFilter);
+  boost::filtered_graph<G, EdgeCostFilter<G>> filteredGraph(g, eFilter, vFilter);
 
   auto pmId = boost::get(&VertexInfo::laneletOrArea, filteredGraph);  // NOLINT
   auto pmRelation = boost::get(&EdgeInfo::relation, filteredGraph);
@@ -124,7 +124,7 @@ inline void exportGraphMLImpl(const std::string& filename, const G& g, E eFilter
 template <typename G>
 inline void exportGraphMLImpl(const std::string& filename, const G& g, const RelationType& relationTypes,
                               RoutingCostId routingCostId = 0) {
-  auto edgeFilter = EdgeCostFilter(g, routingCostId, relationTypes);
+  auto edgeFilter = EdgeCostFilter<G>(g, routingCostId, relationTypes);
   exportGraphMLImpl(filename, g, edgeFilter);
 }
 

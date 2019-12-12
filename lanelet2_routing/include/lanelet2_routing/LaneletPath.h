@@ -2,9 +2,23 @@
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
+#include <lanelet2_core/utility/Optional.h>
+#include "Forward.h"
 
 namespace lanelet {
 namespace routing {
+//! Represents the relation of a lanelet to another lanelet
+struct LaneletRelation {
+  ConstLanelet lanelet;       //! the lanelet this relation refers to
+  RelationType relationType;  //! the type of relation to that
+};
+inline bool operator==(const LaneletRelation& lhs, const LaneletRelation& rhs) {
+  return lhs.lanelet == rhs.lanelet && lhs.relationType == rhs.relationType;
+}
+inline bool operator!=(const LaneletRelation& rhs, const LaneletRelation& lhs) { return !(rhs == lhs); }
+
+using LaneletRelations = std::vector<LaneletRelation>;
+
 //! A lanelet path represents a set of lanelets that can be reached in order by either driving straight or doing lane
 //! changes.
 class LaneletPath {

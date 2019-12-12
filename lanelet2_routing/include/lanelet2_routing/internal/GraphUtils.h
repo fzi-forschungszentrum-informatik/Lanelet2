@@ -2,7 +2,7 @@
 #include <lanelet2_core/utility/Optional.h>
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/two_bit_color_map.hpp>
-#include "../Graph.h"
+#include "Graph.h"
 
 namespace lanelet {
 namespace routing {
@@ -31,6 +31,44 @@ Optional<LaneletVertexId> getNext(LaneletVertexId ofVertex, const Graph& g) {
   }
   return {};
 }
+
+// Class that selects between in_edges and out_edges (i wish I had c++17...)
+template <bool Backwards>
+struct GetEdges {};
+template <>
+struct GetEdges<true> {
+  template <typename Id, typename Graph>
+  inline auto operator()(Id id, Graph& g) {
+    return in_edges(id, g);
+  }
+};
+template <>
+struct GetEdges<false> {
+  template <typename Id, typename Graph>
+  inline auto operator()(Id id, Graph& g) {
+    return out_edges(id, g);
+  }
+};
+
+// Class that selects between in_edges and out_edges (i wish I had c++17...)
+template <bool Backwards>
+struct GetTarget {};
+template <>
+struct GetTarget<true> {
+  using T = FilteredRoutingGraph::vertex_descriptor;
+  template <typename Id, typename Graph>
+  inline T operator()(Id id, Graph& g) {
+    return boost::source(id, g);
+  }
+};
+template <>
+struct GetTarget<false> {
+  using T = FilteredRoutingGraph::vertex_descriptor;
+  template <typename Id, typename Graph>
+  inline T operator()(Id id, Graph& g) {
+    return boost::target(id, g);
+  }
+};
 
 template <typename Vertex, typename Graph, typename Func>
 bool anySidewayNeighbourIs(Vertex v, const Graph& g, Func&& f) {
@@ -93,9 +131,7 @@ class OnRouteFilter {
   OnRouteFilter() = default;
   explicit OnRouteFilter(const RouteLanelets& onRoute) : onRoute_{&onRoute} {}
 
-  bool operator()(FilteredGraph::vertex_descriptor vertexId) const {
-    return onRoute_->find(vertexId) != onRoute_->end();
-  }
+  bool operator()(LaneletVertexId vertexId) const { return onRoute_->find(vertexId) != onRoute_->end(); }
 
  private:
   const RouteLanelets* onRoute_{};
@@ -106,9 +142,22 @@ class OnlyDrivableEdgesFilter {
  public:
   OnlyDrivableEdgesFilter() = default;
   explicit OnlyDrivableEdgesFilter(const OriginalGraph& originalGraph) : originalGraph_{&originalGraph} {}
-  bool operator()(FilteredGraph::edge_descriptor e) const {
+  bool operator()(FilteredRoutingGraph::edge_descriptor e) const {
     auto type = (*originalGraph_)[e].relation;
     return (type & (RelationType::Successor | RelationType::Left | RelationType::Right)) != RelationType::None;
+  }
+
+ private:
+  const OriginalGraph* originalGraph_{};
+};
+
+class OnlyConflictingFilter {
+ public:
+  OnlyConflictingFilter() = default;
+  explicit OnlyConflictingFilter(const OriginalGraph& originalGraph) : originalGraph_{&originalGraph} {}
+  bool operator()(FilteredRoutingGraph::edge_descriptor e) const {
+    auto type = (*originalGraph_)[e].relation;
+    return type == RelationType::Conflicting;
   }
 
  private:
@@ -120,7 +169,7 @@ class NoConflictingFilter {
  public:
   NoConflictingFilter() = default;
   explicit NoConflictingFilter(const OriginalGraph& originalGraph) : originalGraph_{&originalGraph} {}
-  bool operator()(FilteredGraph::edge_descriptor e) const {
+  bool operator()(FilteredRoutingGraph::edge_descriptor e) const {
     auto type = (*originalGraph_)[e].relation;
     return type != RelationType::Conflicting;
   }
@@ -162,7 +211,7 @@ class ConflictingSectionFilter {
   explicit ConflictingSectionFilter(const OriginalGraph& g, const RouteLanelets& onRoute)
       : g_{&g}, onRoute_{&onRoute} {}
 
-  bool operator()(FilteredGraph::vertex_descriptor vertexId) const {
+  bool operator()(LaneletVertexId vertexId) const {
     // conflicting if it is not yet part of the route but in conflict with a route lanelet
     if (has(*onRoute_, vertexId)) {
       return false;
@@ -201,7 +250,7 @@ class OnRouteAndConflictFilter {
                                     const OriginalGraph& g)
       : onRoute_{&onRoute}, conflictWith_{&conflictWith}, g_{&g} {}
 
-  bool operator()(FilteredGraph::vertex_descriptor vertexId) const {
+  bool operator()(LaneletVertexId vertexId) const {
     auto isOk = anySidewayNeighbourIs(vertexId, *g_, [&](auto v) {
       if (!has(*onRoute_, vertexId)) {
         return false;
@@ -324,9 +373,10 @@ class ConnectedPathIterator {
 };
 
 // Aliases for some graphs needed by us
-using RouteGraph = boost::filtered_graph<OriginalGraph, boost::keep_all, OnRouteFilter>;
+using OnRouteGraph = boost::filtered_graph<OriginalGraph, boost::keep_all, OnRouteFilter>;
 using DrivableGraph = boost::filtered_graph<OriginalGraph, OnlyDrivableEdgesFilter>;
 using NoConflictingGraph = boost::filtered_graph<OriginalGraph, NoConflictingFilter>;
+using OnlyConflictingGraph = boost::filtered_graph<OriginalGraph, OnlyConflictingFilter>;
 using NextToRouteGraph = boost::filtered_graph<OriginalGraph, OnlyDrivableEdgesFilter, NextToRouteFilter>;
 using ConflictOrAdjacentToRouteGraph =
     boost::filtered_graph<OriginalGraph, OnlyDrivableEdgesFilter, ConflictingSectionFilter>;

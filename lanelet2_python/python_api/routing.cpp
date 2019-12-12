@@ -45,11 +45,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   OptionalConverter<std::shared_ptr<Route>>();
   OptionalConverter<RelationType>();
   OptionalConverter<LaneletRelation>();
-  OptionalConverter<RouteElementRelation>();
   OptionalConverter<LaneletPath>();
 
   VectorToListConverter<LaneletRelations>();
-  VectorToListConverter<RouteElementRelations>();
   VectorToListConverter<RoutingCostPtrs>();
   VectorToListConverter<LaneletPaths>();
 
@@ -153,10 +151,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("checkValidity", &RoutingGraph::checkValidity, "Performs some basic sanity checks",
            (arg("throwOnError") = true));
 
-  class_<RouteElementRelation>("RouteElementRelation", "Represents relation of a lanelet to another lanelet")
-      .add_property("routeElement", &RouteElementRelation::routeElement)
-      .add_property("relationType", &RouteElementRelation::relationType);
-
   class_<LaneletRelation>("LaneletRelation")
       .add_property("lanelet", &LaneletRelation::lanelet)
       .add_property("relationType", &LaneletRelation::relationType);
@@ -169,30 +163,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .value("AdjacentLeft", RelationType::AdjacentLeft)
       .value("AdjacentRight", RelationType::AdjacentRight)
       .export_values();
-
-  class_<RouteElement, boost::noncopyable, std::shared_ptr<RouteElement>>("RouteElement",
-                                                                          "fundamental building block of a route "
-                                                                          "that represents the relations of one "
-                                                                          "single lanelet",
-                                                                          init<ConstLanelet, RouteElement::LaneId>())
-      .def("laneId", &RouteElement::laneId, "laneID of the route element")
-      .add_property("left", make_function(&RouteElement::left, return_internal_reference<>()), &RouteElement::setLeft,
-                    "the relation to the left lanelet if it exists")
-      .add_property("right", make_function(&RouteElement::right, return_internal_reference<>()),
-                    &RouteElement::setRight, "the relation to the right lanelet if it exists")
-      .add_property("lanelet", make_function(&RouteElement::lanelet, return_internal_reference<>()),
-                    "The lanelet this is all about")
-      .add_property("previous", make_function(&RouteElement::previous, return_internal_reference<>()),
-                    "relations to the previous lanelets if they exist")
-      .add_property("following", make_function(&RouteElement::following, return_internal_reference<>()),
-                    "relations to the following lanelets if they exist")
-      .add_property("conflictingInRoute",
-                    make_function(&RouteElement::conflictingInRoute, return_internal_reference<>()),
-                    "conflicting lanelets within the route if they exist")
-      .add_property("conflictingInMap", make_function(&RouteElement::conflictingInMap, return_internal_reference<>()),
-                    "conflicting lanelets within the passable lanelets in the "
-                    "base laneletMap if they exist")
-      .def("id", &RouteElement::id, "ID of the referenced lanelet");
 
   class_<Route, boost::noncopyable, std::shared_ptr<Route>>("Route",
                                                             "The famous route object that marks a route from A to B, "

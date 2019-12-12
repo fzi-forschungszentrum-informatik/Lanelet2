@@ -50,7 +50,7 @@ class RoutingGraphBuilder {
    *  @param to Goal lanelet
    *  @param relation Relation between the two lanelets */
   void assignCosts(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to, const RelationType& relation);
-  std::unique_ptr<Graph> graph_;
+  std::unique_ptr<RoutingGraphGraph> graph_;
   PointsLaneletMap pointsToLanelets_;  ///< A map of tuples (first or last left and right boundary points) to lanelets
   std::set<Id> bothWaysLaneletIds_;
   const traffic_rules::TrafficRules& trafficRules_;

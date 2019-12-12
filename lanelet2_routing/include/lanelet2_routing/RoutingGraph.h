@@ -1,13 +1,12 @@
 ﻿#pragma once
-
 #include <lanelet2_core/Forward.h>
+#include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/utility/Optional.h>
 #include <map>
 #include <set>
 #include "Forward.h"
 #include "LaneletPath.h"
-#include "RouteElement.h"
 #include "RoutingCost.h"
 
 namespace lanelet {
@@ -322,12 +321,12 @@ class RoutingGraph {
   /**
    * Constructs the routing graph. Don't call this directly, use RoutingGraph::make instead.
    */
-  RoutingGraph(std::unique_ptr<Graph>&& graph, lanelet::LaneletMapConstPtr&& passableMap);
+  RoutingGraph(std::unique_ptr<RoutingGraphGraph>&& graph, lanelet::LaneletMapConstPtr&& passableMap);
 
  private:
   //! Documentation to be found in the cpp file.
-  std::unique_ptr<Graph> graph_;           ///< Wrapper of the routing graph
-  LaneletMapConstPtr passableLaneletMap_;  ///< Lanelet map of all passable lanelets
+  std::unique_ptr<RoutingGraphGraph> graph_;  ///< Wrapper of the routing graph
+  LaneletMapConstPtr passableLaneletMap_;     ///< Lanelet map of all passable lanelets
 };
 
 }  // namespace routing

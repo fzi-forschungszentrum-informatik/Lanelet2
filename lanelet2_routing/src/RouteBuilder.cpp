@@ -2,8 +2,9 @@
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/depth_first_search.hpp>
 #include <unordered_set>
-#include "Graph.h"
+#include "internal/Graph.h"
 #include "internal/GraphUtils.h"
+#include "lanelet2_core/LaneletMap.h"
 
 namespace lanelet {
 namespace routing {
@@ -198,7 +199,7 @@ class PathsOutOfRouteFinder {
     return iterPath_.hasPathFromTo(from, to);
   }
   DrivableGraph g_;
-  RouteGraph gRoute_;
+  OnRouteGraph gRoute_;
   NoConflictingGraph gNoConf_;
   std::vector<LaneletVertexId> newConflictingVertices_;
   std::vector<bool> permittedVertices_;
@@ -233,101 +234,60 @@ class NeighbouringGraphVisitor : public boost::default_bfs_visitor {
 class RouteConstructionVisitor : public boost::default_bfs_visitor {
  public:
   RouteConstructionVisitor() = default;
-  RouteConstructionVisitor(const Graph& graph, ConstLaneletRouteElementMap& elements, LaneBegins& laneBegins)
-      : graph_{&graph}, elements_{&elements}, laneBegins_{&laneBegins} {}
+  RouteConstructionVisitor(const OriginalGraph& graph, RouteGraph& routeGraph)
+      : graph_{&graph}, routeGraph_{&routeGraph} {}
 
   //! called by boost graph on a new vertex
-  void examine_vertex(LaneletVertexId v, const RouteGraph& g) {  // NOLINT
+  void examine_vertex(LaneletVertexId v, const OnRouteGraph& g) {  // NOLINT
     auto llt = g[v].lanelet();
-    if (elements_->empty()) {
+    if (routeGraph_->empty()) {
       // first time
-      sourceElem_ = elements_->emplace(llt, std::make_unique<RouteElement>(llt, laneId_)).first;
-      laneBegins_->emplace(laneId_, sourceElem_->second.get());
+
+      sourceElem_ = routeGraph_->addVertex(RouteVertexInfo{llt, laneId_, {}});
     } else {
-      sourceElem_ = elements_->find(llt);
+      sourceElem_ = *routeGraph_->getVertex(llt);
     }
   }
 
   //! called directly after examine_vertex on all its edges
-  void examine_edge(RouteGraph::edge_descriptor e, const RouteGraph& g) {  // NOLINT
+  void examine_edge(OnRouteGraph::edge_descriptor e, const OnRouteGraph& g) {  // NOLINT
     auto dest = boost::target(e, g);
     auto llt = g[dest].lanelet();
-    auto destElem = elements_->find(llt);
+    auto destVertex = routeGraph_->getVertex(llt);
     const auto newLane = isDifferentLane(e, g);
     auto type = g[e].relation;
-    if (destElem == elements_->end()) {
-      const auto laneId = newLane ? ++laneId_ : sourceElem_->second->laneId();
-      destElem = elements_->emplace(llt, std::make_unique<RouteElement>(llt, laneId)).first;
-      if (newLane) {
-        laneBegins_->emplace(laneId, destElem->second.get());
-      }
-    } else if (destElem != elements_->end() && !newLane && type == RelationType::Successor &&
-               sourceElem_->second->laneId() != destElem->second->laneId()) {
+    if (!destVertex) {
+      const auto laneId = newLane ? ++laneId_ : routeGraph()[sourceElem_].laneId;
+      destVertex = routeGraph_->addVertex(RouteVertexInfo{llt, laneId, {}});
+    } else if (!!destVertex && !newLane && type == RelationType::Successor &&
+               routeGraph()[sourceElem_].laneId != routeGraph()[*destVertex].laneId) {
       // this happens if we reached a lanelet because it was part of a circle of reached through a conflicting lanelet.
       // In this case we have to adjust lane Ids
-      setLaneIdFromTo(destElem->second->laneId(), sourceElem_->second->laneId());
+      setLaneIdFromTo(routeGraph()[*destVertex].laneId, routeGraph()[sourceElem_].laneId);
     }
-    auto* destRelation = destElem->second.get();
-    switch (type) {
-      case RelationType::Left:
-      case RelationType::AdjacentLeft:
-        sourceElem_->second->setLeft(RouteElementRelation{destRelation, type});
-        break;
-      case RelationType::Right:
-      case RelationType::AdjacentRight:
-        sourceElem_->second->setRight(RouteElementRelation{destRelation, type});
-        break;
-      case RelationType::Successor:
-        sourceElem_->second->addFollowing(destRelation);
-        destRelation->addPrevious(sourceElem_->second.get());
-        break;
-      case RelationType::Conflicting:
-        sourceElem_->second->addConflictingInRoute(destRelation);
-        sourceElem_->second->addConflictingInMap(destRelation->lanelet());
-        break;
-      default:
-        break;
-    }
+    routeGraph_->addEdge(sourceElem_, *destVertex, g[e]);
   }
-  void finish_vertex(LaneletVertexId v, const RouteGraph& g) {  // NOLINT
+  void finish_vertex(LaneletVertexId v, const OnRouteGraph& g) {  // NOLINT
     // now that all neighbours are known, now is the time to add lanelets that conflict in the whole graph
-    auto& routingGraph = graph_->get();
-    auto numOut = boost::out_degree(v, g);
-    auto numOutGraph = boost::out_degree(v, routingGraph);
-    assert(numOutGraph >= numOut &&
-           "the original routing graph must not have more less edges than the graph of the route!");
-    if (numOut == numOutGraph) {
-      // there cant be any conflicting for this lanelet, all edges lie within the graph of the route. Only works if
-      // there is only one routing cost object.
-      return;
-    }
-    auto outGraph = boost::out_edges(v, routingGraph);
+    OnlyConflictingGraph conflictInMap(*graph_, OnlyConflictingFilter{*graph_});
+    auto outGraph = boost::out_edges(v, conflictInMap);
     std::for_each(outGraph.first, outGraph.second, [&](GraphTraits::edge_descriptor e) {
-      if (routingGraph[e].relation != RelationType::Conflicting) {
-        return;
-      }
-      auto dest = boost::target(e, g);
-      auto destLlt = g[dest];
-      if (destLlt.laneletOrArea.isLanelet() && elements_->find(destLlt.lanelet()) != elements_->end()) {
-        return;  // this lanelet is part of the route
-      }
-      sourceElem_->second->addConflictingInMap(destLlt.laneletOrArea);
+      routeGraph()[sourceElem_].conflictingInMap.push_back(g[boost::target(e, g)].laneletOrArea);
     });
   }
 
  private:
-  void setLaneIdFromTo(RouteElement::LaneId from, RouteElement::LaneId to) {
-    for (auto& elem : *elements_) {
-      if (elem.second->laneId() == from) {
-        elem.second->setLaneId(to);
+  RouteGraphType& routeGraph() { return routeGraph_->get(); }
+  void setLaneIdFromTo(LaneId from, LaneId to) {
+    auto& g = routeGraph_->get();
+    for (auto elem : g.vertex_set()) {
+      if (g[elem].laneId == from) {
+        g[elem].laneId = to;
       }
     }
-    auto laneBegin = laneBegins_->find(from);
-    assert(laneBegin != laneBegins_->end());
-    laneBegins_->erase(laneBegin);
   }
 
-  bool isDifferentLane(RouteGraph::edge_descriptor e, const RouteGraph& g) const {
+  bool isDifferentLane(OnRouteGraph::edge_descriptor e, const OnRouteGraph& g) const {
     // we increment the lane id whenever the vertex has more than one predecessor or the singele predecessor has
     // multiple follower. Non-Successor edges are always a different lane.
     if (g[e].relation != RelationType::Successor) {
@@ -341,7 +301,7 @@ class RouteConstructionVisitor : public boost::default_bfs_visitor {
     return !hasOneSuccessor(boost::out_edges(source, g), g);
   }
 
-  static LaneletVertexId getOnePredecessor(LaneletVertexId v, const RouteGraph& g) {
+  static LaneletVertexId getOnePredecessor(LaneletVertexId v, const OnRouteGraph& g) {
     auto inEdges = boost::in_edges(v, g);
     auto e =
         *std::find_if(inEdges.first, inEdges.second, [&](auto e) { return g[e].relation == RelationType::Successor; });
@@ -349,7 +309,7 @@ class RouteConstructionVisitor : public boost::default_bfs_visitor {
   }
 
   template <typename EdgesT>
-  static bool hasOneSuccessor(const EdgesT& edges, const RouteGraph& g) {
+  static bool hasOneSuccessor(const EdgesT& edges, const OnRouteGraph& g) {
     bool hasOneEdge = false;
     for (auto it = edges.first; it != edges.second; ++it) {
       bool oneMoreEdge = g[*it].relation == RelationType::Successor;
@@ -361,11 +321,10 @@ class RouteConstructionVisitor : public boost::default_bfs_visitor {
     return hasOneEdge;
   }
 
-  const Graph* graph_{};
-  RouteElement::LaneId laneId_{1000};
-  ConstLaneletRouteElementMap* elements_{};
-  ConstLaneletRouteElementMap::iterator sourceElem_;
-  LaneBegins* laneBegins_{};
+  const OriginalGraph* graph_{};
+  LaneId laneId_{1000};
+  RouteGraph* routeGraph_{};
+  LaneletVertexId sourceElem_;
 };
 
 template <typename Graph, typename StartVertex, typename Visitor>
@@ -412,19 +371,18 @@ class RouteUnderConstruction {
   }
 
   //! Creates the route object from the current state of the route.
-  Optional<Route> finalizeRoute(const Graph& theGraph, const LaneletPath& thePath) {
-    ConstLaneletRouteElementMap elements;
-    LaneBegins laneBegins;
+  Optional<Route> finalizeRoute(const OriginalGraph& theGraph, const LaneletPath& thePath) {
+    auto routeGraph = std::make_unique<RouteGraph>(1);
     // Search the graph of the route. The visitor fills elements and lanebegins
-    RouteConstructionVisitor visitor(theGraph, elements, laneBegins);
+    RouteConstructionVisitor visitor(theGraph, *routeGraph);
     breadthFirstSearch(routeGraph_, begin_, visitor);
 
-    if (elements.find(thePath.back()) == elements.end()) {
+    if (!routeGraph->getVertex(thePath.back())) {
       return {};  // there was no path between begin and end
     }
-
-    auto map = utils::createConstMap(utils::transform(elements, [](auto& elem) { return elem.first; }), {});
-    return Route(thePath, std::move(elements), std::move(laneBegins), std::move(map));
+    auto& g = routeGraph->get();
+    auto map = utils::createConstMap(utils::transform(g.vertex_set(), [&g](auto v) { return g[v].lanelet; }), {});
+    return Route(thePath, std::move(routeGraph), std::move(map));
   }
 
  private:
@@ -432,7 +390,7 @@ class RouteUnderConstruction {
   LaneletVertexId end_;
   RouteLanelets laneletsOnRoute_;  //! Lanelets already determined to be on the route
   const OriginalGraph& originalGraph_;
-  RouteGraph routeGraph_;
+  OnRouteGraph routeGraph_;
   NextToRouteGraph nextToRouteGraph_;
   VisitedLaneletGraph laneletVisitor_;
   PathsOutOfRouteFinder pathOutOfRouteFinder_;
@@ -458,7 +416,7 @@ Optional<Route> RouteBuilder::getRouteFromShortestPath(const LaneletPath& path, 
   while (progress) {
     progress = routeUnderConstruction.addAdjacentLaneletsToRoute();
   }
-  return routeUnderConstruction.finalizeRoute(graph_, path);
+  return routeUnderConstruction.finalizeRoute(originalGraph, path);
 }
 }  // namespace routing
 }  // namespace lanelet
