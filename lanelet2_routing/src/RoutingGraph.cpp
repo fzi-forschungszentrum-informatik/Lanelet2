@@ -7,6 +7,7 @@
 #include <lanelet2_core/primitives/Point.h>
 #include <lanelet2_traffic_rules/TrafficRules.h>
 #include <algorithm>
+#include <boost/graph/reverse_graph.hpp>
 #include <cassert>  // Asserts
 #include <memory>
 #include <queue>
@@ -36,10 +37,6 @@ T reservedVector(size_t size) {
   T t;
   t.reserve(size);
   return t;
-}
-
-ConstLanelets toLanelets(const ConstLaneletOrAreas& la) {
-  return utils::transform(la, [](auto& la) { return static_cast<const ConstLanelet&>(la); });
 }
 
 /** @brief Helper objecct to save state of possible routes search */
@@ -181,6 +178,94 @@ ConstLanelets getLaneletEdgesFromGraph(const RoutingGraphGraph& graph, const Fil
   }
   return result;
 }
+
+template <bool Backw>
+struct GetGraph {};
+template <>
+struct GetGraph<true> {
+  template <typename G>
+  auto operator()(const G& g) {
+    return boost::make_reverse_graph(g);
+  }
+};
+template <>
+struct GetGraph<false> {
+  template <typename G>
+  auto operator()(const G& g) {
+    return g;
+  }
+};
+
+template <bool Backw, typename OutVertexT, typename GraphT>
+std::vector<OutVertexT> buildPath(const DijkstraSearchMap<LaneletVertexId>& map, LaneletVertexId vertex, GraphT g) {
+  auto* currInfo = &map.at(vertex);
+  auto size = currInfo->length;
+  std::vector<OutVertexT> path(size);
+  while (true) {
+    auto idx = Backw ? size - currInfo->length : currInfo->length - 1;
+    path[idx] = static_cast<OutVertexT>(g[vertex].laneletOrArea);
+    if (currInfo->predecessor == vertex) {
+      break;
+    }
+    vertex = currInfo->predecessor;
+    currInfo = &map.at(vertex);
+  }
+  return path;
+}
+
+template <bool Backw, typename OutVertexT, typename OutContainerT, typename Func>
+std::vector<OutContainerT> possiblePathsImpl(const GraphType::vertex_descriptor& start,
+                                             const FilteredRoutingGraph& graph, Func stopCriterion) {
+  auto g = GetGraph<Backw>{}(graph);
+  DijkstraStyleSearch<decltype(g)> search(g);
+  search.query(start, stopCriterion);
+  auto keepPath = [&](auto& vertex) { return vertex.second.isLeaf && !vertex.second.predicate; };
+  auto numPaths = size_t(std::count_if(search.getMap().begin(), search.getMap().end(), keepPath));
+  std::vector<OutContainerT> result;
+  result.reserve(numPaths);
+  for (auto& vertex : search.getMap()) {
+    if (!keepPath(vertex)) {
+      continue;
+    }
+    result.emplace_back(buildPath<Backw, OutVertexT>(search.getMap(), vertex.first, graph));
+  }
+  return result;
+}
+
+template <bool Backw, typename OutVertexT, typename Func>
+std::vector<OutVertexT> reachableSetImpl(const GraphType::vertex_descriptor& start, const FilteredRoutingGraph& graph,
+                                         Func stopCriterion) {
+  auto g = GetGraph<Backw>{}(graph);
+  DijkstraStyleSearch<decltype(g)> search(g);
+  search.query(start, stopCriterion);
+  std::vector<OutVertexT> result;
+  result.reserve(search.getMap().size());
+  for (auto& vertex : search.getMap()) {
+    if (vertex.second.predicate) {
+      result.emplace_back(static_cast<OutVertexT>(graph[vertex.first].laneletOrArea));
+    }
+  }
+  return result;
+}
+
+template <bool Eq = false>
+struct StopIfLaneletsMoreThan {
+  StopIfLaneletsMoreThan(size_t n) : n{n} {}
+  template <typename T>
+  inline bool operator()(const T& v) const {
+    return Eq ? v.length <= n : v.length < n;
+  }
+  size_t n;
+};
+template <bool Eq = false>
+struct StopIfCostMoreThan {
+  StopIfCostMoreThan(double c) : c{c} {}
+  template <typename T>
+  inline bool operator()(const T& v) const {
+    return Eq ? v.cost <= c : v.cost < c;
+  }
+  double c;
+};
 }  // namespace
 
 RoutingGraph::RoutingGraph(RoutingGraph&& /*other*/) noexcept = default;
@@ -380,104 +465,34 @@ ConstLaneletOrAreas RoutingGraph::conflicting(const ConstLaneletOrArea& laneletO
   return getAllEdgesFromGraph(*graph_, graph_->conflicting(), laneletOrArea, true);
 }
 
-template <bool Backw, typename Func>
-std::vector<ConstLaneletOrAreas> possiblePathsImpl(const GraphType::vertex_descriptor& start,
-                                                   const FilteredRoutingGraph& graph, bool keepBeforeStop,
-                                                   Func stopCriterion) {
-  std::vector<ConstLaneletOrAreas> result;
-  std::priority_queue<PossibleRoutesInfo, std::vector<PossibleRoutesInfo>, MoreLaneChanges> candidates;
-  candidates.push(PossibleRoutesInfo(static_cast<uint32_t>(start), graph[start].laneletOrArea));
-  auto weights = boost::get(&EdgeInfo::routingCost, graph);
-  auto tryToVisit = [visited = std::set<Id>{graph[start].laneletOrArea.id()}](const ConstLaneletOrArea& la) mutable {
-    if (visited.find(la.id()) != visited.end()) {
-      return false;
-    }
-    visited.insert(la.id());
-    return true;
-  };
-  while (!candidates.empty()) {
-    PossibleRoutesInfo candidate = candidates.top();
-    candidates.pop();
-    bool continued = false;
-    decltype(GetEdges<Backw>()(candidate.vertexId, graph).first) edgesIt, edgesEnd;
-    for (std::tie(edgesIt, edgesEnd) = GetEdges<Backw>()(candidate.vertexId, graph); edgesIt != edgesEnd; ++edgesIt) {
-      auto idx = Backw ? boost::source(*edgesIt, graph) : boost::target(*edgesIt, graph);
-      if (!tryToVisit(graph[idx].laneletOrArea)) {
-        continue;
-      }
-      const auto cost = boost::get(weights, *edgesIt);
-      PossibleRoutesInfo newCandidate{candidate};
-      newCandidate.totalDistance += cost;
-      newCandidate.vertexId = static_cast<uint32_t>(idx);
-      newCandidate.laneletsOrAreas.emplace_back(graph[idx].laneletOrArea);
-      newCandidate.numLaneChanges += graph[*edgesIt].relation != RelationType::Successor;
-      if (stopCriterion(newCandidate)) {
-        if (keepBeforeStop) {
-          continue;
-        }
-        result.emplace_back(std::move(newCandidate.laneletsOrAreas));
-      } else {
-        candidates.push(std::move(newCandidate));
-      }
-      continued = true;
-    }
-    if (!continued && keepBeforeStop) {
-      result.emplace_back(candidate.laneletsOrAreas);
-    }
-  }
-  return result;
-}
-
 ConstLanelets RoutingGraph::reachableSet(const ConstLanelet& lanelet, double maxRoutingCost,
-                                         RoutingCostId routingCostId) const {
-  ConstLanelets result;
+                                         RoutingCostId routingCostId, bool allowLaneChanges) const {
   auto start = graph_->getVertex(lanelet);
   if (!start) {
-    return result;
+    return {};
   }
-  auto stopIfMoreThanMinCost = [maxRoutingCost](const PossibleRoutesInfo& route) {
-    return route.totalDistance > maxRoutingCost;
-  };
-  auto graph = graph_->withLaneChanges(routingCostId);
-  auto possibleRoutes = possiblePathsImpl<false>(*start, graph, true, stopIfMoreThanMinCost);
-  // the result may contain duplicates where lanes have diverged
-  auto reachableSet = toLanelets(utils::concatenateRange(possibleRoutes, [&possibleRoutes](auto& path) {
-    assert(!path.empty());
-    if (&path == possibleRoutes.begin().base()) {
-      return std::make_pair(path.begin(), path.end());
-    }
-    return std::make_pair(path.begin() + 1, path.end());
-  }));
-  std::sort(reachableSet.begin(), reachableSet.end(), [](auto& rhs, auto& lhs) { return rhs.id() <= lhs.id(); });
-  auto remove = std::unique(reachableSet.begin(), reachableSet.end());
-  reachableSet.erase(remove, reachableSet.end());
-  return reachableSet;
+  auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
+  return reachableSetImpl<false, ConstLanelet>(*start, graph, StopIfCostMoreThan<true>{maxRoutingCost});
 }
 
 ConstLaneletOrAreas RoutingGraph::reachableSetIncludingAreas(const ConstLaneletOrArea& llOrAr, double maxRoutingCost,
                                                              RoutingCostId routingCostId) const {
-  ConstLaneletOrAreas result;
   auto start = graph_->getVertex(llOrAr);
   if (!start) {
-    return result;
+    return {};
   }
-  auto stopIfMoreThanMinCost = [maxRoutingCost](const PossibleRoutesInfo& route) {
-    return route.totalDistance > maxRoutingCost;
-  };
   auto graph = graph_->withAreasAndLaneChanges(routingCostId);
-  auto possibleRoutes = possiblePathsImpl<false>(*start, graph, true, stopIfMoreThanMinCost);
-  // the result may contain duplicates where lanes have diverged
-  auto reachableSet = utils::concatenateRange(possibleRoutes, [&possibleRoutes](auto& path) {
-    assert(!path.empty());
-    if (&path == possibleRoutes.begin().base()) {
-      return std::make_pair(path.begin(), path.end());
-    }
-    return std::make_pair(path.begin() + 1, path.end());
-  });
-  std::sort(reachableSet.begin(), reachableSet.end(), [](auto& rhs, auto& lhs) { return rhs.id() <= lhs.id(); });
-  auto remove = std::unique(reachableSet.begin(), reachableSet.end());
-  reachableSet.erase(remove, reachableSet.end());
-  return reachableSet;
+  return reachableSetImpl<false, ConstLaneletOrArea>(*start, graph, StopIfCostMoreThan<true>{maxRoutingCost});
+}
+
+ConstLanelets RoutingGraph::reachableSetTowards(const ConstLanelet& lanelet, double maxRoutingCost,
+                                                RoutingCostId routingCostId, bool allowLaneChanges) const {
+  auto start = graph_->getVertex(lanelet);
+  if (!start) {
+    return {};
+  }
+  auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
+  return reachableSetImpl<true, ConstLanelet>(*start, graph, StopIfCostMoreThan<true>{maxRoutingCost});
 }
 
 LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, double minRoutingCost,
@@ -486,26 +501,18 @@ LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, double 
   if (!start) {
     return {};
   }
-  auto stopIfMoreThanMinCost = [minRoutingCost](const PossibleRoutesInfo& route) {
-    return route.totalDistance >= minRoutingCost;
-  };
   auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
-  return utils::transform(possiblePathsImpl<false>(*start, graph, false, stopIfMoreThanMinCost),
-                          [](auto& v) { return LaneletPath(toLanelets(v)); });
+  return possiblePathsImpl<false, ConstLanelet, LaneletPath>(*start, graph, StopIfCostMoreThan{minRoutingCost});
 }
 
-LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets,
-                                         bool allowLaneChanges) const {
+LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets, bool allowLaneChanges,
+                                         RoutingCostId routingCostId) const {
   auto start = graph_->getVertex(startPoint);
   if (!start) {
     return {};
   }
-  auto stopIfMinLanelets = [minLanelets](const PossibleRoutesInfo& route) {
-    return route.laneletsOrAreas.size() >= minLanelets;
-  };
-  auto graph = allowLaneChanges ? graph_->withLaneChanges(0) : graph_->withoutLaneChanges(0);
-  return utils::transform(possiblePathsImpl<false>(*start, graph, false, stopIfMinLanelets),
-                          [](auto& v) { return LaneletPath(toLanelets(v)); });
+  auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
+  return possiblePathsImpl<false, ConstLanelet, LaneletPath>(*start, graph, StopIfLaneletsMoreThan{minLanelets});
 }
 
 LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanelet, double minRoutingCost,
@@ -514,32 +521,18 @@ LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanele
   if (!start) {
     return {};
   }
-  auto stopIfMoreThanMinCost = [minRoutingCost](const PossibleRoutesInfo& route) {
-    return route.totalDistance >= minRoutingCost;
-  };
   auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
-  return utils::transform(possiblePathsImpl<true>(*start, graph, false, stopIfMoreThanMinCost), [](auto& v) {
-    auto llts = toLanelets(v);
-    std::reverse(llts.begin(), llts.end());
-    return LaneletPath(std::move(llts));
-  });
+  return possiblePathsImpl<true, ConstLanelet, LaneletPath>(*start, graph, StopIfCostMoreThan{minRoutingCost});
 }
 
 LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanelet, uint32_t minLanelets,
-                                                bool allowLaneChanges) const {
+                                                bool allowLaneChanges, RoutingCostId routingCostId) const {
   auto start = graph_->getVertex(targetLanelet);
   if (!start) {
     return {};
   }
-  auto stopIfMinLanelets = [minLanelets](const PossibleRoutesInfo& route) {
-    return route.laneletsOrAreas.size() >= minLanelets;
-  };
-  auto graph = allowLaneChanges ? graph_->withLaneChanges() : graph_->withoutLaneChanges();
-  return utils::transform(possiblePathsImpl<true>(*start, graph, false, stopIfMinLanelets), [](auto& v) {
-    auto llts = toLanelets(v);
-    std::reverse(llts.begin(), llts.end());
-    return LaneletPath(std::move(llts));
-  });
+  auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
+  return possiblePathsImpl<true, ConstLanelet, LaneletPath>(*start, graph, StopIfLaneletsMoreThan{minLanelets});
 }
 
 LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint,
@@ -549,27 +542,22 @@ LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletO
   if (!start) {
     return {};
   }
-  auto stopIfMoreThanMinCost = [minRoutingCost](const PossibleRoutesInfo& route) {
-    return route.totalDistance >= minRoutingCost;
-  };
   auto graph = allowLaneChanges ? graph_->withAreasAndLaneChanges(routingCostId)
                                 : graph_->withAreasWithoutLaneChanges(routingCostId);
-  return utils::transform(possiblePathsImpl<false>(*start, graph, false, stopIfMoreThanMinCost),
-                          [](auto& v) { return LaneletOrAreaPath(v); });
+  return possiblePathsImpl<false, ConstLaneletOrArea, LaneletOrAreaPath>(*start, graph,
+                                                                         StopIfCostMoreThan{minRoutingCost});
 }
 
 LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, uint32_t minElements,
-                                                             bool allowLaneChanges) const {
+                                                             bool allowLaneChanges, RoutingCostId routingCostId) const {
   auto start = graph_->getVertex(startPoint);
   if (!start) {
     return {};
   }
-  auto stopIfMinVertices = [minElements](const PossibleRoutesInfo& route) {
-    return route.laneletsOrAreas.size() >= minElements;
-  };
-  auto graph = allowLaneChanges ? graph_->withAreasAndLaneChanges(0) : graph_->withAreasWithoutLaneChanges(0);
-  return utils::transform(possiblePathsImpl<false>(*start, graph, false, stopIfMinVertices),
-                          [](auto& v) { return LaneletOrAreaPath(v); });
+  auto graph = allowLaneChanges ? graph_->withAreasAndLaneChanges(routingCostId)
+                                : graph_->withAreasWithoutLaneChanges(routingCostId);
+  return possiblePathsImpl<false, ConstLaneletOrArea, LaneletOrAreaPath>(*start, graph,
+                                                                         StopIfLaneletsMoreThan{minElements});
 }
 
 void RoutingGraph::exportGraphML(const std::string& filename, const RelationType& edgeTypesToExclude,

@@ -7,6 +7,7 @@
 #include <vector>
 #include "Forward.h"
 #include "LaneletPath.h"
+#include "Types.h"
 
 namespace lanelet {
 namespace routing {

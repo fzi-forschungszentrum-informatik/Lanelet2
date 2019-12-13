@@ -1,12 +1,66 @@
 #include <gtest/gtest.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
+#include <sched.h>
 #include <algorithm>
 #include "RoutingGraph.h"
+#include "internal/Graph.h"
+#include "internal/ShortestPath.h"
 #include "test_routing_map.h"
 
 using namespace lanelet;
 using namespace lanelet::routing;
 using namespace lanelet::routing::tests;
+
+GraphType getSimpleGraph() {
+  /*        3
+   *    (1)---(3)
+   *    /1 \1 /  \3
+   *  (0)   X     (5)
+   *    \2 /1 \  /1
+   *    (2)----(4)
+   *         3
+   */
+  GraphType g;
+  auto v0 = boost::add_vertex(g);
+  auto v1 = boost::add_vertex(g);
+  auto v2 = boost::add_vertex(g);
+  auto v3 = boost::add_vertex(g);
+  auto v4 = boost::add_vertex(g);
+  auto v5 = boost::add_vertex(g);
+  auto addEdge = [](auto v0, auto v1, auto& g, double c) {
+    auto e = boost::add_edge(v0, v1, g);
+    g[e.first].routingCost = c;
+  };
+  addEdge(v0, v1, g, 1);
+  addEdge(v0, v2, g, 2);
+  addEdge(v1, v3, g, 3);
+  addEdge(v1, v4, g, 1);
+  addEdge(v2, v3, g, 1);
+  addEdge(v2, v4, g, 3);
+  addEdge(v3, v5, g, 3);
+  addEdge(v4, v5, g, 1);
+  return g;
+}
+
+TEST(DijkstraSearch, onSimpleGraph) {
+  auto g = getSimpleGraph();
+  DijkstraStyleSearch<GraphType> searcher(g);
+  std::vector<double> expCost{0, 1, 2, 3, 2, 6};
+  std::vector<size_t> length{1, 2, 2, 3, 3, 4};
+  std::vector<GraphType::vertex_descriptor> predecessors{0, 0, 0, 2, 1, 3};
+  searcher.query(0, [&](const VertexVisitInformation& v) -> bool {
+    EXPECT_DOUBLE_EQ(expCost[v.vertex], v.cost) << v.vertex;
+    EXPECT_EQ(length[v.vertex], v.length) << v.vertex;
+    EXPECT_EQ(predecessors[v.vertex], v.predecessor) << v.vertex;
+    EXPECT_EQ(v.length, v.numLaneChanges + 1);
+    return v.vertex != 4;
+  });
+  EXPECT_EQ(searcher.getMap().size(), boost::num_vertices(g));
+  for (auto& v : searcher.getMap()) {
+    EXPECT_EQ(v.second.predicate, v.first != 4) << v.first;
+    EXPECT_EQ(v.second.isLeaf, v.first == 5 || v.first == 4) << v.first;
+  }
+}
 
 TEST_F(GermanPedestrianGraph, NumberOfLanelets) {  // NOLINT
   EXPECT_EQ(graph->passableMap()->laneletLayer.size(), 5ul);
@@ -195,7 +249,8 @@ TEST_F(GermanPedestrianGraph, reachableSetStartingFromArea) {  // NOLINT
 }
 TEST_F(GermanPedestrianGraph, reachableSetWithAreaFromTwoWayLanelet) {  // NOLINT
   auto reachable = graph->reachableSetIncludingAreas(lanelets.at(2053).invert(), 100);
-  EXPECT_EQ(reachable.size(), 4ul);
+  EXPECT_TRUE(containsLanelet(reachable, 2053));
+  EXPECT_EQ(reachable.size(), 5ul);
 }
 TEST_F(GermanPedestrianGraph, reachableSetWithAreaFromUnconnectedLanelet) {  // NOLINT
   auto reachable = graph->reachableSetIncludingAreas(lanelets.at(2051), 100);
@@ -258,10 +313,13 @@ TEST_F(GermanVehicleGraph, possiblePathsMinLanelets) {  // NOLINT
 }
 
 TEST_F(GermanVehicleGraph, possiblePathsInvalid) {  // NOLINT
-  // Invalid min length
+  // Invalid num costs length
   EXPECT_THROW(graph->possiblePaths(lanelets.at(2002), 0., numCostModules, true), InvalidInputError);  // NOLINT
+  auto routes = graph->possiblePaths(lanelets.at(2002), 0.);
+  ASSERT_EQ(routes.size(), 1);
+  EXPECT_EQ(routes[0].size(), 1);
   ConstLanelet invalid;
-  auto routes = graph->possiblePaths(invalid, 10.0, 0, true);
+  routes = graph->possiblePaths(invalid, 10.0, 0, true);
   EXPECT_EQ(routes.size(), 0ul);
 
   // Invalid min number lanelets

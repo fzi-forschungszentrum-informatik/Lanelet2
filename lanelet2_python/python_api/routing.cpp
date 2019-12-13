@@ -72,7 +72,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   auto possR1 = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, double, RoutingCostId, bool) const>(
       &RoutingGraph::possiblePaths);
-  auto possR2 = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, uint32_t, bool) const>(
+  auto possR2 = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, uint32_t, bool, RoutingCostId) const>(
       &RoutingGraph::possiblePaths);
 
   class_<LaneletPath>("LaneletPath",
@@ -135,7 +135,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("possiblePaths", possR1,
            "possible routes from a given start lanelet that are "
            "'minRoutingCost'-long",
-           (arg("lanelet"), arg("minRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = false))
+           (arg("lanelet"), arg("minRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = false,
+            arg("routingCostId") = 0))
       .def("possiblePaths", possR2,
            "possible routes from a given start lanelet that are "
            "'minLanelets'-long",

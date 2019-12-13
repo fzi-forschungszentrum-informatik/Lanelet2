@@ -442,7 +442,8 @@ class RoutingGraphTestData {
     lanelets.at(2050).setAttribute(AttributeName::OneWay, true);
     addLaneletPedestrian(lines.at(1101), lines.at(1089));           // ll2051
     addLaneletPedestrian(lines.at(1093).invert(), lines.at(1100));  // ll2052
-    addLaneletPedestrian(lines.at(1098), lines.at(1099));           // ll2053
+    lanelets.at(2052).setAttribute(AttributeName::OneWay, true);
+    addLaneletPedestrian(lines.at(1098), lines.at(1099));  // ll2053
 
     // lanelets on conflicting section
     laneletId = 2059;

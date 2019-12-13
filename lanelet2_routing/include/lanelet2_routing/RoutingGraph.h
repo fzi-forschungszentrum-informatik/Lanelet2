@@ -8,6 +8,7 @@
 #include "Forward.h"
 #include "LaneletPath.h"
 #include "RoutingCost.h"
+#include "Types.h"
 
 namespace lanelet {
 namespace routing {
@@ -217,15 +218,27 @@ class RoutingGraph {
    *
    *  Determines which lanelets can be reached from a give start lanelets within a given amount of routing cost.
    *  @param lanelet Start lanelet
-   *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets
+   *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets (noninclusive)
    *  @param routingCostId ID of the routing cost module used for routing cost.
+   *  @param allowLaneChanges Allow or forbid lane changes
    *  @return all lanelets that are reachable in no particular orders. "lanelet" itself is always included. */
-  ConstLanelets reachableSet(const ConstLanelet& lanelet, double maxRoutingCost,
-                             RoutingCostId routingCostId = {}) const;
+  ConstLanelets reachableSet(const ConstLanelet& lanelet, double maxRoutingCost, RoutingCostId routingCostId = {},
+                             bool allowLaneChanges = true) const;
 
   //! Retrieve set of lanelet or areas that are reachable without exceeding routing cost.
   ConstLaneletOrAreas reachableSetIncludingAreas(const ConstLaneletOrArea& llOrAr, double maxRoutingCost,
                                                  RoutingCostId routingCostId = {}) const;
+
+  /** @brief Retrieve a set of lanelets that can reach a given lanelet
+   *
+   *  Determines which reach the given lanelet with a given amount of routing cost.
+   *  @param lanelet destination lanelet
+   *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets (noninclusive)
+   *  @param routingCostId ID of the routing cost module used for routing cost.
+   *  @param allowLaneChanges Allow or forbid lane changes
+   *  @return all lanelets in range in no particular order. "lanelet" itself is always included. */
+  ConstLanelets reachableSetTowards(const ConstLanelet& lanelet, double maxRoutingCost,
+                                    RoutingCostId routingCostId = {}, bool allowLaneChanges = true) const;
 
   /** @brief Determines possible routes from a given start lanelet that are "minRoutingCost"-long.
    *
@@ -239,14 +252,19 @@ class RoutingGraph {
   LaneletPaths possiblePaths(const ConstLanelet& startPoint, double minRoutingCost, RoutingCostId routingCostId = {},
                              bool allowLaneChanges = false) const;
 
-  /** @brief Determines possible paths from a given start lanelet that are "minLanelets"-long.
-   *  Returns possible routes that are at least as long as specified number of lanelets. It is possible to forbid
-   * lane changes in order to avoid routes that alternate between two neighboring lanelets.
+  /** @brief Determines possible paths from a given start lanelet that are "minLanelets"-long.   *
+   *  @return possible paths that are at least as long as specified number of lanelets. If a lanelet can be reached
+   * using different paths, only the one is included that requires the least number of lane changes and has minimum
+   * routing costs. "lanelet" itself is always included.
    *  @param startPoint Start lanelet
    *  @param minLanelets Number of lanelets a route must be long
    *  @param allowLaneChanges Allow or forbid lane changes. Note that "lane changes" from a lanelet to an area do not
-   * count. */
-  LaneletPaths possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets, bool allowLaneChanges = false) const;
+   * count.
+   *  @param routingCostId ID of the routing cost module used. This is important in cases where some of routing cost
+   * modules retuned an invalid edge weight and some not.
+   */
+  LaneletPaths possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets, bool allowLaneChanges = false,
+                             RoutingCostId routingCostId = {}) const;
 
   /** @brief Determines possible routes that reach the given lanelet and are "minRoutingCost" long.
    *  @return possible paths that are at least as long as specified in 'minRoutingCost'. "lanelet" itself is always
@@ -258,14 +276,17 @@ class RoutingGraph {
   LaneletPaths possiblePathsTowards(const ConstLanelet& targetLanelet, double minRoutingCost,
                                     RoutingCostId routingCostId = {}, bool allowLaneChanges = false) const;
 
-  /** @brief Determines possible paths from a given start lanelet that are "minLanelets"-long.
-   *  Returns possible routes that are at least as long as specified number of lanelets.
-   *  @param startPoint Start lanelet
+  /** @brief Determines possible paths towards a destination lanelet that are "minLanelets"-long.
+   *  @return possible routes that are at least as long as specified number of lanelets. The last lanelet will aways be
+   * "targetLanelet" (or nothing if it is not part of the graph).
+   *  @param targetLanelet target lanelet
    *  @param minLanelets Number of lanelets a route must be long
    *  @param allowLaneChanges Allow or forbid lane changes. Note that "lane changes" from a lanelet to an area do not
-   * count. */
+   * count.
+   *  @param routingCostId ID of the routing cost module used. This is important in cases where some of routing cost
+   * modules retuned an invalid edge weight and some not. */
   LaneletPaths possiblePathsTowards(const ConstLanelet& targetLanelet, uint32_t minLanelets,
-                                    bool allowLaneChanges = false) const;
+                                    bool allowLaneChanges = false, RoutingCostId routingCostId = {}) const;
 
   //! Similar to RoutingGraph::possiblePaths, but also considers areas.
   LaneletOrAreaPaths possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, double minRoutingCost,
@@ -273,7 +294,7 @@ class RoutingGraph {
 
   //! Similar to RoutingGraph::possiblePaths, but also considers areas.
   LaneletOrAreaPaths possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, uint32_t minElements,
-                                                 bool allowLaneChanges = false) const;
+                                                 bool allowLaneChanges = false, RoutingCostId routingCostId = {}) const;
 
   /** @brief Export the internal graph to graphML (xml-based) file format.
    *  @param filename Fully qualified file name - ideally with extension (.graphml)
