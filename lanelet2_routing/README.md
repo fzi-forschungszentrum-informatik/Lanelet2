@@ -33,7 +33,7 @@ Lanelets that are part of a routing graph can have relations to each other:
 The possible relations are:
     * `left`, `right` (reachable via lane change)
     * `adjacent left`, `adjacent right` (lanelets that are neighbours but not reachable via lane change)
-    * `succeeding` (1:1 relation between two subsequent lanelets), `merging` (n:1 relation between lanelets), `diverging` (1:n relation between lanelets)
+    * `succeeding` (relation between two subsequent lanelets)
     * `conflicting` (intersecting lanelets/areas)
     * `area` (reachable area to lanelet/area relation)
 
