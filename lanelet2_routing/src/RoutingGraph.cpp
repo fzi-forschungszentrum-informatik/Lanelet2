@@ -303,12 +303,20 @@ Optional<LaneletPath> RoutingGraph::shortestPath(const ConstLanelet& from, const
     return {};
   }
   auto graph = withLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
-  ShortestPath<FilteredRoutingGraph> pathSearch(graph, *startVertex);
-  std::deque<GraphType::vertex_descriptor> vertexPath{pathSearch.shortestPath(*endVertex)};
-  if (vertexPath.empty()) {
-    return {};
+  DijkstraStyleSearch<FilteredRoutingGraph> search(graph);
+  class DestinationReached {};
+  try {
+    search.query(*startVertex, [endVertex](const VertexVisitInformation& i) {
+      if (i.vertex == *endVertex) {
+        throw DestinationReached{};
+      }
+      return true;
+    });
+  } catch (DestinationReached) {
+    auto map = search.getMap();
+    return LaneletPath{buildPath<false, ConstLanelet>(search.getMap(), *endVertex, graph)};
   }
-  return LaneletPath(utils::transform(vertexPath, [&](auto& vi) { return graph_->get()[vi].lanelet(); }));
+  return {};
 }
 
 Optional<LaneletPath> RoutingGraph::shortestPathVia(const ConstLanelet& start, const ConstLanelets& via,
