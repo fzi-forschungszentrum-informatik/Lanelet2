@@ -6,6 +6,7 @@
 #include <boost/graph/filtered_graph.hpp>
 #include <map>
 #include <utility>
+#include "../Exceptions.h"
 
 namespace lanelet {
 namespace routing {
@@ -184,6 +185,12 @@ class Graph {
   }
 
   void addEdge(Vertex from, Vertex to, const EdgeInfo& edgeInfo) {
+    if (!std::isfinite(edgeInfo.routingCost)) {
+      return;
+    }
+    if (edgeInfo.routingCost < 0.) {
+      throw RoutingGraphError{"Negative costs calculated by routing cost module!"};
+    }
     auto edge = boost::add_edge(from, to, graph_);
     assert(edge.second && "Edge could not be added to the graph.");
     graph_[edge.first] = edgeInfo;

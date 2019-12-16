@@ -342,6 +342,12 @@ void RoutingGraphBuilder::assignLaneChangeCosts(const ConstLanelets& froms, cons
       routingCosts_, [&](const RoutingCostPtr& cost) { return cost->getCostLaneChange(trafficRules_, froms, tos); });
   for (auto i = 0u; i < froms.size(); ++i) {
     for (RoutingCostId costId = 0; costId < routingCosts_.size(); ++costId) {
+      if (!std::isfinite(costs[costId])) {
+        // if the costs are infinite, we add an adjacent edge instead
+        auto adjacent = relation == RelationType::Left ? RelationType::AdjacentLeft : RelationType::AdjacentRight;
+        graph_->addEdge(froms[i], tos[i], EdgeInfo{1, costId, adjacent});
+        continue;
+      }
       graph_->addEdge(froms[i], tos[i], EdgeInfo{costs[costId], costId, relation});
     }
   }
@@ -361,9 +367,9 @@ void RoutingGraphBuilder::assignCosts(const ConstLaneletOrArea& from, const Cons
     } else if (relation == RelationType::Right) {
       edgeInfo.routingCost = routingCost.getCostLaneChange(trafficRules_, {*from.lanelet()}, {*to.lanelet()});
     } else if (relation == RelationType::AdjacentLeft || relation == RelationType::AdjacentRight) {
-      edgeInfo.routingCost = std::numeric_limits<double>::max();
+      edgeInfo.routingCost = 1;
     } else if (relation == RelationType::Conflicting) {
-      edgeInfo.routingCost = std::numeric_limits<double>::max();
+      edgeInfo.routingCost = 1;
     } else {
       assert(false && "Trying to add edge with wrong relation type to graph.");  // NOLINT
       return;

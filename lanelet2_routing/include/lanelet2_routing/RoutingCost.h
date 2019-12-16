@@ -14,9 +14,9 @@ namespace routing {
  *  As of now, two modules are implemented which should satisfy basic needs:
  *    1. Distance-based calculation
  *    2. Travel time-based calculation
- *  Routing cost modules should not be used to prohibit a certain relation by setting the cost to infinity. Use
- * regulatory elements and the TrafficRules module to achieve this. The cost can represent whatever you want it to be -
- * seconds, meter, lane changes, ... but it must not be negative! */
+ * Routing cost modules *can* be used to prohibit a certain relation by setting the cost to infinity. Still it is
+ * generally better to use regulatory elements and the TrafficRules module to achieve this. The cost can represent
+ * whatever you want it to be - seconds, meter, lane changes, ... but it must not be negative! */
 class RoutingCost {  // NOLINT
  public:
   virtual ~RoutingCost() = default;
@@ -46,7 +46,8 @@ class RoutingCost {  // NOLINT
  *  Uses the 2D length and a fixed lane change cost to evaluate relations. */
 class RoutingCostDistance : public RoutingCost {
  public:
-  //! Distance cost of a lane change [m]
+  //! Distance cost of a lane change [m]. If a lane change requires less than minLaneChangeLength, no lane change will
+  //! be possible here. Instead, relation between the involved lanelets will be "adjacent".
   explicit RoutingCostDistance(double laneChangeCost, double minLaneChangeLength = 0.)
       : laneChangeCost_{laneChangeCost}, minChangeLength_{minLaneChangeLength} {
     if (laneChangeCost_ < 0.0) {
@@ -65,7 +66,7 @@ class RoutingCostDistance : public RoutingCost {
     }
     auto totalLength = std::accumulate(from.begin(), from.end(), 0.,
                                        [this](double acc, auto& llt) { return acc + this->length(llt); });
-    return totalLength >= minChangeLength_ ? laneChangeCost_ : std::numeric_limits<double>::max();
+    return totalLength >= minChangeLength_ ? laneChangeCost_ : std::numeric_limits<double>::infinity();
   }
 
  private:
@@ -81,7 +82,9 @@ class RoutingCostTravelTime : public RoutingCost {
  public:
   RoutingCostTravelTime() = delete;
 
-  //! Time cost of a lane change [s]
+  //! Time cost of a lane change [s]. If the time is not sufficient for the lane change (i.e. minLaneChangeTime is not
+  //! reached), no lane change will possible at this position. Instead the relation between the involved lanelets is
+  //! "adjacent".
   explicit RoutingCostTravelTime(double laneChangeCost, double minLaneChangeTime = 0.)
       : laneChangeCost_{laneChangeCost}, minChangeTime_{minLaneChangeTime} {
     if (laneChangeCost_ < 0.0) {
@@ -97,7 +100,7 @@ class RoutingCostTravelTime : public RoutingCost {
     auto changeTime = std::accumulate(from.begin(), from.end(), 0., [this, &trafficRules](double acc, auto& llt) {
       return acc + this->travelTime(trafficRules, llt);
     });
-    return changeTime >= minChangeTime_ ? laneChangeCost_ : std::numeric_limits<double>::max();
+    return changeTime >= minChangeTime_ ? laneChangeCost_ : std::numeric_limits<double>::infinity();
   }
   inline double getCostSucceeding(const traffic_rules::TrafficRules& trafficRules, const ConstLaneletOrArea& from,
                                   const ConstLaneletOrArea& to) const override {
