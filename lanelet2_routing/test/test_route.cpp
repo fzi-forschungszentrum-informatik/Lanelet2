@@ -138,6 +138,16 @@ TEST_F(Route1, Conflicting) {  // NOLINT
   EXPECT_TRUE(route.conflictingInMap(lanelets.at(2007)).empty());
 }
 
+TEST_F(Route1, forEachSuccessor) {  // NOLINT
+  double cLast = 0.;
+  route.forEachSuccessor(lanelets.at(2001), [&](const LaneletVisitInformation& i) {
+    EXPECT_TRUE(route.contains(i.lanelet));
+    EXPECT_LE(cLast, i.cost);
+    cLast = i.cost;
+    return true;
+  });
+}
+
 TEST_F(Route1, Lanes) {  // NOLINT
   auto remainingLane{route.remainingLane(lanelets.at(2002))};
   EXPECT_EQ(remainingLane.size(), 2ul);  // NOLINT
@@ -167,6 +177,13 @@ TEST_F(Route1NoLc, Lanes) {  // NOLINT
 
   EXPECT_TRUE(route.remainingLane(lanelets.at(2010)).empty());
   EXPECT_EQ(route.numLanes(), 1ul);
+}
+
+TEST_F(Route1NoLc, forEachPredecessor) {  // NOLINT
+  route.forEachPredecessor(lanelets.at(2001), [&](const LaneletVisitInformation& i) {
+    EXPECT_EQ(i.lanelet, lanelets.at(2001));
+    return true;
+  });
 }
 
 TEST_F(Route2, CreateRoute2) {                                           // NOLINT

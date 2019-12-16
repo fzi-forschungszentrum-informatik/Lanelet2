@@ -145,6 +145,14 @@ class Route {
    * route.*/
   LaneletRelations rightRelations(const ConstLanelet& lanelet) const;
 
+  //! Can be used to search the route object with a custom function that is called for the successors of lanelet.
+  //! This function works similar to RoutingGraph::forEachSuccessor. Which costs and whether lane changes are used to
+  //! determine the shortest path depends on the cost id that was used to create this route object.
+  void forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f) const;
+
+  //! Similar to forEachSuccessor but goes backwards in the routing graph instead of forwards.
+  void forEachPredecessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f) const;
+
   /** @brief Information about conflicting lanelets of a lanelet within the route
    *  @param lanelet Lanelet to find conflicting lanelets to
    *  @return Vector of conflicting lanelets. Empty vector if input lanelet is not part of the route.

@@ -93,6 +93,29 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(self == self)   // NOLINT
       .def(self != self);  // NOLINT
 
+  class_<LaneletVisitInformation>("LaneletVisitInformation",
+                                  "Object passed as input for the forEachSuccessor function of the routing graph")
+      .add_property("lanelet", &LaneletVisitInformation::lanelet, "the currently visited lanelet")
+      .add_property("predecessor", &LaneletVisitInformation::predecessor, "the predecessor within the shortest path")
+      .add_property("length", &LaneletVisitInformation::length,
+                    "The length of the shortest path to this lanelet (including lanelet")
+      .add_property("cost", &LaneletVisitInformation::cost, "The cost along the shortest path")
+      .add_property("numLaneChanges", &LaneletVisitInformation::numLaneChanges,
+                    "The number of lane changes necessary along the shortest path");
+
+  class_<LaneletOrAreaVisitInformation>(
+      "LaneletOrAreaVisitInformation",
+      "Object passed as input for the forEachSuccessorIncludingAreas function of the routing graph")
+      .add_property("laneletOrArea", &LaneletOrAreaVisitInformation::laneletOrArea,
+                    "the currently visited lanelet/area")
+      .add_property("predecessor", &LaneletOrAreaVisitInformation::predecessor,
+                    "the predecessor within the shortest path")
+      .add_property("length", &LaneletOrAreaVisitInformation::length,
+                    "The length of the shortest path to this lanelet (including lanelet")
+      .add_property("cost", &LaneletOrAreaVisitInformation::cost, "The cost along the shortest path")
+      .add_property("numLaneChanges", &LaneletOrAreaVisitInformation::numLaneChanges,
+                    "The number of lane changes necessary along the shortest path");
+
   class_<RoutingGraph, boost::noncopyable, RoutingGraphPtr>(
       "RoutingGraph",
       "Main class of the routing module that holds routing information and can "
@@ -152,6 +175,34 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("possiblePathsTowardsMinLen", possPToLen,
            "possible routes from a given start lanelet that are 'minLanelets'-long",
            (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
+      .def("forEachSuccessor",
+           +[](RoutingGraph& self, const ConstLanelet& from, object func, bool lc, RoutingCostId costId) {
+             self.forEachSuccessor(from, func, lc, costId);
+           },
+           "calls a function on each successor of lanelet with increasing cost. The function must receives a "
+           "LaneletVisitInformation object as input and must return a bool whether followers of the current lanelet "
+           "should be visited as well. The function can raise an exception if an early exit is desired",
+           (arg("lanelet"), arg("func"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
+      .def("forEachSuccessorIncludingAreas",
+           +[](RoutingGraph& self, const ConstLaneletOrArea& from, object func, bool lc, RoutingCostId costId) {
+             self.forEachSuccessorIncludingAreas(from, func, lc, costId);
+           },
+           "similar to forEachSuccessor but also includes areas into the search",
+           (arg("lanelet"), arg("func"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
+      .def("forEachPredecessor",
+           +[](RoutingGraph& self, const ConstLanelet& from, object func, bool lc, RoutingCostId costId) {
+             self.forEachPredecessor(from, func, lc, costId);
+           },
+           "similar to forEachSuccessor but instead goes backwards along the routing graph",
+           (arg("lanelet"), arg("func"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
+      .def("forEachPredecessorIncludingAreas",
+           +[](RoutingGraph& self, const ConstLaneletOrArea& from, object func, bool lc, RoutingCostId costId) {
+             self.forEachPredecessorIncludingAreas(from, func, lc, costId);
+           },
+           "calls a function on each successor of lanelet. The function must receives a LaneletVisitInformation object "
+           "as input and must return a bool whether followers of the current lanelet should be visited as well. The "
+           "function can throw an exception if an early exit is desired",
+           (arg("lanelet"), arg("func"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
       .def("exportGraphML", +[](RoutingGraph& self, const std::string& path) { self.exportGraphML(path); },
            "Export the internal graph to graphML (xml-based) file format")
       .def("exportGraphViz", +[](RoutingGraph& self, const std::string& path) { self.exportGraphViz(path); },
@@ -191,25 +242,28 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("laneletMap", +[](const Route& r) { return std::const_pointer_cast<LaneletMap>(r.laneletMap()); },
            "laneletMap with all lanelets that are part of the route")
       .def("getDebugLaneletMap", &Route::getDebugLaneletMap,
-           "laneletMap that represents the Lanelets of the Route "
-           "and their relationship")
+           "laneletMap that represents the Lanelets of the Route and their relationship")
       .def("size", &Route::size, "Number of lanelets")
       .def("followingRelations", &Route::followingRelations, "Provides the following lanelets within the Route")
       .def("previousRelations", &Route::previousRelations, "Provides the previous lanelets within the Route")
-      .def("leftRelation", &Route::leftRelation,
-           "Provides the lanelet left of a given lanelet within the "
-           "Route")
+      .def("leftRelation", &Route::leftRelation, "Provides the lanelet left of a given lanelet within the Route")
       .def("leftRelations", &Route::leftRelations, "*all* lanelets left of a given lanelet within the Route")
-      .def("rightRelation", &Route::rightRelation,
-           "Provides the lanelet right of a given lanelet within the "
-           "Route")
+      .def("rightRelation", &Route::rightRelation, "Provides the lanelet right of a given lanelet within the Route")
       .def("rightRelations", &Route::rightRelations, "*all* lanelets right of a given lanelet within the Route")
       .def("conflictingInRoute", &Route::conflictingInRoute, "conflicting lanelets of a lanelet within the route")
       .def("conflictingInMap", &Route::conflictingInMap,
-           "conflicting lanelets of a lanelet within all passable "
-           "lanelets in the laneletMap")
+           "conflicting lanelets of a lanelet within all passable lanelets in the laneletMap")
       .def("allConflictingInMap", &Route::allConflictingInMap,
-           "all lanelets in the map that conflict with any lanelet in the "
-           "route")
+           "all lanelets in the map that conflict with any lanelet in the route")
+      .def("forEachSuccessor",
+           +[](Route& self, const ConstLanelet& from, object func) { self.forEachSuccessor(from, func); },
+           "calls a function on each successor of lanelet with increasing cost. The function must receives a "
+           "LaneletVisitInformation object as input and must return a bool whether followers of the current lanelet "
+           "should be visited as well. The function can raise an exception if an early exit is desired",
+           (arg("lanelet"), arg("func")))
+      .def("forEachPredecessor",
+           +[](Route& self, const ConstLanelet& from, object func) { self.forEachPredecessor(from, func); },
+           "similar to forEachSuccessor but instead goes backwards along the routing graph",
+           (arg("lanelet"), arg("func")))
       .def("checkValidity", &Route::checkValidity, "perform sanity check on the route");
 }

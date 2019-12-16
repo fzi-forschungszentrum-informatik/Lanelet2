@@ -568,6 +568,71 @@ LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletO
                                                                          StopIfLaneletsMoreThan{minElements});
 }
 
+void RoutingGraph::forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges,
+                                    RoutingCostId routingCostId) const {
+  auto start = graph_->getVertex(lanelet);
+  if (!start) {
+    return;
+  }
+  auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
+  DijkstraStyleSearch<FilteredRoutingGraph> search(graph);
+  search.query(*start, [&](const VertexVisitInformation& i) -> bool {
+    return f(LaneletVisitInformation{graph_->get()[i.vertex].lanelet(), graph_->get()[i.predecessor].lanelet(), i.cost,
+                                     i.length, i.numLaneChanges});
+  });
+}
+
+void RoutingGraph::forEachSuccessorIncludingAreas(const ConstLaneletOrArea& lanelet,
+                                                  const LaneletOrAreaVisitFunction& f, bool allowLaneChanges,
+                                                  RoutingCostId routingCostId) const {
+  auto start = graph_->getVertex(lanelet);
+  if (!start) {
+    return;
+  }
+  auto graph = allowLaneChanges ? graph_->withAreasAndLaneChanges(routingCostId)
+                                : graph_->withAreasWithoutLaneChanges(routingCostId);
+  DijkstraStyleSearch<FilteredRoutingGraph> search(graph);
+  search.query(*start, [&](const VertexVisitInformation& i) -> bool {
+    return f(LaneletOrAreaVisitInformation{graph_->get()[i.vertex].laneletOrArea,
+                                           graph_->get()[i.predecessor].laneletOrArea, i.cost, i.length,
+                                           i.numLaneChanges});
+  });
+}
+
+void RoutingGraph::forEachPredecessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges,
+                                      RoutingCostId routingCostId) const {
+  auto start = graph_->getVertex(lanelet);
+  if (!start) {
+    return;
+  }
+  auto forwGraph =
+      allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
+  auto graph = boost::make_reverse_graph(forwGraph);  // forwGraph needs to stay on the stack
+  DijkstraStyleSearch<decltype(graph)> search(graph);
+  search.query(*start, [&](const VertexVisitInformation& i) -> bool {
+    return f(LaneletVisitInformation{graph_->get()[i.vertex].lanelet(), graph_->get()[i.predecessor].lanelet(), i.cost,
+                                     i.length, i.numLaneChanges});
+  });
+}
+
+void RoutingGraph::forEachPredecessorIncludingAreas(const ConstLaneletOrArea& lanelet,
+                                                    const LaneletOrAreaVisitFunction& f, bool allowLaneChanges,
+                                                    RoutingCostId routingCostId) const {
+  auto start = graph_->getVertex(lanelet);
+  if (!start) {
+    return;
+  }
+  auto forwGraph = allowLaneChanges ? graph_->withAreasAndLaneChanges(routingCostId)
+                                    : graph_->withAreasWithoutLaneChanges(routingCostId);
+  auto graph = boost::make_reverse_graph(forwGraph);  // forwGraph needs to stay on the stack
+  DijkstraStyleSearch<decltype(graph)> search(graph);
+  search.query(*start, [&](const VertexVisitInformation& i) -> bool {
+    return f(LaneletOrAreaVisitInformation{graph_->get()[i.vertex].laneletOrArea,
+                                           graph_->get()[i.predecessor].laneletOrArea, i.cost, i.length,
+                                           i.numLaneChanges});
+  });
+}
+
 void RoutingGraph::exportGraphML(const std::string& filename, const RelationType& edgeTypesToExclude,
                                  RoutingCostId routingCostId) const {
   if (filename.empty()) {

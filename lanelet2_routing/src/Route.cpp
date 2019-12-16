@@ -3,10 +3,12 @@
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/utility/Utilities.h>
+#include <boost/graph/reverse_graph.hpp>
 #include <unordered_map>
 #include "Exceptions.h"
 #include "internal/Graph.h"
 #include "internal/GraphUtils.h"
+#include "internal/ShortestPath.h"
 
 namespace lanelet {
 namespace routing {
@@ -287,6 +289,33 @@ LaneletRelations Route::rightRelations(const ConstLanelet& lanelet) const {
     std::tie(next, type) = getNextVertex(*next, g);
   }
   return result;
+}
+
+void Route::forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f) const {
+  auto v = graph_->getVertex(lanelet);
+  if (!v) {
+    return;
+  }
+  auto g = graph_->withLaneChanges();
+  DijkstraStyleSearch<FilteredRouteGraph> search(g);
+  search.query(*v, [&](const VertexVisitInformation& i) -> bool {
+    return f(LaneletVisitInformation{graph_->get()[i.vertex].lanelet, graph_->get()[i.predecessor].lanelet, i.cost,
+                                     i.length, i.numLaneChanges});
+  });
+}
+
+void Route::forEachPredecessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f) const {
+  auto v = graph_->getVertex(lanelet);
+  if (!v) {
+    return;
+  }
+  auto g = graph_->withLaneChanges();
+  auto gInv = boost::make_reverse_graph(g);
+  DijkstraStyleSearch<decltype(gInv)> search(gInv);
+  search.query(*v, [&](const VertexVisitInformation& i) -> bool {
+    return f(LaneletVisitInformation{graph_->get()[i.vertex].lanelet, graph_->get()[i.predecessor].lanelet, i.cost,
+                                     i.length, i.numLaneChanges});
+  });
 }
 
 ConstLanelets Route::conflictingInRoute(const ConstLanelet& lanelet) const {

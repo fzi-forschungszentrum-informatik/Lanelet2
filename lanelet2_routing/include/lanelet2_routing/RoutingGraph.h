@@ -218,7 +218,7 @@ class RoutingGraph {
    *
    *  Determines which lanelets can be reached from a give start lanelets within a given amount of routing cost.
    *  @param lanelet Start lanelet
-   *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets (noninclusive)
+   *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets
    *  @param routingCostId ID of the routing cost module used for routing cost.
    *  @param allowLaneChanges Allow or forbid lane changes
    *  @return all lanelets that are reachable in no particular orders. "lanelet" itself is always included. */
@@ -233,7 +233,7 @@ class RoutingGraph {
    *
    *  Determines which reach the given lanelet with a given amount of routing cost.
    *  @param lanelet destination lanelet
-   *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets (noninclusive)
+   *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets
    *  @param routingCostId ID of the routing cost module used for routing cost.
    *  @param allowLaneChanges Allow or forbid lane changes
    *  @return all lanelets in range in no particular order. "lanelet" itself is always included. */
@@ -295,6 +295,38 @@ class RoutingGraph {
   //! Similar to RoutingGraph::possiblePaths, but also considers areas.
   LaneletOrAreaPaths possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, uint32_t minElements,
                                                  bool allowLaneChanges = false, RoutingCostId routingCostId = {}) const;
+
+  /** @brief Calls a function on every successor of lanelet, optionally including lane changes
+   *
+   * This function can be used to query the routing graph on a more direct level. The function will be called on
+   * lanelets with monotonically increasing cost from the start lanelet, including the start lanelet itself. If the
+   * function returns "false" on an input, its followers will not be visited through this lanelet, as if it did not
+   * exist.
+   *
+   * The search internally uses the dijkstra algorithm in order to discover the shortest path to the successors of this
+   * lanelet and calls the provided function once it is known.
+   *
+   * In order to abort the query early, an exception can be thrown. If the lanelet is not part of the graph, nothing
+   * will be called.
+   * @param lanelet the lanelet where the search starts
+   * @param f the function to be called on lanelet and its successors
+   * @param allowLaneChanges also consider lane changes
+   * @param routingCostId id for the routing cost module that is used to calculate the shortest path
+   */
+  void forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges = true,
+                        RoutingCostId routingCostId = {}) const;
+
+  //! Similar to forEachSuccessor but also includes areas into the search
+  void forEachSuccessorIncludingAreas(const ConstLaneletOrArea& lanelet, const LaneletOrAreaVisitFunction& f,
+                                      bool allowLaneChanges = true, RoutingCostId routingCostId = {}) const;
+
+  //! Similar to forEachSuccessor but goes backwards in the routing graph instead of forwards.
+  void forEachPredecessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges = true,
+                          RoutingCostId routingCostId = {}) const;
+
+  //! Similar to forEachPredecessor but also includes areas into the search
+  void forEachPredecessorIncludingAreas(const ConstLaneletOrArea& lanelet, const LaneletOrAreaVisitFunction& f,
+                                        bool allowLaneChanges = true, RoutingCostId routingCostId = {}) const;
 
   /** @brief Export the internal graph to graphML (xml-based) file format.
    *  @param filename Fully qualified file name - ideally with extension (.graphml)

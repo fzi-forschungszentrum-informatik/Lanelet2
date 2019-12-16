@@ -1,18 +1,32 @@
 #pragma once
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/primitives/LaneletOrArea.h>
+#include <functional>
 #include "Forward.h"
 
 namespace lanelet {
 namespace routing {
 
 //! This object carries the required information for the graph neighbourhood search
-struct VisitInformation {
+struct LaneletOrAreaVisitInformation {
   ConstLaneletOrArea laneletOrArea;  //! The lanelet or area that is currently visited
   ConstLaneletOrArea predecessor;    //! Its predecessor on the shortest path
-  double cost{};                     //! The accumulated cost from the start along the shortest path
-  size_t length{};                   //! The number of lanelets from start to here along the shortest path
+  double cost{};                     //! The accumulated cost from the start along shortest path
+  size_t length{};                   //! Number of elements from start to here along shortest path (including this)
+  size_t numLaneChanges{};           //! Number of lane changes from start to here along shortest path
 };
+
+//! This object carries the required information for the graph neighbourhood search
+struct LaneletVisitInformation {
+  ConstLanelet lanelet;      //! The lanelet or area that is currently visited
+  ConstLanelet predecessor;  //! Its predecessor on the shortest path
+  double cost{};             //! The accumulated cost from the start along shortest path
+  size_t length{};           //! The number of lanelets from start to here along shortest path (including this)
+  size_t numLaneChanges{};   //! Number of lane changes from start to here along shortest path
+};
+
+using LaneletVisitFunction = std::function<bool(const LaneletVisitInformation&)>;
+using LaneletOrAreaVisitFunction = std::function<bool(const LaneletOrAreaVisitInformation&)>;
 
 //! Represents the relation of a lanelet to another lanelet
 struct LaneletRelation {
