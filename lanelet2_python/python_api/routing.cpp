@@ -70,10 +70,16 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "RoutingCostDistance", "Travel time based routing cost calculation object",
       init<double, double>((arg("laneChangeCost"), arg("minLaneChangeTime") = 0)));
 
-  auto possR1 = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, double, RoutingCostId, bool) const>(
+  auto possPCost = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, double, RoutingCostId, bool) const>(
       &RoutingGraph::possiblePaths);
-  auto possR2 = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, uint32_t, bool, RoutingCostId) const>(
+  auto possPLen = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, uint32_t, bool, RoutingCostId) const>(
       &RoutingGraph::possiblePaths);
+  auto possPToCost =
+      static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, double, RoutingCostId, bool) const>(
+          &RoutingGraph::possiblePathsTowards);
+  auto possPToLen =
+      static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, uint32_t, bool, RoutingCostId) const>(
+          &RoutingGraph::possiblePathsTowards);
 
   class_<LaneletPath>("LaneletPath",
                       "A set of consecutive lanelets connected in straight "
@@ -131,16 +137,21 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("rightRelations", &RoutingGraph::rightRelations, "relations to right lanelets", arg("lanelet"))
       .def("conflicting", &RoutingGraph::conflicting, "Conflicting lanelets", arg("lanelet"))
       .def("reachableSet", &RoutingGraph::reachableSet, "set of lanelets that can be reached from a given lanelet",
-           (arg("lanelet"), arg("maxRoutingCost"), arg("RoutingCostId") = 0))
-      .def("possiblePaths", possR1,
-           "possible routes from a given start lanelet that are "
-           "'minRoutingCost'-long",
+           (arg("lanelet"), arg("maxRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = true))
+      .def("reachableSetTowards", &RoutingGraph::reachableSetTowards, "set of lanelets that can reach a given lanelet",
+           (arg("lanelet"), arg("maxRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = true))
+      .def("possiblePaths", possPCost, "possible paths from a given start lanelet that are 'minRoutingCost'-long",
            (arg("lanelet"), arg("minRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = false,
             arg("routingCostId") = 0))
-      .def("possiblePaths", possR2,
-           "possible routes from a given start lanelet that are "
-           "'minLanelets'-long",
-           (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges")))
+      .def("possiblePathsTowards", possPToCost,
+           "possible paths to a given start lanelet that are 'minRoutingCost'-long",
+           (arg("lanelet"), arg("minRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = false,
+            arg("routingCostId") = 0))
+      .def("possiblePathsMinLen", possPLen, "possible routes from a given start lanelet that are 'minLanelets'-long",
+           (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
+      .def("possiblePathsTowardsMinLen", possPToLen,
+           "possible routes from a given start lanelet that are 'minLanelets'-long",
+           (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
       .def("exportGraphML", +[](RoutingGraph& self, const std::string& path) { self.exportGraphML(path); },
            "Export the internal graph to graphML (xml-based) file format")
       .def("exportGraphViz", +[](RoutingGraph& self, const std::string& path) { self.exportGraphViz(path); },
