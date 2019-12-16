@@ -8,6 +8,7 @@
 
 namespace lanelet {
 namespace routing {
+namespace internal {
 
 //! This object carries the required information for the graph neighbourhood search
 struct VertexVisitInformation {
@@ -19,12 +20,12 @@ struct VertexVisitInformation {
 };
 
 struct VertexState {
-  RoutingGraphGraph::Vertex predecessor;  //! The vertex this refers to
-  double cost{};                          //! Current accumulated cost
-  size_t length{};                        //! Number of vertices to this vertex (including this one)
-  size_t numLaneChanges{};                //! Required lane changes along the shortest path in order to get here
-  bool predicate{true};                   //! False if disabled by predicate
-  bool isLeaf{true};                      //! True if it has no successor that is on the shortest path
+  RoutingGraphGraph::Vertex predecessor;  //!< The vertex this refers to
+  double cost{};                          //!< Current accumulated cost
+  size_t length{};                        //!< Number of vertices to this vertex (including this one)
+  size_t numLaneChanges{};                //!< Required lane changes along the shortest path in order to get here
+  bool predicate{true};                   //!< False if disabled by predicate
+  bool isLeaf{true};                      //!< True if it has no successor that is on the shortest path
 };
 
 template <typename VertexT>
@@ -132,5 +133,6 @@ class DijkstraStyleSearch {
   DijkstraSearchMapType vertices_;
 };
 
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

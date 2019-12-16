@@ -6,6 +6,7 @@
 
 namespace lanelet {
 namespace routing {
+namespace internal {
 using LaneletVertexId = GraphTraits::vertex_descriptor;
 using LaneletVertexIds = std::vector<LaneletVertexId>;
 using RouteLanelets = std::set<LaneletVertexId>;
@@ -382,5 +383,6 @@ using ConflictOrAdjacentToRouteGraph =
     boost::filtered_graph<OriginalGraph, OnlyDrivableEdgesFilter, ConflictingSectionFilter>;
 using ConflictsWithPathGraph = boost::filtered_graph<OriginalGraph, NoConflictingFilter, OnRouteAndConflictFilter>;
 
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

@@ -7,8 +7,8 @@
 
 namespace lanelet {
 namespace routing {
-//! A lanelet path represents a set of lanelets that can be reached in order by either driving straight or doing lane
-//! changes.
+//! @brief A lanelet path represents a set of lanelets that can be reached in order by either driving straight or doing
+//! lane changes.
 class LaneletPath {
  public:
   using iterator = ConstLanelets::iterator;              // NOLINT

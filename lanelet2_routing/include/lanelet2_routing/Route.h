@@ -19,8 +19,8 @@ namespace routing {
  * is not included. Any adjacent Lanelet which does not lead to the goal is also not included.
  * - A Route does not have any relations to Lanelets that are not part of the Route (the only exception are
  * conflicting Lanelets)
- * - A Route is usually obtained from a RoutingGraph via the "getRoute" function.
- * - A route is self-sustained in terms of that there is no relation to the RoutingGraph anymore
+ * - A Route is usually obtained from a RoutingGraph via "RoutingGraph::getRoute".
+ * - A Route is self-sustained in terms of that there is no relation to the RoutingGraph anymore
  * - RelationTypes within a Route refer to relations of the Elements that are part of the Route. A lanelet can have
  * fewer successors than in the routing graph if some are not part of the route
  * - The route is divided into lanes with individual Ids. The exact value of the id for a lane is random. Ids are not
@@ -41,7 +41,7 @@ class Route {
   Route(Route&& other) noexcept;
   ~Route() noexcept;
 
-  Route(LaneletPath shortestPath, std::unique_ptr<RouteGraph> graph, LaneletMapConstPtr laneletMap) noexcept;
+  Route(LaneletPath shortestPath, std::unique_ptr<internal::RouteGraph> graph, LaneletMapConstPtr laneletMap) noexcept;
 
   /** @brief Returns the shortest path that was the base of this route */
   inline const LaneletPath& shortestPath() const noexcept { return shortestPath_; }
@@ -182,9 +182,9 @@ class Route {
   Errors checkValidity(bool throwOnError = false) const;
 
  private:
-  std::unique_ptr<RouteGraph> graph_;  ///< The internal graph
-  LaneletPath shortestPath_;           ///< The underlying shortest path used to create the route
-  LaneletMapConstPtr laneletMap_;      ///< LaneletMap with all lanelets that are part of the route
+  std::unique_ptr<internal::RouteGraph> graph_;  ///< The internal graph
+  LaneletPath shortestPath_;                     ///< The underlying shortest path used to create the route
+  LaneletMapConstPtr laneletMap_;                ///< LaneletMap with all lanelets that are part of the route
 };
 };  // namespace routing
 };  // namespace lanelet

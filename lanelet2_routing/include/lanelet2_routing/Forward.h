@@ -8,6 +8,8 @@
 
 namespace lanelet {
 namespace routing {
+namespace internal {
+
 using IdPair = std::pair<Id, Id>;
 
 template <typename BaseGraphT>
@@ -15,8 +17,9 @@ class Graph;
 
 class RoutingGraphGraph;
 class RouteGraph;
-using LaneId = uint16_t;
+}  // namespace internal
 
+using LaneId = uint16_t;
 class RoutingGraph;
 using RoutingGraphPtr = std::shared_ptr<RoutingGraph>;
 using RoutingGraphUPtr = std::unique_ptr<RoutingGraph>;

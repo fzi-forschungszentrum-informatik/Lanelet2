@@ -8,6 +8,7 @@
 
 namespace lanelet {
 namespace routing {
+namespace internal {
 namespace {
 struct VisitationCount {
   bool isLeaf() const { return numFollowers + numLaneChangesOut == 0; }
@@ -418,5 +419,6 @@ Optional<Route> RouteBuilder::getRouteFromShortestPath(const LaneletPath& path, 
   }
   return routeUnderConstruction.finalizeRoute(originalGraph, path);
 }
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

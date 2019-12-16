@@ -5,9 +5,9 @@
 
 namespace lanelet {
 namespace routing {
-
 class RoutingGraph;
 
+namespace internal {
 //! Builder class to create a route from a routing graph and the shortest path
 class RouteBuilder {
  public:
@@ -39,5 +39,6 @@ class RouteBuilder {
   const RoutingGraphGraph& graph_;
 };
 
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

@@ -7,6 +7,7 @@ namespace lanelet {
 class LaneletLayer;
 
 namespace routing {
+namespace internal {
 
 class LaneChangeLaneletsCollector;
 
@@ -57,5 +58,6 @@ class RoutingGraphBuilder {
   const RoutingCostPtrs& routingCosts_;
   const RoutingGraph::Configuration& config_;
 };
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

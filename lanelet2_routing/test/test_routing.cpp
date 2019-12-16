@@ -9,6 +9,7 @@
 
 using namespace lanelet;
 using namespace lanelet::routing;
+using namespace lanelet::routing::internal;
 using namespace lanelet::routing::tests;
 
 GraphType getSimpleGraph() {

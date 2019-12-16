@@ -9,6 +9,7 @@
 
 namespace lanelet {
 namespace routing {
+namespace internal {
 namespace {
 inline IdPair orderedIdPair(const Id id1, const Id id2) { return (id1 < id2) ? IdPair(id1, id2) : IdPair(id2, id1); }
 }  // namespace
@@ -370,6 +371,6 @@ void RoutingGraphBuilder::assignCosts(const ConstLaneletOrArea& from, const Cons
     graph_->addEdge(from, to, edgeInfo);
   }
 }
-
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

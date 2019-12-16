@@ -5,15 +5,6 @@
 #include <stdexcept>
 
 namespace lanelet {
-
-/**
- * @brief Thrown when the goal is found in Dijkstra shortest path.
- * This is an internal exception only.
- */
-class FoundGoalError : public LaneletError {
-  using LaneletError::LaneletError;
-};
-
 /**
  * @brief Thrown when an export to the provided file(name) cannot be done.
  */

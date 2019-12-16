@@ -32,6 +32,14 @@ constexpr const char RoutingGraph::ParticipantHeight[];
 #endif
 
 namespace {
+using internal::DijkstraSearchMap;
+using internal::DijkstraStyleSearch;
+using internal::FilteredRoutingGraph;
+using internal::GraphType;
+using internal::LaneletVertexId;
+using internal::RoutingGraphGraph;
+using internal::VertexVisitInformation;
+
 template <typename T>
 T reservedVector(size_t size) {
   T t;
@@ -274,7 +282,7 @@ RoutingGraph::~RoutingGraph() = default;
 
 RoutingGraphUPtr RoutingGraph::build(const LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
                                      const RoutingCostPtrs& routingCosts, const RoutingGraph::Configuration& config) {
-  return RoutingGraphBuilder(trafficRules, routingCosts, config).build(laneletMap);
+  return internal::RoutingGraphBuilder(trafficRules, routingCosts, config).build(laneletMap);
 }
 
 Optional<Route> RoutingGraph::getRoute(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId,
@@ -283,7 +291,7 @@ Optional<Route> RoutingGraph::getRoute(const ConstLanelet& from, const ConstLane
   if (!optPath) {
     return {};
   }
-  return RouteBuilder(*graph_).getRouteFromShortestPath(*optPath, withLaneChanges, routingCostId);
+  return internal::RouteBuilder(*graph_).getRouteFromShortestPath(*optPath, withLaneChanges, routingCostId);
 }
 
 Optional<Route> RoutingGraph::getRouteVia(const ConstLanelet& from, const ConstLanelets& via, const ConstLanelet& to,
@@ -292,7 +300,7 @@ Optional<Route> RoutingGraph::getRouteVia(const ConstLanelet& from, const ConstL
   if (!optPath) {
     return {};
   }
-  return RouteBuilder(*graph_).getRouteFromShortestPath(*optPath, withLaneChanges, routingCostId);
+  return internal::RouteBuilder(*graph_).getRouteFromShortestPath(*optPath, withLaneChanges, routingCostId);
 }
 
 Optional<LaneletPath> RoutingGraph::shortestPath(const ConstLanelet& from, const ConstLanelet& to,
@@ -306,7 +314,7 @@ Optional<LaneletPath> RoutingGraph::shortestPath(const ConstLanelet& from, const
   DijkstraStyleSearch<FilteredRoutingGraph> search(graph);
   class DestinationReached {};
   try {
-    search.query(*startVertex, [endVertex](const VertexVisitInformation& i) {
+    search.query(*startVertex, [endVertex](const internal::VertexVisitInformation& i) {
       if (i.vertex == *endVertex) {
         throw DestinationReached{};
       }
@@ -608,7 +616,7 @@ void RoutingGraph::forEachPredecessor(const ConstLanelet& lanelet, const Lanelet
   auto forwGraph =
       allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
   auto graph = boost::make_reverse_graph(forwGraph);  // forwGraph needs to stay on the stack
-  DijkstraStyleSearch<decltype(graph)> search(graph);
+  internal::DijkstraStyleSearch<decltype(graph)> search(graph);
   search.query(*start, [&](const VertexVisitInformation& i) -> bool {
     return f(LaneletVisitInformation{graph_->get()[i.vertex].lanelet(), graph_->get()[i.predecessor].lanelet(), i.cost,
                                      i.length, i.numLaneChanges});
@@ -625,7 +633,7 @@ void RoutingGraph::forEachPredecessorIncludingAreas(const ConstLaneletOrArea& la
   auto forwGraph = allowLaneChanges ? graph_->withAreasAndLaneChanges(routingCostId)
                                     : graph_->withAreasWithoutLaneChanges(routingCostId);
   auto graph = boost::make_reverse_graph(forwGraph);  // forwGraph needs to stay on the stack
-  DijkstraStyleSearch<decltype(graph)> search(graph);
+  internal::DijkstraStyleSearch<decltype(graph)> search(graph);
   search.query(*start, [&](const VertexVisitInformation& i) -> bool {
     return f(LaneletOrAreaVisitInformation{graph_->get()[i.vertex].laneletOrArea,
                                            graph_->get()[i.predecessor].laneletOrArea, i.cost, i.length,
@@ -642,7 +650,7 @@ void RoutingGraph::exportGraphML(const std::string& filename, const RelationType
     throw InvalidInputError("Routing Cost ID is higher than the number of routing modules.");
   }
   RelationType relations = allRelations() & ~edgeTypesToExclude;
-  exportGraphMLImpl<GraphType>(filename, graph_->get(), relations, routingCostId);
+  internal::exportGraphMLImpl<GraphType>(filename, graph_->get(), relations, routingCostId);
 }
 
 void RoutingGraph::exportGraphViz(const std::string& filename, const RelationType& edgeTypesToExclude,
@@ -654,7 +662,7 @@ void RoutingGraph::exportGraphViz(const std::string& filename, const RelationTyp
     throw InvalidInputError("Routing Cost ID is higher than the number of routing modules.");
   }
   RelationType relations = allRelations() & ~edgeTypesToExclude;
-  exportGraphVizImpl<GraphType>(filename, graph_->get(), relations, routingCostId);
+  internal::exportGraphVizImpl<GraphType>(filename, graph_->get(), relations, routingCostId);
 }
 
 //! Helper function to slim down getDebugLaneletMap
@@ -684,7 +692,7 @@ class DebugMapBuilder {
  public:
   using LaneletOrAreaPair = std::pair<ConstLaneletOrArea, ConstLaneletOrArea>;
   explicit DebugMapBuilder(const FilteredRoutingGraph& graph) : graph_{graph} {}
-  LaneletMapPtr run(const LaneletOrAreaToVertex& loa) {
+  LaneletMapPtr run(const internal::LaneletOrAreaToVertex& loa) {
     LaneletMapPtr output = std::make_shared<LaneletMap>();
     for (auto& vertex : loa) {
       visitVertex(vertex);
@@ -698,7 +706,7 @@ class DebugMapBuilder {
   }
 
  private:
-  void visitVertex(const LaneletOrAreaToVertex::value_type& vertex) {
+  void visitVertex(const internal::LaneletOrAreaToVertex::value_type& vertex) {
     addPoint(vertex.first);
     auto edges = boost::out_edges(vertex.second, graph_);
     for (auto edge = edges.first; edge != edges.second; ++edge) {
@@ -720,7 +728,7 @@ class DebugMapBuilder {
     }
   }
 
-  void addEdge(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to, EdgeInfo edge) {
+  void addEdge(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to, internal::EdgeInfo edge) {
     auto pair = getPair(from, to);
     auto inMap = lineStringMap_.find(pair);
     if (inMap != lineStringMap_.end()) {
@@ -746,8 +754,8 @@ LaneletMapPtr RoutingGraph::getDebugLaneletMap(RoutingCostId routingCostId, bool
   if (routingCostId >= graph_->numRoutingCosts()) {
     throw InvalidInputError("Routing Cost ID is higher than the number of routing modules.");
   }
-  EdgeCostFilter<GraphType> edgeFilter(graph_->get(), routingCostId,
-                                       allowedRelationsfromConfiguration(includeAdjacent, includeConflicting));
+  internal::EdgeCostFilter<GraphType> edgeFilter(
+      graph_->get(), routingCostId, allowedRelationsfromConfiguration(includeAdjacent, includeConflicting));
   FilteredRoutingGraph filteredGraph(graph_->get(), edgeFilter);
   return DebugMapBuilder(filteredGraph).run(graph_->vertexLookup());
 }

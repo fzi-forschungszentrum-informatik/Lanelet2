@@ -4,7 +4,6 @@
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/utility/Optional.h>
 #include <map>
-#include <set>
 #include "Forward.h"
 #include "LaneletPath.h"
 #include "RoutingCost.h"
@@ -12,8 +11,6 @@
 
 namespace lanelet {
 namespace routing {
-struct EdgeInfo;
-
 /** @brief Main class of the routing module that holds routing information and can be queried.
  *  The RoutingGraph class is the central object of this module and is initialized with a LaneletMap, TrafficRules and
  * RoutingCost.
@@ -26,10 +23,6 @@ struct EdgeInfo;
  * @note 'adjacent_left' and 'adjacent_right' means that there is a passable lanelet left/right of another passable
  * lanelet, but a lane change is not allowed. */
 class RoutingGraph {
-  using PointsLaneletMap = std::multimap<IdPair, ConstLanelet>;
-  using PointsLaneletMapIt = PointsLaneletMap::iterator;
-  using PointsLaneletMapResult = std::pair<PointsLaneletMapIt, PointsLaneletMapIt>;
-
  public:
   using Errors = std::vector<std::string>;                 ///< For the checkValidity function
   using Configuration = std::map<std::string, Attribute>;  ///< Used to provide a configuration
@@ -269,7 +262,7 @@ class RoutingGraph {
   /** @brief Determines possible routes that reach the given lanelet and are "minRoutingCost" long.
    *  @return possible paths that are at least as long as specified in 'minRoutingCost'. "lanelet" itself is always
    * included.
-   *  @param startPoint Start lanelet
+   *  @param targetLanelet Start lanelet
    *  @param minRoutingCost Costs that must be reached by a route.
    *  @param routingCostId ID of the routing cost module used
    *  @param allowLaneChanges Allow or forbid lane changes */
@@ -316,15 +309,16 @@ class RoutingGraph {
   void forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges = true,
                         RoutingCostId routingCostId = {}) const;
 
-  //! Similar to forEachSuccessor but also includes areas into the search
+  //! Similar to RoutingGraph::forEachSuccessor but also includes areas into the search
   void forEachSuccessorIncludingAreas(const ConstLaneletOrArea& lanelet, const LaneletOrAreaVisitFunction& f,
                                       bool allowLaneChanges = true, RoutingCostId routingCostId = {}) const;
 
-  //! Similar to forEachSuccessor but goes backwards in the routing graph instead of forwards.
+  //! Similar to RoutingGraph::forEachSuccessor but goes backwards in the routing graph instead of forward. The
+  //! LaneletVisitInformation::cost will still be positive, despite going backwards.
   void forEachPredecessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges = true,
                           RoutingCostId routingCostId = {}) const;
 
-  //! Similar to forEachPredecessor but also includes areas into the search
+  //! Similar to RoutingGraph::forEachPredecessor but also includes areas into the search
   void forEachPredecessorIncludingAreas(const ConstLaneletOrArea& lanelet, const LaneletOrAreaVisitFunction& f,
                                         bool allowLaneChanges = true, RoutingCostId routingCostId = {}) const;
 
@@ -374,12 +368,12 @@ class RoutingGraph {
   /**
    * Constructs the routing graph. Don't call this directly, use RoutingGraph::make instead.
    */
-  RoutingGraph(std::unique_ptr<RoutingGraphGraph>&& graph, lanelet::LaneletMapConstPtr&& passableMap);
+  RoutingGraph(std::unique_ptr<internal::RoutingGraphGraph>&& graph, lanelet::LaneletMapConstPtr&& passableMap);
 
  private:
   //! Documentation to be found in the cpp file.
-  std::unique_ptr<RoutingGraphGraph> graph_;  ///< Wrapper of the routing graph
-  LaneletMapConstPtr passableLaneletMap_;     ///< Lanelet map of all passable lanelets
+  std::unique_ptr<internal::RoutingGraphGraph> graph_;  ///< Wrapper of the routing graph
+  LaneletMapConstPtr passableLaneletMap_;               ///< Lanelet map of all passable lanelets
 };
 
 }  // namespace routing

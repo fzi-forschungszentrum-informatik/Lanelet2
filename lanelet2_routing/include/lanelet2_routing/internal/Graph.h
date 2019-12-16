@@ -9,7 +9,7 @@
 
 namespace lanelet {
 namespace routing {
-
+namespace internal {
 /** @brief Internal information of a vertex in the graph
  *  If A* search is adapted, this could hold information about longitude and latitude. */
 struct VertexInfo {
@@ -240,5 +240,6 @@ class RouteGraph : public Graph<RouteGraphType> {
   using Graph::Graph;
 };
 
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

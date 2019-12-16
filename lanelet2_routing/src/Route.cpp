@@ -14,6 +14,9 @@ namespace lanelet {
 namespace routing {
 
 namespace {
+using internal::FilteredRouteGraph;
+using internal::RouteGraph;
+using internal::RouteVertexInfo;
 
 using ConstLaneletPointMapIt = std::map<Id, Point2d>::iterator;
 using DebugEdge = std::pair<Id, Id>;
@@ -93,15 +96,16 @@ LaneletSequence remainingLaneImpl(RouteGraph::Vertex v, const FilteredRouteGraph
 
 template <bool Backwards = false>
 LaneletRelations getRelations(RouteGraph::Vertex v, const FilteredRouteGraph& g) {
-  auto out = GetEdges<Backwards>{}(v, g);
+  auto out = internal::GetEdges<Backwards>{}(v, g);
   return utils::transform(out.first, out.second, [&g](auto e) {
-    return LaneletRelation{g[GetTarget<Backwards>{}(e, g)].lanelet, g[e].relation};
+    return LaneletRelation{g[internal::GetTarget<Backwards>{}(e, g)].lanelet, g[e].relation};
   });
 }
 template <bool Backwards = false>
 ConstLanelets getLanelets(RouteGraph::Vertex v, const FilteredRouteGraph& g) {
-  auto out = GetEdges<Backwards>{}(v, g);
-  return utils::transform(out.first, out.second, [&g](auto e) { return g[GetTarget<Backwards>{}(e, g)].lanelet; });
+  auto out = internal::GetEdges<Backwards>{}(v, g);
+  return utils::transform(out.first, out.second,
+                          [&g](auto e) { return g[internal::GetTarget<Backwards>{}(e, g)].lanelet; });
 }
 
 Optional<LaneletRelation> getSingleRelation(RouteGraph::Vertex v, const FilteredRouteGraph& g) {
@@ -114,11 +118,11 @@ Optional<LaneletRelation> getSingleRelation(RouteGraph::Vertex v, const Filtered
 
 template <bool Backwards = false>
 std::pair<Optional<RouteGraph::Vertex>, RelationType> getNextVertex(RouteGraph::Vertex v, const FilteredRouteGraph& g) {
-  auto out = GetEdges<Backwards>{}(v, g);
+  auto out = internal::GetEdges<Backwards>{}(v, g);
   if (out.first == out.second) {
     return {};
   }
-  return {GetTarget<Backwards>{}(*out.first, g), g[*out.first].relation};
+  return {internal::GetTarget<Backwards>{}(*out.first, g), g[*out.first].relation};
 }
 
 }  // anonymous namespace
@@ -297,8 +301,8 @@ void Route::forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunc
     return;
   }
   auto g = graph_->withLaneChanges();
-  DijkstraStyleSearch<FilteredRouteGraph> search(g);
-  search.query(*v, [&](const VertexVisitInformation& i) -> bool {
+  internal::DijkstraStyleSearch<FilteredRouteGraph> search(g);
+  search.query(*v, [&](const internal::VertexVisitInformation& i) -> bool {
     return f(LaneletVisitInformation{graph_->get()[i.vertex].lanelet, graph_->get()[i.predecessor].lanelet, i.cost,
                                      i.length, i.numLaneChanges});
   });
@@ -311,8 +315,8 @@ void Route::forEachPredecessor(const ConstLanelet& lanelet, const LaneletVisitFu
   }
   auto g = graph_->withLaneChanges();
   auto gInv = boost::make_reverse_graph(g);
-  DijkstraStyleSearch<decltype(gInv)> search(gInv);
-  search.query(*v, [&](const VertexVisitInformation& i) -> bool {
+  internal::DijkstraStyleSearch<decltype(gInv)> search(gInv);
+  search.query(*v, [&](const internal::VertexVisitInformation& i) -> bool {
     return f(LaneletVisitInformation{graph_->get()[i.vertex].lanelet, graph_->get()[i.predecessor].lanelet, i.cost,
                                      i.length, i.numLaneChanges});
   });
@@ -364,7 +368,7 @@ Route::Errors Route::checkValidity(bool throwOnError) const {
   // Check if all relations are back and forth
   auto g = graph_->get();
   auto edges = boost::edges(g);
-  std::for_each(edges.first, edges.second, [&](RouteGraph::Edge e) {
+  std::for_each(edges.first, edges.second, [&](internal::RouteGraph::Edge e) {
     // get reverse edge
     decltype(e) eRev;
     bool exists;

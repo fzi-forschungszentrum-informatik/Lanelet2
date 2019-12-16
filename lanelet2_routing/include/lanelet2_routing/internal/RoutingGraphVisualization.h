@@ -13,10 +13,10 @@ namespace lanelet {
 inline std::istream& operator>>(std::istream& is, ConstLaneletOrArea& /*r*/) { return is; }
 
 namespace routing {
-
 inline std::ostream& operator<<(std::ostream& os, const RelationType& r) { return os << relationToString(r); }
-
 inline std::istream& operator>>(std::istream& is, const RelationType& /*r*/) { return is; }
+
+namespace internal {
 
 /** @brief Internal vertex writer for graphViz file export. */
 template <class Graph>
@@ -127,6 +127,6 @@ inline void exportGraphMLImpl(const std::string& filename, const G& g, const Rel
   auto edgeFilter = EdgeCostFilter<G>(g, routingCostId, relationTypes);
   exportGraphMLImpl(filename, g, edgeFilter);
 }
-
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet
