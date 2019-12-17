@@ -234,6 +234,8 @@ class PrimitiveLayer {
 
  protected:
   friend class LaneletMap;  // only the map can create or modify layers
+  friend class LaneletMapLayers;
+  friend class LaneletSubmap;
   explicit PrimitiveLayer(const Map& primitives = Map());
   PrimitiveLayer(PrimitiveLayer&& rhs) noexcept;
   PrimitiveLayer& operator=(PrimitiveLayer&& rhs) noexcept;
@@ -272,6 +274,8 @@ class AreaLayer : public PrimitiveLayer<Area> {
 
  private:
   friend class LaneletMap;
+  friend class LaneletMapLayers;
+  friend class LaneletSubmap;
   using PrimitiveLayer<Area>::PrimitiveLayer;
   AreaLayer(AreaLayer&& rhs) noexcept = default;
   AreaLayer& operator=(AreaLayer&& rhs) noexcept = default;
@@ -290,6 +294,8 @@ class LaneletLayer : public PrimitiveLayer<Lanelet> {
 
  private:
   friend class LaneletMap;
+  friend class LaneletMapLayers;
+  friend class LaneletSubmap;
   using PrimitiveLayer<Lanelet>::PrimitiveLayer;
   LaneletLayer(LaneletLayer&& rhs) noexcept = default;
   LaneletLayer& operator=(LaneletLayer&& rhs) noexcept = default;
@@ -301,18 +307,16 @@ using PointLayer = PrimitiveLayer<Point3d>;
 using RegulatoryElementLayer = PrimitiveLayer<RegulatoryElementPtr>;
 
 /**
- * @brief Basic element for accessing and managing the elements of a map.
- * @todo Add functions for faster lookup
- * @todo Add function to rebuild tree
- *
- * The map is divided in individual layers, one for each primitive in lanelet2.
- * Each layer offers efficient functions to find elements by its id or spacial
- * position. A LaneletMap can not be copied because maps are unique. You can
- * only std::move them.
+ * @brief Container for all layers of a lanelet map. Used by both LaneletMap and LaneletSubmap
  */
-class LaneletMap {
+class LaneletMapLayers {
  public:
-  LaneletMap();
+  LaneletMapLayers() = default;
+  LaneletMapLayers(LaneletMapLayers&& rhs) noexcept = default;
+  LaneletMapLayers& operator=(LaneletMapLayers&& rhs) noexcept = default;
+  LaneletMapLayers(const LaneletMapLayers& rhs) = delete;
+  LaneletMapLayers& operator=(const LaneletMapLayers& rhs) = delete;
+  ~LaneletMapLayers() noexcept = default;
 
   /**
    * @brief Construct from already initialized layers
@@ -329,14 +333,47 @@ class LaneletMap {
    * way to create a map because this will result in the most efficient RTree
    * structure for fastest lookups.
    */
-  LaneletMap(const LaneletLayer::Map& lanelets, const AreaLayer::Map& areas,
-             const RegulatoryElementLayer::Map& regulatoryElements, const PolygonLayer::Map& polygons,
-             const LineStringLayer::Map& lineStrings, const PointLayer::Map& points);
-  LaneletMap(LaneletMap&& rhs) noexcept = default;
-  LaneletMap& operator=(LaneletMap&& rhs) noexcept = default;
-  LaneletMap(const LaneletMap& rhs) = delete;
-  LaneletMap& operator=(const LaneletMap& rhs) = delete;
-  ~LaneletMap() noexcept;
+  LaneletMapLayers(const LaneletLayer::Map& lanelets, const AreaLayer::Map& areas,
+                   const RegulatoryElementLayer::Map& regulatoryElements, const PolygonLayer::Map& polygons,
+                   const LineStringLayer::Map& lineStrings, const PointLayer::Map& points);
+
+  //! Returns whether all layers of this object are empty
+  bool empty() const noexcept {
+    return laneletLayer.empty() && areaLayer.empty() && regulatoryElementLayer.empty() && polygonLayer.empty() &&
+           lineStringLayer.empty() && pointLayer.empty();
+  }
+
+  //! Returns the total number of elements in all layers
+  size_t size() const noexcept {
+    return laneletLayer.size() + areaLayer.size() + regulatoryElementLayer.size() + polygonLayer.size() +
+           lineStringLayer.size() + pointLayer.size();
+  }
+
+  LaneletLayer laneletLayer;                      //!< access to the lanelets within this map
+  AreaLayer areaLayer;                            //!< access to areas
+  RegulatoryElementLayer regulatoryElementLayer;  //!< access to regElems
+  PolygonLayer polygonLayer;                      //!< access to the polygons
+  LineStringLayer lineStringLayer;                //!< access to the lineStrings
+  PointLayer pointLayer;                          //!< access to the points
+};
+
+/**
+ * @brief Basic element for accessing and managing the elements of a map.
+ *
+ * The map is divided in individual layers, one for each primitive in lanelet2.
+ * Each layer offers efficient functions to find elements by its id or spacial
+ * position. A LaneletMap can not be copied because maps are unique. You can
+ * only std::move them.
+ *
+ * A LaneletMap is designed to be *always* self contained. This means it always contains all elements that are used by
+ * any element in the map. If you add a Lanelet, all its LineString boundaries, all RegulatoryElements, all things
+ * referenced by the regulatory elements are added to the map as well. This also means that if a lanelet has regulatory
+ * elements that in turn also reference lanelets, these lanelets will also be added to the map. If this behaviour is not
+ * what you want, consider using a LaneletSubmap.
+ */
+class LaneletMap : public LaneletMapLayers {
+ public:
+  using LaneletMapLayers::LaneletMapLayers;
 
   /**
    * @brief adds a lanelet and all the elements it owns to the map
@@ -397,21 +434,74 @@ class LaneletMap {
    * sure that the id has not already been for a different element.
    */
   void add(Point3d point);
+};
 
-  LaneletLayer laneletLayer;                      //!< access to the lanelets within this map
-  AreaLayer areaLayer;                            //!< access to areas
-  RegulatoryElementLayer regulatoryElementLayer;  //!< access to regElems
-  PolygonLayer polygonLayer;                      //!< access to the polygons
-  LineStringLayer lineStringLayer;                //!< access to the lineStrings
-  PointLayer pointLayer;                          //!< access to the points
+/**
+ * @brief A LaneletSubmap only contains the elemets that have be expleicitly added to it.
+ *
+ * This class is similar to a LaneletMap but with one fundamental difference: It is not self-contained. When add is
+ * called with an object *only this object* is added to the map and nothing else like e.g. its subobjects. But you can
+ * always convert this object back to a laneletMap by calling "LaneletSubmap::laneletMap", which is of course a costly
+ * operation.
+ *
+ * If you want to have a function that can operate on both LaneletMap and LaneletSubmap, consider using their common
+ * base class LaneletMapLayers as an input parameter for it.
+ */
+class LaneletSubmap : public LaneletMapLayers {
+ public:
+  using LaneletMapLayers::LaneletMapLayers;
+
+  //! Constructs a submap from a moved-from LaneletMap
+  explicit LaneletSubmap(LaneletMap&& rhs) noexcept : LaneletMapLayers{std::move(rhs)} {}
+  LaneletSubmap& operator=(LaneletMap&& rhs) {
+    static_cast<LaneletMapLayers&>(*this) = std::move(rhs);
+    return *this;
+  }
+
+  /**
+   * @brief adds a lanelet to the submap
+   * @throws InvalidInputError if lanelet has a reglatory element without
+   * members
+   *
+   * If the lanelet or elements owned by the lanelet have InvalId as Id, they
+   * will be assigned a new, unique id. Otherwise you are responsible for making
+   * sure that the id has not already been for a different element.
+   */
+  void add(Lanelet lanelet);
+
+  //! adds an area
+  void add(Area area);
+
+  //! adds a new regulatory element to the submap.
+  void add(const RegulatoryElementPtr& regElem);
+
+  //! adds a new polygon to the submap
+  void add(Polygon3d polygon);
+
+  //! adds a new lineString the submap
+  void add(LineString3d lineString);
+
+  //! adds a new point to the submap
+  void add(Point3d point);
+
+  //! Converts this into a fully valid lanelet map
+  LaneletMapConstPtr laneletMap() const;
+  LaneletMapUPtr laneletMap();
+
+  //! In order to let areas and lanelets get out of scope, this function ensures they stay alive. LaneletSubmap::add
+  //! already handles this for you, so there is usually no need to call this.
+  void trackParameters(const RegulatoryElement& regelem);
+
+ private:
+  //! In order to not let lanelets/areas referenced by regelems get out of scope, we keep a reference to them here
+  std::vector<boost::variant<ConstLanelet, ConstArea>> regelemObjects;
 };
 
 namespace utils {
 template <typename PrimitiveT>
 using ConstLayerPrimitive = typename PrimitiveLayer<PrimitiveT>::ConstPrimitiveT;
 
-//! Efficiently create a map from a vector of things. All elements must have a
-//! valid id!
+//! Efficiently create a LaneletMap from a vector of things. All elements must have a valid id!
 LaneletMapUPtr createMap(const Points3d& fromPoints);
 LaneletMapUPtr createMap(const LineStrings3d& fromLineStrings);
 LaneletMapUPtr createMap(const Polygons3d& fromPolygons);
@@ -419,6 +509,15 @@ LaneletMapUPtr createMap(const Lanelets& fromLanelets);
 LaneletMapUPtr createMap(const Areas& fromAreas);
 LaneletMapUPtr createMap(const Lanelets& fromLanelets, const Areas& fromAreas);
 LaneletMapConstUPtr createConstMap(const ConstLanelets& fromLanelets, const ConstAreas& fromAreas);
+
+//! Efficiently create a LaneletSubmap from a vector of things. All elements must have a valid id!
+LaneletSubmapUPtr createSubmap(const Points3d& fromPoints);
+LaneletSubmapUPtr createSubmap(const LineStrings3d& fromLineStrings);
+LaneletSubmapUPtr createSubmap(const Polygons3d& fromPolygons);
+LaneletSubmapUPtr createSubmap(const Lanelets& fromLanelets);
+LaneletSubmapUPtr createSubmap(const Areas& fromAreas);
+LaneletSubmapUPtr createSubmap(const Lanelets& fromLanelets, const Areas& fromAreas);
+LaneletSubmapConstUPtr createConstSubmap(const ConstLanelets& fromLanelets, const ConstAreas& fromAreas);
 
 /**
  * @brief returns a unique id by incrementing a counter each time this is
@@ -440,8 +539,8 @@ void registerId(Id id);
 template <typename PrimitiveT>
 std::vector<ConstLayerPrimitive<PrimitiveT>> findUsages(const PrimitiveLayer<PrimitiveT>& layer, Id id);
 
-ConstLanelets findUsagesInLanelets(const LaneletMap& map, const ConstPoint3d& p);
-ConstAreas findUsagesInAreas(const LaneletMap& map, const ConstPoint3d& p);
+ConstLanelets findUsagesInLanelets(const LaneletMapLayers& map, const ConstPoint3d& p);
+ConstAreas findUsagesInAreas(const LaneletMapLayers& map, const ConstPoint3d& p);
 
 }  // namespace utils
 
