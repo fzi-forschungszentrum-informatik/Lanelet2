@@ -38,6 +38,11 @@ class RoutingGraph {
                                 const RoutingCostPtrs& routingCosts = defaultRoutingCosts(),
                                 const Configuration& config = Configuration());
 
+  //! Similar to the above but for a LaneletSubmap
+  static RoutingGraphUPtr build(const LaneletSubmap& laneletSubmap, const traffic_rules::TrafficRules& trafficRules,
+                                const RoutingCostPtrs& routingCosts = defaultRoutingCosts(),
+                                const Configuration& config = Configuration());
+
   //! The graph can not be copied, only moved
   RoutingGraph() = delete;
   RoutingGraph(const RoutingGraph&) = delete;
@@ -349,13 +354,18 @@ class RoutingGraph {
   LaneletMapPtr getDebugLaneletMap(RoutingCostId routingCostId = {}, bool includeAdjacent = false,
                                    bool includeConflicting = false) const;
 
-  /** @brief LaneletMap that includes all passable lanelets and areas.
-   *  This map contains all passable lanelets and areas with all primitives (linestrings, points), but
-   *  no regulatory elements. It can be used to perform spacial queries e.g. for localization.
-   *  When selecting a lanelet from this map please be aware that the routing graph may also contain the inverted
-   * lanelet.
+  inline LaneletSubmapConstPtr passableSubmap() const noexcept { return passableLaneletSubmap_; }
+
+  /** @brief LaneletSubmap that includes all passable lanelets and areas.
+   *  This map contains all passable lanelets and areas with all primitives (linestrings, points), including regulatory
+   * elements and lanelets referenced by them. It can be used to perform spacial queries e.g. for localization. When
+   * selecting a lanelet from this map please be aware that the routing graph may also contain the inverted lanelet.
    *  @return LaneletMap with all passable lanelets and areas */
-  inline LaneletMapConstPtr passableMap() const noexcept { return passableLaneletMap_; }
+  [[deprecated(
+      "Use passableSubmap to obtain the lanelets and areas within the routing graph!")]] inline LaneletMapConstPtr
+  passableMap() const noexcept {
+    return passableSubmap()->laneletMap();
+  }
 
   /** @brief Performs some basic sanity checks.
    *  It is recommended to call this function after the routing graph has been generated since it can point out some
@@ -368,12 +378,12 @@ class RoutingGraph {
   /**
    * Constructs the routing graph. Don't call this directly, use RoutingGraph::make instead.
    */
-  RoutingGraph(std::unique_ptr<internal::RoutingGraphGraph>&& graph, lanelet::LaneletMapConstPtr&& passableMap);
+  RoutingGraph(std::unique_ptr<internal::RoutingGraphGraph>&& graph, lanelet::LaneletSubmapConstPtr&& passableMap);
 
  private:
   //! Documentation to be found in the cpp file.
   std::unique_ptr<internal::RoutingGraphGraph> graph_;  ///< Wrapper of the routing graph
-  LaneletMapConstPtr passableLaneletMap_;               ///< Lanelet map of all passable lanelets
+  LaneletSubmapConstPtr passableLaneletSubmap_;         ///< Lanelet map of all passable lanelets
 };
 
 }  // namespace routing

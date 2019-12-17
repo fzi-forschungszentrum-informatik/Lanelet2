@@ -34,6 +34,12 @@ routing::RoutingGraphPtr makeRoutingGraph(LaneletMap& laneletMap, const traffic_
   return routing::RoutingGraph::build(laneletMap, trafficRules, routingCosts);
 }
 
+routing::RoutingGraphPtr makeRoutingGraphSubmap(LaneletSubmap& laneletMap,
+                                                const traffic_rules::TrafficRules& trafficRules,
+                                                const routing::RoutingCostPtrs& routingCosts) {
+  return routing::RoutingGraph::build(laneletMap, trafficRules, routingCosts);
+}
+
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   auto trafficRules = import("lanelet2.traffic_rules");
   using namespace lanelet::routing;
@@ -125,6 +131,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            make_constructor(makeRoutingGraph, default_call_policies(),
                             (arg("laneletMap"), arg("trafficRules"), arg("routingCost") = defaultRoutingCosts())),
            "Initialization with default routing costs")
+      .def("__init__",
+           make_constructor(makeRoutingGraphSubmap, default_call_policies(),
+                            (arg("laneletSubmap"), arg("trafficRules"), arg("routingCost") = defaultRoutingCosts())),
+           "Initialization from a submap")
       .def("getRoute", getRouteWrapper, "driving route from 'start' to 'end' lanelet",
            (arg("from"), arg("to"), arg("routingCostId") = 0, arg("withLaneChanges") = true))
       .def("getRouteVia", getRouteWrapper, "driving route from 'start' to 'end' lanelet using the 'via' lanelets",
@@ -210,7 +220,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("getDebugLaneletMap", &RoutingGraph::getDebugLaneletMap,
            "abstract lanelet map holding the information of the routing graph",
            (arg("routingCostId") = 0, arg("includeAdjacent") = false, arg("includeConflicting") = false))
-      .def("passableLaneletMap", &RoutingGraph::passableMap, "LaneletMap that includes all passable lanelets")
+      .def("passableLaneletSubmap", &RoutingGraph::passableSubmap, "LaneletMap that includes all passable lanelets")
       .def("checkValidity", &RoutingGraph::checkValidity, "Performs some basic sanity checks",
            (arg("throwOnError") = true));
 
@@ -239,8 +249,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Returns all lanelets on the shortest path that follow the input lanelet")
       .def("length2d", &Route::length2d, "2d length of shortest path")
       .def("numLanes", &Route::numLanes, "Number of inidividual lanes")
-      .def("laneletMap", +[](const Route& r) { return std::const_pointer_cast<LaneletMap>(r.laneletMap()); },
-           "laneletMap with all lanelets that are part of the route")
+      .def("laneletSubmap", +[](const Route& r) { return std::const_pointer_cast<LaneletSubmap>(r.laneletSubmap()); },
+           "laneletSubmap with all lanelets that are part of the route")
       .def("getDebugLaneletMap", &Route::getDebugLaneletMap,
            "laneletMap that represents the Lanelets of the Route and their relationship")
       .def("size", &Route::size, "Number of lanelets")

@@ -131,8 +131,8 @@ Route::Route() = default;
 Route::~Route() noexcept = default;
 Route& Route::operator=(Route&& other) noexcept = default;
 Route::Route(Route&& other) noexcept = default;
-Route::Route(LaneletPath shortestPath, std::unique_ptr<RouteGraph> graph, LaneletMapConstPtr laneletMap) noexcept
-    : graph_{std::move(graph)}, shortestPath_{std::move(shortestPath)}, laneletMap_{std::move(laneletMap)} {}
+Route::Route(LaneletPath shortestPath, std::unique_ptr<RouteGraph> graph, LaneletSubmapConstPtr laneletSubmap) noexcept
+    : graph_{std::move(graph)}, shortestPath_{std::move(shortestPath)}, laneletSubmap_{std::move(laneletSubmap)} {}
 
 LaneletPath Route::remainingShortestPath(const ConstLanelet& ll) const {
   auto iter = std::find(shortestPath_.begin(), shortestPath_.end(), ll);

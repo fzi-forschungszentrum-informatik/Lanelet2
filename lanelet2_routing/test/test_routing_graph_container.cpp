@@ -23,10 +23,10 @@ class RoutingGraphContainerTest : public RoutingGraphTest {
 class RouteRoutingGraphContainerTest : public RoutingGraphContainerTest {
  public:
   void getAndCheckRoute(const RoutingGraphConstPtr& graph, Id from, Id to, routing::RoutingCostId routingCostId = 0) {
-    ASSERT_NE(graph->passableMap()->laneletLayer.find(from), graph->passableMap()->laneletLayer.end());
-    ConstLanelet fromLanelet{*graph->passableMap()->laneletLayer.find(from)};
-    ASSERT_NE(graph->passableMap()->laneletLayer.find(to), graph->passableMap()->laneletLayer.end());
-    ConstLanelet toLanelet{*graph->passableMap()->laneletLayer.find(to)};
+    ASSERT_NE(graph->passableSubmap()->laneletLayer.find(from), graph->passableSubmap()->laneletLayer.end());
+    ConstLanelet fromLanelet{*graph->passableSubmap()->laneletLayer.find(from)};
+    ASSERT_NE(graph->passableSubmap()->laneletLayer.find(to), graph->passableSubmap()->laneletLayer.end());
+    ConstLanelet toLanelet{*graph->passableSubmap()->laneletLayer.find(to)};
     Optional<Route> tempRoute = graph->getRoute(fromLanelet, toLanelet, routingCostId);
     ASSERT_TRUE(!!tempRoute);
     route = std::make_unique<Route>(std::move(*tempRoute));

@@ -258,7 +258,7 @@ std::vector<OutVertexT> reachableSetImpl(const GraphType::vertex_descriptor& sta
 
 template <bool Eq = false>
 struct StopIfLaneletsMoreThan {
-  StopIfLaneletsMoreThan(size_t n) : n{n} {}
+  explicit StopIfLaneletsMoreThan(size_t n) : n{n} {}
   template <typename T>
   inline bool operator()(const T& v) const {
     return Eq ? v.length <= n : v.length < n;
@@ -267,7 +267,7 @@ struct StopIfLaneletsMoreThan {
 };
 template <bool Eq = false>
 struct StopIfCostMoreThan {
-  StopIfCostMoreThan(double c) : c{c} {}
+  explicit StopIfCostMoreThan(double c) : c{c} {}
   template <typename T>
   inline bool operator()(const T& v) const {
     return Eq ? v.cost <= c : v.cost < c;
@@ -283,6 +283,12 @@ RoutingGraph::~RoutingGraph() = default;
 RoutingGraphUPtr RoutingGraph::build(const LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
                                      const RoutingCostPtrs& routingCosts, const RoutingGraph::Configuration& config) {
   return internal::RoutingGraphBuilder(trafficRules, routingCosts, config).build(laneletMap);
+}
+
+RoutingGraphUPtr RoutingGraph::build(const LaneletSubmap& laneletSubmap,
+                                     const traffic_rules::TrafficRules& trafficRules,
+                                     const RoutingCostPtrs& routingCosts, const RoutingGraph::Configuration& config) {
+  return internal::RoutingGraphBuilder(trafficRules, routingCosts, config).build(laneletSubmap);
 }
 
 Optional<Route> RoutingGraph::getRoute(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId,
@@ -321,7 +327,6 @@ Optional<LaneletPath> RoutingGraph::shortestPath(const ConstLanelet& from, const
       return true;
     });
   } catch (DestinationReached) {
-    auto map = search.getMap();
     return LaneletPath{buildPath<false, ConstLanelet>(search.getMap(), *endVertex, graph)};
   }
   return {};
@@ -858,8 +863,8 @@ RoutingGraph::Errors RoutingGraph::checkValidity(bool throwOnError) const {
   return errors;
 }
 
-RoutingGraph::RoutingGraph(std::unique_ptr<RoutingGraphGraph>&& graph, LaneletMapConstPtr&& passableMap)
-    : graph_{std::move(graph)}, passableLaneletMap_{std::move(passableMap)} {}
+RoutingGraph::RoutingGraph(std::unique_ptr<RoutingGraphGraph>&& graph, LaneletSubmapConstPtr&& passableMap)
+    : graph_{std::move(graph)}, passableLaneletSubmap_{std::move(passableMap)} {}
 
 }  // namespace routing
 }  // namespace lanelet

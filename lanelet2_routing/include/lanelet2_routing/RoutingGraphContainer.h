@@ -44,7 +44,7 @@ class RoutingGraphContainer {
       return participantHeight != .0 ? !geometry::overlaps3d(lanelet, ll, participantHeight)
                                      : !geometry::overlaps2d(lanelet, ll);
     };
-    const LaneletMapConstPtr map{graphs_[routingGraphId]->passableMap()};
+    const auto map{graphs_[routingGraphId]->passableSubmap()};
     ConstLanelets conflicting{map->laneletLayer.search(geometry::boundingBox2d(lanelet))};
     auto begin = conflicting.begin();
     auto end = conflicting.end();
@@ -75,7 +75,7 @@ class RoutingGraphContainer {
   ConstLanelets conflictingOfRouteInGraph(const Route* route, size_t routingGraphId,
                                           double participantHeight = .0) const {
     std::unordered_set<ConstLanelet> conflicting;
-    for (const auto& it : route->laneletMap()->laneletLayer) {
+    for (const auto& it : route->laneletSubmap()->laneletLayer) {
       ConstLanelets tempConf{conflictingInGraph(it, routingGraphId, participantHeight)};
       conflicting.insert(tempConf.begin(), tempConf.end());
     }

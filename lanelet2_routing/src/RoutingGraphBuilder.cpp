@@ -88,10 +88,10 @@ RoutingGraphBuilder::RoutingGraphBuilder(const traffic_rules::TrafficRules& traf
       routingCosts_{routingCosts},
       config_{config} {}
 
-RoutingGraphUPtr RoutingGraphBuilder::build(const LaneletMap& laneletMap) {
-  auto passableLanelets = getPassableLanelets(laneletMap.laneletLayer, trafficRules_);
-  auto passableAreas = getPassableAreas(laneletMap.areaLayer, trafficRules_);
-  auto passableMap = utils::createConstMap(passableLanelets, passableAreas);
+RoutingGraphUPtr RoutingGraphBuilder::build(const LaneletMapLayers& laneletMapLayers) {
+  auto passableLanelets = getPassableLanelets(laneletMapLayers.laneletLayer, trafficRules_);
+  auto passableAreas = getPassableAreas(laneletMapLayers.areaLayer, trafficRules_);
+  auto passableMap = utils::createConstSubmap(passableLanelets, passableAreas);
   appendBidirectionalLanelets(passableLanelets);
   addLaneletsToGraph(passableLanelets);
   addAreasToGraph(passableAreas);

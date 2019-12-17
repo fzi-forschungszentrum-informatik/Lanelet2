@@ -325,7 +325,7 @@ class RouteConstructionVisitor : public boost::default_bfs_visitor {
   const OriginalGraph* graph_{};
   LaneId laneId_{1000};
   RouteGraph* routeGraph_{};
-  LaneletVertexId sourceElem_;
+  LaneletVertexId sourceElem_{};
 };
 
 template <typename Graph, typename StartVertex, typename Visitor>
@@ -382,7 +382,7 @@ class RouteUnderConstruction {
       return {};  // there was no path between begin and end
     }
     auto& g = routeGraph->get();
-    auto map = utils::createConstMap(utils::transform(g.vertex_set(), [&g](auto v) { return g[v].lanelet; }), {});
+    auto map = utils::createConstSubmap(utils::transform(g.vertex_set(), [&g](auto v) { return g[v].lanelet; }), {});
     return Route(thePath, std::move(routeGraph), std::move(map));
   }
 

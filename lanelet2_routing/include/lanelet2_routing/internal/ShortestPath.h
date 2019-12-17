@@ -12,20 +12,20 @@ namespace internal {
 
 //! This object carries the required information for the graph neighbourhood search
 struct VertexVisitInformation {
-  RoutingGraphGraph::Vertex vertex;
-  RoutingGraphGraph::Vertex predecessor;
+  RoutingGraphGraph::Vertex vertex{};
+  RoutingGraphGraph::Vertex predecessor{};
   double cost{};
   size_t length{};
   size_t numLaneChanges{};
 };
 
 struct VertexState {
-  RoutingGraphGraph::Vertex predecessor;  //!< The vertex this refers to
-  double cost{};                          //!< Current accumulated cost
-  size_t length{};                        //!< Number of vertices to this vertex (including this one)
-  size_t numLaneChanges{};                //!< Required lane changes along the shortest path in order to get here
-  bool predicate{true};                   //!< False if disabled by predicate
-  bool isLeaf{true};                      //!< True if it has no successor that is on the shortest path
+  RoutingGraphGraph::Vertex predecessor{};  //!< The vertex this refers to
+  double cost{};                            //!< Current accumulated cost
+  size_t length{};                          //!< Number of vertices to this vertex (including this one)
+  size_t numLaneChanges{};                  //!< Required lane changes along the shortest path in order to get here
+  bool predicate{true};                     //!< False if disabled by predicate
+  bool isLeaf{true};                        //!< True if it has no successor that is on the shortest path
 };
 
 template <typename VertexT>
@@ -84,14 +84,14 @@ class DijkstraStyleSearch {
     DijkstraStyleVisitor(DijkstraSearchMapType& map, FuncT* cb) : map_{&map}, cb_{cb} {}
 
     // called whenever a minimal edge is discovered
-    void examine_vertex(VertexType v, const SearchGraph& /*g*/) {
+    void examine_vertex(VertexType v, const SearchGraph& /*g*/) {  // NOLINT
       auto& state = map_->at(v);
       state.predicate =
           ((*cb_)(VertexVisitInformation{v, state.predecessor, state.cost, state.length, state.numLaneChanges}));
       map_->at(state.predecessor).isLeaf = v == state.predecessor;  // necessary for the initial vertex
     }
 
-    void edge_relaxed(EdgeType e, const SearchGraph& g) {
+    void edge_relaxed(EdgeType e, const SearchGraph& g) {  // NOLINT
       // called whenever a shorter path to e is discovered and before "examine vertex" is called
       // cost is automatically updated by the dijkstra algorithm
       auto& predecessor = (*map_).at(boost::source(e, g));
@@ -108,7 +108,7 @@ class DijkstraStyleSearch {
 
  public:
   //! Constructor for the graph search
-  DijkstraStyleSearch(const G& graph) : graph_{graph, LeafFilter{vertices_, graph}} {}
+  explicit DijkstraStyleSearch(const G& graph) : graph_{graph, LeafFilter{vertices_, graph}} {}
 
   //! Performs the dijkstra style search by calling func whenever the shortest path for a certain vertex is
   //! discovered. Whenever func returns false, the successor edges of this vertex will not be visited.

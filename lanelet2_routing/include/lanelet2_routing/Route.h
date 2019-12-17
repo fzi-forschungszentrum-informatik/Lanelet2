@@ -41,7 +41,9 @@ class Route {
   Route(Route&& other) noexcept;
   ~Route() noexcept;
 
-  Route(LaneletPath shortestPath, std::unique_ptr<internal::RouteGraph> graph, LaneletMapConstPtr laneletMap) noexcept;
+  //! Constructs a route. Not supposed to be called directly. Use RoutingGraph to obtain routes.
+  Route(LaneletPath shortestPath, std::unique_ptr<internal::RouteGraph> graph,
+        LaneletSubmapConstPtr laneletSubmap) noexcept;
 
   /** @brief Returns the shortest path that was the base of this route */
   inline const LaneletPath& shortestPath() const noexcept { return shortestPath_; }
@@ -74,13 +76,23 @@ class Route {
    *  @return Number of lanes */
   size_t numLanes() const;
 
-  /** @brief A laneletMap with all lanelets that are part of the route.
+  /** @brief A LaneletSubmap with all lanelets that are part of the route.
+   *
+   *  Can be used to do spatial lookups like 'which Lanelets of the route are close to my position'. It does not contain
+   * anything beyond that, no points, linestrings, etc.
+   */
+  inline LaneletSubmapConstPtr laneletSubmap() const noexcept { return laneletSubmap_; }
+
+  /** @brief A LaneletMap with all lanelets that are part of the route and those referenced by regelems.
    *  @return A laneletMap with all lanelets of the route, excluding regulatory elements.
    *  Can be used to do spatial lookups like 'which Lanelets of the route are close to my position'.
    *  Note that not all lanelets in the map automatically belong to the route. They can also belong to one of the
    * regulatory elements of the lanelet. Use Route::contains for that.
    */
-  inline const LaneletMapConstPtr& laneletMap() const noexcept { return laneletMap_; }
+  [[deprecated("Use laneletSubmap() to obtain a view on the elements within this route")]] inline LaneletMapConstPtr
+  laneletMap() const noexcept {
+    return laneletSubmap_->laneletMap();
+  }
 
   /** @brief Get a laneletMap that represents the Lanelets of the Route and their relationship.
    *  @return The laneletMap
@@ -184,7 +196,7 @@ class Route {
  private:
   std::unique_ptr<internal::RouteGraph> graph_;  ///< The internal graph
   LaneletPath shortestPath_;                     ///< The underlying shortest path used to create the route
-  LaneletMapConstPtr laneletMap_;                ///< LaneletMap with all lanelets that are part of the route
+  LaneletSubmapConstPtr laneletSubmap_;          ///< LaneletSubmap with all lanelets that are part of the route
 };
 };  // namespace routing
 };  // namespace lanelet

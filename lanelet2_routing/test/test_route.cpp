@@ -77,7 +77,7 @@ TYPED_TEST(AllRoutesTest, ShortestMapInDebugMap) {
 
 TYPED_TEST(AllRoutesTest, DebugMapCompleteness) {
   const LaneletMapPtr debugMap{this->route.getDebugLaneletMap()};
-  const LaneletMapConstPtr laneletMap{this->route.laneletMap()};
+  const LaneletSubmapConstPtr laneletMap{this->route.laneletSubmap()};
 
   for (const auto& it : laneletMap->laneletLayer) {
     ASSERT_NE(debugMap->pointLayer.find(it.id()), debugMap->pointLayer.end());
@@ -99,8 +99,8 @@ TEST_F(Route1, CreateRoute1) {    // NOLINT
   EXPECT_TRUE(route.remainingShortestPath(lanelets.at(2003)).empty());   // NOLINT
   EXPECT_NE(route.getDebugLaneletMap(), nullptr);
   EXPECT_EQ(route.getDebugLaneletMap()->pointLayer.size(), route.size());  // NOLINT
-  EXPECT_NE(route.laneletMap(), nullptr);
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), route.size());  // NOLINT
+  EXPECT_NE(route.laneletSubmap(), nullptr);
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), route.size());  // NOLINT
 }
 
 bool hasRelation(const LaneletRelations& relations, const ConstLanelet& llt, RelationType relationType) {
@@ -164,8 +164,8 @@ TEST_F(Route1NoLc, CreateRoute) {                                               
   EXPECT_EQ(route.shortestPath(), *graph->shortestPath(start, end, 0, false));  // NOLINT
   EXPECT_NE(route.getDebugLaneletMap(), nullptr);
   EXPECT_EQ(route.getDebugLaneletMap()->pointLayer.size(), route.size());  // NOLINT
-  EXPECT_NE(route.laneletMap(), nullptr);
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), route.size());  // NOLINT
+  EXPECT_NE(route.laneletSubmap(), nullptr);
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), route.size());  // NOLINT
 }
 TEST_F(Route1NoLc, Lanes) {  // NOLINT
   auto remainingLane{route.remainingLane(lanelets.at(2002))};
@@ -191,8 +191,8 @@ TEST_F(Route2, CreateRoute2) {                                           // NOLI
   EXPECT_EQ(route.shortestPath(), *graph->shortestPath(start, end, 0));  // NOLINT
   EXPECT_NE(route.getDebugLaneletMap(), nullptr);
   EXPECT_EQ(route.getDebugLaneletMap()->pointLayer.size(), route.size());  // NOLINT
-  EXPECT_NE(route.laneletMap(), nullptr);
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), route.size());  // NOLINT
+  EXPECT_NE(route.laneletSubmap(), nullptr);
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), route.size());  // NOLINT
 }
 
 TEST_F(Route3, CreateRoute3) {                                           // NOLINT
@@ -200,8 +200,8 @@ TEST_F(Route3, CreateRoute3) {                                           // NOLI
   EXPECT_EQ(route.shortestPath(), *graph->shortestPath(start, end, 0));  // NOLINT
   EXPECT_NE(route.getDebugLaneletMap(), nullptr);
   EXPECT_EQ(route.getDebugLaneletMap()->pointLayer.size(), route.size());  // NOLINT
-  EXPECT_NE(route.laneletMap(), nullptr);
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), route.size());  // NOLINT
+  EXPECT_NE(route.laneletSubmap(), nullptr);
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), route.size());  // NOLINT
 }
 
 TEST_F(Route4, CreateRoute4) {                                           // NOLINT
@@ -209,8 +209,8 @@ TEST_F(Route4, CreateRoute4) {                                           // NOLI
   EXPECT_EQ(route.shortestPath(), *graph->shortestPath(start, end, 0));  // NOLINT
   EXPECT_NE(route.getDebugLaneletMap(), nullptr);
   EXPECT_EQ(route.getDebugLaneletMap()->pointLayer.size(), route.size());  // NOLINT
-  EXPECT_NE(route.laneletMap(), nullptr);
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), route.size());  // NOLINT
+  EXPECT_NE(route.laneletSubmap(), nullptr);
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), route.size());  // NOLINT
 }
 
 TEST_F(RouteMaxHoseLeftRight, CreateRouteMaxHose1) {                     // NOLINT
@@ -218,8 +218,8 @@ TEST_F(RouteMaxHoseLeftRight, CreateRouteMaxHose1) {                     // NOLI
   EXPECT_EQ(route.shortestPath(), *graph->shortestPath(start, end, 0));  // NOLINT
   EXPECT_NE(route.getDebugLaneletMap(), nullptr);
   EXPECT_EQ(route.getDebugLaneletMap()->pointLayer.size(), route.size());  // NOLINT
-  EXPECT_NE(route.laneletMap(), nullptr);
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), route.size());  // NOLINT
+  EXPECT_NE(route.laneletSubmap(), nullptr);
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), route.size());  // NOLINT
 }
 
 TEST_F(RouteMaxHoseLeftRight, Lanes) {  // NOLINT
@@ -245,8 +245,8 @@ TEST_F(RouteMaxHoseRightLeft, CreateRouteMaxHose2) {                     // NOLI
   EXPECT_EQ(route.shortestPath(), *graph->shortestPath(start, end, 0));  // NOLINT
   EXPECT_NE(route.getDebugLaneletMap(), nullptr);
   EXPECT_EQ(route.getDebugLaneletMap()->pointLayer.size(), route.size());  // NOLINT
-  EXPECT_NE(route.laneletMap(), nullptr);
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), route.size());  // NOLINT
+  EXPECT_NE(route.laneletSubmap(), nullptr);
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), route.size());  // NOLINT
 }
 
 TEST_F(RouteMaxHoseRightLeft, Lanes) {  // NOLINT
@@ -338,18 +338,18 @@ TEST_F(GermanVehicleGraph, CannotCreateRoute) {  // NOLINT
   EXPECT_THROW(graph->getRoute(lanelets.at(2001), lanelets.at(2004), numCostModules), lanelet::InvalidInputError);
 }
 
-TEST_F(RouteSplittedDiverging, Completeness) {              // NOLINT
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), 7ul);  // NOLINT
-  EXPECT_EQ(route.numLanes(), 3ul);                         // NOLINT
+TEST_F(RouteSplittedDiverging, Completeness) {                 // NOLINT
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), 7ul);  // NOLINT
+  EXPECT_EQ(route.numLanes(), 3ul);                            // NOLINT
 }
 
-TEST_F(RouteSplittedDivergingAndMerging, Completeness) {     // NOLINT
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), 11ul);  // NOLINT
-  EXPECT_EQ(route.numLanes(), 5ul);                          // NOLINT
+TEST_F(RouteSplittedDivergingAndMerging, Completeness) {        // NOLINT
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), 11ul);  // NOLINT
+  EXPECT_EQ(route.numLanes(), 5ul);                             // NOLINT
 }
 
 TEST_F(RouteInCircle, create) {                                   // NOLINT
-  EXPECT_EQ(route.laneletMap()->laneletLayer.size(), 11ul);       // NOLINT
+  EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), 11ul);    // NOLINT
   EXPECT_EQ(route.numLanes(), 3ul);                               // NOLINT
   EXPECT_EQ(route.remainingLane(lanelets.at(2067)).size(), 0ul);  // NOLINT
 }

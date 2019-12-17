@@ -16,7 +16,7 @@ class RoutingGraphBuilder {
   RoutingGraphBuilder(const traffic_rules::TrafficRules& trafficRules, const RoutingCostPtrs& routingCosts,
                       const RoutingGraph::Configuration& config);
 
-  RoutingGraphUPtr build(const LaneletMap& laneletMap);
+  RoutingGraphUPtr build(const LaneletMapLayers& laneletMapLayers);
 
  private:
   using PointsLaneletMap = std::multimap<IdPair, ConstLanelet>;

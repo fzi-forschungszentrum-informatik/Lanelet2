@@ -64,17 +64,17 @@ TEST(DijkstraSearch, onSimpleGraph) {
 }
 
 TEST_F(GermanPedestrianGraph, NumberOfLanelets) {  // NOLINT
-  EXPECT_EQ(graph->passableMap()->laneletLayer.size(), 5ul);
-  EXPECT_TRUE(graph->passableMap()->laneletLayer.exists(2031));
-  EXPECT_TRUE(graph->passableMap()->laneletLayer.exists(2050));
-  EXPECT_EQ(graph->passableMap()->areaLayer.size(), 2ul);
-  EXPECT_TRUE(graph->passableMap()->areaLayer.exists(3000));
-  EXPECT_TRUE(graph->passableMap()->areaLayer.exists(3001));
+  EXPECT_EQ(graph->passableSubmap()->laneletLayer.size(), 5ul);
+  EXPECT_TRUE(graph->passableSubmap()->laneletLayer.exists(2031));
+  EXPECT_TRUE(graph->passableSubmap()->laneletLayer.exists(2050));
+  EXPECT_EQ(graph->passableSubmap()->areaLayer.size(), 2ul);
+  EXPECT_TRUE(graph->passableSubmap()->areaLayer.exists(3000));
+  EXPECT_TRUE(graph->passableSubmap()->areaLayer.exists(3001));
 }
 
 TEST_F(GermanBicycleGraph, NumberOfLanelets) {  // NOLINT
-  EXPECT_TRUE(graph->passableMap()->laneletLayer.exists(2013));
-  EXPECT_FALSE(graph->passableMap()->laneletLayer.exists(2022));
+  EXPECT_TRUE(graph->passableSubmap()->laneletLayer.exists(2013));
+  EXPECT_FALSE(graph->passableSubmap()->laneletLayer.exists(2022));
 }
 
 TEST_F(GermanVehicleGraph, GetShortestPath) {  // NOLINT

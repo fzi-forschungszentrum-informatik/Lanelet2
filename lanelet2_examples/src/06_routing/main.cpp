@@ -117,9 +117,9 @@ void part2UsingRoutes() {
   auto right = route->rightRelation(lanelet);
   assert(!!right);
 
-  // finally, we can also create a lanelet map from the route that only contains the relevant primitives for the
+  // finally, we can also create a lanelet submap from the route that only contains the relevant primitives for the
   // chosen route:
-  LaneletMapConstPtr routeMap = route->laneletMap();
+  LaneletSubmapConstPtr routeMap = route->laneletSubmap();
   assert(!routeMap->laneletLayer.empty());
 }
 
