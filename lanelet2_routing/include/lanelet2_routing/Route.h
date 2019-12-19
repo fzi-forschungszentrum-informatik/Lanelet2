@@ -88,6 +88,9 @@ class Route {
    *  Can be used to do spatial lookups like 'which Lanelets of the route are close to my position'.
    *  Note that not all lanelets in the map automatically belong to the route. They can also belong to one of the
    * regulatory elements of the lanelet. Use Route::contains for that.
+   *
+   * Due to this behaviour that the map can contain lanelets that are not on the route, this function is deprecated.
+   * laneletSubmap() only returns lanelets on the map. To get the old behaviour use laneletSubmap()->laneletMap().
    */
   [[deprecated("Use laneletSubmap() to obtain a view on the elements within this route")]] inline LaneletMapConstPtr
   laneletMap() const noexcept {

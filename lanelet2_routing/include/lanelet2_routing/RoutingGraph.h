@@ -75,7 +75,7 @@ class RoutingGraph {
    * If from and to are the same lanelet, the resulting route will form a loop.
    *  @see Route */
   Optional<Route> getRouteVia(const ConstLanelet& from, const ConstLanelets& via, const ConstLanelet& to,
-                              RoutingCostId routingCostId = {}, bool withLaneChanges = false) const;
+                              RoutingCostId routingCostId = {}, bool withLaneChanges = true) const;
 
   /** @brief Retrieve a shortest path between 'start' and 'end'.
    *
@@ -354,13 +354,22 @@ class RoutingGraph {
   LaneletMapPtr getDebugLaneletMap(RoutingCostId routingCostId = {}, bool includeAdjacent = false,
                                    bool includeConflicting = false) const;
 
+  /**
+   * @brief Returns a submap that contains all lanelets and areas within this routing graph, and nothing else.
+   * You can obtain a full map of the routing graph by calling passabelSubmap()->laneletMap(), which ist a potentially
+   * costly operation.
+   */
   inline LaneletSubmapConstPtr passableSubmap() const noexcept { return passableLaneletSubmap_; }
 
   /** @brief LaneletSubmap that includes all passable lanelets and areas.
    *  This map contains all passable lanelets and areas with all primitives (linestrings, points), including regulatory
    * elements and lanelets referenced by them. It can be used to perform spacial queries e.g. for localization. When
    * selecting a lanelet from this map please be aware that the routing graph may also contain the inverted lanelet.
-   *  @return LaneletMap with all passable lanelets and areas */
+   *  @return LaneletMap with all passable lanelets and areas
+   *
+   * This function is deprecated because it was misleading that the map also contained lanelets referenced by regulatory
+   * elements and not only the lanelets from the routing graph.
+   */
   [[deprecated(
       "Use passableSubmap to obtain the lanelets and areas within the routing graph!")]] inline LaneletMapConstPtr
   passableMap() const noexcept {

@@ -181,10 +181,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            (arg("lanelet"), arg("minRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = false,
             arg("routingCostId") = 0))
       .def("possiblePathsMinLen", possPLen, "possible routes from a given start lanelet that are 'minLanelets'-long",
-           (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
+           (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges") = false, arg("routingCostId") = 0))
       .def("possiblePathsTowardsMinLen", possPToLen,
            "possible routes from a given start lanelet that are 'minLanelets'-long",
-           (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges") = true, arg("routingCostId") = 0))
+           (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges") = false, arg("routingCostId") = 0))
       .def("forEachSuccessor",
            +[](RoutingGraph& self, const ConstLanelet& from, object func, bool lc, RoutingCostId costId) {
              self.forEachSuccessor(from, func, lc, costId);
