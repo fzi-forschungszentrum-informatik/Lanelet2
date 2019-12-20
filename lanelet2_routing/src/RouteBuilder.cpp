@@ -142,7 +142,7 @@ class PathsOutOfRouteFinder {
     permittedVertices_.resize(newConflictingVertices_.size(), false);
     auto testIfPathIsPermitted = [&](auto& path) {
       // neverConflictsWith is a shortcut for cases where all lanelets are only adjacent but not conflicting.
-      if (neverConflictsWithRoute(path) || alwaysConflictsWithRoute(path)) {
+      if (this->neverConflictsWithRoute(path) || this->alwaysConflictsWithRoute(path)) {
         for (auto& vertex : path) {
           auto iter = std::find(newConflictingVertices_.begin(), newConflictingVertices_.end(), vertex);
           permittedVertices_[std::distance(newConflictingVertices_.begin(), iter)] = true;

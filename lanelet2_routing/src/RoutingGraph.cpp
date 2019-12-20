@@ -523,7 +523,7 @@ LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, double 
     return {};
   }
   auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
-  return possiblePathsImpl<false, ConstLanelet, LaneletPath>(*start, graph, StopIfCostMoreThan{minRoutingCost});
+  return possiblePathsImpl<false, ConstLanelet, LaneletPath>(*start, graph, StopIfCostMoreThan<>{minRoutingCost});
 }
 
 LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets, bool allowLaneChanges,
@@ -533,7 +533,7 @@ LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, uint32_
     return {};
   }
   auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
-  return possiblePathsImpl<false, ConstLanelet, LaneletPath>(*start, graph, StopIfLaneletsMoreThan{minLanelets});
+  return possiblePathsImpl<false, ConstLanelet, LaneletPath>(*start, graph, StopIfLaneletsMoreThan<>{minLanelets});
 }
 
 LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanelet, double minRoutingCost,
@@ -543,7 +543,7 @@ LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanele
     return {};
   }
   auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
-  return possiblePathsImpl<true, ConstLanelet, LaneletPath>(*start, graph, StopIfCostMoreThan{minRoutingCost});
+  return possiblePathsImpl<true, ConstLanelet, LaneletPath>(*start, graph, StopIfCostMoreThan<>{minRoutingCost});
 }
 
 LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanelet, uint32_t minLanelets,
@@ -553,7 +553,7 @@ LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanele
     return {};
   }
   auto graph = allowLaneChanges ? graph_->withLaneChanges(routingCostId) : graph_->withoutLaneChanges(routingCostId);
-  return possiblePathsImpl<true, ConstLanelet, LaneletPath>(*start, graph, StopIfLaneletsMoreThan{minLanelets});
+  return possiblePathsImpl<true, ConstLanelet, LaneletPath>(*start, graph, StopIfLaneletsMoreThan<>{minLanelets});
 }
 
 LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint,
@@ -566,7 +566,7 @@ LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletO
   auto graph = allowLaneChanges ? graph_->withAreasAndLaneChanges(routingCostId)
                                 : graph_->withAreasWithoutLaneChanges(routingCostId);
   return possiblePathsImpl<false, ConstLaneletOrArea, LaneletOrAreaPath>(*start, graph,
-                                                                         StopIfCostMoreThan{minRoutingCost});
+                                                                         StopIfCostMoreThan<>{minRoutingCost});
 }
 
 LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, uint32_t minElements,
@@ -578,7 +578,7 @@ LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletO
   auto graph = allowLaneChanges ? graph_->withAreasAndLaneChanges(routingCostId)
                                 : graph_->withAreasWithoutLaneChanges(routingCostId);
   return possiblePathsImpl<false, ConstLaneletOrArea, LaneletOrAreaPath>(*start, graph,
-                                                                         StopIfLaneletsMoreThan{minElements});
+                                                                         StopIfLaneletsMoreThan<>{minElements});
 }
 
 void RoutingGraph::forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges,

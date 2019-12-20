@@ -449,6 +449,7 @@ class LaneletMap : public LaneletMapLayers {
  */
 class LaneletSubmap : public LaneletMapLayers {
  public:
+  LaneletSubmap() = default;
   using LaneletMapLayers::LaneletMapLayers;
 
   //! Constructs a submap from a moved-from LaneletMap
