@@ -79,5 +79,5 @@ COPY --chown=developer:developer . /home/developer/workspace/src/lanelet2
 RUN git -C /home/developer/workspace/src/mrt_cmake_modules pull
 
 # build
-RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build --no-status"
+RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build --no-status && catkin clean -by"
 
