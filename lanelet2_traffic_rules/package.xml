@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>lanelet2_traffic_rules</name>
-  <version>0.8.0</version>
+  <version>0.9.0</version>
   <description>Package for interpreting traffic rules in a lanelet map</description>
 
   <license>BSD</license>
