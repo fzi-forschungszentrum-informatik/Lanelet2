@@ -26,10 +26,10 @@ jobs:
       - name: Run tests
         run: |
           docker build --cache-from $IMAGE --target lanelet2_deps -t lanelet2_deps .
-          docker run -dit --name lanelet2 -v `pwd`:/home/developer/workspace/src/lanelet2 --rm lanelet2_deps bash
-          docker exec -ti lanelet2 /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build --no-status"
-          docker exec -ti lanelet2 catkin build --catkin-make-args run_tests -- --no-status
-          docker exec -ti lanelet2 /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin_test_results --verbose"
+          docker run -di --name lanelet2 -v `pwd`:/home/developer/workspace/src/lanelet2 --rm lanelet2_deps bash
+          docker exec -i lanelet2 /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build --no-status"
+          docker exec -i lanelet2 catkin build --catkin-make-args run_tests -- --no-status
+          docker exec -i lanelet2 /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin_test_results --verbose"
           docker stop lanelet2
   # Push image to GitHub Package Registry
   push:
