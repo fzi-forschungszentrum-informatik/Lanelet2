@@ -12,6 +12,7 @@ on:
 env:
   IMAGE_NAME: lanelet2
   IMAGE: docker.pkg.github.com/${{ github.repository }}/lanelet2
+  ROS_DISTRO: melodic
 
 jobs:
   test:
