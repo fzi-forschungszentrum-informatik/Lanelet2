@@ -99,7 +99,7 @@ def part4reading_and_writing():
 def part5traffic_rules():
     # this is just as you would expect
     traffic_rules = lanelet2.traffic_rules.create(lanelet2.traffic_rules.Locations.Germany,
-                                                 lanelet2.traffic_rules.Participants.Vehicle)
+                                                  lanelet2.traffic_rules.Participants.Vehicle)
     lanelet = get_a_lanelet()
     lanelet.attributes["vehicle"] = "yes"
     assert traffic_rules.canPass(lanelet)
@@ -111,7 +111,7 @@ def part6routing():
     projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
     map = lanelet2.io.load(example_file, projector)
     traffic_rules = lanelet2.traffic_rules.create(lanelet2.traffic_rules.Locations.Germany,
-                                                 lanelet2.traffic_rules.Participants.Vehicle)
+                                                  lanelet2.traffic_rules.Participants.Vehicle)
     graph = lanelet2.routing.RoutingGraph(map, traffic_rules)
     lanelet = map.laneletLayer[4984315]
     toLanelet = map.laneletLayer[2925017]
@@ -125,6 +125,29 @@ def part6routing():
     path = route.shortestPath()
     confLlts = [llt for llt in route.allConflictingInMap() if llt not in path]
     assert len(confLlts) > 0
+
+    # for more complex queries, you can use the forEachSuccessor function and pass it a function object
+    assert hasPathFromTo(graph, lanelet, toLanelet)
+
+
+def hasPathFromTo(graph, start, target):
+    class TargetFound:
+        pass
+
+    def raiseIfDestination(visitInformation):
+        # this function is called for every successor of lanelet with a LaneletVisitInformation object.
+        # if the function returns true, the search continues with the successors of this lanelet.
+        # Otherwise, the followers will not be visited through this lanelet, but could still be visited through
+        # other lanelets.
+        if visitInformation.lanelet == target:
+            raise TargetFound()
+        else:
+            return True
+    try:
+        graph.forEachSuccessor(start, raiseIfDestination)
+        return False
+    except TargetFound:
+        return True
 
 
 def get_linestring_at_x(x):

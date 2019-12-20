@@ -1,12 +1,13 @@
 #pragma once
+#include "Graph.h"
 #include "LaneletPath.h"
 #include "Route.h"
 
 namespace lanelet {
 namespace routing {
-
 class RoutingGraph;
 
+namespace internal {
 //! Builder class to create a route from a routing graph and the shortest path
 class RouteBuilder {
  public:
@@ -30,35 +31,14 @@ class RouteBuilder {
    * to the goal. So in the context of the route this is not a diverging situation but rather it's just one lanelet
    * (the right one) is following its predecessor. We would say that they are part of the same lane since there's no
    * other way to go. */
-  explicit RouteBuilder(const RoutingGraph& g) : graph_{g} {}
-  Optional<Route> getRouteFromShortestPath(const LaneletPath& path);
+  explicit RouteBuilder(const RoutingGraphGraph& g) : graph_{g} {}
+  Optional<Route> getRouteFromShortestPath(const LaneletPath& path, bool withLaneChanges = true,
+                                           RoutingCostId costId = 0);
 
  private:
-  void addPendingToElements(std::vector<RouteElement*>& elementsQueue);
-  std::vector<RouteElement*> addPreviousRelations(RouteElement* newElement, bool directlyConnected);
-  Optional<Route> createRoutefromElements(const LaneletPath& path);
-  std::vector<ConstLanelets> determineDivergingLanes(const ConstLanelets& diverging);
-  std::vector<ConstLanelets> determineMergingLanes(const ConstLanelets& merging);
-  std::vector<ConstLanelets> determineLanesImpl(
-      const ConstLanelets& initialSplit,
-      const std::function<ConstLanelets(const RoutingGraph&, ConstLanelet, bool)>& nextLanelets) const;
-  std::vector<RouteElementUPtrs> divergingToPending(RouteElement* element, RouteElement::LaneId& initLaneId,
-                                                    const RouteElementUPtrs& currentCandidates = RouteElementUPtrs());
-  RouteElement::LaneId initlaneIdForRoute(const ConstLanelet& lanelet, RouteElement::LaneId& initLaneId);
-  void processMergingLanelets(std::vector<RouteElement*>& elementsQueue, RouteElement::LaneId& initLaneId,
-                              RouteElement* thisElement, RouteElement* previousElement,
-                              const Optional<RelationType>& relation);
-  void processLeftSide(RouteElement::LaneId& initLaneId, RouteElement* thisElement, bool directRelation = true,
-                       bool preferPendingToElements = false);
-  void processRightSide(RouteElement::LaneId& initLaneId, RouteElement* thisElement, bool directRelation = true,
-                        bool preferPendingToElements = false);
-  void recursiveDivergingToPending(RouteElement::LaneId& initLaneId, RouteElement* thisElement);
-
-  const RoutingGraph& graph_;
-  std::vector<RouteElementUPtrs> pending_;
-  std::unordered_map<ConstLanelet, RouteElementUPtr> elements_;  // These are going to part of the route
-  std::map<RouteElement::LaneId, RouteElement*> firstInLane_;    // First elements of each lane
+  const RoutingGraphGraph& graph_;
 };
 
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

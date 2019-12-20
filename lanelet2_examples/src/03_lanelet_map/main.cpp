@@ -12,12 +12,14 @@
 void part1AboutLaneletMaps();
 void part2CreatingLaneletMaps();
 void part3QueryingInformation();
+void part4LaneletSubmaps();
 
 int main() {
   // this tutorial shows you what LaneletMaps are and how they are supposed to be used.
   part1AboutLaneletMaps();
   part2CreatingLaneletMaps();
   part3QueryingInformation();
+  part4LaneletSubmaps();
   return 0;
 }
 
@@ -134,4 +136,27 @@ void part3QueryingInformation() {
   };
   Optional<Lanelet> lanelet = laneletMap.laneletLayer.nearestUntil(searchPoint, searchFunc);
   assert(!!lanelet && geometry::distance(geometry::boundingBox2d(*lanelet), searchPoint) > 3);
+}
+
+void part4LaneletSubmaps() {
+  using namespace lanelet;
+  // While LaneletMap has the property that when an element is added, all the things referenced by it are added as well,
+  // LaneletSubmap does not have this property. This can be useful if you want to avoid that if you add a Lanelet, all
+  // Lanelets referenced by its RegulatoryElements are added as well. Apart from that, basically everything you can do
+  // with a LaneletMap can also be done with a LaneletSubmap:
+  LaneletSubmap submap{examples::getALaneletMap()};  // it can be constructed (moved) from an existing map
+
+  // you can search its layers
+  Lanelets inRegion = submap.laneletLayer.search(BoundingBox2d(BasicPoint2d(0, 0), BasicPoint2d(10, 10)));
+
+  // you can create new submaps from some elements
+  LaneletSubmapUPtr newSubmap = utils::createSubmap(inRegion);
+
+  // but this submap will not contain any elements except for the ones you explicitly added
+  assert(newSubmap->pointLayer.empty());
+  assert(newSubmap->size() == inRegion.size());
+
+  // ... unless you convert back into a laneletMap. This will again contain all primitives:
+  LaneletMapUPtr newMap = newSubmap->laneletMap();
+  assert(!newMap->pointLayer.empty());
 }

@@ -283,11 +283,19 @@ class ToFileWriter {
   std::unique_ptr<osm::File> file_;
 };
 
+void testAndPrintLocaleWarning() {
+  auto decimalPoint = std::localeconv()->decimal_point;
+  if (decimalPoint == nullptr || *decimalPoint != '.') {
+    std::cerr << "Warning: Current decimal point of the C locale is set to \""
+              << (decimalPoint == nullptr ? ' ' : *decimalPoint) << "\". This will lead to invalid osm output!\n";
+  }
+}
 }  // namespace
 
 void OsmWriter::write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors) const {
   auto file = toOsmFile(laneletMap, errors);
   auto doc = osm::write(*file);
+  testAndPrintLocaleWarning();
   auto res = doc->save_file(filename.c_str(), "  ");
   if (!res) {
     throw ParseError("Pugixml failed to write the map (unable to create file?)");

@@ -348,6 +348,10 @@ template <typename PrimT>
 auto selectAdd() {
   return static_cast<void (LaneletMap::*)(PrimT)>(&LaneletMap::add);
 }
+template <typename PrimT>
+auto selectSubmapAdd() {
+  return static_cast<void (LaneletSubmap::*)(PrimT)>(&LaneletSubmap::add);
+}
 
 template <typename RegelemT>
 std::vector<std::shared_ptr<RegelemT>> regelemAs(Lanelet& llt) {
@@ -362,6 +366,11 @@ std::vector<std::shared_ptr<const RegelemT>> constRegelemAs(ConstLanelet& llt) {
 template <typename PrimT>
 LaneletMapPtr createMapWrapper(const PrimT& prim) {
   return utils::createMap(prim);
+}
+
+template <typename PrimT>
+LaneletSubmapPtr createSubmapWrapper(const PrimT& prim) {
+  return utils::createSubmap(prim);
 }
 
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
@@ -866,8 +875,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<SpeedLimit, boost::noncopyable, std::shared_ptr<SpeedLimit>, bases<TrafficSign>>(  // NOLINT
       "SpeedLimit", "A speed limit regulatory element", no_init);
 
-  class_<PrimitiveLayer<Area>, boost::noncopyable>("PrimitiveLayerArea", no_init);
-  class_<PrimitiveLayer<Lanelet>, boost::noncopyable>("PrimitiveLayerLanelet", no_init);
+  class_<PrimitiveLayer<Area>, boost::noncopyable>("PrimitiveLayerArea", no_init);        // NOLINT
+  class_<PrimitiveLayer<Lanelet>, boost::noncopyable>("PrimitiveLayerLanelet", no_init);  // NOLINT
 
   wrapLayer<AreaLayer, bases<PrimitiveLayer<Area>>>("AreaLayer")
       .def("findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
@@ -884,21 +893,34 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   wrapLayer<PointLayer>("PointLayer");
   wrapLayer<RegulatoryElementLayer>("RegulatoryElementLayer");
 
-  class_<LaneletMap, boost::noncopyable, LaneletMapPtr>("LaneletMap", "Object for managing a lanelet map",
-                                                        init<>("LaneletMap()"))
+  class_<LaneletMapLayers, boost::noncopyable>("LaneletMapLayers", "Container for the layers of a lanelet map")
       .def_readonly("laneletLayer", &LaneletMap::laneletLayer, "Lanelets")
       .def_readonly("areaLayer", &LaneletMap::areaLayer)
       .def_readonly("regulatoryElementLayer", &LaneletMap::regulatoryElementLayer)
       .def_readonly("lineStringLayer", &LaneletMap::lineStringLayer)
       .def_readonly("polygonLayer", &LaneletMap::polygonLayer)
-      .def_readonly("pointLayer", &LaneletMap::pointLayer)
-      .def("add", selectAdd<Point3d>())
+      .def_readonly("pointLayer", &LaneletMap::pointLayer);
+
+  class_<LaneletMap, bases<LaneletMapLayers>, LaneletMapPtr, boost::noncopyable>(
+      "LaneletMap", "Object for managing a lanelet map", init<>("LaneletMap()"))
+      .def("add", selectSubmapAdd<Point3d>())
       .def("add", selectAdd<Lanelet>())
       .def("add", selectAdd<Area>())
       .def("add", selectAdd<LineString3d>())
       .def("add", selectAdd<Polygon3d>())
       .def("add", selectAdd<const RegulatoryElementPtr&>());
   register_ptr_to_python<LaneletMapConstPtr>();
+
+  class_<LaneletSubmap, bases<LaneletMapLayers>, LaneletSubmapPtr, boost::noncopyable>(
+      "LaneletSubmap", "Object for managing parts of a lanelet map", init<>("LaneletSubmap()"))
+      .def("laneletMap", +[](LaneletSubmap& self) { return self.laneletMap(); })
+      .def("add", selectSubmapAdd<Point3d>())
+      .def("add", selectSubmapAdd<Lanelet>())
+      .def("add", selectSubmapAdd<Area>())
+      .def("add", selectSubmapAdd<LineString3d>())
+      .def("add", selectSubmapAdd<Polygon3d>())
+      .def("add", selectSubmapAdd<const RegulatoryElementPtr&>());
+  register_ptr_to_python<LaneletSubmapConstPtr>();
 
   def("getId", static_cast<Id (&)()>(utils::getId), "Returns a unique id");
   def("registerId", &utils::registerId, "Registers an id");
@@ -908,4 +930,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("createMapFromPolygons", createMapWrapper<Polygons3d>, "Create map from primitives");
   def("createMapFromLanelets", createMapWrapper<Lanelets>, "Create map from primitives");
   def("createMapFromAreas", createMapWrapper<Areas>, "Create map from primitives");
+
+  def("createSubmapFromPoints", createSubmapWrapper<Points3d>, "Create sbumap from primitives");
+  def("createSubmapFromLineStrings", createSubmapWrapper<LineStrings3d>, "Create submap from primitives");
+  def("createSubmapFromPolygons", createSubmapWrapper<Polygons3d>, "Create submap from primitives");
+  def("createSubmapFromLanelets", createSubmapWrapper<Lanelets>, "Create submap from primitives");
+  def("createSubmapFromAreas", createSubmapWrapper<Areas>, "Create submap from primitives");
 }

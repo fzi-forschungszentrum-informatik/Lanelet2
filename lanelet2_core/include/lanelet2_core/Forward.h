@@ -170,6 +170,15 @@ using LaneletMapConstUPtr = std::unique_ptr<const LaneletMap>;
 using LaneletMapPtrs = std::vector<LaneletMapPtr>;
 using LaneletMapConstPtrs = std::vector<LaneletMapConstPtr>;
 
+// LaneletSubmap
+class LaneletSubmap;
+using LaneletSubmapPtr = std::shared_ptr<LaneletSubmap>;
+using LaneletSubmapUPtr = std::unique_ptr<LaneletSubmap>;
+using LaneletSubmapConstPtr = std::shared_ptr<const LaneletSubmap>;
+using LaneletSubmapConstUPtr = std::unique_ptr<const LaneletSubmap>;
+using LaneletSubmapPtrs = std::vector<LaneletSubmapPtr>;
+using LaneletSubmapConstPtrs = std::vector<LaneletSubmapConstPtr>;
+
 // RegulatoryElementData
 class RegulatoryElementData;
 using RegulatoryElementDataPtr = std::shared_ptr<RegulatoryElementData>;

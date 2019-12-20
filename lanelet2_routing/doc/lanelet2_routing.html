@@ -88,11 +88,6 @@ class: center, middle, inverse
 ---
 
 # Lanelet2 Routing
-## Matthias Mayr
-
-???
-
-Notes for the _first_ slide!
 
 ---
 layout: false
@@ -148,9 +143,9 @@ layout: false
 # 2. Routing Graph
 Answer queries regarding relations to other lanelets
 * Possible relations:
-    * `left`, `right` (routable)
-    * `adjacent left`, `adjacent right` (non-routable)
-    * `succeeding`, `merging`, `diverging`
+    * `left`, `right` (reachable though lane change)
+    * `adjacent left`, `adjacent right` (directly adjacent but not legally  reachable)
+    * `succeeding`
     * `conflicting`
 
 Reachable set of lanelets:
@@ -331,11 +326,9 @@ ConstLanelets remainingLane = route->remainingLane(ll);
 # Side notes and limitations
 .pull-strong-left[
 * Routing Lanelet Maps best viewed with the provided JOSM map styles
-* Routing Graph and Routes provide a `checkValidity()` function until there's a general sanity check module
+* Routing Graph and Routes provide a `checkValidity()` (refer to lanelet2_validation for sanity checking)
 
-* Currently diverging and merging situations have to have a length of one lanelet (Issue #4)
-* Adjacent lanelets of diverging lanelets that are not the part of the shortest route are not regarded (Issue #1)
-* Areas aren't part of the routing graph (Issue #3)
+
 ## Questions and suggestions!
 ]
 

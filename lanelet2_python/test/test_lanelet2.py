@@ -1,36 +1,44 @@
 import unittest
-import lanelet2 # if we fail here, there is something wrong with registration
+import lanelet2  # if we fail here, there is something wrong with registration
 from lanelet2.core import AttributeMap, getId, BasicPoint2d, Point3d, LineString3d, Lanelet, RegulatoryElement, TrafficLight, LaneletMap, createMapFromLanelets
 from lanelet2.geometry import distance, intersects2d, boundingBox2d, to2D
+
 
 def getAttributes():
     return AttributeMap({"key": "value"})
 
+
 def getPoint():
     return Point3d(getId(), 0, 0, 0, getAttributes())
+
 
 def getLineString():
     return LineString3d(getId(), [getPoint(), getPoint()], getAttributes())
 
+
 def getLanelet():
     return Lanelet(getId(), getLineString(), getLineString(), getAttributes())
 
+
 def getRegelem():
     return TrafficLight(getId(), AttributeMap(), [getLineString()], getLineString())
+
 
 def getLaneletMap():
     lanelet = getLanelet()
     lanelet.addRegulatoryElement(getRegelem())
     return createMapFromLanelets([lanelet])
 
+
 def checkPrimitiveId(testClass, primitive):
     primitive.id = 30
     testClass.assertEqual(primitive.id, 30)
 
+
 def checkPrimitiveAttributes(testClass, primitive):
     lenBefore = len(primitive.attributes)
     primitive.attributes["newkey"] = "newvalue"
-    testClass.assertEqual(lenBefore+1, len(primitive.attributes))
+    testClass.assertEqual(lenBefore + 1, len(primitive.attributes))
     testClass.assertTrue("newkey" in primitive.attributes)
     testClass.assertEqual(primitive.attributes["newkey"], "newvalue")
     del primitive.attributes["newkey"]
@@ -58,6 +66,7 @@ class LaneletApiTestCase(unittest.TestCase):
         self.assertEqual(len(llt.trafficSigns()), 0)
         self.assertEqual(len(llt.regulatoryElements), 1)
 
+
 class LaneletMapApiTestCase(unittest.TestCase):
     def test_lanelet_map_basic(self):
         map = getLaneletMap()
@@ -66,9 +75,10 @@ class LaneletMapApiTestCase(unittest.TestCase):
 
     def test_lanelet_map_search(self):
         map = getLaneletMap()
-        nearest = map.laneletLayer.nearest(BasicPoint2d(0,0), 1)
+        nearest = map.laneletLayer.nearest(BasicPoint2d(0, 0), 1)
         self.assertEqual(len(nearest), 1)
         self.assertTrue(map.laneletLayer.exists(nearest[0].id))
+
 
 class GeometryApiTestCase(unittest.TestCase):
     def test_distance_p2p(self):

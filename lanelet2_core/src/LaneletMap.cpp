@@ -189,6 +189,27 @@ Optional<RetT> nearestUntilImpl(TreeT&& tree, const BasicPoint2d& point, const F
   }
   return {};
 }
+
+template <typename T>
+void checkId(T& t) {
+  if (t.id() == InvalId) {
+    t.setId(utils::getId());
+  } else {
+    utils::registerId(t.id());
+  }
+}
+
+template <typename ConstLaneletsT, typename ConstAreasT>
+LaneletMapUPtr createMapFromConst(const ConstLaneletsT& fromLanelets, const ConstAreasT& fromAreas) {
+  // sorry, we temporarily have to const cast our primitives back to non-const to be able to create a const map. Its not
+  // beautiful but valid.
+  auto lanelets = utils::transform(fromLanelets, [](const ConstLanelet& llt) {
+    return Lanelet(std::const_pointer_cast<LaneletData>(llt.constData()), llt.inverted());
+  });
+  auto areas = utils::transform(
+      fromAreas, [](const ConstArea& ar) { return Area(std::const_pointer_cast<AreaData>(ar.constData())); });
+  return utils::createMap(lanelets, areas);
+}
 }  // namespace
 }  // namespace lanelet
 
@@ -529,19 +550,16 @@ Id PrimitiveLayer<T>::uniqueId() const {
   return utils::getId();
 }
 
-LaneletMap::LaneletMap() = default;
-
-LaneletMap::LaneletMap(const LaneletLayer::Map& lanelets, const AreaLayer::Map& areas,
-                       const RegulatoryElementLayer::Map& regulatoryElements, const PolygonLayer::Map& polygons,
-                       const LineStringLayer::Map& lineStrings, const PointLayer::Map& points)
+LaneletMapLayers::LaneletMapLayers(const LaneletLayer::Map& lanelets, const AreaLayer::Map& areas,
+                                   const RegulatoryElementLayer::Map& regulatoryElements,
+                                   const PolygonLayer::Map& polygons, const LineStringLayer::Map& lineStrings,
+                                   const PointLayer::Map& points)
     : laneletLayer(lanelets),
       areaLayer(areas),
       regulatoryElementLayer(regulatoryElements),
       polygonLayer(polygons),
       lineStringLayer(lineStrings),
       pointLayer(points) {}
-
-LaneletMap::~LaneletMap() noexcept = default;
 
 void LaneletMap::add(Lanelet lanelet) {
   if (lanelet.id() == InvalId) {
@@ -660,6 +678,91 @@ void LaneletMap::add(Point3d point) {
   pointLayer.add(point);
 }
 
+void LaneletSubmap::add(Lanelet lanelet) {
+  checkId(lanelet);
+  utils::forEach(lanelet.regulatoryElements(), [&](auto& regElem) { this->trackParameters(*regElem); });
+  laneletLayer.add(lanelet);
+}
+
+void LaneletSubmap::add(Area area) {
+  checkId(area);
+  utils::forEach(area.regulatoryElements(), [&](auto& regElem) { this->trackParameters(*regElem); });
+  areaLayer.add(area);
+}
+
+void LaneletSubmap::add(const RegulatoryElementPtr& regElem) {
+  checkId(*regElem);
+  trackParameters(*regElem);
+  regulatoryElementLayer.add(regElem);
+}
+
+void LaneletSubmap::add(Polygon3d polygon) {
+  checkId(polygon);
+  polygonLayer.add(polygon);
+}
+
+void LaneletSubmap::add(LineString3d lineString) {
+  checkId(lineString);
+  lineStringLayer.add(lineString);
+}
+
+void LaneletSubmap::add(Point3d point) {
+  checkId(point);
+  pointLayer.add(point);
+}
+
+LaneletMapConstPtr LaneletSubmap::laneletMap() const {
+  auto map = createMapFromConst(laneletLayer, areaLayer);
+  auto add = [&map](auto& prim) {
+    using T = std::decay_t<decltype(prim)>;
+    map->add(typename traits::PrimitiveTraits<T>::MutableType(
+        std::const_pointer_cast<typename traits::PrimitiveTraits<T>::DataType>(prim.constData())));
+  };
+  auto addLs = [&map](auto& prim) {
+    map->add(LineString3d(std::const_pointer_cast<LineStringData>(prim.constData()), prim.inverted()));
+  };
+  auto addRe = [&map](auto& prim) { map->add(std::const_pointer_cast<RegulatoryElement>(prim)); };
+  utils::forEach(regulatoryElementLayer, addRe);
+  utils::forEach(polygonLayer, add);
+  utils::forEach(lineStringLayer, addLs);
+  utils::forEach(pointLayer, add);
+  return map;
+}
+
+LaneletMapUPtr LaneletSubmap::laneletMap() {
+  auto map =
+      utils::createMap(Lanelets{laneletLayer.begin(), laneletLayer.end()}, Areas{areaLayer.begin(), areaLayer.end()});
+  auto add = [&](auto& val) { map->add(val); };
+  utils::forEach(regulatoryElementLayer, add);
+  utils::forEach(polygonLayer, add);
+  utils::forEach(lineStringLayer, add);
+  utils::forEach(pointLayer, add);
+  return map;
+}
+
+void LaneletSubmap::trackParameters(const RegulatoryElement& regelem) {
+  using LLorAreas = std::vector<boost::variant<ConstLanelet, ConstArea>>;
+  class AddToLLorAreaVisitor : public RuleParameterVisitor {
+   public:
+    AddToLLorAreaVisitor(LLorAreas& llOrAreas) : llOrAreas_{&llOrAreas} {}
+    void operator()(const ConstWeakLanelet& wll) override {
+      if (!wll.expired()) {
+        llOrAreas_->emplace_back(wll.lock());
+      }
+    }
+    void operator()(const ConstWeakArea& wa) override {
+      if (!wa.expired()) {
+        llOrAreas_->emplace_back(wa.lock());
+      }
+    }
+
+   private:
+    LLorAreas* llOrAreas_{};
+  };
+  AddToLLorAreaVisitor v{regelemObjects};
+  regelem.applyVisitor(v);
+}
+
 template class PrimitiveLayer<Area>;
 template class PrimitiveLayer<Lanelet>;
 template class PrimitiveLayer<Point3d>;
@@ -683,7 +786,7 @@ template std::vector<ConstLayerPrimitive<Polygon3d>> findUsages<Polygon3d>(const
 template std::vector<ConstLayerPrimitive<RegulatoryElementPtr>> findUsages<RegulatoryElementPtr>(
     const PrimitiveLayer<RegulatoryElementPtr>&, Id);
 
-ConstLanelets findUsagesInLanelets(const LaneletMap& map, const ConstPoint3d& p) {
+ConstLanelets findUsagesInLanelets(const LaneletMapLayers& map, const ConstPoint3d& p) {
   auto ls = map.lineStringLayer.findUsages(p);
   auto llts = utils::concatenate(ls, [&map](const auto& ls) { return map.laneletLayer.findUsages(ls); });
   auto lltsInv = utils::concatenate(ls, [&map](const auto& ls) { return map.laneletLayer.findUsages(ls.invert()); });
@@ -693,7 +796,7 @@ ConstLanelets findUsagesInLanelets(const LaneletMap& map, const ConstPoint3d& p)
   return llts;
 }
 
-ConstAreas findUsagesInAreas(const LaneletMap& map, const ConstPoint3d& p) {
+ConstAreas findUsagesInAreas(const LaneletMapLayers& map, const ConstPoint3d& p) {
   auto ls = map.lineStringLayer.findUsages(p);
   auto areas = utils::concatenate(ls, [&map](const auto& ls) { return map.areaLayer.findUsages(ls); });
   auto areasInv = utils::concatenate(ls, [&map](const auto& ls) { return map.areaLayer.findUsages(ls.invert()); });
@@ -762,14 +865,7 @@ LaneletMapUPtr createMap(const Polygons3d& fromPolygons) {
 }
 
 LaneletMapConstUPtr createConstMap(const ConstLanelets& fromLanelets, const ConstAreas& fromAreas) {
-  // sorry, we temporarily have to const cast our primitives back to non-const to be able to create a const map. Its not
-  // beautiful but valid.
-  auto lanelets = utils::transform(fromLanelets, [](const ConstLanelet& llt) {
-    return Lanelet(std::const_pointer_cast<LaneletData>(llt.constData()), llt.inverted());
-  });
-  auto areas = utils::transform(
-      fromAreas, [](const ConstArea& ar) { return Area(std::const_pointer_cast<AreaData>(ar.constData())); });
-  return createMap(lanelets, areas);
+  return createMapFromConst(fromLanelets, fromAreas);
 }
 
 namespace {
@@ -785,6 +881,49 @@ void registerId(Id id) {
   while (current < newId && !currId.compare_exchange_weak(current, newId)) {
   }
 }
+
+LaneletSubmapUPtr createSubmap(const Points3d& fromPoints) {
+  return std::make_unique<LaneletSubmap>(LaneletLayer::Map(), AreaLayer::Map(), RegulatoryElementLayer::Map(),
+                                         PolygonLayer::Map(), LineStringLayer::Map(), toMap(fromPoints));
+}
+
+LaneletSubmapUPtr createSubmap(const LineStrings3d& fromLineStrings) {
+  return std::make_unique<LaneletSubmap>(LaneletLayer::Map(), AreaLayer::Map(), RegulatoryElementLayer::Map(),
+                                         PolygonLayer::Map(), toMap(fromLineStrings), PointLayer::Map());
+}
+
+LaneletSubmapUPtr createSubmap(const Polygons3d& fromPolygons) {
+  return std::make_unique<LaneletSubmap>(LaneletLayer::Map(), AreaLayer::Map(), RegulatoryElementLayer::Map(),
+                                         toMap(fromPolygons), LineStringLayer::Map(), PointLayer::Map());
+}
+
+LaneletSubmapUPtr createSubmap(const Lanelets& fromLanelets) { return createSubmap(fromLanelets, {}); }
+
+LaneletSubmapUPtr createSubmap(const Areas& fromAreas) { return createSubmap({}, fromAreas); }
+
+LaneletSubmapUPtr createSubmap(const Lanelets& fromLanelets, const Areas& fromAreas) {
+  auto map = std::make_unique<LaneletSubmap>(toMap(fromLanelets), toMap(fromAreas), RegulatoryElementLayer::Map(),
+                                             PolygonLayer::Map(), LineStringLayer::Map(), PointLayer::Map());
+  for (auto& ll : fromLanelets) {
+    utils::forEach(ll.regulatoryElements(), [&](auto& regelem) { map->trackParameters(*regelem); });
+  }
+  for (auto& ar : fromAreas) {
+    utils::forEach(ar.regulatoryElements(), [&](auto& regelem) { map->trackParameters(*regelem); });
+  }
+  return map;
+}
+
+LaneletSubmapConstUPtr createConstSubmap(const ConstLanelets& fromLanelets, const ConstAreas& fromAreas) {
+  // sorry, we temporarily have to const cast our primitives back to non-const to be able to create a const map. Its not
+  // beautiful but valid.
+  auto lanelets = utils::transform(fromLanelets, [](const ConstLanelet& llt) {
+    return Lanelet(std::const_pointer_cast<LaneletData>(llt.constData()), llt.inverted());
+  });
+  auto areas = utils::transform(
+      fromAreas, [](const ConstArea& ar) { return Area(std::const_pointer_cast<AreaData>(ar.constData())); });
+  return utils::createSubmap(lanelets, areas);
+}
+
 }  // namespace utils
 
 namespace geometry {

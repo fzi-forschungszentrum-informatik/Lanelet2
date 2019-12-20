@@ -1,45 +1,59 @@
 #include <gtest/gtest.h>
 #include "Exceptions.h"
 #include "RoutingGraph.h"
+#include "boost/filesystem.hpp"
 #include "test_routing_map.h"
 
 using namespace lanelet;
 using namespace lanelet::routing;
 using namespace lanelet::routing::tests;
+namespace fs = boost::filesystem;
 
-TEST_F(GermanVehicleGraph, GraphVizExport) {  // NOLINT
-  const std::string file("/tmp/lanelet2_tests_graphexport.dot");
-  const std::string fileWithExcluded1("/tmp/lanelet2_tests_graphexportWithExcluded1.dot");
-  const std::string fileWithExcluded2("/tmp/lanelet2_tests_graphexportWithExcluded2.dot");
-  EXPECT_NO_THROW(graph->exportGraphViz(file));  // NOLINT
-  RelationTypes excluded{RelationType::Conflicting};
-  EXPECT_NO_THROW(graph->exportGraphViz(fileWithExcluded1, excluded));  // NOLINT
-  excluded.push_back(RelationType::AdjacentLeft);
-  excluded.push_back(RelationType::AdjacentRight);
-  EXPECT_NO_THROW(graph->exportGraphViz(fileWithExcluded2, excluded));  // NOLINT
+class Tempfile {
+ public:
+  Tempfile() {
+    auto res = mkdtemp(path_.data());
+    if (res == nullptr) {
+      throw lanelet::LaneletError("Failed to crate temporary directory");
+    }
+  }
+  ~Tempfile() { fs::remove_all(fs::path(path_)); }
+
+  auto operator()(const std::string& str) const noexcept -> std::string { return (fs::path(path_) / str).string(); }
+
+ private:
+  std::string path_{"/tmp/lanelet2_unittest.XXXXXX"};
+};
+
+static Tempfile tempfile;
+
+TEST_F(GermanVehicleGraph, GraphVizExport) {                            // NOLINT
+  EXPECT_NO_THROW(graph->exportGraphViz(tempfile("graphexport.dot")));  // NOLINT
+  RelationType excluded{RelationType::Conflicting};
+  EXPECT_NO_THROW(graph->exportGraphViz(tempfile("graphexportWithExcluded1.dot"), excluded));  // NOLINT
+  excluded |= RelationType::AdjacentLeft;
+  excluded |= RelationType::AdjacentRight;
+  EXPECT_NO_THROW(graph->exportGraphViz(tempfile("graphexportWithExcluded2.dot"), excluded));  // NOLINT
 }
 
-TEST_F(GermanVehicleGraph, GraphVizExportError) {                                        // NOLINT
-  EXPECT_THROW(graph->exportGraphViz("", RelationTypes()), lanelet::InvalidInputError);  // NOLINT
-  EXPECT_THROW(graph->exportGraphViz("/bla", RelationTypes()), lanelet::ExportError);    // NOLINT
+TEST_F(GermanVehicleGraph, GraphVizExportError) {                                           // NOLINT
+  EXPECT_THROW(graph->exportGraphViz("", RelationType::None), lanelet::InvalidInputError);  // NOLINT
+  EXPECT_THROW(graph->exportGraphViz("/bla"), lanelet::ExportError);                        // NOLINT
 }
 
-TEST_F(GermanVehicleGraph, GraphMLExport) {  // NOLINT
-  const std::string file("/tmp/lanelet2_tests_graphexport.graphml");
-  const std::string fileWithExcluded1("/tmp/lanelet2_tests_graphexportWithExcluded1.graphml");
-  const std::string fileWithExcluded2("/tmp/lanelet2_tests_graphexportWithExcluded2.graphml");
-  EXPECT_NO_THROW(graph->exportGraphML(file));  // NOLINT
-  RelationTypes excluded;
-  excluded.push_back(RelationType::Conflicting);
-  EXPECT_NO_THROW(graph->exportGraphML(fileWithExcluded1, excluded));  // NOLINT
-  excluded.push_back(RelationType::AdjacentLeft);
-  excluded.push_back(RelationType::AdjacentRight);
-  EXPECT_NO_THROW(graph->exportGraphML(fileWithExcluded2, excluded));  // NOLINT
+TEST_F(GermanVehicleGraph, GraphMLExport) {                                // NOLINT
+  EXPECT_NO_THROW(graph->exportGraphML(tempfile("graphexport.graphml")));  // NOLINT
+  RelationType excluded{RelationType::Conflicting};
+  EXPECT_NO_THROW(graph->exportGraphML(tempfile("graphexportWithExcluded1.graphml"), excluded));  // NOLINT
+  excluded |= RelationType::AdjacentLeft;
+  excluded |= RelationType::AdjacentLeft;
+  excluded |= RelationType::AdjacentRight;
+  EXPECT_NO_THROW(graph->exportGraphML(tempfile("graphexportWithExcluded2.graphml"), excluded));  // NOLINT
 }
 
-TEST_F(GermanVehicleGraph, GraphMLExportError) {                                                          // NOLINT
-  EXPECT_THROW(graph->exportGraphML("", RelationTypes()), lanelet::InvalidInputError);                    // NOLINT
-  EXPECT_THROW(graph->exportGraphML("/place_that_doesnt_exist", RelationTypes()), lanelet::ExportError);  // NOLINT
+TEST_F(GermanVehicleGraph, GraphMLExportError) {                                                             // NOLINT
+  EXPECT_THROW(graph->exportGraphML("", RelationType::None), lanelet::InvalidInputError);                    // NOLINT
+  EXPECT_THROW(graph->exportGraphML("/place_that_doesnt_exist", RelationType::None), lanelet::ExportError);  // NOLINT
 }
 
 TEST_F(GermanVehicleGraph, DebugLaneletMap) {  // NOLINT
@@ -47,6 +61,7 @@ TEST_F(GermanVehicleGraph, DebugLaneletMap) {  // NOLINT
   EXPECT_TRUE(map->pointLayer.exists(2007));
   EXPECT_TRUE(map->pointLayer.exists(2020));
   EXPECT_TRUE(map->pointLayer.exists(2032));
+  EXPECT_GT(map->lineStringLayer.size(), map->pointLayer.size());
   EXPECT_FALSE(map->pointLayer.exists(2031));
 }
 

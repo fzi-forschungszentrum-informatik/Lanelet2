@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>lanelet2_maps</name>
-  <version>0.8.0</version>
+  <version>0.9.0</version>
   <description>Example maps in the lanelet2-format</description>
 
   <license>BSD</license>

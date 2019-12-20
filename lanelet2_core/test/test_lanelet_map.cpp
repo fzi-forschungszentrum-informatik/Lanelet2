@@ -200,6 +200,13 @@ TEST_F(LaneletMapTest, findUsagesInAreas) {  // NOLINT
   });
 }
 
+TEST_F(LaneletMapTest, sizeAndEmpty) {  // NOLINT
+  auto pointMap = utils::createMap(Points3d{map->pointLayer.begin(), map->pointLayer.end()});
+  EXPECT_FALSE(pointMap->empty());
+  EXPECT_EQ(pointMap->size(), pointMap->pointLayer.size());
+  EXPECT_TRUE(LaneletMap().empty());
+}
+
 TEST_F(LaneletMapTest, findRegelemUsagesInLanelet) {  // NOLINT
   ll2.addRegulatoryElement(regelem1);
   map->add(ll2);
@@ -235,4 +242,12 @@ TEST_F(LaneletMapTest, createConstMap) {  // NOLINT
   auto map = utils::createConstMap(ConstLanelets{ll1, ll2}, ConstAreas{ar1});
   EXPECT_TRUE(map->laneletLayer.exists(ll1.id()));
   EXPECT_TRUE(map->areaLayer.exists(ar1.id()));
+}
+
+TEST_F(LaneletMapTest, createSubmap) {  // NOLINT
+  auto submap = utils::createSubmap(Lanelets{ll1, ll2});
+  EXPECT_EQ(submap->size(), 2ul);
+  auto llMap = submap->laneletMap();
+  EXPECT_LT(0ul, llMap->lineStringLayer.size());
+  EXPECT_LT(0ul, llMap->pointLayer.size());
 }

@@ -1,19 +1,16 @@
-#pragma once
-
+﻿#pragma once
 #include <lanelet2_core/Forward.h>
+#include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/utility/Optional.h>
 #include <map>
-#include <set>
 #include "Forward.h"
 #include "LaneletPath.h"
-#include "RouteElement.h"
 #include "RoutingCost.h"
+#include "Types.h"
 
 namespace lanelet {
 namespace routing {
-struct EdgeInfo;
-
 /** @brief Main class of the routing module that holds routing information and can be queried.
  *  The RoutingGraph class is the central object of this module and is initialized with a LaneletMap, TrafficRules and
  * RoutingCost.
@@ -26,10 +23,6 @@ struct EdgeInfo;
  * @note 'adjacent_left' and 'adjacent_right' means that there is a passable lanelet left/right of another passable
  * lanelet, but a lane change is not allowed. */
 class RoutingGraph {
-  using PointsLaneletMap = std::multimap<IdPair, ConstLanelet>;
-  using PointsLaneletMapIt = PointsLaneletMap::iterator;
-  using PointsLaneletMapResult = std::pair<PointsLaneletMapIt, PointsLaneletMapIt>;
-
  public:
   using Errors = std::vector<std::string>;                 ///< For the checkValidity function
   using Configuration = std::map<std::string, Attribute>;  ///< Used to provide a configuration
@@ -45,6 +38,11 @@ class RoutingGraph {
                                 const RoutingCostPtrs& routingCosts = defaultRoutingCosts(),
                                 const Configuration& config = Configuration());
 
+  //! Similar to the above but for a LaneletSubmap
+  static RoutingGraphUPtr build(const LaneletSubmap& laneletSubmap, const traffic_rules::TrafficRules& trafficRules,
+                                const RoutingCostPtrs& routingCosts = defaultRoutingCosts(),
+                                const Configuration& config = Configuration());
+
   //! The graph can not be copied, only moved
   RoutingGraph() = delete;
   RoutingGraph(const RoutingGraph&) = delete;
@@ -57,21 +55,27 @@ class RoutingGraph {
    *  @param from Start lanelet to find a shortest path
    *  @param to End lanelet to find a shortest path
    *  @param routingCostId ID of RoutingCost module to determine shortest route
-   *  @return A route of all adjacent lanelets of the shortest route that lead to 'end'. Nothing if there's not
-   * route.
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes and the route will only contain
+   *  lanelets that are reachable without lane changes
+   *  @return A route of all adjacent lanelets of the shortest route that lead to 'end'. Nothing if there's no route.
    *  @see Route */
-  Optional<Route> getRoute(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId = {}) const;
+  Optional<Route> getRoute(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId = {},
+                           bool withLaneChanges = true) const;
 
   /** @brief Get a driving route from 'start' to 'end' lanelets while going via other lanelets
    *  @param from Start lanelet to find a shortest path
    *  @param via Other lanelets to visit (in this order)
    *  @param to End lanelet to find a shortest path
    *  @param routingCostId ID of RoutingCost module to determine shortest route
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes and the route will only contain
+   *  lanelets that are reachable without lane changes
    *  @return A route of all adjacent lanelets of the shortest route that lead to 'end'. Nothing if there's not
    * route.
+   *
+   * If from and to are the same lanelet, the resulting route will form a loop.
    *  @see Route */
   Optional<Route> getRouteVia(const ConstLanelet& from, const ConstLanelets& via, const ConstLanelet& to,
-                              RoutingCostId routingCostId = {}) const;
+                              RoutingCostId routingCostId = {}, bool withLaneChanges = true) const;
 
   /** @brief Retrieve a shortest path between 'start' and 'end'.
    *
@@ -80,9 +84,10 @@ class RoutingGraph {
    * i.e. lanelets that are parallel and not only adjacent.
    *  @param from Start lanelet to find a shortest path
    *  @param to End lanelet to find a shortest path
-   *  @param routingCostId ID of RoutingCost module to determine shortest path */
-  Optional<LaneletPath> shortestPath(const ConstLanelet& from, const ConstLanelet& to,
-                                     RoutingCostId routingCostId = {}) const;
+   *  @param routingCostId ID of RoutingCost module to determine shortest path
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes */
+  Optional<LaneletPath> shortestPath(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId = {},
+                                     bool withLaneChanges = true) const;
 
   /** @brief Retrieve a shortest path between 'start' and 'end' using intermediate points.
    *  Will find a shortest path using Djikstra's shortest path algorithm and the routing cost calculated by the
@@ -92,9 +97,10 @@ class RoutingGraph {
    *  @param via Intermediate lanelets that have to be passed
    *  @param end End lanelet to find a shortest path
    *  @param routingCostId ID of RoutingCost module to determine shortest path
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes
    *  @see shortestPath */
   Optional<LaneletPath> shortestPathVia(const ConstLanelet& start, const ConstLanelets& via, const ConstLanelet& end,
-                                        RoutingCostId routingCostId = {}) const;
+                                        RoutingCostId routingCostId = {}, bool withLaneChanges = true) const;
 
   /** @brief Determines the relation between two lanelets
    *  @param from Start lanelet
@@ -212,13 +218,25 @@ class RoutingGraph {
    *  @param lanelet Start lanelet
    *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets
    *  @param routingCostId ID of the routing cost module used for routing cost.
+   *  @param allowLaneChanges Allow or forbid lane changes
    *  @return all lanelets that are reachable in no particular orders. "lanelet" itself is always included. */
-  ConstLanelets reachableSet(const ConstLanelet& lanelet, double maxRoutingCost,
-                             RoutingCostId routingCostId = {}) const;
+  ConstLanelets reachableSet(const ConstLanelet& lanelet, double maxRoutingCost, RoutingCostId routingCostId = {},
+                             bool allowLaneChanges = true) const;
 
   //! Retrieve set of lanelet or areas that are reachable without exceeding routing cost.
   ConstLaneletOrAreas reachableSetIncludingAreas(const ConstLaneletOrArea& llOrAr, double maxRoutingCost,
                                                  RoutingCostId routingCostId = {}) const;
+
+  /** @brief Retrieve a set of lanelets that can reach a given lanelet
+   *
+   *  Determines which reach the given lanelet with a given amount of routing cost.
+   *  @param lanelet destination lanelet
+   *  @param maxRoutingCost Maximum amount of routing cost allowed to reach other lanelets
+   *  @param routingCostId ID of the routing cost module used for routing cost.
+   *  @param allowLaneChanges Allow or forbid lane changes
+   *  @return all lanelets in range in no particular order. "lanelet" itself is always included. */
+  ConstLanelets reachableSetTowards(const ConstLanelet& lanelet, double maxRoutingCost,
+                                    RoutingCostId routingCostId = {}, bool allowLaneChanges = true) const;
 
   /** @brief Determines possible routes from a given start lanelet that are "minRoutingCost"-long.
    *
@@ -232,14 +250,41 @@ class RoutingGraph {
   LaneletPaths possiblePaths(const ConstLanelet& startPoint, double minRoutingCost, RoutingCostId routingCostId = {},
                              bool allowLaneChanges = false) const;
 
-  /** @brief Determines possible paths from a given start lanelet that are "minLanelets"-long.
-   *  Returns possible routes that are at least as long as specified number of lanelets. It is possible to forbid
-   * lane changes in order to avoid routes that alternate between two neighboring lanelets.
+  /** @brief Determines possible paths from a given start lanelet that are "minLanelets"-long.   *
+   *  @return possible paths that are at least as long as specified number of lanelets. If a lanelet can be reached
+   * using different paths, only the one is included that requires the least number of lane changes and has minimum
+   * routing costs. "lanelet" itself is always included.
    *  @param startPoint Start lanelet
    *  @param minLanelets Number of lanelets a route must be long
    *  @param allowLaneChanges Allow or forbid lane changes. Note that "lane changes" from a lanelet to an area do not
-   * count. */
-  LaneletPaths possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets, bool allowLaneChanges = false) const;
+   * count.
+   *  @param routingCostId ID of the routing cost module used. This is important in cases where some of routing cost
+   * modules retuned an invalid edge weight and some not.
+   */
+  LaneletPaths possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets, bool allowLaneChanges = false,
+                             RoutingCostId routingCostId = {}) const;
+
+  /** @brief Determines possible routes that reach the given lanelet and are "minRoutingCost" long.
+   *  @return possible paths that are at least as long as specified in 'minRoutingCost'. "lanelet" itself is always
+   * included.
+   *  @param targetLanelet Start lanelet
+   *  @param minRoutingCost Costs that must be reached by a route.
+   *  @param routingCostId ID of the routing cost module used
+   *  @param allowLaneChanges Allow or forbid lane changes */
+  LaneletPaths possiblePathsTowards(const ConstLanelet& targetLanelet, double minRoutingCost,
+                                    RoutingCostId routingCostId = {}, bool allowLaneChanges = false) const;
+
+  /** @brief Determines possible paths towards a destination lanelet that are "minLanelets"-long.
+   *  @return possible routes that are at least as long as specified number of lanelets. The last lanelet will aways be
+   * "targetLanelet" (or nothing if it is not part of the graph).
+   *  @param targetLanelet target lanelet
+   *  @param minLanelets Number of lanelets a route must be long
+   *  @param allowLaneChanges Allow or forbid lane changes. Note that "lane changes" from a lanelet to an area do not
+   * count.
+   *  @param routingCostId ID of the routing cost module used. This is important in cases where some of routing cost
+   * modules retuned an invalid edge weight and some not. */
+  LaneletPaths possiblePathsTowards(const ConstLanelet& targetLanelet, uint32_t minLanelets,
+                                    bool allowLaneChanges = false, RoutingCostId routingCostId = {}) const;
 
   //! Similar to RoutingGraph::possiblePaths, but also considers areas.
   LaneletOrAreaPaths possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, double minRoutingCost,
@@ -247,22 +292,55 @@ class RoutingGraph {
 
   //! Similar to RoutingGraph::possiblePaths, but also considers areas.
   LaneletOrAreaPaths possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, uint32_t minElements,
-                                                 bool allowLaneChanges = false) const;
+                                                 bool allowLaneChanges = false, RoutingCostId routingCostId = {}) const;
+
+  /** @brief Calls a function on every successor of lanelet, optionally including lane changes
+   *
+   * This function can be used to query the routing graph on a more direct level. The function will be called on
+   * lanelets with monotonically increasing cost from the start lanelet, including the start lanelet itself. If the
+   * function returns "false" on an input, its followers will not be visited through this lanelet, as if it did not
+   * exist.
+   *
+   * The search internally uses the dijkstra algorithm in order to discover the shortest path to the successors of this
+   * lanelet and calls the provided function once it is known.
+   *
+   * In order to abort the query early, an exception can be thrown. If the lanelet is not part of the graph, nothing
+   * will be called.
+   * @param lanelet the lanelet where the search starts
+   * @param f the function to be called on lanelet and its successors
+   * @param allowLaneChanges also consider lane changes
+   * @param routingCostId id for the routing cost module that is used to calculate the shortest path
+   */
+  void forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges = true,
+                        RoutingCostId routingCostId = {}) const;
+
+  //! Similar to RoutingGraph::forEachSuccessor but also includes areas into the search
+  void forEachSuccessorIncludingAreas(const ConstLaneletOrArea& lanelet, const LaneletOrAreaVisitFunction& f,
+                                      bool allowLaneChanges = true, RoutingCostId routingCostId = {}) const;
+
+  //! Similar to RoutingGraph::forEachSuccessor but goes backwards in the routing graph instead of forward. The
+  //! LaneletVisitInformation::cost will still be positive, despite going backwards.
+  void forEachPredecessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges = true,
+                          RoutingCostId routingCostId = {}) const;
+
+  //! Similar to RoutingGraph::forEachPredecessor but also includes areas into the search
+  void forEachPredecessorIncludingAreas(const ConstLaneletOrArea& lanelet, const LaneletOrAreaVisitFunction& f,
+                                        bool allowLaneChanges = true, RoutingCostId routingCostId = {}) const;
 
   /** @brief Export the internal graph to graphML (xml-based) file format.
    *  @param filename Fully qualified file name - ideally with extension (.graphml)
-   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting
+   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting. Combine them with "|".
    *  @param routingCostId ID of the routing cost module
       @see exportGraphViz */
-  void exportGraphML(const std::string& filename, const RelationTypes& edgeTypesToExclude = RelationTypes(),
+  void exportGraphML(const std::string& filename, const RelationType& edgeTypesToExclude = RelationType::None,
                      RoutingCostId routingCostId = {}) const;
 
   /** @brief Export the internal graph to graphViz (DOT) file format.
    *  This format includes coloring of the edges in the graph and bears little more information than graphML export.
    *  @param filename Fully qualified file name - ideally with extension (.gv)
-   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting
+   *  @param edgeTypesToExclude Exclude the specified relations. E.g. conflicting. Combine them with "|".
    *  @param routingCostId ID of the routing cost module */
-  void exportGraphViz(const std::string& filename, const RelationTypes& edgeTypesToExclude = RelationTypes(),
+  void exportGraphViz(const std::string& filename, const RelationType& edgeTypesToExclude = RelationType::None,
                       RoutingCostId routingCostId = {}) const;
 
   /** @brief An abstract lanelet map holding the information of the routing graph.
@@ -276,13 +354,27 @@ class RoutingGraph {
   LaneletMapPtr getDebugLaneletMap(RoutingCostId routingCostId = {}, bool includeAdjacent = false,
                                    bool includeConflicting = false) const;
 
-  /** @brief LaneletMap that includes all passable lanelets and areas.
-   *  This map contains all passable lanelets and areas with all primitives (linestrings, points), but
-   *  no regulatory elements. It can be used to perform spacial queries e.g. for localization.
-   *  When selecting a lanelet from this map please be aware that the routing graph may also contain the inverted
-   * lanelet.
-   *  @return LaneletMap with all passable lanelets and areas */
-  inline LaneletMapConstPtr passableMap() const noexcept { return passableLaneletMap_; }
+  /**
+   * @brief Returns a submap that contains all lanelets and areas within this routing graph, and nothing else.
+   * You can obtain a full map of the routing graph by calling passabelSubmap()->laneletMap(), which ist a potentially
+   * costly operation.
+   */
+  inline LaneletSubmapConstPtr passableSubmap() const noexcept { return passableLaneletSubmap_; }
+
+  /** @brief LaneletSubmap that includes all passable lanelets and areas.
+   *  This map contains all passable lanelets and areas with all primitives (linestrings, points), including regulatory
+   * elements and lanelets referenced by them. It can be used to perform spacial queries e.g. for localization. When
+   * selecting a lanelet from this map please be aware that the routing graph may also contain the inverted lanelet.
+   *  @return LaneletMap with all passable lanelets and areas
+   *
+   * This function is deprecated because it was misleading that the map also contained lanelets referenced by regulatory
+   * elements and not only the lanelets from the routing graph.
+   */
+  [[deprecated(
+      "Use passableSubmap to obtain the lanelets and areas within the routing graph!")]] inline LaneletMapConstPtr
+  passableMap() const noexcept {
+    return passableSubmap()->laneletMap();
+  }
 
   /** @brief Performs some basic sanity checks.
    *  It is recommended to call this function after the routing graph has been generated since it can point out some
@@ -295,12 +387,12 @@ class RoutingGraph {
   /**
    * Constructs the routing graph. Don't call this directly, use RoutingGraph::make instead.
    */
-  RoutingGraph(std::unique_ptr<Graph>&& graph, lanelet::LaneletMapConstPtr&& passableMap);
+  RoutingGraph(std::unique_ptr<internal::RoutingGraphGraph>&& graph, lanelet::LaneletSubmapConstPtr&& passableMap);
 
  private:
   //! Documentation to be found in the cpp file.
-  std::unique_ptr<Graph> graph_;           ///< Wrapper of the routing graph
-  LaneletMapConstPtr passableLaneletMap_;  ///< Lanelet map of all passable lanelets
+  std::unique_ptr<internal::RoutingGraphGraph> graph_;  ///< Wrapper of the routing graph
+  LaneletSubmapConstPtr passableLaneletSubmap_;         ///< Lanelet map of all passable lanelets
 };
 
 }  // namespace routing

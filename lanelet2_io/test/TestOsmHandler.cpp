@@ -9,7 +9,7 @@
 using namespace lanelet;
 
 template <typename T, typename TT>
-T writeAndLoad(const T& value, TT(LaneletMap::*layer)) {
+T writeAndLoad(const T& value, TT(LaneletMapLayers::*layer)) {
   LaneletMap llmap;
   llmap.add(value);
 

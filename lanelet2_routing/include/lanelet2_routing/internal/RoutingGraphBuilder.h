@@ -7,6 +7,7 @@ namespace lanelet {
 class LaneletLayer;
 
 namespace routing {
+namespace internal {
 
 class LaneChangeLaneletsCollector;
 
@@ -15,7 +16,7 @@ class RoutingGraphBuilder {
   RoutingGraphBuilder(const traffic_rules::TrafficRules& trafficRules, const RoutingCostPtrs& routingCosts,
                       const RoutingGraph::Configuration& config);
 
-  RoutingGraphUPtr build(const LaneletMap& laneletMap);
+  RoutingGraphUPtr build(const LaneletMapLayers& laneletMapLayers);
 
  private:
   using PointsLaneletMap = std::multimap<IdPair, ConstLanelet>;
@@ -50,12 +51,13 @@ class RoutingGraphBuilder {
    *  @param to Goal lanelet
    *  @param relation Relation between the two lanelets */
   void assignCosts(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to, const RelationType& relation);
-  std::unique_ptr<Graph> graph_;
+  std::unique_ptr<RoutingGraphGraph> graph_;
   PointsLaneletMap pointsToLanelets_;  ///< A map of tuples (first or last left and right boundary points) to lanelets
   std::set<Id> bothWaysLaneletIds_;
   const traffic_rules::TrafficRules& trafficRules_;
   const RoutingCostPtrs& routingCosts_;
   const RoutingGraph::Configuration& config_;
 };
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet
