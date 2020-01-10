@@ -72,7 +72,7 @@ class AreaData : public PrimitiveData {
   RegulatoryElementPtrs& regulatoryElements() { return regulatoryElements_; }
 
   template <typename RegElemT>
-  std::vector<std::shared_ptr<RegElemT>> regulatoryElementsAs() const {
+  std::vector<std::shared_ptr<const RegElemT>> regulatoryElementsAs() const {
     return utils::transformSharedPtr<const RegElemT>(regulatoryElements_);
   }
   template <typename RegElemT>
