@@ -62,7 +62,7 @@ class ConstLaneletOrArea {
 
   template <typename T>
   std::vector<std::shared_ptr<const T>> regulatoryElementsAs() const {
-    return applyVisitor([](auto& elem) { return elem.template regulatoryElementAs<T>(); });
+    return applyVisitor([](auto& elem) { return elem.template regulatoryElementsAs<T>(); });
   }
 
   //! return the managed lanelet
