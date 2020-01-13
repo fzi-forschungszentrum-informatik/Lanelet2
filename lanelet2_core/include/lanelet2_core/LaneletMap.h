@@ -495,7 +495,7 @@ class LaneletSubmap : public LaneletMapLayers {
 
  private:
   //! In order to not let lanelets/areas referenced by regelems get out of scope, we keep a reference to them here
-  std::vector<boost::variant<ConstLanelet, ConstArea>> regelemObjects;
+  std::vector<boost::variant<ConstLanelet, ConstArea>> regelemObjects_;
 };
 
 namespace utils {

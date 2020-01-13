@@ -744,7 +744,7 @@ void LaneletSubmap::trackParameters(const RegulatoryElement& regelem) {
   using LLorAreas = std::vector<boost::variant<ConstLanelet, ConstArea>>;
   class AddToLLorAreaVisitor : public RuleParameterVisitor {
    public:
-    AddToLLorAreaVisitor(LLorAreas& llOrAreas) : llOrAreas_{&llOrAreas} {}
+    explicit AddToLLorAreaVisitor(LLorAreas& llOrAreas) : llOrAreas_{&llOrAreas} {}
     void operator()(const ConstWeakLanelet& wll) override {
       if (!wll.expired()) {
         llOrAreas_->emplace_back(wll.lock());
@@ -759,7 +759,7 @@ void LaneletSubmap::trackParameters(const RegulatoryElement& regelem) {
    private:
     LLorAreas* llOrAreas_{};
   };
-  AddToLLorAreaVisitor v{regelemObjects};
+  AddToLLorAreaVisitor v{regelemObjects_};
   regelem.applyVisitor(v);
 }
 
