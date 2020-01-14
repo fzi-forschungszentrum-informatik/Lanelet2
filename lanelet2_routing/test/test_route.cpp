@@ -10,8 +10,6 @@ using namespace lanelet::routing::tests;
 template <Id FromId, Id ToId, Id... ViaIds>
 class TestRoute : public GermanVehicleGraph {
  public:
-  static constexpr Id From = FromId;
-  static constexpr Id To = ToId;
   explicit TestRoute(uint16_t routingCostId = 0, bool withLaneChanges = true) {
     Ids viaIds{ViaIds...};
     start = lanelets.at(From);
@@ -26,6 +24,9 @@ class TestRoute : public GermanVehicleGraph {
   ConstLanelet end;
   ConstLanelets via;
   Route route;
+  // these would better be defined as static constexpr, but c++14 doesnt support it well
+  const Id From{FromId};  // NOLINT
+  const Id To{ToId};      // NOLINT
 };
 
 class Route1 : public TestRoute<2001, 2014> {};
