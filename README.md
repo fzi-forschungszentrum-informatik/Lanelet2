@@ -1,6 +1,8 @@
 # Lanelet2
 
-![build](https://www.mrt.kit.edu/z/gitlab/lanelet2/pipeline.svg) ![coverage](https://www.mrt.kit.edu/z/gitlab/lanelet2/coverage.svg)
+| [Travis CI](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2) | Gitlab CI | Coverage |
+| --------- | --------- | -------- |
+| [![](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2.svg?branch=master)](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2) | ![build](https://www.mrt.kit.edu/z/gitlab/lanelet2/pipeline.svg) | ![coverage](https://www.mrt.kit.edu/z/gitlab/lanelet2/coverage.svg) |
 
 ## Overview
 
