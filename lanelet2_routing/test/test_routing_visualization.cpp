@@ -12,17 +12,19 @@ namespace fs = boost::filesystem;
 class Tempfile {
  public:
   Tempfile() {
-    auto res = mkdtemp(path_.data());
+    char path[] = {"/tmp/lanelet2_unittest.XXXXXX"};
+    auto res = mkdtemp(path);
     if (res == nullptr) {
       throw lanelet::LaneletError("Failed to crate temporary directory");
     }
+    path_ = path;
   }
   ~Tempfile() { fs::remove_all(fs::path(path_)); }
 
   auto operator()(const std::string& str) const noexcept -> std::string { return (fs::path(path_) / str).string(); }
 
  private:
-  std::string path_{"/tmp/lanelet2_unittest.XXXXXX"};
+  std::string path_;
 };
 
 static Tempfile tempfile;
