@@ -73,7 +73,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       init<double, double>((arg("laneChangeCost"), arg("minLaneChangeDistance") = 0)));
 
   class_<RoutingCostTravelTime, bases<RoutingCost>, std::shared_ptr<RoutingCostTravelTime>>(  // NOLINT
-      "RoutingCostDistance", "Travel time based routing cost calculation object",
+      "RoutingCostTravelTime", "Travel time based routing cost calculation object",
       init<double, double>((arg("laneChangeCost"), arg("minLaneChangeTime") = 0)));
 
   auto possPCost = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, double, RoutingCostId, bool) const>(
