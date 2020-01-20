@@ -1,3 +1,4 @@
+#pragma once
 #include <boost/optional.hpp>
 
 namespace lanelet {
