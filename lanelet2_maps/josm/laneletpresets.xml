@@ -7,7 +7,7 @@
             <key key="one_way" value="yes"/>
             <text key="region" text="Region" default="de" use_last_as_default="true"/>
             <text key="name" text="Road name" default="" use_last_as_default="true"/>
-            <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="true" />
+            <combo key="location" text="Location" values="urban,nonurban,private" default="urban" use_last_as_default="true" />
             <combo key="subtype" text="Subtype" values="road,play_street,main_road,highway" default="road" use_last_as_default="true"/>
             <roles>
                 <role key="left" text="left border" requisite="required" type="way" count="1" />
@@ -20,7 +20,7 @@
             <key key="one_way" value="no"/>
             <text key="region" text="Region" default="de" use_last_as_default="true"/>
             <text key="name" text="Road name" default="" use_last_as_default="true"/>
-            <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="true" />
+            <combo key="location" text="Location" values="urban,nonurban,private" default="urban" use_last_as_default="true" />
             <combo key="subtype" text="Subtype" values="road,play_street,main_road,highway" default="road" use_last_as_default="true"/>
             <roles>
                 <role key="left" text="left border" requisite="required" type="way" count="1" />
@@ -33,7 +33,7 @@
             <key key="type" value="lanelet"/>
             <text key="region" text="Region" default="de" use_last_as_default="true"/>
             <text key="name" text="Road name" default="" use_last_as_default="true"/>
-            <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="true" />
+            <combo key="location" text="Location" values="urban,nonurban,private" default="urban" use_last_as_default="true" />
             <combo key="subtype" text="Subtype" values="walkway,crosswalk,stairs" default="walkway" use_last_as_default="true"/>
             <space />
             <check key="one_way" text="One way" default="off"/>
@@ -62,7 +62,7 @@
             <combo key="subtype" value="emergency_lane"/>
             <text key="region" text="Region" default="de" use_last_as_default="true"/>
             <text key="name" text="Road name" default="" use_last_as_default="true"/>
-            <combo key="location" text="Location" values="city,urban,private" default="urban" use_last_as_default="true" />
+            <combo key="location" text="Location" values="urban,nonurban,private" default="urban" use_last_as_default="true" />
             <space />       
             <roles>
                 <role key="left" text="left border" requisite="required" type="way" count="1" />
@@ -75,7 +75,7 @@
             <combo key="subtype" value="bicycle_lane"/>
             <text key="region" text="Region" default="de" use_last_as_default="true"/>
             <text key="name" text="Road name" default="" use_last_as_default="true"/>
-            <combo key="location" text="Location" values="city,urban,private" default="urban" use_last_as_default="true" />
+            <combo key="location" text="Location" values="urban,nonurban,private" default="urban" use_last_as_default="true" />
             <space />       
             <roles>
                 <role key="left" text="left border" requisite="required" type="way" count="1" />
@@ -148,7 +148,7 @@
         <item name="House exit" icon="presets/misc/entrance_exit.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="exit"/>
-            <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="true" />
+            <combo key="location" text="Location" values="urban,nonurban,private" default="urban" use_last_as_default="true" />
             <text key="region" text="Region" default="de" use_last_as_default="true"/>
             <text key="name" text="Area name" default="" use_last_as_default="true"/>
             <roles>
@@ -159,7 +159,7 @@
         <item name="Freespace" icon="presets/misc/no_icon.svg" type="relation" preset_name_label="true">
             <key key="type" value="multipolygon"/>
             <key key="subtype" value="freespace"/>
-            <combo key="location" text="Location" values="city,urban,private" default="city" use_last_as_default="true" />
+            <combo key="location" text="Location" values="urban,nonurban,private" default="urban" use_last_as_default="true" />
             <text key="region" text="Region" default="de" use_last_as_default="true"/>
             <text key="name" text="Area name" default="" use_last_as_default="true"/>
             <roles>

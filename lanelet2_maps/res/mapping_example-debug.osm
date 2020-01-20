@@ -1,0 +1,3713 @@
+<?xml version="1.0"?>
+<osm version="0.6" generator="lanelet2">
+  <node id="42440" visible="true" version="1" lat="49.01108666075" lon="8.42328002855">
+    <tag k="id" v="42440" />
+  </node>
+  <node id="42526" visible="true" version="1" lat="49.00537589832" lon="8.41546650419">
+    <tag k="id" v="42526" />
+  </node>
+  <node id="43672" visible="true" version="1" lat="49.00944312637" lon="8.42357012872">
+    <tag k="id" v="43672" />
+  </node>
+  <node id="43685" visible="true" version="1" lat="49.00938011581" lon="8.42357969469">
+    <tag k="id" v="43685" />
+  </node>
+  <node id="43694" visible="true" version="1" lat="49.00919603606" lon="8.4236291243">
+    <tag k="id" v="43694" />
+  </node>
+  <node id="44962" visible="true" version="1" lat="49.00517637127" lon="8.41496695589">
+    <tag k="id" v="44962" />
+  </node>
+  <node id="44964" visible="true" version="1" lat="49.00520210615" lon="8.41497454981">
+    <tag k="id" v="44964" />
+  </node>
+  <node id="44966" visible="true" version="1" lat="49.00522866722" lon="8.41498820142">
+    <tag k="id" v="44966" />
+  </node>
+  <node id="44968" visible="true" version="1" lat="49.00513221164" lon="8.41516099216">
+    <tag k="id" v="44968" />
+  </node>
+  <node id="44970" visible="true" version="1" lat="49.00515805815" lon="8.41517485274">
+    <tag k="id" v="44970" />
+  </node>
+  <node id="44972" visible="true" version="1" lat="49.00518495649" lon="8.41518861424">
+    <tag k="id" v="44972" />
+  </node>
+  <node id="44974" visible="true" version="1" lat="49.00514581307" lon="8.41522513635">
+    <tag k="id" v="44974" />
+  </node>
+  <node id="44976" visible="true" version="1" lat="49.00517372713" lon="8.41523917694">
+    <tag k="id" v="44976" />
+  </node>
+  <node id="44978" visible="true" version="1" lat="49.00511940234" lon="8.41521172539">
+    <tag k="id" v="44978" />
+  </node>
+  <node id="44980" visible="true" version="1" lat="49.00511154719" lon="8.41524897351">
+    <tag k="id" v="44980" />
+  </node>
+  <node id="44982" visible="true" version="1" lat="49.00513831255" lon="8.41526224886">
+    <tag k="id" v="44982" />
+  </node>
+  <node id="44984" visible="true" version="1" lat="49.00516761475" lon="8.41527769068">
+    <tag k="id" v="44984" />
+  </node>
+  <node id="44988" visible="true" version="1" lat="49.00509529577" lon="8.41555506079">
+    <tag k="id" v="44988" />
+  </node>
+  <node id="44990" visible="true" version="1" lat="49.00516635971" lon="8.41539389583">
+    <tag k="id" v="44990" />
+  </node>
+  <node id="44992" visible="true" version="1" lat="49.00506949747" lon="8.41553785044">
+    <tag k="id" v="44992" />
+  </node>
+  <node id="44994" visible="true" version="1" lat="49.00506790552" lon="8.41540569527">
+    <tag k="id" v="44994" />
+  </node>
+  <node id="44996" visible="true" version="1" lat="49.00526045215" lon="8.41566064927">
+    <tag k="id" v="44996" />
+  </node>
+  <node id="44998" visible="true" version="1" lat="49.00535258673" lon="8.41579860555">
+    <tag k="id" v="44998" />
+  </node>
+  <node id="45000" visible="true" version="1" lat="49.00518682765" lon="8.41555247509">
+    <tag k="id" v="45000" />
+  </node>
+  <node id="45002" visible="true" version="1" lat="49.00500398071" lon="8.41547161176">
+    <tag k="id" v="45002" />
+  </node>
+  <node id="45004" visible="true" version="1" lat="49.00495986352" lon="8.41544976741">
+    <tag k="id" v="45004" />
+  </node>
+  <node id="45006" visible="true" version="1" lat="49.0049192777" lon="8.41543431454">
+    <tag k="id" v="45006" />
+  </node>
+  <node id="45008" visible="true" version="1" lat="49.00478640322" lon="8.415377533">
+    <tag k="id" v="45008" />
+  </node>
+  <node id="45010" visible="true" version="1" lat="49.00477654562" lon="8.4154543744">
+    <tag k="id" v="45010" />
+  </node>
+  <node id="45012" visible="true" version="1" lat="49.00476816751" lon="8.41549219618">
+    <tag k="id" v="45012" />
+  </node>
+  <node id="45014" visible="true" version="1" lat="49.004895035" lon="8.41551646477">
+    <tag k="id" v="45014" />
+  </node>
+  <node id="45016" visible="true" version="1" lat="49.00488651629" lon="8.41555506376">
+    <tag k="id" v="45016" />
+  </node>
+  <node id="45018" visible="true" version="1" lat="49.00491629467" lon="8.4155276699">
+    <tag k="id" v="45018" />
+  </node>
+  <node id="45020" visible="true" version="1" lat="49.00490830658" lon="8.41556613703">
+    <tag k="id" v="45020" />
+  </node>
+  <node id="45022" visible="true" version="1" lat="49.00494313018" lon="8.41554044756">
+    <tag k="id" v="45022" />
+  </node>
+  <node id="45024" visible="true" version="1" lat="49.00493516467" lon="8.41558020079">
+    <tag k="id" v="45024" />
+  </node>
+  <node id="45026" visible="true" version="1" lat="49.00499426347" lon="8.41556651661">
+    <tag k="id" v="45026" />
+  </node>
+  <node id="45028" visible="true" version="1" lat="49.00501735707" lon="8.41567733285">
+    <tag k="id" v="45028" />
+  </node>
+  <node id="45030" visible="true" version="1" lat="49.00517572967" lon="8.41557829824">
+    <tag k="id" v="45030" />
+  </node>
+  <node id="45032" visible="true" version="1" lat="49.00519116851" lon="8.41570884923">
+    <tag k="id" v="45032" />
+  </node>
+  <node id="45054" visible="true" version="1" lat="49.00531674665" lon="8.41548586731">
+    <tag k="id" v="45054" />
+  </node>
+  <node id="45056" visible="true" version="1" lat="49.00533978532" lon="8.41544653862">
+    <tag k="id" v="45056" />
+  </node>
+  <node id="45058" visible="true" version="1" lat="49.00536172026" lon="8.41539091104">
+    <tag k="id" v="45058" />
+  </node>
+  <node id="45060" visible="true" version="1" lat="49.00536576956" lon="8.41539100077">
+    <tag k="id" v="45060" />
+  </node>
+  <node id="45062" visible="true" version="1" lat="49.00535091663" lon="8.41545353421">
+    <tag k="id" v="45062" />
+  </node>
+  <node id="45064" visible="true" version="1" lat="49.00528982071" lon="8.41568961134">
+    <tag k="id" v="45064" />
+  </node>
+  <node id="45066" visible="true" version="1" lat="49.00522742648" lon="8.41593203465">
+    <tag k="id" v="45066" />
+  </node>
+  <node id="45068" visible="true" version="1" lat="49.00508187466" lon="8.41644626866">
+    <tag k="id" v="45068" />
+  </node>
+  <node id="45070" visible="true" version="1" lat="49.00517674976" lon="8.41602614852">
+    <tag k="id" v="45070" />
+  </node>
+  <node id="45072" visible="true" version="1" lat="49.00519280617" lon="8.41595477027">
+    <tag k="id" v="45072" />
+  </node>
+  <node id="45074" visible="true" version="1" lat="49.00519757281" lon="8.41591564819">
+    <tag k="id" v="45074" />
+  </node>
+  <node id="45076" visible="true" version="1" lat="49.00520342384" lon="8.41583313849">
+    <tag k="id" v="45076" />
+  </node>
+  <node id="45078" visible="true" version="1" lat="49.00511822308" lon="8.41558127784">
+    <tag k="id" v="45078" />
+  </node>
+  <node id="45080" visible="true" version="1" lat="49.00508071145" lon="8.41656075009">
+    <tag k="id" v="45080" />
+  </node>
+  <node id="45082" visible="true" version="1" lat="49.00520301555" lon="8.41603969338">
+    <tag k="id" v="45082" />
+  </node>
+  <node id="45084" visible="true" version="1" lat="49.00510561893" lon="8.41657770602">
+    <tag k="id" v="45084" />
+  </node>
+  <node id="45086" visible="true" version="1" lat="49.00521871904" lon="8.4159682526">
+    <tag k="id" v="45086" />
+  </node>
+  <node id="45088" visible="true" version="1" lat="49.0052309605" lon="8.4160524815">
+    <tag k="id" v="45088" />
+  </node>
+  <node id="45090" visible="true" version="1" lat="49.0052466004" lon="8.4159827884">
+    <tag k="id" v="45090" />
+  </node>
+  <node id="45092" visible="true" version="1" lat="49.00525488067" lon="8.41594649279">
+    <tag k="id" v="45092" />
+  </node>
+  <node id="45094" visible="true" version="1" lat="49.00531272386" lon="8.41571337771">
+    <tag k="id" v="45094" />
+  </node>
+  <node id="45096" visible="true" version="1" lat="49.00531065174" lon="8.41582098816">
+    <tag k="id" v="45096" />
+  </node>
+  <node id="45098" visible="true" version="1" lat="49.00557427204" lon="8.41587670174">
+    <tag k="id" v="45098" />
+  </node>
+  <node id="45100" visible="true" version="1" lat="49.0055599241" lon="8.41591211504">
+    <tag k="id" v="45100" />
+  </node>
+  <node id="45102" visible="true" version="1" lat="49.005493739" lon="8.41581998718">
+    <tag k="id" v="45102" />
+  </node>
+  <node id="45104" visible="true" version="1" lat="49.00550546782" lon="8.41577668648">
+    <tag k="id" v="45104" />
+  </node>
+  <node id="45106" visible="true" version="1" lat="49.00542231889" lon="8.41573571771">
+    <tag k="id" v="45106" />
+  </node>
+  <node id="45108" visible="true" version="1" lat="49.00540078098" lon="8.41571485824">
+    <tag k="id" v="45108" />
+  </node>
+  <node id="45110" visible="true" version="1" lat="49.00521002115" lon="8.41567466283">
+    <tag k="id" v="45110" />
+  </node>
+  <node id="45112" visible="true" version="1" lat="49.00508547185" lon="8.4157599351">
+    <tag k="id" v="45112" />
+  </node>
+  <node id="45114" visible="true" version="1" lat="49.00505889352" lon="8.41584361761">
+    <tag k="id" v="45114" />
+  </node>
+  <node id="45116" visible="true" version="1" lat="49.00502700883" lon="8.41582840457">
+    <tag k="id" v="45116" />
+  </node>
+  <node id="45118" visible="true" version="1" lat="49.00502556895" lon="8.41582716269">
+    <tag k="id" v="45118" />
+  </node>
+  <node id="45120" visible="true" version="1" lat="49.00505588451" lon="8.4158430826">
+    <tag k="id" v="45120" />
+  </node>
+  <node id="45122" visible="true" version="1" lat="49.00543234737" lon="8.41569627599">
+    <tag k="id" v="45122" />
+  </node>
+  <node id="45124" visible="true" version="1" lat="49.00541050169" lon="8.41567509878">
+    <tag k="id" v="45124" />
+  </node>
+  <node id="45126" visible="true" version="1" lat="49.00538736005" lon="8.41564869029">
+    <tag k="id" v="45126" />
+  </node>
+  <node id="45128" visible="true" version="1" lat="49.00537144218" lon="8.41556761456">
+    <tag k="id" v="45128" />
+  </node>
+  <node id="45130" visible="true" version="1" lat="49.00537848807" lon="8.41546954653">
+    <tag k="id" v="45130" />
+  </node>
+  <node id="45132" visible="true" version="1" lat="49.00539101568" lon="8.41540470994">
+    <tag k="id" v="45132" />
+  </node>
+  <node id="45134" visible="true" version="1" lat="49.00545398502" lon="8.41577138092">
+    <tag k="id" v="45134" />
+  </node>
+  <node id="45136" visible="true" version="1" lat="49.00546743369" lon="8.4157342196">
+    <tag k="id" v="45136" />
+  </node>
+  <node id="45144" visible="true" version="1" lat="49.00537555903" lon="8.41581389375">
+    <tag k="id" v="45144" />
+  </node>
+  <node id="45146" visible="true" version="1" lat="49.00540657681" lon="8.4158371059">
+    <tag k="id" v="45146" />
+  </node>
+  <node id="45148" visible="true" version="1" lat="49.00545307732" lon="8.41587980056">
+    <tag k="id" v="45148" />
+  </node>
+  <node id="45150" visible="true" version="1" lat="49.00553855684" lon="8.41597451263">
+    <tag k="id" v="45150" />
+  </node>
+  <node id="45154" visible="true" version="1" lat="49.00565262479" lon="8.41410504567">
+    <tag k="id" v="45154" />
+  </node>
+  <node id="45156" visible="true" version="1" lat="49.00567294211" lon="8.41413643851">
+    <tag k="id" v="45156" />
+  </node>
+  <node id="45164" visible="true" version="1" lat="49.00492772082" lon="8.4164291946">
+    <tag k="id" v="45164" />
+  </node>
+  <node id="45166" visible="true" version="1" lat="49.00489857612" lon="8.41641641588">
+    <tag k="id" v="45166" />
+  </node>
+  <node id="45188" visible="true" version="1" lat="49.00465319164" lon="8.41502499155">
+    <tag k="id" v="45188" />
+  </node>
+  <node id="45214" visible="true" version="1" lat="49.0049431838" lon="8.41708287465">
+    <tag k="id" v="45214" />
+  </node>
+  <node id="45216" visible="true" version="1" lat="49.00496652265" lon="8.41710774822">
+    <tag k="id" v="45216" />
+  </node>
+  <node id="45252" visible="true" version="1" lat="49.01110629609" lon="8.4230607744">
+    <tag k="id" v="45252" />
+  </node>
+  <node id="45254" visible="true" version="1" lat="49.01108125518" lon="8.4232468072">
+    <tag k="id" v="45254" />
+  </node>
+  <node id="45256" visible="true" version="1" lat="49.01106010491" lon="8.42321769096">
+    <tag k="id" v="45256" />
+  </node>
+  <node id="45258" visible="true" version="1" lat="49.01105792539" lon="8.42323232857">
+    <tag k="id" v="45258" />
+  </node>
+  <node id="45260" visible="true" version="1" lat="49.01110587931" lon="8.42335924697">
+    <tag k="id" v="45260" />
+  </node>
+  <node id="45262" visible="true" version="1" lat="49.0110183397" lon="8.42323540185">
+    <tag k="id" v="45262" />
+  </node>
+  <node id="45264" visible="true" version="1" lat="49.01093526185" lon="8.4232545985">
+    <tag k="id" v="45264" />
+  </node>
+  <node id="45266" visible="true" version="1" lat="49.01083629323" lon="8.42331526147">
+    <tag k="id" v="45266" />
+  </node>
+  <node id="45268" visible="true" version="1" lat="49.01082152972" lon="8.42328162633">
+    <tag k="id" v="45268" />
+  </node>
+  <node id="45270" visible="true" version="1" lat="49.01080707865" lon="8.42332153138">
+    <tag k="id" v="45270" />
+  </node>
+  <node id="45272" visible="true" version="1" lat="49.01073841918" lon="8.42328653553">
+    <tag k="id" v="45272" />
+  </node>
+  <node id="45274" visible="true" version="1" lat="49.01060462804" lon="8.42331957782">
+    <tag k="id" v="45274" />
+  </node>
+  <node id="45276" visible="true" version="1" lat="49.01047116022" lon="8.42335039171">
+    <tag k="id" v="45276" />
+  </node>
+  <node id="45278" visible="true" version="1" lat="49.01042822713" lon="8.42336046656">
+    <tag k="id" v="45278" />
+  </node>
+  <node id="45280" visible="true" version="1" lat="49.01039940207" lon="8.42336640656">
+    <tag k="id" v="45280" />
+  </node>
+  <node id="45282" visible="true" version="1" lat="49.01035767328" lon="8.42337650866">
+    <tag k="id" v="45282" />
+  </node>
+  <node id="45284" visible="true" version="1" lat="49.01032662206" lon="8.42338323283">
+    <tag k="id" v="45284" />
+  </node>
+  <node id="45286" visible="true" version="1" lat="49.01029229856" lon="8.42339029695">
+    <tag k="id" v="45286" />
+  </node>
+  <node id="45288" visible="true" version="1" lat="49.01022816523" lon="8.42340633222">
+    <tag k="id" v="45288" />
+  </node>
+  <node id="45290" visible="true" version="1" lat="49.01014086971" lon="8.42342653281">
+    <tag k="id" v="45290" />
+  </node>
+  <node id="45292" visible="true" version="1" lat="49.01005026407" lon="8.42348198928">
+    <tag k="id" v="45292" />
+  </node>
+  <node id="45294" visible="true" version="1" lat="49.01002183144" lon="8.42345439402">
+    <tag k="id" v="45294" />
+  </node>
+  <node id="45296" visible="true" version="1" lat="49.01000598485" lon="8.42348726191">
+    <tag k="id" v="45296" />
+  </node>
+  <node id="45298" visible="true" version="1" lat="49.00983996482" lon="8.42349495641">
+    <tag k="id" v="45298" />
+  </node>
+  <node id="45300" visible="true" version="1" lat="49.00972092822" lon="8.42352610662">
+    <tag k="id" v="45300" />
+  </node>
+  <node id="45302" visible="true" version="1" lat="49.00969024013" lon="8.42352978694">
+    <tag k="id" v="45302" />
+  </node>
+  <node id="45304" visible="true" version="1" lat="49.01003981463" lon="8.42370919826">
+    <tag k="id" v="45304" />
+  </node>
+  <node id="45306" visible="true" version="1" lat="49.00964334788" lon="8.42353294693">
+    <tag k="id" v="45306" />
+  </node>
+  <node id="45308" visible="true" version="1" lat="49.00960852702" lon="8.42349874539">
+    <tag k="id" v="45308" />
+  </node>
+  <node id="45310" visible="true" version="1" lat="49.00957495368" lon="8.42346779777">
+    <tag k="id" v="45310" />
+  </node>
+  <node id="45312" visible="true" version="1" lat="49.0095828968" lon="8.42345515804">
+    <tag k="id" v="45312" />
+  </node>
+  <node id="45314" visible="true" version="1" lat="49.0095736323" lon="8.42345631885">
+    <tag k="id" v="45314" />
+  </node>
+  <node id="45316" visible="true" version="1" lat="49.00953434492" lon="8.42350081857">
+    <tag k="id" v="45316" />
+  </node>
+  <node id="45318" visible="true" version="1" lat="49.00957718817" lon="8.42340142889">
+    <tag k="id" v="45318" />
+  </node>
+  <node id="45320" visible="true" version="1" lat="49.0094922427" lon="8.42354970665">
+    <tag k="id" v="45320" />
+  </node>
+  <node id="45322" visible="true" version="1" lat="49.00950904665" lon="8.42355950847">
+    <tag k="id" v="45322" />
+  </node>
+  <node id="45324" visible="true" version="1" lat="49.00951995689" lon="8.42360528888">
+    <tag k="id" v="45324" />
+  </node>
+  <node id="45326" visible="true" version="1" lat="49.00949365544" lon="8.42356551511">
+    <tag k="id" v="45326" />
+  </node>
+  <node id="45328" visible="true" version="1" lat="49.00954093866" lon="8.42365934722">
+    <tag k="id" v="45328" />
+  </node>
+  <node id="45330" visible="true" version="1" lat="49.00954672827" lon="8.42363975147">
+    <tag k="id" v="45330" />
+  </node>
+  <node id="45332" visible="true" version="1" lat="49.00960350063" lon="8.42362353182">
+    <tag k="id" v="45332" />
+  </node>
+  <node id="45334" visible="true" version="1" lat="49.00955440768" lon="8.42367147557">
+    <tag k="id" v="45334" />
+  </node>
+  <node id="45336" visible="true" version="1" lat="49.00962870704" lon="8.42354607379">
+    <tag k="id" v="45336" />
+  </node>
+  <node id="45338" visible="true" version="1" lat="49.00964350992" lon="8.42354916493">
+    <tag k="id" v="45338" />
+  </node>
+  <node id="45346" visible="true" version="1" lat="49.00957825005" lon="8.4233699041">
+    <tag k="id" v="45346" />
+  </node>
+  <node id="45348" visible="true" version="1" lat="49.00957245549" lon="8.4233176425">
+    <tag k="id" v="45348" />
+  </node>
+  <node id="45350" visible="true" version="1" lat="49.00956592762" lon="8.42324432293">
+    <tag k="id" v="45350" />
+  </node>
+  <node id="45354" visible="true" version="1" lat="49.00944370412" lon="8.42356996081">
+    <tag k="id" v="45354" />
+  </node>
+  <node id="45356" visible="true" version="1" lat="49.00953834454" lon="8.42373813152">
+    <tag k="id" v="45356" />
+  </node>
+  <node id="45358" visible="true" version="1" lat="49.00952465235" lon="8.42381153336">
+    <tag k="id" v="45358" />
+  </node>
+  <node id="45360" visible="true" version="1" lat="49.00950984808" lon="8.42388908197">
+    <tag k="id" v="45360" />
+  </node>
+  <node id="45362" visible="true" version="1" lat="49.00949376379" lon="8.42396736145">
+    <tag k="id" v="45362" />
+  </node>
+  <node id="45364" visible="true" version="1" lat="49.00948052928" lon="8.42403735459">
+    <tag k="id" v="45364" />
+  </node>
+  <node id="45366" visible="true" version="1" lat="49.00946747358" lon="8.42412555949">
+    <tag k="id" v="45366" />
+  </node>
+  <node id="45368" visible="true" version="1" lat="49.00945119852" lon="8.42420763049">
+    <tag k="id" v="45368" />
+  </node>
+  <node id="45370" visible="true" version="1" lat="49.00942418968" lon="8.42433058827">
+    <tag k="id" v="45370" />
+  </node>
+  <node id="45392" visible="true" version="1" lat="49.00759689901" lon="8.45747759396">
+    <tag k="id" v="45392" />
+  </node>
+  <node id="45394" visible="true" version="1" lat="49.00756991657" lon="8.45750952955">
+    <tag k="id" v="45394" />
+  </node>
+  <node id="45396" visible="true" version="1" lat="49.00754666839" lon="8.45754714532">
+    <tag k="id" v="45396" />
+  </node>
+  <node id="45398" visible="true" version="1" lat="49.00745048149" lon="8.45748586815">
+    <tag k="id" v="45398" />
+  </node>
+  <node id="45400" visible="true" version="1" lat="49.00821846066" lon="8.45827800107">
+    <tag k="id" v="45400" />
+  </node>
+  <node id="45402" visible="true" version="1" lat="49.00820479874" lon="8.45832798691">
+    <tag k="id" v="45402" />
+  </node>
+  <node id="45404" visible="true" version="1" lat="49.00817856259" lon="8.45836343916">
+    <tag k="id" v="45404" />
+  </node>
+  <node id="45406" visible="true" version="1" lat="49.00817544639" lon="8.45842436313">
+    <tag k="id" v="45406" />
+  </node>
+  <node id="45458" visible="true" version="1" lat="49.00940124096" lon="8.42445518932">
+    <tag k="id" v="45458" />
+  </node>
+  <node id="45460" visible="true" version="1" lat="49.00938408248" lon="8.42455273208">
+    <tag k="id" v="45460" />
+  </node>
+  <node id="45462" visible="true" version="1" lat="49.00935719255" lon="8.42466717631">
+    <tag k="id" v="45462" />
+  </node>
+  <node id="45464" visible="true" version="1" lat="49.00933645711" lon="8.42480028822">
+    <tag k="id" v="45464" />
+  </node>
+  <node id="45466" visible="true" version="1" lat="49.00931557856" lon="8.42491357858">
+    <tag k="id" v="45466" />
+  </node>
+  <node id="45468" visible="true" version="1" lat="49.0092879447" lon="8.42505673">
+    <tag k="id" v="45468" />
+  </node>
+  <node id="45470" visible="true" version="1" lat="49.00926016152" lon="8.42520349253">
+    <tag k="id" v="45470" />
+  </node>
+  <node id="45472" visible="true" version="1" lat="49.00923057757" lon="8.42535656857">
+    <tag k="id" v="45472" />
+  </node>
+  <node id="45474" visible="true" version="1" lat="49.00920184242" lon="8.42550568956">
+    <tag k="id" v="45474" />
+  </node>
+  <node id="45476" visible="true" version="1" lat="49.00919404835" lon="8.42555526242">
+    <tag k="id" v="45476" />
+  </node>
+  <node id="45478" visible="true" version="1" lat="49.00916924603" lon="8.42567097623">
+    <tag k="id" v="45478" />
+  </node>
+  <node id="45480" visible="true" version="1" lat="49.00920750497" lon="8.42564365709">
+    <tag k="id" v="45480" />
+  </node>
+  <node id="45482" visible="true" version="1" lat="49.00930793049" lon="8.42580038115">
+    <tag k="id" v="45482" />
+  </node>
+  <node id="45484" visible="true" version="1" lat="49.00918926579" lon="8.4256993694">
+    <tag k="id" v="45484" />
+  </node>
+  <node id="45542" visible="true" version="1" lat="49.00914057752" lon="8.42581457093">
+    <tag k="id" v="45542" />
+  </node>
+  <node id="45544" visible="true" version="1" lat="49.00912556924" lon="8.42589864437">
+    <tag k="id" v="45544" />
+  </node>
+  <node id="45546" visible="true" version="1" lat="49.00910635901" lon="8.42599622657">
+    <tag k="id" v="45546" />
+  </node>
+  <node id="45548" visible="true" version="1" lat="49.00909212198" lon="8.42607634594">
+    <tag k="id" v="45548" />
+  </node>
+  <node id="45550" visible="true" version="1" lat="49.00907590956" lon="8.42617027289">
+    <tag k="id" v="45550" />
+  </node>
+  <node id="45552" visible="true" version="1" lat="49.00905384028" lon="8.42629711484">
+    <tag k="id" v="45552" />
+  </node>
+  <node id="45554" visible="true" version="1" lat="49.00906148161" lon="8.42637923777">
+    <tag k="id" v="45554" />
+  </node>
+  <node id="45556" visible="true" version="1" lat="49.00908002589" lon="8.42646102242">
+    <tag k="id" v="45556" />
+  </node>
+  <node id="45558" visible="true" version="1" lat="49.00903192581" lon="8.42650195664">
+    <tag k="id" v="45558" />
+  </node>
+  <node id="45560" visible="true" version="1" lat="49.00898302843" lon="8.42660089206">
+    <tag k="id" v="45560" />
+  </node>
+  <node id="45562" visible="true" version="1" lat="49.00896254604" lon="8.42666441551">
+    <tag k="id" v="45562" />
+  </node>
+  <node id="45564" visible="true" version="1" lat="49.00893129652" lon="8.42675357253">
+    <tag k="id" v="45564" />
+  </node>
+  <node id="45566" visible="true" version="1" lat="49.00885621486" lon="8.42710485755">
+    <tag k="id" v="45566" />
+  </node>
+  <node id="45572" visible="true" version="1" lat="49.00908009999" lon="8.4266063954">
+    <tag k="id" v="45572" />
+  </node>
+  <node id="50348" visible="true" version="1" lat="49.00535270522" lon="8.41579914487">
+    <tag k="id" v="50348" />
+  </node>
+  <node id="185265" visible="true" version="1" lat="49.00290595193" lon="8.42469567626">
+    <tag k="id" v="185265" />
+  </node>
+  <node id="2925017" visible="true" version="1" lat="49.0034565476" lon="8.42376468389">
+    <tag k="id" v="2925017" />
+  </node>
+  <node id="4984315" visible="true" version="1" lat="49.0027750308" lon="8.42480428069">
+    <tag k="id" v="4984315" />
+  </node>
+  <node id="32215298016831761" visible="true" version="1" lat="49.00289950969" lon="8.42475082876">
+    <tag k="id" v="32215298016831761" />
+  </node>
+  <node id="104180959442016125" visible="true" version="1" lat="49.0031163473" lon="8.42406224974">
+    <tag k="id" v="104180959442016125" />
+  </node>
+  <node id="137834999382935054" visible="true" version="1" lat="49.00316209544" lon="8.42465013269">
+    <tag k="id" v="137834999382935054" />
+  </node>
+  <node id="146105097596474585" visible="true" version="1" lat="49.00284373809" lon="8.42415923547">
+    <tag k="id" v="146105097596474585" />
+  </node>
+  <node id="236893084089463991" visible="true" version="1" lat="49.00341230121" lon="8.42462616165">
+    <tag k="id" v="236893084089463991" />
+  </node>
+  <node id="299801135556229805" visible="true" version="1" lat="49.00315058291" lon="8.42481987144">
+    <tag k="id" v="299801135556229805" />
+  </node>
+  <node id="329661501650965856" visible="true" version="1" lat="49.00278845173" lon="8.42484297711">
+    <tag k="id" v="329661501650965856" />
+  </node>
+  <node id="374340466209181523" visible="true" version="1" lat="49.00280957453" lon="8.42453872206">
+    <tag k="id" v="374340466209181523" />
+  </node>
+  <node id="442585512667267394" visible="true" version="1" lat="49.00353740187" lon="8.42412485908">
+    <tag k="id" v="442585512667267394" />
+  </node>
+  <node id="493910511394665656" visible="true" version="1" lat="49.00360721105" lon="8.42423191455">
+    <tag k="id" v="493910511394665656" />
+  </node>
+  <node id="584797533045363980" visible="true" version="1" lat="49.00330127623" lon="8.42392390996">
+    <tag k="id" v="584797533045363980" />
+  </node>
+  <node id="585125576327414600" visible="true" version="1" lat="49.00377434091" lon="8.42433009926">
+    <tag k="id" v="585125576327414600" />
+  </node>
+  <node id="647618925042582206" visible="true" version="1" lat="49.0029786769" lon="8.4241360347">
+    <tag k="id" v="647618925042582206" />
+  </node>
+  <node id="738566528952162269" visible="true" version="1" lat="49.00349597134" lon="8.42402366996">
+    <tag k="id" v="738566528952162269" />
+  </node>
+  <node id="805058864315633006" visible="true" version="1" lat="49.0029280342" lon="8.42473217069">
+    <tag k="id" v="805058864315633006" />
+  </node>
+  <node id="882345970527846776" visible="true" version="1" lat="49.00268793282" lon="8.42403449991">
+    <tag k="id" v="882345970527846776" />
+  </node>
+  <node id="984250743551948171" visible="true" version="1" lat="49.00347943183" lon="8.42390906141">
+    <tag k="id" v="984250743551948171" />
+  </node>
+  <node id="1090413704220797690" visible="true" version="1" lat="49.00281430988" lon="8.42414106779">
+    <tag k="id" v="1090413704220797690" />
+  </node>
+  <node id="1181845994370657488" visible="true" version="1" lat="49.00283704723" lon="8.42475156169">
+    <tag k="id" v="1181845994370657488" />
+  </node>
+  <node id="1230696026783469716" visible="true" version="1" lat="49.0035299833" lon="8.42415468113">
+    <tag k="id" v="1230696026783469716" />
+  </node>
+  <node id="1233497489963677373" visible="true" version="1" lat="49.0032221041" lon="8.42483907433">
+    <tag k="id" v="1233497489963677373" />
+  </node>
+  <node id="1234379034591142988" visible="true" version="1" lat="49.00331459194" lon="8.4234215409">
+    <tag k="id" v="1234379034591142988" />
+  </node>
+  <node id="1309969941904883021" visible="true" version="1" lat="49.00334105436" lon="8.42343739747">
+    <tag k="id" v="1309969941904883021" />
+  </node>
+  <node id="1375323336322835582" visible="true" version="1" lat="49.00284280056" lon="8.42449683726">
+    <tag k="id" v="1375323336322835582" />
+  </node>
+  <node id="1490339216733857237" visible="true" version="1" lat="49.00285167622" lon="8.42478818175">
+    <tag k="id" v="1490339216733857237" />
+  </node>
+  <node id="1507837371260062763" visible="true" version="1" lat="49.00371258614" lon="8.4243522221">
+    <tag k="id" v="1507837371260062763" />
+  </node>
+  <node id="1604899560552226700" visible="true" version="1" lat="49.00282314945" lon="8.42410086913">
+    <tag k="id" v="1604899560552226700" />
+  </node>
+  <node id="1785705568830251339" visible="true" version="1" lat="49.00377446346" lon="8.4242181886">
+    <tag k="id" v="1785705568830251339" />
+  </node>
+  <node id="1847807341669006157" visible="true" version="1" lat="49.00301947894" lon="8.42475043141">
+    <tag k="id" v="1847807341669006157" />
+  </node>
+  <node id="1900110162825233936" visible="true" version="1" lat="49.00268135953" lon="8.42407575537">
+    <tag k="id" v="1900110162825233936" />
+  </node>
+  <node id="1967009324258694641" visible="true" version="1" lat="49.00303959844" lon="8.42478699901">
+    <tag k="id" v="1967009324258694641" />
+  </node>
+  <node id="1982879017437833417" visible="true" version="1" lat="49.00289348322" lon="8.42439548381">
+    <tag k="id" v="1982879017437833417" />
+  </node>
+  <node id="1989239315666164064" visible="true" version="1" lat="49.00379763057" lon="8.42437623737">
+    <tag k="id" v="1989239315666164064" />
+  </node>
+  <node id="1993127157384578621" visible="true" version="1" lat="49.00285527323" lon="8.4245475209">
+    <tag k="id" v="1993127157384578621" />
+  </node>
+  <node id="2178541420781414387" visible="true" version="1" lat="49.00328358448" lon="8.42368944869">
+    <tag k="id" v="2178541420781414387" />
+  </node>
+  <node id="2284311893438003411" visible="true" version="1" lat="49.00307601025" lon="8.42468570247">
+    <tag k="id" v="2284311893438003411" />
+  </node>
+  <node id="2406796994303637602" visible="true" version="1" lat="49.00328245434" lon="8.42472104063">
+    <tag k="id" v="2406796994303637602" />
+  </node>
+  <node id="2488177370187451685" visible="true" version="1" lat="49.00283671492" lon="8.4246226983">
+    <tag k="id" v="2488177370187451685" />
+  </node>
+  <node id="2494187620681288553" visible="true" version="1" lat="49.00360400198" lon="8.42418130458">
+    <tag k="id" v="2494187620681288553" />
+  </node>
+  <node id="2501538042390187229" visible="true" version="1" lat="49.00292236913" lon="8.42428895357">
+    <tag k="id" v="2501538042390187229" />
+  </node>
+  <node id="2506949279349802532" visible="true" version="1" lat="49.00383875756" lon="8.42422840248">
+    <tag k="id" v="2506949279349802532" />
+  </node>
+  <node id="2629117211428231733" visible="true" version="1" lat="49.00290002271" lon="8.42456208909">
+    <tag k="id" v="2629117211428231733" />
+  </node>
+  <node id="2630419999660053416" visible="true" version="1" lat="49.00300056398" lon="8.42469873989">
+    <tag k="id" v="2630419999660053416" />
+  </node>
+  <node id="2815701990836374505" visible="true" version="1" lat="49.00276197246" lon="8.42468996121">
+    <tag k="id" v="2815701990836374505" />
+  </node>
+  <node id="2875883881497262985" visible="true" version="1" lat="49.00286563273" lon="8.42446543085">
+    <tag k="id" v="2875883881497262985" />
+  </node>
+  <node id="2981562299451081503" visible="true" version="1" lat="49.00343626591" lon="8.42466948712">
+    <tag k="id" v="2981562299451081503" />
+  </node>
+  <node id="3055700409747041357" visible="true" version="1" lat="49.00383605885" lon="8.42426755733">
+    <tag k="id" v="3055700409747041357" />
+  </node>
+  <node id="3065808502060875935" visible="true" version="1" lat="49.0035195584" lon="8.42361974624">
+    <tag k="id" v="3065808502060875935" />
+  </node>
+  <node id="3093071314729702331" visible="true" version="1" lat="49.00282332" lon="8.42458223254">
+    <tag k="id" v="3093071314729702331" />
+  </node>
+  <node id="3096645840465895340" visible="true" version="1" lat="49.00345589119" lon="8.42403264033">
+    <tag k="id" v="3096645840465895340" />
+  </node>
+  <node id="3115863563472957956" visible="true" version="1" lat="49.00388687977" lon="8.42427496474">
+    <tag k="id" v="3115863563472957956" />
+  </node>
+  <node id="3196075855580673794" visible="true" version="1" lat="49.00336516393" lon="8.42396402378">
+    <tag k="id" v="3196075855580673794" />
+  </node>
+  <node id="3322836406896645644" visible="true" version="1" lat="49.00347843806" lon="8.42382625418">
+    <tag k="id" v="3322836406896645644" />
+  </node>
+  <node id="3372255899520750209" visible="true" version="1" lat="49.00367049548" lon="8.42437922817">
+    <tag k="id" v="3372255899520750209" />
+  </node>
+  <node id="3535038449830291886" visible="true" version="1" lat="49.00323739214" lon="8.42381552873">
+    <tag k="id" v="3535038449830291886" />
+  </node>
+  <node id="3592489247503589951" visible="true" version="1" lat="49.00355174736" lon="8.42433067282">
+    <tag k="id" v="3592489247503589951" />
+  </node>
+  <node id="3670769534662493708" visible="true" version="1" lat="49.00351266269" lon="8.42431744048">
+    <tag k="id" v="3670769534662493708" />
+  </node>
+  <node id="3766022379599666264" visible="true" version="1" lat="49.00322417255" lon="8.42472078568">
+    <tag k="id" v="3766022379599666264" />
+  </node>
+  <node id="3766978479898785248" visible="true" version="1" lat="49.00297349456" lon="8.42429462177">
+    <tag k="id" v="3766978479898785248" />
+  </node>
+  <node id="3871405854776721782" visible="true" version="1" lat="49.00276548465" lon="8.42411855305">
+    <tag k="id" v="3871405854776721782" />
+  </node>
+  <node id="3966054957584072627" visible="true" version="1" lat="49.00307638886" lon="8.42396140938">
+    <tag k="id" v="3966054957584072627" />
+  </node>
+  <node id="4025272606550902343" visible="true" version="1" lat="49.00366830259" lon="8.4242021484">
+    <tag k="id" v="4025272606550902343" />
+  </node>
+  <node id="4096028023390365527" visible="true" version="1" lat="49.00389362025" lon="8.42423687114">
+    <tag k="id" v="4096028023390365527" />
+  </node>
+  <node id="4138841661201604349" visible="true" version="1" lat="49.00285215073" lon="8.42411435863">
+    <tag k="id" v="4138841661201604349" />
+  </node>
+  <node id="4189184195328241898" visible="true" version="1" lat="49.00338927575" lon="8.4245837401">
+    <tag k="id" v="4189184195328241898" />
+  </node>
+  <node id="4294877725170241388" visible="true" version="1" lat="49.00294208197" lon="8.42425345074">
+    <tag k="id" v="4294877725170241388" />
+  </node>
+  <node id="4374554816280829709" visible="true" version="1" lat="49.00377219385" lon="8.4242573966">
+    <tag k="id" v="4374554816280829709" />
+  </node>
+  <node id="4388755663905652130" visible="true" version="1" lat="49.00347584908" lon="8.42430968528">
+    <tag k="id" v="4388755663905652130" />
+  </node>
+  <node id="4667234218878130709" visible="true" version="1" lat="49.0032883794" lon="8.42478028105">
+    <tag k="id" v="4667234218878130709" />
+  </node>
+  <node id="4693469271421012934" visible="true" version="1" lat="49.00291978698" lon="8.4247879141">
+    <tag k="id" v="4693469271421012934" />
+  </node>
+  <node id="4819270741178254817" visible="true" version="1" lat="49.00340714006" lon="8.42410754984">
+    <tag k="id" v="4819270741178254817" />
+  </node>
+  <node id="4828442271883631201" visible="true" version="1" lat="49.00327570911" lon="8.42466617985">
+    <tag k="id" v="4828442271883631201" />
+  </node>
+  <node id="4838042488308346637" visible="true" version="1" lat="49.00322375277" lon="8.42466575131">
+    <tag k="id" v="4838042488308346637" />
+  </node>
+  <node id="4939294930088669192" visible="true" version="1" lat="49.00301021853" lon="8.42406002924">
+    <tag k="id" v="4939294930088669192" />
+  </node>
+  <node id="4971743209403573582" visible="true" version="1" lat="49.00314644384" lon="8.42475936568">
+    <tag k="id" v="4971743209403573582" />
+  </node>
+  <node id="4997125851566631431" visible="true" version="1" lat="49.00326386985" lon="8.42364739737">
+    <tag k="id" v="4997125851566631431" />
+  </node>
+  <node id="5118910481164513340" visible="true" version="1" lat="49.00309833508" lon="8.42459930942">
+    <tag k="id" v="5118910481164513340" />
+  </node>
+  <node id="5203507687316292638" visible="true" version="1" lat="49.00318293486" lon="8.42382520123">
+    <tag k="id" v="5203507687316292638" />
+  </node>
+  <node id="5219605276379452838" visible="true" version="1" lat="49.00301369857" lon="8.42416693962">
+    <tag k="id" v="5219605276379452838" />
+  </node>
+  <node id="5499728065004547155" visible="true" version="1" lat="49.00346130166" lon="8.4241904783">
+    <tag k="id" v="5499728065004547155" />
+  </node>
+  <node id="5500878114409909220" visible="true" version="1" lat="49.00304501099" lon="8.42420097295">
+    <tag k="id" v="5500878114409909220" />
+  </node>
+  <node id="5576711776832046743" visible="true" version="1" lat="49.0028842517" lon="8.42471416905">
+    <tag k="id" v="5576711776832046743" />
+  </node>
+  <node id="5608083412546920899" visible="true" version="1" lat="49.00377563091" lon="8.42452549753">
+    <tag k="id" v="5608083412546920899" />
+  </node>
+  <node id="5662180970588112254" visible="true" version="1" lat="49.00331025144" lon="8.42357568619">
+    <tag k="id" v="5662180970588112254" />
+  </node>
+  <node id="5820064232837944307" visible="true" version="1" lat="49.00311496825" lon="8.4239522791">
+    <tag k="id" v="5820064232837944307" />
+  </node>
+  <node id="5872433480342781773" visible="true" version="1" lat="49.00307169812" lon="8.42405142449">
+    <tag k="id" v="5872433480342781773" />
+  </node>
+  <node id="5950390889582504921" visible="true" version="1" lat="49.00344379079" lon="8.423899197">
+    <tag k="id" v="5950390889582504921" />
+  </node>
+  <node id="5994571573834976945" visible="true" version="1" lat="49.00288902627" lon="8.42420345224">
+    <tag k="id" v="5994571573834976945" />
+  </node>
+  <node id="6010873249177339358" visible="true" version="1" lat="49.00329314138" lon="8.42365079861">
+    <tag k="id" v="6010873249177339358" />
+  </node>
+  <node id="6012398680329441872" visible="true" version="1" lat="49.00349317037" lon="8.42416840761">
+    <tag k="id" v="6012398680329441872" />
+  </node>
+  <node id="6037691286361354304" visible="true" version="1" lat="49.00280128568" lon="8.42487598586">
+    <tag k="id" v="6037691286361354304" />
+  </node>
+  <node id="6051755935835805602" visible="true" version="1" lat="49.00346626998" lon="8.42443098422">
+    <tag k="id" v="6051755935835805602" />
+  </node>
+  <node id="6160829422260087896" visible="true" version="1" lat="49.00295769435" lon="8.42477364312">
+    <tag k="id" v="6160829422260087896" />
+  </node>
+  <node id="6200113967165995538" visible="true" version="1" lat="49.00343607497" lon="8.42403675862">
+    <tag k="id" v="6200113967165995538" />
+  </node>
+  <node id="6241521636797569241" visible="true" version="1" lat="49.00289090992" lon="8.42399768682">
+    <tag k="id" v="6241521636797569241" />
+  </node>
+  <node id="6264043605759549266" visible="true" version="1" lat="49.00314685656" lon="8.42469889286">
+    <tag k="id" v="6264043605759549266" />
+  </node>
+  <node id="6296448398140990640" visible="true" version="1" lat="49.00299342691" lon="8.42464914902">
+    <tag k="id" v="6296448398140990640" />
+  </node>
+  <node id="6435386096984456936" visible="true" version="1" lat="49.00384816308" lon="8.42432963869">
+    <tag k="id" v="6435386096984456936" />
+  </node>
+  <node id="6507148803034981613" visible="true" version="1" lat="49.00370902931" lon="8.4242450459">
+    <tag k="id" v="6507148803034981613" />
+  </node>
+  <node id="6587744829884096258" visible="true" version="1" lat="49.00325072703" lon="8.42369083612">
+    <tag k="id" v="6587744829884096258" />
+  </node>
+  <node id="6722104362058561355" visible="true" version="1" lat="49.00299071202" lon="8.42430863326">
+    <tag k="id" v="6722104362058561355" />
+  </node>
+  <node id="6771979691019578165" visible="true" version="1" lat="49.00290861519" lon="8.42415282674">
+    <tag k="id" v="6771979691019578165" />
+  </node>
+  <node id="6863241492471799904" visible="true" version="1" lat="49.00351561326" lon="8.42412581852">
+    <tag k="id" v="6863241492471799904" />
+  </node>
+  <node id="6905469033316639457" visible="true" version="1" lat="49.00344797936" lon="8.42381031048">
+    <tag k="id" v="6905469033316639457" />
+  </node>
+  <node id="6911248270169482253" visible="true" version="1" lat="49.00324119172" lon="8.42398921184">
+    <tag k="id" v="6911248270169482253" />
+  </node>
+  <node id="6923355182620813640" visible="true" version="1" lat="49.00342641657" lon="8.42407375039">
+    <tag k="id" v="6923355182620813640" />
+  </node>
+  <node id="6980464299688733498" visible="true" version="1" lat="49.00329545399" lon="8.42483788115">
+    <tag k="id" v="6980464299688733498" />
+  </node>
+  <node id="6994307814782407283" visible="true" version="1" lat="49.00322294053" lon="8.42477917884">
+    <tag k="id" v="6994307814782407283" />
+  </node>
+  <node id="7195674799508775743" visible="true" version="1" lat="49.00346478494" lon="8.42471009552">
+    <tag k="id" v="7195674799508775743" />
+  </node>
+  <node id="7326074532659563937" visible="true" version="1" lat="49.00300729709" lon="8.42433628603">
+    <tag k="id" v="7326074532659563937" />
+  </node>
+  <node id="7395562882005622250" visible="true" version="1" lat="49.00328263609" lon="8.42356640673">
+    <tag k="id" v="7395562882005622250" />
+  </node>
+  <node id="7402914969115001621" visible="true" version="1" lat="49.00274945834" lon="8.4246540106">
+    <tag k="id" v="7402914969115001621" />
+  </node>
+  <node id="7599071200282796306" visible="true" version="1" lat="49.00348575482" lon="8.42378799156">
+    <tag k="id" v="7599071200282796306" />
+  </node>
+  <node id="7634496477757533080" visible="true" version="1" lat="49.00334636629" lon="8.42402524498">
+    <tag k="id" v="7634496477757533080" />
+  </node>
+  <node id="7683991892595990902" visible="true" version="1" lat="49.00374534685" lon="8.42439535769">
+    <tag k="id" v="7683991892595990902" />
+  </node>
+  <node id="7697222576222483732" visible="true" version="1" lat="49.00349263428" lon="8.423593689">
+    <tag k="id" v="7697222576222483732" />
+  </node>
+  <node id="7711382928694550045" visible="true" version="1" lat="49.00350128967" lon="8.42445044323">
+    <tag k="id" v="7711382928694550045" />
+  </node>
+  <node id="7713903556798291715" visible="true" version="1" lat="49.00366975126" lon="8.42424015341">
+    <tag k="id" v="7713903556798291715" />
+  </node>
+  <node id="7859042241037394600" visible="true" version="1" lat="49.00349731392" lon="8.42419784719">
+    <tag k="id" v="7859042241037394600" />
+  </node>
+  <node id="7906681650004026038" visible="true" version="1" lat="49.00307803368" lon="8.42474557284">
+    <tag k="id" v="7906681650004026038" />
+  </node>
+  <node id="8000743559438839841" visible="true" version="1" lat="49.00315301199" lon="8.42394197993">
+    <tag k="id" v="8000743559438839841" />
+  </node>
+  <node id="8057105352138418295" visible="true" version="1" lat="49.00371068786" lon="8.4242079">
+    <tag k="id" v="8057105352138418295" />
+  </node>
+  <node id="8159759251987551368" visible="true" version="1" lat="49.00357056078" lon="8.4245092667">
+    <tag k="id" v="8159759251987551368" />
+  </node>
+  <node id="8278298097919170101" visible="true" version="1" lat="49.00286438679" lon="8.42482305334">
+    <tag k="id" v="8278298097919170101" />
+  </node>
+  <node id="8295342500107575335" visible="true" version="1" lat="49.00286715796" lon="8.42459358071">
+    <tag k="id" v="8295342500107575335" />
+  </node>
+  <node id="8319424567269301985" visible="true" version="1" lat="49.00304835518" lon="8.42449983456">
+    <tag k="id" v="8319424567269301985" />
+  </node>
+  <node id="8396043010843852718" visible="true" version="1" lat="49.00295296514" lon="8.42447974222">
+    <tag k="id" v="8396043010843852718" />
+  </node>
+  <node id="8410819687057750073" visible="true" version="1" lat="49.00273398037" lon="8.42461699836">
+    <tag k="id" v="8410819687057750073" />
+  </node>
+  <node id="8601933696747810962" visible="true" version="1" lat="49.00308238948" lon="8.42479533546">
+    <tag k="id" v="8601933696747810962" />
+  </node>
+  <node id="8607646396414175765" visible="true" version="1" lat="49.0028836619" lon="8.42451660802">
+    <tag k="id" v="8607646396414175765" />
+  </node>
+  <node id="8691549135950706455" visible="true" version="1" lat="49.00361725348" lon="8.42442524694">
+    <tag k="id" v="8691549135950706455" />
+  </node>
+  <node id="8717970484406193818" visible="true" version="1" lat="49.00324246864" lon="8.42392145423">
+    <tag k="id" v="8717970484406193818" />
+  </node>
+  <node id="8770581255578109950" visible="true" version="1" lat="49.00309080483" lon="8.4246287928">
+    <tag k="id" v="8770581255578109950" />
+  </node>
+  <node id="8788265173405290791" visible="true" version="1" lat="49.00302729143" lon="8.42434447897">
+    <tag k="id" v="8788265173405290791" />
+  </node>
+  <node id="9037740909199276460" visible="true" version="1" lat="49.00247172096" lon="8.42384783578">
+    <tag k="id" v="9037740909199276460" />
+  </node>
+  <node id="9123153028072835627" visible="true" version="1" lat="49.00292118216" lon="8.42444428533">
+    <tag k="id" v="9123153028072835627" />
+  </node>
+  <node id="9178926741377113721" visible="true" version="1" lat="49.0029816087" lon="8.42398582437">
+    <tag k="id" v="9178926741377113721" />
+  </node>
+  <node id="9187600893603114095" visible="true" version="1" lat="49.00277289021" lon="8.42407679925">
+    <tag k="id" v="9187600893603114095" />
+  </node>
+  <node id="9191509550669907524" visible="true" version="1" lat="49.00353667796" lon="8.4244713487">
+    <tag k="id" v="9191509550669907524" />
+  </node>
+  <way id="9217047218277094767" visible="true" version="1">
+    <nd ref="45030" />
+    <nd ref="45054" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.225868" />
+  </way>
+  <way id="9217047218277094768" visible="true" version="1">
+    <nd ref="8607646396414175765" />
+    <nd ref="1993127157384578621" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.296851" />
+  </way>
+  <way id="9217047218277094769" visible="true" version="1">
+    <nd ref="45310" />
+    <nd ref="45316" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.240118" />
+  </way>
+  <way id="9217047218277094770" visible="true" version="1">
+    <nd ref="45054" />
+    <nd ref="45056" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.248850" />
+  </way>
+  <way id="9217047218277094771" visible="true" version="1">
+    <nd ref="6507148803034981613" />
+    <nd ref="7713903556798291715" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.305487" />
+  </way>
+  <way id="9217047218277094772" visible="true" version="1">
+    <nd ref="45028" />
+    <nd ref="45118" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.007379" />
+  </way>
+  <way id="9217047218277094773" visible="true" version="1">
+    <nd ref="43685" />
+    <nd ref="43694" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.571223" />
+  </way>
+  <way id="9217047218277094774" visible="true" version="1">
+    <nd ref="43685" />
+    <nd ref="43672" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.636708" />
+  </way>
+  <way id="9217047218277094775" visible="true" version="1">
+    <nd ref="45370" />
+    <nd ref="45368" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.770829" />
+  </way>
+  <way id="9217047218277094776" visible="true" version="1">
+    <nd ref="45370" />
+    <nd ref="45458" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.580413" />
+  </way>
+  <way id="9217047218277094777" visible="true" version="1">
+    <nd ref="805058864315633006" />
+    <nd ref="2630419999660053416" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.680685" />
+  </way>
+  <way id="9217047218277094778" visible="true" version="1">
+    <nd ref="45314" />
+    <nd ref="45316" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.514186" />
+  </way>
+  <way id="9217047218277094779" visible="true" version="1">
+    <nd ref="44980" />
+    <nd ref="44994" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.925129" />
+  </way>
+  <way id="9217047218277094780" visible="true" version="1">
+    <nd ref="44980" />
+    <nd ref="44992" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.566344" />
+  </way>
+  <way id="9217047218277094781" visible="true" version="1">
+    <nd ref="44974" />
+    <nd ref="44982" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.205245" />
+  </way>
+  <way id="9217047218277094782" visible="true" version="1">
+    <nd ref="45308" />
+    <nd ref="45312" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.410825" />
+  </way>
+  <way id="9217047218277094783" visible="true" version="1">
+    <nd ref="45308" />
+    <nd ref="45310" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.198673" />
+  </way>
+  <way id="9217047218277094784" visible="true" version="1">
+    <nd ref="44968" />
+    <nd ref="44978" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.287938" />
+  </way>
+  <way id="9217047218277094785" visible="true" version="1">
+    <nd ref="45302" />
+    <nd ref="45300" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.224569" />
+  </way>
+  <way id="9217047218277094786" visible="true" version="1">
+    <nd ref="45302" />
+    <nd ref="45306" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.465557" />
+  </way>
+  <way id="9217047218277094787" visible="true" version="1">
+    <nd ref="45298" />
+    <nd ref="45296" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.549102" />
+  </way>
+  <way id="9217047218277094788" visible="true" version="1">
+    <nd ref="45298" />
+    <nd ref="45294" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.461857" />
+  </way>
+  <way id="9217047218277094789" visible="true" version="1">
+    <nd ref="45298" />
+    <nd ref="45300" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.974158" />
+  </way>
+  <way id="9217047218277094790" visible="true" version="1">
+    <nd ref="45094" />
+    <nd ref="42526" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.341776" />
+  </way>
+  <way id="9217047218277094791" visible="true" version="1">
+    <nd ref="45094" />
+    <nd ref="45064" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094792" visible="true" version="1">
+    <nd ref="45004" />
+    <nd ref="45006" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.335090" />
+  </way>
+  <way id="9217047218277094793" visible="true" version="1">
+    <nd ref="44962" />
+    <nd ref="44968" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.105574" />
+  </way>
+  <way id="9217047218277094794" visible="true" version="1">
+    <nd ref="44962" />
+    <nd ref="44964" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094795" visible="true" version="1">
+    <nd ref="45296" />
+    <nd ref="45298" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.054904" />
+  </way>
+  <way id="9217047218277094796" visible="true" version="1">
+    <nd ref="45296" />
+    <nd ref="45304" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.263500" />
+  </way>
+  <way id="9217047218277094797" visible="true" version="1">
+    <nd ref="3055700409747041357" />
+    <nd ref="4374554816280829709" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.515739" />
+  </way>
+  <way id="9217047218277094798" visible="true" version="1">
+    <nd ref="3055700409747041357" />
+    <nd ref="2506949279349802532" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094799" visible="true" version="1">
+    <nd ref="45300" />
+    <nd ref="45298" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.974384" />
+  </way>
+  <way id="9217047218277094800" visible="true" version="1">
+    <nd ref="45300" />
+    <nd ref="45302" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.264397" />
+  </way>
+  <way id="9217047218277094801" visible="true" version="1">
+    <nd ref="6994307814782407283" />
+    <nd ref="4667234218878130709" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.495043" />
+  </way>
+  <way id="9217047218277094802" visible="true" version="1">
+    <nd ref="6994307814782407283" />
+    <nd ref="3766022379599666264" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094803" visible="true" version="1">
+    <nd ref="6994307814782407283" />
+    <nd ref="1233497489963677373" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094804" visible="true" version="1">
+    <nd ref="44966" />
+    <nd ref="44972" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.099542" />
+  </way>
+  <way id="9217047218277094805" visible="true" version="1">
+    <nd ref="44966" />
+    <nd ref="44964" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094806" visible="true" version="1">
+    <nd ref="45148" />
+    <nd ref="45150" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.888181" />
+  </way>
+  <way id="9217047218277094807" visible="true" version="1">
+    <nd ref="45012" />
+    <nd ref="45016" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.004999" />
+  </way>
+  <way id="9217047218277094808" visible="true" version="1">
+    <nd ref="45012" />
+    <nd ref="45010" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094809" visible="true" version="1">
+    <nd ref="44972" />
+    <nd ref="44976" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.283392" />
+  </way>
+  <way id="9217047218277094810" visible="true" version="1">
+    <nd ref="4997125851566631431" />
+    <nd ref="6587744829884096258" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.231415" />
+  </way>
+  <way id="9217047218277094811" visible="true" version="1">
+    <nd ref="45272" />
+    <nd ref="45270" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.864037" />
+  </way>
+  <way id="9217047218277094812" visible="true" version="1">
+    <nd ref="45272" />
+    <nd ref="45268" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.674441" />
+  </way>
+  <way id="9217047218277094813" visible="true" version="1">
+    <nd ref="45272" />
+    <nd ref="45274" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.030014" />
+  </way>
+  <way id="9217047218277094814" visible="true" version="1">
+    <nd ref="1490339216733857237" />
+    <nd ref="32215298016831761" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.418049" />
+  </way>
+  <way id="9217047218277094815" visible="true" version="1">
+    <nd ref="45306" />
+    <nd ref="45308" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.467976" />
+  </way>
+  <way id="9217047218277094816" visible="true" version="1">
+    <nd ref="45022" />
+    <nd ref="45026" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.437010" />
+  </way>
+  <way id="9217047218277094817" visible="true" version="1">
+    <nd ref="45356" />
+    <nd ref="45334" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.465818" />
+  </way>
+  <way id="9217047218277094818" visible="true" version="1">
+    <nd ref="45356" />
+    <nd ref="45358" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.409357" />
+  </way>
+  <way id="9217047218277094819" visible="true" version="1">
+    <nd ref="45124" />
+    <nd ref="45126" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.253721" />
+  </way>
+  <way id="9217047218277094820" visible="true" version="1">
+    <nd ref="45124" />
+    <nd ref="45000" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.612934" />
+  </way>
+  <way id="9217047218277094821" visible="true" version="1">
+    <nd ref="44982" />
+    <nd ref="44988" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.568578" />
+  </way>
+  <way id="9217047218277094822" visible="true" version="1">
+    <nd ref="45316" />
+    <nd ref="45322" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.254684" />
+  </way>
+  <way id="9217047218277094823" visible="true" version="1">
+    <nd ref="45316" />
+    <nd ref="45320" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.512386" />
+  </way>
+  <way id="9217047218277094824" visible="true" version="1">
+    <nd ref="45318" />
+    <nd ref="45346" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.163470" />
+  </way>
+  <way id="9217047218277094825" visible="true" version="1">
+    <nd ref="45318" />
+    <nd ref="45314" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.433357" />
+  </way>
+  <way id="9217047218277094826" visible="true" version="1">
+    <nd ref="45320" />
+    <nd ref="43672" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.470277" />
+  </way>
+  <way id="9217047218277094827" visible="true" version="1">
+    <nd ref="44988" />
+    <nd ref="45120" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.559622" />
+  </way>
+  <way id="9217047218277094828" visible="true" version="1">
+    <nd ref="44988" />
+    <nd ref="44992" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094829" visible="true" version="1">
+    <nd ref="45322" />
+    <nd ref="45324" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.106428" />
+  </way>
+  <way id="9217047218277094830" visible="true" version="1">
+    <nd ref="44990" />
+    <nd ref="44996" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.400699" />
+  </way>
+  <way id="9217047218277094831" visible="true" version="1">
+    <nd ref="45326" />
+    <nd ref="45324" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.433542" />
+  </way>
+  <way id="9217047218277094832" visible="true" version="1">
+    <nd ref="5499728065004547155" />
+    <nd ref="6923355182620813640" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.544341" />
+  </way>
+  <way id="9217047218277094833" visible="true" version="1">
+    <nd ref="45328" />
+    <nd ref="45356" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.548338" />
+  </way>
+  <way id="9217047218277094834" visible="true" version="1">
+    <nd ref="584797533045363980" />
+    <nd ref="8717970484406193818" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.534723" />
+  </way>
+  <way id="9217047218277094835" visible="true" version="1">
+    <nd ref="44994" />
+    <nd ref="45002" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.056367" />
+  </way>
+  <way id="9217047218277094836" visible="true" version="1">
+    <nd ref="6905469033316639457" />
+    <nd ref="2925017" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.267919" />
+  </way>
+  <way id="9217047218277094837" visible="true" version="1">
+    <nd ref="44996" />
+    <nd ref="44998" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.028299" />
+  </way>
+  <way id="9217047218277094838" visible="true" version="1">
+    <nd ref="45330" />
+    <nd ref="45332" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.311124" />
+  </way>
+  <way id="9217047218277094839" visible="true" version="1">
+    <nd ref="1375323336322835582" />
+    <nd ref="374340466209181523" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.327029" />
+  </way>
+  <way id="9217047218277094840" visible="true" version="1">
+    <nd ref="5203507687316292638" />
+    <nd ref="3966054957584072627" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.106734" />
+  </way>
+  <way id="9217047218277094841" visible="true" version="1">
+    <nd ref="5203507687316292638" />
+    <nd ref="3535038449830291886" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094842" visible="true" version="1">
+    <nd ref="2630419999660053416" />
+    <nd ref="2284311893438003411" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.656861" />
+  </way>
+  <way id="9217047218277094843" visible="true" version="1">
+    <nd ref="2630419999660053416" />
+    <nd ref="1847807341669006157" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094844" visible="true" version="1">
+    <nd ref="45332" />
+    <nd ref="45338" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.560291" />
+  </way>
+  <way id="9217047218277094845" visible="true" version="1">
+    <nd ref="45332" />
+    <nd ref="45336" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.270811" />
+  </way>
+  <way id="9217047218277094846" visible="true" version="1">
+    <nd ref="45000" />
+    <nd ref="45002" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.742079" />
+  </way>
+  <way id="9217047218277094847" visible="true" version="1">
+    <nd ref="45334" />
+    <nd ref="45332" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.501688" />
+  </way>
+  <way id="9217047218277094848" visible="true" version="1">
+    <nd ref="1967009324258694641" />
+    <nd ref="8601933696747810962" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.402308" />
+  </way>
+  <way id="9217047218277094849" visible="true" version="1">
+    <nd ref="1967009324258694641" />
+    <nd ref="1847807341669006157" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094850" visible="true" version="1">
+    <nd ref="45010" />
+    <nd ref="45014" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.005676" />
+  </way>
+  <way id="9217047218277094851" visible="true" version="1">
+    <nd ref="45014" />
+    <nd ref="45018" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.180862" />
+  </way>
+  <way id="9217047218277094852" visible="true" version="1">
+    <nd ref="45014" />
+    <nd ref="45016" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094853" visible="true" version="1">
+    <nd ref="45020" />
+    <nd ref="45024" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.223897" />
+  </way>
+  <way id="9217047218277094854" visible="true" version="1">
+    <nd ref="6863241492471799904" />
+    <nd ref="6200113967165995538" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.802166" />
+  </way>
+  <way id="9217047218277094855" visible="true" version="1">
+    <nd ref="6863241492471799904" />
+    <nd ref="7859042241037394600" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094856" visible="true" version="1">
+    <nd ref="45016" />
+    <nd ref="45020" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.179853" />
+  </way>
+  <way id="9217047218277094857" visible="true" version="1">
+    <nd ref="45108" />
+    <nd ref="45110" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.215986" />
+  </way>
+  <way id="9217047218277094858" visible="true" version="1">
+    <nd ref="1900110162825233936" />
+    <nd ref="3871405854776721782" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.702896" />
+  </way>
+  <way id="9217047218277094859" visible="true" version="1">
+    <nd ref="1900110162825233936" />
+    <nd ref="882345970527846776" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094860" visible="true" version="1">
+    <nd ref="45110" />
+    <nd ref="45112" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.322549" />
+  </way>
+  <way id="9217047218277094861" visible="true" version="1">
+    <nd ref="6010873249177339358" />
+    <nd ref="2178541420781414387" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.202565" />
+  </way>
+  <way id="9217047218277094862" visible="true" version="1">
+    <nd ref="45114" />
+    <nd ref="45164" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="3.339463" />
+  </way>
+  <way id="9217047218277094863" visible="true" version="1">
+    <nd ref="45116" />
+    <nd ref="45166" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="3.342385" />
+  </way>
+  <way id="9217047218277094864" visible="true" version="1">
+    <nd ref="45118" />
+    <nd ref="45166" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="3.343021" />
+  </way>
+  <way id="9217047218277094865" visible="true" version="1">
+    <nd ref="45130" />
+    <nd ref="45132" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.351673" />
+  </way>
+  <way id="9217047218277094866" visible="true" version="1">
+    <nd ref="1507837371260062763" />
+    <nd ref="585125576327414600" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.495545" />
+  </way>
+  <way id="9217047218277094867" visible="true" version="1">
+    <nd ref="45284" />
+    <nd ref="45286" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.266842" />
+  </way>
+  <way id="9217047218277094868" visible="true" version="1">
+    <nd ref="45284" />
+    <nd ref="45282" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.246257" />
+  </way>
+  <way id="9217047218277094869" visible="true" version="1">
+    <nd ref="8057105352138418295" />
+    <nd ref="4025272606550902343" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.322497" />
+  </way>
+  <way id="9217047218277094870" visible="true" version="1">
+    <nd ref="43694" />
+    <nd ref="43685" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.533874" />
+  </way>
+  <way id="9217047218277094871" visible="true" version="1">
+    <nd ref="45112" />
+    <nd ref="45114" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.411054" />
+  </way>
+  <way id="9217047218277094872" visible="true" version="1">
+    <nd ref="45136" />
+    <nd ref="45122" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.331126" />
+  </way>
+  <way id="9217047218277094873" visible="true" version="1">
+    <nd ref="45126" />
+    <nd ref="45128" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.549986" />
+  </way>
+  <way id="9217047218277094874" visible="true" version="1">
+    <nd ref="3372255899520750209" />
+    <nd ref="7683991892595990902" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.893838" />
+  </way>
+  <way id="9217047218277094875" visible="true" version="1">
+    <nd ref="3372255899520750209" />
+    <nd ref="1507837371260062763" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.325085" />
+  </way>
+  <way id="9217047218277094876" visible="true" version="1">
+    <nd ref="45286" />
+    <nd ref="45288" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.512399" />
+  </way>
+  <way id="9217047218277094877" visible="true" version="1">
+    <nd ref="45286" />
+    <nd ref="45284" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.287077" />
+  </way>
+  <way id="9217047218277094878" visible="true" version="1">
+    <nd ref="45294" />
+    <nd ref="45298" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.458634" />
+  </way>
+  <way id="9217047218277094879" visible="true" version="1">
+    <nd ref="45294" />
+    <nd ref="45290" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.968426" />
+  </way>
+  <way id="9217047218277094880" visible="true" version="1">
+    <nd ref="9178926741377113721" />
+    <nd ref="6241521636797569241" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.563107" />
+  </way>
+  <way id="9217047218277094881" visible="true" version="1">
+    <nd ref="45348" />
+    <nd ref="45350" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.389304" />
+  </way>
+  <way id="9217047218277094882" visible="true" version="1">
+    <nd ref="45348" />
+    <nd ref="45346" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.294861" />
+  </way>
+  <way id="9217047218277094883" visible="true" version="1">
+    <nd ref="44978" />
+    <nd ref="44980" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.204854" />
+  </way>
+  <way id="9217047218277094884" visible="true" version="1">
+    <nd ref="45312" />
+    <nd ref="45318" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.383126" />
+  </way>
+  <way id="9217047218277094885" visible="true" version="1">
+    <nd ref="6980464299688733498" />
+    <nd ref="7195674799508775743" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.443673" />
+  </way>
+  <way id="9217047218277094886" visible="true" version="1">
+    <nd ref="45002" />
+    <nd ref="45004" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.441496" />
+  </way>
+  <way id="9217047218277094887" visible="true" version="1">
+    <nd ref="738566528952162269" />
+    <nd ref="984250743551948171" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.678259" />
+  </way>
+  <way id="9217047218277094888" visible="true" version="1">
+    <nd ref="738566528952162269" />
+    <nd ref="3096645840465895340" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094889" visible="true" version="1">
+    <nd ref="7326074532659563937" />
+    <nd ref="8396043010843852718" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.946784" />
+  </way>
+  <way id="9217047218277094890" visible="true" version="1">
+    <nd ref="7326074532659563937" />
+    <nd ref="3766978479898785248" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094891" visible="true" version="1">
+    <nd ref="7713903556798291715" />
+    <nd ref="493910511394665656" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.484788" />
+  </way>
+  <way id="9217047218277094892" visible="true" version="1">
+    <nd ref="45554" />
+    <nd ref="45552" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.525085" />
+  </way>
+  <way id="9217047218277094893" visible="true" version="1">
+    <nd ref="45554" />
+    <nd ref="45558" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.874723" />
+  </way>
+  <way id="9217047218277094894" visible="true" version="1">
+    <nd ref="45164" />
+    <nd ref="45166" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094895" visible="true" version="1">
+    <nd ref="8159759251987551368" />
+    <nd ref="8691549135950706455" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.756019" />
+  </way>
+  <way id="9217047218277094896" visible="true" version="1">
+    <nd ref="45144" />
+    <nd ref="45146" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.279367" />
+  </way>
+  <way id="9217047218277094897" visible="true" version="1">
+    <nd ref="4838042488308346637" />
+    <nd ref="4828442271883631201" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.386084" />
+  </way>
+  <way id="9217047218277094898" visible="true" version="1">
+    <nd ref="7859042241037394600" />
+    <nd ref="6923355182620813640" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.946693" />
+  </way>
+  <way id="9217047218277094899" visible="true" version="1">
+    <nd ref="45338" />
+    <nd ref="45302" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.525749" />
+  </way>
+  <way id="9217047218277094900" visible="true" version="1">
+    <nd ref="8396043010843852718" />
+    <nd ref="2629117211428231733" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.622875" />
+  </way>
+  <way id="9217047218277094901" visible="true" version="1">
+    <nd ref="45276" />
+    <nd ref="45274" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.046603" />
+  </way>
+  <way id="9217047218277094902" visible="true" version="1">
+    <nd ref="42440" />
+    <nd ref="45260" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.479713" />
+  </way>
+  <way id="9217047218277094903" visible="true" version="1">
+    <nd ref="45276" />
+    <nd ref="45278" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.353234" />
+  </way>
+  <way id="9217047218277094904" visible="true" version="1">
+    <nd ref="45254" />
+    <nd ref="45260" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.479713" />
+  </way>
+  <way id="9217047218277094905" visible="true" version="1">
+    <nd ref="2494187620681288553" />
+    <nd ref="6863241492471799904" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.864778" />
+  </way>
+  <way id="9217047218277094906" visible="true" version="1">
+    <nd ref="2494187620681288553" />
+    <nd ref="442585512667267394" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.795386" />
+  </way>
+  <way id="9217047218277094907" visible="true" version="1">
+    <nd ref="2494187620681288553" />
+    <nd ref="493910511394665656" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094908" visible="true" version="1">
+    <nd ref="45360" />
+    <nd ref="45358" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.418244" />
+  </way>
+  <way id="9217047218277094909" visible="true" version="1">
+    <nd ref="45360" />
+    <nd ref="45362" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.410740" />
+  </way>
+  <way id="9217047218277094910" visible="true" version="1">
+    <nd ref="45262" />
+    <nd ref="45258" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.415702" />
+  </way>
+  <way id="9217047218277094911" visible="true" version="1">
+    <nd ref="45262" />
+    <nd ref="45264" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.630894" />
+  </way>
+  <way id="9217047218277094912" visible="true" version="1">
+    <nd ref="6771979691019578165" />
+    <nd ref="6722104362058561355" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.178092" />
+  </way>
+  <way id="9217047218277094913" visible="true" version="1">
+    <nd ref="6771979691019578165" />
+    <nd ref="5994571573834976945" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094914" visible="true" version="1">
+    <nd ref="45252" />
+    <nd ref="45256" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.916671" />
+  </way>
+  <way id="9217047218277094915" visible="true" version="1">
+    <nd ref="45252" />
+    <nd ref="45254" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.824812" />
+  </way>
+  <way id="9217047218277094916" visible="true" version="1">
+    <nd ref="45288" />
+    <nd ref="45290" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.691827" />
+  </way>
+  <way id="9217047218277094917" visible="true" version="1">
+    <nd ref="45288" />
+    <nd ref="45286" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.527581" />
+  </way>
+  <way id="9217047218277094918" visible="true" version="1">
+    <nd ref="4693469271421012934" />
+    <nd ref="6160829422260087896" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.273166" />
+  </way>
+  <way id="9217047218277094919" visible="true" version="1">
+    <nd ref="45282" />
+    <nd ref="45284" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.257289" />
+  </way>
+  <way id="9217047218277094920" visible="true" version="1">
+    <nd ref="45282" />
+    <nd ref="45280" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.331111" />
+  </way>
+  <way id="9217047218277094921" visible="true" version="1">
+    <nd ref="45290" />
+    <nd ref="45294" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.971264" />
+  </way>
+  <way id="9217047218277094922" visible="true" version="1">
+    <nd ref="45290" />
+    <nd ref="45292" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.559390" />
+  </way>
+  <way id="9217047218277094923" visible="true" version="1">
+    <nd ref="45290" />
+    <nd ref="45288" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.719499" />
+  </way>
+  <way id="9217047218277094924" visible="true" version="1">
+    <nd ref="8770581255578109950" />
+    <nd ref="137834999382935054" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.615850" />
+  </way>
+  <way id="9217047218277094925" visible="true" version="1">
+    <nd ref="4819270741178254817" />
+    <nd ref="7634496477757533080" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.723143" />
+  </way>
+  <way id="9217047218277094926" visible="true" version="1">
+    <nd ref="4819270741178254817" />
+    <nd ref="6923355182620813640" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094927" visible="true" version="1">
+    <nd ref="7906681650004026038" />
+    <nd ref="4971743209403573582" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.567467" />
+  </way>
+  <way id="9217047218277094928" visible="true" version="1">
+    <nd ref="7906681650004026038" />
+    <nd ref="2284311893438003411" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094929" visible="true" version="1">
+    <nd ref="7906681650004026038" />
+    <nd ref="8601933696747810962" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094930" visible="true" version="1">
+    <nd ref="45058" />
+    <nd ref="45154" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="7.176046" />
+  </way>
+  <way id="9217047218277094931" visible="true" version="1">
+    <nd ref="4096028023390365527" />
+    <nd ref="2506949279349802532" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.437101" />
+  </way>
+  <way id="9217047218277094932" visible="true" version="1">
+    <nd ref="4096028023390365527" />
+    <nd ref="3115863563472957956" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094933" visible="true" version="1">
+    <nd ref="45214" />
+    <nd ref="45080" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="2.991470" />
+  </way>
+  <way id="9217047218277094934" visible="true" version="1">
+    <nd ref="45214" />
+    <nd ref="45216" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094935" visible="true" version="1">
+    <nd ref="7402914969115001621" />
+    <nd ref="2815701990836374505" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094936" visible="true" version="1">
+    <nd ref="7402914969115001621" />
+    <nd ref="8410819687057750073" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094937" visible="true" version="1">
+    <nd ref="6037691286361354304" />
+    <nd ref="8278298097919170101" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.571896" />
+  </way>
+  <way id="9217047218277094938" visible="true" version="1">
+    <nd ref="6037691286361354304" />
+    <nd ref="329661501650965856" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094939" visible="true" version="1">
+    <nd ref="6587744829884096258" />
+    <nd ref="5203507687316292638" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.772805" />
+  </way>
+  <way id="9217047218277094940" visible="true" version="1">
+    <nd ref="9187600893603114095" />
+    <nd ref="1604899560552226700" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.426222" />
+  </way>
+  <way id="9217047218277094941" visible="true" version="1">
+    <nd ref="5500878114409909220" />
+    <nd ref="7326074532659563937" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.777825" />
+  </way>
+  <way id="9217047218277094942" visible="true" version="1">
+    <nd ref="5500878114409909220" />
+    <nd ref="8788265173405290791" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.687888" />
+  </way>
+  <way id="9217047218277094943" visible="true" version="1">
+    <nd ref="5500878114409909220" />
+    <nd ref="5219605276379452838" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094944" visible="true" version="1">
+    <nd ref="4374554816280829709" />
+    <nd ref="6507148803034981613" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.502386" />
+  </way>
+  <way id="9217047218277094945" visible="true" version="1">
+    <nd ref="45256" />
+    <nd ref="45262" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.464689" />
+  </way>
+  <way id="9217047218277094946" visible="true" version="1">
+    <nd ref="6923355182620813640" />
+    <nd ref="3196075855580673794" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.814719" />
+  </way>
+  <way id="9217047218277094947" visible="true" version="1">
+    <nd ref="45216" />
+    <nd ref="45084" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="2.996139" />
+  </way>
+  <way id="9217047218277094948" visible="true" version="1">
+    <nd ref="45106" />
+    <nd ref="45108" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.203988" />
+  </way>
+  <way id="9217047218277094949" visible="true" version="1">
+    <nd ref="104180959442016125" />
+    <nd ref="5500878114409909220" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.884610" />
+  </way>
+  <way id="9217047218277094950" visible="true" version="1">
+    <nd ref="104180959442016125" />
+    <nd ref="5872433480342781773" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094951" visible="true" version="1">
+    <nd ref="7634496477757533080" />
+    <nd ref="6911248270169482253" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.857012" />
+  </way>
+  <way id="9217047218277094952" visible="true" version="1">
+    <nd ref="7634496477757533080" />
+    <nd ref="3196075855580673794" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094953" visible="true" version="1">
+    <nd ref="7711382928694550045" />
+    <nd ref="3670769534662493708" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.693105" />
+  </way>
+  <way id="9217047218277094954" visible="true" version="1">
+    <nd ref="7711382928694550045" />
+    <nd ref="9191509550669907524" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094955" visible="true" version="1">
+    <nd ref="6241521636797569241" />
+    <nd ref="9037740909199276460" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.034844" />
+  </way>
+  <way id="9217047218277094956" visible="true" version="1">
+    <nd ref="2506949279349802532" />
+    <nd ref="1785705568830251339" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.515920" />
+  </way>
+  <way id="9217047218277094957" visible="true" version="1">
+    <nd ref="45026" />
+    <nd ref="45030" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.407348" />
+  </way>
+  <way id="9217047218277094958" visible="true" version="1">
+    <nd ref="146105097596474585" />
+    <nd ref="5994571573834976945" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.469794" />
+  </way>
+  <way id="9217047218277094959" visible="true" version="1">
+    <nd ref="45292" />
+    <nd ref="45304" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.799848" />
+  </way>
+  <way id="9217047218277094960" visible="true" version="1">
+    <nd ref="45292" />
+    <nd ref="45290" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.974887" />
+  </way>
+  <way id="9217047218277094961" visible="true" version="1">
+    <nd ref="45134" />
+    <nd ref="45106" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.302557" />
+  </way>
+  <way id="9217047218277094962" visible="true" version="1">
+    <nd ref="4138841661201604349" />
+    <nd ref="6771979691019578165" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.477189" />
+  </way>
+  <way id="9217047218277094963" visible="true" version="1">
+    <nd ref="7697222576222483732" />
+    <nd ref="3065808502060875935" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094964" visible="true" version="1">
+    <nd ref="8691549135950706455" />
+    <nd ref="3372255899520750209" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.583662" />
+  </way>
+  <way id="9217047218277094965" visible="true" version="1">
+    <nd ref="7195674799508775743" />
+    <nd ref="8159759251987551368" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.418564" />
+  </way>
+  <way id="9217047218277094966" visible="true" version="1">
+    <nd ref="7195674799508775743" />
+    <nd ref="2981562299451081503" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094967" visible="true" version="1">
+    <nd ref="7683991892595990902" />
+    <nd ref="5608083412546920899" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.914581" />
+  </way>
+  <way id="9217047218277094968" visible="true" version="1">
+    <nd ref="8000743559438839841" />
+    <nd ref="5872433480342781773" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.019630" />
+  </way>
+  <way id="9217047218277094969" visible="true" version="1">
+    <nd ref="8000743559438839841" />
+    <nd ref="3966054957584072627" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094970" visible="true" version="1">
+    <nd ref="4189184195328241898" />
+    <nd ref="6051755935835805602" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.958364" />
+  </way>
+  <way id="9217047218277094971" visible="true" version="1">
+    <nd ref="45280" />
+    <nd ref="45282" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.343737" />
+  </way>
+  <way id="9217047218277094972" visible="true" version="1">
+    <nd ref="45280" />
+    <nd ref="45278" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.231045" />
+  </way>
+  <way id="9217047218277094973" visible="true" version="1">
+    <nd ref="45018" />
+    <nd ref="45022" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.222603" />
+  </way>
+  <way id="9217047218277094974" visible="true" version="1">
+    <nd ref="9191509550669907524" />
+    <nd ref="3592489247503589951" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.729910" />
+  </way>
+  <way id="9217047218277094975" visible="true" version="1">
+    <nd ref="45104" />
+    <nd ref="45136" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.375609" />
+  </way>
+  <way id="9217047218277094976" visible="true" version="1">
+    <nd ref="8601933696747810962" />
+    <nd ref="299801135556229805" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.536079" />
+  </way>
+  <way id="9217047218277094977" visible="true" version="1">
+    <nd ref="45258" />
+    <nd ref="42440" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.520417" />
+  </way>
+  <way id="9217047218277094978" visible="true" version="1">
+    <nd ref="45128" />
+    <nd ref="45130" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.601663" />
+  </way>
+  <way id="9217047218277094979" visible="true" version="1">
+    <nd ref="1309969941904883021" />
+    <nd ref="5662180970588112254" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.762170" />
+  </way>
+  <way id="9217047218277094980" visible="true" version="1">
+    <nd ref="1309969941904883021" />
+    <nd ref="1234379034591142988" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277094981" visible="true" version="1">
+    <nd ref="8319424567269301985" />
+    <nd ref="5118910481164513340" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.655884" />
+  </way>
+  <way id="9217047218277094982" visible="true" version="1">
+    <nd ref="45278" />
+    <nd ref="45276" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.344811" />
+  </way>
+  <way id="9217047218277094983" visible="true" version="1">
+    <nd ref="45278" />
+    <nd ref="45280" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.235518" />
+  </way>
+  <way id="9217047218277094984" visible="true" version="1">
+    <nd ref="6200113967165995538" />
+    <nd ref="3196075855580673794" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.726171" />
+  </way>
+  <way id="9217047218277094985" visible="true" version="1">
+    <nd ref="44976" />
+    <nd ref="44984" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.207773" />
+  </way>
+  <way id="9217047218277094986" visible="true" version="1">
+    <nd ref="7599071200282796306" />
+    <nd ref="3065808502060875935" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.945923" />
+  </way>
+  <way id="9217047218277094987" visible="true" version="1">
+    <nd ref="45120" />
+    <nd ref="45164" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="3.341725" />
+  </way>
+  <way id="9217047218277094988" visible="true" version="1">
+    <nd ref="8717970484406193818" />
+    <nd ref="5820064232837944307" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.135158" />
+  </way>
+  <way id="9217047218277094989" visible="true" version="1">
+    <nd ref="45274" />
+    <nd ref="45272" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.126267" />
+  </way>
+  <way id="9217047218277094990" visible="true" version="1">
+    <nd ref="45274" />
+    <nd ref="45276" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.111804" />
+  </way>
+  <way id="9217047218277094991" visible="true" version="1">
+    <nd ref="45270" />
+    <nd ref="45272" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.387779" />
+  </way>
+  <way id="9217047218277094992" visible="true" version="1">
+    <nd ref="45268" />
+    <nd ref="45264" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.895110" />
+  </way>
+  <way id="9217047218277094993" visible="true" version="1">
+    <nd ref="45268" />
+    <nd ref="45272" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.652429" />
+  </way>
+  <way id="9217047218277094994" visible="true" version="1">
+    <nd ref="45266" />
+    <nd ref="45264" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.110080" />
+  </way>
+  <way id="9217047218277094995" visible="true" version="1">
+    <nd ref="45264" />
+    <nd ref="45262" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.713807" />
+  </way>
+  <way id="9217047218277094996" visible="true" version="1">
+    <nd ref="45264" />
+    <nd ref="45268" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.964314" />
+  </way>
+  <way id="9217047218277094997" visible="true" version="1">
+    <nd ref="45264" />
+    <nd ref="45266" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.702597" />
+  </way>
+  <way id="9217047218277094998" visible="true" version="1">
+    <nd ref="44970" />
+    <nd ref="44974" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.282316" />
+  </way>
+  <way id="9217047218277094999" visible="true" version="1">
+    <nd ref="45304" />
+    <nd ref="45292" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.705179" />
+  </way>
+  <way id="9217047218277095000" visible="true" version="1">
+    <nd ref="45304" />
+    <nd ref="45296" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.330454" />
+  </way>
+  <way id="9217047218277095001" visible="true" version="1">
+    <nd ref="8278298097919170101" />
+    <nd ref="4693469271421012934" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.446968" />
+  </way>
+  <way id="9217047218277095002" visible="true" version="1">
+    <nd ref="2284311893438003411" />
+    <nd ref="6264043605759549266" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.587081" />
+  </way>
+  <way id="9217047218277095003" visible="true" version="1">
+    <nd ref="8295342500107575335" />
+    <nd ref="2488177370187451685" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.281862" />
+  </way>
+  <way id="9217047218277095004" visible="true" version="1">
+    <nd ref="7395562882005622250" />
+    <nd ref="4997125851566631431" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.429553" />
+  </way>
+  <way id="9217047218277095005" visible="true" version="1">
+    <nd ref="45462" />
+    <nd ref="45460" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.674097" />
+  </way>
+  <way id="9217047218277095006" visible="true" version="1">
+    <nd ref="45462" />
+    <nd ref="45464" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.625734" />
+  </way>
+  <way id="9217047218277095007" visible="true" version="1">
+    <nd ref="1982879017437833417" />
+    <nd ref="2875883881497262985" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.423532" />
+  </way>
+  <way id="9217047218277095008" visible="true" version="1">
+    <nd ref="3766022379599666264" />
+    <nd ref="2406796994303637602" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.445603" />
+  </way>
+  <way id="9217047218277095009" visible="true" version="1">
+    <nd ref="3115863563472957956" />
+    <nd ref="3055700409747041357" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.381296" />
+  </way>
+  <way id="9217047218277095010" visible="true" version="1">
+    <nd ref="3115863563472957956" />
+    <nd ref="1989239315666164064" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.773630" />
+  </way>
+  <way id="9217047218277095011" visible="true" version="1">
+    <nd ref="45156" />
+    <nd ref="45154" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095012" visible="true" version="1">
+    <nd ref="5994571573834976945" />
+    <nd ref="2501538042390187229" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.770683" />
+  </way>
+  <way id="9217047218277095013" visible="true" version="1">
+    <nd ref="45146" />
+    <nd ref="45148" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.471283" />
+  </way>
+  <way id="9217047218277095014" visible="true" version="1">
+    <nd ref="45032" />
+    <nd ref="50348" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.730599" />
+  </way>
+  <way id="9217047218277095015" visible="true" version="1">
+    <nd ref="647618925042582206" />
+    <nd ref="4294877725170241388" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.740784" />
+  </way>
+  <way id="9217047218277095016" visible="true" version="1">
+    <nd ref="647618925042582206" />
+    <nd ref="5219605276379452838" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095017" visible="true" version="1">
+    <nd ref="1234379034591142988" />
+    <nd ref="7395562882005622250" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.785551" />
+  </way>
+  <way id="9217047218277095018" visible="true" version="1">
+    <nd ref="137834999382935054" />
+    <nd ref="4838042488308346637" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.367985" />
+  </way>
+  <way id="9217047218277095019" visible="true" version="1">
+    <nd ref="137834999382935054" />
+    <nd ref="6264043605759549266" />
+    <tag k="relation" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+  </way>
+  <way id="9217047218277095020" visible="true" version="1">
+    <nd ref="5950390889582504921" />
+    <nd ref="6905469033316639457" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.463203" />
+  </way>
+  <way id="9217047218277095021" visible="true" version="1">
+    <nd ref="5950390889582504921" />
+    <nd ref="984250743551948171" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095022" visible="true" version="1">
+    <nd ref="1785705568830251339" />
+    <nd ref="8057105352138418295" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.510615" />
+  </way>
+  <way id="9217047218277095023" visible="true" version="1">
+    <nd ref="45056" />
+    <nd ref="45058" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.354136" />
+  </way>
+  <way id="9217047218277095024" visible="true" version="1">
+    <nd ref="45060" />
+    <nd ref="45154" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="7.168642" />
+  </way>
+  <way id="9217047218277095025" visible="true" version="1">
+    <nd ref="45060" />
+    <nd ref="45132" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095026" visible="true" version="1">
+    <nd ref="45062" />
+    <nd ref="45060" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.347305" />
+  </way>
+  <way id="9217047218277095027" visible="true" version="1">
+    <nd ref="45064" />
+    <nd ref="45062" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.346238" />
+  </way>
+  <way id="9217047218277095028" visible="true" version="1">
+    <nd ref="45066" />
+    <nd ref="45064" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.366725" />
+  </way>
+  <way id="9217047218277095029" visible="true" version="1">
+    <nd ref="3093071314729702331" />
+    <nd ref="7402914969115001621" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.698439" />
+  </way>
+  <way id="9217047218277095030" visible="true" version="1">
+    <nd ref="45068" />
+    <nd ref="45070" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="2.842391" />
+  </way>
+  <way id="9217047218277095031" visible="true" version="1">
+    <nd ref="45068" />
+    <nd ref="45080" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095032" visible="true" version="1">
+    <nd ref="45070" />
+    <nd ref="45072" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.399120" />
+  </way>
+  <way id="9217047218277095033" visible="true" version="1">
+    <nd ref="45072" />
+    <nd ref="45074" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.206616" />
+  </way>
+  <way id="9217047218277095034" visible="true" version="1">
+    <nd ref="45074" />
+    <nd ref="45076" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.396235" />
+  </way>
+  <way id="9217047218277095035" visible="true" version="1">
+    <nd ref="45076" />
+    <nd ref="45078" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.150867" />
+  </way>
+  <way id="9217047218277095036" visible="true" version="1">
+    <nd ref="45078" />
+    <nd ref="45002" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.207414" />
+  </way>
+  <way id="9217047218277095037" visible="true" version="1">
+    <nd ref="1181845994370657488" />
+    <nd ref="5576711776832046743" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.411828" />
+  </way>
+  <way id="9217047218277095038" visible="true" version="1">
+    <nd ref="45080" />
+    <nd ref="45082" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="2.847824" />
+  </way>
+  <way id="9217047218277095039" visible="true" version="1">
+    <nd ref="45080" />
+    <nd ref="45084" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095040" visible="true" version="1">
+    <nd ref="45082" />
+    <nd ref="45086" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.395112" />
+  </way>
+  <way id="9217047218277095041" visible="true" version="1">
+    <nd ref="1604899560552226700" />
+    <nd ref="4138841661201604349" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.241002" />
+  </way>
+  <way id="9217047218277095042" visible="true" version="1">
+    <nd ref="45084" />
+    <nd ref="45088" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="2.943174" />
+  </way>
+  <way id="9217047218277095043" visible="true" version="1">
+    <nd ref="45086" />
+    <nd ref="45066" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.203271" />
+  </way>
+  <way id="9217047218277095044" visible="true" version="1">
+    <nd ref="45088" />
+    <nd ref="45090" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.392691" />
+  </way>
+  <way id="9217047218277095045" visible="true" version="1">
+    <nd ref="45092" />
+    <nd ref="45094" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.362129" />
+  </way>
+  <way id="9217047218277095046" visible="true" version="1">
+    <nd ref="45092" />
+    <nd ref="45096" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.926532" />
+  </way>
+  <way id="9217047218277095047" visible="true" version="1">
+    <nd ref="45096" />
+    <nd ref="45144" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.922455" />
+  </way>
+  <way id="9217047218277095048" visible="true" version="1">
+    <nd ref="6012398680329441872" />
+    <nd ref="3096645840465895340" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.784169" />
+  </way>
+  <way id="9217047218277095049" visible="true" version="1">
+    <nd ref="6012398680329441872" />
+    <nd ref="5499728065004547155" />
+    <tag k="relation" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+  </way>
+  <way id="9217047218277095050" visible="true" version="1">
+    <nd ref="6012398680329441872" />
+    <nd ref="1230696026783469716" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095051" visible="true" version="1">
+    <nd ref="45098" />
+    <nd ref="45104" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.745835" />
+  </way>
+  <way id="9217047218277095052" visible="true" version="1">
+    <nd ref="45098" />
+    <nd ref="45100" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095053" visible="true" version="1">
+    <nd ref="45100" />
+    <nd ref="45102" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.731437" />
+  </way>
+  <way id="9217047218277095054" visible="true" version="1">
+    <nd ref="45102" />
+    <nd ref="45134" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.426755" />
+  </way>
+  <way id="9217047218277095055" visible="true" version="1">
+    <nd ref="45346" />
+    <nd ref="45348" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.275454" />
+  </way>
+  <way id="9217047218277095056" visible="true" version="1">
+    <nd ref="45346" />
+    <nd ref="45318" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.163657" />
+  </way>
+  <way id="9217047218277095057" visible="true" version="1">
+    <nd ref="45350" />
+    <nd ref="45348" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.385385" />
+  </way>
+  <way id="9217047218277095058" visible="true" version="1">
+    <nd ref="1090413704220797690" />
+    <nd ref="146105097596474585" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.241153" />
+  </way>
+  <way id="9217047218277095059" visible="true" version="1">
+    <nd ref="2925017" />
+    <nd ref="7697222576222483732" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.943333" />
+  </way>
+  <way id="9217047218277095060" visible="true" version="1">
+    <nd ref="45358" />
+    <nd ref="45356" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.389583" />
+  </way>
+  <way id="9217047218277095061" visible="true" version="1">
+    <nd ref="45358" />
+    <nd ref="45360" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.430597" />
+  </way>
+  <way id="9217047218277095062" visible="true" version="1">
+    <nd ref="45362" />
+    <nd ref="45360" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.454606" />
+  </way>
+  <way id="9217047218277095063" visible="true" version="1">
+    <nd ref="42526" />
+    <nd ref="45132" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.350896" />
+  </way>
+  <way id="9217047218277095064" visible="true" version="1">
+    <nd ref="45362" />
+    <nd ref="45364" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.352034" />
+  </way>
+  <way id="9217047218277095065" visible="true" version="1">
+    <nd ref="45364" />
+    <nd ref="45362" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.413862" />
+  </way>
+  <way id="9217047218277095066" visible="true" version="1">
+    <nd ref="45364" />
+    <nd ref="45366" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.563430" />
+  </way>
+  <way id="9217047218277095067" visible="true" version="1">
+    <nd ref="2981562299451081503" />
+    <nd ref="9191509550669907524" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.283350" />
+  </way>
+  <way id="9217047218277095068" visible="true" version="1">
+    <nd ref="2981562299451081503" />
+    <nd ref="236893084089463991" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095069" visible="true" version="1">
+    <nd ref="6264043605759549266" />
+    <nd ref="3766022379599666264" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.612204" />
+  </way>
+  <way id="9217047218277095070" visible="true" version="1">
+    <nd ref="6264043605759549266" />
+    <nd ref="4971743209403573582" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095071" visible="true" version="1">
+    <nd ref="45366" />
+    <nd ref="45364" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.383422" />
+  </way>
+  <way id="9217047218277095072" visible="true" version="1">
+    <nd ref="45366" />
+    <nd ref="45368" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.560996" />
+  </way>
+  <way id="9217047218277095073" visible="true" version="1">
+    <nd ref="45368" />
+    <nd ref="45366" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.325839" />
+  </way>
+  <way id="9217047218277095074" visible="true" version="1">
+    <nd ref="45368" />
+    <nd ref="45370" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.622831" />
+  </way>
+  <way id="9217047218277095075" visible="true" version="1">
+    <nd ref="3096645840465895340" />
+    <nd ref="5950390889582504921" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.793628" />
+  </way>
+  <way id="9217047218277095076" visible="true" version="1">
+    <nd ref="3096645840465895340" />
+    <nd ref="6923355182620813640" />
+    <tag k="relation" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+  </way>
+  <way id="9217047218277095077" visible="true" version="1">
+    <nd ref="8788265173405290791" />
+    <nd ref="8319424567269301985" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.724635" />
+  </way>
+  <way id="9217047218277095078" visible="true" version="1">
+    <nd ref="45392" />
+    <nd ref="45400" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="2.525377" />
+  </way>
+  <way id="9217047218277095079" visible="true" version="1">
+    <nd ref="45392" />
+    <nd ref="45394" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095080" visible="true" version="1">
+    <nd ref="43672" />
+    <nd ref="43685" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.333809" />
+  </way>
+  <way id="9217047218277095081" visible="true" version="1">
+    <nd ref="43672" />
+    <nd ref="45326" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.533304" />
+  </way>
+  <way id="9217047218277095082" visible="true" version="1">
+    <nd ref="45090" />
+    <nd ref="45092" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.204089" />
+  </way>
+  <way id="9217047218277095083" visible="true" version="1">
+    <nd ref="1847807341669006157" />
+    <nd ref="7906681650004026038" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.533279" />
+  </way>
+  <way id="9217047218277095084" visible="true" version="1">
+    <nd ref="5118910481164513340" />
+    <nd ref="137834999382935054" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.574102" />
+  </way>
+  <way id="9217047218277095085" visible="true" version="1">
+    <nd ref="45394" />
+    <nd ref="45402" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="2.550821" />
+  </way>
+  <way id="9217047218277095086" visible="true" version="1">
+    <nd ref="45394" />
+    <nd ref="45396" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095087" visible="true" version="1">
+    <nd ref="45396" />
+    <nd ref="45404" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="2.558957" />
+  </way>
+  <way id="9217047218277095088" visible="true" version="1">
+    <nd ref="45396" />
+    <nd ref="45398" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095089" visible="true" version="1">
+    <nd ref="5872433480342781773" />
+    <nd ref="5219605276379452838" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.950861" />
+  </way>
+  <way id="9217047218277095090" visible="true" version="1">
+    <nd ref="5872433480342781773" />
+    <nd ref="4939294930088669192" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095091" visible="true" version="1">
+    <nd ref="9123153028072835627" />
+    <nd ref="8607646396414175765" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.546142" />
+  </way>
+  <way id="9217047218277095092" visible="true" version="1">
+    <nd ref="45400" />
+    <nd ref="45402" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095093" visible="true" version="1">
+    <nd ref="2629117211428231733" />
+    <nd ref="8295342500107575335" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.315543" />
+  </way>
+  <way id="9217047218277095094" visible="true" version="1">
+    <nd ref="4025272606550902343" />
+    <nd ref="2494187620681288553" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.511319" />
+  </way>
+  <way id="9217047218277095095" visible="true" version="1">
+    <nd ref="44964" />
+    <nd ref="44970" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.108407" />
+  </way>
+  <way id="9217047218277095096" visible="true" version="1">
+    <nd ref="45402" />
+    <nd ref="45404" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095097" visible="true" version="1">
+    <nd ref="493910511394665656" />
+    <nd ref="7859042241037394600" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.901134" />
+  </way>
+  <way id="9217047218277095098" visible="true" version="1">
+    <nd ref="45458" />
+    <nd ref="45370" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.773618" />
+  </way>
+  <way id="9217047218277095099" visible="true" version="1">
+    <nd ref="45458" />
+    <nd ref="45460" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.588392" />
+  </way>
+  <way id="9217047218277095100" visible="true" version="1">
+    <nd ref="45460" />
+    <nd ref="45458" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.463650" />
+  </way>
+  <way id="9217047218277095101" visible="true" version="1">
+    <nd ref="1233497489963677373" />
+    <nd ref="6980464299688733498" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.559866" />
+  </way>
+  <way id="9217047218277095102" visible="true" version="1">
+    <nd ref="45460" />
+    <nd ref="45462" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.625732" />
+  </way>
+  <way id="9217047218277095103" visible="true" version="1">
+    <nd ref="45464" />
+    <nd ref="45462" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.800506" />
+  </way>
+  <way id="9217047218277095104" visible="true" version="1">
+    <nd ref="45464" />
+    <nd ref="45466" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.629370" />
+  </way>
+  <way id="9217047218277095105" visible="true" version="1">
+    <nd ref="45466" />
+    <nd ref="45464" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.612369" />
+  </way>
+  <way id="9217047218277095106" visible="true" version="1">
+    <nd ref="45466" />
+    <nd ref="45468" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.789379" />
+  </way>
+  <way id="9217047218277095107" visible="true" version="1">
+    <nd ref="45470" />
+    <nd ref="45468" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.808291" />
+  </way>
+  <way id="9217047218277095108" visible="true" version="1">
+    <nd ref="45470" />
+    <nd ref="45472" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.825502" />
+  </way>
+  <way id="9217047218277095109" visible="true" version="1">
+    <nd ref="45472" />
+    <nd ref="45470" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.838519" />
+  </way>
+  <way id="9217047218277095110" visible="true" version="1">
+    <nd ref="45472" />
+    <nd ref="45474" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.822106" />
+  </way>
+  <way id="9217047218277095111" visible="true" version="1">
+    <nd ref="32215298016831761" />
+    <nd ref="805058864315633006" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.214263" />
+  </way>
+  <way id="9217047218277095112" visible="true" version="1">
+    <nd ref="45474" />
+    <nd ref="45472" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.831533" />
+  </way>
+  <way id="9217047218277095113" visible="true" version="1">
+    <nd ref="45474" />
+    <nd ref="45476" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.284688" />
+  </way>
+  <way id="9217047218277095114" visible="true" version="1">
+    <nd ref="2501538042390187229" />
+    <nd ref="1982879017437833417" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.759953" />
+  </way>
+  <way id="9217047218277095115" visible="true" version="1">
+    <nd ref="299801135556229805" />
+    <nd ref="1233497489963677373" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.612618" />
+  </way>
+  <way id="9217047218277095116" visible="true" version="1">
+    <nd ref="299801135556229805" />
+    <nd ref="4971743209403573582" />
+    <tag k="relation" v="Left" />
+    <tag k="relation_reverse" v="Right" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095117" visible="true" version="1">
+    <nd ref="44998" />
+    <nd ref="45144" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.206527" />
+  </way>
+  <way id="9217047218277095118" visible="true" version="1">
+    <nd ref="45476" />
+    <nd ref="45474" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.252137" />
+  </way>
+  <way id="9217047218277095119" visible="true" version="1">
+    <nd ref="45476" />
+    <nd ref="45478" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.676889" />
+  </way>
+  <way id="9217047218277095120" visible="true" version="1">
+    <nd ref="45476" />
+    <nd ref="45480" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.297765" />
+  </way>
+  <way id="9217047218277095121" visible="true" version="1">
+    <nd ref="45478" />
+    <nd ref="45476" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.628988" />
+  </way>
+  <way id="9217047218277095122" visible="true" version="1">
+    <nd ref="45478" />
+    <nd ref="45542" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.791267" />
+  </way>
+  <way id="9217047218277095123" visible="true" version="1">
+    <nd ref="45482" />
+    <nd ref="45484" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.074601" />
+  </way>
+  <way id="9217047218277095124" visible="true" version="1">
+    <nd ref="45482" />
+    <nd ref="45480" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.319726" />
+  </way>
+  <way id="9217047218277095125" visible="true" version="1">
+    <nd ref="45544" />
+    <nd ref="45542" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.438155" />
+  </way>
+  <way id="9217047218277095126" visible="true" version="1">
+    <nd ref="45544" />
+    <nd ref="45546" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.528346" />
+  </way>
+  <way id="9217047218277095127" visible="true" version="1">
+    <nd ref="4667234218878130709" />
+    <nd ref="2981562299451081503" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.270786" />
+  </way>
+  <way id="9217047218277095128" visible="true" version="1">
+    <nd ref="45484" />
+    <nd ref="45482" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.458466" />
+  </way>
+  <way id="9217047218277095129" visible="true" version="1">
+    <nd ref="45484" />
+    <nd ref="45542" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.615081" />
+  </way>
+  <way id="9217047218277095130" visible="true" version="1">
+    <nd ref="45542" />
+    <nd ref="45478" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.764108" />
+  </way>
+  <way id="9217047218277095131" visible="true" version="1">
+    <nd ref="45542" />
+    <nd ref="45484" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.893710" />
+  </way>
+  <way id="9217047218277095132" visible="true" version="1">
+    <nd ref="45542" />
+    <nd ref="45544" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.477419" />
+  </way>
+  <way id="9217047218277095133" visible="true" version="1">
+    <nd ref="45546" />
+    <nd ref="45544" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.544032" />
+  </way>
+  <way id="9217047218277095134" visible="true" version="1">
+    <nd ref="45546" />
+    <nd ref="45548" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.419700" />
+  </way>
+  <way id="9217047218277095135" visible="true" version="1">
+    <nd ref="45548" />
+    <nd ref="45546" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.457187" />
+  </way>
+  <way id="9217047218277095136" visible="true" version="1">
+    <nd ref="45548" />
+    <nd ref="45550" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.501714" />
+  </way>
+  <way id="9217047218277095137" visible="true" version="1">
+    <nd ref="5576711776832046743" />
+    <nd ref="185265" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.186974" />
+  </way>
+  <way id="9217047218277095138" visible="true" version="1">
+    <nd ref="45550" />
+    <nd ref="45548" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.504005" />
+  </way>
+  <way id="9217047218277095139" visible="true" version="1">
+    <nd ref="45550" />
+    <nd ref="45552" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.602505" />
+  </way>
+  <way id="9217047218277095140" visible="true" version="1">
+    <nd ref="45552" />
+    <nd ref="45550" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.768477" />
+  </way>
+  <way id="9217047218277095141" visible="true" version="1">
+    <nd ref="45552" />
+    <nd ref="45554" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.394569" />
+  </way>
+  <way id="9217047218277095142" visible="true" version="1">
+    <nd ref="45324" />
+    <nd ref="45330" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.173554" />
+  </way>
+  <way id="9217047218277095143" visible="true" version="1">
+    <nd ref="45324" />
+    <nd ref="45328" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="0.436292" />
+  </way>
+  <way id="9217047218277095144" visible="true" version="1">
+    <nd ref="45556" />
+    <nd ref="45554" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.420802" />
+  </way>
+  <way id="9217047218277095145" visible="true" version="1">
+    <nd ref="45558" />
+    <nd ref="45560" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.753729" />
+  </way>
+  <way id="9217047218277095146" visible="true" version="1">
+    <nd ref="45560" />
+    <nd ref="45562" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.373739" />
+  </way>
+  <way id="9217047218277095147" visible="true" version="1">
+    <nd ref="45562" />
+    <nd ref="45564" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.482549" />
+  </way>
+  <way id="9217047218277095148" visible="true" version="1">
+    <nd ref="45564" />
+    <nd ref="45566" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.809882" />
+  </way>
+  <way id="9217047218277095149" visible="true" version="1">
+    <nd ref="2406796994303637602" />
+    <nd ref="236893084089463991" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.126606" />
+  </way>
+  <way id="9217047218277095150" visible="true" version="1">
+    <nd ref="45572" />
+    <nd ref="45556" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.722931" />
+  </way>
+  <way id="9217047218277095151" visible="true" version="1">
+    <nd ref="6911248270169482253" />
+    <nd ref="104180959442016125" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.068111" />
+  </way>
+  <way id="9217047218277095152" visible="true" version="1">
+    <nd ref="4984315" />
+    <nd ref="1181845994370657488" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.579170" />
+  </way>
+  <way id="9217047218277095153" visible="true" version="1">
+    <nd ref="4984315" />
+    <nd ref="329661501650965856" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095154" visible="true" version="1">
+    <nd ref="4971743209403573582" />
+    <nd ref="6994307814782407283" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.637769" />
+  </way>
+  <way id="9217047218277095155" visible="true" version="1">
+    <nd ref="50348" />
+    <nd ref="45144" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.206527" />
+  </way>
+  <way id="9217047218277095156" visible="true" version="1">
+    <nd ref="185265" />
+    <nd ref="6296448398140990640" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.737384" />
+  </way>
+  <way id="9217047218277095157" visible="true" version="1">
+    <nd ref="236893084089463991" />
+    <nd ref="7711382928694550045" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.107688" />
+  </way>
+  <way id="9217047218277095158" visible="true" version="1">
+    <nd ref="329661501650965856" />
+    <nd ref="1490339216733857237" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.583918" />
+  </way>
+  <way id="9217047218277095159" visible="true" version="1">
+    <nd ref="3196075855580673794" />
+    <nd ref="584797533045363980" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.532859" />
+  </way>
+  <way id="9217047218277095160" visible="true" version="1">
+    <nd ref="3670769534662493708" />
+    <nd ref="6012398680329441872" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.754369" />
+  </way>
+  <way id="9217047218277095161" visible="true" version="1">
+    <nd ref="3670769534662493708" />
+    <nd ref="3592489247503589951" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095162" visible="true" version="1">
+    <nd ref="44984" />
+    <nd ref="44990" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.578389" />
+  </way>
+  <way id="9217047218277095163" visible="true" version="1">
+    <nd ref="45132" />
+    <nd ref="45156" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="7.165847" />
+  </way>
+  <way id="9217047218277095164" visible="true" version="1">
+    <nd ref="374340466209181523" />
+    <nd ref="8410819687057750073" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.716246" />
+  </way>
+  <way id="9217047218277095165" visible="true" version="1">
+    <nd ref="3592489247503589951" />
+    <nd ref="1230696026783469716" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.865787" />
+  </way>
+  <way id="9217047218277095166" visible="true" version="1">
+    <nd ref="45480" />
+    <nd ref="45476" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.712501" />
+  </way>
+  <way id="9217047218277095167" visible="true" version="1">
+    <nd ref="45480" />
+    <nd ref="45482" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.964314" />
+  </way>
+  <way id="9217047218277095168" visible="true" version="1">
+    <nd ref="442585512667267394" />
+    <nd ref="738566528952162269" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.730018" />
+  </way>
+  <way id="9217047218277095169" visible="true" version="1">
+    <nd ref="585125576327414600" />
+    <nd ref="6435386096984456936" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.514753" />
+  </way>
+  <way id="9217047218277095170" visible="true" version="1">
+    <nd ref="882345970527846776" />
+    <nd ref="9187600893603114095" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.722647" />
+  </way>
+  <way id="9217047218277095171" visible="true" version="1">
+    <nd ref="984250743551948171" />
+    <nd ref="3322836406896645644" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.452210" />
+  </way>
+  <way id="9217047218277095172" visible="true" version="1">
+    <nd ref="45006" />
+    <nd ref="45008" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.072193" />
+  </way>
+  <way id="9217047218277095173" visible="true" version="1">
+    <nd ref="1230696026783469716" />
+    <nd ref="738566528952162269" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.752820" />
+  </way>
+  <way id="9217047218277095174" visible="true" version="1">
+    <nd ref="1989239315666164064" />
+    <nd ref="5608083412546920899" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.757370" />
+  </way>
+  <way id="9217047218277095175" visible="true" version="1">
+    <nd ref="1993127157384578621" />
+    <nd ref="3093071314729702331" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.299806" />
+  </way>
+  <way id="9217047218277095176" visible="true" version="1">
+    <nd ref="2178541420781414387" />
+    <nd ref="3535038449830291886" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.670144" />
+  </way>
+  <way id="9217047218277095177" visible="true" version="1">
+    <nd ref="2488177370187451685" />
+    <nd ref="2815701990836374505" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.689516" />
+  </way>
+  <way id="9217047218277095178" visible="true" version="1">
+    <nd ref="45336" />
+    <nd ref="45308" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.240051" />
+  </way>
+  <way id="9217047218277095179" visible="true" version="1">
+    <nd ref="2875883881497262985" />
+    <nd ref="1375323336322835582" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.269456" />
+  </way>
+  <way id="9217047218277095180" visible="true" version="1">
+    <nd ref="3535038449830291886" />
+    <nd ref="8000743559438839841" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.802194" />
+  </way>
+  <way id="9217047218277095181" visible="true" version="1">
+    <nd ref="45468" />
+    <nd ref="45466" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.777506" />
+  </way>
+  <way id="9217047218277095182" visible="true" version="1">
+    <nd ref="45468" />
+    <nd ref="45470" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.802228" />
+  </way>
+  <way id="9217047218277095183" visible="true" version="1">
+    <nd ref="3766978479898785248" />
+    <nd ref="9123153028072835627" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.924916" />
+  </way>
+  <way id="9217047218277095184" visible="true" version="1">
+    <nd ref="3766978479898785248" />
+    <nd ref="4294877725170241388" />
+    <tag k="relation" v="Right" />
+    <tag k="relation_reverse" v="Left" />
+    <tag k="routing_cost" v="0.000000" />
+    <tag k="routing_cost_reverse" v="0.000000" />
+  </way>
+  <way id="9217047218277095185" visible="true" version="1">
+    <nd ref="3871405854776721782" />
+    <nd ref="1090413704220797690" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.413842" />
+  </way>
+  <way id="9217047218277095186" visible="true" version="1">
+    <nd ref="3966054957584072627" />
+    <nd ref="4939294930088669192" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.883667" />
+  </way>
+  <way id="9217047218277095187" visible="true" version="1">
+    <nd ref="4294877725170241388" />
+    <nd ref="1982879017437833417" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="0.877605" />
+  </way>
+  <way id="9217047218277095188" visible="true" version="1">
+    <nd ref="4388755663905652130" />
+    <nd ref="5499728065004547155" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.522113" />
+  </way>
+  <way id="9217047218277095189" visible="true" version="1">
+    <nd ref="4828442271883631201" />
+    <nd ref="4189184195328241898" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.972889" />
+  </way>
+  <way id="9217047218277095190" visible="true" version="1">
+    <nd ref="4939294930088669192" />
+    <nd ref="647618925042582206" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.569876" />
+  </way>
+  <way id="9217047218277095191" visible="true" version="1">
+    <nd ref="5219605276379452838" />
+    <nd ref="3766978479898785248" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.742128" />
+  </way>
+  <way id="9217047218277095192" visible="true" version="1">
+    <nd ref="45122" />
+    <nd ref="45124" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.205906" />
+  </way>
+  <way id="9217047218277095193" visible="true" version="1">
+    <nd ref="44992" />
+    <nd ref="45116" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.559374" />
+  </way>
+  <way id="9217047218277095194" visible="true" version="1">
+    <nd ref="5662180970588112254" />
+    <nd ref="6010873249177339358" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.398396" />
+  </way>
+  <way id="9217047218277095195" visible="true" version="1">
+    <nd ref="5820064232837944307" />
+    <nd ref="9178926741377113721" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="1.123609" />
+  </way>
+  <way id="9217047218277095196" visible="true" version="1">
+    <nd ref="45024" />
+    <nd ref="45028" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.013357" />
+  </way>
+  <way id="9217047218277095197" visible="true" version="1">
+    <nd ref="45024" />
+    <nd ref="45032" />
+    <tag k="relation" v="Diverging" />
+    <tag k="routing_cost" v="1.842519" />
+  </way>
+  <way id="9217047218277095198" visible="true" version="1">
+    <nd ref="6051755935835805602" />
+    <nd ref="4388755663905652130" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.610133" />
+  </way>
+  <way id="9217047218277095199" visible="true" version="1">
+    <nd ref="6160829422260087896" />
+    <nd ref="1847807341669006157" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.584249" />
+  </way>
+  <way id="9217047218277095200" visible="true" version="1">
+    <nd ref="3322836406896645644" />
+    <nd ref="7599071200282796306" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.230168" />
+  </way>
+  <way id="9217047218277095201" visible="true" version="1">
+    <nd ref="6296448398140990640" />
+    <nd ref="8770581255578109950" />
+    <tag k="relation" v="Successor" />
+    <tag k="routing_cost" v="0.979755" />
+  </way>
+  <way id="9217047218277095202" visible="true" version="1">
+    <nd ref="6722104362058561355" />
+    <nd ref="8319424567269301985" />
+    <tag k="relation" v="Merging" />
+    <tag k="routing_cost" v="1.146795" />
+  </way>
+</osm>
