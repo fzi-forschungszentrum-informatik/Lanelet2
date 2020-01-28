@@ -459,6 +459,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   VectorToListConverter<LineStringsOrPolygons3d>();
   VectorToListConverter<ConstLineStringsOrPolygons3d>();
   VectorToListConverter<ConstLaneletOrAreas>();
+  VectorToListConverter<Areas>();
   VectorToListConverter<std::vector<TrafficLight::Ptr>>();
   VectorToListConverter<std::vector<TrafficSign::Ptr>>();
   VectorToListConverter<std::vector<SpeedLimit::Ptr>>();
