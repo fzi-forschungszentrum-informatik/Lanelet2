@@ -137,7 +137,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Initialization from a submap")
       .def("getRoute", getRouteWrapper, "driving route from 'start' to 'end' lanelet",
            (arg("from"), arg("to"), arg("routingCostId") = 0, arg("withLaneChanges") = true))
-      .def("getRouteVia", getRouteWrapper, "driving route from 'start' to 'end' lanelet using the 'via' lanelets",
+      .def("getRouteVia", getRouteViaWrapper, "driving route from 'start' to 'end' lanelet using the 'via' lanelets",
            (arg("from"), arg("via"), arg("to"), arg("routingCostId") = 0, arg("withLaneChanges") = true))
       .def("shortestPath", &RoutingGraph::shortestPath, "shortest path between 'start' and 'end'",
            (arg("from"), arg("to"), arg("routingCostId") = 0))
