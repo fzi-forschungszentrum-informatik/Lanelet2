@@ -15,6 +15,7 @@ The `subtype` tag helps Lanelet2 to distinguish between the different regulatory
 * *traffic_sign*
 * *speed_limit*
 * *right_of_way*
+* *all_way_stop*
 
 ### Other, Optional Tags
 The following tags can be used to add more information to a Regulatory Element (of course you can add you own to enhance your map and implement a new `TrafficRule` object that implements them). The default values for the tag are highlighted.
@@ -35,7 +36,11 @@ The most common roles that are used across all regulatory elements are:
 * *ref_line*: The line (usually a LineString) from which a restrictions becomes valid. If not used, that usually means that the whole lanelet/area is affected by the restriction. However, there are exceptions, e.g. for traffic lights the stop line is the *end* of the lanelet.
 * *cancel_line*: The line (usally a LineString) from which a restriction is no longer in place (if applicable)
 
-## Basic Regulatory Elements
+## Regulatory Element Sub-types
+
+### Traffic Light
+
+Traffic lights are also similar to traffic signs. Instead of a sign, the light itself is referenced as *refers* parameter. The *cancels* and *cancels_line* role have no meaning for traffic lights. The *ref_line* can reference the respective stop line. If they are not present, the stop line is implicitly at the end of the lanelet or Area.
 
 ### Traffic Sign
 
@@ -46,10 +51,6 @@ A traffic sign generically expresses a restriction that is expressed by a traffi
 Speed limits work very similar to traffic signs. If they are put up by a traffic sign, they simply reference this traffic sign. Similar for the *ref_line* and the *cancels* role. The `TrafficRules` class then takes care of interpreting the speed limit from the `subtype` of the referenced traffic sign.
 
 Alternatively, if the speed limit does not originate from a traffic sign, a `sign_type` tag can be used to define the speed limit. The value should contain the unit, eg "50 km/h". mph or mps or similar units are possible as well. If no unit is given, km/h is assumed.
-
-### Traffic Light
-
-Traffic lights are also similar to traffic signs. Instead of a sign, the light itself is referenced as *refers* parameter. The *cancels* and *cancels_line* role have no meaning for traffic lights. The *ref_line* can reference the respective stop line. If they are not present, the stop line is implicitly at the end of the lanelet or Area.
 
 ### Right of Way
 
@@ -70,3 +71,50 @@ The following roles are used in an all way stop:
 * *refers*: The traffic sign(s) that constitute this rule
 
 All lanelets referenced in this regelem also have to reference this regelem.
+
+## OSM XML Examples
+
+Below are some examples of regulatory element relations created in JOSM.
+
+### Traffic Light
+
+```xml
+<relation id='45222'>
+  <member type='way' ref='43728' role='ref_line' />
+  <member type='way' ref='85888' role='refers' />
+  <tag k='subtype' v='traffic_light' />
+  <tag k='type' v='regulatory_element' />
+</relation>
+```
+
+### Speed Limit
+
+```xml
+<relation id='45390'>
+  <member type='way' ref='44952' role='refers' />
+  <tag k='subtype' v='speed_limit' />
+  <tag k='type' v='regulatory_element' />
+</relation>
+```
+
+### All Way Stop
+
+Below is an example of a 4-way stop intersection.
+```xml
+<relation id='-138049'>
+  <member type='relation' ref='-138027' role='yield' />
+  <member type='relation' ref='-138052' role='yield' />
+  <member type='relation' ref='-138055' role='yield' />
+  <member type='way' ref='-138008' role='refers' />
+  <member type='way' ref='-138007' role='refers' />
+  <member type='way' ref='-138006' role='ref_line' />
+  <member type='way' ref='-138001' role='ref_line' />
+  <member type='way' ref='-137994' role='refers' />
+  <member type='way' ref='-137993' role='refers' />
+  <member type='way' ref='-137995' role='ref_line' />
+  <member type='way' ref='-137992' role='ref_line' />
+  <member type='relation' ref='-138032' role='yield' />
+  <tag k='subtype' v='all_way_stop' />
+  <tag k='type' v='regulatory_element' />
+</relation>
+```
