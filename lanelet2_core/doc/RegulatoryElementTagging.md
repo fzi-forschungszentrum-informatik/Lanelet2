@@ -11,10 +11,11 @@ Regulatory Elements always have `type=regulatory_element`. If this tag is not pr
 
 ### Subtype
 The `subtype` tag helps Lanelet2 to distinguish between the different regulatory elements. For the basic Regulatory Elements this would be:
-* *traffic_light*
 * *traffic_sign*
+* *traffic_light*
 * *speed_limit*
 * *right_of_way*
+* *all_way_stop*
 
 ### Other, Optional Tags
 The following tags can be used to add more information to a Regulatory Element (of course you can add you own to enhance your map and implement a new `TrafficRule` object that implements them). The default values for the tag are highlighted.
@@ -70,3 +71,57 @@ The following roles are used in an all way stop:
 * *refers*: The traffic sign(s) that constitute this rule
 
 All lanelets referenced in this regelem also have to reference this regelem.
+
+## OSM XML Examples
+
+Below are some examples of regulatory element relations as they might look in lanelet2's OSM XML format.
+
+### Traffic Light
+
+```xml
+<relation id='1'>
+  <tag k='type' v='regulatory_element' />
+  <tag k='subtype' v='traffic_light' />
+  <!-- stop line -->
+  <member type='way' ref='2' role='ref_line' />
+  <!-- traffic light -->
+  <member type='way' ref='3' role='refers' />
+</relation>
+```
+
+### Speed Limit
+
+```xml
+<relation id='1'>
+  <tag k='subtype' v='speed_limit' />
+  <tag k='type' v='regulatory_element' />
+  <!-- Traffic sign(s) that constitute this rule -->
+  <member type='way' ref='2' role='refers' />
+</relation>
+```
+
+### All Way Stop
+
+Below is an example of a 4-way stop intersection.
+```xml
+<relation id='1'>
+  <tag k='type' v='regulatory_element' />
+  <tag k='subtype' v='all_way_stop' />
+  <!-- Lanelets participating in the 4-way stop -->
+  <member type='relation' ref='2' role='yield' />
+  <member type='relation' ref='3' role='yield' />
+  <member type='relation' ref='4' role='yield' />
+  <member type='relation' ref='5' role='yield' />
+  <!-- Traffic signs that constitute this rule -->
+  <member type='way' ref='6' role='refers' />
+  <member type='way' ref='7' role='refers' />
+  <member type='way' ref='8' role='refers' />
+  <member type='way' ref='9' role='refers' />
+  <!-- stop lines for the lanelets (same order as lanelets) -->
+  <member type='way' ref='10' role='ref_line' />
+  <member type='way' ref='11' role='ref_line' />
+  <member type='way' ref='12' role='ref_line' />
+  <member type='way' ref='13' role='ref_line' />
+</relation>
+```
+
