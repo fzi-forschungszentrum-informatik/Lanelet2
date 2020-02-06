@@ -89,8 +89,8 @@ TEST(OsmHandler, writeMapWithIncompleteRegelem) {  // NOLINT
   auto regElem = test_setup::setUpRegulatoryElement(num);
   lanelet::LaneletMap map({}, {}, {{regElem->id(), regElem}}, {}, {}, {});
   ErrorMessages errsWrite;
-  io_handlers::OsmWriter parser(defaultProjection(Origin({0, 0, 0})));
-  auto file = parser.toOsmFile(map, errsWrite);
+  auto projector = defaultProjection(Origin({0, 0, 0}));
+  auto file = io_handlers::OsmWriter(projector).toOsmFile(map, errsWrite);
   EXPECT_GT(errsWrite.size(), 0ul);
 }
 
@@ -99,8 +99,8 @@ TEST(OsmHandler, writeMapWithIncompleteLanelet) {  // NOLINT
   auto llt = test_setup::setUpLanelet(num);
   lanelet::LaneletMap map({{llt.id(), llt}}, {}, {}, {}, {}, {});
   ErrorMessages errsWrite;
-  io_handlers::OsmWriter parser(defaultProjection(Origin({0, 0, 0})));
-  auto file = parser.toOsmFile(map, errsWrite);
+  auto projector = defaultProjection(Origin({0, 0, 0}));
+  auto file = io_handlers::OsmWriter(projector).toOsmFile(map, errsWrite);
   EXPECT_GT(errsWrite.size(), 0ul);
 }
 
