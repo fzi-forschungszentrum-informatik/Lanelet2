@@ -273,7 +273,7 @@ class ToFileWriter {
     errs.clear();
     if (!errors_.empty()) {
       errs.reserve(errors_.size() + 1);
-      errs.emplace_back("Errors ocurred while parsing Lanelet Map:");
+      errs.emplace_back("Errors ocurred while writing Lanelet Map:");
       for (const auto& err : errors_) {
         errs.emplace_back("\t- " + err);
       }
