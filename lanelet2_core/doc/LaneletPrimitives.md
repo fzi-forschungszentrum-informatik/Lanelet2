@@ -64,7 +64,7 @@ For more details on the exact tags of a Lanelet, please read [here](LaneletAndAr
 
 ![Area](images/area.png)
 
-An Area has similar properties like a Lanelet, but instead of representing *directed* traffic from entry to exit, an area represents *undirected* traffic within its surface. An Area can have multiple entry and exit points. A typical example of an area would be squares that are used by pedestrians or parking lots and emergency lanes for vehicles. Similar to lanelets, traffic rules must not change on the lanelet.
+An Area has similar properties like a Lanelet, but instead of representing *directed* traffic from entry to exit, an area represents *undirected* traffic within its surface. An Area can have multiple entry and exit points. A typical example of an area would be squares that are used by pedestrians or parking lots and emergency lanes for vehicles. Similar to lanelets, traffic rules must not change on the areas.
 
 Geometrically, an Area is represented by an ordered list of linestrings that together form the shape of the area in *clockwise* orientation. Areas must share exactly one linestring with an other area to be considered adajacent. For lanelets they either have to share one Linestring (when the lanelet is parallel to the area) or the endpoints of the lanelet are also the endpoints of one of the linestrings of the area (when the lanelet leads into the area). The area of an Area must not be zero and the bounds must not self-intersect.
 
