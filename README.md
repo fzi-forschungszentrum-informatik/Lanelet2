@@ -89,6 +89,31 @@ catkin build
 
 If unsure, see the [Dockerfile](Dockerfile) or the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2). It shows the the full installation process, with subsequent build and test based on a docker image with a clean ubuntu installation.
 
+### Manual, experimental installation using conan
+For non-catkin users, we also offer a conan based install proces. Its experimental and might not work on all platforms, expecially Windows.
+Since conan handles installing all the dependencies, all you need is a cloned repository and conan itself:
+```bash
+pip install conan empy catkin_pkg
+conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan # requried for python bindings
+git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
+cd lanelet2
+```
+
+From here, just use the default conan build/install procedure, e.g.:
+```bash
+conan source .
+conan create . lanelet2/stable --build=missing --options shared=True
+```
+The `shared=True` part is important, because otherwise the lanelet2's plugin mechanisms will fail. E.g. loading maps will be possible.
+
+To be able to use the python bindings, you have to make conan export the PYTHONPATH for lanelet2:
+```bash
+conan install lanelet2/0.0.0@lanelet2/stable -g virtualenv # replace 0.0.0 with the version shown by conan
+source activate.sh
+python -c "import lanelet2" # or whatever you want to do
+source deactivate.sh
+```
+
 ### Python3
 
 The python bindings are build for your default python installation by default (which currently is python2 on most systems). To build for python3 instead of python2, create a python3 virtualenv before initializing the workspace with `catkin init`. The command `python` should point to `python3`. 
