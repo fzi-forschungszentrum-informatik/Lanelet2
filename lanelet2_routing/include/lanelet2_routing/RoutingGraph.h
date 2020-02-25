@@ -2,6 +2,7 @@
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Lanelet.h>
+#include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/utility/Optional.h>
 #include <map>
 #include "Forward.h"
@@ -89,6 +90,19 @@ class RoutingGraph {
   Optional<LaneletPath> shortestPath(const ConstLanelet& from, const ConstLanelet& to, RoutingCostId routingCostId = {},
                                      bool withLaneChanges = true) const;
 
+  /** @brief Retrieve a shortest path between 'start' and 'end' that may contain Areas.
+   *
+   *  Will find a shortest path using Djikstra's shortest path algorithm and the routing cost calculated by the
+   * routing cost module with the respective ID. Be aware that the shortest path may contain lane changes,
+   * i.e. lanelets that are parallel and not only adjacent.
+   *  @param from Start lanelet or area to find a shortest path
+   *  @param to End lanelet or area to find a shortest path to
+   *  @param routingCostId ID of RoutingCost module to determine shortest path
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes */
+  Optional<LaneletOrAreaPath> shortestPathIncludingAreas(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to,
+                                                         RoutingCostId routingCostId = {},
+                                                         bool withLaneChanges = true) const;
+
   /** @brief Retrieve a shortest path between 'start' and 'end' using intermediate points.
    *  Will find a shortest path using Djikstra's shortest path algorithm and the routing cost calculated by the
    * routing cost module with the respective ID. Be aware that the shortest path may contain lane changes,
@@ -101,6 +115,22 @@ class RoutingGraph {
    *  @see shortestPath */
   Optional<LaneletPath> shortestPathVia(const ConstLanelet& start, const ConstLanelets& via, const ConstLanelet& end,
                                         RoutingCostId routingCostId = {}, bool withLaneChanges = true) const;
+
+  /** @brief Retrieve a shortest path between 'start' and 'end' using intermediate points.
+   *  Will find a shortest path using Djikstra's shortest path algorithm and the routing cost calculated by the
+   * routing cost module with the respective ID. Be aware that the shortest path may contain lane changes,
+   * i.e. lanelets that are parallel and not only adjacent.
+   *  @param start Start lanelet or area to find a shortest path
+   *  @param via Intermediate lanelets or areas that have to be passed
+   *  @param end End lanelet or area to find a shortest path
+   *  @param routingCostId ID of RoutingCost module to determine shortest path
+   *  @param withLaneChanges if false, the shortest path will not contain lane changes
+   *  @see shortestPath */
+  Optional<LaneletOrAreaPath> shortestPathIncludingAreasVia(const ConstLaneletOrArea& start,
+                                                            const ConstLaneletOrAreas& via,
+                                                            const ConstLaneletOrArea& end,
+                                                            RoutingCostId routingCostId = {},
+                                                            bool withLaneChanges = true) const;
 
   /** @brief Determines the relation between two lanelets
    *  @param from Start lanelet

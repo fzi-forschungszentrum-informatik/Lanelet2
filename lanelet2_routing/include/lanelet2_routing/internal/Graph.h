@@ -116,20 +116,20 @@ class Graph {
   inline size_t numRoutingCosts() const noexcept { return numRoutingCosts_; }
   inline const LaneletOrAreaToVertex& vertexLookup() const noexcept { return laneletOrAreaToVertex_; }
 
-  FilteredGraph withLaneChanges(RoutingCostId routingCostId = 0) {
+  FilteredGraph withLaneChanges(RoutingCostId routingCostId = 0) const {
     return getFilteredGraph(routingCostId, RelationType::Successor | RelationType::Left | RelationType::Right);
   }
 
-  FilteredGraph withoutLaneChanges(RoutingCostId routingCostId = 0) {
+  FilteredGraph withoutLaneChanges(RoutingCostId routingCostId = 0) const {
     return getFilteredGraph(routingCostId, RelationType::Successor);
   }
 
-  FilteredGraph withAreasAndLaneChanges(RoutingCostId routingCostId = 0) {
+  FilteredGraph withAreasAndLaneChanges(RoutingCostId routingCostId = 0) const {
     return getFilteredGraph(routingCostId,
                             RelationType::Successor | RelationType::Left | RelationType::Right | RelationType::Area);
   }
 
-  FilteredGraph withAreasWithoutLaneChanges(RoutingCostId routingCostId = 0) {
+  FilteredGraph withAreasWithoutLaneChanges(RoutingCostId routingCostId = 0) const {
     return getFilteredGraph(routingCostId, RelationType::Successor | RelationType::Area);
   }
 
