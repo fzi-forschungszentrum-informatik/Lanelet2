@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>lanelet2_projection</name>
-  <version>0.8.0</version>
+  <version>0.9.0</version>
   <description>Lanelet2 projection library for lat/lon to local x/y conversion</description>
 
   <license>BSD</license>
@@ -13,7 +13,7 @@
   <build_depend>mrt_cmake_modules</build_depend>
   <test_depend>gtest</test_depend>
   <depend>lanelet2_io</depend>
-  <depend>libgeographic-dev</depend>
+  <depend>geographiclib</depend>
 
 
   <export>

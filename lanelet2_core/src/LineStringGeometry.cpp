@@ -154,5 +154,16 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedBorderPoint3d(const CompoundHybri
 }
 
 }  // namespace internal
+
+Segment<BasicPoint2d> closestSegment(const BasicLineString2d& lineString, const BasicPoint2d& pointToProject) {
+  helper::ProjectedPoint<BasicPoint2d> projectedPoint;
+  distance(lineString, pointToProject, projectedPoint);
+  return Segment<BasicPoint2d>(projectedPoint.result->segmentPoint1, projectedPoint.result->segmentPoint2);
+}
+Segment<BasicPoint3d> closestSegment(const BasicLineString3d& lineString, const BasicPoint3d& pointToProject) {
+  helper::ProjectedPoint<BasicPoint3d> projectedPoint;
+  distance(lineString, pointToProject, projectedPoint);
+  return Segment<BasicPoint3d>(projectedPoint.result->segmentPoint1, projectedPoint.result->segmentPoint2);
+}
 }  // namespace geometry
 }  // namespace lanelet

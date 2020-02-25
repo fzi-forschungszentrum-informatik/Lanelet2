@@ -206,8 +206,25 @@ class RoutingGraphTestData {
     addPoint(31, 4, 0);  // p103
     addPoint(33, 4, 0);  // p104
     addPoint(31, 2, 0);  // p105
-    addPoint(33, 4, 0);  // p106
+    addPoint(33, 2, 0);  // p106
+    addPoint(31, 0, 0);  // p107
+
+    // points on the conflicting and circular section
+    pointId = 119;
+    addPoint(33, 11, 0);  // p120
+    addPoint(37, 16, 0);  // p121
+    addPoint(37, 14, 0);  // p122
+    addPoint(37, 12, 0);  // p123
+    addPoint(41, 12, 0);  // p124
+    addPoint(32, 16, 0);  // p125
+    addPoint(34, 16, 0);  // p126
+    addPoint(28, 18, 0);  // p127
+    addPoint(28, 20, 0);  // p128
+    addPoint(21, 14, 0);  // p129
+    addPoint(23, 14, 0);  // p130
+    addPoint(19, 14, 0);  // p131
   }
+
   void initLineStrings() {
     lines.clear();
     addLine(Points3d{points.at(1), points.at(2)});  // l1001
@@ -330,12 +347,15 @@ class RoutingGraphTestData {
     addLine({points.at(95), points.at(96)});  // ls1091
     lines.at(1091).setAttribute(AttributeName::Type, AttributeValueString::Virtual);
     addLine({points.at(96), points.at(97)});  // ls1092
+    lines.at(1092).setAttribute(AttributeName::Type, AttributeValueString::Curbstone);
+    lines.at(1092).setAttribute(AttributeName::Subtype, AttributeValueString::Low);
     addLine({points.at(97), points.at(98)});  // ls1093
     lines.at(1093).setAttribute(AttributeName::Type, AttributeValueString::Curbstone);
     lines.at(1093).setAttribute(AttributeName::Subtype, AttributeValueString::Low);
-    addLine({points.at(98), points.at(92)});    // ls1094
-    addLine({points.at(95), points.at(103)});   // ls1095
-    addLine({points.at(96), points.at(105)});   // ls1096
+    addLine({points.at(98), points.at(92)});   // ls1094
+    addLine({points.at(95), points.at(103)});  // ls1095
+    addLine({points.at(96), points.at(105)});  // ls1096
+    lines.at(1096).setAttribute(AttributeName::Type, AttributeValueString::Wall);
     addLine({points.at(103), points.at(105)});  // ls1097
     lines.at(1097).setAttribute(AttributeName::Type, AttributeValueString::Virtual);
     addLine({points.at(103), points.at(104)});  // ls1098
@@ -344,6 +364,30 @@ class RoutingGraphTestData {
     addLine({points.at(101), points.at(102)});  // ls1101
     addLine({points.at(92), points.at(90)});    // ls1102
     lines.at(1102).setAttribute(AttributeName::Type, AttributeValueString::Virtual);
+    addLine({points.at(97), points.at(107)});   // ls1103
+    addLine({points.at(107), points.at(105)});  // ls1104
+
+    // lines on the conflicting and circular section
+    lineId = 1199;
+    addLine({points.at(61), points.at(120)});   // ls1200
+    addLine({points.at(74), points.at(70)});    // ls1201
+    addLine({points.at(120), points.at(122)});  // ls1202
+    addLine({points.at(70), points.at(123)});   // ls1203
+    addLine({points.at(121), points.at(124)});  // ls1204
+    addLine({points.at(122), points.at(83)});   // ls1205
+    addLine({points.at(123), points.at(84)});   // ls1206
+    addLine({points.at(68), points.at(125)});   // ls1207
+    addLine({points.at(65), points.at(126)});   // ls1208
+    addLine({points.at(125), points.at(127)});  // ls1209
+    addLine({points.at(126), points.at(128)});  // ls1210
+    addLine({points.at(127), points.at(130)});  // ls1211
+    addLine({points.at(128), points.at(129)});  // ls1212
+    addLine({points.at(130), points.at(48)});   // ls1213
+    addLine({points.at(129), points.at(49)});   // ls1214
+    addLine({points.at(129), points.at(131)});  // ls1215
+    addLine({points.at(130), points.at(42)});   // ls1216
+    lines.at(1205).setAttribute(AttributeName::Type, AttributeValueString::LineThin);
+    lines.at(1205).setAttribute(AttributeName::Type, AttributeValueString::Dashed);
   }
   void initLanelets() {
     lanelets.clear();
@@ -404,13 +448,30 @@ class RoutingGraphTestData {
     lanelets.at(2050).setAttribute(AttributeName::OneWay, true);
     addLaneletPedestrian(lines.at(1101), lines.at(1089));           // ll2051
     addLaneletPedestrian(lines.at(1093).invert(), lines.at(1100));  // ll2052
-    addLaneletPedestrian(lines.at(1098), lines.at(1099));           // ll2053
+    lanelets.at(2052).setAttribute(AttributeName::OneWay, true);
+    addLaneletPedestrian(lines.at(1098), lines.at(1099));  // ll2053
+
+    // lanelets on conflicting section
+    laneletId = 2059;
+    addLaneletVehicle(lines.at(1200), lines.at(1201));  // ll2060
+    addLaneletVehicle(lines.at(1202), lines.at(1203));  // ll2061
+    addLaneletVehicle(lines.at(1204), lines.at(1205));  // ll2062
+    addLaneletVehicle(lines.at(1205), lines.at(1206));  // ll2063
+    addLaneletVehicle(lines.at(1207), lines.at(1208));  // ll2064
+    addLaneletVehicle(lines.at(1209), lines.at(1210));  // ll2065
+    addLaneletVehicle(lines.at(1211), lines.at(1212));  // ll2066
+    addLaneletVehicle(lines.at(1213), lines.at(1214));  // ll2067
+    addLaneletVehicle(lines.at(1216), lines.at(1215));  // ll2068
   }
 
   void initAreas() {
     addAreaPedestrian({lines.at(1102), lines.at(1088), lines.at(1089), lines.at(1090), lines.at(1091), lines.at(1092),
                        lines.at(1093), lines.at(1094)});                                           // ar3000
     addAreaPedestrian({lines.at(1095), lines.at(1097), lines.at(1096), lines.at(1091).invert()});  // ar3001
+    //    addAreaPedestrian({lines.at(1096).invert(), lines.at(1092), lines.at(1103), lines.at(1104)});  // ar3002
+    addAreaPedestrian(
+        {lines.at(1096), lines.at(1104).invert(), lines.at(1103).invert(), lines.at(1092).invert()});  // ar3002
+    areas.at(3002).setAttribute(AttributeName::Subtype, AttributeValueString::Walkway);
   }
 };
 

@@ -34,16 +34,40 @@ struct robust_point_type<const lanelet::BasicPoint2d, detail::no_rescale_policy>
 
 namespace lanelet {
 namespace geometry {
+namespace internal {
+template <typename T, typename Enable = void>
+struct GetGeometry {
+  static inline auto twoD(const T& geometry) { return geometry; }
+  static inline auto threeD(const T& geometry) { return geometry; }
+};
+
+template <typename T>
+struct GetGeometry<T, IfPT<T, void>> {
+  static inline auto twoD(const T& geometry) { return traits::to2D(geometry); }
+  static inline auto threeD(const T& geometry) { return traits::to3D(geometry); }
+};
+
+template <typename T1, typename T2>
+constexpr bool isTrivialDistance() {
+  return traits::noRegelem<T1>() && traits::noRegelem<T2>() &&
+         !(traits::isCategory<T1, traits::LineStringTag>() && traits::isCategory<T2, traits::LineStringTag>() &&
+           traits::is3D<T1>());
+}
+}  // namespace internal
 using boost::geometry::distance;
 
-template <typename Point1T, typename Point2T>
-IfPT<Point1T, double> distance2d(const Point1T& p1, const Point2T& p2) {
-  return distance(traits::to2D(p1), traits::to2D(p2));
+//! Calculates the distance of two lanelet2 geometries in 2D, converting them if necessary
+template <typename Geometry1T, typename Geometry2T>
+auto distance2d(const Geometry1T& p1, const Geometry2T& p2)
+    -> std::enable_if_t<internal::isTrivialDistance<Geometry1T, Geometry2T>(), double> {
+  return distance(internal::GetGeometry<Geometry1T>::twoD(p1), internal::GetGeometry<Geometry2T>::twoD(p2));
 }
 
-template <typename Point1T, typename Point2T>
-IfPT<Point1T, double> distance3d(const Point1T& p1, const Point2T& p2) {
-  return distance(traits::to3D(p1), traits::to3D(p2));
+//! Calculates the distance of two lanelet2 geometries in 3D, converting them if necessary
+template <typename Geometry1T, typename Geometry2T>
+auto distance3d(const Geometry1T& p1, const Geometry2T& p2)
+    -> std::enable_if_t<internal::isTrivialDistance<Geometry1T, Geometry2T>(), double> {
+  return distance(internal::GetGeometry<Geometry1T>::threeD(p1), internal::GetGeometry<Geometry2T>::threeD(p2));
 }
 }  // namespace geometry
 }  // namespace lanelet

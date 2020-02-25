@@ -4,11 +4,12 @@
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <unordered_map>
 #include "Exceptions.h"
-#include "Graph.h"
 #include "RoutingGraph.h"
+#include "internal/Graph.h"
 
 namespace lanelet {
 namespace routing {
+namespace internal {
 namespace {
 inline IdPair orderedIdPair(const Id id1, const Id id2) { return (id1 < id2) ? IdPair(id1, id2) : IdPair(id2, id1); }
 }  // namespace
@@ -82,15 +83,15 @@ class LaneChangeLaneletsCollector {
 
 RoutingGraphBuilder::RoutingGraphBuilder(const traffic_rules::TrafficRules& trafficRules,
                                          const RoutingCostPtrs& routingCosts, const RoutingGraph::Configuration& config)
-    : graph_{std::make_unique<Graph>(routingCosts.size())},
+    : graph_{std::make_unique<RoutingGraphGraph>(routingCosts.size())},
       trafficRules_{trafficRules},
       routingCosts_{routingCosts},
       config_{config} {}
 
-RoutingGraphUPtr RoutingGraphBuilder::build(const LaneletMap& laneletMap) {
-  auto passableLanelets = getPassableLanelets(laneletMap.laneletLayer, trafficRules_);
-  auto passableAreas = getPassableAreas(laneletMap.areaLayer, trafficRules_);
-  auto passableMap = utils::createConstMap(passableLanelets, passableAreas);
+RoutingGraphUPtr RoutingGraphBuilder::build(const LaneletMapLayers& laneletMapLayers) {
+  auto passableLanelets = getPassableLanelets(laneletMapLayers.laneletLayer, trafficRules_);
+  auto passableAreas = getPassableAreas(laneletMapLayers.areaLayer, trafficRules_);
+  auto passableMap = utils::createConstSubmap(passableLanelets, passableAreas);
   appendBidirectionalLanelets(passableLanelets);
   addLaneletsToGraph(passableLanelets);
   addAreasToGraph(passableAreas);
@@ -130,14 +131,14 @@ void RoutingGraphBuilder::appendBidirectionalLanelets(ConstLanelets& llts) {
 
 void RoutingGraphBuilder::addLaneletsToGraph(ConstLanelets& llts) {
   for (auto& ll : llts) {
-    graph_->addVertex(ll);
+    graph_->addVertex(VertexInfo{ll});
     addPointsToSearchIndex(ll);
   }
 }
 
 void RoutingGraphBuilder::addAreasToGraph(ConstAreas& areas) {
   for (auto& ar : areas) {
-    graph_->addVertex(ar);
+    graph_->addVertex(VertexInfo{ar});
   }
 }
 
@@ -172,7 +173,7 @@ void RoutingGraphBuilder::addFollowingEdges(const ConstLanelet& ll) {
   std::for_each(endPointsLanelets.first, endPointsLanelets.second, [&ll, this, &following](auto it) {
     if (geometry::follows(ll, it.second) && this->trafficRules_.canPass(ll, it.second)) {
       following.push_back(it.second);
-    };
+    }
   });
   if (following.empty()) {
     return;
@@ -182,21 +183,9 @@ void RoutingGraphBuilder::addFollowingEdges(const ConstLanelet& ll) {
   std::for_each(endPointsLanelets.first, endPointsLanelets.second, [&following, this, &merging](auto it) {
     if (geometry::follows(it.second, following.front()) && this->trafficRules_.canPass(it.second, following.front())) {
       merging.push_back(it.second);
-    };
+    }
   });
-  RelationType relation;
-  if (merging.size() == 1 && following.size() == 1) {
-    relation = RelationType::Successor;
-  } else if (merging.size() > 1 && following.size() == 1) {
-    relation = RelationType::Merging;
-  } else if (merging.size() == 1 && following.size() > 1) {
-    relation = RelationType::Diverging;
-  } else {
-    throw RoutingGraphError("Could not determine relationship between lanelets following lanelet " +
-                            std::to_string(ll.id()) +
-                            ". Lanelets that are diverging and merging at the same time are not permitted.");
-  }
-
+  RelationType relation = RelationType::Successor;
   for (auto& followingIt : following) {
     assignCosts(ll, followingIt, relation);
   }
@@ -251,19 +240,19 @@ void RoutingGraphBuilder::addLaneChangeEdges(LaneChangeLaneletsCollector& laneCh
   auto getSuccessors = [this](auto beginEdgeIt, auto endEdgeIt) {
     ConstLanelets nexts;
     for (; beginEdgeIt != endEdgeIt; ++beginEdgeIt) {
-      auto& edgeInfo = graph_->graph[*beginEdgeIt];
+      auto& edgeInfo = graph_->get()[*beginEdgeIt];
       if (edgeInfo.relation == RelationType::Successor && edgeInfo.costId == 0) {
-        nexts.push_back(graph_->graph[boost::source(*beginEdgeIt, graph_->graph)].lanelet());
+        nexts.push_back(graph_->get()[boost::source(*beginEdgeIt, graph_->get())].lanelet());
       }
     }
     return nexts;
   };
   auto next = [this, &getSuccessors](const ConstLanelet& llt) {
-    auto edges = boost::out_edges(*graph_->getVertex(llt), graph_->graph);
+    auto edges = boost::out_edges(*graph_->getVertex(llt), graph_->get());
     return getSuccessors(edges.first, edges.second);
   };
   auto prev = [this, &getSuccessors](const ConstLanelet& llt) {
-    auto edges = boost::in_edges(*graph_->getVertex(llt), graph_->graph);
+    auto edges = boost::in_edges(*graph_->getVertex(llt), graph_->get());
     return getSuccessors(edges.first, edges.second);
   };
   Optional<LaneChangeLaneletsCollector::LaneChangeLanelets> laneChangeLanelets;
@@ -353,7 +342,13 @@ void RoutingGraphBuilder::assignLaneChangeCosts(const ConstLanelets& froms, cons
       routingCosts_, [&](const RoutingCostPtr& cost) { return cost->getCostLaneChange(trafficRules_, froms, tos); });
   for (auto i = 0u; i < froms.size(); ++i) {
     for (RoutingCostId costId = 0; costId < routingCosts_.size(); ++costId) {
-      graph_->addEdge(froms[i], tos[i], EdgeInfo{costId, costs[costId], relation});
+      if (!std::isfinite(costs[costId])) {
+        // if the costs are infinite, we add an adjacent edge instead
+        auto adjacent = relation == RelationType::Left ? RelationType::AdjacentLeft : RelationType::AdjacentRight;
+        graph_->addEdge(froms[i], tos[i], EdgeInfo{1, costId, adjacent});
+        continue;
+      }
+      graph_->addEdge(froms[i], tos[i], EdgeInfo{costs[costId], costId, relation});
     }
   }
 }
@@ -365,17 +360,16 @@ void RoutingGraphBuilder::assignCosts(const ConstLaneletOrArea& from, const Cons
     edgeInfo.costId = rci;
     edgeInfo.relation = relation;
     auto& routingCost = *routingCosts_[rci];
-    if (relation == RelationType::Successor || relation == RelationType::Merging ||
-        relation == RelationType::Diverging || relation == RelationType::Area) {
+    if (relation == RelationType::Successor || relation == RelationType::Area) {
       edgeInfo.routingCost = routingCost.getCostSucceeding(trafficRules_, from, to);
     } else if (relation == RelationType::Left) {
       edgeInfo.routingCost = routingCost.getCostLaneChange(trafficRules_, {*from.lanelet()}, {*to.lanelet()});
     } else if (relation == RelationType::Right) {
       edgeInfo.routingCost = routingCost.getCostLaneChange(trafficRules_, {*from.lanelet()}, {*to.lanelet()});
     } else if (relation == RelationType::AdjacentLeft || relation == RelationType::AdjacentRight) {
-      edgeInfo.routingCost = std::numeric_limits<double>::max();
+      edgeInfo.routingCost = 1;
     } else if (relation == RelationType::Conflicting) {
-      edgeInfo.routingCost = std::numeric_limits<double>::max();
+      edgeInfo.routingCost = 1;
     } else {
       assert(false && "Trying to add edge with wrong relation type to graph.");  // NOLINT
       return;
@@ -383,6 +377,6 @@ void RoutingGraphBuilder::assignCosts(const ConstLaneletOrArea& from, const Cons
     graph_->addEdge(from, to, edgeInfo);
   }
 }
-
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

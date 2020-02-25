@@ -19,6 +19,8 @@ class BasicPolygon2d : public BasicLineString2d {
   explicit BasicPolygon2d(const BasicLineString2d& other) : BasicLineString2d(other) {}
   using TwoDType = BasicPolygon2d;
   using ThreeDType = BasicPolygon3d;
+  using HybridType = BasicPolygon2d;
+  using PointType = BasicPoint2d;
   using BasicLineString2d::BasicLineString2d;
   BasicPolygon2d() = default;
 };
@@ -37,6 +39,8 @@ class BasicPolygon3d : public BasicLineString3d {
   explicit BasicPolygon3d(const BasicLineString3d& other) : BasicLineString3d(other) {}
   using TwoDType = BasicPolygon2d;
   using ThreeDType = BasicPolygon3d;
+  using HybridType = BasicPolygon3d;
+  using PointType = BasicPoint3d;
   using BasicLineString3d::BasicLineString3d;
   BasicPolygon3d() = default;
 };
@@ -229,6 +233,7 @@ class ConstHybridPolygon3d : public ConstPolygon3d {
   using ConstType = ConstHybridPolygon3d;
   using TwoDType = ConstHybridPolygon2d;
   using ThreeDType = ConstHybridPolygon3d;
+  using PointType = BasicPoint3d;
 
   ConstHybridPolygon3d() = default;
 
@@ -273,6 +278,8 @@ class ConstHybridPolygon2d : public ConstPolygon2d {
   using ConstType = ConstHybridPolygon2d;
   using TwoDType = ConstHybridPolygon2d;
   using ThreeDType = ConstHybridPolygon3d;
+  using PointType = BasicPoint2d;
+  using HybridType = ConstHybridPolygon2d;
 
   ConstHybridPolygon2d() = default;
 
@@ -362,6 +369,23 @@ template <typename T>
 constexpr bool isPolygonT() {
   return isCategory<T, traits::PolygonTag>();
 }
+
+template <>
+struct PrimitiveTraits<BasicPolygon2d> {
+  using ConstType = BasicPolygon2d;
+  using MutableType = BasicPolygon2d;
+  using TwoDType = BasicPolygon2d;
+  using ThreeDType = BasicPolygon3d;
+  using Category = PolygonTag;
+};
+template <>
+struct PrimitiveTraits<BasicPolygon3d> {
+  using ConstType = BasicPolygon3d;
+  using MutableType = BasicPolygon3d;
+  using TwoDType = BasicPolygon2d;
+  using ThreeDType = BasicPolygon3d;
+  using Category = PolygonTag;
+};
 }  // namespace traits
 template <typename T, typename RetT>
 using IfPoly = std::enable_if_t<traits::isPolygonT<T>(), RetT>;

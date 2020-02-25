@@ -51,6 +51,13 @@ struct ReserveIfNecessary<std::vector<T>> {
   void operator()(std::vector<T>& c, size_t size) const { c.reserve(size); }
 };
 
+template <typename VectorT>
+inline VectorT createReserved(size_t size) {
+  VectorT vector;
+  ReserveIfNecessary<VectorT>()(vector, size);
+  return vector;
+}
+
 template <typename VectorT, typename ContainerT>
 VectorT concatenate(ContainerT&& c) {
   VectorT conced;
@@ -76,7 +83,7 @@ VectorT concatenate(ContainerT&& c, Func f) {
 
 template <typename ContainerT, typename Func>
 auto concatenateRange(ContainerT&& c, Func f) {
-  auto size = sum(c, [f](auto& elem) {
+  auto size = sum(c, [f](auto&& elem) {
     auto range = f(elem);
     return std::distance(range.first, range.second);
   });
@@ -84,7 +91,7 @@ auto concatenateRange(ContainerT&& c, Func f) {
   std::vector<RetT> ret;
   ret.reserve(size);
   MoveIf<std::is_rvalue_reference<decltype(c)>::value> move;
-  for (auto& elem : c) {
+  for (auto&& elem : c) {
     auto range = f(elem);
     ret.insert(ret.end(), move(range.first), move(range.second));
   }
@@ -93,7 +100,7 @@ auto concatenateRange(ContainerT&& c, Func f) {
 
 template <typename ContainerT, typename Func, typename AllocatorT>
 auto concatenateRange(ContainerT&& c, Func f, const AllocatorT& alloc) {
-  auto size = sum(c, [f](auto& elem) {
+  auto size = sum(c, [f](auto&& elem) {
     auto range = f(elem);
     return std::distance(range.first, range.second);
   });
@@ -101,7 +108,7 @@ auto concatenateRange(ContainerT&& c, Func f, const AllocatorT& alloc) {
   std::vector<RetT, AllocatorT> ret(alloc);
   ret.reserve(size);
   MoveIf<std::is_rvalue_reference<decltype(c)>::value> move;
-  for (auto& elem : c) {
+  for (auto&& elem : c) {
     auto range = f(elem);
     ret.insert(ret.end(), move(range.first), move(range.second));
   }
@@ -117,6 +124,8 @@ auto transform(Container&& c, Func f) {
   return transformed;
 }
 }  // namespace detail
+
+using detail::createReserved;
 
 //! Compares ids of primitives. Can be used for some stl algorithms
 template <typename PrimitiveT>
@@ -237,7 +246,7 @@ auto transformSharedPtr(const std::vector<std::shared_ptr<InT>>& v) {
 template <typename Range, typename Func>
 auto sum(Range&& r, Func f) {
   using ValT = decltype(f(*std::begin(r)));
-  return std::accumulate(std::begin(r), std::end(r), ValT(), [&f](auto v, auto& elem) { return v + f(elem); });
+  return std::accumulate(std::begin(r), std::end(r), ValT(), [&f](auto v, auto&& elem) { return v + f(elem); });
 }
 
 /**

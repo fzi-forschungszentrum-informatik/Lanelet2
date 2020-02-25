@@ -171,10 +171,11 @@ class LineStringData : public PrimitiveData {
 //! @ingroup Primitives
 //!
 //! ## General
-//! LineStrings are a series of line segments defined by an ordered list of
-//! points. Lanelet2 exist in const/non-const, 2d/3d and in normal/hybrid
-//! versions.
+//! LineStrings are a series of line segments defined by an ordered list of points.
+//! A LineString consists at least of one point and must not contain the same point
+//! multiple times in succession.
 //!
+//! LineStrings exist in const/non-const, 2d/3d and in normal/hybrid versions.
 //! They all have the same interface but differ in the point types they provide.
 //! While the normal versions return Point2d or Point3d as points,
 //! the hybrid versions only return Eigen points when iterating.
@@ -641,13 +642,15 @@ class ConstHybridLineString2d : public ConstLineString2d {
   BasicIterator end() const noexcept { return basicEnd(); }
 
   //! Get first BasicPoint2d
-  BasicPointType front() const noexcept { return ConstLineString2d::front().basicPoint(); }
+  const BasicPointType& front() const noexcept { return ConstLineString2d::front().basicPoint(); }
 
   //! Get last BasicPoint2d
-  BasicPointType back() const noexcept { return ConstLineString2d::back().basicPoint(); }
+  const BasicPointType& back() const noexcept { return ConstLineString2d::back().basicPoint(); }
 
   //! access element at specific position
-  BasicPointType operator[](size_t idx) const noexcept { return ConstLineString2d::operator[](idx).basicPoint(); }
+  const BasicPointType& operator[](size_t idx) const noexcept {
+    return ConstLineString2d::operator[](idx).basicPoint();
+  }
 
   /**
    * @brief returns the n-th segment. If n equals size() -1, the segment from
@@ -690,37 +693,6 @@ inline std::ostream& operator<<(std::ostream& stream, const ConstLineString3d& o
   return stream << "]";
 }
 
-namespace utils {
-/**
- * @brief returns true if element of a lanelet primitive has a matching Id
- * @param ls the element holding other primitives
- * @param id id to look for
- * @return true if the primitive has such an element
- *
- * This function does not look for the id of the element, only its members
- * Works for linestrings and polylines.
- * A similar implementation exists for regulatory elements and lanelets.
- */
-template <typename PointT>
-bool has(const ConstLineStringImpl<PointT>& ls, Id id) {
-  return std::any_of(ls.begin(), ls.end(), [&id](const auto& elem) { return elem.id() == id; });
-}
-}  // namespace utils
-
-namespace traits {
-template <typename LineStringT>
-using HybridT = typename LineStringTraits<LineStringT>::HybridType;
-
-template <typename LineStringT>
-constexpr auto toHybrid(const LineStringT ls) {
-  return HybridT<LineStringT>(ls);
-}
-}  // namespace traits
-
-namespace utils {
-using traits::toHybrid;
-}  // namespace utils
-
 // comparison
 template <typename LhsPointT, typename RhsPointT>
 bool operator==(const ConstLineStringImpl<LhsPointT>& lhs, const ConstLineStringImpl<RhsPointT>& rhs) {
@@ -756,9 +728,50 @@ template <typename T>
 constexpr bool isLinestringT() {
   return isCategory<T, traits::LineStringTag>();
 }
+
+namespace detail {
+template <typename T, typename Enable = void>
+struct HybridType {};
+
+template <typename T>
+struct HybridType<T, std::enable_if_t<traits::isLinestringT<T>(), void>> {
+  using Type = typename LineStringTraits<T>::HybridType;
+};
+template <typename T>
+struct HybridType<T, std::enable_if_t<!traits::isLinestringT<T>(), void>> {
+  using Type = typename LineStringTraits<T>::HybridType;
+};
+}  // namespace detail
+template <typename LineStringT>
+using HybridT = typename detail::HybridType<LineStringT>::Type;
+
+template <typename LineStringT>
+constexpr auto toHybrid(const LineStringT ls) {
+  return HybridT<LineStringT>(ls);
+}
 }  // namespace traits
+
 template <typename T, typename RetT>
 using IfLS = std::enable_if_t<traits::isLinestringT<T>(), RetT>;
+
+namespace utils {
+using traits::toHybrid;
+
+/**
+ * @brief returns true if element of a lanelet primitive has a matching Id
+ * @param ls the element holding other primitives
+ * @param id id to look for
+ * @return true if the primitive has such an element
+ *
+ * This function does not look for the id of the element, only its members
+ * Works for linestrings and polylines.
+ * A similar implementation exists for regulatory elements and lanelets.
+ */
+template <typename PointT>
+bool has(const ConstLineStringImpl<PointT>& ls, Id id) {
+  return std::any_of(ls.begin(), ls.end(), [&id](const auto& elem) { return elem.id() == id; });
+}
+}  // namespace utils
 
 }  // namespace lanelet
 

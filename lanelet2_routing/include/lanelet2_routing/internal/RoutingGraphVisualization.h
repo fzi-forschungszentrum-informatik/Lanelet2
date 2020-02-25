@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Exceptions.h"
 #include "Forward.h"
-#include "Graph.h"
+#include "internal/Graph.h"
 
 namespace lanelet {
 
@@ -13,10 +13,10 @@ namespace lanelet {
 inline std::istream& operator>>(std::istream& is, ConstLaneletOrArea& /*r*/) { return is; }
 
 namespace routing {
-
 inline std::ostream& operator<<(std::ostream& os, const RelationType& r) { return os << relationToString(r); }
-
 inline std::istream& operator>>(std::istream& is, const RelationType& /*r*/) { return is; }
+
+namespace internal {
 
 /** @brief Internal vertex writer for graphViz file export. */
 template <class Graph>
@@ -82,9 +82,9 @@ inline void exportGraphVizImpl(const std::string& filename, const G& g, E edgeFi
  *  @param relationTypes Relations that will be included in the export
  *  @param routingCostId ID of the routing cost module */
 template <typename G>
-inline void exportGraphVizImpl(const std::string& filename, const G& g, const RelationTypes& relationTypes,
+inline void exportGraphVizImpl(const std::string& filename, const G& g, const RelationType& relationTypes,
                                RoutingCostId routingCostId = 0) {
-  auto edgeFilter = EdgeCostFilter(g, routingCostId, relationTypes);
+  auto edgeFilter = EdgeCostFilter<G>(g, routingCostId, relationTypes);
   exportGraphVizImpl(filename, g, edgeFilter);
 }
 
@@ -102,7 +102,7 @@ inline void exportGraphMLImpl(const std::string& filename, const G& g, E eFilter
     throw lanelet::ExportError("Could not open file at " + filename + ".");
   }
 
-  auto filteredGraph{boost::filtered_graph<G, EdgeCostFilter>(g, eFilter, vFilter)};  // NOLINT
+  boost::filtered_graph<G, EdgeCostFilter<G>> filteredGraph(g, eFilter, vFilter);
 
   auto pmId = boost::get(&VertexInfo::laneletOrArea, filteredGraph);  // NOLINT
   auto pmRelation = boost::get(&EdgeInfo::relation, filteredGraph);
@@ -122,11 +122,11 @@ inline void exportGraphMLImpl(const std::string& filename, const G& g, E eFilter
  *  @param relationTypes Relations that will be included in the export
  *  @param routingCostId ID of the routing cost module */
 template <typename G>
-inline void exportGraphMLImpl(const std::string& filename, const G& g, const RelationTypes& relationTypes,
+inline void exportGraphMLImpl(const std::string& filename, const G& g, const RelationType& relationTypes,
                               RoutingCostId routingCostId = 0) {
-  auto edgeFilter = EdgeCostFilter(g, routingCostId, relationTypes);
+  auto edgeFilter = EdgeCostFilter<G>(g, routingCostId, relationTypes);
   exportGraphMLImpl(filename, g, edgeFilter);
 }
-
+}  // namespace internal
 }  // namespace routing
 }  // namespace lanelet

@@ -10,4 +10,5 @@ TEST(lanelet2_io, exampleUsage) {  // NOLINT
 
   std::string filenameOut = std::string(std::tmpnam(nullptr)) + ".osm";  // NOLINT
   lanelet::write(filenameOut, *laneletMap, origin);
+  LaneletMapPtr laneletMapAgain = lanelet::load(filenameOut, origin);
 }

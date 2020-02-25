@@ -1,62 +1,24 @@
-# Inspired by
-# Generic .travis.yml file for running continuous integration on Travis-CI for
-# any ROS package. (https://github.com/felixduvallet/ros-travis-integration)
-# by Felix Duvallet <felixd@gmail.com>
-
-################################################################################
-
-# Use ubuntu xenial (16.04) with sudo privileges.
-dist: xenial
+# Use docker with sudo privileges.
 sudo: required
-language:
-  - generic
-cache:
-  - apt
+services: docker
 
-# Configuration variables.
-env:
-  global:
-    - ROS_DISTRO=kinetic
-    - ROS_CI_DESKTOP="`lsb_release -cs`"  # e.g. [precise|trusty|...]
-    - CI_SOURCE_PATH=$(pwd)
-    - ROS_PARALLEL_JOBS='-j8 -l6'
-    # Set the python path manually to include /usr/-/python2.7/dist-packages
-    # as this is where apt-get installs python packages.
-    - PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/dist-packages:/usr/local/lib/python2.7/dist-packages
+# Build this with both 18.04 and 16.04
+matrix:
+    include:
+    - env:
+      - DISTRIBUTION=18.04
+      - ROS_DISTRO=melodic
+    - env:
+      - DISTRIBUTION=16.04
+      - ROS_DISTRO=kinetic
 
-################################################################################
+# setup the container with dependencies
+install: docker build --target lanelet2_deps -t lanelet2_deps --build-arg=DISTRIBUTION=$DISTRIBUTION --build-arg=ROS_DISTRO=$ROS_DISTRO .
 
-before_install:
-  - sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $ROS_CI_DESKTOP main\" > /etc/apt/sources.list.d/ros-latest.list"
-  - sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
-  - sudo apt-get update -qq
-
-install:
-  # build system
-  - sudo apt-get install -y python-catkin-pkg python-catkin-tools ros-$ROS_DISTRO-catkin ros-$ROS_DISTRO-rospack
-  - sudo apt-get install -y ros-$ROS_DISTRO-ros-environment # missing dep of rospack on xenial
-
-  # lanelet2 specific deps
-  - sudo apt-get install -y libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev ros-$ROS_DISTRO-rosbash
-
-before_script:
-  # source ros-$ROS_DISTRO-catkin to find the catkin cmake module
-  - source /opt/ros/$ROS_DISTRO/setup.bash
-  # set up the workspace (clone and build)
-  - cd
-  - mkdir catkin_ws && cd catkin_ws && mkdir src
-  - catkin init
-  - catkin config --cmake-args -DCMAKE_BUILD_TYPE=Debug
-  # clone the packages into the src folder
-  - cd src
-  - git clone https://github.com/KIT-MRT/mrt_cmake_modules.git
-  - ln -s $CI_SOURCE_PATH . # instead of "git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git" because Lanelet2 is already cloned here
-  - cd ..
-
+# start the container with the code, build and test
 script:
-  # build the packages
-  - catkin build --no-status --continue-on-failure
-  # run tests
-  - catkin build --catkin-make-args run_tests -- --no-status
-  # summarize test results
-  - catkin_test_results --verbose
+- docker run -dit --name lanelet2 -v `pwd`:/home/developer/workspace/src/lanelet2 --rm lanelet2_deps bash
+- docker exec -ti lanelet2 /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build --no-status"
+- docker exec -ti lanelet2 catkin build --catkin-make-args run_tests -- --no-status
+- docker exec -ti lanelet2 /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin_test_results --verbose"
+- docker stop lanelet2

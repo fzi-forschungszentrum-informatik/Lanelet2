@@ -1,5 +1,6 @@
 #include "io_handlers/OsmFile.h"
 #include <lanelet2_core/utility/Utilities.h>
+#include <boost/format.hpp>
 #include <iostream>
 
 namespace lanelet {
@@ -24,10 +25,17 @@ constexpr const char* Id = "id";
 constexpr const char* Lat = "lat";
 constexpr const char* Lon = "lon";
 constexpr const char* Version = "version";
+constexpr const char* Visible = "visible";
 constexpr const char* Elevation = "ele";
 constexpr const char* Action = "action";
 constexpr const char* Delete = "delete";
 }  // namespace keyword
+
+struct UnresolvedRole {
+  Id relation{};
+  Id referencedRelation{};
+  Primitive** location{};
+};
 
 Attributes tags(const pugi::xml_node& node) {
   Attributes attributes;
@@ -44,6 +52,43 @@ Attributes tags(const pugi::xml_node& node) {
 bool isDeleted(const pugi::xml_node& node) {
   auto action = node.attribute(keyword::Action);
   return action && std::string(action.value()) == keyword::Delete;  // NOLINT
+}
+
+std::string toJosmStyle(double d) {
+  std::string str = boost::str(boost::format{"%12.11f"} % d);
+  str.erase(str.find_last_not_of('0') + 1, std::string::npos);
+  str.erase(str.find_last_not_of('.') + 1, std::string::npos);
+  return str;
+}
+
+void removeAndFixPlaceholders(Primitive** toRemove, Roles& fromRoles, std::vector<UnresolvedRole>& placeholders) {
+  // find other placeholders that we have to fix
+  auto remIt =
+      std::find_if(fromRoles.begin(), fromRoles.end(), [&](const Role& role) { return &role.second == toRemove; });
+  assert(remIt != fromRoles.end());
+  std::vector<std::pair<size_t, Primitive**>> placeholderLocations;
+  for (auto it = fromRoles.begin(); it != fromRoles.end(); ++it) {
+    if (it->second == nullptr && remIt != it) {
+      auto idx = std::distance(fromRoles.begin(), it);
+      placeholderLocations.emplace_back(it > remIt ? idx - 1 : idx, &it->second);
+    }
+  }
+  fromRoles.erase(remIt);
+  if (placeholderLocations.empty()) {
+    return;  // nothing to update
+  }
+  // get the new locations
+  std::map<Primitive**, Primitive**> newLocations;
+  for (auto& loc : placeholderLocations) {
+    newLocations.emplace(loc.second, &std::next(fromRoles.begin(), long(loc.first))->second);
+  }
+  // adapt existing locations
+  for (auto& placeholder : placeholders) {
+    auto it = newLocations.find(placeholder.location);
+    if (it != newLocations.end()) {
+      placeholder.location = it->second;
+    }
+  }
 }
 
 class OsmFileWriter {
@@ -73,11 +118,13 @@ class OsmFileWriter {
     for (const auto& node : nodes) {
       auto xmlNode = osmNode.append_child(keyword::Node);
       xmlNode.append_attribute(keyword::Id) = LongLong(node.second.id);
-      xmlNode.append_attribute(keyword::Lat) = node.second.point.lat;
-      xmlNode.append_attribute(keyword::Lon) = node.second.point.lon;
       if (node.second.id > 0) {
+        xmlNode.append_attribute(keyword::Visible) = "true";
         xmlNode.append_attribute(keyword::Version) = 1;
       }
+      xmlNode.append_attribute(keyword::Lat) = toJosmStyle(node.second.point.lat).c_str();
+      xmlNode.append_attribute(keyword::Lon) = toJosmStyle(node.second.point.lon).c_str();
+
       if (node.second.point.ele != 0.) {
         auto tagNode = xmlNode.append_child(keyword::Tag);
         tagNode.append_attribute(keyword::Key) = keyword::Elevation;
@@ -91,10 +138,11 @@ class OsmFileWriter {
     for (const auto& wayElem : ways) {
       const auto& way = wayElem.second;
       auto xmlNode = osmNode.append_child(keyword::Way);
+      xmlNode.append_attribute(keyword::Id) = LongLong(way.id);
       if (way.id > 0) {
+        xmlNode.append_attribute(keyword::Visible) = "true";
         xmlNode.append_attribute(keyword::Version) = 1;
       }
-      xmlNode.append_attribute(keyword::Id) = LongLong(way.id);
       for (const auto& node : way.nodes) {
         auto nd = xmlNode.append_child(keyword::Nd);
         nd.append_attribute(keyword::Ref) = LongLong(node->id);
@@ -109,6 +157,7 @@ class OsmFileWriter {
       auto xmlNode = osmNode.append_child(keyword::Relation);
       xmlNode.append_attribute(keyword::Id) = LongLong(relation.id);
       if (relation.id > 0) {
+        xmlNode.append_attribute(keyword::Visible) = "true";
         xmlNode.append_attribute(keyword::Version) = 1;
       }
       for (const auto& role : relation.members) {
@@ -188,10 +237,9 @@ class OsmFileParser {
 
   Relations readRelations(const pugi::xml_node& osmNode, Nodes& nodes, Ways& ways) {
     Relations relations;
-    using UnresolvedRole = std::pair<std::string, Id>;
-    using UnresolvedRoles = std::vector<UnresolvedRole>;
-    using UnresolvedRolesPair = std::pair<Relation*, UnresolvedRoles>;
-    std::vector<UnresolvedRolesPair> unresolvedRelations;     //!< relations referring to other relations
+    // Two-pass approach: We can resolve all roles except where relations reference relations. We insert a dummy nullptr
+    // and resolve that later on.
+    std::vector<UnresolvedRole> unresolvedRoles;
     for (auto node = osmNode.child(keyword::Relation); node;  // NOLINT
          node = node.next_sibling(keyword::Relation)) {
       if (isDeleted(node)) {
@@ -199,10 +247,10 @@ class OsmFileParser {
       }
       const auto id = node.attribute(keyword::Id).as_llong(InvalId);
       const auto attributes = tags(node);
+      auto& relation = relations.emplace(id, Relation{id, attributes, {}}).first->second;
 
       // resolve members
-      Roles roles;
-      UnresolvedRoles unresolvedRoles;
+      auto& roles = relation.members;
       for (auto member = node.child(keyword::Member); member;  // NOLINT
            member = member.next_sibling(keyword::Member)) {
         Id memberId = member.attribute(keyword::Ref).as_llong();
@@ -210,32 +258,32 @@ class OsmFileParser {
         const std::string type = member.attribute(keyword::Type).value();
         try {
           if (type == keyword::Node) {
-            roles.insert(std::make_pair(role, &nodes.at(memberId)));
+            roles.emplace_back(role, &nodes.at(memberId));
           } else if (type == keyword::Way) {
-            roles.insert(std::make_pair(role, &ways.at(memberId)));
+            roles.emplace_back(role, &ways.at(memberId));
           } else if (type == keyword::Relation) {
-            unresolvedRoles.push_back({role, memberId});
+            // insert a placeholder and store a pointer to it for the second pass
+            roles.emplace_back(role, nullptr);
+            unresolvedRoles.push_back(UnresolvedRole{id, memberId, &roles.back().second});
           }
         } catch (std::out_of_range&) {
           reportParseError(id, "Relation has nonexistent member " + std::to_string(memberId));
         }
       }
-      auto inserted = relations.insert(Relations::value_type{id, Relation{id, attributes, roles}});
-      if (!unresolvedRoles.empty()) {
-        unresolvedRelations.emplace_back(&inserted.first->second, unresolvedRoles);
-      }
     }
 
     // now resolve all unresolved roles that point to other relations
-    for (const auto& unresolvedRelation : unresolvedRelations) {
-      for (const auto& role : unresolvedRelation.second) {
-        try {
-          unresolvedRelation.first->members.insert(std::make_pair(role.first, &relations.at(role.second)));
-
-        } catch (std::out_of_range&) {
-          reportParseError(unresolvedRelation.first->id,
-                           "Relation references nonexistent relation " + std::to_string(role.second));
-        }
+    for (const auto& unresolvedRole : unresolvedRoles) {
+      try {
+        assert(*unresolvedRole.location == nullptr);
+        *unresolvedRole.location = &relations.at(unresolvedRole.referencedRelation);
+      } catch (std::out_of_range&) {
+        reportParseError(unresolvedRole.relation, "Relation references nonexistent relation " +
+                                                      std::to_string(unresolvedRole.referencedRelation));
+        // now it gets ugly: find placeholder and remove it. Fix all other placeholders because the pointers are
+        // invalidated after moving. This is inefficent, but its the fault of the guy loading an invalid map, not ours.
+        auto& relation = relations.at(unresolvedRole.relation);
+        removeAndFixPlaceholders(unresolvedRole.location, relation.members, unresolvedRoles);
       }
     }
     return relations;
@@ -264,24 +312,12 @@ bool operator==(const Way& lhs, const Way& rhs) {
 
 bool operator==(const Relation& lhs, const Relation& rhs) {
   auto membersEqual = [&lhs, &rhs]() {
-    try {
-      for (const auto& member : lhs.members) {
-        auto rhsmem = rhs.members.equal_range(member.first);
-        while (rhsmem.first != rhsmem.second) {
-          if (member.second->type() == rhsmem.first->second->type() && member.second->id == rhsmem.first->second->id) {
-            break;
-          }
-          ++rhsmem.first;
-        }
-        if (rhsmem.first == rhsmem.second) {
-          return false;
-        }
+    for (auto itL = lhs.members.begin(), itR = rhs.members.begin(); itL != lhs.members.end(); ++itL, ++itR) {
+      if (itL->second->type() != itR->second->type() && itL->second->id != itR->second->id) {
+        return false;
       }
-      return true;
-
-    } catch (std::out_of_range&) {
-      return false;
     }
+    return true;
   };
   return lhs.id == rhs.id && lhs.members.size() == rhs.members.size() && membersEqual();
 }

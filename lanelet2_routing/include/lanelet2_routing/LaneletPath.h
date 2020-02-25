@@ -2,11 +2,13 @@
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
+#include <lanelet2_core/utility/Optional.h>
+#include "Forward.h"
 
 namespace lanelet {
 namespace routing {
-//! A lanelet path represents a set of lanelets that can be reached in order by either driving straight or doing lane
-//! changes.
+//! @brief A lanelet path represents a set of lanelets that can be reached in order by either driving straight or doing
+//! lane changes.
 class LaneletPath {
  public:
   using iterator = ConstLanelets::iterator;              // NOLINT

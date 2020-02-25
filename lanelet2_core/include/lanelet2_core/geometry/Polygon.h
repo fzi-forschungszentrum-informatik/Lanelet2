@@ -178,7 +178,7 @@ struct exterior_ring<LLPolygon3d> {
 
 template <>
 struct interior_rings<LLPolygon3d> {
-  static lanelet::BasicPolygons3d get(LLPolygon3d& p) { return p.inner; }
+  static lanelet::BasicPolygons3d& get(LLPolygon3d& p) { return p.inner; }
   static const lanelet::BasicPolygons3d& get(LLPolygon3d const& p) { return p.inner; }
 };
 
@@ -215,7 +215,7 @@ struct exterior_ring<LLPolygon2d> {
 
 template <>
 struct interior_rings<LLPolygon2d> {
-  static lanelet::BasicPolygons2d get(LLPolygon2d& p) { return p.inner; }
+  static lanelet::BasicPolygons2d& get(LLPolygon2d& p) { return p.inner; }
   static const lanelet::BasicPolygons2d& get(LLPolygon2d const& p) { return p.inner; }
 };
 }  // namespace traits
@@ -229,10 +229,6 @@ namespace lanelet {
 namespace geometry {
 using boost::geometry::area;
 using boost::geometry::within;
-
-//! Computes the distance of a polygon and a point in 2d (ie ignoring z)
-template <typename PolygonT>
-IfPoly<PolygonT, double> distance2d(const PolygonT& poly, const BasicPoint2d& p);
 
 /**
  * @brief computes the distance of the outer bounds of two polygons in 3d.
@@ -253,22 +249,6 @@ IfPoly<Polygon3dT, BoundingBox3d> boundingBox3d(const Polygon3dT& polygon);
 
 template <typename Polygon2dT>
 IfPoly<Polygon2dT, BoundingBox2d> boundingBox2d(const Polygon2dT& polygon);
-
-// implementations
-template <typename PolygonT>
-IfPoly<PolygonT, double> distance2d(const PolygonT& poly1, const PolygonT& poly2) {
-  return distance(traits::toHybrid(traits::to2D(poly1)), traits::toHybrid(traits::to2D(poly2)));
-}
-
-template <typename PolygonT, typename LineStringT>
-IfPoly<PolygonT, IfLS<LineStringT, double>> distance2d(const PolygonT& poly, const LineStringT& ls) {
-  return distance(traits::toHybrid(traits::to2D(poly)), traits::toHybrid(traits::to2D(ls)));
-}
-
-template <typename PolygonT>
-IfPoly<PolygonT, double> distance2d(const PolygonT& poly, const BasicPoint2d& p) {
-  return distance(traits::to2D(traits::toConst(poly)), p);
-}
 
 template <typename Polygon3dT>
 IfPoly<Polygon3dT, BoundingBox3d> boundingBox3d(const Polygon3dT& polygon) {

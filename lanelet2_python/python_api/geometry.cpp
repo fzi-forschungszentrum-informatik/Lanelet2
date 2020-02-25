@@ -1,11 +1,16 @@
-#include <boost/python.hpp>
-
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/geometry/Area.h>
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/geometry/LineString.h>
 #include <lanelet2_core/geometry/Polygon.h>
 #include <lanelet2_core/geometry/RegulatoryElement.h>
+#include <boost/geometry/geometries/register/multi_linestring.hpp>
+#include <boost/python.hpp>
+#include "converter.h"
+
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::LineStrings2d);
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstLineStrings2d);
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstHybridLineStrings2d);
 
 using namespace boost::python;
 using namespace lanelet;
@@ -15,9 +20,16 @@ using HybridLs2d = ConstHybridLineString2d;
 
 template <typename PrimT>
 auto wrapFindNearest() {
-  using Sig = std::vector<std::pair<double, PrimT>> (*)(PrimitiveLayer<PrimT>&, const BasicPoint2d&, unsigned);
+  using ResultT = std::vector<std::pair<double, PrimT>>;
+  using Sig = ResultT (*)(PrimitiveLayer<PrimT>&, const BasicPoint2d&, unsigned);
   auto func = static_cast<Sig>(lanelet::geometry::findNearest);
+  converters::PairConverter<std::pair<double, PrimT>>();
+  converters::VectorToListConverter<ResultT>();
   return def("findNearest", func);
+}
+
+std::vector<BasicPoint2d> toBasicVector(const BasicPoints2d& pts) {
+  return utils::transform(pts, [](auto& p) { return BasicPoint2d(p.x(), p.y()); });
 }
 
 template <typename T>
@@ -30,24 +42,60 @@ lanelet::BoundingBox3d boundingBox3dFor(const T& t) {
   return lanelet::geometry::boundingBox3d(t);
 }
 
+#define TO2D_AS(X)                        \
+  if (extract<X>(o).check()) {            \
+    return object(to2D(extract<X>(o)())); \
+  }
+
+#define TO3D_AS(X)                        \
+  if (extract<X>(o).check()) {            \
+    return object(to3D(extract<X>(o)())); \
+  }
+
+template <typename PtT>
+double distancePointToLss(const PtT& p, object lss) {
+  auto distance = [](PtT p, auto range) {
+    return boost::geometry::distance(p, utils::transform(range, [](auto& v) { return utils::toHybrid(v); }));
+  };
+  if (extract<ConstLineStrings2d>(lss).check()) {
+    return distance(p, extract<ConstLineStrings2d>(lss)());
+  }
+  return distance(p, extract<LineStrings2d>(lss)());
+}
+
+object to2D(object o) {
+  using utils::to2D;
+  TO2D_AS(Point3d);
+  TO2D_AS(BasicPoint3d);
+  TO2D_AS(ConstPoint3d);
+  TO2D_AS(LineString3d);
+  TO2D_AS(LineString3d);
+  TO2D_AS(ConstLineString3d);
+  TO2D_AS(Polygon3d);
+  TO2D_AS(ConstPolygon3d);
+  return o;
+}
+
+object to3D(object o) {
+  using utils::to3D;
+  TO3D_AS(Point2d);
+  TO3D_AS(BasicPoint2d);
+  TO3D_AS(ConstPoint2d);
+  TO3D_AS(LineString2d);
+  TO3D_AS(LineString2d);
+  TO3D_AS(ConstLineString2d);
+  TO3D_AS(Polygon2d);
+  TO3D_AS(ConstPolygon2d);
+  return o;
+}
+#undef TO2D_AS
+#undef TO3D_AS
+
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   namespace lg = lanelet::geometry;
 
-  def("to2D", utils::to2D<Point3d>);
-  def("to2D", utils::to2D<BasicPoint3d>);
-  def("to2D", utils::to2D<ConstPoint3d>);
-  def("to2D", utils::to2D<LineString3d>);
-  def("to2D", utils::to2D<ConstLineString3d>);
-  def("to2D", utils::to2D<Polygon3d>);
-  def("to2D", utils::to2D<ConstPolygon3d>);
-
-  def("to3D", utils::to3D<Point2d>);
-  def("to3D", utils::to2D<BasicPoint2d>);
-  def("to3D", utils::to3D<ConstPoint2d>);
-  def("to3D", utils::to3D<LineString2d>);
-  def("to3D", utils::to3D<ConstLineString2d>);
-  def("to3D", utils::to3D<Polygon2d>);
-  def("to3D", utils::to3D<ConstPolygon2d>);
+  def("to2D", to2D);
+  def("to3D", to3D);
 
   // p2p
   def("distance", lg::distance<BasicPoint2d, BasicPoint2d>);
@@ -60,6 +108,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("distance", lg::distance<HybridLs2d, ConstPoint2d>);
   def("distance", lg::distance<ConstPoint2d, ConstLineString2d>);
   def("distance", lg::distance<ConstLineString2d, ConstPoint2d>);
+  def("distance", lg::distance<BasicPoint2d, ConstLineString2d>);
+  def("distance", lg::distance<ConstLineString2d, BasicPoint2d>);
 
   // l2l
   def("distance", +[](const ConstLineString2d& ls1, const ConstLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
@@ -68,6 +118,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   // poly2p
   def("distance", lg::distance<ConstHybridPolygon2d, BasicPoint2d>);
   def("distance", +[](const ConstPolygon2d& p1, const BasicPoint2d& p2) { return lg::distance2d(p1, p2); });
+  def("distance",
+      +[](const ConstPolygon2d& p1, const ConstPoint2d& p2) { return lg::distance2d(p1, p2.basicPoint()); });
 
   // poly2ls
   def("distance", +[](const ConstPolygon2d& p1, const ConstLineString2d& p2) { return lg::distance2d(p1, p2); });
@@ -76,6 +128,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   // poly2poly
   def("distance", lg::distance<ConstHybridPolygon2d, ConstHybridPolygon2d>);
   def("distance", +[](const ConstPolygon2d& p1, const ConstPolygon2d& p2) { return lg::distance2d(p1, p2); });
+  def("distance", +[](const ConstHybridPolygon2d& p1, const ConstPolygon2d& p2) { return lg::distance2d(p1, p2); });
+  def("distance", +[](const CompoundPolygon2d& p1, const ConstPolygon2d& p2) { return lg::distance2d(p1, p2); });
+  def("distance", +[](const ConstPolygon2d& p1, const ConstHybridPolygon2d& p2) { return lg::distance2d(p1, p2); });
 
   // p2llt
   def("distance", +[](const ConstLanelet& llt, const BasicPoint2d& p) { return lg::distance2d(llt, p); });
@@ -97,12 +152,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("distance", lg::distance<ConstPoint3d, ConstLineString3d>);
   def("distance", lg::distance<ConstLineString3d, ConstPoint3d>);
 
+  // p2lines
+  def("distanceToLines", distancePointToLss<ConstPoint2d>);
+  def("distanceToLines", distancePointToLss<BasicPoint2d>);
+  def("distanceToLines", distancePointToLss<ConstPoint2d>);
+  def("distanceToLines", distancePointToLss<BasicPoint2d>);
+
   // l2l
   def("distance", +[](const ConstLineString3d& ls1, const ConstLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
   def("distance", +[](const HybridLs3d& ls1, const HybridLs3d& ls2) { return lg::distance3d(ls1, ls2); });
 
   // p2llt
-  def("distance", lg::distance3d<ConstLanelet>);
+  def("distance", lg::distance3d<ConstLanelet, BasicPoint3d>);
 
   // p2area
   def("distance", +[](const ConstArea& llt, const BasicPoint3d& p) { return lg::distance3d(llt, p); });
@@ -172,13 +233,17 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   def("inside", lg::inside<ConstLanelet>, "tests whether a point is within a lanelet");
   def("length2d", lg::length2d<ConstLanelet>, "calculate length of centerline");
+  def("approximatedLength2d", lg::approximatedLength2d<ConstLanelet>,
+      "approximates length by sampling points along left bound");
   def("length3d", lg::length3d<ConstLanelet>, "calculate length of centerline in 3d");
   def("distanceToCenterline2d", lg::distanceToCenterline2d<ConstLanelet>);
   def("distanceToCenterline3d", lg::distanceToCenterline3d<ConstLanelet>);
   def("overlaps2d", lg::overlaps2d<ConstLanelet, ConstLanelet>, "Returns true if shared area of two lanelets is >0");
   def("overlaps3d", lg::overlaps3d<ConstLanelet, ConstLanelet>, "Approximates if two lanelets overlap (area  >0) in 3d",
       (arg("lanelet1"), arg("lanelet2"), arg("heightTolerance") = 3.));
-  def("intersectCenterlines2d", lg::intersectCenterlines2d<ConstLanelet, ConstLanelet>);
+  def("intersectCenterlines2d", +[](const ConstLanelet& ll1, const ConstLanelet& ll2) {
+    return toBasicVector(lg::intersectCenterlines2d(ll1, ll2));
+  });
 
   def("leftOf", lg::leftOf<ConstLanelet, ConstLanelet>, "Returns if first lanelet is directly left of second");
   def("rightOf", lg::rightOf<ConstLanelet, ConstLanelet>, "Returns if first lanelet is directly right of second");
@@ -186,6 +251,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   wrapFindNearest<Point3d>();
   wrapFindNearest<LineString3d>();
+  wrapFindNearest<Polygon3d>();
   wrapFindNearest<Lanelet>();
   wrapFindNearest<Area>();
   wrapFindNearest<RegulatoryElementPtr>();

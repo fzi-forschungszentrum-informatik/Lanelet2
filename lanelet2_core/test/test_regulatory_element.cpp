@@ -161,12 +161,16 @@ TEST_F(RegulatoryElementTest, ConstructValidTrafficSign) {  // NOLINT
 
   EXPECT_EQ(ts->type(), "de205");
 
-  ASSERT_TRUE(!!ts->cancelType());
-  EXPECT_EQ(*ts->cancelType(), "de206");
-  EXPECT_TRUE(ts->removeCancellingTrafficSign(poly1));
+  ASSERT_TRUE(!ts->cancelTypes().empty());
+  EXPECT_EQ(ts->cancelTypes().front(), "de206");
 
-  ts->addCancellingTrafficSign(ls2);
-  EXPECT_THROW(ts->cancelType(), InvalidInputError);  // NOLINT
+  ts->addCancellingTrafficSign({{ls2}, "de207"});
+  std::vector<std::string> expect{"de206", "de207"};
+  EXPECT_EQ(ts->cancelTypes(), expect);
+
+  EXPECT_TRUE(ts->removeCancellingTrafficSign(poly1));
+  ASSERT_TRUE(!ts->cancelTypes().empty());
+  EXPECT_EQ(ts->cancelTypes().front(), "de207");
 }
 
 // ============ Speed limit ===========================
@@ -205,4 +209,38 @@ TEST_F(RegulatoryElementTest, ConstructValidRightOfWay) {  // NOLINT
   row->setStopLine(ls1);
   EXPECT_EQ(row->getManeuver(ll3), ManeuverType::RightOfWay);
   EXPECT_EQ(ls1, *row->stopLine());
+}
+
+// =========== All Way Stop ==============================
+TEST_F(RegulatoryElementTest, FactoryCannotConstructInvalidAllWayStop) {  // NOLINT
+  regelemData->parameters[RoleName::Yield].emplace_back(ll1);
+  regelemData->parameters[RoleName::Yield].emplace_back(ll2);
+  regelemData->parameters[RoleName::RefLine].emplace_back(ls1);
+  // NOLINTNEXTLINE
+  EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::AllWayStop, regelemData), InvalidInputError);
+  regelemData->parameters[RoleName::RefLine].emplace_back(ls1);
+  regelemData->parameters[RoleName::RightOfWay].emplace_back(ll1);
+  // NOLINTNEXTLINE
+  EXPECT_THROW(RegulatoryElementFactory::create(AttributeValueString::AllWayStop, regelemData), InvalidInputError);
+}
+
+TEST_F(RegulatoryElementTest, FactoryConstructsAllWayStop) {  // NOLINT
+  auto row = AllWayStop::make(++id, AttributeMap(), {{ll1, ls1}});
+  auto factoryAws = RegulatoryElementFactory::create(row->attribute(AttributeName::Subtype).value(),
+                                                     std::const_pointer_cast<RegulatoryElementData>(row->constData()));
+  EXPECT_TRUE(!!std::dynamic_pointer_cast<AllWayStop>(factoryAws));
+}
+
+TEST_F(RegulatoryElementTest, ConstructValidAllWayStop) {  // NOLINT
+  auto row = AllWayStop::make(++id, AttributeMap(), {{ll1, ls1}});
+  EXPECT_EQ(row->stopLines().size(), 1UL);
+  EXPECT_EQ(row->lanelets().size(), 1UL);
+  EXPECT_TRUE(row->trafficSigns().empty());
+  EXPECT_EQ(row->getStopLine(ll1), ls1);
+  EXPECT_TRUE(row->removeLanelet(ll1));
+  EXPECT_TRUE(row->lanelets().empty());
+  EXPECT_TRUE(row->trafficSigns().empty());
+  row->addLanelet({ll2, {}});
+  EXPECT_THROW(row->addLanelet({ll1, ls1}), InvalidInputError);  // NOLINT
+  EXPECT_TRUE(row->trafficSigns().empty());
 }

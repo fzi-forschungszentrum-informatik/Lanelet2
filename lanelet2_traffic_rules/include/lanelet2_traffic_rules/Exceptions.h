@@ -1,3 +1,4 @@
+#pragma once
 #include <lanelet2_core/Exceptions.h>
 
 namespace lanelet {

@@ -4,6 +4,7 @@
 namespace lanelet {
 namespace traits {
 struct PointTag {};              //! Identifies PointPrimitives
+struct BoundingBoxTag {};        //! Identifies bounding boxes
 struct LineStringTag {};         //! Identifies LineStringPrimitives
 struct PolygonTag {};            //! Identifies PolygonPrimitives
 struct LaneletTag {};            //! Identifies LaneletPrimitives
@@ -144,6 +145,13 @@ struct LineStringTraits : PrimitiveTraits<LineStringT> {
   using HybridType = typename LineStringT::HybridType;
 };
 
+//! Specialization of traits for polygons
+template <typename PolygonT>
+struct PolygonTraits : PrimitiveTraits<PolygonT> {
+  using PointType = typename PolygonT::PointType;
+  using HybridType = typename PolygonT::HybridType;
+};
+
 template <typename PointT>
 using BasicPointT = typename PointTraits<PointT>::BasicPoint;
 
@@ -171,7 +179,12 @@ auto toBasicPoint(const PointT& point)
 
 template <typename PrimT, typename TagT>
 constexpr bool isCategory() {
-  return std::is_same<typename PrimitiveTraits<PrimT>::Category, TagT>::value;
+  return std::is_same<typename PrimitiveTraits<std::decay_t<PrimT>>::Category, TagT>::value;
+}
+
+template <typename T>
+constexpr bool noRegelem() {
+  return !traits::isCategory<T, traits::RegulatoryElementTag>();
 }
 
 template <typename LineStringT>

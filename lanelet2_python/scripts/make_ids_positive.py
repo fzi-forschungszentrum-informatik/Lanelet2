@@ -4,10 +4,12 @@ import lanelet2
 import sys
 import argparse
 
+
 def make_positive(layer):
     for elem in layer:
         if elem.id < 0:
             elem.id = layer.uniqueId()
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("filename", help="Path to the input osm file")
@@ -19,7 +21,7 @@ args = parser.parse_args()
 if args.inplace:
     args.output = args.filename
 
-proj = lanelet2.projection.MercatorProjector(lanelet2.io.Origin(49,8))
+proj = lanelet2.projection.MercatorProjector(lanelet2.io.Origin(49, 8))
 map = lanelet2.io.load(args.filename, proj)
 
 

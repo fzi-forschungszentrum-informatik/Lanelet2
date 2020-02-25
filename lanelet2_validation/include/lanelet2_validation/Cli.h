@@ -1,3 +1,4 @@
+#pragma once
 #include "Validation.h"
 
 namespace lanelet {

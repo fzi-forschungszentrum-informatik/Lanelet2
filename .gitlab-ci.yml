@@ -1,179 +1,43 @@
-variables:
-  GIT_STRATEGY: none
-  LANELET2_PACKAGES: lanelet2_core lanelet2_io lanelet2_projection lanelet2_python lanelet2_routing lanelet2_traffic_rules lanelet2_validation
-# Cache build results between building and testing
-cache:
-  paths:
-  - catkin_ws/
-stages:
-  - build
-  - test
-  - deploy
+#version=1.5
+include:
+   - project: 'pub/mrt_cmake_modules'
+     ref: master
+     file: '/ci_templates/default_catkin_project.yml'
 
-# Prepare workspace and checkout the code. This will be executed before every stage
-before_script:
-  # Environment variablen setzen
-  - export SHELL="/bin/bash"
-  # Prepare workspace (in folder catkin_ws)
-  - sudo apt-get update
-  - mrt ci prepare $CI_PROJECT_NAME -c $CI_COMMIT_SHA
-  - cd catkin_ws
-  # add current branch name to branch management
-  - mrt ws branches add $CI_COMMIT_REF_NAME
-
-# Tests installing on a plain system
-build_vanilla:
-  image: ros
-  cache: {}
-  before_script: []
+# Tests installing on a plain system without mrt stuff using the provided Docker image
+.build_docker: &build_docker
   stage: build
-  script:
-    - apt-get update
-    - apt-get install -y libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
-    - mkdir catkin_ws && cd catkin_ws && mkdir src
-    - catkin init
-    - cd src
-    - git clone https://github.com/KIT-MRT/mrt_cmake_modules.git
-    - git clone $CI_REPOSITORY_URL -b $CI_COMMIT_REF_NAME
-    - cd ..
-    - catkin build
-
-build_mrt:
-  stage: build
-  script:
-  # Build project and resolve deps at the same time in debug mode
-  - mrt catkin build -s -rd --debug --default_yes --no-status $CI_PROJECT_NAME
-  # generate documentation
-  - mrt doc clean && mrt doc build
-  - cp -r build_debug/workspace_doc_* ../doxygen
-  # make doxygen documentation available in gitlab
-  artifacts:
-    name: doxygen
-    paths:
-    - doxygen
-    expire_in: 6 mos
-
-    
-general_code_quality:
-  stage: build
-  image: docker:stable
+  image: docker:18.09
+  only:
+  - master
+  - merge_requests
   before_script: []
   cache: {}
+  services:
+    - docker:18.09-dind
+  script:
+    - export IMAGE_NAME=$CI_REGISTRY_IMAGE:$DISTRIBUTION
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build --cache-from $IMAGE_NAME -t $IMAGE_NAME --build-arg=DISTRIBUTION=$DISTRIBUTION --build-arg=ROS_DISTRO=$ROS_DISTRO .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then docker push $IMAGE_NAME; fi
+
+build_docker_xenial:
+  <<: *build_docker
   variables:
+    DISTRIBUTION: "16.04"
+    ROS_DISTRO: kinetic
     DOCKER_DRIVER: overlay2
     GIT_STRATEGY: fetch
-  allow_failure: true
-  services:
-    - docker:stable-dind
-  script:
-    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
-    - docker run
-        --env SOURCE_CODE="$PWD"
-        --volume "$PWD":/code
-        --volume /var/run/docker.sock:/var/run/docker.sock
-        "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
-    - chmod a+rw gl-code-quality-report.json
-  artifacts:
-    paths: [gl-code-quality-report.json]
-   
 
-.test: &test_job
-  stage: test
-  coverage: '/lines: \d+.\d+\%/'
-  cache:
-    paths:
-    - catkin_ws/
-    policy: pull
-  script:
-  # Build code again, in case caching didn't work
-  - mrt catkin build -s -rd --debug --default_yes --no-status $PACKAGE
-  # Run tests
-  - source devel_debug/setup.bash
-  - mrt catkin run_tests --no-status $PACKAGE --no-deps
-  # Summarize results
-  - catkin_test_results --verbose build_debug/$PACKAGE
-  - mkdir ../coverage
-  - cp -r build_debug/$PACKAGE/coverage ../coverage/$PACKAGE || true
-  # make coverage information available in gitlab
-  artifacts:
-    name: coverage
-    paths:
-    - coverage
-    expire_in: 6 mos
-    reports:
-      junit: catkin_ws/build_debug/$PACKAGE/test_results/$PACKAGE/*.xml
+build_docker_bionic:
+  <<: *build_docker
+  variables:
+    DISTRIBUTION: "18.04"
+    ROS_DISTRO: melodic
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: fetch
 
-test_lanelet2_core:
-  <<: *test_job
-  variables:
-    PACKAGE: lanelet2_core
-
-test_lanelet2_io:
-  <<: *test_job
-  variables:
-    PACKAGE: lanelet2_io
-    
-test_lanelet2_projection:
-  <<: *test_job
-  variables:
-    PACKAGE: lanelet2_projection
-    
-test_lanelet2_python:
-  <<: *test_job
-  variables:
-    PACKAGE: lanelet2_python
-    
-test_lanelet2_routing:
-  <<: *test_job
-  variables:
-    PACKAGE: lanelet2_routing
-    
-test_lanelet2_traffic_rules:
-  <<: *test_job
-  variables:
-    PACKAGE: lanelet2_traffic_rules
-
-test_lanelet2_validation:
-  <<: *test_job
-  variables:
-    PACKAGE: lanelet2_validation
-
-test_lanelet2_examples:
-  <<: *test_job
-  variables:
-    PACKAGE: lanelet2_examples
-    
-code_quality:
-  allow_failure: true
-  cache:
-    paths:
-    - catkin_ws/
-    policy: pull
-  artifacts:
-    paths: [gl-code-quality-report.json]
-  script:
-  - cat ../gl-code-quality-report.json || true
-  # Build code again, in case caching didn't work
-  - mrt catkin build -s -rd --debug --default_yes --no-status $CI_PROJECT_NAME
-  - source devel_debug/setup.bash
-  - cd src/lanelet2
-  - rm codeclimate.json || true
-  - cp ../../../gl-code-quality-report.json codeclimate.json || true
-  - mrt ci run_clang_tidy -e $LANELET2_PACKAGES
-  - cp codeclimate.json ../../../gl-code-quality-report.json
-
-pages:
-  before_script: []
-  stage: deploy
-  script:
-  # everything in the public folder will be available as website
-  - mkdir public
-  - cp -r coverage public/ || true
-  - cp -r doxygen public/
-  artifacts:
-    paths:
-    - public
-  only:
-  # only execute for master branch
-  - master
+check_code_quality:
+    allow_failure: true
 

@@ -11,10 +11,11 @@ Regulatory Elements always have `type=regulatory_element`. If this tag is not pr
 
 ### Subtype
 The `subtype` tag helps Lanelet2 to distinguish between the different regulatory elements. For the basic Regulatory Elements this would be:
-* *traffic_light*
 * *traffic_sign*
+* *traffic_light*
 * *speed_limit*
 * *right_of_way*
+* *all_way_stop*
 
 ### Other, Optional Tags
 The following tags can be used to add more information to a Regulatory Element (of course you can add you own to enhance your map and implement a new `TrafficRule` object that implements them). The default values for the tag are highlighted.
@@ -25,7 +26,7 @@ The following tags can be used to add more information to a Regulatory Element (
 
 ## Parameters
 
-The main feature of a Regulatory Element is that it can reference other parts of the map that are important for the traffic restriction that they represent. These parts are called *parameters* of a Regulatory Element. Every parameter is characterized by a role (a string) that explains what he expresses within the Regulatory Element. Multiple parameters can have the same role if they do not contradict. 
+The main feature of a Regulatory Element is that it can reference other parts of the map that are important for the traffic restriction that they represent. These parts are called *parameters* of a Regulatory Element. Every parameter is characterized by a role (a string) that explains what he expresses within the Regulatory Element. Multiple parameters can have the same role if they do not contradict.
 
 An example of parameters are the traffic lights that referenced by the *refers* role of a `TrafficLight` Regulatory Element. These are the traffic lights that a vehicle has to pay attention to when driving along a specific lanelet/area that has this Regulatory Elements. Because parameters with the same role cannot contradict, this means all traffic lights must refer to the same driving direction within that intersection.
 
@@ -59,4 +60,68 @@ By default, intersecting lanelets are treated as a "first come first served" sit
 * *ref_line*: The lines where vehicles that are crossing a *yield* lanelet have to stop at. If not set, this is the end of the *yield* lanelet.
 
 Only one lanelet of a chain of lanelets that belong to the same lane have to be referenced. Generally this is the last lanelet that can be undoubtedly assigned to one specific intersection arm (i.e. the last lanelet before the intersection begins). All lanelets that are mentioned by the right of way Regulatory Element also have to reference the regulatory element.
+
+### All Way Stop
+
+While in a *Right of Way* regelem, the right of way only depends on the lanelet, the right of way in an [All-Way Stop](https://en.wikipedia.org/wiki/All-way_stop) regelem depends on the order of arrival and the route through the intersection. Therefore, all lanelets are potentially yield lanelets. All approaching vehicles have to stop before entering the intersection.
+The intersection entry is either defined by one stop line for each lanelet or is otherwise determined by the end of each lanelet. To avoid confusion when matching lanelets and stop lines, an *All Way Stop* regelem is only valid if either no lanelet has a stop line or all lanelets have exactly one.
+The following roles are used in an all way stop:
+* *yield*: References the lanelets that might have to yield
+* *ref_line*: The lines where *yield* lanelets have to stop. This either empty or has the same order and size as the number of lanelets in *yield*.
+* *refers*: The traffic sign(s) that constitute this rule
+
+All lanelets referenced in this regelem also have to reference this regelem.
+
+## OSM XML Examples
+
+Below are some examples of regulatory element relations as they might look in lanelet2's OSM XML format.
+
+### Traffic Light
+
+```xml
+<relation id='1'>
+  <tag k='type' v='regulatory_element' />
+  <tag k='subtype' v='traffic_light' />
+  <!-- stop line -->
+  <member type='way' ref='2' role='ref_line' />
+  <!-- traffic light -->
+  <member type='way' ref='3' role='refers' />
+</relation>
+```
+
+### Speed Limit
+
+```xml
+<relation id='1'>
+  <tag k='subtype' v='speed_limit' />
+  <tag k='type' v='regulatory_element' />
+  <!-- Traffic sign(s) that constitute this rule -->
+  <member type='way' ref='2' role='refers' />
+</relation>
+```
+
+### All Way Stop
+
+Below is an example of a 4-way stop intersection.
+```xml
+<relation id='1'>
+  <tag k='type' v='regulatory_element' />
+  <tag k='subtype' v='all_way_stop' />
+  <!-- Lanelets participating in the 4-way stop -->
+  <member type='relation' ref='2' role='yield' />
+  <member type='relation' ref='3' role='yield' />
+  <member type='relation' ref='4' role='yield' />
+  <member type='relation' ref='5' role='yield' />
+  <!-- Traffic signs that constitute this rule -->
+  <member type='way' ref='6' role='refers' />
+  <member type='way' ref='7' role='refers' />
+  <member type='way' ref='8' role='refers' />
+  <member type='way' ref='9' role='refers' />
+  <!-- stop lines for the lanelets (same order as lanelets) -->
+  <member type='way' ref='10' role='ref_line' />
+  <member type='way' ref='11' role='ref_line' />
+  <member type='way' ref='12' role='ref_line' />
+  <member type='way' ref='13' role='ref_line' />
+</relation>
+```
 

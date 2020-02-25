@@ -99,17 +99,17 @@ Strings availabeChecks(const std::string& filterString) {
   return ValidatorFactory::instance().availableValidators(parseFilterString(filterString));
 }
 
-std::pair<Strings, Strings> buildReport(std::vector<DetectedIssues> issues) {
-  std::pair<Strings, Strings> report;
+IssueReport buildReport(std::vector<DetectedIssues> issues) {
+  IssueReport report;
   for (auto& issue : issues) {
     auto buildReports = [& check = issue.checkName](auto& issue) { return issue.buildReport() + " [" + check + "]"; };
     auto errorsFromCheck = utils::transform(issue.errors(), buildReports);
     if (!errorsFromCheck.empty()) {
-      report.first.insert(report.first.end(), errorsFromCheck.begin(), errorsFromCheck.end());
+      report.errors.insert(report.errors.end(), errorsFromCheck.begin(), errorsFromCheck.end());
     }
     auto warningsFromCheck = utils::transform(issue.warnings(), buildReports);
     if (!warningsFromCheck.empty()) {
-      report.second.insert(report.second.end(), warningsFromCheck.begin(), warningsFromCheck.end());
+      report.warnings.insert(report.warnings.end(), warningsFromCheck.begin(), warningsFromCheck.end());
     }
   }
   return report;

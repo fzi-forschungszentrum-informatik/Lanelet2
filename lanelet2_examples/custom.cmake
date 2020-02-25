@@ -1,0 +1,1 @@
+target_compile_definitions(lanelet2_examples_private_compiler_flags INTERFACE PKG_DIR="${CMAKE_CURRENT_LIST_DIR}")

@@ -202,12 +202,12 @@ TEST_F(GermanVehicleGraph, FollowingWithoutLaneChangeInvalid) {  // NOLINT
 TEST_F(GermanVehicleGraph, FollowingWithLaneChange) {  // NOLINT
   // Multiple1
   ConstLanelets following = graph->following(lanelets.at(2001), true);
-  EXPECT_EQ(following.size(), 2);
+  EXPECT_EQ(following.size(), 2ul);
   EXPECT_TRUE(std::find(following.begin(), following.end(), lanelets.at(2002)) != following.end());
   EXPECT_TRUE(std::find(following.begin(), following.end(), lanelets.at(2003)) != following.end());
 
   following = graph->following(lanelets.at(2003), true);
-  EXPECT_EQ(following.size(), 2);
+  EXPECT_EQ(following.size(), 2ul);
   EXPECT_TRUE(std::find(following.begin(), following.end(), lanelets.at(2001)) != following.end());
   EXPECT_TRUE(std::find(following.begin(), following.end(), lanelets.at(2004)) != following.end());
 
@@ -233,7 +233,7 @@ TEST_F(GermanVehicleGraph, FollowingWithLaneChangeMerging) {  // NOLINT
 TEST_F(GermanVehicleGraph, FollowingWithLaneChangeDiverging) {  // NOLINT
   // Single Lane -> Diverging
   ConstLanelets following = graph->following(lanelets.at(2007), true);
-  EXPECT_EQ(following.size(), 2);
+  EXPECT_EQ(following.size(), 2ul);
   EXPECT_TRUE(std::find(following.begin(), following.end(), lanelets.at(2008)) != following.end());
   EXPECT_TRUE(std::find(following.begin(), following.end(), lanelets.at(2009)) != following.end());
 }
@@ -295,7 +295,7 @@ TEST_F(GermanVehicleGraph, PreviousWithoutLaneChangeMerging) {  // NOLINT
 
 TEST_F(GermanVehicleGraph, PreviousWithoutLaneChangeSingleLane) {  // NOLINT
   ConstLanelets previous = graph->previous(lanelets.at(2007), false);
-  EXPECT_EQ(previous.size(), 2);
+  EXPECT_EQ(previous.size(), 2ul);
   EXPECT_TRUE(std::find(previous.begin(), previous.end(), lanelets.at(2005)) != previous.end());
   EXPECT_TRUE(std::find(previous.begin(), previous.end(), lanelets.at(2006)) != previous.end());
 }
@@ -382,7 +382,7 @@ TEST_F(GermanVehicleGraph, PreviousWithLaneChangeMerging) {  // NOLINT
 
 TEST_F(GermanVehicleGraph, PreviousWithLaneChangeSingleLane) {  // NOLINT
   ConstLanelets previous = graph->previous(lanelets.at(2007), true);
-  EXPECT_EQ(previous.size(), 2);
+  EXPECT_EQ(previous.size(), 2ul);
   EXPECT_TRUE(std::find(previous.begin(), previous.end(), lanelets.at(2005)) != previous.end());
   EXPECT_TRUE(std::find(previous.begin(), previous.end(), lanelets.at(2006)) != previous.end());
 }

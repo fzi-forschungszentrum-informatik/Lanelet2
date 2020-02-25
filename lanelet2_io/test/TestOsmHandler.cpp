@@ -9,7 +9,7 @@
 using namespace lanelet;
 
 template <typename T, typename TT>
-T writeAndLoad(const T& value, TT(LaneletMap::*layer)) {
+T writeAndLoad(const T& value, TT(LaneletMapLayers::*layer)) {
   LaneletMap llmap;
   llmap.add(value);
 
@@ -53,6 +53,13 @@ TEST(OsmHandler, writeAndLoadMapWithCenterlineLanelet) {  // NOLINT
   EXPECT_EQ(lltLoad.centerline().inverted(), centerline.inverted());
 }
 
+TEST(OsmHandler, writeAndLoadMapWithPolygon) {  // NOLINT
+  auto num = 1;
+  Polygon3d poly{test_setup::setUpLineString(num)};
+  auto polyLoad = writeAndLoad(poly, &LaneletMap::polygonLayer);
+  EXPECT_EQ(poly.id(), polyLoad.id());
+}
+
 TEST(OsmHandler, writeAndLoadMapWithOneArea) {  // NOLINT
   auto map = std::make_unique<lanelet::LaneletMap>();
   auto num = 1;
@@ -82,8 +89,8 @@ TEST(OsmHandler, writeMapWithIncompleteRegelem) {  // NOLINT
   auto regElem = test_setup::setUpRegulatoryElement(num);
   lanelet::LaneletMap map({}, {}, {{regElem->id(), regElem}}, {}, {}, {});
   ErrorMessages errsWrite;
-  io_handlers::OsmWriter parser(defaultProjection(Origin({0, 0, 0})));
-  auto file = parser.toOsmFile(map, errsWrite);
+  auto projector = defaultProjection(Origin({0, 0, 0}));
+  auto file = io_handlers::OsmWriter(projector).toOsmFile(map, errsWrite);
   EXPECT_GT(errsWrite.size(), 0ul);
 }
 
@@ -92,8 +99,8 @@ TEST(OsmHandler, writeMapWithIncompleteLanelet) {  // NOLINT
   auto llt = test_setup::setUpLanelet(num);
   lanelet::LaneletMap map({{llt.id(), llt}}, {}, {}, {}, {}, {});
   ErrorMessages errsWrite;
-  io_handlers::OsmWriter parser(defaultProjection(Origin({0, 0, 0})));
-  auto file = parser.toOsmFile(map, errsWrite);
+  auto projector = defaultProjection(Origin({0, 0, 0}));
+  auto file = io_handlers::OsmWriter(projector).toOsmFile(map, errsWrite);
   EXPECT_GT(errsWrite.size(), 0ul);
 }
 

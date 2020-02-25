@@ -18,11 +18,22 @@ Lanelet bufferLanelet(Lanelet llt, double z) {
   return Lanelet(llt.id(), left, right);
 };
 
+void testHasIntersection(const ConstHybridLineString2d& ls, const ConstHybridLineString2d& lsRef) {
+  Points2d intersectionPts;
+  boost::geometry::intersection(ls, lsRef, intersectionPts);
+  for (auto& pt : intersectionPts) {
+    EXPECT_TRUE(geometry::distance(pt, lsRef.front()) < 0.01 || geometry::distance(pt, lsRef.back()) < 0.01);
+  }
+}
+
 void testCenterline(const ConstLineString3d& centerline, const ConstLineString3d& leftBound,
                     const ConstLineString3d& rightBound) {
   EXPECT_GE(centerline.size(), 2ul);
-  EXPECT_FALSE(geometry::intersects(ConstHybridLineString2d(centerline), ConstHybridLineString2d(leftBound)));
-  EXPECT_FALSE(geometry::intersects(ConstHybridLineString2d(centerline), ConstHybridLineString2d(rightBound)));
+  ConstHybridLineString2d lb(leftBound);
+  ConstHybridLineString2d rb(rightBound);
+  ConstHybridLineString2d c(centerline);
+  testHasIntersection(c, lb);
+  testHasIntersection(c, rb);
 }
 
 class LaneletTest : public ::testing::Test {
@@ -42,7 +53,6 @@ class LaneletTest : public ::testing::Test {
     right = LineString3d(++id, Points3d{p3, p4});
     other = LineString3d(++id, Points3d{p5, p6, p7});
     outside = LineString3d(++id, Points3d{p8, p9});
-
     ritterLanelet = Lanelet(++id, left, right);
     constRitterLanelet = ritterLanelet;
   }
@@ -281,6 +291,24 @@ Lanelet buildLinearTestCase(size_t numPoints) {
   return Lanelet(++id, left, right);
 }
 
+Lanelet buildTouchingTestCase(bool inverted) {
+  /*
+   * Shape:
+   * \__
+   *    \
+   * ----x
+   */
+  Id id{1};
+  Point3d p11(++id, 0, 3);
+  Point3d p12(++id, 1, 1);
+  Point3d p13(++id, 4, 0);
+  Point3d p21(++id, 0, 0);
+  Point3d p22(++id, 1, 0);
+  LineString3d left(++id, {p11, p12, p13});
+  LineString3d right(++id, {p21, p22, p13});
+  return inverted ? Lanelet(++id, right.invert(), left.invert()) : Lanelet(++id, left, right);
+}
+
 TEST(ComplexLaneletTest, complexCenterline) {  // NOLINT
   auto lanelet = buildComplexTestCase();
   auto centerline = lanelet.centerline();
@@ -289,6 +317,18 @@ TEST(ComplexLaneletTest, complexCenterline) {  // NOLINT
 
 TEST(ComplexLaneletTest, linearCenterline) {  // NOLINT
   auto lanelet = buildLinearTestCase(20);
+  auto centerline = lanelet.centerline();
+  testCenterline(centerline, lanelet.leftBound(), lanelet.rightBound());
+}
+
+TEST(ComplexLaneletTest, touchingCenterlineForward) {  // NOLINT
+  auto lanelet = buildTouchingTestCase(false);
+  auto centerline = lanelet.centerline();
+  testCenterline(centerline, lanelet.leftBound(), lanelet.rightBound());
+}
+
+TEST(ComplexLaneletTest, touchingCenterlineBackward) {  // NOLINT
+  auto lanelet = buildTouchingTestCase(true);
   auto centerline = lanelet.centerline();
   testCenterline(centerline, lanelet.leftBound(), lanelet.rightBound());
 }

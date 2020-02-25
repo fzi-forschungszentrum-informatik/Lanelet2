@@ -14,11 +14,11 @@
    viewBox="0 0 166.71931 55.58594"
    version="1.1"
    id="svg9418"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="max-hose.svg"
-   inkscape:export-filename="/home/mayr/catkin_ws/src/lanelet2_routing/doc/Images/max-hose.png"
-   inkscape:export-xdpi="28.559072"
-   inkscape:export-ydpi="28.559072">
+   inkscape:export-filename="/home/poggenhans/workspace/lanelet2/src/lanelet2/lanelet2_routing/doc/images/max-hose.png"
+   inkscape:export-xdpi="96.040001"
+   inkscape:export-ydpi="96.040001">
   <defs
      id="defs9412">
     <marker
@@ -613,15 +613,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="224.82113"
+     inkscape:cx="-39.586298"
      inkscape:cy="187.99879"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="2495"
-     inkscape:window-height="1416"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-width="3773"
+     inkscape:window-height="2105"
+     inkscape:window-x="1987"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -679,7 +679,7 @@
        style="fill:none;fill-rule:evenodd;stroke:#999999;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m -29.187667,126.16655 41.567331,0"
+       d="M -29.187667,126.16655 H 12.379664"
        id="path9963"
        inkscape:connector-curvature="0"
        inkscape:path-effect="#path-effect9965"
@@ -689,11 +689,11 @@
        inkscape:path-effect="#path-effect9992"
        inkscape:connector-curvature="0"
        id="path9990"
-       d="m -29.187667,98.887985 41.567331,0"
+       d="M -29.187667,98.887985 H 12.379664"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m -29.187667,71.609428 41.567331,0"
+       d="M -29.187667,71.609428 H 12.379664"
        id="path9994"
        inkscape:connector-curvature="0"
        inkscape:path-effect="#path-effect9996"
@@ -703,7 +703,7 @@
        inkscape:path-effect="#path-effect10000"
        inkscape:connector-curvature="0"
        id="path9998"
-       d="m 86.0672,126.16648 41.56733,0"
+       d="m 86.0672,126.16648 h 41.56733"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
        ry="0.88054717"
@@ -717,7 +717,7 @@
        transform="matrix(0,1,-1,0,0,0)" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:8.00000013, 8.00000013;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 86.0672,99.478369 41.56733,0"
+       d="m 86.0672,99.478369 h 41.56733"
        id="path10002"
        inkscape:connector-curvature="0"
        inkscape:path-effect="#path-effect10004"
@@ -727,18 +727,18 @@
        inkscape:path-effect="#path-effect10008"
        inkscape:connector-curvature="0"
        id="path10006"
-       d="m 86.0672,71.609372 41.56733,0"
+       d="m 86.0672,71.609372 h 41.56733"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        inkscape:original-d="m 42.610448,112.82242 c 4.408708,1.7e-4 8.817366,1.7e-4 13.225968,0"
        inkscape:path-effect="#path-effect10028"
        inkscape:connector-curvature="0"
        id="path10026"
-       d="m 42.610448,112.82242 13.225968,0"
+       d="M 42.610448,112.82242 H 55.836416"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 42.610448,84.953426 13.225968,0"
+       d="M 42.610448,84.953426 H 55.836416"
        id="path10030"
        inkscape:connector-curvature="0"
        inkscape:path-effect="#path-effect10032"
@@ -777,7 +777,7 @@
        sodipodi:nodetypes="cssc" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.99999999, 5.99999992;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 12.379664,71.609428 0,54.557122"
+       d="M 12.379664,71.609428 V 126.16655"
        id="path11288"
        inkscape:connector-curvature="0"
        inkscape:path-effect="#path-effect11290"
@@ -787,11 +787,11 @@
        inkscape:path-effect="#path-effect11294"
        inkscape:connector-curvature="0"
        id="path11292"
-       d="m 42.610447,84.953426 0,27.868994"
+       d="M 42.610447,84.953426 V 112.82242"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.99999999, 5.9999999;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.99999999, 5.9999999;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 55.836416,84.953426 0,27.868994"
+       d="M 55.836416,84.953426 V 112.82242"
        id="path11296"
        inkscape:connector-curvature="0"
        inkscape:path-effect="#path-effect11298"
@@ -801,18 +801,18 @@
        inkscape:path-effect="#path-effect11302"
        inkscape:connector-curvature="0"
        id="path11300"
-       d="m 86.0672,71.609373 0,54.557107"
+       d="M 86.0672,71.609373 V 126.16648"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.99999999, 5.99999998;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        inkscape:original-d="m -8.7814065,115.14582 c 1.684e-4,-10.42828 1.684e-4,-20.856375 0,-31.284293"
        inkscape:path-effect="#path-effect13580"
        inkscape:connector-curvature="0"
        id="path13578"
-       d="m -8.7814065,115.14582 0,-31.284293"
+       d="M -8.7814065,115.14582 V 83.861527"
        style="fill:#ff0000;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker13584)" />
     <path
        style="fill:#ff0000;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker14216)"
-       d="m -12.622478,82.816885 0,30.910825"
+       d="M -12.622478,82.816885 V 113.72771"
        id="path14210"
        inkscape:connector-curvature="0"
        inkscape:path-effect="#path-effect14212"
@@ -875,7 +875,7 @@
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker19578)" />
     <path
        style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker21134)"
-       d="m 112.29582,116.88959 0,-33.591051"
+       d="M 112.29582,116.88959 V 83.298539"
        id="path21124"
        inkscape:connector-curvature="0"
        inkscape:path-effect="#path-effect21126"
@@ -885,40 +885,37 @@
        inkscape:path-effect="#path-effect21130"
        inkscape:connector-curvature="0"
        id="path21128"
-       d="m 108.45475,81.716212 0,34.292938"
+       d="M 108.45475,81.716212 V 116.00915"
        style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker21918)" />
     <text
-       sodipodi:linespacing="0%"
        id="text5651"
        y="97.631126"
        x="113.35424"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px"
          y="97.631126"
          x="113.35424"
          id="tspan5649"
          sodipodi:role="line">Left</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="97.411919"
        y="104.07826"
-       id="text22126"
-       sodipodi:linespacing="0%"><tspan
+       id="text22126"><tspan
          sodipodi:role="line"
          id="tspan22124"
          x="97.411919"
          y="104.07826"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px">Right</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px">Right</tspan></text>
     <text
        id="text22792"
        y="117.85757"
        x="7.2444301"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"
-       sodipodi:linespacing="0%"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px"
          y="117.85757"
          x="7.2444301"
          id="tspan22790"
@@ -927,68 +924,62 @@
        id="text22804"
        y="99.930573"
        x="56.551601"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"
-       sodipodi:linespacing="0%"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px"
          y="99.930573"
          x="56.551601"
          id="tspan22802"
-         sodipodi:role="line">Diverging</tspan></text>
+         sodipodi:role="line">Succeeding</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="26.773815"
-       y="100.31449"
-       id="text22928"
-       sodipodi:linespacing="0%"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="21.499697"
+       y="100.59958"
+       id="text22928"><tspan
          sodipodi:role="line"
          id="tspan22926"
-         x="26.773815"
-         y="100.31449"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px">Merging</tspan></text>
+         x="21.499697"
+         y="100.59958"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px">Succeeding</tspan></text>
     <text
        id="text22932"
        y="82.618652"
        x="7.2444301"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"
-       sodipodi:linespacing="0%"
        inkscape:transform-center-x="4.809688"
        inkscape:transform-center-y="-0.35627393"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px"
          y="82.618652"
          x="7.2444301"
          id="tspan22930"
          sodipodi:role="line">Succeeding</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-39.116493"
        y="96.641075"
-       id="text22130"
-       sodipodi:linespacing="0%"><tspan
+       id="text22130"><tspan
          sodipodi:role="line"
          id="tspan22128"
          x="-39.116493"
          y="96.641075"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;fill:#ff0000;stroke-width:0.26458332px">Adjacent Left</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;fill:#ff0000;stroke-width:0.26458332px">Adjacent Left</tspan></text>
     <text
        id="text22134"
        y="104.26753"
        x="-7.6638408"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"
-       sodipodi:linespacing="0%"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;fill:#ff0000;stroke-width:0.26458332px"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;fill:#ff0000;stroke-width:0.26458332px"
          y="104.26753"
          x="-7.6638408"
          id="tspan22132"
          sodipodi:role="line">Adjacent Right</tspan></text>
     <text
-       sodipodi:linespacing="0%"
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="74.223793"
        y="118.39198"
        id="text4456"><tspan
@@ -996,13 +987,12 @@
          id="tspan4458"
          x="74.223793"
          y="118.39198"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px">Succeeding</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px">Succeeding</tspan></text>
     <text
        inkscape:transform-center-y="-0.35627599"
        inkscape:transform-center-x="4.8096869"
-       sodipodi:linespacing="0%"
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571875px;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Computer Modern';-inkscape-font-specification:'Computer Modern';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="74.936348"
        y="82.440514"
        id="text4460"><tspan
@@ -1010,7 +1000,7 @@
          id="tspan4462"
          x="74.936348"
          y="82.440514"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px">Succeeding</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.96571898px;line-height:0;font-family:ubuntu;-inkscape-font-specification:ubuntu;stroke-width:0.26458332px">Succeeding</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"

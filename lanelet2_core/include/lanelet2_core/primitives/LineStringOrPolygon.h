@@ -80,8 +80,7 @@ class LineStringOrPolygonBase {
     return {};
   }
 
-  bool operator==(const LineStringOrPolygonBase& other) const { return lsOrPoly_ == other.lsOrPoly_; }
-  bool operator!=(const LineStringOrPolygonBase& other) const { return !(*this == other); }
+  bool equals(const LineStringOrPolygonBase& other) const { return lsOrPoly_ == other.lsOrPoly_; }
 
  protected:
   boost::variant<LineStringT, PolygonT> lsOrPoly_;  // NOLINT
@@ -123,6 +122,16 @@ class ConstLineStringOrPolygon3d : public LineStringOrPolygonBase<ConstLineStrin
     return applyVisitor([](auto& prim) { return ConstRuleParameter(prim); });
   }
 };
+
+inline bool operator==(const LineStringOrPolygon3d& lhs, const LineStringOrPolygon3d& rhs) { return lhs.equals(rhs); }
+inline bool operator!=(const LineStringOrPolygon3d& lhs, const LineStringOrPolygon3d& rhs) { return !(lhs == rhs); }
+
+inline bool operator==(const ConstLineStringOrPolygon3d& lhs, const ConstLineStringOrPolygon3d& rhs) {
+  return lhs.equals(rhs);
+}
+inline bool operator!=(const ConstLineStringOrPolygon3d& lhs, const ConstLineStringOrPolygon3d& rhs) {
+  return !(lhs == rhs);
+}
 
 using LineStringsOrPolygons3d = std::vector<LineStringOrPolygon3d>;
 using ConstLineStringsOrPolygons3d = std::vector<ConstLineStringOrPolygon3d>;
