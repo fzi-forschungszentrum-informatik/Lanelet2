@@ -904,7 +904,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LaneletMap, bases<LaneletMapLayers>, LaneletMapPtr, boost::noncopyable>(
       "LaneletMap", "Object for managing a lanelet map", init<>("LaneletMap()"))
-      .def("add", selectSubmapAdd<Point3d>())
+      .def("add", selectAdd<Point3d>())
       .def("add", selectAdd<Lanelet>())
       .def("add", selectAdd<Area>())
       .def("add", selectAdd<LineString3d>())
