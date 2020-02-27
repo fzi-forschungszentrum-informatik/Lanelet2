@@ -282,6 +282,61 @@ IfPoly<Polygon2dT, bool> overlaps2d(const Polygon2dT& poly1, const Polygon2dT& p
 
 template <typename Polygon3dT>
 IfPoly<Polygon3dT, bool> overlaps3d(const Polygon3dT& poly1, const Polygon3dT& poly2, double heightTolerance);
+
+/**
+ *
+ * @brief Split a concave polygon into convex parts
+ *
+ * Internally computes a Delaunay triangulation which is greedily merged into convex parts. Guaranteed to deliver a
+ * partition with at most 2N+1 parts if N is minimum partition. Since boost only allows integral types, the
+ * triangulation is only millimeter-accurate, even though the resulting points are identical to the input points.
+ *
+ * @tparam Polygon2dT Polygon Type
+ * @param poly Polygon to partition
+ * @return a list of convex polygons yielding the original polygon if merged.
+ */
+template <typename Polygon2dT>
+IfPoly<Polygon2dT, BasicPolygons2d> convexPartition(const Polygon2dT& poly);
+/**
+ *
+ * @brief Split a concave polygon into convex parts
+ *
+ * Internally computes a Delaunay triangulation which is greedily merged into convex parts. Guaranteed to deliver a
+ * partition with at most 2N+1 parts if N is minimum partition. Since boost only allows integral types, the
+ * triangulation is only millimeter-accurate, even though the resulting points are identical to the input points.
+ *
+ * @param poly BasicPolygon2d to partition
+ * @return a list of convex polygons yielding the original polygon if merged.
+ */
+template <>
+IfPoly<BasicPolygon2d, BasicPolygons2d> convexPartition<BasicPolygon2d>(const BasicPolygon2d& poly);
+using IndexedTriangle = std::array<size_t, 3>;
+using IndexedTriangles = std::vector<IndexedTriangle>;
+
+/**
+ *
+ * @brief Split a concave polygon into triangles
+ *
+ * Internally computes a Delaunay triangulation.
+ *
+ * @tparam Polygon2dT Polygon Type
+ * @param poly Polygon to partition
+ * @return a list of indices sets. Each set refers to a triangle in the original polygon.
+ */
+template <typename Polygon2dT>
+IfPoly<Polygon2dT, IndexedTriangles> triangulate(const Polygon2dT& poly);
+/**
+ *
+ * @brief Split a concave polygon into triangles
+ *
+ * Internally computes a Delaunay triangulation.
+ *
+ * @param poly Polygon to partition
+ * @return a list of indices sets. Each set refers to a triangle in the original polygon.
+ */
+template <>
+IfPoly<BasicPolygon2d, IndexedTriangles> triangulate<BasicPolygon2d>(const BasicPolygon2d& poly);
+
 }  // namespace geometry
 }  // namespace lanelet
 

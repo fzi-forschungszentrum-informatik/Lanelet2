@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <boost/geometry/algorithms/perimeter.hpp>
+#include <random>
 #include "geometry/Polygon.h"
 #include "primitives/CompoundPolygon.h"
 #include "primitives/Polygon.h"
@@ -40,11 +41,21 @@ class PolygonPoints : public ::testing::Test {
     p32 = Point3d(++id, 1., 1., 2.);
     p33 = Point3d(++id, 2., 1., 2.);
     p34 = Point3d(++id, 2., 0., 2.);
+    /*
+     *      p42    X
+     *           /   \
+     *         /   X   \
+     *       / -/ p44 \- \
+     * p41 X/            \X p43
+     */
+    p41 = Point3d(++id, 1.5, 1.5, 2.);
+    p42 = Point3d(++id, 1.5, 0.5, 2.);
   }
 
   Point3d p11, p12, p13;
   Point3d p21, p22, p23;
   Point3d p31, p32, p33, p34;
+  Point3d p41, p42;
 };
 
 template <typename T>
@@ -52,14 +63,38 @@ class PolygonTypeTest : public PolygonPoints {
  public:
   using PolygonT = T;
   PolygonTypeTest() {
-    Id id{10};
+    Id id{20};
     AttributeMap poly1Attrs{{AttributeNamesString::Type, AttributeValueString::Curbstone}};
     poly1 = toPolygon<T>(Polygon3d{++id, {p11, p12, p13}, poly1Attrs});
     poly2 = toPolygon<T>(Polygon3d{++id, {p21, p22, p23}});
     poly3 = toPolygon<T>(Polygon3d{++id, {p31, p32, p33, p34}});
+    Polygon3d temp{++id, {p31, p41, p34, p42}};
+    simpleStar = toPolygon<T>(temp);
+    subdivide(temp, 2, ++id);
+    fancyStar = toPolygon<T>(temp);
   }
 
-  PolygonT poly1, poly2, poly3;
+  PolygonT poly1, poly2, poly3, fancyStar, simpleStar;
+
+ private:
+  void randomSubdivide(Polygon3d& poly, const size_t after, const int nNew, Id id) const {
+    BasicPoint3d delta =
+        (utils::toBasicPoint(poly[(after + 1) % poly.size()]) - utils::toBasicPoint(poly[after])) / (2 * nNew + 1);
+    std::vector<Point3d> points;
+    for (size_t i(0); i < nNew; ++i) {
+      points.emplace_back(Point3d(++id, utils::toBasicPoint(poly[after]) + (2 * i + floatRand_() + 1) * delta));
+    }
+    Polygon3d newLs(++id, points);
+    poly.insert(poly.begin() + ((after + 1) % poly.size()), newLs.begin(), newLs.end());
+  }
+  void subdivide(Polygon3d& poly, const int n, Id id) {
+    auto initSize = poly.size();
+    for (size_t i = 0; i < initSize; ++i) {
+      randomSubdivide(poly, (n + 1) * i, n, id);
+    }
+  }
+  std::function<double(void)> floatRand_ =
+      std::bind(std::uniform_real_distribution<double>(-0.5, 0.5), std::mt19937(133769420));
 };
 
 template <typename PolygonT>
@@ -78,13 +113,18 @@ class CompoundPolygonTypeTest : public PolygonPoints {
     ConstLineString3d tempLs22{++id, {p22, p23}};
     ConstLineString3d tempLs31{++id, {p31, p32}};
     ConstLineString3d tempLs32{++id, {p33, p34}};
+    ConstLineString3d tempStar1{++id, {p31, p41, p34}};
+    ConstLineString3d tempStar2{++id, {p34, p42}};
+
     poly1 = PolygonT({tempLs11});
     poly2 = PolygonT({tempLs21, tempLs22});
     poly3 = PolygonT({tempLs31, tempLs32});
+    simpleStar = PolygonT({tempStar1, tempStar2});
+    fancyStar = simpleStar;
   }
 
  public:
-  PolygonT poly1, poly2, poly3;
+  PolygonT poly1, poly2, poly3, fancyStar, simpleStar;
 };
 
 template <typename T>
@@ -234,4 +274,73 @@ TYPED_TEST(TwoDPolygonsTest, toBasicPolygon) {  // NOLINT
   auto pBasic = this->poly3.basicPolygon();
   EXPECT_EQ(4, boost::geometry::perimeter(pBasic));
   EXPECT_EQ(4ul, pBasic.size());
+}
+
+inline auto crossProd(const Eigen::Matrix<double, 2, 1>& p1, const Eigen::Matrix<double, 2, 1>& p2) {
+  return BasicPoint3d(p1.x(), p1.y(), 0.).cross(BasicPoint3d(p2.x(), p2.y(), 0.)).eval();
+}
+
+bool isConnectionConvex(const BasicPoint2d& seg1, const BasicPoint2d& seg2,
+                        const double eps = 4 * std::numeric_limits<double>::epsilon()) {
+  return crossProd(seg1.normalized(), seg2.normalized()).z() <= eps;
+}
+
+bool isConvex(const BasicPolygon2d& poly) {
+  for (size_t i = 2; i < poly.size(); ++i) {
+    if (!isConnectionConvex(poly.at(i - 1) - poly.at(i - 2), poly.at(i) - poly.at(i - 1))) {
+      return false;
+    }
+  }
+  return (isConnectionConvex(poly.back() - poly.at(poly.size() - 2), poly.front() - poly.back()) &&
+          isConnectionConvex(poly.front() - poly.back(), poly.at(1) - poly.front()));
+}
+
+void checkPartitionConsistency(const BasicPolygon2d& poly, const BasicPolygons2d& parts) {
+  double areaSum{0.};
+  for (int i = 0; i < parts.size(); ++i) {
+    areaSum += boost::geometry::area(parts.at(i));
+    for (int j = i + 1; j < parts.size(); ++j) {
+      BasicPolygon2d intersection;
+      boost::geometry::intersection(parts.at(i), parts.at(j), intersection);
+      EXPECT_DOUBLE_EQ(boost::geometry::area(intersection), 0.);
+    }
+    for (const auto& p : parts.at(i)) {
+      Eigen::Matrix<double, 2, 1> pCopy(p.x(), p.y());
+      EXPECT_DOUBLE_EQ(boost::geometry::distance(pCopy, poly), 0.);
+    }
+  }
+  EXPECT_DOUBLE_EQ(areaSum, boost::geometry::area(poly));
+}
+
+TYPED_TEST(TwoDPolygonsTest, convexPartition) {
+  auto t1 = lanelet::geometry::convexPartition(this->poly3);
+  EXPECT_EQ(t1.size(), 1ul);
+  EXPECT_TRUE(isConvex(t1.front()));
+  checkPartitionConsistency(BasicPolygon2d(this->poly3.basicBegin(), this->poly3.basicEnd()), t1);
+  auto t2 = lanelet::geometry::convexPartition(this->simpleStar);
+  EXPECT_EQ(t2.size(), 2ul);
+  for (const auto& poly : t2) {
+    EXPECT_TRUE(isConvex(poly));
+  }
+  checkPartitionConsistency(BasicPolygon2d(this->simpleStar.basicBegin(), this->simpleStar.basicEnd()), t2);
+  auto t3 = lanelet::geometry::convexPartition(this->fancyStar);
+  EXPECT_EQ(t3.size(), 2ul);
+  for (const auto& poly : t3) {
+    EXPECT_TRUE(isConvex(poly));
+  }
+  checkPartitionConsistency(BasicPolygon2d(this->fancyStar.basicBegin(), this->fancyStar.basicEnd()), t3);
+}
+
+TYPED_TEST(TwoDAndBasicPolygonsTest, triangulate) {
+  auto isIn = [](const geometry::IndexedTriangle& p, const size_t idx) {
+    return std::find(p.begin(), p.end(), idx) != p.end();
+  };
+  auto res = lanelet::geometry::triangulate(this->poly3);
+  ASSERT_EQ(res.size(), 2ul);
+  EXPECT_EQ(res.front().size(), 3ul);
+  EXPECT_EQ(res.back().size(), 3ul);
+  const auto& t1 = res.front();
+  const auto& t2 = res.back();
+  EXPECT_TRUE((isIn(t1, 1) && isIn(t1, 3) && isIn(t2, 1) && isIn(t2, 3)) ||
+              (isIn(t1, 0) && isIn(t1, 2) && isIn(t2, 0) && isIn(t2, 2)));
 }

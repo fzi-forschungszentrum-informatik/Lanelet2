@@ -22,6 +22,8 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedBorderPoint3d(const ConstHybridPo
 
 std::pair<BasicPoint3d, BasicPoint3d> projectedBorderPoint3d(const CompoundHybridPolygon3d& l1,
                                                              const CompoundHybridPolygon3d& l2);
+BasicPolygons2d convexPartition(const BasicPolygon2d& poly);
+IndexedTriangles triangulate(const BasicPolygon2d& poly);
 }  // namespace internal
 
 template <typename Polygon3dT>
@@ -71,5 +73,26 @@ IfPoly<Polygon3dT, bool> overlaps3d(const Polygon3dT& poly1, const Polygon3dT& p
   auto points = projectedBorderPoint3d(poly1, poly2);
   return std::abs(points.first.z() - points.second.z()) < heightTolerance;
 }
+
+template <typename Polygon2dT>
+IfPoly<Polygon2dT, BasicPolygons2d> convexPartition(const Polygon2dT& poly) {
+  return internal::convexPartition(BasicPolygon2d(poly.basicBegin(), poly.basicEnd()));
+}
+
+template <typename Polygon2dT>
+IfPoly<Polygon2dT, IndexedTriangles> triangulate(const Polygon2dT& poly) {
+  return internal::triangulate(BasicPolygon2d(poly.basicBegin(), poly.basicEnd()));
+}
+
+template <>
+inline IfPoly<BasicPolygon2d, BasicPolygons2d> convexPartition<BasicPolygon2d>(const BasicPolygon2d& poly) {
+  return internal::convexPartition(poly);
+}
+
+template <>
+inline IfPoly<BasicPolygon2d, IndexedTriangles> triangulate<BasicPolygon2d>(const BasicPolygon2d& poly) {
+  return internal::triangulate(poly);
+}
+
 }  // namespace geometry
 }  // namespace lanelet

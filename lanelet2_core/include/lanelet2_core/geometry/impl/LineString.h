@@ -36,6 +36,10 @@ inline auto crossProd(const BasicPoint3d& p1, const BasicPoint3d& p2) { return p
 inline auto crossProd(const BasicPoint2d& p1, const BasicPoint2d& p2) {
   return BasicPoint3d(p1.x(), p1.y(), 0.).cross(BasicPoint3d(p2.x(), p2.y(), 0.)).eval();
 }
+// required for Polygon triangulation
+inline auto crossProd(const Eigen::Matrix<double, 2, 1>& p1, const Eigen::Matrix<double, 2, 1>& p2) {
+  return BasicPoint3d(p1.x(), p1.y(), 0.).cross(BasicPoint3d(p2.x(), p2.y(), 0.)).eval();
+}
 
 template <typename LineStringT, typename BasicPointT>
 auto findPoint(const LineStringT& ls, const BasicPointT& p) {
