@@ -6,8 +6,44 @@
 
 namespace lanelet {
 namespace geometry {
-namespace internal {
+namespace {
 using V3d = BasicPoint3d;
+
+struct LineParams {
+  double sN;
+  double sD;
+  double tN;
+  double tD;
+};
+
+constexpr double SmallNum = 1.e-10;
+
+inline LineParams calculateLineParams(double a, double b, double c, double d, double e, double den) {
+  // compute the line parameters of the two closest points
+  if (den < SmallNum) {  // the lines are almost parallel
+    // force using point P0 on segment S1
+    // to prevent possible division by 0.0 later
+    return {0.0, 1.0, e, c};
+  }
+  LineParams lp{};
+  lp.sD = den;
+  lp.tD = den;
+  // get the closest points on the infinite lines
+  lp.sN = (b * e - c * d);
+  lp.tN = (a * e - b * d);
+  if (lp.sN < 0.0) {  // sc < 0 => the s=0 edge is visible
+    lp.sN = 0.0;
+    lp.tN = e;
+    lp.tD = c;
+  } else if (lp.sN > lp.sD) {  // sc > 1  => the s=1 edge is visible
+    lp.sN = lp.sD;
+    lp.tN = e + b;
+    lp.tD = c;
+  }
+
+  return lp;
+}
+
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicPoint3d& p1, const BasicPoint3d& p2,
                                                        const BasicPoint3d& q1, const BasicPoint3d& q2) {
   // see http://geomalgorithms.com/a07-_distance.html
@@ -19,59 +55,36 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicPoint3d& p1, c
   double c = v.dot(v);
   double d = u.dot(w);
   double e = v.dot(w);
-
   auto den = a * c - b * b;
-  constexpr double SmallNum = 1.e-10;
 
-  double sc, sN, sD = den;  // sc = sN / sD, default sD = D >= 0
-  double tc, tN, tD = den;  // tc = tN / tD, default tD = D >= 0
+  auto lp = calculateLineParams(a, b, c, d, e, den);
 
-  // compute the line parameters of the two closest points
-  if (den < SmallNum) {  // the lines are almost parallel
-    sN = 0.0;            // force using point P0 on segment S1
-    sD = 1.0;            // to prevent possible division by 0.0 later
-    tN = e;
-    tD = c;
-  } else {  // get the closest points on the infinite lines
-    sN = (b * e - c * d);
-    tN = (a * e - b * d);
-    if (sN < 0.0) {  // sc < 0 => the s=0 edge is visible
-      sN = 0.0;
-      tN = e;
-      tD = c;
-    } else if (sN > sD) {  // sc > 1  => the s=1 edge is visible
-      sN = sD;
-      tN = e + b;
-      tD = c;
-    }
-  }
-
-  if (tN < 0.0) {  // tc < 0 => the t=0 edge is visible
-    tN = 0.0;
+  if (lp.tN < 0.0) {  // tc < 0 => the t=0 edge is visible
+    lp.tN = 0.0;
     // recompute sc for this edge
     if (-d < 0.0) {
-      sN = 0.0;
+      lp.sN = 0.0;
     } else if (-d > a) {
-      sN = sD;
+      lp.sN = lp.sD;
     } else {
-      sN = -d;
-      sD = a;
+      lp.sN = -d;
+      lp.sD = a;
     }
-  } else if (tN > tD) {  // tc > 1  => the t=1 edge is visible
-    tN = tD;
+  } else if (lp.tN > lp.tD) {  // tc > 1  => the t=1 edge is visible
+    lp.tN = lp.tD;
     // recompute sc for this edge
     if ((-d + b) < 0.0) {
-      sN = 0;
+      lp.sN = 0;
     } else if ((-d + b) > a) {
-      sN = sD;
+      lp.sN = lp.sD;
     } else {
-      sN = (-d + b);
-      sD = a;
+      lp.sN = (-d + b);
+      lp.sD = a;
     }
   }
   // finally do the division to get sc and tc
-  sc = (std::abs(sN) < SmallNum ? 0.0 : sN / sD);
-  tc = (std::abs(tN) < SmallNum ? 0.0 : tN / tD);
+  double sc = (std::abs(lp.sN) < SmallNum ? 0.0 : lp.sN / lp.sD);
+  double tc = (std::abs(lp.tN) < SmallNum ? 0.0 : lp.tN / lp.tD);
 
   return {p1 + (sc * u), q1 + (tc * v)};  // return the closest distance
 }
@@ -79,9 +92,9 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicPoint3d& p1, c
 namespace bg = boost::geometry;
 namespace bgi = bg::index;
 namespace bgm = boost::geometry::model;
-using Segment = bgm::pointing_segment<const BasicPoint3d>;
+using BasicSegment = bgm::pointing_segment<const BasicPoint3d>;
 using Box = bgm::box<bgm::point<double, 3, boost::geometry::cs::cartesian>>;
-using Node = std::pair<Box, Segment>;
+using Node = std::pair<Box, BasicSegment>;
 using RTree = bgi::rtree<Node, bgi::linear<8>>;
 
 template <typename LineStringT>
@@ -113,7 +126,7 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineStringT& l1
   for (auto it = bg::segments_begin(*smallerRange); it != bg::segments_end(*smallerRange); ++it) {
     Box queryBox;
     bg::envelope(*it, queryBox);
-    for (auto qIt = tree.qbegin(bgi::nearest(queryBox, greaterRange->size())); qIt != tree.qend();
+    for (auto qIt = tree.qbegin(bgi::nearest(queryBox, unsigned(greaterRange->size()))); qIt != tree.qend();
          ++qIt, first = false) {
       auto& nearest = *qIt;
       auto dBox = boost::geometry::distance(nearest.first, queryBox);
@@ -133,7 +146,9 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineStringT& l1
   }
   return closestPair;
 }
+}  // namespace
 
+namespace internal {
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const CompoundHybridLineString3d& l1,
                                                        const CompoundHybridLineString3d& l2) {
   return projectedPoint3dImpl(l1, l2);

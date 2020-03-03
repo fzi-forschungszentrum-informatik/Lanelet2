@@ -778,7 +778,8 @@ BasicPoint2d fromArcCoordinates(const LineString2dT& lineString, const ArcCoordi
   auto hLineString = utils::toHybrid(lineString);
   auto ratios = accumulatedLengthRatios(lineString);
   const auto llength = length(lineString);
-  size_t startIdx{}, endIdx{};
+  size_t startIdx{};
+  size_t endIdx{};
   for (size_t i = 0; i < ratios.size(); ++i) {
     if (ratios.at(i) * llength > arcCoords.length) {
       startIdx = i;

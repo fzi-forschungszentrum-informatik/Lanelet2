@@ -12,10 +12,6 @@ Point3d makePoint(double x, double y) {
   return Point3d(id++, x, y);
 }
 
-namespace lanelet {
-namespace geometry {}  // namespace geometry
-}  // namespace lanelet
-
 class TestArea : public testing::Test {
  public:
   TestArea() {
@@ -76,27 +72,27 @@ TEST_F(TestArea, inside) {  // NOLINT
 
 TEST_F(TestArea, distance2d) {  // NOLINT
   auto d = geometry::distance2d(area2, utils::to2D(pointsLeft[3].basicPoint()));
-  EXPECT_FLOAT_EQ(1, d);
+  EXPECT_DOUBLE_EQ(1, d);
 }
 
 TEST_F(TestArea, distance2dWithHole) {  // NOLINT
   auto d = geometry::distance2d(area2, BasicPoint2d(1.5, 0.5));
-  EXPECT_FLOAT_EQ(0.25, d);
+  EXPECT_DOUBLE_EQ(0.25, d);
 }
 
 TEST_F(TestArea, distance3dWithHole) {  // NOLINT
   auto d = geometry::distance3d(area2, BasicPoint3d(1.5, 0.5, 1));
-  EXPECT_FLOAT_EQ(std::sqrt(0.25 * 0.25 + 1), d);
+  EXPECT_DOUBLE_EQ(std::sqrt(0.25 * 0.25 + 1), d);
 }
 
 TEST_F(TestArea, area) {  // NOLINT
   auto area = geometry::area(area1.basicPolygonWithHoles2d());
-  EXPECT_FLOAT_EQ(1, area);
+  EXPECT_DOUBLE_EQ(1, area);
 }
 
 TEST_F(TestArea, areaWithHole) {  // NOLINT
   auto area = geometry::area(area2.basicPolygonWithHoles2d());
-  EXPECT_FLOAT_EQ(0.75, area);
+  EXPECT_DOUBLE_EQ(0.75, area);
 }
 
 TEST_F(TestArea, boundingBox) {  // NOLINT

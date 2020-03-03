@@ -10,27 +10,28 @@ namespace {
 class HasIdVisitor : public RuleParameterVisitor {
  public:
   explicit HasIdVisitor(Id id) : id_{id} {}
-  void operator()(const ConstPoint3d& p) override { found |= p.id() == id_; }
-  void operator()(const ConstLineString3d& l) override { found |= l.id() == id_ || utils::has(l, id_); }
-  void operator()(const ConstPolygon3d& p) override { found |= p.id() == id_ || utils::has(p, id_); }
+  void operator()(const ConstPoint3d& p) override { found_ |= p.id() == id_; }
+  void operator()(const ConstLineString3d& l) override { found_ |= l.id() == id_ || utils::has(l, id_); }
+  void operator()(const ConstPolygon3d& p) override { found_ |= p.id() == id_ || utils::has(p, id_); }
   void operator()(const ConstWeakLanelet& ll) override {
     if (ll.expired()) {
       return;
     }
     ConstLanelet llet(ll.lock());
-    found |= llet.id() == id_ || utils::has(llet, id_);
+    found_ |= llet.id() == id_ || utils::has(llet, id_);
   }
   void operator()(const ConstWeakArea& ar) override {
     if (ar.expired()) {
       return;
     }
     ConstArea area(ar.lock());
-    found |= area.id() == id_ || utils::has(area, id_);
+    found_ |= area.id() == id_ || utils::has(area, id_);
   }
-  bool found{false};
+  bool operator!() const { return !found_; }
 
  private:
   Id id_;
+  bool found_{false};
 };
 
 class GetIdVisitor : public RuleParameterVisitor {
@@ -160,9 +161,9 @@ void RegulatoryElement::applyVisitor(lanelet::internal::MutableParameterVisitor&
 }
 
 bool utils::has(const RegulatoryElement& regElem, Id id) {
-  HasIdVisitor visitor(id);
-  regElem.applyVisitor(visitor);
-  return visitor.found;
+  HasIdVisitor hasId(id);
+  regElem.applyVisitor(hasId);
+  return !!hasId;
 }
 
 template <>

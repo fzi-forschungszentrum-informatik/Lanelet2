@@ -16,7 +16,7 @@ std::unordered_map<Id, T> makeMap(const std::initializer_list<T>& vec) {
 }
 
 template <>
-std::unordered_map<Id, RegulatoryElementPtr> makeMap(const std::initializer_list<RegulatoryElementPtr>& vec) {
+inline std::unordered_map<Id, RegulatoryElementPtr> makeMap(const std::initializer_list<RegulatoryElementPtr>& vec) {
   std::unordered_map<Id, RegulatoryElementPtr> map;
   for (const auto& elem : vec) {
     map.insert(std::make_pair(elem->id(), elem));
@@ -29,9 +29,9 @@ class LaneletMapTestCase {
   LaneletMapTestCase() {
     /**
    p1------left-------p2
-
+   |front             |
    p5------p6--other--p7
-
+   |                  | rear
    p3------right------p4
 
 

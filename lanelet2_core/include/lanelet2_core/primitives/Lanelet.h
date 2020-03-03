@@ -140,8 +140,9 @@ class ConstLanelet : public ConstPrimitive<LaneletData> {
       : ConstLanelet(std::make_shared<LaneletData>(id, LineString3d(), LineString3d()), false) {}
 
   //! Constructs a lanelet from id, attributes, regulatoryElements and bounds.
-  ConstLanelet(Id id, LineString3d leftBound, LineString3d rightBound, AttributeMap attributes = AttributeMap(),
-               RegulatoryElementPtrs regulatoryElements = RegulatoryElementPtrs())
+  ConstLanelet(Id id, const LineString3d& leftBound, const LineString3d& rightBound,
+               const AttributeMap& attributes = AttributeMap(),
+               const RegulatoryElementPtrs& regulatoryElements = RegulatoryElementPtrs())
       : ConstPrimitive{std::make_shared<LaneletData>(id, leftBound, rightBound, attributes, regulatoryElements)} {}
 
   //! Construct from the data of a different Lanelet

@@ -196,8 +196,10 @@ std::shared_ptr<ConstLineString3d> calculateCenterline(const ConstLineString2d& 
     ++leftCurrent;
   }
   while (leftCurrent != leftBound.end() || rightCurrent != rightBound.end()) {
-    OptDistance leftCandidateDistance, rightCandidateDistance;
-    ConstLineString2d::const_iterator leftCandidate, rightCandidate;
+    OptDistance leftCandidateDistance;
+    OptDistance rightCandidateDistance;
+    ConstLineString2d::const_iterator leftCandidate;
+    ConstLineString2d::const_iterator rightCandidate;
 
     // Determine left candidate
     std::tie(leftCandidate, leftCandidateDistance) =

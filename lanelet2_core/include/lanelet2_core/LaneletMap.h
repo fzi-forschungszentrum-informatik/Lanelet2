@@ -580,11 +580,12 @@ std::vector<std::pair<double, traits::ConstPrimitiveType<PrimT>>> findNearest(co
                                                                               const BasicPoint2d& pt, unsigned count);
 
 #ifndef LANELET_LAYER_DEFINITION
-#define EXTERN_FIND_NEAREST(PRIM) \
-  extern template std::vector<std::pair<double, PRIM>> findNearest(PrimitiveLayer<PRIM>&, const BasicPoint2d&, unsigned)
-#define EXTERN_CONST_FIND_NEAREST(PRIM)                                                         \
-  extern template std::vector<std::pair<double, traits::ConstPrimitiveType<PRIM>>> findNearest( \
-      const PrimitiveLayer<PRIM>&, const BasicPoint2d&, unsigned)
+// clang-format off
+// NOLINTNEXTLINE
+#define EXTERN_FIND_NEAREST(PRIM) extern template std::vector<std::pair<double, PRIM>> findNearest(PrimitiveLayer<PRIM>&, const BasicPoint2d&, unsigned)
+// NOLINTNEXTLINE
+#define EXTERN_CONST_FIND_NEAREST(PRIM) extern template std::vector<std::pair<double, traits::ConstPrimitiveType<PRIM>>> findNearest(const PrimitiveLayer<PRIM>&, const BasicPoint2d&, unsigned)
+// clang-format on
 EXTERN_FIND_NEAREST(Area);
 EXTERN_FIND_NEAREST(Polygon3d);
 EXTERN_FIND_NEAREST(Lanelet);

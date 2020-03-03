@@ -87,18 +87,17 @@ class ProjectedPoint : public boost::geometry::strategy::distance::projected_poi
     using namespace boost::geometry;
     assert_dimension_equal<Point, PointOfSegment>();
 
-    using calculation_type =  // NOLINT
-        typename calculation_type<Point, PointOfSegment>::type;
+    using CalculationResult = typename calculation_type<Point, PointOfSegment>::type;
 
     // A projected point of points in Integer coordinates must be able to be
     // represented in FP.
-    using fp_point_type =  // NOLINT
-        model::point<calculation_type, dimension<PointOfSegment>::value,
+    using FpVector =  // NOLINT
+        model::point<CalculationResult, dimension<PointOfSegment>::value,
                      typename coordinate_system<PointOfSegment>::type>;
 
-    // For convenience
-    typedef fp_point_type fp_vector_type;  // NOLINT
-    fp_vector_type v, w, projected;
+    FpVector v;
+    FpVector w;
+    FpVector projected;
 
     convert(p2, v);
     convert(p, w);
@@ -109,18 +108,18 @@ class ProjectedPoint : public boost::geometry::strategy::distance::projected_poi
     Strategy strategy;
     boost::ignore_unused_variable_warning(strategy);
 
-    calculation_type const zero = calculation_type();
-    calculation_type const c1 = dot_product(w, v);
+    auto zero = CalculationResult{};
+    CalculationResult const c1 = dot_product(w, v);
     if (c1 <= zero) {
       return updateClosestPoint(p1, p2, p1, strategy.apply(p, p1));
     }
-    calculation_type const c2 = dot_product(v, v);
+    CalculationResult const c2 = dot_product(v, v);
     if (c2 <= c1) {
       return updateClosestPoint(p1, p2, p2, strategy.apply(p, p2));
     }
 
     // See above, c1 > 0 AND c2 > c1 so: c2 != 0
-    calculation_type const b = c1 / c2;
+    CalculationResult const b = c1 / c2;
 
     multiply_value(v, b);
     add_point(projected, v);

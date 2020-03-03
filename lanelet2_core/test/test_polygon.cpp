@@ -74,7 +74,7 @@ class PolygonTypeTest : public PolygonPoints {
     fancyStar = toPolygon<T>(temp);
   }
 
-  PolygonT poly1, poly2, poly3, fancyStar, simpleStar;
+  PolygonT poly1, poly2, poly3, fancyStar, simpleStar;  // NOLINT
 
  private:
   void randomSubdivide(Polygon3d& poly, const size_t after, const int nNew, Id id) const {

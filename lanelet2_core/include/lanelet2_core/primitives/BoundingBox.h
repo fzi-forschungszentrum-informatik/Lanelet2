@@ -109,13 +109,13 @@ class BoundingBox2d {
   inline VectorType&(max)() { return max_; }
 
   /** \returns the center of the box */
-  inline const BasicPoint2d center() const { return (min_ + max_) / 2; }
+  inline BasicPoint2d center() const { return (min_ + max_) / 2; }
 
   /** \returns the lengths of the sides of the bounding box.
    * Note that this function does not get the same
    * result for integral or floating scalar types: see
    */
-  inline const BasicPoint2d sizes() const { return max_ - min_; }
+  inline BasicPoint2d sizes() const { return max_ - min_; }
 
   /** \returns the volume of the bounding box */
   inline Scalar volume() const { return sizes().prod(); }
