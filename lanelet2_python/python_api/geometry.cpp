@@ -42,18 +42,20 @@ lanelet::BoundingBox3d boundingBox3dFor(const T& t) {
   return lanelet::geometry::boundingBox3d(t);
 }
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define TO2D_AS(X)                        \
   if (extract<X>(o).check()) {            \
     return object(to2D(extract<X>(o)())); \
   }
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define TO3D_AS(X)                        \
   if (extract<X>(o).check()) {            \
     return object(to3D(extract<X>(o)())); \
   }
 
 template <typename PtT>
-double distancePointToLss(const PtT& p, object lss) {
+double distancePointToLss(const PtT& p, const object& lss) {
   auto distance = [](PtT p, auto range) {
     return boost::geometry::distance(p, utils::transform(range, [](auto& v) { return utils::toHybrid(v); }));
   };
@@ -65,27 +67,27 @@ double distancePointToLss(const PtT& p, object lss) {
 
 object to2D(object o) {
   using utils::to2D;
-  TO2D_AS(Point3d);
-  TO2D_AS(BasicPoint3d);
-  TO2D_AS(ConstPoint3d);
-  TO2D_AS(LineString3d);
-  TO2D_AS(LineString3d);
-  TO2D_AS(ConstLineString3d);
-  TO2D_AS(Polygon3d);
-  TO2D_AS(ConstPolygon3d);
+  TO2D_AS(Point3d)
+  TO2D_AS(BasicPoint3d)
+  TO2D_AS(ConstPoint3d)
+  TO2D_AS(LineString3d)
+  TO2D_AS(LineString3d)
+  TO2D_AS(ConstLineString3d)
+  TO2D_AS(Polygon3d)
+  TO2D_AS(ConstPolygon3d)
   return o;
 }
 
 object to3D(object o) {
   using utils::to3D;
-  TO3D_AS(Point2d);
-  TO3D_AS(BasicPoint2d);
-  TO3D_AS(ConstPoint2d);
-  TO3D_AS(LineString2d);
-  TO3D_AS(LineString2d);
-  TO3D_AS(ConstLineString2d);
-  TO3D_AS(Polygon2d);
-  TO3D_AS(ConstPolygon2d);
+  TO3D_AS(Point2d)
+  TO3D_AS(BasicPoint2d)
+  TO3D_AS(ConstPoint2d)
+  TO3D_AS(LineString2d)
+  TO3D_AS(LineString2d)
+  TO3D_AS(ConstLineString2d)
+  TO3D_AS(Polygon2d)
+  TO3D_AS(ConstPolygon2d)
   return o;
 }
 #undef TO2D_AS

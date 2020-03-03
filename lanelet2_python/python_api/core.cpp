@@ -224,7 +224,6 @@ class IsConstPrimitive : public def_visitor<IsConstPrimitive<PrimT>> {
  public:
   template <typename ClassT>
   void visit(ClassT& c) const {
-    namespace py = boost::python;
     c.add_property("id", &PrimT::id);
     const AttributeMap& (PrimT::*attr)() const = &PrimT::attributes;
     c.add_property("attributes", getRefFunc(attr));
@@ -840,10 +839,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<TrafficSignsWithType, std::shared_ptr<TrafficSignsWithType>>("TrafficSignsWithType", no_init)
       .def("__init__", make_constructor(+[](LineStringsOrPolygons3d ls) {
-             return std::make_shared<TrafficSignsWithType>(TrafficSignsWithType{ls});
+             return std::make_shared<TrafficSignsWithType>(TrafficSignsWithType{std::move(ls)});
            }))
       .def("__init__", make_constructor(+[](LineStringsOrPolygons3d ls, std::string type) {
-             return std::make_shared<TrafficSignsWithType>(TrafficSignsWithType{ls, type});
+             return std::make_shared<TrafficSignsWithType>(TrafficSignsWithType{std::move(ls), std::move(type)});
            }))
       .add_property("trafficSigns", &TrafficSignsWithType::trafficSigns)
       .add_property("type", &TrafficSignsWithType::type);
