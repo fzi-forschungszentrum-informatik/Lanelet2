@@ -9,7 +9,7 @@
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
 #include <lanelet2_core/primitives/RegulatoryElement.h>
-#include "converter.h"
+#include "internal/converter.h"
 
 using namespace boost::python;
 using namespace lanelet;

@@ -1,7 +1,7 @@
 #include <lanelet2_routing/Route.h>
 #include <lanelet2_routing/RoutingGraph.h>
 #include <boost/python.hpp>
-#include "converter.h"
+#include "internal/converter.h"
 
 using namespace boost::python;
 using namespace lanelet;
