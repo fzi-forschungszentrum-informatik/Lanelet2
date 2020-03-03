@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <future>
+#include "geometry/Area.h"
 #include "geometry/BoundingBox.h"
 #include "geometry/LaneletMap.h"
 #include "lanelet_map_test_case.h"
@@ -54,7 +55,17 @@ TEST_F(LaneletMapGeometryTest, findWithin2dLanelet) {  // NOLINT
   testConstAndNonConst([this](auto& map) {
     auto llts = geometry::findWithin2d(map->pointLayer, this->ll2);
     ASSERT_LE(1ul, llts.size());
-    utils::contains(utils::transform(llts, [](auto& t) { return t.second; }), this->p6);
+    EXPECT_TRUE(utils::contains(utils::transform(llts, [](auto& t) { return t.second; }), this->p6));
+  });
+}
+
+TEST_F(LaneletMapGeometryTest, findWithin2dArea) {  // NOLINT
+  map->add(ll2);
+  EXPECT_EQ(2ul, map->laneletLayer.size());
+  testConstAndNonConst([this](auto& map) {
+    auto areas = geometry::findWithin2d(map->areaLayer, utils::to2D(this->p8), 1.5);
+    ASSERT_EQ(1ul, areas.size());
+    EXPECT_EQ(areas.front().second, this->ar1);
   });
 }
 
@@ -95,5 +106,15 @@ TEST_F(LaneletMapGeometryTest, findWithin3dLanelet) {  // NOLINT
     auto llts = geometry::findWithin3d(map->pointLayer, this->ll2);
     ASSERT_LE(1ul, llts.size());
     utils::contains(utils::transform(llts, [](auto& t) { return t.second; }), this->p6);
+  });
+}
+
+TEST_F(LaneletMapGeometryTest, findWithin3dArea) {  // NOLINT
+  map->add(ll2);
+  EXPECT_EQ(2ul, map->laneletLayer.size());
+  testConstAndNonConst([this](auto& map) {
+    auto areas = geometry::findWithin3d(map->areaLayer, this->p8, 1.5);
+    ASSERT_EQ(1ul, areas.size());
+    EXPECT_EQ(areas.front().second, this->ar1);
   });
 }
