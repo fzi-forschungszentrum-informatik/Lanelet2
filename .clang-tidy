@@ -1,5 +1,5 @@
 # clang tidy file installed by mrt_tools. Do not modify: This file will be overwritten.
-Checks:          '-*,mrt*,clang-analyzer-core*,clang-analyzer-deadcode*,clang-analyzer-unix*,clang-analyzer-cplusplus*,-clang-analyzer-cplusplus.NewDeleteLeaks,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-type-vararg,google-explicit-constructor,google-global-names-in-headers,google-readability-casting,google-readability-namespace-comments,google-runtime-int,bugprone-*,-bugprone-exception-escape,performance-*,readability-*,modernize-*,misc-*'
+Checks:          '-*,mrt*,bugprone-*,clang-analyzer-apiModeling*,clang-analyzer-core*,-clang-analyzer-core.UndefinedBinaryOperatorResult,clang-analyzer-deadcode*,clang-analyzer-unix*,clang-analyzer-cplusplus*,-clang-analyzer-cplusplus.NewDelete,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-type-vararg,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-avoid-c-arrays,google-explicit-constructor,google-global-names-in-headers,google-readability-casting,google-readability-namespace-comments,google-global-names-in-headers,google-build-namespaces,performance-*,readability-*,-readability-uppercase-literal-suffix,-readability-magic-numbers,modernize-*,-modernize-use-trailing-return-type,-modernize-use-nodiscard,-modernize-concat-nested-namespaces,-modernize-avoid-c-arrays,misc-*,-misc-non-private-member-variables-in-classes'
 HeaderFilterRegex: '^(?!\/usr)(?!\/opt).*\/src\/.*'
 AnalyzeTemporaryDtors: false
 CheckOptions:
@@ -142,4 +142,8 @@ CheckOptions:
     value:           lower_case
   - key:             readability-identifier-naming.InlineNamespaceCase
     value:           lower_case
+    
+  
+  - key:             readability-identifier-naming.IgnoreMacros
+    value:           1
 
