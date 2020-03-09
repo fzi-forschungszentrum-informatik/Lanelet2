@@ -405,6 +405,17 @@ void registerIds(const MapT& map) {
     utils::registerId(map.rbegin()->first);
   }
 }
+
+void testAndPrintLocaleWarning(ErrorMessages& errors) {
+  auto decimalPoint = std::localeconv()->decimal_point;
+  if (decimalPoint == nullptr || *decimalPoint != '.') {
+    std::stringstream ss;
+    ss << "Warning: Current decimal point of the C locale is set to \""
+       << (decimalPoint == nullptr ? ' ' : *decimalPoint) << "\". The loaded map will have wrong coordinates!\n";
+    errors.emplace_back(ss.str());
+    std::cerr << errors.back();
+  }
+}
 }  // namespace
 
 std::unique_ptr<LaneletMap> OsmParser::parse(const std::string& filename, ErrorMessages& errors) const {
@@ -415,6 +426,7 @@ std::unique_ptr<LaneletMap> OsmParser::parse(const std::string& filename, ErrorM
     throw lanelet::ParseError("Errors occured while parsing osm file: "s + result.description());
   }
   osm::Errors osmReadErrors;
+  testAndPrintLocaleWarning(osmReadErrors);
   auto file = lanelet::osm::read(doc, &osmReadErrors);
   auto map = fromOsmFile(file, errors);
   // make sure ids in the file are known to Lanelet2 id management.
