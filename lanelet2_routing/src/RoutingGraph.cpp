@@ -297,7 +297,7 @@ Optional<PathT> shortestPathImpl(const PrimT& from, const PrimT& to, RoutingCost
       }
       return true;
     });
-  } catch (DestinationReached) {
+  } catch (DestinationReached) {  // NOLINT
     return PathT{buildPath<false, PrimT>(search.getMap(), *endVertex, filteredGraph)};
   }
   return {};

@@ -475,7 +475,7 @@ class RoutingGraphTestData {
   }
 };
 
-namespace {
+namespace {                            // NOLINT
 static RoutingGraphTestData testData;  // NOLINT
 }  // namespace
 

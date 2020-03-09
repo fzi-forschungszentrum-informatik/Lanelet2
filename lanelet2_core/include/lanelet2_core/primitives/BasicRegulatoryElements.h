@@ -293,7 +293,7 @@ class TrafficSign : public RegulatoryElement {
   bool removeTrafficSign(const LineStringOrPolygon3d& sign);
 
   //! Add new cancelling traffic sign
-  void addCancellingTrafficSign(const TrafficSignsWithType& sign);
+  void addCancellingTrafficSign(const TrafficSignsWithType& signs);
 
   //! remove a cancelling traffic sign, returns true on success
   bool removeCancellingTrafficSign(const LineStringOrPolygon3d& sign);
