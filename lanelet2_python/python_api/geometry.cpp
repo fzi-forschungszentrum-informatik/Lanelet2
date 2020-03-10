@@ -170,13 +170,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   // p2area
   def("distance", +[](const ConstArea& llt, const BasicPoint3d& p) { return lg::distance3d(llt, p); });
 
-  //equals 2d
+  // equals 2d
   def("equals", boost::geometry::equals<BasicPoint2d, BasicPoint2d>);
   def("equals", boost::geometry::equals<ConstPoint2d, ConstPoint2d>);
   def("equals", boost::geometry::equals<ConstPoint2d, BasicPoint2d>);
   def("equals", boost::geometry::equals<BasicPoint2d, ConstPoint2d>);
 
-  //equals 3d
+  // equals 3d
   def("equals", boost::geometry::equals<BasicPoint3d, BasicPoint3d>);
   def("equals", boost::geometry::equals<ConstPoint3d, ConstPoint3d>);
   def("equals", boost::geometry::equals<ConstPoint3d, BasicPoint3d>);

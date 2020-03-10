@@ -18,7 +18,8 @@ Issues CurvatureTooBigChecker::operator()(const LaneletMap& map) {
   return issues;
 }
 
-double CurvatureTooBigChecker::computeCurvature(const BasicPoint2d& p1, const BasicPoint2d& p2, const BasicPoint2d& p3) {
+double CurvatureTooBigChecker::computeCurvature(const BasicPoint2d& p1, const BasicPoint2d& p2,
+                                                const BasicPoint2d& p3) {
   auto dp = 0.5 * (p3 - p1);
   auto ddp = p3 - 2.0 * p2 + p1;
   auto denom = std::pow(dp.x() * dp.x() + dp.y() * dp.y(), 3.0 / 2.0);
@@ -35,7 +36,7 @@ void CurvatureTooBigChecker::checkCurvature(Issues& issues, const ConstLineStrin
       if (std::fabs(computeCurvature(lineHyb[i - 1], lineHyb[i], lineHyb[i + 1])) > 0.5) {
         issues.emplace_back(Severity::Warning, Primitive::Lanelet, laneletId,
                             "Curvature at point " + std::to_string(line[i].id()) +
-                            " is bigger than 0.5. This can confuse algorithms using this map.");
+                                " is bigger than 0.5. This can confuse algorithms using this map.");
       }
     }
   }

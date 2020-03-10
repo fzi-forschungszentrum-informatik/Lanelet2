@@ -21,6 +21,7 @@ Similar plugin for Eigen objects: https://github.com/nspo/drake_gdb
 
 import gdb
 
+
 class LaneletPrinter:
     def __init__(self, val):
         self.val = val
@@ -167,6 +168,7 @@ class AttributePrinter:
             except KeyError:
                 raise StopIteration
 
+
 class RegulatoryElementPrinter:
     def __init__(self, val):
         self.val = val
@@ -201,7 +203,7 @@ class RegulatoryElementPrinter:
 
 
 def lookup_type(val):
-    type_and_mod = str(val.type).split(" ") # type and modifiers
+    type_and_mod = str(val.type).split(" ")  # type and modifiers
 
     if 'lanelet::Lanelet' in type_and_mod or 'lanelet::ConstLanelet' in type_and_mod:
         return LaneletPrinter(val)

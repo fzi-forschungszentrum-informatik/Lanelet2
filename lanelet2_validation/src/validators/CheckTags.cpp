@@ -214,8 +214,9 @@ Issues checkAttribute(const AttributeMap& map, Id id, Primitive primitive) {
     bool isBoolAttr =
         utils::anyOf(boolAttributes, [&attr](auto& boolAttr) { return startsWith(attr.first, boolAttr); });
     if (isBoolAttr && !attr.second.asBool()) {
-      issues.push_back(Issue(Severity::Warning, primitive, id, "attribute " + attr.first + ": " + attr.second.value() +
-                                                                   " should be convertible to bool, but isn't."));
+      issues.push_back(
+          Issue(Severity::Warning, primitive, id,
+                "attribute " + attr.first + ": " + attr.second.value() + " should be convertible to bool, but isn't."));
     }
   }
   return issues;
