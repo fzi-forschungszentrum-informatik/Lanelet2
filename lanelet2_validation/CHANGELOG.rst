@@ -1,0 +1,29 @@
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package lanelet2_validation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Forthcoming
+-----------
+* Format files
+* Contributors: Fabian Poggenhans
+
+1.0.0 (2020-03-03)
+------------------
+* Bump version to 1.0
+* Update cmakelists files
+* Fix headers missing their include guards
+* Bump version to 0.9
+* Merge branch 'master' into reverse_routing
+* Merge branch 'validate_repeated_points' into 'master'
+  Validate repeated points
+  See merge request MRT/released/lanelet2!142
+* Add a new IssueReport object returned by lanelet2_validation
+* Implement new check in lanelet2_validation for repeated points
+* code clean, fix one big curvature point in mapping_example.osm
+* add curvature validator and unit test
+* Improved readmes and corrected typos
+* Documented ele tag for points, add it to validation
+* Re-add support for hardcoding sign type or speed limit in regulatory elements
+* Add new validators to sanitize tagging of a lanelet map, add unittests
+* Add lanelet2 validation
+* Contributors: Fabian Poggenhans, Lingguang Wang, Maximilian Naumann
