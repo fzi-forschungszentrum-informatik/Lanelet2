@@ -98,6 +98,18 @@ template <typename LineString2dT>
 double signedDistance(const LineString2dT& lineString, const BasicPoint2d& p);
 
 /**
+ * Calculate the curvature value given 3 consecutive points.
+ * The curvature value is always positive.
+ *
+ * @param p1, p2, p3 are the points
+ * @return curvature value.
+ *
+ * If any 2 of the 3 points duplicate, return infinity.
+ */
+template <typename Point2dT>
+double curvature2d(const Point2dT& p1, const Point2dT& p2, const Point2dT& p3);
+
+/**
  *
  * @brief Transform a point to the coordinates of the linestring
  *

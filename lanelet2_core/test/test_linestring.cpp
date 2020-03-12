@@ -27,6 +27,22 @@ class LineStringPoints : public ::testing::Test {
 };
 
 template <typename T>
+class Point2dTypeTest : public ::testing::Test {
+ protected:
+  using Point2dT = T;
+  void SetUp() override {
+    Id id{1};
+    p1 = Point2d(++id, 1., 0., 0.);
+    p2 = Point2d(++id, 0., 1., 0.);
+    p3 = Point2d(++id, -1., 0., 0.);
+    p4 = Point2d(++id, 0., 1., 0.);
+  }
+
+ public:
+  Point2dT p1, p2, p3, p4;
+};
+
+template <typename T>
 class LineStringTypeTest : public LineStringPoints {
  protected:
   using LineStringT = T;
@@ -112,7 +128,11 @@ template <typename T>
 class TwoDLineStringsTest : public LineStringTypeTest<T> {};
 
 template <typename T>
+class TwoDPointsTest : public Point2dTypeTest<T> {};
+
+template <typename T>
 class BasicLineStringsTest : public LineStringTypeTest<T> {};
+using TwoDPoints = testing::Types<BasicPoint2d, Point2d, ConstPoint2d>;
 using AllLineStrings = testing::Types<LineString2d, LineString3d, ConstLineString2d, ConstLineString3d,
                                       ConstHybridLineString2d, ConstHybridLineString3d, CompoundLineString2d,
                                       CompoundLineString3d, CompoundHybridLineString2d, CompoundHybridLineString3d>;
@@ -131,6 +151,7 @@ using HybridLineStrings = testing::Types<ConstHybridLineString2d, ConstHybridLin
 
 using BasicLineStrings = testing::Types<BasicLineString2d, BasicLineString3d>;
 
+TYPED_TEST_CASE(TwoDPointsTest, TwoDPoints);
 TYPED_TEST_CASE(AllLineStringsTest, AllLineStrings);
 TYPED_TEST_CASE(TwoDLineStringsTest, TwoDLineStrings);
 TYPED_TEST_CASE(ThreeDLineStringsTest, ThreeDLineStrings);
@@ -327,6 +348,11 @@ TYPED_TEST(AllLineStringsTest, segmentsInverse) {  // NOLINT
   auto segment = lsInv.segment(0);
   EXPECT_EQ(segment.first, lsInv[0]);
   EXPECT_EQ(segment.second, lsInv[1]);
+}
+
+TYPED_TEST(TwoDPointsTest, checkCurvature) {
+  EXPECT_DOUBLE_EQ(1., geometry::curvature2d(this->p1, this->p2, this->p3));
+  EXPECT_DOUBLE_EQ(std::numeric_limits<double>::infinity(), geometry::curvature2d(this->p1, this->p2, this->p4));
 }
 
 TYPED_TEST(TwoDLineStringsTest, signedDistance) {  // NOLINT

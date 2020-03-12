@@ -665,6 +665,20 @@ double signedDistance(const LineString2dT& lineString, const BasicPoint2d& p) {
   return internal::signedDistanceImpl(lineString, p).first;
 }
 
+template <typename Point2dT>
+double curvature2d(const Point2dT& p1, const Point2dT& p2, const Point2dT& p3) {
+  // see https://en.wikipedia.org/wiki/Menger_curvature#Definition
+  const double area = 0.5 * ((p2.x() - p1.x()) * (p3.y() - p1.y()) - (p2.y() - p1.y()) * (p3.x() - p1.x()));
+  const double side1 = distance(p1, p2);
+  const double side2 = distance(p1, p3);
+  const double side3 = distance(p2, p3);
+  const double product = side1 * side2 * side3;
+  if (product < 1e-20) {
+    return std::numeric_limits<double>::infinity();
+  }
+  return std::fabs(4 * area / product);
+}
+
 template <typename LineString2dT>
 ArcCoordinates toArcCoordinates(const LineString2dT& lineString, const BasicPoint2d& point) {
   auto res = internal::signedDistanceImpl(lineString, point);
