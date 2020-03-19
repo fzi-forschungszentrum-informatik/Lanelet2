@@ -698,7 +698,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("invert", &ConstLanelet::invert, "Returns inverted lanelet (flipped left/right bound, etc")
       .def("inverted", &ConstLanelet::inverted, "Returns whether this lanelet has been inverted")
       .def("polygon2d", &ConstLanelet::polygon2d, "Outline of this lanelet as 2d polygon")
-      .def("polygon3d", &ConstLanelet::polygon3d, "Outline of this lanelet as 3d polygon");
+      .def("polygon3d", &ConstLanelet::polygon3d, "Outline of this lanelet as 3d polygon")
+      .def("resetCache", &ConstLanelet::resetCache,
+           "Reset the cache. Forces update of the centerline if points have chagned");
 
   auto left = static_cast<LineString3d (Lanelet::*)()>(&Lanelet::leftBound);
   auto right = static_cast<LineString3d (Lanelet::*)()>(&Lanelet::rightBound);
