@@ -1,4 +1,9 @@
 #pragma once
+#include <boost/version.hpp>
+#if BOOST_VERSION < 106300 && BOOST_VERSION >= 106200
+// Boost 1.62 is missing an iostream include...
+#include <iostream>
+#endif
 #include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/geometries/geometries.hpp>
 #include <boost/geometry/geometries/register/point.hpp>

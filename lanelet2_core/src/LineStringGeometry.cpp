@@ -1,3 +1,8 @@
+#include <boost/version.hpp>
+#if BOOST_VERSION < 106300 && BOOST_VERSION >= 106200
+// Boost 1.62 is missing an iostream include...
+#include <iostream>
+#endif
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/pointing_segment.hpp>
 #include <boost/geometry/index/rtree.hpp>
