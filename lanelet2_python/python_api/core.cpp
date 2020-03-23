@@ -875,7 +875,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   implicitly_convertible<std::shared_ptr<SpeedLimit>, RegulatoryElementPtr>();
 
   class_<SpeedLimit, boost::noncopyable, std::shared_ptr<SpeedLimit>, bases<TrafficSign>>(  // NOLINT
-      "SpeedLimit", "A speed limit regulatory element", no_init);
+      "SpeedLimit", "A speed limit regulatory element", no_init)
+      .def("__init__", make_constructor(&TrafficSign::make, default_call_policies(),
+                                        (arg("id"), arg("attributes"), arg("trafficSigns"),
+                                         arg("cancellingTrafficSigns") = TrafficSignsWithType{},
+                                         arg("refLines") = LineStrings3d(), arg("cancelLines") = LineStrings3d())));
 
   class_<PrimitiveLayer<Area>, boost::noncopyable>("PrimitiveLayerArea", no_init);        // NOLINT
   class_<PrimitiveLayer<Lanelet>, boost::noncopyable>("PrimitiveLayerLanelet", no_init);  // NOLINT
