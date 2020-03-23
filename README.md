@@ -67,11 +67,17 @@ Besides [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html), the 
 * `rosbash` (for lanelet2_examples)
 
 For Ubuntu, the steps are the following:
-* [Set up ROS](http://wiki.ros.org/ROS/Installation), and install at least `rospack` and `catkin` (e.g. `ros-melodic-rospack` and `ros-melodic-catkin`).
+* [Set up ROS](http://wiki.ros.org/ROS/Installation), and install at least `rospack`, `catkin` and `mrt_cmake_modules` (e.g. `ros-melodic-rospack`, `ros-melodic-catkin`, `ros-melodic-mrt-cmake-modules`):
+```
+sudo apt-get install os-melodic-rospack ros-melodic-catkin ros-melodic-mrt-cmake-modules
+```
+
 * Install the dependencies above:
 ```bash
 sudo apt-get install libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
 ```
+
+**On 16.04 and below**, `mrt_cmake_modules` is not available in ROS and you have to clone it into your workspace (`git clone https://github.com/KIT-MRT/mrt_cmake_modules.git`).
 
 ### Building
 As usual with Catkin, after you have sourced the ros installation, you have to create a workspace and clone all required packages there. Then you can build.
@@ -81,7 +87,6 @@ mkdir catkin_ws && cd catkin_ws && mkdir src
 catkin init
 catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo # build in release mode (or whatever you prefer)
 cd src
-git clone https://github.com/KIT-MRT/mrt_cmake_modules.git
 git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
 cd ..
 catkin build
