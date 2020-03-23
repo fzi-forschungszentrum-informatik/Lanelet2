@@ -153,8 +153,8 @@ template <typename LaneletT>
 double approximatedLength2d(const LaneletT& lanelet) {
   double length = 0.;
   auto line = lanelet.leftBound2d();
-  auto step = std::max(1ul, line.size() / 10);
-  for (auto i1 = 0ul, i2 = step; i2 < line.size(); i1 += step, i2 += step) {
+  auto step = std::max(size_t{1}, line.size() / 10);
+  for (auto i1 = size_t{}, i2 = step; i2 < line.size(); i1 += step, i2 += step) {
     length += distance(line[i1], line[i2]);
     if (i2 + step >= line.size()) {
       length += distance(line[i2], line[line.size() - 1]);
