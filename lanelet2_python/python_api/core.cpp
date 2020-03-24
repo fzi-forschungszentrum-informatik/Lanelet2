@@ -919,7 +919,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LaneletSubmap, bases<LaneletMapLayers>, LaneletSubmapPtr, boost::noncopyable>(
       "LaneletSubmap", "Object for managing parts of a lanelet map", init<>("LaneletSubmap()"))
-      .def("laneletMap", +[](LaneletSubmap& self) { return self.laneletMap(); })
+      .def("laneletMap", +[](LaneletSubmap& self) { return LaneletMapPtr{self.laneletMap()}; })
       .def("add", selectSubmapAdd<Point3d>())
       .def("add", selectSubmapAdd<Lanelet>())
       .def("add", selectSubmapAdd<Area>())
