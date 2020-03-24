@@ -2,8 +2,8 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.1 (2020-03-24)
+------------------
 * Add changelogs
 * Contributors: Fabian Poggenhans
 

@@ -2,8 +2,8 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.1 (2020-03-24)
+------------------
 * Fix python bindings for lanelet submap
 * lanelet2_python: Register constructor for SpeedLimits
 * Register more geometry functions (#96, #97)

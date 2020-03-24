@@ -2,8 +2,8 @@
 Changelog for package lanelet2_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.1 (2020-03-24)
+------------------
 * Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules
 * Add changelogs
 * Contributors: Fabian Poggenhans

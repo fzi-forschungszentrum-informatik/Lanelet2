@@ -2,8 +2,8 @@
 Changelog for package lanelet2_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.1 (2020-03-24)
+------------------
 * Fix build failure if size_t is not unsigned long
 * Fix build with boost 1.62
 * Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules
