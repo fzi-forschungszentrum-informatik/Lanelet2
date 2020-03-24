@@ -102,17 +102,25 @@ In python, shortestPath simply returns `None` if there is no path.
 ```cpp
     Optional<Route> route = graph->getRoute(fromLanelet, toLanelet, routingCostId);
     if (route) {
-        write("route.osm", *route->laneletMap(), Origin({49, 8}));
+        LaneletSubmapConstPtr routeMap = route->laneletSubmap();
+        write("route.osm", *routeMap->laneletMap(), Origin({49, 8}));
     }
 ```
 * `Optional` will be uninitialized (false) if there's no route
-* This lanelet map will include all lanelets that are part of the route
+
+Note that there is a semantic difference between a `LaneletSubmap` and a `LaneletMap`. While a LaneletSubmap only contains
+the things you explicitly added, the `LaneletMap` also contains all the things referred by them (the Points, Linestrings, things referred by RegulatoryElements).
+The `LaneletSubmap` in this case only contains the Lanelets of the route. But since this is not sufficient for writing, you need to transform it into a regular `LaneletMap` first.
+
+The written map will therefore not only contain the Lanelets but also their RegulatoryElements.
+If these RegulatoryElements contain other Lanelets, these Lanelets will be part of the written map as well, even if they are not on the route.
 
 in python:
 ```python
 route = graph.getRoute(fromLanelet, toLanelet, routingCostId)
 if route:
-    lanelet2.io.write("route.osm", route.laneletMap(), lanelet2.io.Origin(49, 8)))
+    laneletSubmap = route.laneletSubmap()
+    lanelet2.io.write("route.osm", laneletSubmap.laneletMap(), lanelet2.io.Origin(49, 8)))
 ```
 
 ## Get a reachable set of lanelets
