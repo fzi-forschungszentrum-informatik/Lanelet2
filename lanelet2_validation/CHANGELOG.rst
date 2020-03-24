@@ -4,6 +4,10 @@ Changelog for package lanelet2_validation
 
 Forthcoming
 -----------
+* Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules
+* Add geometry function to compute curvature from three points
+  Add tests, cleanup the validator that uses it
+* Add changelogs
 * Format files
 * Contributors: Fabian Poggenhans
 

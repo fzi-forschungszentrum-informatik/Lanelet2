@@ -4,6 +4,12 @@ Changelog for package lanelet2_core
 
 Forthcoming
 -----------
+* Fix build failure if size_t is not unsigned long
+* Fix build with boost 1.62
+* Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules
+* Add geometry function to compute curvature from three points
+  Add tests, cleanup the validator that uses it
+* Add changelogs
 * Format files
 * Fix clang-tidy warnings
 * Contributors: Fabian Poggenhans

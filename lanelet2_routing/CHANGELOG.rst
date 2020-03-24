@@ -4,6 +4,9 @@ Changelog for package lanelet2_routing
 
 Forthcoming
 -----------
+* Mention laneletSubmap in README
+* Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules
+* Add changelogs
 * Fix clang-tidy warnings
 * Contributors: Fabian Poggenhans
 

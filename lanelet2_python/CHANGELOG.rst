@@ -4,7 +4,11 @@ Changelog for package lanelet2_python
 
 Forthcoming
 -----------
-* Format files
+* Fix python bindings for lanelet submap
+* lanelet2_python: Register constructor for SpeedLimits
+* Register more geometry functions (#96, #97)
+* Register Lanelet::resetCache in python
+* Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules
 * Contributors: Fabian Poggenhans
 
 1.0.0 (2020-03-03)

@@ -4,6 +4,8 @@ Changelog for package lanelet2_io
 
 Forthcoming
 -----------
+* Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules
+* Add changelogs
 * Improve warning if wrong decimal symbol is set, also report it when loading
 * Contributors: Fabian Poggenhans
 

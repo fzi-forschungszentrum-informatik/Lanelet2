@@ -4,6 +4,9 @@ Changelog for package lanelet2_traffic_rules
 
 Forthcoming
 -----------
+* Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules
+* Add changelogs
+* Contributors: Fabian Poggenhans
 
 1.0.0 (2020-03-03)
 ------------------
