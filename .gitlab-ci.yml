@@ -1,6 +1,6 @@
-#version=1.5
+#version=1.6
 include:
-   - project: 'pub/mrt_cmake_modules'
+   - project: 'pub/mrt_build_config'
      ref: master
      file: '/ci_templates/default_catkin_project.yml'
 
