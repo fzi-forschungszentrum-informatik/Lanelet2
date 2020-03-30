@@ -69,7 +69,8 @@ TEST_F(LaneletSequenceTest, LaneletsAreOk) {  // NOLINT
 }
 
 TEST_F(LaneletSequenceTest, ConstructFromLaneletSequences) {  // NOLINT
-  LaneletSequence cl1{{ll1}}, cl2{{ll2}};
+  LaneletSequence cl1{{ll1}};
+  LaneletSequence cl2{{ll2}};
   LaneletSequence ccl{{cl1, cl2}};
   EXPECT_EQ(ccl, cll);
 }

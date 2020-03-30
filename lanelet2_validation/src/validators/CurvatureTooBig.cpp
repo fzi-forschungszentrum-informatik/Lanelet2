@@ -11,7 +11,7 @@ RegisterMapValidator<CurvatureTooBigChecker> reg1;
 
 Issues CurvatureTooBigChecker::operator()(const LaneletMap& map) {
   Issues issues;
-  for (auto& lanelet : map.laneletLayer) {
+  for (const auto& lanelet : map.laneletLayer) {
     checkCurvature(issues, utils::to2D(lanelet.leftBound()), lanelet.id());
     checkCurvature(issues, utils::to2D(lanelet.rightBound()), lanelet.id());
   }

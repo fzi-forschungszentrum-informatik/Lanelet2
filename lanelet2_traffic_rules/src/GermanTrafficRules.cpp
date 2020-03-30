@@ -38,7 +38,7 @@ Velocity trafficSignToVelocity(const std::string& typeString) {
 }  // namespace
 
 Optional<SpeedLimitInformation> GermanVehicle::speedLimit(const RegulatoryElementConstPtrs& regelems) const {
-  for (auto& regelem : regelems) {
+  for (const auto& regelem : regelems) {
     auto speedLimit = std::dynamic_pointer_cast<const SpeedLimit>(regelem);
     if (!!speedLimit) {
       return SpeedLimitInformation{trafficSignToVelocity(speedLimit->type()), true};

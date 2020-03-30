@@ -167,7 +167,7 @@ class Graph {
 
   //! add new lanelet to graph
   inline Vertex addVertex(const typename BaseGraphT::vertex_property_type& property) {
-    GraphType::vertex_descriptor vd;
+    GraphType::vertex_descriptor vd = 0;
     vd = boost::add_vertex(graph_);
     graph_[vd] = property;
     laneletOrAreaToVertex_.emplace(property.get(), vd);

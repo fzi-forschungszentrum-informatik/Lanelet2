@@ -115,7 +115,7 @@ class OriginalGraphFilter {
     }
   }
   bool operator()(const GraphTraits::edge_descriptor& v) const {
-    auto& edge = (*g_)[v];
+    const auto& edge = (*g_)[v];
     return edge.costId == costId_ && (edge.relation & filterMask_) != RelationType::None;
   }
 

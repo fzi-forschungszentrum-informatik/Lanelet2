@@ -506,15 +506,14 @@ TYPED_TEST(TwoDLineStringsTest, shiftLateral) {
  *   O   O
  */
 TEST(TwoDLineStringsTest, removeSelfIntersections) {
-  BasicPoint2d p1, p2, p3, p4, p5, p6, p7, p8;
-  p1 = BasicPoint2d(2, 0);
-  p2 = BasicPoint2d(2, 2);
-  p3 = BasicPoint2d(3, 1);
-  p4 = BasicPoint2d(0, 1);
-  p5 = BasicPoint2d(1, 2);
-  p6 = BasicPoint2d(1, 0);
-  p7 = BasicPoint2d(2, 1);
-  p8 = BasicPoint2d(1, 1);
+  auto p1 = BasicPoint2d(2, 0);
+  auto p2 = BasicPoint2d(2, 2);
+  auto p3 = BasicPoint2d(3, 1);
+  auto p4 = BasicPoint2d(0, 1);
+  auto p5 = BasicPoint2d(1, 2);
+  auto p6 = BasicPoint2d(1, 0);
+  auto p7 = BasicPoint2d(2, 1);
+  auto p8 = BasicPoint2d(1, 1);
   BasicLineString2d l1{p1, p2, p3, p4, p5, p6};
   BasicLineString2d l2{p1, p7, p8, p6};
   auto ret = geometry::internal::removeSelfIntersections(l1);
@@ -522,18 +521,17 @@ TEST(TwoDLineStringsTest, removeSelfIntersections) {
 }
 
 TEST(TwoDLineStringsTest, extractConvex) {
-  BasicPoint2d p1, p2, p3, p3a, p3b, p4, p5, p6, p7, p8, p9;
-  p1 = BasicPoint2d(1, 0);
-  p2 = BasicPoint2d(1, 1);
-  p3 = BasicPoint2d(0, 1);
-  p3a = BasicPoint2d(2, 1);
-  p3b = BasicPoint2d(0, 0);
-  p4 = BasicPoint2d(0.5, 0);
-  p5 = BasicPoint2d(0.5, 1);
-  p6 = BasicPoint2d(1, 0.5);
-  p7 = BasicPoint2d(0, 0.5);
-  p8 = BasicPoint2d(0.5, 1.5);
-  p9 = BasicPoint2d(2, 1.5);
+  auto p1 = BasicPoint2d(1, 0);
+  auto p2 = BasicPoint2d(1, 1);
+  auto p3 = BasicPoint2d(0, 1);
+  auto p3a = BasicPoint2d(2, 1);
+  auto p3b = BasicPoint2d(0, 0);
+  auto p4 = BasicPoint2d(0.5, 0);
+  auto p5 = BasicPoint2d(0.5, 1);
+  auto p6 = BasicPoint2d(1, 0.5);
+  auto p7 = BasicPoint2d(0, 0.5);
+  auto p8 = BasicPoint2d(0.5, 1.5);
+  auto p9 = BasicPoint2d(2, 1.5);
 
   BasicLineString2d l1{p1, p2, p3};
   BasicLineString2d l2{p1, p2, p3a};
@@ -562,14 +560,13 @@ TEST(TwoDLineStringsTest, extractConvex) {
  */
 
 TEST(TwoDLineStringsTest, checkInversion) {
-  BasicPoint2d p1, p2, p3, p4, p5;
-  p1 = BasicPoint2d(3, 3);
-  p2 = BasicPoint2d(3, 5);
-  p3 = BasicPoint2d(0, 5);
-  p4 = BasicPoint2d(0, 0);
-  p5 = BasicPoint2d(4, 0);
+  auto p1 = BasicPoint2d(3, 3);
+  auto p2 = BasicPoint2d(3, 5);
+  auto p3 = BasicPoint2d(0, 5);
+  auto p4 = BasicPoint2d(0, 0);
+  auto p5 = BasicPoint2d(4, 0);
 
   BasicLineString2d l1{p1, p2, p3, p4, p5};
   EXPECT_THROW(geometry::offset(l1, 2), GeometryError);  // NOLINT
-  EXPECT_NO_THROW(geometry::offset(l1, 1));
+  EXPECT_NO_THROW(geometry::offset(l1, 1));              // NOLINT
 }

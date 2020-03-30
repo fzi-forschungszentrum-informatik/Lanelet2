@@ -836,11 +836,11 @@ LaneletMapUPtr createMap(const Lanelets& fromLanelets, const Areas& fromAreas) {
 
   auto points = utils::concatenateRange(ls, [](auto ls) { return std::make_pair(ls.begin(), ls.end()); });
   auto regelems = utils::concatenateRange(fromLanelets, [](Lanelet llt) {
-    auto& regelems = llt.regulatoryElements();
+    const auto& regelems = llt.regulatoryElements();
     return std::make_pair(regelems.begin(), regelems.end());
   });
   auto areaRegelems = utils::concatenateRange(fromAreas, [](Area area) {
-    auto& regelems = area.regulatoryElements();
+    const auto& regelems = area.regulatoryElements();
     return std::make_pair(regelems.begin(), regelems.end());
   });
   auto map = std::make_unique<LaneletMap>(toMap(fromLanelets), toMap(fromAreas), RegulatoryElementLayer::Map(),
@@ -904,10 +904,10 @@ LaneletSubmapUPtr createSubmap(const Areas& fromAreas) { return createSubmap({},
 LaneletSubmapUPtr createSubmap(const Lanelets& fromLanelets, const Areas& fromAreas) {
   auto map = std::make_unique<LaneletSubmap>(toMap(fromLanelets), toMap(fromAreas), RegulatoryElementLayer::Map(),
                                              PolygonLayer::Map(), LineStringLayer::Map(), PointLayer::Map());
-  for (auto& ll : fromLanelets) {
+  for (const auto& ll : fromLanelets) {
     utils::forEach(ll.regulatoryElements(), [&](auto& regelem) { map->trackParameters(*regelem); });
   }
-  for (auto& ar : fromAreas) {
+  for (const auto& ar : fromAreas) {
     utils::forEach(ar.regulatoryElements(), [&](auto& regelem) { map->trackParameters(*regelem); });
   }
   return map;

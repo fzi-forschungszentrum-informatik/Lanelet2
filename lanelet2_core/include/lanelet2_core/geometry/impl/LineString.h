@@ -612,8 +612,8 @@ traits::BasicPointT<traits::PointType<LineStringT>> interpolatedPointAtDistance(
   double currentCumulativeLength = 0.0;
   for (auto first = lineString.begin(), second = std::next(lineString.begin()); second != lineString.end();
        ++first, ++second) {
-    const auto p1 = traits::toBasicPoint(*first);
-    const auto p2 = traits::toBasicPoint(*second);
+    auto p1 = traits::toBasicPoint(*first);
+    auto p2 = traits::toBasicPoint(*second);
     double currentLength = distance(p1, p2);
     currentCumulativeLength += currentLength;
     if (currentCumulativeLength >= dist) {

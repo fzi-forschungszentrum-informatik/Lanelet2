@@ -23,7 +23,7 @@ Optional<Id> hasDuplicates(const T& elem) {
 
 Issues DuplicatedPointsChecker::operator()(const lanelet::LaneletMap& map) {
   Issues issues;
-  for (auto& ls : map.lineStringLayer) {
+  for (const auto& ls : map.lineStringLayer) {
     auto duplicates = hasDuplicates(ls);
     if (!!duplicates) {
       issues.emplace_back(Severity::Error, Primitive::LineString, ls.id(),
@@ -31,7 +31,7 @@ Issues DuplicatedPointsChecker::operator()(const lanelet::LaneletMap& map) {
                               " multiple times in succession. This is not allowed!");
     }
   }
-  for (auto& poly : map.polygonLayer) {
+  for (const auto& poly : map.polygonLayer) {
     auto duplicates = hasDuplicates(poly);
     if (!!duplicates) {
       issues.emplace_back(Severity::Error, Primitive::Polygon, poly.id(),

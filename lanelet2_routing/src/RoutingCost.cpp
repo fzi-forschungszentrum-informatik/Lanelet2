@@ -19,21 +19,20 @@ Velocity speedLimit(const traffic_rules::TrafficRules& trafficRules, const Const
 }
 }  // namespace
 
-double RoutingCostTravelTime::travelTime(const traffic_rules::TrafficRules& trafficRules,
-                                         const ConstLanelet& ll) const {
+double RoutingCostTravelTime::travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstLanelet& ll) {
   auto limit = speedLimit(trafficRules, ll);
   return units::SecondQuantity(geometry::approximatedLength2d(ll) * units::Meter() / limit).value();
 }
 
-double RoutingCostTravelTime::travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstArea& ar) const {
+double RoutingCostTravelTime::travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstArea& ar) {
   auto limit = speedLimit(trafficRules, ar);
   auto diameter = boost::geometry::perimeter(utils::to2D(ar.outerBoundPolygon()));
   return units::SecondQuantity(diameter * units::Meter() / limit).value();
 }
 
-double RoutingCostDistance::length(const ConstLanelet& ll) const noexcept { return geometry::approximatedLength2d(ll); }
+double RoutingCostDistance::length(const ConstLanelet& ll) noexcept { return geometry::approximatedLength2d(ll); }
 
-double RoutingCostDistance::length(const ConstArea& ar) const noexcept {
+double RoutingCostDistance::length(const ConstArea& ar) noexcept {
   return double(boost::geometry::perimeter(utils::to2D(ar.outerBoundPolygon())));
 }
 }  // namespace routing

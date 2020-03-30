@@ -6,7 +6,7 @@ namespace {
 
 std::vector<std::string> matchSingleRegex(const std::regex& regex, const std::vector<std::string>& toMatch) {
   std::vector<std::string> matches;
-  for (auto& str : toMatch) {
+  for (const auto& str : toMatch) {
     if (std::regex_match(str, regex)) {
       matches.push_back(str);
     }

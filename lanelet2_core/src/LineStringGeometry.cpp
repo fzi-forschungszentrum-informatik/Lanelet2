@@ -133,7 +133,7 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineStringT& l1
     bg::envelope(*it, queryBox);
     for (auto qIt = tree.qbegin(bgi::nearest(queryBox, unsigned(greaterRange->size()))); qIt != tree.qend();
          ++qIt, first = false) {
-      auto& nearest = *qIt;
+      const auto& nearest = *qIt;
       auto dBox = boost::geometry::distance(nearest.first, queryBox);
       if (!first && dBox > dMin) {
         break;

@@ -148,7 +148,7 @@ const std::vector<std::string>& mandatoryRegelemTags() {
 Issues checkKnownTags(const AttributeMap& attrs, const std::vector<std::string>& knownTags, Id id,
                       Primitive primitive) {
   Issues issues;
-  for (auto& attr : attrs) {
+  for (const auto& attr : attrs) {
     bool isKnown = utils::anyOf(knownTags, [&attr](auto& knownTag) { return startsWith(attr.first, knownTag); });
     if (!isKnown) {
       issues.push_back(
@@ -161,7 +161,7 @@ Issues checkKnownTags(const AttributeMap& attrs, const std::vector<std::string>&
 Issues checkMandatoryTags(const AttributeMap& attrs, const std::vector<std::string>& mandatoryTags, Id id,
                           Primitive primitive) {
   Issues issues;
-  for (auto& tag : mandatoryTags) {
+  for (const auto& tag : mandatoryTags) {
     if (attrs.find(tag) == attrs.end()) {
       issues.push_back(Issue(Severity::Warning, primitive, id, "should have a " + tag + " attribute."));
     }
@@ -174,7 +174,7 @@ Issues checkKnownTagValues(const AttributeMap& attrs, const ValueMap& knownTagVa
   using Attr = AttributeNamesString;
   Issues issues;
   auto type = attrs.find(AttributeName::Type);
-  for (auto& attr : attrs) {
+  for (const auto& attr : attrs) {
     auto key = attr.first;
     bool isSubtype = combineSubtypes && key == Attr::Subtype && type != attrs.end();
     if (isSubtype) {
@@ -210,7 +210,7 @@ Issues checkAttribute(const AttributeMap& map, Id id, Primitive primitive) {
   static std::vector<std::string> boolAttributes{Attr::OneWay,      Attr::Dynamic,  Attr::LaneChange,
                                                  Attr::Participant, Attr::Fallback, Attr::Temporary};
   Issues issues;
-  for (auto& attr : map) {
+  for (const auto& attr : map) {
     bool isBoolAttr =
         utils::anyOf(boolAttributes, [&attr](auto& boolAttr) { return startsWith(attr.first, boolAttr); });
     if (isBoolAttr && !attr.second.asBool()) {

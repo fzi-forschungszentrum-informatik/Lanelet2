@@ -81,11 +81,11 @@ class PolygonTypeTest : public PolygonPoints {
     BasicPoint3d delta =
         (utils::toBasicPoint(poly[(after + 1) % poly.size()]) - utils::toBasicPoint(poly[after])) / (2 * nNew + 1);
     std::vector<Point3d> points;
-    for (size_t i(0); i < nNew; ++i) {
-      points.emplace_back(Point3d(++id, utils::toBasicPoint(poly[after]) + (2 * i + floatRand_() + 1) * delta));
+    for (int i = 0; i < nNew; ++i) {
+      points.emplace_back(Point3d(++id, utils::toBasicPoint(poly[after]) + (2 * double(i) + randomNum_() + 1) * delta));
     }
     Polygon3d newLs(++id, points);
-    poly.insert(poly.begin() + ((after + 1) % poly.size()), newLs.begin(), newLs.end());
+    poly.insert(poly.begin() + long((after + 1) % poly.size()), newLs.begin(), newLs.end());
   }
   void subdivide(Polygon3d& poly, const int n, Id id) {
     auto initSize = poly.size();
@@ -93,8 +93,8 @@ class PolygonTypeTest : public PolygonPoints {
       randomSubdivide(poly, (n + 1) * i, n, id);
     }
   }
-  std::function<double(void)> floatRand_ =
-      std::bind(std::uniform_real_distribution<double>(-0.5, 0.5), std::mt19937(133769420));
+  std::function<double(void)> randomNum_ = [distr = std::uniform_real_distribution<double>(-0.5, 0.5),
+                                            gen = std::mt19937(133769420)]() mutable { return distr(gen); };
 };
 
 template <typename PolygonT>
@@ -297,9 +297,9 @@ bool isConvex(const BasicPolygon2d& poly) {
 
 void checkPartitionConsistency(const BasicPolygon2d& poly, const BasicPolygons2d& parts) {
   double areaSum{0.};
-  for (int i = 0; i < parts.size(); ++i) {
+  for (auto i = 0ul; i < parts.size(); ++i) {
     areaSum += boost::geometry::area(parts.at(i));
-    for (int j = i + 1; j < parts.size(); ++j) {
+    for (auto j = i + 1; j < parts.size(); ++j) {
       BasicPolygon2d intersection;
       boost::geometry::intersection(parts.at(i), parts.at(j), intersection);
       EXPECT_DOUBLE_EQ(boost::geometry::area(intersection), 0.);

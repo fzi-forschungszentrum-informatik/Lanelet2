@@ -12,7 +12,9 @@ using lanelet::Participants;
 
 lanelet::RegulatoryElementPtr getSpeedLimit(const std::string& type, const lanelet::AttributeMap& attributes = {}) {
   using namespace lanelet;
-  Point3d p1{10, 0, -1}, p2{11, 0, -2};
+  Point3d p1{10, 0, -1};
+
+  Point3d p2{11, 0, -2};
   LineString3d sign{7, {p1, p2}};
   return SpeedLimit::make(5, attributes, {{sign}, type});
 }

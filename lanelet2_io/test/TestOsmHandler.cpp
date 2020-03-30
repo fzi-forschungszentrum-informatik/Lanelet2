@@ -111,8 +111,8 @@ TEST(OsmHandler, writeMapWithLaneletAndAreaToFile) {  // NOLINT
   auto ll = test_setup::setUpLanelet(num);
   map->add(ar);
   map->add(ll);
-  auto filename = std::string(std::tmpnam(nullptr)) + ".osm";  // NOLINT
+  lanelet::test_setup::Tempfile file("file.osm");
   Origin origin({49, 8.4, 0});
-  write(filename, *map, origin);
-  EXPECT_NO_THROW(load(filename, origin));  // NOLINT
+  write(file.get().string(), *map, origin);
+  EXPECT_NO_THROW(load(file.get().string(), origin));  // NOLINT
 }

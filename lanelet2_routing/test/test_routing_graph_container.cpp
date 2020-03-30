@@ -16,7 +16,6 @@ class RoutingGraphContainerTest : public RoutingGraphTest {
     container = std::make_unique<RoutingGraphContainer>(graphs);
   }
 
- public:
   RoutingGraphContainerUPtr container;
 };
 
@@ -32,7 +31,6 @@ class RouteRoutingGraphContainerTest : public RoutingGraphContainerTest {
     route = std::make_unique<Route>(std::move(*tempRoute));
   }
 
- public:
   std::unique_ptr<Route> route;
 };
 

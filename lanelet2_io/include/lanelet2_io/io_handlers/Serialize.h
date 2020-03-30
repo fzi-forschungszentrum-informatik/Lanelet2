@@ -62,7 +62,7 @@ void serialize(Archive& ar, std::pair<std::string, lanelet::RuleParameters>& p, 
 
 template <typename Archive>
 void load(Archive& ar, lanelet::AttributeMap& p, unsigned int /*version*/) {
-  size_t size;
+  size_t size = 0;
   ar& size;
   for (auto i = 0u; i < size; ++i) {
     std::pair<std::string, lanelet::Attribute> val;
@@ -75,7 +75,7 @@ template <typename Archive>
 void save(Archive& ar, const lanelet::AttributeMap& p, unsigned int /*version*/) {
   auto size = p.size();
   ar& size;
-  for (auto& elem : p) {
+  for (const auto& elem : p) {
     std::pair<std::string, lanelet::Attribute> val = elem;
     ar& val;
   }
@@ -83,7 +83,7 @@ void save(Archive& ar, const lanelet::AttributeMap& p, unsigned int /*version*/)
 
 template <typename Archive>
 void load(Archive& ar, lanelet::RuleParameterMap& p, unsigned int /*version*/) {
-  size_t size;
+  size_t size = 0;
   ar& size;
   for (auto i = 0u; i < size; ++i) {
     std::pair<std::string, lanelet::RuleParameters> val;
@@ -96,7 +96,7 @@ template <typename Archive>
 void save(Archive& ar, const lanelet::RuleParameterMap& p, unsigned int /*version*/) {
   size_t size = p.size();
   ar& size;
-  for (auto& elem : p) {
+  for (const auto& elem : p) {
     std::pair<std::string, lanelet::RuleParameters> val = elem;
     ar& val;
   }
@@ -126,13 +126,14 @@ template <class Archive>
 inline void load_construct_data(Archive& ar, lanelet::LaneletData* llt, unsigned int /*version*/
 ) {
   using namespace lanelet;
-  Id id;
+  Id id = 0;
   AttributeMap attrs;
-  LineString3d left, right;
+  LineString3d left;
+  LineString3d right;
   ar >> id >> attrs >> left >> right;
   new (llt) LaneletData(id, left, right, attrs);
   lanelet::impl::loadRegelems(ar, llt->regulatoryElements());  // must happen directly to the correct memory location
-  bool hasCenterline;
+  bool hasCenterline = false;
   ar >> hasCenterline;
   if (hasCenterline) {
     LineString3d centerline;
@@ -150,7 +151,7 @@ void save(Archive& ar, const lanelet::Lanelet& l, unsigned int /*version*/) {
 template <typename Archive>
 void load(Archive& ar, lanelet::Lanelet& l, unsigned int /*version*/) {
   std::shared_ptr<lanelet::LaneletData> ptr;
-  bool inv;
+  bool inv = false;
   ar >> inv >> ptr;
   l = lanelet::Lanelet(ptr, inv);
 }
@@ -164,7 +165,7 @@ void save(Archive& ar, const lanelet::ConstLanelet& l, unsigned int /*version*/)
 template <typename Archive>
 void load(Archive& ar, lanelet::ConstLanelet& l, unsigned int /*version*/) {
   std::shared_ptr<lanelet::LaneletData> ptr;
-  bool inv;
+  bool inv = false;
   ar >> inv >> ptr;
   l = lanelet::Lanelet(ptr, inv);
 }
@@ -198,7 +199,7 @@ template <class Archive>
 // NOLINTNEXTLINE
 inline void load_construct_data(Archive& ar, lanelet::LineStringData* l, unsigned int /*version*/) {
   using namespace lanelet;
-  Id id;
+  Id id = 0;
   AttributeMap attr;
   Points3d points;
   ar >> id >> attr >> points;
@@ -269,7 +270,7 @@ template <class Archive>
 // NOLINTNEXTLINE
 inline void load_construct_data(Archive& ar, lanelet::PointData* p, unsigned int /*version*/) {
   using namespace lanelet;
-  Id id;
+  Id id = 0;
   AttributeMap attrs;
   BasicPoint3d pt;
   ar >> id >> attrs >> pt.x() >> pt.y() >> pt.z();
@@ -316,7 +317,7 @@ template <class Archive>
 // NOLINTNEXTLINE
 inline void load_construct_data(Archive& ar, lanelet::AreaData* a, unsigned int /*version*/) {
   using namespace lanelet;
-  Id id;
+  Id id = 0;
   AttributeMap attrs;
   InnerBounds inner;
   LineStrings3d outer;
@@ -423,7 +424,7 @@ template <class Archive>
 // NOLINTNEXTLINE
 inline void load_construct_data(Archive& ar, lanelet::RegulatoryElementData* r, unsigned int /*version*/) {
   using namespace lanelet;
-  Id id;
+  Id id = 0;
   AttributeMap attr;
   RuleParameterMap params;
   ar >> id >> attr >> params;
@@ -445,7 +446,7 @@ void save(Archive& ar, const lanelet::RegulatoryElementPtr& r, unsigned int /*ve
 template <typename Archive>
 void load(Archive& ar, lanelet::RegulatoryElementPtr& r, unsigned int /*version*/) {
   auto& helper = ar.template get_helper<RegelemDeserialization>(&ar);
-  lanelet::Id id;
+  lanelet::Id id = 0;
   ar >> id;
   if (helper.currentlyDeserializing(id, r)) {
     return;
@@ -490,7 +491,7 @@ template <typename Archive>
 void load(Archive& ar, lanelet::LaneletMap& m, unsigned int /*version*/) {
   auto loadLayer = [&ar](auto& layerMap) {
     using Prim = typename std::decay_t<decltype(layerMap)>::mapped_type;
-    size_t size;
+    size_t size = 0;
     ar >> size;
     for (auto i = 0u; i < size; ++i) {
       Prim p;

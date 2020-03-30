@@ -73,7 +73,7 @@ class VisitedLaneletGraph {
   //! Iterates the vertices of the graph
   template <typename Func>
   void forAllValidLanelets(Func&& f) const {
-    for (auto& vertex : visited_) {
+    for (const auto& vertex : visited_) {
       if (!!vertex.second && !vertex.second->isLeaf()) {
         f(vertex);
       }
@@ -288,7 +288,7 @@ class RouteConstructionVisitor : public boost::default_bfs_visitor {
     }
   }
 
-  bool isDifferentLane(OnRouteGraph::edge_descriptor e, const OnRouteGraph& g) const {
+  static bool isDifferentLane(OnRouteGraph::edge_descriptor e, const OnRouteGraph& g) {
     // we increment the lane id whenever the vertex has more than one predecessor or the singele predecessor has
     // multiple follower. Non-Successor edges are always a different lane.
     if (g[e].relation != RelationType::Successor) {

@@ -15,7 +15,9 @@ inline LineString3d getLineStringAtY(double y) {
 }
 
 inline Polygon3d getAPolygon() {
-  Point3d p1{utils::getId(), 0, 0, 0}, p2{utils::getId(), 2, 0, 0}, p3{utils::getId(), 2, -2, 0};
+  Point3d p1{utils::getId(), 0, 0, 0};
+  Point3d p2{utils::getId(), 2, 0, 0};
+  Point3d p3{utils::getId(), 2, -2, 0};
   return Polygon3d(utils::getId(), {p1, p2, p3});
 }
 

@@ -13,12 +13,16 @@ class Tempfile {
  public:
   Tempfile() {
     char path[] = {"/tmp/lanelet2_unittest.XXXXXX"};
-    auto res = mkdtemp(path);
+    auto* res = mkdtemp(path);
     if (res == nullptr) {
       throw lanelet::LaneletError("Failed to crate temporary directory");
     }
     path_ = path;
   }
+  Tempfile(const Tempfile&) = delete;
+  Tempfile(Tempfile&&) = delete;
+  Tempfile& operator=(const Tempfile&) = delete;
+  Tempfile& operator=(Tempfile&&) = delete;
   ~Tempfile() { fs::remove_all(fs::path(path_)); }
 
   auto operator()(const std::string& str) const noexcept -> std::string { return (fs::path(path_) / str).string(); }

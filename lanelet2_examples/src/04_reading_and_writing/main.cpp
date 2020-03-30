@@ -15,7 +15,7 @@ std::string exampleMapPath = std::string(PKG_DIR) + "/../lanelet2_maps/res/mappi
 
 std::string tempfile(const std::string& name) {
   char tmpDir[] = "/tmp/lanelet2_example_XXXXXX";
-  auto file = mkdtemp(tmpDir);
+  auto* file = mkdtemp(tmpDir);
   if (file == nullptr) {
     throw lanelet::IOError("Failed to open a temporary file for writing");
   }

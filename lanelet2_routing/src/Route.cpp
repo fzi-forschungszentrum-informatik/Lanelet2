@@ -371,7 +371,7 @@ Route::Errors Route::checkValidity(bool throwOnError) const {
   std::for_each(edges.first, edges.second, [&](internal::RouteGraph::Edge e) {
     // get reverse edge
     decltype(e) eRev;
-    bool exists;
+    bool exists = false;
     std::tie(eRev, exists) = boost::edge(boost::target(e, g), boost::source(e, g), g);
     auto sourceId = g[boost::source(e, g)].lanelet.id();
     auto targetId = g[boost::target(e, g)].lanelet.id();

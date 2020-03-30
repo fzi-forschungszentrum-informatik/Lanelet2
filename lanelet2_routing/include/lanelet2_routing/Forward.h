@@ -114,7 +114,6 @@ inline std::string relationToColor(RelationType type) {
     case RelationType::Conflicting:
       return "red";
     case RelationType::AdjacentLeft:
-      return "black";
     case RelationType::AdjacentRight:
       return "black";
     case RelationType::Area:

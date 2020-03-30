@@ -37,7 +37,6 @@ class TestArea : public testing::Test {
     regelem = std::make_shared<GenericRegulatoryElement>(++id);
   }
 
- public:
   Id id{0};
   Points3d pointsLeft, pointsRight;
   LineString3d firstCircle, secondCircle1, secondCircle2, secondCircle3, hole, thirdLine1, thirdLine2, rightLine;

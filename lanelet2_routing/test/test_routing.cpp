@@ -57,7 +57,7 @@ TEST(DijkstraSearch, onSimpleGraph) {
     return v.vertex != 4;
   });
   EXPECT_EQ(searcher.getMap().size(), boost::num_vertices(g));
-  for (auto& v : searcher.getMap()) {
+  for (const auto& v : searcher.getMap()) {
     EXPECT_EQ(v.second.predicate, v.first != 4) << v.first;
     EXPECT_EQ(v.second.isLeaf, v.first == 5 || v.first == 4) << v.first;
   }

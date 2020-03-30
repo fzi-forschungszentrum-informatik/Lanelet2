@@ -69,7 +69,7 @@ class ToFileWriter {
   }
 
  private:
-  ToFileWriter() : file_{std::make_unique<osm::File>()} {}
+  ToFileWriter() = default;
 
   // writers for every primitive
   void writeNodes(const LaneletMap& map, const Projector& projector) {
@@ -158,7 +158,7 @@ class ToFileWriter {
     errors_.push_back("Error writing primitive "s + std::to_string(id) + ": " + what);
   }
 
-  osm::Attributes getAttributes(const AttributeMap& attributes) {
+  static osm::Attributes getAttributes(const AttributeMap& attributes) {
     osm::Attributes osmAttributes;
     for (const auto& attr : attributes) {
       osmAttributes.emplace(attr.first, attr.second.value());
@@ -280,11 +280,11 @@ class ToFileWriter {
     }
   }
   Errors errors_;
-  std::unique_ptr<osm::File> file_;
+  std::unique_ptr<osm::File> file_{std::make_unique<osm::File>()};
 };
 
 void testAndPrintLocaleWarning(ErrorMessages& errors) {
-  auto decimalPoint = std::localeconv()->decimal_point;
+  auto* decimalPoint = std::localeconv()->decimal_point;
   if (decimalPoint == nullptr || *decimalPoint != '.') {
     std::stringstream ss;
     ss << "Warning: Current decimal point of the C locale is set to \""

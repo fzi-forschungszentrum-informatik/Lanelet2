@@ -22,8 +22,9 @@ void part1UsingTrafficRules() {
   using namespace lanelet::units::literals;
 
   // first lets construct a sequence of lanelets. left is left of right, next follows right.
-  LineString3d leftLs{examples::getLineStringAtY(3)}, middleLs{examples::getLineStringAtY(2)},
-      rightLs{examples::getLineStringAtY(0)};
+  LineString3d leftLs{examples::getLineStringAtY(3)};
+  LineString3d middleLs{examples::getLineStringAtY(2)};
+  LineString3d rightLs{examples::getLineStringAtY(0)};
   LineString3d nextLeftLs{utils::getId(),
                           {middleLs.back(), Point3d(utils::getId(), middleLs.back().x() + 1., middleLs.back().y())}};
   LineString3d nextRightLs{utils::getId(),

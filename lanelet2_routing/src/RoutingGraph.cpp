@@ -207,7 +207,7 @@ struct GetGraph<false> {
 
 template <bool Backw, typename OutVertexT, typename GraphT>
 std::vector<OutVertexT> buildPath(const DijkstraSearchMap<LaneletVertexId>& map, LaneletVertexId vertex, GraphT g) {
-  auto* currInfo = &map.at(vertex);
+  const auto* currInfo = &map.at(vertex);
   auto size = currInfo->length;
   std::vector<OutVertexT> path(size);
   while (true) {
@@ -734,7 +734,7 @@ class DebugMapBuilder {
   explicit DebugMapBuilder(const FilteredRoutingGraph& graph) : graph_{graph} {}
   LaneletMapPtr run(const internal::LaneletOrAreaToVertex& loa) {
     LaneletMapPtr output = std::make_shared<LaneletMap>();
-    for (auto& vertex : loa) {
+    for (const auto& vertex : loa) {
       visitVertex(vertex);
     }
     auto lineStrings = utils::transform(lineStringMap_, [](auto& mapLs) { return mapLs.second; });
@@ -757,7 +757,7 @@ class DebugMapBuilder {
     }
   }
 
-  LaneletOrAreaPair getPair(const ConstLaneletOrArea& first, const ConstLaneletOrArea& second) {
+  static LaneletOrAreaPair getPair(const ConstLaneletOrArea& first, const ConstLaneletOrArea& second) {
     return first.id() < second.id() ? LaneletOrAreaPair(first, second) : LaneletOrAreaPair(second, first);
   }
 
@@ -783,7 +783,6 @@ class DebugMapBuilder {
     }
   }
 
- private:
   FilteredRoutingGraph graph_;
   std::unordered_map<LaneletOrAreaPair, LineString3d> lineStringMap_;  // Stores all relations
   std::unordered_map<ConstLaneletOrArea, Point2d> pointMap_;           // Stores all 'edges'
@@ -803,9 +802,9 @@ LaneletMapPtr RoutingGraph::getDebugLaneletMap(RoutingCostId routingCostId, bool
 RoutingGraph::Errors RoutingGraph::checkValidity(bool throwOnError) const {
   Errors errors;
   for (const auto& laWithVertex : graph_->vertexLookup()) {
-    auto& la = laWithVertex.first;
+    const auto& la = laWithVertex.first;
     auto ll = laWithVertex.first.lanelet();
-    auto& vertex = laWithVertex.second;
+    const auto& vertex = laWithVertex.second;
     auto id = la.id();
     // Check left relation
     Optional<ConstLanelet> left;

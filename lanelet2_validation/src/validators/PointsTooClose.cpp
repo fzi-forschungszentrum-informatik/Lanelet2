@@ -10,7 +10,7 @@ RegisterMapValidator<PointsTooCloseChecker> reg;
 
 Issues PointsTooCloseChecker::operator()(const lanelet::LaneletMap& map) {
   Issues issues;
-  for (auto& p : map.pointLayer) {
+  for (const auto& p : map.pointLayer) {
     auto nearest = map.pointLayer.nearest(utils::to2D(p).basicPoint(), 2);
     if (nearest.size() == 2) {
       auto& next = nearest[0] == p ? nearest[1] : nearest[0];

@@ -150,7 +150,9 @@ void part1Points() {
 void part2LineStrings() {
   using namespace lanelet;
   // LineStrings are created from a set of points with linear interpolation between them.
-  Point3d p1{utils::getId(), 0, 0, 0}, p2{utils::getId(), 1, 0, 0}, p3{utils::getId(), 2, 0, 0};
+  Point3d p1{utils::getId(), 0, 0, 0};
+  Point3d p2{utils::getId(), 1, 0, 0};
+  Point3d p3{utils::getId(), 2, 0, 0};
   LineString3d ls(utils::getId(), {p1, p2, p3});
 
   // conceptually, linestrings are similar to an std::vector. You can access individal points or loop over them.
@@ -217,7 +219,9 @@ void part3Polygons() {
   using namespace lanelet;
   // polygons are very, very similar to linestrings. the only actual difference is that there is a last, implicit
   // segment between the last and the first point that closes the polygon. The interface is basically the same:
-  Point3d p1{utils::getId(), 0, 0, 0}, p2{utils::getId(), 1, 0, 0}, p3{utils::getId(), 2, -1, 0};
+  Point3d p1{utils::getId(), 0, 0, 0};
+  Point3d p2{utils::getId(), 1, 0, 0};
+  Point3d p3{utils::getId(), 2, -1, 0};
   Polygon3d poly(utils::getId(), {p1, p2, p3});
 
   assert(poly.size() == 3);

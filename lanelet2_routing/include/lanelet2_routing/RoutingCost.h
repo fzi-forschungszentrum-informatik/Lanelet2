@@ -70,8 +70,8 @@ class RoutingCostDistance : public RoutingCost {
   }
 
  private:
-  double length(const ConstLanelet& ll) const noexcept;
-  double length(const ConstArea& ar) const noexcept;
+  static double length(const ConstLanelet& ll) noexcept;
+  static double length(const ConstArea& ar) noexcept;
   const double laneChangeCost_, minChangeLength_;  // NOLINT
 };
 
@@ -111,8 +111,8 @@ class RoutingCostTravelTime : public RoutingCost {
   }
 
  private:
-  double travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstLanelet& ll) const;
-  double travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstArea& ar) const;
+  static double travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstLanelet& ll);
+  static double travelTime(const traffic_rules::TrafficRules& trafficRules, const ConstArea& ar);
   const Velocity maxSpeed_;                      // NOLINT
   const double laneChangeCost_, minChangeTime_;  // NOLINT
 };

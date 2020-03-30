@@ -37,7 +37,7 @@ class IOHandler {  // NOLINT
     return *projector_;
   }
 
-  const io::Configuration config() { return *config_; }
+  io::Configuration config() { return *config_; }
 
  protected:
   IOHandler() = default;  // workaround for gcc5 bug

@@ -35,7 +35,7 @@ std::unique_ptr<LaneletMap> BinParser::parse(const std::string& filename, ErrorM
   std::unique_ptr<LaneletMap> laneletMap = std::make_unique<LaneletMap>();
   boost::archive::binary_iarchive ia(fs);
   ia >> *laneletMap;
-  Id idCounter;
+  Id idCounter = 0;
   ia >> idCounter;
   utils::registerId(idCounter);
   return laneletMap;

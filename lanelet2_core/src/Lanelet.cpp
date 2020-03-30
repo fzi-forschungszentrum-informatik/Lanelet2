@@ -64,7 +64,7 @@ class BoundChecker {
   }
 
   bool secondCrossesBounds(const BasicSegment2d& seg, bool left) const {
-    auto& segmentTree = left ? leftSegments_ : rightSegments_;
+    const auto& segmentTree = left ? leftSegments_ : rightSegments_;
     for (auto it = segmentTree.qbegin(bgi::intersects(seg)); it != segmentTree.qend(); ++it) {
       using boost::geometry::equals;
       if (!equals(it->first, seg.second) && !equals(it->second, seg.second)) {

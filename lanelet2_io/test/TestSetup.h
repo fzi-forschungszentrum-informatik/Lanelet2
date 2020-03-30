@@ -1,6 +1,10 @@
 #pragma once
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
+#include <lanelet2_io/Exceptions.h>
+#include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
 
 namespace lanelet {
 inline bool operator==(const PointData& lhs, const PointData& rhs) {
@@ -115,5 +119,29 @@ inline Area setUpArea(int& num, const std::string& type = AttributeValueString::
               AttributeMap{{AttributeNamesString::Subtype, type}}, {regelem});
 }
 
+class Tempfile {
+ public:
+  explicit Tempfile(std::string name) {
+    char dir[] = {"/tmp/lanelet2_io_test.XXXXXX"};
+    auto* res = mkdtemp(dir);
+    if (res == nullptr) {
+      throw lanelet::LaneletError("Failed to crate temporary directory");
+    }
+    dir_ = dir;
+    path_ = fs::path(dir_) / name;
+  }
+  Tempfile(Tempfile&& rhs) noexcept = delete;
+  Tempfile& operator=(Tempfile&& rhs) noexcept = delete;
+  Tempfile(const Tempfile& rhs) = delete;
+  Tempfile& operator=(const Tempfile& rhs) = delete;
+  ~Tempfile() { fs::remove_all(path_); }
+
+  const fs::path& get() const { return path_; }
+  void touch() { std::ofstream(path_.string()); }
+
+ private:
+  std::string dir_;
+  fs::path path_;
+};
 }  // namespace test_setup
 }  // namespace lanelet

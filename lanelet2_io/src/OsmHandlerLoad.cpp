@@ -43,7 +43,7 @@ RegulatoryElementPtr getDummy<RegulatoryElementPtr>(Id id) {
   return std::make_shared<GenericRegulatoryElement>(std::make_shared<RegulatoryElementData>(id));
 }
 
-Errors buildErrorMessage(const std::string& errorIntro, Errors errors) {
+Errors buildErrorMessage(const std::string& errorIntro, const Errors& errors) {
   if (errors.empty()) {
     return {};
   }
@@ -225,7 +225,7 @@ class FromFileLoader {  // NOLINT
     return attr != relation.attributes.end() && attr->second == Type;
   }
 
-  lanelet::AttributeMap getAttributes(const lanelet::osm::Attributes& osmAttributes) {
+  static lanelet::AttributeMap getAttributes(const lanelet::osm::Attributes& osmAttributes) {
     lanelet::AttributeMap attributes;
     for (const auto& osmAttr : osmAttributes) {
       attributes.insert(std::make_pair(osmAttr.first, lanelet::Attribute(osmAttr.second)));
@@ -407,7 +407,7 @@ void registerIds(const MapT& map) {
 }
 
 void testAndPrintLocaleWarning(ErrorMessages& errors) {
-  auto decimalPoint = std::localeconv()->decimal_point;
+  auto* decimalPoint = std::localeconv()->decimal_point;
   if (decimalPoint == nullptr || *decimalPoint != '.') {
     std::stringstream ss;
     ss << "Warning: Current decimal point of the C locale is set to \""

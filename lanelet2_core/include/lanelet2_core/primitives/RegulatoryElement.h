@@ -433,7 +433,7 @@ template <>
 inline boost::optional<ConstLanelet> RegulatoryElement::find<ConstLanelet>(Id id) const {
   for (const auto& params : parameters()) {
     for (const auto& elem : params.second) {
-      auto telem = boost::get<WeakLanelet>(&elem);
+      const auto* telem = boost::get<WeakLanelet>(&elem);
       if (telem != nullptr && !telem->expired() && telem->lock().id() == id) {
         return telem->lock();
       }
@@ -446,7 +446,7 @@ template <>
 inline boost::optional<ConstArea> RegulatoryElement::find<ConstArea>(Id id) const {
   for (const auto& params : parameters()) {
     for (const auto& elem : params.second) {
-      auto telem = boost::get<WeakArea>(&elem);
+      const auto* telem = boost::get<WeakArea>(&elem);
       if (telem != nullptr && !telem->expired() && telem->lock().id() == id) {
         return telem->lock();
       }

@@ -59,7 +59,7 @@ void runRoutingGraphValidators(std::vector<DetectedIssues>& issues, const Regexe
   if (routingGraphValidators.empty()) {
     return;
   }
-  for (auto& rule : rules) {
+  for (const auto& rule : rules) {
     routing::RoutingGraphPtr routingGraph;
     try {
       routingGraph = routing::RoutingGraph::build(map, *rule);
@@ -77,7 +77,7 @@ void runRoutingGraphValidators(std::vector<DetectedIssues>& issues, const Regexe
 
 Issues DetectedIssues::errors() const {
   Issues errors;
-  for (auto& issue : issues) {
+  for (const auto& issue : issues) {
     if (issue.severity == Severity::Error) {
       errors.push_back(issue);
     }
@@ -87,7 +87,7 @@ Issues DetectedIssues::errors() const {
 
 Issues DetectedIssues::warnings() const {
   Issues warning;
-  for (auto& issue : issues) {
+  for (const auto& issue : issues) {
     if (issue.severity == Severity::Warning) {
       warning.push_back(issue);
     }

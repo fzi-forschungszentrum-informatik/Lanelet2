@@ -94,19 +94,18 @@ void removeAndFixPlaceholders(Primitive** toRemove, Roles& fromRoles, std::vecto
 class OsmFileWriter {
  public:
   static std::unique_ptr<pugi::xml_document> write(const File& osmFile) {
-    OsmFileWriter osmIo;
     auto xml = std::make_unique<pugi::xml_document>();
     auto osmNode = xml->append_child(keyword::Osm);
     osmNode.append_attribute("version") = "0.6";
     osmNode.append_attribute("generator") = "lanelet2";
-    osmIo.writeNodes(osmNode, osmFile.nodes);
-    osmIo.writeWays(osmNode, osmFile.ways);
-    osmIo.writeRelations(osmNode, osmFile.relations);
+    lanelet::osm::OsmFileWriter::writeNodes(osmNode, osmFile.nodes);
+    lanelet::osm::OsmFileWriter::writeWays(osmNode, osmFile.ways);
+    lanelet::osm::OsmFileWriter::writeRelations(osmNode, osmFile.relations);
     return xml;
   }
 
  private:
-  void writeAttributes(pugi::xml_node& elemNode, const Attributes& attributes) {
+  static void writeAttributes(pugi::xml_node& elemNode, const Attributes& attributes) {
     for (const auto& attribute : attributes) {
       auto tagNode = elemNode.append_child(keyword::Tag);
       tagNode.append_attribute(keyword::Key) = attribute.first.c_str();
@@ -114,7 +113,7 @@ class OsmFileWriter {
     }
   }
 
-  void writeNodes(pugi::xml_node& osmNode, const Nodes& nodes) {
+  static void writeNodes(pugi::xml_node& osmNode, const Nodes& nodes) {
     for (const auto& node : nodes) {
       auto xmlNode = osmNode.append_child(keyword::Node);
       xmlNode.append_attribute(keyword::Id) = LongLong(node.second.id);
@@ -134,7 +133,7 @@ class OsmFileWriter {
     }
   }
 
-  void writeWays(pugi::xml_node& osmNode, const Ways& ways) {
+  static void writeWays(pugi::xml_node& osmNode, const Ways& ways) {
     for (const auto& wayElem : ways) {
       const auto& way = wayElem.second;
       auto xmlNode = osmNode.append_child(keyword::Way);
@@ -151,7 +150,7 @@ class OsmFileWriter {
     }
   }
 
-  void writeRelations(pugi::xml_node& osmNode, const Relations& relations) {
+  static void writeRelations(pugi::xml_node& osmNode, const Relations& relations) {
     for (const auto& relationElem : relations) {
       const auto& relation = relationElem.second;
       auto xmlNode = osmNode.append_child(keyword::Relation);
@@ -178,7 +177,7 @@ class OsmFileParser {
     OsmFileParser osmParser;
     File file;
     auto osmNode = fileNode.child(keyword::Osm);
-    file.nodes = osmParser.readNodes(osmNode);
+    file.nodes = lanelet::osm::OsmFileParser::readNodes(osmNode);
     file.ways = osmParser.readWays(osmNode, file.nodes);
     file.relations = osmParser.readRelations(osmNode, file.nodes, file.ways);
     if (errors != nullptr) {
@@ -188,7 +187,7 @@ class OsmFileParser {
   }
 
  private:
-  Nodes readNodes(const pugi::xml_node& osmNode) {
+  static Nodes readNodes(const pugi::xml_node& osmNode) {
     Nodes nodes;
     for (auto node = osmNode.child(keyword::Node); node;  // NOLINT
          node = node.next_sibling(keyword::Node)) {

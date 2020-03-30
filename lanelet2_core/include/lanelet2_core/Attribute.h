@@ -370,7 +370,7 @@ inline std::ostream& operator<<(std::ostream& stream, const Attribute& obj) { re
 using AttributeMap = HybridMap<Attribute, decltype(AttributeNamesString::Map)&, AttributeNamesString::Map>;
 
 inline std::ostream& operator<<(std::ostream& stream, const AttributeMap& obj) {
-  for (auto& o : obj) {
+  for (const auto& o : obj) {
     stream << o.first << ": " << o.second << " ";
   }
   return stream;

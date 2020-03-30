@@ -23,8 +23,9 @@ class RoutingGraphBuilder {
   using PointsLaneletMapIt = PointsLaneletMap::iterator;
   using PointsLaneletMapResult = std::pair<PointsLaneletMapIt, PointsLaneletMapIt>;
 
-  ConstLanelets getPassableLanelets(const LaneletLayer& lanelets, const traffic_rules::TrafficRules& trafficRules);
-  ConstAreas getPassableAreas(const AreaLayer& areas, const traffic_rules::TrafficRules& trafficRules);
+  static ConstLanelets getPassableLanelets(const LaneletLayer& lanelets,
+                                           const traffic_rules::TrafficRules& trafficRules);
+  static ConstAreas getPassableAreas(const AreaLayer& areas, const traffic_rules::TrafficRules& trafficRules);
   void appendBidirectionalLanelets(ConstLanelets& llts);
   void addLaneletsToGraph(ConstLanelets& llts);
   void addAreasToGraph(ConstAreas& areas);

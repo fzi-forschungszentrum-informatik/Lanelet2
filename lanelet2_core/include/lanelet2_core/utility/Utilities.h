@@ -316,7 +316,7 @@ std::vector<T> getVariant(const std::vector<Variant>& v) {
   std::vector<T> s;
   s.reserve(v.size());
   for (const auto& e : v) {
-    auto t = boost::get<typename T::MutableType>(&e);
+    const auto* t = boost::get<typename T::MutableType>(&e);
     if (t) {
       s.push_back(*t);
     }

@@ -9,7 +9,7 @@ class CurvatureTooBigChecker : public MapValidator {
   constexpr static const char* name() { return "mapping.curvature_too_big"; }
 
   Issues operator()(const LaneletMap& map) override;
-  void checkCurvature(Issues& issues, const ConstLineString2d& line, const Id& laneletId);
+  static void checkCurvature(Issues& issues, const ConstLineString2d& line, const Id& laneletId);
 };
 
 }  // namespace validation

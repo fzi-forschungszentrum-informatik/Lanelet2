@@ -143,7 +143,8 @@ void RoutingGraphBuilder::addAreasToGraph(ConstAreas& areas) {
 }
 
 void RoutingGraphBuilder::addEdges(const ConstLanelets& lanelets, const LaneletLayer& passableLanelets) {
-  LaneChangeLaneletsCollector leftToRight, rightToLeft;
+  LaneChangeLaneletsCollector leftToRight;
+  LaneChangeLaneletsCollector rightToLeft;
   // Check relations between lanelets
   for (auto const& ll : lanelets) {
     addFollowingEdges(ll);
@@ -340,8 +341,8 @@ void RoutingGraphBuilder::assignLaneChangeCosts(const ConstLanelets& froms, cons
   assert(froms.size() == tos.size());
   auto costs = utils::transform(
       routingCosts_, [&](const RoutingCostPtr& cost) { return cost->getCostLaneChange(trafficRules_, froms, tos); });
-  for (auto i = 0u; i < froms.size(); ++i) {
-    for (RoutingCostId costId = 0; costId < routingCosts_.size(); ++costId) {
+  for (auto i = 0ul; i < froms.size(); ++i) {
+    for (RoutingCostId costId = 0; costId < RoutingCostId(routingCosts_.size()); ++costId) {
       if (!std::isfinite(costs[costId])) {
         // if the costs are infinite, we add an adjacent edge instead
         auto adjacent = relation == RelationType::Left ? RelationType::AdjacentLeft : RelationType::AdjacentRight;
@@ -355,20 +356,17 @@ void RoutingGraphBuilder::assignLaneChangeCosts(const ConstLanelets& froms, cons
 
 void RoutingGraphBuilder::assignCosts(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to,
                                       const RelationType& relation) {
-  for (RoutingCostId rci = 0; rci < routingCosts_.size(); rci++) {
+  for (RoutingCostId rci = 0; rci < RoutingCostId(routingCosts_.size()); rci++) {
     EdgeInfo edgeInfo{};
     edgeInfo.costId = rci;
     edgeInfo.relation = relation;
     auto& routingCost = *routingCosts_[rci];
     if (relation == RelationType::Successor || relation == RelationType::Area) {
       edgeInfo.routingCost = routingCost.getCostSucceeding(trafficRules_, from, to);
-    } else if (relation == RelationType::Left) {
+    } else if (relation == RelationType::Left || relation == RelationType::Right) {
       edgeInfo.routingCost = routingCost.getCostLaneChange(trafficRules_, {*from.lanelet()}, {*to.lanelet()});
-    } else if (relation == RelationType::Right) {
-      edgeInfo.routingCost = routingCost.getCostLaneChange(trafficRules_, {*from.lanelet()}, {*to.lanelet()});
-    } else if (relation == RelationType::AdjacentLeft || relation == RelationType::AdjacentRight) {
-      edgeInfo.routingCost = 1;
-    } else if (relation == RelationType::Conflicting) {
+    } else if (relation == RelationType::AdjacentLeft || relation == RelationType::AdjacentRight ||
+               relation == RelationType::Conflicting) {
       edgeInfo.routingCost = 1;
     } else {
       assert(false && "Trying to add edge with wrong relation type to graph.");  // NOLINT

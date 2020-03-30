@@ -58,7 +58,7 @@ Attribute::Attribute(const Velocity& value) : value_{std::to_string(units::KmHQu
 
 Optional<bool> Attribute::asBool() const {
   // try load from cache
-  auto val = load<bool>(cache_);
+  auto* val = load<bool>(cache_);
   if (val != nullptr) {
     return *val;
   }
@@ -78,7 +78,7 @@ Optional<bool> Attribute::asBool() const {
 
 Optional<double> Attribute::asDouble() const {
   // try load from cache
-  auto val = load<double>(cache_);
+  auto* val = load<double>(cache_);
   if (val != nullptr) {
     return *val;
   }
@@ -92,7 +92,7 @@ Optional<double> Attribute::asDouble() const {
 
 Optional<Id> Attribute::asId() const {
   // try load from cache
-  auto val = load<Id>(cache_);
+  auto* val = load<Id>(cache_);
   if (val != nullptr) {
     return *val;
   }
@@ -106,7 +106,7 @@ Optional<Id> Attribute::asId() const {
 
 Optional<int> Attribute::asInt() const {
   // try load from cache
-  auto val = load<int>(cache_);
+  auto* val = load<int>(cache_);
   if (val != nullptr) {
     return *val;
   }
@@ -120,7 +120,7 @@ Optional<int> Attribute::asInt() const {
 
 Optional<Velocity> Attribute::asVelocity() const {
   // try load from cache
-  auto val = load<Velocity>(cache_);
+  auto* val = load<Velocity>(cache_);
   if (val != nullptr) {
     return *val;
   }

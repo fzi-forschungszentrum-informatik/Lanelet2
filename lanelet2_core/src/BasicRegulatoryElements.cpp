@@ -56,12 +56,12 @@ LineStringsOrPolygons3d getLsOrPoly(const RuleParameterMap& paramsMap, RoleName 
   }
 
   LineStringsOrPolygons3d result;
-  for (auto& param : params->second) {
-    auto l = boost::get<LineString3d>(&param);
+  for (const auto& param : params->second) {
+    const auto* l = boost::get<LineString3d>(&param);
     if (l != nullptr) {
       result.push_back(*l);
     }
-    auto p = boost::get<Polygon3d>(&param);
+    const auto* p = boost::get<Polygon3d>(&param);
     if (p != nullptr) {
       result.push_back(*p);
     }
@@ -333,7 +333,7 @@ SpeedLimit::SpeedLimit(const RegulatoryElementDataPtr& data) : TrafficSign(data)
 
 void TrafficSign::addCancellingTrafficSign(const TrafficSignsWithType& signs) {
   updateTrafficSigns(signs);
-  for (auto& sign : signs.trafficSigns) {
+  for (const auto& sign : signs.trafficSigns) {
     parameters()[RoleName::Cancels].emplace_back(sign.asRuleParameter());
   }
 }
