@@ -69,7 +69,7 @@ Besides [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html), the 
 For Ubuntu, the steps are the following:
 * [Set up ROS](http://wiki.ros.org/ROS/Installation), and install at least `rospack`, `catkin` and `mrt_cmake_modules` (e.g. `ros-melodic-rospack`, `ros-melodic-catkin`, `ros-melodic-mrt-cmake-modules`):
 ```
-sudo apt-get install os-melodic-rospack ros-melodic-catkin ros-melodic-mrt-cmake-modules
+sudo apt-get install ros-melodic-rospack ros-melodic-catkin ros-melodic-mrt-cmake-modules
 ```
 
 * Install the dependencies above:
