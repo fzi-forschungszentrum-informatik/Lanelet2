@@ -81,6 +81,7 @@ class PolygonTypeTest : public PolygonPoints {
     BasicPoint3d delta =
         (utils::toBasicPoint(poly[(after + 1) % poly.size()]) - utils::toBasicPoint(poly[after])) / (2 * nNew + 1);
     std::vector<Point3d> points;
+    points.reserve(size_t(nNew));
     for (int i = 0; i < nNew; ++i) {
       points.emplace_back(Point3d(++id, utils::toBasicPoint(poly[after]) + (2 * double(i) + randomNum_() + 1) * delta));
     }
