@@ -57,11 +57,6 @@ class LineStringOrPolygonBase {
     return applyVisitor([](auto& elem) -> const AttributeMap& { return elem.attributes(); });
   }
 
-  template <typename T>
-  std::vector<std::shared_ptr<const T>> regulatoryElementsAs() const {
-    return applyVisitor([](auto& elem) { return elem.template regulatoryElementAs<T>(); });
-  }
-
   //! return the managed linestring
   Optional<LineStringT> lineString() const {
     const auto* ls = boost::get<LineStringT>(&lsOrPoly_);
