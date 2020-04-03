@@ -71,6 +71,38 @@ inline bool follows(const ConstArea& prev, const ConstLanelet& next);
 
 //! Test if two areas are adjacent
 inline bool adjacent(const ConstArea& area1, const ConstArea& area2);
+
+/**
+ * Find line string in area ar that borders Lanelet ll if ar follows ll
+ * @param ll Lanelet
+ * @param ar Area that is following ll
+ * @return LineString3d if it exists
+ */
+inline Optional<ConstLineString3d> determineCommonLinePreceding(const ConstLanelet& ll, const ConstArea& ar);
+
+/**
+ * Find line string in area ar that borders Lanelet ll if ar precedes ll
+ * @param ar Lanelet
+ * @param ll Area that is preceding ll
+ * @return LineString3d if it exists
+ */
+inline Optional<ConstLineString3d> determineCommonLineFollowing(const ConstArea& ar, const ConstLanelet& ll);
+
+/**
+ * Find line string in area ar that borders Lanelet ll if ar precedes or follows ll
+ * @param ar Lanelet
+ * @param ll Area that is preceding or following ll
+ * @return LineString3d if it exists
+ */
+inline Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar, const ConstLanelet& ll);
+
+/**
+ * Find Line String in Area ar1 that is common with Area ar2
+ * @param ar1 Area
+ * @param ar2 Area
+ * @return LineString3d in Area ar1 if it exists. The inverted line string is part of ar2.
+ */
+inline Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar1, const ConstArea& ar2);
 }  // namespace geometry
 }  // namespace lanelet
 

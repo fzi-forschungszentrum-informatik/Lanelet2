@@ -7,11 +7,6 @@
 
 using namespace lanelet;
 
-Point3d makePoint(double x, double y) {
-  static Id id{1};
-  return Point3d(id++, x, y);
-}
-
 class TestArea : public testing::Test {
  public:
   TestArea() {
@@ -20,6 +15,9 @@ class TestArea : public testing::Test {
       pointsRight.push_back(Point3d(++id, i, 0));
     }
     firstCircle = LineString3d(++id, {pointsLeft[0], pointsLeft[1], pointsRight[1], pointsRight[0]});
+    firstCircle1 = LineString3d(++id, {pointsLeft[0], pointsLeft[1]});
+    firstCircle2 = LineString3d(++id, {pointsLeft[1], pointsRight[1]});
+    firstCircle3 = LineString3d(++id, {pointsRight[1], pointsRight[0]});
     secondCircle1 = LineString3d(++id, {pointsLeft[1], pointsLeft[2]});
     secondCircle2 = LineString3d(++id, {pointsLeft[2], pointsRight[2]});
     secondCircle3 = LineString3d(++id, {pointsRight[2], pointsRight[1]});
@@ -32,6 +30,8 @@ class TestArea : public testing::Test {
     rightLine = LineString3d(lineId, {Point3d(++id, 1, -1), Point3d(++id, 2, -1)});
     area1 = Area(++id, {firstCircle});
     area2 = Area(++id, {secondCircle1, secondCircle2, secondCircle3}, {{hole}});
+    area3 = Area(++id, {firstCircle1, firstCircle2, firstCircle3});
+    area4 = Area(++id, {secondCircle1, secondCircle2, secondCircle3, firstCircle2.invert()});
     laneletFollowing = Lanelet(++id, thirdLine1, thirdLine2);
     laneletRight = Lanelet(++id, secondCircle2.invert(), rightLine);
     regelem = std::make_shared<GenericRegulatoryElement>(++id);
@@ -39,8 +39,9 @@ class TestArea : public testing::Test {
 
   Id id{0};
   Points3d pointsLeft, pointsRight;
-  LineString3d firstCircle, secondCircle1, secondCircle2, secondCircle3, hole, thirdLine1, thirdLine2, rightLine;
-  Area area1, area2;
+  LineString3d firstCircle, firstCircle1, firstCircle2, firstCircle3, secondCircle1, secondCircle2, secondCircle3, hole,
+      thirdLine1, thirdLine2, rightLine;
+  Area area1, area2, area3, area4;
   Lanelet laneletFollowing, laneletRight;
   RegulatoryElementPtr regelem;
 };
@@ -126,8 +127,47 @@ TEST_F(TestArea, leftOf) {  // NOLINT
   EXPECT_FALSE(geometry::leftOf(laneletRight.invert(), area2));
   EXPECT_FALSE(geometry::leftOf(laneletRight, area1));
 }
+
 TEST_F(TestArea, rightOf) {  // NOLINT
   EXPECT_FALSE(geometry::rightOf(laneletRight, area2));
   EXPECT_TRUE(geometry::rightOf(laneletRight.invert(), area2));
   EXPECT_FALSE(geometry::rightOf(laneletRight, area1));
+}
+
+TEST_F(TestArea, determineCommonLinePreceding) {
+  auto res = geometry::determineCommonLinePreceding(laneletFollowing.invert(), area2);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(res->id(), 14);
+  EXPECT_FALSE(!!geometry::determineCommonLinePreceding(laneletFollowing, area2));
+  EXPECT_FALSE(!!geometry::determineCommonLinePreceding(laneletFollowing.invert(), area1));
+}
+
+TEST_F(TestArea, determineCommonLineFollowing) {
+  auto res = geometry::determineCommonLineFollowing(area2, laneletFollowing);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(res->id(), 14);
+  EXPECT_FALSE(!!geometry::determineCommonLineFollowing(area2, laneletFollowing.invert()));
+  EXPECT_FALSE(!!geometry::determineCommonLineFollowing(area1, laneletFollowing));
+}
+
+TEST_F(TestArea, determineCommonLine) {
+  auto res = geometry::determineCommonLine(area2, laneletFollowing);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(res->id(), 14);
+  res = geometry::determineCommonLine(area2, laneletFollowing.invert());
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(res->id(), 14);
+  EXPECT_FALSE(!!geometry::determineCommonLine(area1, laneletFollowing.invert()));
+  EXPECT_FALSE(!!geometry::determineCommonLine(area1, laneletFollowing));
+}
+
+TEST_F(TestArea, determineCommonLineArea) {
+  auto res = geometry::determineCommonLine(area3, area4);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(res->id(), 11);
+  EXPECT_FALSE(res->inverted());
+  res = geometry::determineCommonLine(area4, area3);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(res->id(), 11);
+  EXPECT_TRUE(res->inverted());
 }

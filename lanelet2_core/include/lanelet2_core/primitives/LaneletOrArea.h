@@ -85,6 +85,14 @@ class ConstLaneletOrArea {
   //! compares this lanelet or area
   bool equals(const ConstLaneletOrArea& other) const { return laneletOrArea_ == other.laneletOrArea_; }
 
+  //! returns the outer bound if it is an area or the polygon made of the lanelet bounds if it's a lanelet
+  CompoundPolygon3d boundingPolygon() const {
+    if (isArea()) {
+      return area()->outerBoundPolygon();
+    }
+    return lanelet()->polygon3d();
+  }
+
  private:
   boost::variant<ConstLanelet, ConstArea> laneletOrArea_;
 };

@@ -88,5 +88,30 @@ inline bool adjacent(const ConstArea& area1, const ConstArea& area2) {
   }
   return false;
 }
+
+inline Optional<ConstLineString3d> determineCommonLinePreceding(const ConstLanelet& ll, const ConstArea& ar) {
+  return utils::findIf(ar.outerBound(), [p1 = ll.leftBound().back(), p2 = ll.rightBound().back()](auto& boundLs) {
+    return (boundLs.back() == p1 && boundLs.front() == p2);
+  });
+}
+
+inline Optional<ConstLineString3d> determineCommonLineFollowing(const ConstArea& ar, const ConstLanelet& ll) {
+  return determineCommonLinePreceding(ll.invert(), ar);
+}
+
+inline Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar, const ConstLanelet& ll) {
+  return utils::findIf(ar.outerBound(), [p1 = ll.leftBound().front(), p2 = ll.rightBound().front(),
+                                         p3 = ll.leftBound().back(), p4 = ll.rightBound().back()](auto& boundLs) {
+    return ((boundLs.back() == p2 && boundLs.front() == p1) || (boundLs.back() == p3 && boundLs.front() == p4));
+  });
+}
+
+inline Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar1, const ConstArea& ar2) {
+  return utils::findIf(ar1.outerBound(), [&ar2](auto& ar1Bound) {
+    return !!utils::findIf(ar2.outerBound(),
+                           [ar1Bound = ar1Bound.invert()](auto& ar2Bound) { return ar2Bound == ar1Bound; });
+  });
+}
+
 }  // namespace geometry
 }  // namespace lanelet

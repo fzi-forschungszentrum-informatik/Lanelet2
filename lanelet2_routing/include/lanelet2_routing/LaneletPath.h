@@ -72,5 +72,13 @@ class LaneletOrAreaPath {
  private:
   ConstLaneletOrAreas laneletsOrAreas_;
 };
+
+/**
+ * finds the Polygon containing all Lanelets and Areas in Path. All points on the polygon will be identical to points
+ * of primitives in path.
+ * @param path Path to merge
+ * @return Polygon containing all Lanelets and Areas in Path
+ */
+BasicPolygon3d getEnclosingPolygon3d(const LaneletOrAreaPath& path);
 }  // namespace routing
 }  // namespace lanelet
