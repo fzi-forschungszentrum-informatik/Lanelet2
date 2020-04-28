@@ -1,4 +1,5 @@
 #pragma once
+#include <lanelet2_core/geometry/Area.h>
 #include "../../primitives/Area.h"
 #include "../../primitives/Lanelet.h"
 #include "../Point.h"
@@ -58,9 +59,7 @@ IfAr<AreaT, IfLL<LaneletT, bool>> overlaps3d(const AreaT& area, const LaneletT& 
 }
 
 inline bool leftOf(const ConstLanelet& right, const ConstArea& left) {
-  return utils::anyOf(left.outerBound(), [&right](auto& bound) {
-    return bound == right.leftBound() || bound.invert() == right.leftBound();
-  });
+  return utils::anyOf(left.outerBound(), [&right](auto& bound) { return bound.invert() == right.leftBound(); });
 }
 
 inline bool rightOf(const ConstLanelet& left, const ConstArea& area) { return leftOf(left.invert(), area); }
@@ -99,10 +98,22 @@ inline Optional<ConstLineString3d> determineCommonLineFollowing(const ConstArea&
   return determineCommonLinePreceding(ll.invert(), ar);
 }
 
-inline Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar, const ConstLanelet& ll) {
+inline Optional<ConstLineString3d> determineCommonLineFollowingOrPreceding(const ConstArea& ar,
+                                                                           const ConstLanelet& ll) {
   return utils::findIf(ar.outerBound(), [p1 = ll.leftBound().front(), p2 = ll.rightBound().front(),
                                          p3 = ll.leftBound().back(), p4 = ll.rightBound().back()](auto& boundLs) {
     return ((boundLs.back() == p2 && boundLs.front() == p1) || (boundLs.back() == p3 && boundLs.front() == p4));
+  });
+}
+
+inline Optional<ConstLineString3d> determineCommonLineSideways(const ConstLanelet& ll, const ConstArea& ar) {
+  auto res = determineCommonLineLeft(ll, ar);
+  return res ? res : determineCommonLineRight(ll, ar);
+}
+
+inline Optional<ConstLineString3d> determineCommonLineSideways(const ConstArea& ar, const ConstLanelet& ll) {
+  return utils::findIf(ar.outerBound(), [lb = ll.leftBound(), rb = ll.rightBound()](auto& boundLs) {
+    return boundLs == lb.invert() || boundLs == rb;
   });
 }
 
@@ -111,6 +122,23 @@ inline Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar1, con
     return !!utils::findIf(ar2.outerBound(),
                            [ar1Bound = ar1Bound.invert()](auto& ar2Bound) { return ar2Bound == ar1Bound; });
   });
+}
+
+inline Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar, const ConstLanelet& ll) {
+  auto res = determineCommonLineFollowingOrPreceding(ar, ll);
+  return res ? res : determineCommonLineSideways(ar, ll);
+}
+
+inline Optional<ConstLineString3d> determineCommonLineLeft(const ConstLanelet& right, const ConstArea& left) {
+  auto res = determineCommonLineRight(right.invert(), left);
+  if (res) {
+    return res->invert();
+  }
+  return {};
+}
+
+inline Optional<ConstLineString3d> determineCommonLineRight(const ConstLanelet& left, const ConstArea& right) {
+  return utils::findIf(right.outerBound(), [&left](auto& bound) { return bound == left.rightBound(); });
 }
 
 }  // namespace geometry

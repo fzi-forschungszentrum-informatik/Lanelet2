@@ -82,16 +82,58 @@ inline Optional<ConstLineString3d> determineCommonLinePreceding(const ConstLanel
 
 /**
  * Find line string in area ar that borders Lanelet ll if ar precedes ll
- * @param ar Lanelet
- * @param ll Area that is preceding ll
+ * @param ar Area that is preceding ll
+ * @param ll Lanelet
  * @return LineString3d if it exists
  */
 inline Optional<ConstLineString3d> determineCommonLineFollowing(const ConstArea& ar, const ConstLanelet& ll);
 
 /**
  * Find line string in area ar that borders Lanelet ll if ar precedes or follows ll
- * @param ar Lanelet
- * @param ll Area that is preceding or following ll
+ * @param ar Area that is preceding or following ll
+ * @param ll Lanelet
+ * @return LineString3d if it exists
+ */
+inline Optional<ConstLineString3d> determineCommonLineFollowingOrPreceding(const ConstArea& ar, const ConstLanelet& ll);
+
+/**
+ * Find line string in Lanelet right that borders Area left if ar is left of ll.
+ * @param left Area that borders ll on the left
+ * @param right Lanelet
+ * @return LineString3d in right if it exists
+ */
+inline Optional<ConstLineString3d> determineCommonLineLeft(const ConstLanelet& right, const ConstArea& left);
+
+/**
+ * Find line string in Lanelet left that borders Area right if ar is right of ll.
+ * @param right Area that borders ll on the right
+ * @param left Lanelet
+ * @return LineString3d in left if it exists
+ */
+inline Optional<ConstLineString3d> determineCommonLineRight(const ConstLanelet& left, const ConstArea& right);
+
+/**
+ * Find line string in Lanelet ll that borders Area ar if ar is left or right of ll. Same as
+ * determineCommonLineSideways(ar, ll) but returned line string is guaranteed to be in ll
+ * @param ar Area that borders ll
+ * @param ll Lanelet
+ * @return LineString3d in ll if it exists
+ */
+inline Optional<ConstLineString3d> determineCommonLineSideways(const ConstLanelet& ll, const ConstArea& ar);
+
+/**
+ * Find line string in Area ar that borders Lanelet ll if ar is left or right of ll. Same as
+ * determineCommonLineSideways(ll, ar) but returned line string is guaranteed to be in ar
+ * @param ar Area
+ * @param ll Lanelet that borders ar
+ * @return LineString3d in ar if it exists
+ */
+inline Optional<ConstLineString3d> determineCommonLineSideways(const ConstArea& ar, const ConstLanelet& ll);
+
+/**
+ * Find line string in area ar that borders Lanelet ll anywhere
+ * @param ar Area that is adjacent anywhere to ll
+ * @param ll Lanelet
  * @return LineString3d if it exists
  */
 inline Optional<ConstLineString3d> determineCommonLine(const ConstArea& ar, const ConstLanelet& ll);

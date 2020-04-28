@@ -247,6 +247,26 @@ TEST_F(LaneletTest, weakLanelet) {  // NOLINT
   EXPECT_EQ(wll.lock(), ritterLanelet);
 }
 
+TEST_F(LaneletTest, determineCommonLine) {  // NOLINT
+  Lanelet rightLL(++id, right, outside);
+  auto res = geometry::determineCommonLine(ritterLanelet, rightLL);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(*res, right);
+  res = geometry::determineCommonLine(rightLL, ritterLanelet);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(*res, right);
+  res = geometry::determineCommonLine(rightLL.invert(), ritterLanelet);
+  ASSERT_FALSE(!!res);
+  res = geometry::determineCommonLine(rightLL, ritterLanelet.invert());
+  ASSERT_FALSE(!!res);
+  res = geometry::determineCommonLine(rightLL.invert(), ritterLanelet, true);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(*res, right.invert());
+  res = geometry::determineCommonLine(rightLL, ritterLanelet.invert(), true);
+  ASSERT_TRUE(!!res);
+  EXPECT_EQ(*res, right);
+}
+
 TEST(LaneletBasic, emptyLanelet) {  // NOLINT
   Lanelet empty;
   EXPECT_EQ(empty.polygon2d().size(), 0ul);

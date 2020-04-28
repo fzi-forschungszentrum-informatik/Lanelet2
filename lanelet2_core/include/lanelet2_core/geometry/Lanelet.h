@@ -166,6 +166,17 @@ template <typename Lanelet1T, typename Lanelet2T>
 IfLL<Lanelet1T, IfLL<Lanelet2T, bool>> follows(const Lanelet1T& prev, const Lanelet2T& next);
 
 /**
+ * @brief find a common line string in ll and other.
+ * @param ll Lanelet
+ * @param other Lanelet
+ * @return line string in ll if it is shared with other
+ */
+template <typename Lanelet1T, typename Lanelet2T>
+IfLL<Lanelet1T, IfLL<Lanelet2T, Optional<ConstLineString3d>>> determineCommonLine(const Lanelet1T& ll,
+                                                                                  const Lanelet2T& other,
+                                                                                  bool allowInverted = false);
+
+/**
  * @brief calculates the maximum velocity without exceding a maximum lateral
  * acceleration.
  * @param lanelet lanelet to calculate this from

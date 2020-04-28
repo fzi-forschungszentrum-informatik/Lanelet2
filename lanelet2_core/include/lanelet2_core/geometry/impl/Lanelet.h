@@ -142,6 +142,27 @@ IfLL<Lanelet1T, IfLL<Lanelet2T, bool>> follows(const Lanelet1T& prev, const Lane
          prev.rightBound().back() == next.rightBound().front();
 }
 
+template <typename Lanelet1T, typename Lanelet2T>
+IfLL<Lanelet1T, IfLL<Lanelet2T, Optional<ConstLineString3d>>> determineCommonLine(const Lanelet1T& ll,
+                                                                                  const Lanelet2T& other,
+                                                                                  bool allowInverted) {
+  if (leftOf(other, ll)) {
+    return ll.leftBound();
+  }
+  if (rightOf(other, ll)) {
+    return ll.rightBound();
+  }
+  if (allowInverted) {
+    if (leftOf(other.invert(), ll)) {
+      return ll.leftBound();
+    }
+    if (rightOf(other.invert(), ll)) {
+      return ll.rightBound();
+    }
+  }
+  return {};
+}
+
 template <typename LaneletT>
 Velocity maxCurveSpeed(const LaneletT& /*lanelet*/, const BasicPoint2d& /*position*/,
                        const Acceleration& /*maxLateralAcceleration*/) {
