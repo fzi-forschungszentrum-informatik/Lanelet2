@@ -6,6 +6,7 @@ namespace lanelet {
 namespace routing {
 
 namespace {
+
 ConstLineStrings3d extractBetween(const ConstLineStrings3d& wrappedLS, const size_t start, const size_t end) {
   auto startIt = std::next(wrappedLS.begin(), start);
   auto endIt = std::next(wrappedLS.begin(), end);
@@ -81,59 +82,211 @@ struct Head {
   Optional<ConstLaneletOrArea> next;
 };
 
+enum class LaneletAdjacency { Following, Preceding, Left, Right };
+struct LaneletPairAdjacency {
+  LaneletAdjacency ll;
+  LaneletAdjacency other;
+};
+struct AdjacencyAndBorder {
+  LaneletAdjacency adjacency{LaneletAdjacency::Preceding};
+  ConstLineString3d border;
+};
 struct BoundsResult {
   Optional<ConstLineString3d> prevBorder;
+  Optional<LaneletAdjacency> llAdjacency;
   BasicPolygon3d left;
   BasicPolygon3d right;
 };
 
-ConstLineString3d getBorder(const Head& head) {
-  auto border = head.next->isArea() ? geometry::determineCommonLine(*head.cur.area(), *(head.next->area()))
-                                    : geometry::determineCommonLineFollowing(*head.cur.area(), *head.next->lanelet());
-  if (!border) {
+Optional<AdjacencyAndBorder> getLaneletAdjacency(const ConstLanelet& ll, const ConstArea& ar) {
+  auto res = geometry::determineCommonLineFollowing(ar, ll);
+  if (res) {
+    return AdjacencyAndBorder{LaneletAdjacency::Following, *res};
+  }
+  res = geometry::determineCommonLinePreceding(ll, ar);
+  if (res) {
+    return AdjacencyAndBorder{LaneletAdjacency::Preceding, *res};
+  }
+  if (geometry::leftOf(ll, ar)) {
+    return AdjacencyAndBorder{LaneletAdjacency::Right, ll.leftBound().invert()};  // must be inverted relative to area
+  }
+  if (geometry::rightOf(ll, ar)) {
+    return AdjacencyAndBorder{LaneletAdjacency::Left, ll.rightBound()};  // must be inverted relative to area
+  }
+  return {};
+}
+
+LaneletPairAdjacency getLaneletAdjacency(const ConstLanelet& ll, const ConstLanelet& other) {
+  if (geometry::follows(ll, other)) {
+    return LaneletPairAdjacency{LaneletAdjacency::Preceding, LaneletAdjacency::Following};
+  }
+  if (geometry::follows(other, ll)) {
+    return LaneletPairAdjacency{LaneletAdjacency::Following, LaneletAdjacency::Preceding};
+  }
+  if (geometry::leftOf(other, ll)) {
+    return LaneletPairAdjacency{LaneletAdjacency::Right, LaneletAdjacency::Left};
+  }
+  if (geometry::rightOf(other, ll)) {
+    return LaneletPairAdjacency{LaneletAdjacency::Left, LaneletAdjacency::Right};
+  }
+  return {};
+}
+
+void appendExtractedClockwise(BasicPolygon3d& target, const ConstLanelet& ll, const LaneletAdjacency& adj) {
+  if (adj == LaneletAdjacency::Right) {
+    target.insert(target.end(), ll.leftBound().basicBegin() + 1, ll.leftBound().basicEnd());
+  } else if (adj == LaneletAdjacency::Preceding) {
+    target.emplace_back(utils::toBasicPoint(ll.rightBound().back()));
+  } else if (adj == LaneletAdjacency::Left) {
+    target.insert(target.end(), ll.rightBound().invert().basicBegin() + 1, ll.rightBound().invert().basicEnd());
+  } else if (adj == LaneletAdjacency::Following) {
+    target.emplace_back(utils::toBasicPoint(ll.leftBound().front()));
+  } else {
+    throw InvalidInputError("Invalid adjacency");
+  }
+}
+
+void appendExtractedCounterClockwise(BasicPolygon3d& target, const ConstLanelet& ll, const LaneletAdjacency& adj) {
+  if (adj == LaneletAdjacency::Right) {
+    target.insert(target.end(), ll.leftBound().invert().basicBegin() + 1, ll.leftBound().invert().basicEnd());
+  } else if (adj == LaneletAdjacency::Preceding) {
+    target.emplace_back(utils::toBasicPoint(ll.leftBound().back()));
+  } else if (adj == LaneletAdjacency::Left) {
+    target.insert(target.end(), ll.rightBound().basicBegin() + 1, ll.rightBound().basicEnd());
+  } else if (adj == LaneletAdjacency::Following) {
+    target.emplace_back(utils::toBasicPoint(ll.rightBound().front()));
+  } else {
+    throw InvalidInputError("Invalid adjacency");
+  }
+}
+
+void appendFirst(BasicPolygon3d& poly, const ConstLanelet& ll, const LaneletAdjacency& in) {
+  if (in == LaneletAdjacency::Following) {
+    poly.emplace_back(utils::toBasicPoint(ll.leftBound().front()));
+  } else if (in == LaneletAdjacency::Right) {
+    poly.emplace_back(utils::toBasicPoint(ll.leftBound().back()));
+  } else if (in == LaneletAdjacency::Preceding) {
+    poly.emplace_back(utils::toBasicPoint(ll.rightBound().back()));
+  } else if (in == LaneletAdjacency::Left) {
+    poly.emplace_back(utils::toBasicPoint(ll.rightBound().front()));
+  } else {
+    throw InvalidInputError("Invalid adjacency");
+  }
+}
+
+using AdjMap = std::map<LaneletAdjacency, LaneletAdjacency>;
+void appendLaneletBoundsLeft(BasicPolygon3d& poly, const ConstLanelet& ll, const LaneletAdjacency& in,
+                             const LaneletAdjacency& out) {
+  const AdjMap cw{{LaneletAdjacency::Left, LaneletAdjacency::Following},
+                  {LaneletAdjacency::Following, LaneletAdjacency::Right},
+                  {LaneletAdjacency::Right, LaneletAdjacency::Preceding},
+                  {LaneletAdjacency::Preceding, LaneletAdjacency::Left}};
+  auto cwNext = cw.at(in);
+  while (cwNext != out) {
+    appendExtractedClockwise(poly, ll, cwNext);
+    cwNext = cw.at(cwNext);
+  }
+}
+
+void appendLaneletBoundsRight(BasicPolygon3d& poly, const ConstLanelet& ll, const LaneletAdjacency& in,
+                              const LaneletAdjacency& out) {
+  const AdjMap ccw{{LaneletAdjacency::Left, LaneletAdjacency::Preceding},
+                   {LaneletAdjacency::Preceding, LaneletAdjacency::Right},
+                   {LaneletAdjacency::Right, LaneletAdjacency::Following},
+                   {LaneletAdjacency::Following, LaneletAdjacency::Left}};
+  auto ccwNext = ccw.at(in);
+  while (ccwNext != out) {
+    appendExtractedCounterClockwise(poly, ll, ccwNext);
+    ccwNext = ccw.at(ccwNext);
+  }
+}
+
+void appendLaneletBounds(BoundsResult& br, const ConstLanelet& ll, const LaneletAdjacency& in,
+                         const LaneletAdjacency& out) {
+  appendLaneletBoundsLeft(br.left, ll, in, out);
+  if (in != out) {
+    appendLaneletBoundsRight(br.right, ll, in, out);
+  }
+}
+/**
+ * @brief update border between cur area and next primitive
+ * @param br
+ * @param head
+ * @return border between cur area and next primitive in cur area
+ */
+ConstLineString3d getBorder(BoundsResult& br, const Head& head) {
+  if (head.next->isArea()) {
+    br.prevBorder = geometry::determineCommonLine(*(head.next->area()), *head.cur.area());
+    if (!br.prevBorder) {
+      throw GeometryError("No shared line string found between adjacent primitives");
+    }
+    return br.prevBorder->invert();
+  }
+  auto adj = getLaneletAdjacency(*head.next->lanelet(), *head.cur.area());
+  if (!adj) {
     throw GeometryError("No shared line string found between adjacent primitives");
   }
-  return *border;
+  br.llAdjacency = adj->adjacency;
+  return adj->border;
 }
 
-void updateBorder(BoundsResult& res, const Head& head) {
-  if (head.next->isArea()) {
-    res.prevBorder = geometry::determineCommonLinePreceding(*head.cur.lanelet(), *head.next->area())->invert();
+void addLaneletPair(BoundsResult& res, const Head& head, const bool notTail = true) {
+  auto adj = getLaneletAdjacency(*head.cur.lanelet(), *head.next->lanelet());
+  if (!notTail) {
+    appendFirst(res.left, *head.cur.lanelet(), adj.ll);
   }
+  appendLaneletBounds(res, *head.cur.lanelet(), notTail ? *res.llAdjacency : adj.ll, adj.ll);
+  res.llAdjacency = adj.other;
 }
 
-void addLanelet(BoundsResult& br, const Head& head) {
-  const auto& rightLS = head.cur.lanelet()->rightBound3d();
-  const auto& leftLS = head.cur.lanelet()->leftBound3d();
-  br.right.insert(br.right.end(), rightLS.basicBegin() + 1, rightLS.basicEnd());
-  br.left.insert(br.left.end(), leftLS.basicBegin() + 1, leftLS.basicEnd());
-  if (!!head.next) {
-    updateBorder(br, head);
+void addLaneletAreaHead(BoundsResult& res, const Head& head, const bool notTail = true) {
+  auto adj = getLaneletAdjacency(*head.cur.lanelet(), *head.next->area());
+  if (!adj) {
+    throw std::runtime_error("Did not find adjacency");
+  }
+  if (!notTail) {
+    appendFirst(res.left, *head.cur.lanelet(), adj->adjacency);
+  }
+  appendLaneletBounds(res, *head.cur.lanelet(), notTail ? *res.llAdjacency : adj->adjacency, adj->adjacency);
+  res.prevBorder = adj->border;
+}
+
+void addLanelet(BoundsResult& res, const Head& head) {
+  if (!head.next) {
+    appendLaneletBounds(res, *head.cur.lanelet(), *res.llAdjacency, *res.llAdjacency);
+    res.left.pop_back();  // ugly AF
+  } else if (head.next->isLanelet()) {
+    addLaneletPair(res, head);
+  } else {
+    addLaneletAreaHead(res, head);
   }
 }
 
 void addFirstArea(BoundsResult& res, const Head& head) {
-  res.prevBorder = getBorder(head);
+  auto thisBorder = getBorder(res, head);
   if (!head.cur.area()) {
     throw GeometryError("Uninitialized area");
   }
-  appendLineStrings(extractExceptBorder(*head.cur.area(), *res.prevBorder), res.left);
+  appendLineStrings(extractExceptBorder(*head.cur.area(), thisBorder), res.left);
 }
 
-void addFirstLanelet(BoundsResult& res, const ConstLanelet& ll) {
-  const auto& rightLS = ll.rightBound3d().invert();
-  const auto& leftLS = ll.leftBound3d();
-  res.left.reserve(leftLS.size() + rightLS.size());
-  res.left.insert(res.left.end(), rightLS.basicBegin(), rightLS.basicEnd());
-  res.left.insert(res.left.end(), leftLS.basicBegin(), leftLS.basicEnd());
+void addFirstLanelet(BoundsResult& res, const Head& head) {
+  if (!head.next) {
+    throw std::runtime_error("Following primitive not intialized");
+  }
+  if (head.next->isLanelet()) {
+    addLaneletPair(res, head, false);
+  } else {
+    addLaneletAreaHead(res, head, false);
+  }
 }
 
 void addArea(BoundsResult& br, const Head& head) {
-  auto border = getBorder(head);
-  auto bounds = extractBounds(*head.cur.area(), br.prevBorder->invert(), border);
+  auto oldBorder = *br.prevBorder;
+  auto border = getBorder(br, head);
+  auto bounds = extractBounds(*head.cur.area(), oldBorder, border);
   appendLineStringsExceptFirst(bounds.first, br.left, false);
   appendLineStringsExceptFirst(bounds.second, br.right, true);
-  br.prevBorder = border;
 }
 
 BoundsResult appendTail(const Head& head) {
@@ -144,8 +297,7 @@ BoundsResult appendTail(const Head& head) {
   if (head.cur.isArea()) {
     addFirstArea(res, head);
   } else {
-    addFirstLanelet(res, *head.cur.lanelet());
-    updateBorder(res, head);
+    addFirstLanelet(res, head);
   }
   return res;
 }
@@ -154,7 +306,7 @@ void appendFinalArea(const Head& head, BoundsResult& br) {
   if (!br.prevBorder) {
     throw InvalidInputError("border not given for area");
   }
-  appendLineStringsExceptFirstAndLast(extractExceptBorder(*head.cur.area(), br.prevBorder->invert()), br.left);
+  appendLineStringsExceptFirstAndLast(extractExceptBorder(*head.cur.area(), *br.prevBorder), br.left);
 }
 
 void appendBounds(const Head& head, BoundsResult& br) {
