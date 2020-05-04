@@ -96,7 +96,10 @@ void checkIdentical(const BasicPolygon3d& lhs, const BasicPolygon3d& rhs) {
   };
   BasicPolygon2d lhs2d = to2D(lhs);
   BasicPolygon2d rhs2d = to2D(rhs);
+  // equals is buggy in older boost versions
+#if BOOST_VERSION > 106500
   EXPECT_TRUE(boost::geometry::equals(lhs2d, rhs2d));
+#endif
 }
 
 void checkEvenlySpaced(const BasicPolygon3d& poly, const double dist = 1.) {
