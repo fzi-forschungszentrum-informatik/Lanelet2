@@ -18,6 +18,12 @@ void setVelocity(SpeedLimitInformation& self, double velocityKmh) {
   self.speedLimit = Velocity(velocityKmh * units::KmH());
 }
 
+double getVelocityMPS(const SpeedLimitInformation& self) { return units::MPSQuantity(self.speedLimit).value(); }
+
+void setVelocityMPS(SpeedLimitInformation& self, double velocityMps) {
+  self.speedLimit = Velocity(velocityMps * units::MPS());
+}
+
 template <typename T>
 bool canPassWrapper(const TrafficRules& self, const T& llt) {
   return self.canPass(llt);
@@ -51,6 +57,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Initialize from speed limit [m/s] and bool if speedlimit is "
            "mandatory")
       .add_property("speedLimit", getVelocity, setVelocity, "velocity in km/h")
+      .add_property("speedLimitKmH", getVelocity, setVelocity, "velocity in km/h")
+      .add_property("speedLimitMPS", getVelocityMPS, setVelocityMPS, "velocity in m/s")
       .add_property("isMandatory", &SpeedLimitInformation::isMandatory,
                     "True if speedlimit is not just a recommendation")
       .def(self_ns::str(self_ns::self));
