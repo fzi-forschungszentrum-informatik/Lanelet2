@@ -358,8 +358,9 @@ std::vector<std::shared_ptr<RegelemT>> regelemAs(Lanelet& llt) {
 }
 
 template <typename RegelemT>
-std::vector<std::shared_ptr<const RegelemT>> constRegelemAs(ConstLanelet& llt) {
-  return llt.regulatoryElementsAs<RegelemT>();
+std::vector<std::shared_ptr<RegelemT>> constRegelemAs(ConstLanelet& llt) {
+  return utils::transform(llt.regulatoryElementsAs<RegelemT>(),
+                          [](auto& e) { return std::const_pointer_cast<RegelemT>(e); });
 }
 
 template <typename PrimT>
