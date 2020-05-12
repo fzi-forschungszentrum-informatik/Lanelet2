@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>lanelet2_projection</name>
   <version>1.0.1</version>
   <description>Lanelet2 projection library for lat/lon to local x/y conversion</description>
@@ -15,7 +16,6 @@
   <test_depend>gtest</test_depend>
   <depend>lanelet2_io</depend>
   <depend>geographiclib</depend>
-
 
   <export>
     <rosdoc config="../rosdoc.yaml" />
