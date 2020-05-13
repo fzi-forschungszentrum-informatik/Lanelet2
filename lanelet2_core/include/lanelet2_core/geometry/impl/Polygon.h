@@ -58,7 +58,7 @@ IfPoly<Polygon2dT, bool> overlaps2d(const Polygon2dT& poly1, const Polygon2dT& p
   }
 #if BOOST_VERSION > 105800
   using Mask = boost::geometry::de9im::static_mask<'T', '*', '*', '*', '*', '*', '*', '*', '*'>;
-  return boost::geometry::relate(utils::toHybrid(poly1), utils::toHybrid(poly2), Mask());
+  return boost::geometry::relate(utils::toHybrid(traits::to2D(poly1)), utils::toHybrid(traits::to2D(poly2)), Mask());
 #else
   using Mask = boost::geometry::detail::relate::static_mask<'T', '*', '*', '*', '*', '*', '*', '*', '*'>;
   return boost::geometry::detail::relate::relate<Mask>(utils::toHybrid(poly1), utils::toHybrid(poly2));
