@@ -63,7 +63,12 @@ struct LineStringTraits<Segment<PointT>> : public PrimitiveTraits<Segment<PointT
   using PointType = PointT;
   using HybridType = Segment<traits::BasicPointT<PointT>>;
 };
-
+template <>
+inline BasicLineString2d to2D<BasicLineString3d>(const BasicLineString3d& primitive) {
+  BasicLineString2d ls2d(primitive.size());
+  std::transform(primitive.begin(), primitive.end(), ls2d.begin(), utils::to2D<BasicPoint3d>);
+  return ls2d;
+}
 }  // namespace traits
 
 namespace internal {
@@ -753,6 +758,9 @@ constexpr auto toHybrid(const LineStringT ls) {
 
 template <typename T, typename RetT>
 using IfLS = std::enable_if_t<traits::isLinestringT<T>(), RetT>;
+
+template <typename T1, typename T2, typename RetT>
+using IfLS2 = std::enable_if_t<traits::isLinestringT<T1>() && traits::isLinestringT<T2>(), RetT>;
 
 namespace utils {
 using traits::toHybrid;

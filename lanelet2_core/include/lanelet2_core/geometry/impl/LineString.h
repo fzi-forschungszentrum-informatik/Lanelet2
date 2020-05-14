@@ -101,6 +101,12 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const ConstHybridLineStri
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const CompoundHybridLineString3d& l1,
                                                        const CompoundHybridLineString3d& l2);
 
+std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const ConstHybridLineString3d& l1, const BasicLineString3d& l2);
+
+std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicLineString3d& l1, const ConstHybridLineString3d& l2);
+
+std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicLineString3d& l1, const BasicLineString3d& l2);
+
 template <typename HybridLineStringT>
 BasicPoint2d fromArcCoords(const HybridLineStringT& hLineString, const BasicPoint2d& projStart, const size_t startIdx,
                            const size_t endIdx, const double distance) {
@@ -752,11 +758,12 @@ IfLS<LineString3dT, bool> intersects3d(const LineString3dT& linestring, const Li
 template <typename LineString3dT>
 IfLS<LineString3dT, std::pair<BasicPoint3d, BasicPoint3d>> projectedPoint3d(const LineString3dT& l1,
                                                                             const LineString3dT& l2) {
+  static_assert(traits::is3D<LineString3dT>(), "Please call this function with a 3D type!");
   return internal::projectedPoint3d(traits::toHybrid(l1), traits::toHybrid(l2));
 }
 
 template <typename LineString3d1T, typename LineString3d2T>
-IfLS<LineString3d1T, double> distance3d(const LineString3d1T& l1, const LineString3d2T& l2) {
+IfLS2<LineString3d1T, LineString3d2T, double> distance3d(const LineString3d1T& l1, const LineString3d2T& l2) {
   auto projPoint = internal::projectedPoint3d(traits::toHybrid(traits::to3D(l1)), traits::toHybrid(traits::to3D(l2)));
   return (projPoint.first - projPoint.second).norm();
 }

@@ -38,7 +38,7 @@ auto findWithin3d(LayerT& layer, const GeometryT& geometry, double maxDist)
     -> std::vector<std::pair<double, traits::LayerPrimitiveType<LayerT>>> {
   using RetT = std::vector<std::pair<double, traits::LayerPrimitiveType<LayerT>>>;
 
-  BoundingBox2d boundingBox = boundingBox2d(geometry);
+  BoundingBox2d boundingBox = boundingBox2d(traits::to2D(geometry));
   if (maxDist > 0.) {
     boost::geometry::buffer(boundingBox, boundingBox, maxDist);
   }

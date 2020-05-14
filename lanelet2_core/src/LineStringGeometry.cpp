@@ -102,23 +102,17 @@ using Box = bgm::box<bgm::point<double, 3, boost::geometry::cs::cartesian>>;
 using Node = std::pair<Box, BasicSegment>;
 using RTree = bgi::rtree<Node, bgi::linear<8>>;
 
-template <typename LineStringT>
-std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineStringT& l1, const LineStringT& l2) {
-  bool swap = l1.size() < l2.size();
-  auto* smallerRange = swap ? &l1 : &l2;
-  auto* greaterRange = swap ? &l2 : &l1;
-
+template <typename LineString1T, typename LineString2T>
+std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dOrdered(const LineString1T& smallerRange,
+                                                              const LineString2T& greaterRange) {
   // catch some degerated cases
   ConstHybridLineString3d duplicate;
-  if (smallerRange->size() == 1 && greaterRange->size() == 1) {
-    std::pair<BasicPoint3d, BasicPoint3d> ret(greaterRange->front(), smallerRange->front());
-    if (swap) {
-      std::swap(ret.first, ret.second);
-    }
+  if (smallerRange.size() == 1 && greaterRange.size() == 1) {
+    std::pair<BasicPoint3d, BasicPoint3d> ret(greaterRange.front(), smallerRange.front());
     return ret;
   }
   auto values =
-      utils::transform(bg::segments_begin(*greaterRange), bg::segments_end(*greaterRange), [](const auto& segm) {
+      utils::transform(bg::segments_begin(greaterRange), bg::segments_end(greaterRange), [](const auto& segm) {
         Box box;
         boost::geometry::envelope(segm, box);
         return Node(box, segm);
@@ -128,10 +122,10 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineStringT& l1
   bool first = true;
   double dMin{};
   std::pair<BasicPoint3d, BasicPoint3d> closestPair;
-  for (auto it = bg::segments_begin(*smallerRange); it != bg::segments_end(*smallerRange); ++it) {
+  for (auto it = bg::segments_begin(smallerRange); it != bg::segments_end(smallerRange); ++it) {
     Box queryBox;
     bg::envelope(*it, queryBox);
-    for (auto qIt = tree.qbegin(bgi::nearest(queryBox, unsigned(greaterRange->size()))); qIt != tree.qend();
+    for (auto qIt = tree.qbegin(bgi::nearest(queryBox, unsigned(greaterRange.size()))); qIt != tree.qend();
          ++qIt, first = false) {
       const auto& nearest = *qIt;
       auto dBox = boost::geometry::distance(nearest.first, queryBox);
@@ -139,9 +133,6 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineStringT& l1
         break;
       }
       auto projPair = projectedPoint3d(*nearest.second.first, *nearest.second.second, *it->first, *it->second);
-      if (swap) {
-        std::swap(projPair.first, projPair.second);
-      }
       auto d = (projPair.first - projPair.second).norm();
       if (first || d < dMin) {
         closestPair = projPair;
@@ -150,6 +141,15 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineStringT& l1
     }
   }
   return closestPair;
+}
+
+template <typename LineString1T, typename LineString2T>
+std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3dImpl(const LineString1T& l1, const LineString2T& l2) {
+  if (l1.size() < l2.size()) {
+    return projectedPoint3dOrdered(l1, l2);
+  }
+  auto res = projectedPoint3dOrdered(l2, l1);
+  return {res.second, res.first};
 }
 }  // namespace
 
@@ -160,6 +160,18 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const CompoundHybridLineS
 }
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const ConstHybridLineString3d& l1,
                                                        const ConstHybridLineString3d& l2) {
+  return projectedPoint3dImpl(l1, l2);
+}
+
+std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const ConstHybridLineString3d& l1, const BasicLineString3d& l2) {
+  return projectedPoint3dImpl(l1, l2);
+}
+
+std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicLineString3d& l1, const ConstHybridLineString3d& l2) {
+  return projectedPoint3dImpl(l1, l2);
+};
+
+std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicLineString3d& l1, const BasicLineString3d& l2) {
   return projectedPoint3dImpl(l1, l2);
 }
 

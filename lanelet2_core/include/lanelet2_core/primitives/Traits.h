@@ -93,13 +93,13 @@ using ThreeD = typename PrimitiveTraits<PrimitiveT>::ThreeDType;
 
 //! Converts a primitive to its matching threeD type
 template <typename PrimitiveT>
-auto to3D(const PrimitiveT& primitive) -> decltype(ThreeD<PrimitiveT>(primitive)) {
+auto to3D(const PrimitiveT& primitive) -> ThreeD<PrimitiveT> {
   return ThreeD<PrimitiveT>(primitive);
 }
 
 //! Converts a primitive to its matching twoD type
 template <typename PrimitiveT>
-auto to2D(const PrimitiveT& primitive) -> decltype(TwoD<PrimitiveT>(primitive)) {
+auto to2D(const PrimitiveT& primitive) -> TwoD<PrimitiveT> {
   return TwoD<PrimitiveT>(primitive);
 }
 

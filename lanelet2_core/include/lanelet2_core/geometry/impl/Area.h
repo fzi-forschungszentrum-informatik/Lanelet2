@@ -40,7 +40,7 @@ IfAr<Area1T, bool> intersects2d(const Area1T& area, const Area2T& otherArea) {
 
 template <typename AreaT>
 IfAr<AreaT, bool> overlaps2d(const AreaT& area, const AreaT& otherArea) {
-  return overlaps2d(area.outerBoundPolygon(), otherArea.outerBoundPolygon());
+  return overlaps2d(traits::to2D(area.outerBoundPolygon()), traits::to2D(otherArea.outerBoundPolygon()));
 }
 
 template <typename AreaT>

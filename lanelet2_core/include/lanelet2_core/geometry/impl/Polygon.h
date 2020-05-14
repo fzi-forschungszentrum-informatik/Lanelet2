@@ -29,11 +29,13 @@ IndexedTriangles triangulate(const BasicPolygon2d& poly);
 template <typename Polygon3dT>
 IfPoly<Polygon3dT, std::pair<BasicPoint3d, BasicPoint3d>> projectedBorderPoint3d(const Polygon3dT& l1,
                                                                                  const Polygon3dT& l2) {
+  static_assert(traits::is3D<Polygon3dT>(), "Please call this function with a 3D type!");
   return internal::projectedBorderPoint3d(traits::toHybrid(traits::to3D(l1)), traits::toHybrid(traits::to3D(l2)));
 }
 
 template <typename Polygon3dT>
 IfPoly<Polygon3dT, double> distanceToBorder3d(const Polygon3dT& poly1, const Polygon3dT& poly2) {
+  static_assert(traits::is3D<Polygon3dT>(), "Please call this function with a 3D type!");
   auto projPoint = internal::projectedBorderPoint3d(traits::toHybrid(poly1), traits::toHybrid(poly2));
   return (projPoint.first - projPoint.second).norm();
 }
@@ -53,6 +55,7 @@ IfPoly<PolygonT, bool> touches2d(const PolygonT& poly1, const PolygonT& poly2) {
 
 template <typename Polygon2dT>
 IfPoly<Polygon2dT, bool> overlaps2d(const Polygon2dT& poly1, const Polygon2dT& poly2) {
+  static_assert(traits::is2D<Polygon2dT>(), "Please call this function with a 2D type!");
   if (touches2d(poly1, poly2)) {
     return false;
   }
@@ -67,7 +70,8 @@ IfPoly<Polygon2dT, bool> overlaps2d(const Polygon2dT& poly1, const Polygon2dT& p
 
 template <typename Polygon3dT>
 IfPoly<Polygon3dT, bool> overlaps3d(const Polygon3dT& poly1, const Polygon3dT& poly2, double heightTolerance) {
-  if (!overlaps2d(poly1, poly2)) {
+  static_assert(traits::is3D<Polygon3dT>(), "Please call this function with a 3D type!");
+  if (!overlaps2d(traits::to2D(poly1), traits::to2D(poly2))) {
     return false;
   }
   auto points = projectedBorderPoint3d(poly1, poly2);
@@ -76,11 +80,13 @@ IfPoly<Polygon3dT, bool> overlaps3d(const Polygon3dT& poly1, const Polygon3dT& p
 
 template <typename Polygon2dT>
 IfPoly<Polygon2dT, BasicPolygons2d> convexPartition(const Polygon2dT& poly) {
+  static_assert(traits::is2D<Polygon2dT>(), "Please call this function with a 2D type!");
   return internal::convexPartition(BasicPolygon2d(poly.basicBegin(), poly.basicEnd()));
 }
 
 template <typename Polygon2dT>
 IfPoly<Polygon2dT, IndexedTriangles> triangulate(const Polygon2dT& poly) {
+  static_assert(traits::is2D<Polygon2dT>(), "Please call this function with a 2D type!");
   return internal::triangulate(BasicPolygon2d(poly.basicBegin(), poly.basicEnd()));
 }
 
