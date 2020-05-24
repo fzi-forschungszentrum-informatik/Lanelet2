@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Forward.h"
-#include "LineString.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/primitives/LineString.h"
 
 namespace lanelet {
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "../primitives/BoundingBox.h"
-#include "../primitives/RegulatoryElement.h"
+#include "lanelet2_core/primitives/BoundingBox.h"
+#include "lanelet2_core/primitives/RegulatoryElement.h"
 
 namespace lanelet {
 namespace geometry {

@@ -2,7 +2,7 @@
 #include <boost/units/base_units/metric/hour.hpp>
 #include <boost/units/base_units/us/mile.hpp>
 #include <boost/units/make_scaled_unit.hpp>
-#include "../Forward.h"
+#include "lanelet2_core/Forward.h"
 
 namespace lanelet {
 namespace units {

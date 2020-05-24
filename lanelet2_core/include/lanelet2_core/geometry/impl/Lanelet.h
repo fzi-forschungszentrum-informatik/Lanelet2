@@ -6,9 +6,9 @@
 #else
 #include <boost/geometry/algorithms/detail/relate/relate.hpp>
 #endif
-#include "../../primitives/Lanelet.h"
-#include "../../primitives/LineString.h"
-#include "../Polygon.h"
+#include "lanelet2_core/primitives/Lanelet.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/geometry/Polygon.h"
 
 namespace lanelet {
 namespace geometry {

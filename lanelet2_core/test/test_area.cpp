@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include "geometry/Area.h"
-#include "geometry/Lanelet.h"
-#include "primitives/Area.h"
-#include "primitives/Lanelet.h"
-#include "primitives/RegulatoryElement.h"
+#include "lanelet2_core/geometry/Area.h"
+#include "lanelet2_core/geometry/Lanelet.h"
+#include "lanelet2_core/primitives/Area.h"
+#include "lanelet2_core/primitives/Lanelet.h"
+#include "lanelet2_core/primitives/RegulatoryElement.h"
 
 using namespace lanelet;
 

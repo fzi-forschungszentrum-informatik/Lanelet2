@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <boost/geometry/algorithms/perimeter.hpp>
 #include <random>
-#include "geometry/Polygon.h"
-#include "primitives/CompoundPolygon.h"
-#include "primitives/Polygon.h"
+#include "lanelet2_core/geometry/Polygon.h"
+#include "lanelet2_core/primitives/CompoundPolygon.h"
+#include "lanelet2_core/primitives/Polygon.h"
 
 using namespace lanelet;
 template <typename T>

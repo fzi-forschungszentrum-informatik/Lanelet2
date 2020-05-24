@@ -1,10 +1,10 @@
-#include "primitives/Lanelet.h"
 #include <boost/geometry/algorithms/equals.hpp>
-#include "geometry/Lanelet.h"
-#include "geometry/LineString.h"
-#include "geometry/Polygon.h"
-#include "primitives/CompoundPolygon.h"
-#include "primitives/RegulatoryElement.h"
+#include "lanelet2_core/geometry/Lanelet.h"
+#include "lanelet2_core/geometry/LineString.h"
+#include "lanelet2_core/geometry/Polygon.h"
+#include "lanelet2_core/primitives/CompoundPolygon.h"
+#include "lanelet2_core/primitives/Lanelet.h"
+#include "lanelet2_core/primitives/RegulatoryElement.h"
 
 namespace lanelet {
 namespace bg = boost::geometry;

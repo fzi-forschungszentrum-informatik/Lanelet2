@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "primitives/LaneletOrArea.h"
+#include "lanelet2_core/primitives/LaneletOrArea.h"
 
 using namespace lanelet;
 

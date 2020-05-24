@@ -1,8 +1,8 @@
 #pragma once
 #include <boost/noncopyable.hpp>
 #include <utility>
-#include "../utility/CompoundIterator.h"
-#include "LineString.h"
+#include "lanelet2_core/utility/CompoundIterator.h"
+#include "lanelet2_core/primitives/LineString.h"
 
 namespace lanelet {
 namespace internal {

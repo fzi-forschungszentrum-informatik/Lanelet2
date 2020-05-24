@@ -6,8 +6,8 @@
 #pragma GCC diagnostic ignored "-Wint-in-bool-context"
 #endif
 #include <Eigen/Geometry>
-#include "Point.h"
-#include "Traits.h"
+#include "lanelet2_core/primitives/Point.h"
+#include "lanelet2_core/primitives/Traits.h"
 #pragma GCC diagnostic pop
 
 namespace lanelet {

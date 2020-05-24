@@ -6,10 +6,10 @@
 #include <functional>
 #include <memory>
 #include <utility>
-#include "../Forward.h"
-#include "../utility/Optional.h"
-#include "LineString.h"
-#include "Primitive.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/utility/Optional.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/primitives/Primitive.h"
 
 namespace lanelet {
 enum class LaneletType { OneWay, Bidirectional };

@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include <iostream>
-#include "geometry/Area.h"
-#include "geometry/Lanelet.h"
-#include "geometry/LineString.h"
-#include "geometry/Polygon.h"
-#include "primitives/Lanelet.h"
+#include "lanelet2_core/geometry/Area.h"
+#include "lanelet2_core/geometry/Lanelet.h"
+#include "lanelet2_core/geometry/LineString.h"
+#include "lanelet2_core/geometry/Polygon.h"
+#include "lanelet2_core/primitives/Lanelet.h"
 
 using namespace std::literals;
 using namespace lanelet;

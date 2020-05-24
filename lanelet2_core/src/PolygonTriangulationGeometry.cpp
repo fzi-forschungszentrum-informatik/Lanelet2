@@ -1,5 +1,5 @@
 #include <boost/polygon/voronoi.hpp>
-#include "geometry/Polygon.h"
+#include "lanelet2_core/geometry/Polygon.h"
 
 using VoronoiPrecision = std::int64_t;
 

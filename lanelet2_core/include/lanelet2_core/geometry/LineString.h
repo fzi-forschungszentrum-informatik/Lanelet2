@@ -3,12 +3,12 @@
 #include <boost/geometry/algorithms/length.hpp>
 #include <boost/geometry/geometries/register/linestring.hpp>
 #include <boost/geometry/geometries/register/segment.hpp>
-#include "../Forward.h"
-#include "../primitives/CompoundLineString.h"
-#include "../primitives/LineString.h"
-#include "BoundingBox.h"
-#include "GeometryHelper.h"
-#include "Point.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/primitives/CompoundLineString.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/geometry/BoundingBox.h"
+#include "lanelet2_core/geometry/GeometryHelper.h"
+#include "lanelet2_core/geometry/Point.h"
 
 /***********************************************************************
  *                   BOOST GEOMETRY REGISTRATIONS                      *

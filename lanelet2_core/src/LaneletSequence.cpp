@@ -1,4 +1,4 @@
-#include "primitives/LaneletSequence.h"
+#include "lanelet2_core/primitives/LaneletSequence.h"
 
 namespace lanelet {
 

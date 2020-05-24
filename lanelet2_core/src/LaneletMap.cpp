@@ -1,15 +1,15 @@
 #define LANELET_LAYER_DEFINITION
-#include "LaneletMap.h"
 #include <atomic>
-#include <boost/geometry/index/rtree.hpp>
 #include <chrono>
 #include <random>
-#include "geometry/Area.h"
-#include "geometry/BoundingBox.h"
-#include "geometry/Lanelet.h"
-#include "geometry/LineString.h"
-#include "geometry/Polygon.h"
-#include "geometry/RegulatoryElement.h"
+#include <boost/geometry/index/rtree.hpp>
+#include "lanelet2_core/LaneletMap.h"
+#include "lanelet2_core/geometry/Area.h"
+#include "lanelet2_core/geometry/BoundingBox.h"
+#include "lanelet2_core/geometry/Lanelet.h"
+#include "lanelet2_core/geometry/LineString.h"
+#include "lanelet2_core/geometry/Polygon.h"
+#include "lanelet2_core/geometry/RegulatoryElement.h"
 
 // boost geometry stuff
 namespace bgi = boost::geometry::index;

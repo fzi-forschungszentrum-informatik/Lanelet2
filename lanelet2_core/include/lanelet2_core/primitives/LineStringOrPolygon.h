@@ -1,8 +1,8 @@
 #pragma once
 #include <boost/variant.hpp>
-#include "LineString.h"
-#include "Polygon.h"
-#include "RegulatoryElement.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/primitives/Polygon.h"
+#include "lanelet2_core/primitives/RegulatoryElement.h"
 
 namespace lanelet {
 //! Base class for objects that can either refer to linestrings or polygons

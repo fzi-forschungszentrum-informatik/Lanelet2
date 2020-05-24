@@ -1,9 +1,9 @@
 #pragma once
 #include <boost/geometry/algorithms/intersection.hpp>
-#include "../../primitives/LineString.h"
-#include "../../primitives/Traits.h"
-#include "../GeometryHelper.h"
-#include "../Point.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/primitives/Traits.h"
+#include "lanelet2_core/geometry/GeometryHelper.h"
+#include "lanelet2_core/geometry/Point.h"
 
 namespace lanelet {
 namespace geometry {

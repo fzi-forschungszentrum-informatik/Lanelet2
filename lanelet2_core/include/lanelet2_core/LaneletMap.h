@@ -1,12 +1,12 @@
 #pragma once
 
 #include <unordered_map>
-#include "Forward.h"
-#include "primitives/Area.h"
-#include "primitives/BoundingBox.h"
-#include "primitives/Lanelet.h"
-#include "primitives/RegulatoryElement.h"
-#include "utility/Utilities.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/primitives/Area.h"
+#include "lanelet2_core/primitives/BoundingBox.h"
+#include "lanelet2_core/primitives/Lanelet.h"
+#include "lanelet2_core/primitives/RegulatoryElement.h"
+#include "lanelet2_core/utility/Utilities.h"
 
 namespace lanelet {
 namespace internal {

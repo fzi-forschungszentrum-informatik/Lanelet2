@@ -1,9 +1,9 @@
-#include "primitives/RegulatoryElement.h"
-#include "primitives/Area.h"
-#include "primitives/BasicRegulatoryElements.h"
-#include "primitives/Lanelet.h"
-#include "primitives/LineString.h"
-#include "primitives/Point.h"
+#include "lanelet2_core/primitives/RegulatoryElement.h"
+#include "lanelet2_core/primitives/Area.h"
+#include "lanelet2_core/primitives/BasicRegulatoryElements.h"
+#include "lanelet2_core/primitives/Lanelet.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/primitives/Point.h"
 
 namespace lanelet {
 namespace {

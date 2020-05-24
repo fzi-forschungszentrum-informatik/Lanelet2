@@ -1,8 +1,8 @@
 #pragma once
 #include <utility>
-#include "CompoundLineString.h"
-#include "CompoundPolygon.h"
-#include "Lanelet.h"
+#include "lanelet2_core/primitives/CompoundLineString.h"
+#include "lanelet2_core/primitives/CompoundPolygon.h"
+#include "lanelet2_core/primitives/Lanelet.h"
 
 namespace lanelet {
 
