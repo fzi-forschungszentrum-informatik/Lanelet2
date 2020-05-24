@@ -1,8 +1,8 @@
 #pragma once
-#include <lanelet2_core/primitives/GPSPoint.h>
-#include <lanelet2_core/primitives/Point.h>
 #include <memory>
 #include <vector>
+#include <lanelet2_core/primitives/GPSPoint.h>
+#include <lanelet2_core/primitives/Point.h>
 
 namespace lanelet {
 //!< When transforming between global and local coordinates, this offset will be applied to the lat/lon coordinates.

@@ -1,10 +1,10 @@
-#include "io_handlers/BinHandler.h"
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <fstream>
-#include "Exceptions.h"
-#include "io_handlers/Factory.h"
-#include "io_handlers/Serialize.h"
+#include "lanelet2_io/Exceptions.h"
+#include "lanelet2_io/io_handlers/BinHandler.h"
+#include "lanelet2_io/io_handlers/Factory.h"
+#include "lanelet2_io/io_handlers/Serialize.h"
 
 namespace lanelet {
 namespace io_handlers {
