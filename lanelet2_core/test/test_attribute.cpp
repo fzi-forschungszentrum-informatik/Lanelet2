@@ -1,7 +1,7 @@
-#include <Attribute.h>
-#include <Exceptions.h>
 #include <gtest/gtest.h>
-#include "utility/Units.h"
+#include "lanelet2_core/Attribute.h"
+#include "lanelet2_core/Exceptions.h"
+#include "lanelet2_core/utility/Units.h"
 
 using namespace std::string_literals;
 using namespace lanelet;

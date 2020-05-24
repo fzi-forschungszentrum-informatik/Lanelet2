@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <future>
-#include "geometry/Area.h"
-#include "geometry/BoundingBox.h"
-#include "geometry/LaneletMap.h"
+#include "lanelet2_core/geometry/Area.h"
+#include "lanelet2_core/geometry/BoundingBox.h"
+#include "lanelet2_core/geometry/LaneletMap.h"
 #include "lanelet_map_test_case.h"
 
 using namespace lanelet;

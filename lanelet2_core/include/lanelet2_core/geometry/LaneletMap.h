@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../LaneletMap.h"
-#include "../primitives/BoundingBox.h"
-#include "../primitives/Lanelet.h"
-#include "BoundingBox.h"
-#include "Lanelet.h"
-#include "LineString.h"
+#include "lanelet2_core/LaneletMap.h"
+#include "lanelet2_core/primitives/BoundingBox.h"
+#include "lanelet2_core/primitives/Lanelet.h"
+#include "lanelet2_core/geometry/BoundingBox.h"
+#include "lanelet2_core/geometry/Lanelet.h"
+#include "lanelet2_core/geometry/LineString.h"
 
 namespace lanelet {
 namespace geometry {

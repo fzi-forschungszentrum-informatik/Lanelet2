@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <sstream>
-#include "geometry/Point.h"
-#include "primitives/Point.h"
+#include "lanelet2_core/geometry/Point.h"
+#include "lanelet2_core/primitives/Point.h"
 
 using namespace lanelet;
 

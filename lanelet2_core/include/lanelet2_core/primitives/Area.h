@@ -5,12 +5,12 @@
 
 #include <memory>
 #include <utility>
-#include "../Forward.h"
-#include "../utility/Optional.h"
-#include "CompoundPolygon.h"
-#include "Point.h"
-#include "Polygon.h"
-#include "Primitive.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/utility/Optional.h"
+#include "lanelet2_core/primitives/CompoundPolygon.h"
+#include "lanelet2_core/primitives/Point.h"
+#include "lanelet2_core/primitives/Polygon.h"
+#include "lanelet2_core/primitives/Primitive.h"
 
 namespace lanelet {
 //! @defgroup AreaPrimitives Area

@@ -1,7 +1,7 @@
 #pragma once
-#include "../../primitives/Polygon.h"
-#include "../LineString.h"
-#include "../Point.h"
+#include "lanelet2_core/primitives/Polygon.h"
+#include "lanelet2_core/geometry/LineString.h"
+#include "lanelet2_core/geometry/Point.h"
 #if BOOST_VERSION > 105800
 #include <boost/geometry/algorithms/relate.hpp>
 #else

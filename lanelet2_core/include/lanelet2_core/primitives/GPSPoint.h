@@ -1,5 +1,5 @@
 #pragma once
-#include "../Forward.h"
+#include "lanelet2_core/Forward.h"
 
 namespace lanelet {
 

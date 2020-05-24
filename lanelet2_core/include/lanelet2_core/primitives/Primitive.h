@@ -4,9 +4,9 @@
 #pragma once
 #include <limits>
 #include <utility>
-#include "../Attribute.h"
-#include "../Exceptions.h"
-#include "Traits.h"
+#include "lanelet2_core/Attribute.h"
+#include "lanelet2_core/Exceptions.h"
+#include "lanelet2_core/primitives/Traits.h"
 
 namespace lanelet {
 //! @defgroup DataObjects lanelet data management

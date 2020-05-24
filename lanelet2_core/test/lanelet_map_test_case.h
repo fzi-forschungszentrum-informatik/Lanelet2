@@ -1,5 +1,5 @@
 #pragma once
-#include "LaneletMap.h"
+#include "lanelet2_core/LaneletMap.h"
 
 namespace lanelet {
 namespace test_cases {

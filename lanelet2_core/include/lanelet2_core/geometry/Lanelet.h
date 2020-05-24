@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../primitives/Lanelet.h"
+#include "lanelet2_core/primitives/Lanelet.h"
 
 namespace lanelet {
 namespace geometry {

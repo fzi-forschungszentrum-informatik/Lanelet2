@@ -2,14 +2,14 @@
 
 #include <boost/variant.hpp>
 #include <utility>
-#include "../Forward.h"
-#include "../utility/HybridMap.h"
-#include "Area.h"
-#include "Lanelet.h"
-#include "LineString.h"
-#include "Point.h"
-#include "Polygon.h"
-#include "Primitive.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/utility/HybridMap.h"
+#include "lanelet2_core/primitives/Area.h"
+#include "lanelet2_core/primitives/Lanelet.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/primitives/Point.h"
+#include "lanelet2_core/primitives/Polygon.h"
+#include "lanelet2_core/primitives/Primitive.h"
 
 namespace lanelet {
 //! @defgroup RegulatoryElementPrimitives Regulatory Element

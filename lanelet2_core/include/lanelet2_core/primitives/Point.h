@@ -7,11 +7,11 @@
 #include <Eigen/Core>
 #pragma GCC diagnostic pop
 #include <utility>
-#include "../Forward.h"
-#include "../utility/TransformIterator.h"
-#include "../utility/Utilities.h"
-#include "Primitive.h"
-#include "Traits.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/utility/TransformIterator.h"
+#include "lanelet2_core/utility/Utilities.h"
+#include "lanelet2_core/primitives/Primitive.h"
+#include "lanelet2_core/primitives/Traits.h"
 
 namespace lanelet {
 

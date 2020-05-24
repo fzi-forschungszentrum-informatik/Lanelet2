@@ -1,10 +1,10 @@
 #pragma once
 
 #include <string>
-#include "../Forward.h"
-#include "LineString.h"
-#include "LineStringOrPolygon.h"
-#include "RegulatoryElement.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/primitives/LineStringOrPolygon.h"
+#include "lanelet2_core/primitives/RegulatoryElement.h"
 
 namespace lanelet {
 

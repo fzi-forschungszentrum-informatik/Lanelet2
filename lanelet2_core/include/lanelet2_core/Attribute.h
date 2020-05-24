@@ -5,9 +5,9 @@
 #include <boost/variant/variant.hpp>
 #include <memory>
 #include <string>
-#include "Forward.h"
-#include "utility/HybridMap.h"
-#include "utility/Optional.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/utility/HybridMap.h"
+#include "lanelet2_core/utility/Optional.h"
 
 namespace lanelet {
 namespace internal {

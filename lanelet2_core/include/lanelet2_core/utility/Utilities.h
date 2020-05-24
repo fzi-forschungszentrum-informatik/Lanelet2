@@ -8,8 +8,8 @@
 #include <numeric>
 #include <type_traits>
 #include <vector>
-#include "../Forward.h"
-#include "Optional.h"
+#include "lanelet2_core/Forward.h"
+#include "lanelet2_core/utility/Optional.h"
 
 namespace lanelet {
 

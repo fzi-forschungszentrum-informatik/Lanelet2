@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "geometry/LineString.h"
-#include "primitives/LineString.h"
+#include "lanelet2_core/geometry/LineString.h"
+#include "lanelet2_core/primitives/LineString.h"
 using namespace lanelet;
 
 class LineStringPoints : public ::testing::Test {

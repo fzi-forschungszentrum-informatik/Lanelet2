@@ -1,10 +1,10 @@
 #pragma once
 #include <boost/geometry/algorithms/buffer.hpp>
 #include <boost/geometry/algorithms/distance.hpp>
-#include "../../LaneletMap.h"
-#include "../../primitives/BoundingBox.h"
-#include "../../primitives/Lanelet.h"
-#include "../../utility/Utilities.h"
+#include "lanelet2_core/LaneletMap.h"
+#include "lanelet2_core/primitives/BoundingBox.h"
+#include "lanelet2_core/primitives/Lanelet.h"
+#include "lanelet2_core/utility/Utilities.h"
 
 namespace lanelet {
 namespace geometry {

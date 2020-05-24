@@ -1,7 +1,7 @@
 #pragma once
 #include <boost/variant.hpp>
-#include "Area.h"
-#include "Lanelet.h"
+#include "lanelet2_core/primitives/Area.h"
+#include "lanelet2_core/primitives/Lanelet.h"
 
 namespace lanelet {
 

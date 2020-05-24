@@ -1,10 +1,10 @@
 #include <boost/variant.hpp>
-#include "geometry/Area.h"
-#include "geometry/BoundingBox.h"
-#include "geometry/Lanelet.h"
-#include "geometry/LineString.h"
-#include "geometry/RegulatoryElement.h"
-#include "primitives/Traits.h"
+#include "lanelet2_core/geometry/Area.h"
+#include "lanelet2_core/geometry/BoundingBox.h"
+#include "lanelet2_core/geometry/Lanelet.h"
+#include "lanelet2_core/geometry/LineString.h"
+#include "lanelet2_core/geometry/RegulatoryElement.h"
+#include "lanelet2_core/primitives/Traits.h"
 
 namespace lanelet {
 namespace geometry {

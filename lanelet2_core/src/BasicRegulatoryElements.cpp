@@ -1,10 +1,10 @@
-#include "primitives/BasicRegulatoryElements.h"
 #include <vector>
-#include "Exceptions.h"
-#include "primitives/LineString.h"
-#include "primitives/Point.h"
-#include "primitives/RegulatoryElement.h"
-#include "utility/Utilities.h"
+#include "lanelet2_core/Exceptions.h"
+#include "lanelet2_core/primitives/BasicRegulatoryElements.h"
+#include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/primitives/Point.h"
+#include "lanelet2_core/primitives/RegulatoryElement.h"
+#include "lanelet2_core/utility/Utilities.h"
 
 namespace std {
 bool operator==(const lanelet::LaneletDataConstWptr& lhs, const lanelet::LaneletDataConstWptr& rhs) {
