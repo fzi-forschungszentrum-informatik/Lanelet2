@@ -1,7 +1,7 @@
-#include "Io.h"
 #include <boost/filesystem.hpp>
-#include "Exceptions.h"
-#include "io_handlers/Factory.h"
+#include "lanelet2_io/Exceptions.h"
+#include "lanelet2_io/Io.h"
+#include "lanelet2_io/io_handlers/Factory.h"
 
 namespace fs = boost::filesystem;
 

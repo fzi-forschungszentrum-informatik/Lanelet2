@@ -4,10 +4,10 @@
 #include <functional>
 #include <map>
 #include <string>
-#include "../Configuration.h"
-#include "../Projection.h"
-#include "Parser.h"
-#include "Writer.h"
+#include "lanelet2_io/Configuration.h"
+#include "lanelet2_io/Projection.h"
+#include "lanelet2_io/io_handlers/Parser.h"
+#include "lanelet2_io/io_handlers/Writer.h"
 
 namespace lanelet {
 namespace io_handlers {

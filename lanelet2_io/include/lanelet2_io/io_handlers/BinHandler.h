@@ -1,6 +1,6 @@
 #pragma once
-#include "Parser.h"
-#include "Writer.h"
+#include "lanelet2_io/io_handlers/Parser.h"
+#include "lanelet2_io/io_handlers/Writer.h"
 
 namespace lanelet {
 namespace io_handlers {

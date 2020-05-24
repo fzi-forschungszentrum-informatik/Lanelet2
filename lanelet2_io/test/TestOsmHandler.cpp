@@ -2,9 +2,9 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 #include <cstdio>
-#include "Io.h"
+#include "lanelet2_io/Io.h"
+#include "lanelet2_io/io_handlers/OsmHandler.h"
 #include "TestSetup.h"
-#include "io_handlers/OsmHandler.h"
 
 using namespace lanelet;
 

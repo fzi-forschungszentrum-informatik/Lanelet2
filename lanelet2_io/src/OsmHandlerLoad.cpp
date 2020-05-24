@@ -1,5 +1,4 @@
 #include <iostream>
-#include "io_handlers/OsmHandler.h"
 
 #include <lanelet2_core/geometry/LineString.h>
 #include <lanelet2_core/geometry/Polygon.h>
@@ -7,9 +6,10 @@
 #include <fstream>
 #include <pugixml.hpp>
 #include <sstream>
-#include "Exceptions.h"
-#include "io_handlers/Factory.h"
-#include "io_handlers/OsmFile.h"
+#include "lanelet2_io/Exceptions.h"
+#include "lanelet2_io/io_handlers/Factory.h"
+#include "lanelet2_io/io_handlers/OsmFile.h"
+#include "lanelet2_io/io_handlers/OsmHandler.h"
 
 using namespace std::string_literals;
 

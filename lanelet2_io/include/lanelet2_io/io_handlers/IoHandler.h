@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
-#include "../Configuration.h"
-#include "../Projection.h"
+#include "lanelet2_io/Configuration.h"
+#include "lanelet2_io/Projection.h"
 
 namespace lanelet {
 using ErrorMessages = std::vector<std::string>;
