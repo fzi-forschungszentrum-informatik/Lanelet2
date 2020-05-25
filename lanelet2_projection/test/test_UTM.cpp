@@ -1,5 +1,5 @@
-#include "UTM.h"
 #include "gtest/gtest.h"
+#include "lanelet2_projection/UTM.h"
 
 using namespace lanelet;
 using UtmProjector = lanelet::projection::UtmProjector;
