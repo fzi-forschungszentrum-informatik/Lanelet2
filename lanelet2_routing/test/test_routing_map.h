@@ -5,8 +5,8 @@
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
 #include <memory>
 #include <utility>
-#include "Forward.h"
-#include "RoutingGraph.h"
+#include "lanelet2_routing/Forward.h"
+#include "lanelet2_routing/RoutingGraph.h"
 
 /// The coordinates and relations for this test can be found in "LaneletTestMap.xml" which can be viewed in
 /// https://www.draw.io

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "LaneletPath.h"
-#include "lanelet2_core/geometry/Polygon.h"
+#include <lanelet2_core/geometry/Polygon.h>
+#include "lanelet2_routing/LaneletPath.h"
 
 using namespace lanelet;
 using namespace lanelet::routing;

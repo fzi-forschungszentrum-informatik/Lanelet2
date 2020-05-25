@@ -5,9 +5,9 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "Forward.h"
-#include "LaneletPath.h"
-#include "Types.h"
+#include "lanelet2_routing/Forward.h"
+#include "lanelet2_routing/LaneletPath.h"
+#include "lanelet2_routing/Types.h"
 
 namespace lanelet {
 namespace routing {

@@ -1,4 +1,4 @@
-#include "LaneletPath.h"
+#include "lanelet2_routing/LaneletPath.h"
 #include <lanelet2_core/geometry/Area.h>
 #include <lanelet2_core/geometry/Lanelet.h>
 

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "Route.h"
-#include "RoutingGraph.h"
+#include "lanelet2_routing/Route.h"
+#include "lanelet2_routing/RoutingGraph.h"
 #include "test_routing_map.h"
 
 using namespace lanelet;
