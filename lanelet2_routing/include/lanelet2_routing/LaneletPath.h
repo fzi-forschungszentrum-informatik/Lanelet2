@@ -3,7 +3,7 @@
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
 #include <lanelet2_core/utility/Optional.h>
-#include "Forward.h"
+#include "lanelet2_routing/Forward.h"
 
 namespace lanelet {
 namespace routing {

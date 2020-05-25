@@ -5,8 +5,8 @@
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <algorithm>
 #include <unordered_set>
-#include "Route.h"
-#include "RoutingGraph.h"
+#include "lanelet2_routing/Route.h"
+#include "lanelet2_routing/RoutingGraph.h"
 
 namespace lanelet {
 namespace routing {

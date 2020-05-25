@@ -2,7 +2,7 @@
 #include <lanelet2_core/utility/Optional.h>
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/two_bit_color_map.hpp>
-#include "Graph.h"
+#include "lanelet2_routing/internal/Graph.h"
 
 namespace lanelet {
 namespace routing {

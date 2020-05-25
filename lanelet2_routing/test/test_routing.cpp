@@ -2,9 +2,9 @@
 #include <lanelet2_core/primitives/LaneletSequence.h>
 #include <sched.h>
 #include <algorithm>
-#include "RoutingGraph.h"
-#include "internal/Graph.h"
-#include "internal/ShortestPath.h"
+#include "lanelet2_routing/RoutingGraph.h"
+#include "lanelet2_routing/internal/Graph.h"
+#include "lanelet2_routing/internal/ShortestPath.h"
 #include "test_routing_map.h"
 
 using namespace lanelet;

@@ -5,10 +5,10 @@
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/utility/Optional.h>
 #include <map>
-#include "Forward.h"
-#include "LaneletPath.h"
-#include "RoutingCost.h"
-#include "Types.h"
+#include "lanelet2_routing/Forward.h"
+#include "lanelet2_routing/LaneletPath.h"
+#include "lanelet2_routing/RoutingCost.h"
+#include "lanelet2_routing/Types.h"
 
 namespace lanelet {
 namespace routing {
