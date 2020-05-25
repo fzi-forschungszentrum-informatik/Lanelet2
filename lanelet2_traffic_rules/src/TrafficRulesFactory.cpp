@@ -1,4 +1,4 @@
-#include "TrafficRulesFactory.h"
+#include "lanelet2_traffic_rules/TrafficRulesFactory.h"
 
 namespace lanelet {
 

@@ -1,8 +1,8 @@
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/utility/Units.h>
-#include "TrafficRules.h"
-#include "TrafficRulesFactory.h"
+#include "lanelet2_traffic_rules/TrafficRules.h"
+#include "lanelet2_traffic_rules/TrafficRulesFactory.h"
 #include "gtest/gtest.h"
 
 using Attr = lanelet::AttributeName;

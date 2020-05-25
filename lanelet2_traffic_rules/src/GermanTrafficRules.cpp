@@ -1,9 +1,9 @@
-#include "GermanTrafficRules.h"
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 #include <lanelet2_core/utility/Units.h>
-#include "Exceptions.h"
-#include "TrafficRulesFactory.h"
+#include "lanelet2_traffic_rules/Exceptions.h"
+#include "lanelet2_traffic_rules/GermanTrafficRules.h"
+#include "lanelet2_traffic_rules/TrafficRulesFactory.h"
 
 using namespace std::string_literals;
 
