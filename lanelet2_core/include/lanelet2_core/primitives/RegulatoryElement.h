@@ -3,13 +3,13 @@
 #include <boost/variant.hpp>
 #include <utility>
 #include "lanelet2_core/Forward.h"
-#include "lanelet2_core/utility/HybridMap.h"
 #include "lanelet2_core/primitives/Area.h"
 #include "lanelet2_core/primitives/Lanelet.h"
 #include "lanelet2_core/primitives/LineString.h"
 #include "lanelet2_core/primitives/Point.h"
 #include "lanelet2_core/primitives/Polygon.h"
 #include "lanelet2_core/primitives/Primitive.h"
+#include "lanelet2_core/utility/HybridMap.h"
 
 namespace lanelet {
 //! @defgroup RegulatoryElementPrimitives Regulatory Element

@@ -1,7 +1,7 @@
 #pragma once
 #include <boost/geometry/geometries/register/box.hpp>
-#include "lanelet2_core/primitives/BoundingBox.h"
 #include "lanelet2_core/geometry/Point.h"
+#include "lanelet2_core/primitives/BoundingBox.h"
 
 // registrations for use with boost::geometry
 BOOST_GEOMETRY_REGISTER_BOX(lanelet::BoundingBox2d, lanelet::BasicPoint2d, min(), max());

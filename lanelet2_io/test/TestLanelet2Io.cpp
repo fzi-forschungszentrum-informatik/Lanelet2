@@ -1,7 +1,7 @@
-#include "lanelet2_io/Exceptions.h"
-#include "lanelet2_io/Io.h"
 #include "TestSetup.h"
 #include "gtest/gtest.h"
+#include "lanelet2_io/Exceptions.h"
+#include "lanelet2_io/Io.h"
 
 TEST(lanelet2_io, registryTest) {  // NOLINT
   auto parseExtensions = lanelet::supportedParserExtensions();

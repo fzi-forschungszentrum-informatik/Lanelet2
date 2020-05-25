@@ -1,5 +1,5 @@
-#include <boost/geometry/algorithms/equals.hpp>
 #include "lanelet2_core/geometry/Lanelet.h"
+#include <boost/geometry/algorithms/equals.hpp>
 #include "lanelet2_core/geometry/LineString.h"
 #include "lanelet2_core/geometry/Polygon.h"
 #include "lanelet2_core/primitives/CompoundPolygon.h"

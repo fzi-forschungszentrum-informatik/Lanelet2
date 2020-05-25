@@ -1,9 +1,9 @@
 #define LANELET_LAYER_DEFINITION
+#include "lanelet2_core/LaneletMap.h"
 #include <atomic>
+#include <boost/geometry/index/rtree.hpp>
 #include <chrono>
 #include <random>
-#include <boost/geometry/index/rtree.hpp>
-#include "lanelet2_core/LaneletMap.h"
 #include "lanelet2_core/geometry/Area.h"
 #include "lanelet2_core/geometry/BoundingBox.h"
 #include "lanelet2_core/geometry/Lanelet.h"

@@ -1,6 +1,6 @@
-#include "lanelet2_io/Io.h"
 #include "TestSetup.h"
 #include "gtest/gtest.h"
+#include "lanelet2_io/Io.h"
 
 TEST(lanelet2_io, exampleUsage) {  // NOLINT
   using namespace lanelet;

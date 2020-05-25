@@ -3,9 +3,9 @@
 #include <cstdio>
 #include <fstream>
 #include "TestSetup.h"
+#include "gtest/gtest.h"
 #include "lanelet2_io/Io.h"
 #include "lanelet2_io/io_handlers/Serialize.h"
-#include "gtest/gtest.h"
 
 using namespace lanelet;
 

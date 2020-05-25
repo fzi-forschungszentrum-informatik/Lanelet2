@@ -1,8 +1,8 @@
 #pragma once
 
+#include "lanelet2_core/geometry/Polygon.h"
 #include "lanelet2_core/primitives/Area.h"
 #include "lanelet2_core/primitives/Lanelet.h"
-#include "lanelet2_core/geometry/Polygon.h"
 
 namespace lanelet {
 namespace geometry {

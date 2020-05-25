@@ -1,7 +1,7 @@
 #pragma once
+#include <lanelet2_core/LaneletMap.h>
 #include <string>
 #include <vector>
-#include <lanelet2_core/LaneletMap.h>
 #include "lanelet2_io/Configuration.h"
 #include "lanelet2_io/Projection.h"
 

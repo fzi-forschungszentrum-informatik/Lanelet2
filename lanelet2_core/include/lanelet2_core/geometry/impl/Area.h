@@ -1,9 +1,9 @@
 #pragma once
 #include <lanelet2_core/geometry/Area.h>
-#include "lanelet2_core/primitives/Area.h"
-#include "lanelet2_core/primitives/Lanelet.h"
 #include "lanelet2_core/geometry/Point.h"
 #include "lanelet2_core/geometry/Polygon.h"
+#include "lanelet2_core/primitives/Area.h"
+#include "lanelet2_core/primitives/Lanelet.h"
 
 namespace lanelet {
 namespace geometry {

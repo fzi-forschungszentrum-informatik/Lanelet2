@@ -1,12 +1,12 @@
 #pragma once
 #include <utility>
 #include "lanelet2_core/Forward.h"
-#include "lanelet2_core/utility/ReverseAndForwardIterator.h"
-#include "lanelet2_core/utility/TransformIterator.h"
-#include "lanelet2_core/utility/Utilities.h"
 #include "lanelet2_core/primitives/BoundingBox.h"
 #include "lanelet2_core/primitives/Point.h"
 #include "lanelet2_core/primitives/Primitive.h"
+#include "lanelet2_core/utility/ReverseAndForwardIterator.h"
+#include "lanelet2_core/utility/TransformIterator.h"
+#include "lanelet2_core/utility/Utilities.h"
 
 namespace lanelet {
 

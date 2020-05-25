@@ -8,10 +8,10 @@
 #pragma GCC diagnostic pop
 #include <utility>
 #include "lanelet2_core/Forward.h"
-#include "lanelet2_core/utility/TransformIterator.h"
-#include "lanelet2_core/utility/Utilities.h"
 #include "lanelet2_core/primitives/Primitive.h"
 #include "lanelet2_core/primitives/Traits.h"
+#include "lanelet2_core/utility/TransformIterator.h"
+#include "lanelet2_core/utility/Utilities.h"
 
 namespace lanelet {
 

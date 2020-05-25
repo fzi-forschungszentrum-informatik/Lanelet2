@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "lanelet2_core/utility/Utilities.h"
 #include "lanelet2_core/geometry/RegulatoryElement.h"
 #include "lanelet2_core/primitives/BasicRegulatoryElements.h"
+#include "lanelet2_core/utility/Utilities.h"
 
 using namespace lanelet;
 

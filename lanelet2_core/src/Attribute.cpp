@@ -1,7 +1,7 @@
+#include "lanelet2_core/Attribute.h"
 #include <boost/lexical_cast.hpp>
 #include <boost/variant/get.hpp>
 #include <regex>
-#include "lanelet2_core/Attribute.h"
 #include "lanelet2_core/Exceptions.h"
 #include "lanelet2_core/utility/Units.h"
 
