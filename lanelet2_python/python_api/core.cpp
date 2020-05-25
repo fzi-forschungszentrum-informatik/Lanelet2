@@ -214,6 +214,7 @@ class IsPrimitive : public def_visitor<IsPrimitive<PrimT>> {
     c.def(self == self);  // NOLINT
     c.def(self != self);  // NOLINT
     c.def(self_ns::str(self_ns::self));
+    c.def("__hash__", +[](const PrimT& self) { return std::hash<PrimT>()(self); });
   }
 };
 
@@ -230,6 +231,7 @@ class IsConstPrimitive : public def_visitor<IsConstPrimitive<PrimT>> {
     c.def(self == self);  // NOLINT
     c.def(self != self);  // NOLINT
     c.def(self_ns::str(self_ns::self));
+    c.def("__hash__", +[](const PrimT& self) { return std::hash<PrimT>()(self); });
   }
 };
 

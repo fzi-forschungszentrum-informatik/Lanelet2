@@ -793,4 +793,8 @@ template <>
 struct hash<lanelet::LineString2d> : public lanelet::HashBase<lanelet::LineString2d> {};
 template <>
 struct hash<lanelet::ConstLineString2d> : public lanelet::HashBase<lanelet::ConstLineString2d> {};
+template <>
+struct hash<lanelet::ConstHybridLineString2d> : public lanelet::HashBase<lanelet::ConstHybridLineString2d> {};
+template <>
+struct hash<lanelet::ConstHybridLineString3d> : public lanelet::HashBase<lanelet::ConstHybridLineString3d> {};
 }  // namespace std
