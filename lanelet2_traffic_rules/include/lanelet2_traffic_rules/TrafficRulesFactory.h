@@ -1,5 +1,5 @@
 #pragma once
-#include "TrafficRules.h"
+#include "lanelet2_traffic_rules/TrafficRules.h"
 
 namespace lanelet {
 struct Locations {
