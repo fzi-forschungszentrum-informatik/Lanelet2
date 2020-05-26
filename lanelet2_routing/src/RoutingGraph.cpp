@@ -1,3 +1,4 @@
+#include "lanelet2_routing/RoutingGraph.h"
 #include <lanelet2_core/Attribute.h>
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/LaneletMap.h>
@@ -14,7 +15,6 @@
 #include "lanelet2_routing/Exceptions.h"
 #include "lanelet2_routing/Forward.h"
 #include "lanelet2_routing/Route.h"
-#include "lanelet2_routing/RoutingGraph.h"
 #include "lanelet2_routing/internal/Graph.h"
 #include "lanelet2_routing/internal/GraphUtils.h"
 #include "lanelet2_routing/internal/RouteBuilder.h"

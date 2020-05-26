@@ -1,5 +1,5 @@
-#include <GeographicLib/UTMUPS.hpp>
 #include "lanelet2_projection/UTM.h"
+#include <GeographicLib/UTMUPS.hpp>
 
 namespace lanelet {
 namespace projection {

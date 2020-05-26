@@ -1,8 +1,8 @@
+#include "lanelet2_routing/RoutingCost.h"
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/utility/Units.h>
 #include <boost/geometry/algorithms/perimeter.hpp>
-#include "lanelet2_routing/RoutingCost.h"
 
 namespace lanelet {
 namespace routing {

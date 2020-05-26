@@ -1,10 +1,10 @@
+#include "lanelet2_routing/internal/RouteBuilder.h"
 #include <lanelet2_core/LaneletMap.h>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/depth_first_search.hpp>
 #include <unordered_set>
 #include "lanelet2_routing/internal/Graph.h"
 #include "lanelet2_routing/internal/GraphUtils.h"
-#include "lanelet2_routing/internal/RouteBuilder.h"
 
 namespace lanelet {
 namespace routing {
