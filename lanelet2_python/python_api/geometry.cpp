@@ -7,7 +7,7 @@
 #include <lanelet2_core/geometry/RegulatoryElement.h>
 #include <boost/geometry/geometries/register/multi_linestring.hpp>
 #include <boost/python.hpp>
-#include "internal/converter.h"
+#include "lanelet2_python/internal/converter.h"
 
 BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::LineStrings2d);
 BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstLineStrings2d);
