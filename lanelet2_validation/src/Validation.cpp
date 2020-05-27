@@ -1,10 +1,10 @@
-#include "Validation.h"
 #include <lanelet2_core/primitives/GPSPoint.h>
 #include <lanelet2_io/Io.h>
 #include <lanelet2_projection/UTM.h>
 #include <lanelet2_routing/RoutingGraph.h>
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
-#include "ValidatorFactory.h"
+#include "lanelet2_validation/Validation.h"
+#include "lanelet2_validation/ValidatorFactory.h"
 
 namespace lanelet {
 namespace validation {

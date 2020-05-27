@@ -1,4 +1,4 @@
-#include "ValidatorFactory.h"
+#include "lanelet2_validation/ValidatorFactory.h"
 
 namespace lanelet {
 namespace validation {

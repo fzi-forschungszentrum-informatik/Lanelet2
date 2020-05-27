@@ -1,4 +1,4 @@
-#include "BasicValidator.h"
+#include "lanelet2_validation/BasicValidator.h"
 
 namespace lanelet {
 namespace validation {

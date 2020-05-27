@@ -1,8 +1,8 @@
-#include "ValidatorFactory.h"
-#include "validators/mapping/BoolTags.h"
-#include "validators/mapping/MandatoryTags.h"
-#include "validators/mapping/UnknownTagValue.h"
-#include "validators/mapping/UnknownTags.h"
+#include "lanelet2_validation/ValidatorFactory.h"
+#include "lanelet2_validation/validators/mapping/BoolTags.h"
+#include "lanelet2_validation/validators/mapping/MandatoryTags.h"
+#include "lanelet2_validation/validators/mapping/UnknownTagValue.h"
+#include "lanelet2_validation/validators/mapping/UnknownTags.h"
 
 namespace lanelet {
 namespace validation {

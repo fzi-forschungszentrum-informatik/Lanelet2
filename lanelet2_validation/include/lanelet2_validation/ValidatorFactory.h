@@ -2,7 +2,7 @@
 #include <lanelet2_core/utility/Utilities.h>
 #include <functional>
 #include <regex>
-#include "BasicValidator.h"
+#include "lanelet2_validation/BasicValidator.h"
 
 namespace lanelet {
 namespace validation {

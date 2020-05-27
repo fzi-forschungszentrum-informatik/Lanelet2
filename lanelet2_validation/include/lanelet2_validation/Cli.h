@@ -1,5 +1,5 @@
 #pragma once
-#include "Validation.h"
+#include "lanelet2_validation/Validation.h"
 
 namespace lanelet {
 namespace validation {

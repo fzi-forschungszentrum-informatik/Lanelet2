@@ -4,8 +4,8 @@
 #include <lanelet2_io/io_handlers/Factory.h>
 #include <lanelet2_io/io_handlers/Writer.h>
 #include <lanelet2_projection/UTM.h>
-#include "Cli.h"
-#include "Validation.h"
+#include "lanelet2_validation/Cli.h"
+#include "lanelet2_validation/Validation.h"
 
 TEST(TestAllValidators, onExampleMap) {  // NOLINT
   const char* args[] = {"validator",      "../../lanelet2_maps/res/mapping_example.osm",

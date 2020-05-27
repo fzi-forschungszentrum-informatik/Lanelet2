@@ -1,6 +1,6 @@
 #pragma once
 #include <lanelet2_core/LaneletMap.h>
-#include "BasicValidator.h"
+#include "lanelet2_validation/BasicValidator.h"
 
 namespace lanelet {
 namespace validation {
