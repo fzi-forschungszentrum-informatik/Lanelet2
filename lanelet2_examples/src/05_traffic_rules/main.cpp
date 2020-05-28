@@ -4,7 +4,7 @@
 #include <lanelet2_core/utility/Units.h>
 #include <lanelet2_traffic_rules/TrafficRules.h>
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
-#include "../ExampleHelpers.h"
+#include "ExampleHelpers.h"
 
 // we want assert statements to work in release mode
 #undef NDEBUG

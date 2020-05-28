@@ -36,6 +36,7 @@ if (SRC_DIRECTORIES)
     # Found subfolders, add executable for each subfolder
     foreach(SRC_DIR ${SRC_DIRECTORIES})
         mrt_add_executable(${SRC_DIR} FOLDER "src/${SRC_DIR}")
+        target_include_directories(${PROJECT_NAME}-${SRC_DIR}-exec PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
     endforeach()
 else()
     # No subfolder found, add executable and python modules for src folder
