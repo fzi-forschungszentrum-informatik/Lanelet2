@@ -3,6 +3,7 @@ import sys
 import em
 import xml.etree.ElementTree as ET
 from conans import ConanFile, CMake, tools
+from distutils.sysconfig import get_python_lib
 
 find_mrt_cmake="""
 set(mrt_cmake_modules_FOUND True)
@@ -83,16 +84,7 @@ class Lanelet2Conan(ConanFile):
         return cmake
 
     def _pythonpath(self):
-        sys.version_info.major
-        if self.settings.os == "Windows":
-            return os.path.join("lib", "python" + get_py_version(), "site-packages")
-        if os.path.exists("/etc/debian_version"):
-            print("On debian")
-            if sys.version_info.major == 3:
-                return os.path.join("lib", "python3", "dist-packages") # its ROS, idk...
-            else:
-                return os.path.join("lib", "python" + get_py_version(), "dist-packages")
-        return os.path.join("lib", "python" + get_py_version(), "site-packages")
+        return os.path.relpath(get_python_lib(prefix=self.package_folder), start=self.package_folder)
 
     def source(self):
         if not os.path.exists("mrt_cmake_modules"):

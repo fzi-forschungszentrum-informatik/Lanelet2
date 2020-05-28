@@ -131,7 +131,7 @@ def part6routing():
 
 
 def hasPathFromTo(graph, start, target):
-    class TargetFound:
+    class TargetFound(BaseException):
         pass
 
     def raiseIfDestination(visitInformation):
