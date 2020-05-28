@@ -9,7 +9,8 @@
   <maintainer email="fabian.poggenhans@kit.edu">Fabian Poggenhans</maintainer>
   <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake_core</buildtool_depend>
   <exec_depend>lanelet2_core</exec_depend>
   <exec_depend>lanelet2_io</exec_depend>
   <exec_depend>lanelet2_traffic_rules</exec_depend>
@@ -20,6 +21,8 @@
   <exec_depend>lanelet2_validation</exec_depend>
   <exec_depend>lanelet2_examples</exec_depend>
   <export>
-    <metapackage />
+    <build_type condition="$ROS_VERSION == 1">catkin</build_type>
+    <build_type condition="$ROS_VERSION == 2">ament_cmake</build_type>
+    <metapackage/>
   </export>
 </package>

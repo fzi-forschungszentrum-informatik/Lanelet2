@@ -10,7 +10,8 @@
   <author email="mayr@fzi.de">Matthias Mayr</author>
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
   
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake_core</buildtool_depend>
   <buildtool_depend>mrt_cmake_modules</buildtool_depend>
   <buildtool_export_depend>mrt_cmake_modules</buildtool_export_depend>
   <test_depend>gtest</test_depend>
@@ -19,6 +20,8 @@
   <depend>lanelet2_traffic_rules</depend>
 
   <export>
+    <build_type condition="$ROS_VERSION == 1">catkin</build_type>
+    <build_type condition="$ROS_VERSION == 2">ament_cmake</build_type>
     <rosdoc config="../rosdoc.yaml" />
   </export>
 </package>

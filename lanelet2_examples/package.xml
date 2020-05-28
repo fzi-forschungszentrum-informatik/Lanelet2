@@ -10,7 +10,8 @@
   <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake_core</buildtool_depend>
   <buildtool_depend>mrt_cmake_modules</buildtool_depend>
   <buildtool_export_depend>mrt_cmake_modules</buildtool_export_depend>
   <depend>lanelet2_core</depend>
@@ -20,8 +21,11 @@
   <depend>lanelet2_routing</depend>
   <depend>lanelet2_projection</depend>
   <test_depend>gtest</test_depend>
-  <test_depend>rosbash</test_depend>
+  <exec_depend condition="$ROS_VERSION == 1">rosbash</exec_depend>
+  <exec_depend condition="$ROS_VERSION == 2">ros2cli</exec_depend>
   <export>
+    <build_type condition="$ROS_VERSION == 1">catkin</build_type>
+    <build_type condition="$ROS_VERSION == 2">ament_cmake</build_type>
     <rosdoc config="../rosdoc.yaml" />
   </export>
 </package>
