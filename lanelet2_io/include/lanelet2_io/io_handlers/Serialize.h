@@ -1,5 +1,6 @@
 #pragma once
 #include <lanelet2_core/LaneletMap.h>
+#include <boost/serialization/map.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/split_free.hpp>
@@ -49,57 +50,23 @@ void save(Archive& ar, const lanelet::Attribute& p, unsigned int /*version*/) {
 }
 
 template <typename Archive>
-void serialize(Archive& ar, std::pair<std::string, lanelet::Attribute>& p, unsigned int /*version*/) {
-  ar& p.first;
-  ar& p.second;
-}
-
-template <typename Archive>
-void serialize(Archive& ar, std::pair<std::string, lanelet::RuleParameters>& p, unsigned int /*version*/) {
-  ar& p.first;
-  ar& p.second;
-}
-
-template <typename Archive>
 void load(Archive& ar, lanelet::AttributeMap& p, unsigned int /*version*/) {
-  size_t size = 0;
-  ar& size;
-  for (auto i = 0u; i < size; ++i) {
-    std::pair<std::string, lanelet::Attribute> val;
-    ar& val;
-    p.insert(std::move(val));
-  }
+  boost::serialization::load_map_collection(ar, p);
 }
 
 template <typename Archive>
 void save(Archive& ar, const lanelet::AttributeMap& p, unsigned int /*version*/) {
-  auto size = p.size();
-  ar& size;
-  for (const auto& elem : p) {
-    std::pair<std::string, lanelet::Attribute> val = elem;
-    ar& val;
-  }
+  boost::serialization::stl::save_collection(ar, p);
 }
 
 template <typename Archive>
 void load(Archive& ar, lanelet::RuleParameterMap& p, unsigned int /*version*/) {
-  size_t size = 0;
-  ar& size;
-  for (auto i = 0u; i < size; ++i) {
-    std::pair<std::string, lanelet::RuleParameters> val;
-    ar& val;
-    p.insert(std::move(val));
-  }
+  boost::serialization::load_map_collection(ar, p);
 }
 
 template <typename Archive>
 void save(Archive& ar, const lanelet::RuleParameterMap& p, unsigned int /*version*/) {
-  size_t size = p.size();
-  ar& size;
-  for (const auto& elem : p) {
-    std::pair<std::string, lanelet::RuleParameters> val = elem;
-    ar& val;
-  }
+  boost::serialization::stl::save_collection(ar, p);
 }
 
 //! lanelet +data

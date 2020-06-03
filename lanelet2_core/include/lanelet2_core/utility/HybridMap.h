@@ -126,18 +126,18 @@ class HybridMap {
   iterator end() { return m_.end(); }
   const_iterator begin() const { return m_.begin(); }
   const_iterator end() const { return m_.end(); }
+
   std::pair<iterator, bool> insert(const value_type& v) {
     auto it = m_.insert(v);
     if (it.second) {
-      auto attr = Array::findKey(v.first.c_str());
-      if (attr != std::end(PairArray)) {  // NOLINT
-        const auto pos = static_cast<size_t>(attr->second);
-        if (v_.size() < pos + 1) {
-          v_.resize(pos + 1, m_.end());
-        }
-        v_[pos] = it.first;
-      }
+      updateV(it.first);
     }
+    return it;
+  }
+
+  iterator insert(const_iterator hint, const value_type& v) {
+    auto it = m_.insert(hint, v);
+    updateV(it);
     return it;
   }
 
@@ -217,6 +217,16 @@ class HybridMap {
   bool operator!=(const HybridMap& other) const { return !(*this == other); }
 
  private:
+  void updateV(iterator it) {
+    auto attr = Array::findKey(it->first.c_str());
+    if (attr != std::end(PairArray)) {  // NOLINT
+      const auto pos = static_cast<size_t>(attr->second);
+      if (v_.size() < pos + 1) {
+        v_.resize(pos + 1, m_.end());
+      }
+      v_[pos] = it;
+    }
+  }
   Map m_;
   Vec v_;
 };
