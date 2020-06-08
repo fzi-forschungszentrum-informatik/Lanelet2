@@ -9,9 +9,9 @@
 #include <boost/python.hpp>
 #include "lanelet2_python/internal/converter.h"
 
-BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::LineStrings2d);
-BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstLineStrings2d);
-BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstHybridLineStrings2d);
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::LineStrings2d)
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstLineStrings2d)
+BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::ConstHybridLineStrings2d)
 
 using namespace boost::python;
 using namespace lanelet;

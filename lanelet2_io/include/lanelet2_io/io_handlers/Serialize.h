@@ -484,18 +484,18 @@ void load(Archive& ar, lanelet::LaneletMap& m, unsigned int /*version*/) {
 }  // namespace serialization
 }  // namespace boost
 
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::AttributeMap);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Attribute);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::WeakArea);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Area);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::WeakLanelet);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Lanelet);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Point3d);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::ConstPoint3d);  // NOLINT
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::LineString3d);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::ConstLineString3d);  // NOLINT
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Polygon3d);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::RuleParameterMap);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::RegulatoryElementPtr);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::RegulatoryElementConstPtr);
-BOOST_SERIALIZATION_SPLIT_FREE(lanelet::LaneletMap);
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::AttributeMap)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Attribute)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::WeakArea)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Area)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::WeakLanelet)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Lanelet)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Point3d)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::ConstPoint3d)  // NOLINT
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::LineString3d)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::ConstLineString3d)  // NOLINT
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::Polygon3d)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::RuleParameterMap)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::RegulatoryElementPtr)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::RegulatoryElementConstPtr)
+BOOST_SERIALIZATION_SPLIT_FREE(lanelet::LaneletMap)

@@ -26,7 +26,7 @@ BOOST_GEOMETRY_REGISTER_LINESTRING(lanelet::CompoundLineString2d)
 BOOST_GEOMETRY_REGISTER_LINESTRING(lanelet::CompoundLineString3d)
 BOOST_GEOMETRY_REGISTER_LINESTRING(lanelet::CompoundHybridLineString2d)
 BOOST_GEOMETRY_REGISTER_LINESTRING(lanelet::CompoundHybridLineString3d)
-BOOST_GEOMETRY_REGISTER_SEGMENT_TEMPLATIZED(lanelet::Segment, first, second);
+BOOST_GEOMETRY_REGISTER_SEGMENT_TEMPLATIZED(lanelet::Segment, first, second)
 
 namespace lanelet {
 namespace geometry {
