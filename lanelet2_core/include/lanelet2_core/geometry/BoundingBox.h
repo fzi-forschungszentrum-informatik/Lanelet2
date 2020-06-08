@@ -4,8 +4,8 @@
 #include "lanelet2_core/primitives/BoundingBox.h"
 
 // registrations for use with boost::geometry
-BOOST_GEOMETRY_REGISTER_BOX(lanelet::BoundingBox2d, lanelet::BasicPoint2d, min(), max());
-BOOST_GEOMETRY_REGISTER_BOX(lanelet::BoundingBox3d, lanelet::BasicPoint3d, min(), max());
+BOOST_GEOMETRY_REGISTER_BOX(lanelet::BoundingBox2d, lanelet::BasicPoint2d, min(), max())
+BOOST_GEOMETRY_REGISTER_BOX(lanelet::BoundingBox3d, lanelet::BasicPoint3d, min(), max())
 
 namespace lanelet {
 namespace geometry {

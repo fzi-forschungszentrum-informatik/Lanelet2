@@ -22,7 +22,7 @@ lanelet::RegulatoryElementPtr getSpeedLimit(const std::string& type, const lanel
 lanelet::traffic_rules::TrafficRulesPtr germanVehicleRules() {
   using namespace lanelet;
   return traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle, {});
-};
+}
 
 lanelet::traffic_rules::TrafficRulesPtr germanBikeRules() {
   using namespace lanelet;

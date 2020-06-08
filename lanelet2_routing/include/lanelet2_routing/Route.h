@@ -201,5 +201,5 @@ class Route {
   LaneletPath shortestPath_;                     ///< The underlying shortest path used to create the route
   LaneletSubmapConstPtr laneletSubmap_;          ///< LaneletSubmap with all lanelets that are part of the route
 };
-};  // namespace routing
-};  // namespace lanelet
+}  // namespace routing
+}  // namespace lanelet

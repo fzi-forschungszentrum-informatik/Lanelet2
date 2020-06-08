@@ -169,7 +169,7 @@ std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const ConstHybridLineStri
 
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicLineString3d& l1, const ConstHybridLineString3d& l2) {
   return projectedPoint3dImpl(l1, l2);
-};
+}
 
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicLineString3d& l1, const BasicLineString3d& l2) {
   return projectedPoint3dImpl(l1, l2);
