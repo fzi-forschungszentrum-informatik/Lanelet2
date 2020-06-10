@@ -44,7 +44,7 @@ TEST_F(GermanVehicleGraph, GraphVizExport) {                            // NOLIN
 
 TEST_F(GermanVehicleGraph, GraphVizExportError) {                                           // NOLINT
   EXPECT_THROW(graph->exportGraphViz("", RelationType::None), lanelet::InvalidInputError);  // NOLINT
-  EXPECT_THROW(graph->exportGraphViz("/bla"), lanelet::ExportError);                        // NOLINT
+  EXPECT_THROW(graph->exportGraphViz("/place/that/doesnt/exist"), lanelet::ExportError);    // NOLINT
 }
 
 TEST_F(GermanVehicleGraph, GraphMLExport) {                                // NOLINT
@@ -59,7 +59,7 @@ TEST_F(GermanVehicleGraph, GraphMLExport) {                                // NO
 
 TEST_F(GermanVehicleGraph, GraphMLExportError) {                                                             // NOLINT
   EXPECT_THROW(graph->exportGraphML("", RelationType::None), lanelet::InvalidInputError);                    // NOLINT
-  EXPECT_THROW(graph->exportGraphML("/place_that_doesnt_exist", RelationType::None), lanelet::ExportError);  // NOLINT
+  EXPECT_THROW(graph->exportGraphML("/place/that/doesnt/exist", RelationType::None), lanelet::ExportError);  // NOLINT
 }
 
 TEST_F(GermanVehicleGraph, DebugLaneletMap) {  // NOLINT
