@@ -142,9 +142,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   // l2l
   def("distance", +[](const ConstLineString2d& ls1, const ConstLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
   def("distance", lg::distance<ConstHybridLineString2d, ConstHybridLineString2d>);
-  def("distance", +[](const CompoundLineString2d& ls1, const CompoundLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
-  def("distance", +[](const ConstLineString2d& ls1, const CompoundLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
-  def("distance", +[](const CompoundLineString2d& ls1, const ConstLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
+  def("distance",
+      +[](const CompoundLineString2d& ls1, const CompoundLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
+  def("distance",
+      +[](const ConstLineString2d& ls1, const CompoundLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
+  def("distance",
+      +[](const CompoundLineString2d& ls1, const ConstLineString2d& ls2) { return lg::distance2d(ls1, ls2); });
 
   // poly2p
   def("distance", lg::distance<ConstHybridPolygon2d, BasicPoint2d>);
@@ -203,9 +206,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   // l2l
   def("distance", +[](const ConstLineString3d& ls1, const ConstLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
   def("distance", +[](const HybridLs3d& ls1, const HybridLs3d& ls2) { return lg::distance3d(ls1, ls2); });
-  def("distance", +[](const CompoundLineString3d& ls1, const CompoundLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
-  def("distance", +[](const ConstLineString3d& ls1, const CompoundLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
-  def("distance", +[](const CompoundLineString3d& ls1, const ConstLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
+  def("distance",
+      +[](const CompoundLineString3d& ls1, const CompoundLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
+  def("distance",
+      +[](const ConstLineString3d& ls1, const CompoundLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
+  def("distance",
+      +[](const CompoundLineString3d& ls1, const ConstLineString3d& ls2) { return lg::distance3d(ls1, ls2); });
 
   // p2llt
   def("distance", lg::distance3d<ConstLanelet, BasicPoint3d>);
