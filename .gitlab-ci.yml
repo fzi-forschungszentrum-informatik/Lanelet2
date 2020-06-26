@@ -48,7 +48,7 @@ build_conan:
   - merge_requests
   before_script: []
   script:
-  - env DEBIAN_FRONTEND=noninteractive apt update && apt install -y python3-pip git cmake python3-dev
+  - apt update && env DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git cmake python3-dev
   - pip3 install conan catkin_pkg
   - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
   - conan source .
