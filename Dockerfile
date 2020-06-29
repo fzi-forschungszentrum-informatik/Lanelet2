@@ -78,7 +78,7 @@ WORKDIR /home/developer/workspace
 RUN sudo chown -R developer:developer /home/developer \
     && echo "export ROS_HOSTNAME=localhost" > /home/developer/.bashrc \
     && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /home/developer/.bashrc \
-    && echo "source /home/developer/workspace/devel/setup.bash" >> /home/developer/.bashrc
+    && echo "source /home/developer/workspace/devel/setup.bash || True" >> /home/developer/.bashrc
 
 # setup workspace, add dependencies
 RUN if [ "$ROS" = "ros" ]; \
