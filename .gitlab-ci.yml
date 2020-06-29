@@ -16,9 +16,9 @@ include:
   services:
     - docker:18.09-dind
   script:
-    - export IMAGE_NAME=$CI_REGISTRY_IMAGE:$DISTRIBUTION
+    - export IMAGE_NAME=$CI_REGISTRY_IMAGE:$TAG
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build --cache-from $IMAGE_NAME -t $IMAGE_NAME --build-arg=DISTRIBUTION=$DISTRIBUTION --build-arg=ROS_DISTRO=$ROS_DISTRO .
+    - docker build --cache-from $IMAGE_NAME -t $IMAGE_NAME --build-arg=DISTRIBUTION=$DISTRIBUTION --build-arg=ROS_DISTRO=$ROS_DISTRO --build-arg ROS=$ROS .
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then docker push $IMAGE_NAME; fi
 
@@ -26,23 +26,28 @@ build_docker_xenial:
   <<: *build_docker
   variables:
     DISTRIBUTION: "16.04"
+    TAG: "16.04"
     ROS_DISTRO: kinetic
     DOCKER_DRIVER: overlay2
     GIT_STRATEGY: fetch
+    ROS: ros
 
 build_docker_bionic:
   <<: *build_docker
   variables:
     DISTRIBUTION: "18.04"
+    TAG: "18.04"
     ROS_DISTRO: melodic
     DOCKER_DRIVER: overlay2
     GIT_STRATEGY: fetch
+    ROS: ros
 
 build_docker_ros2:
   <<: *build_docker
   variables:
-    DISTRIBUTION: "20.04"
-    ROS_DISTRO: eloquent
+    DISTRIBUTION: "18.04"
+    TAG: ros2
+    ROS_DISTRO: dashing
     DOCKER_DRIVER: overlay2
     GIT_STRATEGY: fetch
     ROS: ros2
