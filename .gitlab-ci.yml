@@ -38,6 +38,15 @@ build_docker_bionic:
     DOCKER_DRIVER: overlay2
     GIT_STRATEGY: fetch
 
+build_docker_ros2:
+  <<: *build_docker
+  variables:
+    DISTRIBUTION: "20.04"
+    ROS_DISTRO: eloquent
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: fetch
+    ROS: ros2
+
 build_conan:
   stage: build
   image: ubuntu:20.04
