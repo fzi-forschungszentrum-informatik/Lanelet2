@@ -32,7 +32,8 @@ RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "lunar" ]; \
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8 \
-    ROS_DISTRO=${ROS_DISTRO}
+    ROS_DISTRO=${ROS_DISTRO} \
+    ROS=${ROS}
 
 # install ROS
 RUN echo "deb http://packages.ros.org/${ROS}/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list \
@@ -78,7 +79,7 @@ WORKDIR /home/developer/workspace
 RUN sudo chown -R developer:developer /home/developer \
     && echo "export ROS_HOSTNAME=localhost" > /home/developer/.bashrc \
     && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /home/developer/.bashrc \
-    && echo "source /home/developer/workspace/devel/setup.bash || True" >> /home/developer/.bashrc
+    && echo "source /home/developer/workspace/devel/setup.bash || true" >> /home/developer/.bashrc
 
 # setup workspace, add dependencies
 RUN if [ "$ROS" = "ros" ]; \
@@ -90,7 +91,7 @@ RUN if [ "$ROS" = "ros" ]; \
     && git clone https://github.com/KIT-MRT/mrt_cmake_modules.git /home/developer/workspace/src/mrt_cmake_modules -b ament_support
 
 # second stage: get the code and build the image
-FROM lanelet2_deps As lanelet2
+FROM lanelet2_deps AS lanelet2
 
 # bring in the code
 COPY --chown=developer:developer . /home/developer/workspace/src/lanelet2
@@ -103,5 +104,5 @@ RUN if [ "$ROS" = "ros" ]; \
     then export BUILD_CMD="catkin build --no-status"; \
     else export BUILD_CMD="colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo"; \
     fi; \
-    /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && env && $BUILD_CMD"
+    /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && env && echo $ROS && $BUILD_CMD"
 
