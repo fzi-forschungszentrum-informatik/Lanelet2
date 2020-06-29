@@ -21,11 +21,11 @@ Note that the values in the following table are just the values inferred by defa
 | **road**    | **urban**    | A part of a road in urban region | All vehicles and bikes | City speed limit |
 | **road**    | **nonurban** | A part of a road in nonurban region | All vehicles and bikes | Nonurban speed limit |
 | **highway** | **urban**    | A part of a highway in urban region | All vehicles  | Urban highway limit |
-| **highway | **nonurban**   | A part of a highway in nonurban region | All vehicles  | Nonurban highway limit |
+| **highway** | **nonurban**   | A part of a highway in nonurban region | All vehicles  | Nonurban highway limit |
 | **play_street** | **-**    | A part of a play street          | Vehicles, bikes, pedestrians | play street speed limit |
 | **emergency_lane** | **-** | Lane for emergency vehicles      | Emergency vehicles | Average emergency vehicle speed |
 | **bus_lane** | **urban**       | Lane for buses                   | Bus, Emergency, Taxi | City speed limit |
-| **bus_lane** | **urban**       | Lane for buses                   | Bus, Emergency, Taxi | Nonurban speed limit |
+| **bus_lane** | **nonurban**       | Lane for buses                   | Bus, Emergency, Taxi | Nonurban speed limit |
 | **bicycle_lane** | **-**   | A lane that is usable only for bikes | Bikes        | Average bike speed |
 | **exit**    | **urban**    | Exit area of a house or garage that crosses the crosswalk   | Vehicles, bikes, pedestrians | Urban speed limit |
 | **walkway** | **-**        | A part of a way for pedestrians  | Pedestrians      | Average pedestrian walking speed |
