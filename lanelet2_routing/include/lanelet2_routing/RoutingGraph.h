@@ -415,7 +415,7 @@ class RoutingGraph {
   Errors checkValidity(bool throwOnError = true) const;
 
   /**
-   * Constructs the routing graph. Don't call this directly, use RoutingGraph::make instead.
+   * Constructs the routing graph. Don't call this directly, use RoutingGraph::build instead.
    */
   RoutingGraph(std::unique_ptr<internal::RoutingGraphGraph>&& graph, lanelet::LaneletSubmapConstPtr&& passableMap);
 

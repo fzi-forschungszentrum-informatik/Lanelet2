@@ -70,7 +70,7 @@ RoutingGraph::Configuration routingGraphConf;
 routingGraphConf.emplace(std::make_pair(RoutingGraph::ParticipantHeight, Attribute("2.")));
 
 // Create routing graph
-RoutingGraphPtr graph = std::make_shared<RoutingGraph>(map, trafficRules /*, costPtrs, routingGraphConf*/);
+RoutingGraphPtr graph = RoutingGraph::build(map, trafficRules /*, costPtrs, routingGraphConf*/);
 ```
 - The traffic rules object represents the view from which the map will be interpreted. Doing routing with vehicle traffic
 rules will yield different results than routing with e.g. bicycle traffic rules.
