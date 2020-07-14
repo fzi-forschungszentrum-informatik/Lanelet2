@@ -1,6 +1,6 @@
 # Lanelet Primitives
 
-Lanelet2 divides the world into a hierachical structure of six different primitives: Points, linestrings, polygons, lanelets, areas and regulatory elements.
+Lanelet2 divides the world into a hierarchical structure of six different primitives: Points, linestrings, polygons, lanelets, areas and regulatory elements.
 
 This article focuses on how the primitives are meant to be used, what properties they have and how they are meant to be used. For the technical side, please refer to the [architecture](Architecture.md) page.
 
