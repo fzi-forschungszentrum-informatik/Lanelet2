@@ -746,12 +746,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__getitem__", wrappers::getItem<LaneletSequence>, return_internal_reference<>());
 
   class_<ConstLaneletWithStopLine>("ConstLaneletWithStopLine", "A lanelet with a stopline", no_init)
-      .def_readwrite("lanelet", &ConstLaneletWithStopLine::lanelet)
-      .def_readwrite("stopLine", &ConstLaneletWithStopLine::stopLine);
+      .add_property("lanelet", &ConstLaneletWithStopLine::lanelet)
+      .add_property("stopLine", &ConstLaneletWithStopLine::stopLine);
 
   class_<LaneletWithStopLine>("LaneletWithStopLine", "A lanelet with a stopline", no_init)
-      .def_readwrite("lanelet", &LaneletWithStopLine::lanelet)
-      .def_readwrite("stopLine", &LaneletWithStopLine::stopLine);
+      .add_property("lanelet", &LaneletWithStopLine::lanelet)
+      .add_property("stopLine", &LaneletWithStopLine::stopLine);
 
   class_<ConstArea>("ConstArea", "Represents an area, potentially with holes, in the map",
                     boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
