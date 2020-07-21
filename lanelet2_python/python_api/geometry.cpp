@@ -260,8 +260,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("area", boost::geometry::area<ConstHybridPolygon2d>);
 
   class_<ArcCoordinates>("ArcCoordinates", "Coordinates along an arc", init<>())
-      .add_property("length", &ArcCoordinates::length, "lenght along arc")
-      .add_property("distance", &ArcCoordinates::distance, "signed distance to arc (left is positive");
+      .def_readwrite("length", &ArcCoordinates::length, "length along arc")
+      .def_readwrite("distance", &ArcCoordinates::distance, "signed distance to arc (left is positive");
 
   def("toArcCoordinates", lg::toArcCoordinates<ConstLineString2d>,
       "Project a point into arc coordinates of the linestring");

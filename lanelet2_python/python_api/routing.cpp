@@ -102,25 +102,25 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LaneletVisitInformation>("LaneletVisitInformation",
                                   "Object passed as input for the forEachSuccessor function of the routing graph")
-      .add_property("lanelet", &LaneletVisitInformation::lanelet, "the currently visited lanelet")
-      .add_property("predecessor", &LaneletVisitInformation::predecessor, "the predecessor within the shortest path")
-      .add_property("length", &LaneletVisitInformation::length,
+      .def_readwrite("lanelet", &LaneletVisitInformation::lanelet, "the currently visited lanelet")
+      .def_readwrite("predecessor", &LaneletVisitInformation::predecessor, "the predecessor within the shortest path")
+      .def_readwrite("length", &LaneletVisitInformation::length,
                     "The length of the shortest path to this lanelet (including lanelet")
-      .add_property("cost", &LaneletVisitInformation::cost, "The cost along the shortest path")
-      .add_property("numLaneChanges", &LaneletVisitInformation::numLaneChanges,
+      .def_readwrite("cost", &LaneletVisitInformation::cost, "The cost along the shortest path")
+      .def_readwrite("numLaneChanges", &LaneletVisitInformation::numLaneChanges,
                     "The number of lane changes necessary along the shortest path");
 
   class_<LaneletOrAreaVisitInformation>(
       "LaneletOrAreaVisitInformation",
       "Object passed as input for the forEachSuccessorIncludingAreas function of the routing graph")
-      .add_property("laneletOrArea", &LaneletOrAreaVisitInformation::laneletOrArea,
+      .def_readwrite("laneletOrArea", &LaneletOrAreaVisitInformation::laneletOrArea,
                     "the currently visited lanelet/area")
-      .add_property("predecessor", &LaneletOrAreaVisitInformation::predecessor,
+      .def_readwrite("predecessor", &LaneletOrAreaVisitInformation::predecessor,
                     "the predecessor within the shortest path")
-      .add_property("length", &LaneletOrAreaVisitInformation::length,
+      .def_readwrite("length", &LaneletOrAreaVisitInformation::length,
                     "The length of the shortest path to this lanelet (including lanelet")
-      .add_property("cost", &LaneletOrAreaVisitInformation::cost, "The cost along the shortest path")
-      .add_property("numLaneChanges", &LaneletOrAreaVisitInformation::numLaneChanges,
+      .def_readwrite("cost", &LaneletOrAreaVisitInformation::cost, "The cost along the shortest path")
+      .def_readwrite("numLaneChanges", &LaneletOrAreaVisitInformation::numLaneChanges,
                     "The number of lane changes necessary along the shortest path");
 
   class_<RoutingGraph, boost::noncopyable, RoutingGraphPtr>(
@@ -226,8 +226,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            (arg("throwOnError") = true));
 
   class_<LaneletRelation>("LaneletRelation")
-      .add_property("lanelet", &LaneletRelation::lanelet)
-      .add_property("relationType", &LaneletRelation::relationType);
+      .def_readwrite("lanelet", &LaneletRelation::lanelet)
+      .def_readwrite("relationType", &LaneletRelation::relationType);
 
   enum_<RelationType>("RelationType")
       .value("Successor", RelationType::Successor)

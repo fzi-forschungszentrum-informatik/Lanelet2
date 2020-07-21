@@ -589,9 +589,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                              return std::make_shared<GPSPoint>(GPSPoint({lat, lon, alt}));
                            },
                            default_call_policies(), (arg("lat") = 0., arg("lon") = 0., arg("alt") = 0)))
-      .add_property("lat", &GPSPoint::lat)
-      .add_property("lon", &GPSPoint::lon)
-      .add_property("alt", &GPSPoint::ele);
+      .def_readwrite("lat", &GPSPoint::lat)
+      .def_readwrite("lon", &GPSPoint::lon)
+      .def_readwrite("alt", &GPSPoint::ele);
 
   class_<ConstLineString2d>("ConstLineString2d", "Immutable 2d lineString primitive",
                             init<ConstLineString3d>("ConstLineString2d(ConstLineString3d)"))
@@ -746,12 +746,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__getitem__", wrappers::getItem<LaneletSequence>, return_internal_reference<>());
 
   class_<ConstLaneletWithStopLine>("ConstLaneletWithStopLine", "A lanelet with a stopline", no_init)
-      .add_property("lanelet", &ConstLaneletWithStopLine::lanelet)
-      .add_property("stopLine", &ConstLaneletWithStopLine::stopLine);
+      .def_readwrite("lanelet", &ConstLaneletWithStopLine::lanelet)
+      .def_readwrite("stopLine", &ConstLaneletWithStopLine::stopLine);
 
   class_<LaneletWithStopLine>("LaneletWithStopLine", "A lanelet with a stopline", no_init)
-      .add_property("lanelet", &LaneletWithStopLine::lanelet)
-      .add_property("stopLine", &LaneletWithStopLine::stopLine);
+      .def_readwrite("lanelet", &LaneletWithStopLine::lanelet)
+      .def_readwrite("stopLine", &LaneletWithStopLine::stopLine);
 
   class_<ConstArea>("ConstArea", "Represents an area, potentially with holes, in the map",
                     boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
@@ -849,8 +849,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__init__", make_constructor(+[](LineStringsOrPolygons3d ls, std::string type) {
              return std::make_shared<TrafficSignsWithType>(TrafficSignsWithType{std::move(ls), std::move(type)});
            }))
-      .add_property("trafficSigns", &TrafficSignsWithType::trafficSigns)
-      .add_property("type", &TrafficSignsWithType::type);
+      .def_readwrite("trafficSigns", &TrafficSignsWithType::trafficSigns)
+      .def_readwrite("type", &TrafficSignsWithType::type);
 
   class_<TrafficSign, boost::noncopyable, std::shared_ptr<TrafficSign>, bases<RegulatoryElement>>(
       "TrafficSign", "A traffic sign regulatory element", no_init)
