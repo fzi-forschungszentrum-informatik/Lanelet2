@@ -60,7 +60,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("speedLimitKmH", getVelocity, setVelocity, "velocity in km/h")
       .add_property("speedLimitMPS", getVelocityMPS, setVelocityMPS, "velocity in m/s")
       .def_readwrite("isMandatory", &SpeedLimitInformation::isMandatory,
-                    "True if speedlimit is not just a recommendation")
+                     "True if speedlimit is not just a recommendation")
       .def(self_ns::str(self_ns::self));
 
   class_<TrafficRules, boost::noncopyable, std::shared_ptr<TrafficRules>>("TrafficRules", no_init)

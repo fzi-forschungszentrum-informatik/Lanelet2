@@ -105,23 +105,23 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def_readwrite("lanelet", &LaneletVisitInformation::lanelet, "the currently visited lanelet")
       .def_readwrite("predecessor", &LaneletVisitInformation::predecessor, "the predecessor within the shortest path")
       .def_readwrite("length", &LaneletVisitInformation::length,
-                    "The length of the shortest path to this lanelet (including lanelet")
+                     "The length of the shortest path to this lanelet (including lanelet")
       .def_readwrite("cost", &LaneletVisitInformation::cost, "The cost along the shortest path")
       .def_readwrite("numLaneChanges", &LaneletVisitInformation::numLaneChanges,
-                    "The number of lane changes necessary along the shortest path");
+                     "The number of lane changes necessary along the shortest path");
 
   class_<LaneletOrAreaVisitInformation>(
       "LaneletOrAreaVisitInformation",
       "Object passed as input for the forEachSuccessorIncludingAreas function of the routing graph")
       .def_readwrite("laneletOrArea", &LaneletOrAreaVisitInformation::laneletOrArea,
-                    "the currently visited lanelet/area")
+                     "the currently visited lanelet/area")
       .def_readwrite("predecessor", &LaneletOrAreaVisitInformation::predecessor,
-                    "the predecessor within the shortest path")
+                     "the predecessor within the shortest path")
       .def_readwrite("length", &LaneletOrAreaVisitInformation::length,
-                    "The length of the shortest path to this lanelet (including lanelet")
+                     "The length of the shortest path to this lanelet (including lanelet")
       .def_readwrite("cost", &LaneletOrAreaVisitInformation::cost, "The cost along the shortest path")
       .def_readwrite("numLaneChanges", &LaneletOrAreaVisitInformation::numLaneChanges,
-                    "The number of lane changes necessary along the shortest path");
+                     "The number of lane changes necessary along the shortest path");
 
   class_<RoutingGraph, boost::noncopyable, RoutingGraphPtr>(
       "RoutingGraph",
