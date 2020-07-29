@@ -273,6 +273,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("length", lg::length<CompoundLineString2d>);
   def("length", lg::length<CompoundLineString3d>);
 
+  def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<BasicLineString2d>);
+  def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<BasicLineString3d>);
   def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<ConstLineString2d>);
   def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<ConstLineString3d>);
   def("interpolatedPointAtDistance", lg::interpolatedPointAtDistance<CompoundLineString2d>);
