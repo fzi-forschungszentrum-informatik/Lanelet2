@@ -1,5 +1,6 @@
 #pragma once
 #include <lanelet2_core/Exceptions.h>
+
 #include <stdexcept>
 
 namespace lanelet {

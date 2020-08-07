@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include <boost/filesystem.hpp>
+
 #include "lanelet2_routing/Exceptions.h"
 #include "lanelet2_routing/RoutingGraph.h"
 #include "test_routing_map.h"

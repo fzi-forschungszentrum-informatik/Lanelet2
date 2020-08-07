@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include <iostream>
+
 #include "lanelet2_core/geometry/LineString.h"
 #include "lanelet2_core/geometry/RegulatoryElement.h"
 #include "lanelet2_core/primitives/BasicRegulatoryElements.h"

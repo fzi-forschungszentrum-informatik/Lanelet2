@@ -6,6 +6,7 @@
 #include <functional>
 #include <memory>
 #include <utility>
+
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/primitives/LineString.h"
 #include "lanelet2_core/primitives/Primitive.h"

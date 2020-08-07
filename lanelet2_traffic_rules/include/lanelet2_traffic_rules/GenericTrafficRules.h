@@ -1,6 +1,7 @@
 #pragma once
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/primitives/Lanelet.h>
+
 #include "lanelet2_traffic_rules/TrafficRules.h"
 
 namespace lanelet {

@@ -1,6 +1,8 @@
 #pragma once
 #include <lanelet2_core/LaneletMap.h>
+
 #include <memory>
+
 #include "lanelet2_io/Exceptions.h"
 #include "lanelet2_io/Projection.h"
 #include "lanelet2_io/io_handlers/IoHandler.h"

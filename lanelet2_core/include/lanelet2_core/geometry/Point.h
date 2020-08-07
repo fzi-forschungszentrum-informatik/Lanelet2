@@ -8,6 +8,7 @@
 #include <boost/geometry/geometries/geometries.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
+
 #include "lanelet2_core/primitives/Point.h"
 
 /***********************************************************************

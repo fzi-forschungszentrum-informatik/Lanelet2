@@ -8,6 +8,7 @@
 #include <numeric>
 #include <type_traits>
 #include <vector>
+
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/utility/Optional.h"
 

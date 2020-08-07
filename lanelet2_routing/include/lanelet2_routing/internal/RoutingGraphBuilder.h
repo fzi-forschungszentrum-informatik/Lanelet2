@@ -1,5 +1,6 @@
 #pragma once
 #include <lanelet2_core/LaneletMap.h>
+
 #include "lanelet2_routing/RoutingGraph.h"
 #include "lanelet2_routing/internal/Graph.h"
 

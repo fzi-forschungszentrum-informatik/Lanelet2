@@ -1,4 +1,5 @@
 #include <lanelet2_projection/UTM.h>
+
 #include <boost/python.hpp>
 
 using namespace lanelet;

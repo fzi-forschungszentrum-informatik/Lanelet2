@@ -1,7 +1,9 @@
 #pragma once
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/primitives/LaneletOrArea.h>
+
 #include <functional>
+
 #include "lanelet2_routing/Forward.h"
 
 namespace lanelet {

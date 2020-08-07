@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include <sstream>
+
 #include "lanelet2_core/geometry/Point.h"
 #include "lanelet2_core/primitives/Point.h"
 

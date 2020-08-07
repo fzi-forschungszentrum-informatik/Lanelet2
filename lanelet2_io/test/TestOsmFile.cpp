@@ -1,4 +1,5 @@
 #include <sstream>
+
 #include "gtest/gtest.h"
 #include "lanelet2_io/io_handlers/OsmFile.h"
 

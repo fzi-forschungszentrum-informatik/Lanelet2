@@ -2,9 +2,11 @@
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
+
 #include <memory>
 #include <string>
 #include <vector>
+
 #include "lanelet2_routing/Forward.h"
 #include "lanelet2_routing/LaneletPath.h"
 #include "lanelet2_routing/Types.h"

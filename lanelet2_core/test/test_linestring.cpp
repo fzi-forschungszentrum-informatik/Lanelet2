@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include "lanelet2_core/geometry/LineString.h"
 #include "lanelet2_core/primitives/LineString.h"
 using namespace lanelet;

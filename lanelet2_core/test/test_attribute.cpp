@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include "lanelet2_core/Attribute.h"
 #include "lanelet2_core/Exceptions.h"
 #include "lanelet2_core/utility/Units.h"

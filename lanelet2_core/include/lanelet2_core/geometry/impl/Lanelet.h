@@ -2,6 +2,7 @@
 #include <boost/version.hpp>
 #if BOOST_VERSION > 105800
 #include <string.h>  // NOLINT
+
 #include <boost/geometry/algorithms/relate.hpp>
 #else
 #include <boost/geometry/algorithms/detail/relate/relate.hpp>

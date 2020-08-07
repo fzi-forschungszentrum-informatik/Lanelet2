@@ -1,6 +1,7 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 #include <lanelet2_core/primitives/Lanelet.h>
+
 #include "lanelet2_examples/internal/ExampleHelpers.h"
 
 // we want assert statements to work in release mode

@@ -1,14 +1,15 @@
-#include <boost/python.hpp>
-#include <boost/python/suite/indexing/indexing_suite.hpp>
-#include <boost/python/suite/indexing/map_indexing_suite.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
-
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 #include <lanelet2_core/primitives/GPSPoint.h>
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
 #include <lanelet2_core/primitives/RegulatoryElement.h>
+
+#include <boost/python.hpp>
+#include <boost/python/suite/indexing/indexing_suite.hpp>
+#include <boost/python/suite/indexing/map_indexing_suite.hpp>
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+
 #include "lanelet2_python/internal/converter.h"
 
 using namespace boost::python;
@@ -214,7 +215,8 @@ class IsPrimitive : public def_visitor<IsPrimitive<PrimT>> {
     c.def(self == self);  // NOLINT
     c.def(self != self);  // NOLINT
     c.def(self_ns::str(self_ns::self));
-    c.def("__hash__", +[](const PrimT& self) { return std::hash<PrimT>()(self); });
+    c.def(
+        "__hash__", +[](const PrimT& self) { return std::hash<PrimT>()(self); });
   }
 };
 
@@ -231,7 +233,8 @@ class IsConstPrimitive : public def_visitor<IsConstPrimitive<PrimT>> {
     c.def(self == self);  // NOLINT
     c.def(self != self);  // NOLINT
     c.def(self_ns::str(self_ns::self));
-    c.def("__hash__", +[](const PrimT& self) { return std::hash<PrimT>()(self); });
+    c.def(
+        "__hash__", +[](const PrimT& self) { return std::hash<PrimT>()(self); });
   }
 };
 
@@ -326,7 +329,7 @@ template <typename T>
 using SetAttrSig = void (T::*)(const std::string&, const Attribute&);
 
 template <typename T>
-using GetAttrSig = const Attribute& (ConstPrimitive<T>::*)(const std::string&)const;
+using GetAttrSig = const Attribute& (ConstPrimitive<T>::*)(const std::string&) const;
 
 template <typename LayerT = PointLayer, typename... ClassArgs>
 auto wrapLayer(const char* layerName) {
@@ -339,7 +342,8 @@ auto wrapLayer(const char* layerName) {
       .def("get", get, "Gets a point with specified Id")
       .def("__iter__", iterator<LayerT>())
       .def("__len__", &LayerT::size)
-      .def("__getitem__", +[](LayerT& self, Id idx) { return self.get(idx); })
+      .def(
+          "__getitem__", +[](LayerT& self, Id idx) { return self.get(idx); })
       .def("search", search, "Search in a search area")
       .def("nearest", nearest, "Get nearest n points")
       .def("uniqueId", &LayerT::uniqueId);
@@ -412,12 +416,16 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(self_ns::str(self_ns::self));
 
   class_<BoundingBox2d>("BoundingBox2d", init<BasicPoint2d, BasicPoint2d>("BoundingBox2d(minPoint, maxPoint"))
-      .add_property("min", +[](BoundingBox2d& self) { return self.min(); })
-      .add_property("max", +[](BoundingBox2d& self) { return self.max(); });
+      .add_property(
+          "min", +[](BoundingBox2d& self) { return self.min(); })
+      .add_property(
+          "max", +[](BoundingBox2d& self) { return self.max(); });
 
   class_<BoundingBox3d>("BoundingBox3d", init<BasicPoint3d, BasicPoint3d>("BoundingBox3d(minPoint, maxPoint"))
-      .add_property("min", +[](BoundingBox3d& self) { return self.min(); })
-      .add_property("max", +[](BoundingBox3d& self) { return self.max(); });
+      .add_property(
+          "min", +[](BoundingBox3d& self) { return self.min(); })
+      .add_property(
+          "max", +[](BoundingBox3d& self) { return self.max(); });
 
   boost::python::to_python_converter<Attribute, AttributeToPythonStr>();
 
@@ -774,8 +782,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(IsPrimitive<Area>())
       .add_property("outerBound", getRefFunc(outerBound), &Area::setOuterBound)
       .add_property("innerBounds", getRefFunc(innerBounds), &Area::setInnerBounds)
-      .add_property("regulatoryElements", +[](Area& self) { return self.regulatoryElements(); },
-                    "Regulatory elements of the area")
+      .add_property(
+          "regulatoryElements", +[](Area& self) { return self.regulatoryElements(); },
+          "Regulatory elements of the area")
       .def("addRegulatoryElement", &Area::addRegulatoryElement)
       .def("removeRegulatoryElement", &Area::removeRegulatoryElement)
       .def("outerBoundPolygon", &Area::outerBoundPolygon)
@@ -800,8 +809,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__init__", make_constructor(&TrafficLight::make, default_call_policies(),
                                         (arg("id"), arg("attributes"), arg("trafficLights"),
                                          arg("stopLine") = Optional<LineString3d>())))
-      .add_property("stopLine", +[](TrafficLight& self) { return self.stopLine(); }, &TrafficLight::setStopLine)
-      .add_property("trafficLights", +[](TrafficLight& self) { return self.trafficLights(); })
+      .add_property(
+          "stopLine", +[](TrafficLight& self) { return self.stopLine(); }, &TrafficLight::setStopLine)
+      .add_property(
+          "trafficLights", +[](TrafficLight& self) { return self.trafficLights(); })
       .def("addTrafficLight", &TrafficLight::addTrafficLight)
       .def("removeTrafficLight", &TrafficLight::removeTrafficLight);
   implicitly_convertible<std::shared_ptr<TrafficLight>, RegulatoryElementPtr>();
@@ -817,13 +828,16 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__init__", make_constructor(&RightOfWay::make, default_call_policies(),
                                         (arg("id"), arg("attributes"), arg("rightOfWayLanelets"), arg("yieldLanelets"),
                                          arg("stopLine") = Optional<LineString3d>{})))
-      .add_property("stopLine", +[](RightOfWay& self) { return self.stopLine(); }, &RightOfWay::setStopLine)
+      .add_property(
+          "stopLine", +[](RightOfWay& self) { return self.stopLine(); }, &RightOfWay::setStopLine)
       .def("removeStopLine", &RightOfWay::removeStopLine)
       .def("getManeuver", &RightOfWay::getManeuver, "get maneuver for a lanelet")
-      .def("rightOfWayLanelets", +[](RightOfWay& self) { return self.rightOfWayLanelets(); })
+      .def(
+          "rightOfWayLanelets", +[](RightOfWay& self) { return self.rightOfWayLanelets(); })
       .def("addRightOfWayLanelet", &RightOfWay::addRightOfWayLanelet)
       .def("removeRightOfWayLanelet", &RightOfWay::removeRightOfWayLanelet)
-      .def("yieldLanelets", +[](RightOfWay& self) { return self.yieldLanelets(); })
+      .def(
+          "yieldLanelets", +[](RightOfWay& self) { return self.yieldLanelets(); })
       .def("addYieldLanelet", &RightOfWay::addYieldLanelet)
       .def("removeYieldLanelet", &RightOfWay::removeYieldLanelet);
   implicitly_convertible<std::shared_ptr<RightOfWay>, RegulatoryElementPtr>();
@@ -833,9 +847,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__init__", make_constructor(&AllWayStop::make, default_call_policies(),
                                         (arg("id"), arg("attributes"), arg("lltsWithStop"),
                                          arg("signs") = Optional<LineStringsOrPolygons3d>{})))
-      .def("lanelets", +[](AllWayStop& self) { return self.lanelets(); })
-      .def("stopLines", +[](AllWayStop& self) { return self.stopLines(); })
-      .def("trafficSigns", +[](AllWayStop& self) { return self.trafficSigns(); })
+      .def(
+          "lanelets", +[](AllWayStop& self) { return self.lanelets(); })
+      .def(
+          "stopLines", +[](AllWayStop& self) { return self.stopLines(); })
+      .def(
+          "trafficSigns", +[](AllWayStop& self) { return self.trafficSigns(); })
       .def("addTrafficSign", &AllWayStop::addTrafficSign)
       .def("removeTrafficSign", &AllWayStop::removeTrafficSign)
       .def("addLanelet", &AllWayStop::addLanelet)
@@ -858,10 +875,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                         (arg("id"), arg("attributes"), arg("trafficSigns"),
                                          arg("cancellingTrafficSigns") = TrafficSignsWithType{},
                                          arg("refLines") = LineStrings3d(), arg("cancelLines") = LineStrings3d())))
-      .def("trafficSigns", +[](TrafficSign& self) { return self.trafficSigns(); })
-      .def("cancellingTrafficSigns", +[](TrafficSign& self) { return self.cancellingTrafficSigns(); })
-      .def("refLines", +[](TrafficSign& self) { return self.refLines(); })
-      .def("cancelLines", +[](TrafficSign& self) { return self.cancelLines(); })
+      .def(
+          "trafficSigns", +[](TrafficSign& self) { return self.trafficSigns(); })
+      .def(
+          "cancellingTrafficSigns", +[](TrafficSign& self) { return self.cancellingTrafficSigns(); })
+      .def(
+          "refLines", +[](TrafficSign& self) { return self.refLines(); })
+      .def(
+          "cancelLines", +[](TrafficSign& self) { return self.cancelLines(); })
       .def("addTrafficSign", &TrafficSign::addTrafficSign)
       .def("removeTrafficSign", &TrafficSign::removeTrafficSign)
       .def("addRefLine", &TrafficSign::addRefLine)
@@ -888,17 +909,21 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<PrimitiveLayer<Lanelet>, boost::noncopyable>("PrimitiveLayerLanelet", no_init);  // NOLINT
 
   wrapLayer<AreaLayer, bases<PrimitiveLayer<Area>>>("AreaLayer")
-      .def("findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
-      .def("findUsages", +[](AreaLayer& self, LineString3d& ls) { return self.findUsages(ls); });
+      .def(
+          "findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
+      .def(
+          "findUsages", +[](AreaLayer& self, LineString3d& ls) { return self.findUsages(ls); });
   wrapLayer<LaneletLayer, bases<PrimitiveLayer<Lanelet>>>("LaneletLayer")
-      .def("findUsages", +[](LaneletLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
-      .def("findUsages", +[](LaneletLayer& self, LineString3d& ls) { return self.findUsages(ls); });
-  wrapLayer<PolygonLayer>("PolygonLayer").def("findUsages", +[](PolygonLayer& self, Point3d& p) {
-    return self.findUsages(p);
-  });
-  wrapLayer<LineStringLayer>("LineStringLayer").def("findUsages", +[](LineStringLayer& self, Point3d& p) {
-    return self.findUsages(p);
-  });
+      .def(
+          "findUsages", +[](LaneletLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
+      .def(
+          "findUsages", +[](LaneletLayer& self, LineString3d& ls) { return self.findUsages(ls); });
+  wrapLayer<PolygonLayer>("PolygonLayer")
+      .def(
+          "findUsages", +[](PolygonLayer& self, Point3d& p) { return self.findUsages(p); });
+  wrapLayer<LineStringLayer>("LineStringLayer")
+      .def(
+          "findUsages", +[](LineStringLayer& self, Point3d& p) { return self.findUsages(p); });
   wrapLayer<PointLayer>("PointLayer");
   wrapLayer<RegulatoryElementLayer>("RegulatoryElementLayer");
 
@@ -922,7 +947,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LaneletSubmap, bases<LaneletMapLayers>, LaneletSubmapPtr, boost::noncopyable>(
       "LaneletSubmap", "Object for managing parts of a lanelet map", init<>("LaneletSubmap()"))
-      .def("laneletMap", +[](LaneletSubmap& self) { return LaneletMapPtr{self.laneletMap()}; })
+      .def(
+          "laneletMap", +[](LaneletSubmap& self) { return LaneletMapPtr{self.laneletMap()}; })
       .def("add", selectSubmapAdd<Point3d>())
       .def("add", selectSubmapAdd<Lanelet>())
       .def("add", selectSubmapAdd<Area>())

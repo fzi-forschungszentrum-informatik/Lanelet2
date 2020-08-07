@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include <future>
+
 #include "lanelet2_core/geometry/Area.h"
 #include "lanelet2_core/geometry/BoundingBox.h"
 #include "lanelet2_core/geometry/LaneletMap.h"

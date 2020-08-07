@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
+
 #include <cstdio>
+
 #include "TestSetup.h"
 #include "lanelet2_io/Io.h"
 #include "lanelet2_io/io_handlers/OsmHandler.h"

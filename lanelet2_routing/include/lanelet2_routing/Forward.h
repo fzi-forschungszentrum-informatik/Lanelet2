@@ -1,6 +1,7 @@
 #pragma once
 
 #include <lanelet2_core/Forward.h>
+
 #include <memory>
 #include <string>
 #include <unordered_map>

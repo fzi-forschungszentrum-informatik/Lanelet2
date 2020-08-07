@@ -1,6 +1,7 @@
 // FROM
 // https://github.com/drodri/cppcon2016/blob/master/pythoncpp/boost/converter.h
 #include <lanelet2_core/utility/Optional.h>
+
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/indexing_suite.hpp>
 #include <boost/variant/static_visitor.hpp>

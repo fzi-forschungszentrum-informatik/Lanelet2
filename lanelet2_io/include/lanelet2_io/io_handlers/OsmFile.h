@@ -1,6 +1,7 @@
 #pragma once
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/primitives/GPSPoint.h>
+
 #include <deque>
 #include <map>
 #include <pugixml.hpp>

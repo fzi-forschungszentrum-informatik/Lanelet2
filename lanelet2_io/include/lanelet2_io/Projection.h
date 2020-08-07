@@ -1,6 +1,7 @@
 #pragma once
 #include <lanelet2_core/primitives/GPSPoint.h>
 #include <lanelet2_core/primitives/Point.h>
+
 #include <memory>
 #include <vector>
 

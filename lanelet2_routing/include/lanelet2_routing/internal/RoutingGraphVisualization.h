@@ -3,6 +3,7 @@
 #include <boost/graph/graphml.hpp>
 #include <boost/graph/graphviz.hpp>
 #include <iostream>
+
 #include "lanelet2_routing/Exceptions.h"
 #include "lanelet2_routing/Forward.h"
 #include "lanelet2_routing/internal/Graph.h"

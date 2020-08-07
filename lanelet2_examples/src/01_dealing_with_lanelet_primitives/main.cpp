@@ -7,6 +7,7 @@
 #include <lanelet2_core/primitives/Point.h>
 #include <lanelet2_core/primitives/Polygon.h>
 #include <lanelet2_core/utility/Units.h>
+
 #include "lanelet2_examples/internal/ExampleHelpers.h"
 
 // we want assert statements to work in release mode

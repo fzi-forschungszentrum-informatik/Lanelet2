@@ -1,4 +1,5 @@
 #include "lanelet2_validation/Cli.h"
+
 #include <boost/program_options.hpp>
 #include <iostream>
 

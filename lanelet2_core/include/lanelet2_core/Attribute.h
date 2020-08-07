@@ -5,6 +5,7 @@
 #include <boost/variant/variant.hpp>
 #include <memory>
 #include <string>
+
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/utility/HybridMap.h"
 #include "lanelet2_core/utility/Optional.h"

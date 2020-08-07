@@ -1,4 +1,5 @@
 #include <lanelet2_io/Io.h>
+
 #include <boost/python.hpp>
 
 namespace py = boost::python;

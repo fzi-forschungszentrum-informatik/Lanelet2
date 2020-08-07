@@ -6,6 +6,7 @@
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/pointing_segment.hpp>
 #include <boost/geometry/index/rtree.hpp>
+
 #include "lanelet2_core/geometry/LineString.h"
 #include "lanelet2_core/geometry/Polygon.h"
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <boost/geometry/geometries/register/box.hpp>
+
 #include "lanelet2_core/geometry/Point.h"
 #include "lanelet2_core/primitives/BoundingBox.h"
 

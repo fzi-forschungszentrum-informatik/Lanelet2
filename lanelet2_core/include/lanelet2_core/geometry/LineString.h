@@ -3,6 +3,7 @@
 #include <boost/geometry/algorithms/length.hpp>
 #include <boost/geometry/geometries/register/linestring.hpp>
 #include <boost/geometry/geometries/register/segment.hpp>
+
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/geometry/BoundingBox.h"
 #include "lanelet2_core/geometry/GeometryHelper.h"

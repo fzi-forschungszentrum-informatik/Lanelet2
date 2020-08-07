@@ -3,6 +3,7 @@
 #include <lanelet2_io/io_handlers/Factory.h>
 #include <lanelet2_io/io_handlers/Writer.h>
 #include <lanelet2_projection/UTM.h>
+
 #include <cstdio>
 
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"

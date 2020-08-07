@@ -1,5 +1,6 @@
 #pragma once
 #include <boost/variant.hpp>
+
 #include "lanelet2_core/primitives/LineString.h"
 #include "lanelet2_core/primitives/Polygon.h"
 #include "lanelet2_core/primitives/RegulatoryElement.h"

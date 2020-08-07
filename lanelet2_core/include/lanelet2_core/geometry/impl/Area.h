@@ -1,5 +1,6 @@
 #pragma once
 #include <lanelet2_core/geometry/Area.h>
+
 #include "lanelet2_core/geometry/Point.h"
 #include "lanelet2_core/geometry/Polygon.h"
 #include "lanelet2_core/primitives/Area.h"
@@ -77,7 +78,7 @@ inline bool follows(const ConstArea& prev, const ConstLanelet& next) { return fo
 inline bool adjacent(const ConstArea& area1, const ConstArea& area2) {
   auto outer1 = area1.outerBoundPolygon();
   auto outer2 = area2.outerBoundPolygon();
-  auto rotatedNext = [& ls = outer2](auto iter) { return iter + 1 == ls.end() ? ls.begin() : iter + 1; };
+  auto rotatedNext = [&ls = outer2](auto iter) { return iter + 1 == ls.end() ? ls.begin() : iter + 1; };
   for (auto i = 0u; i < outer1.numSegments(); ++i) {
     auto segment = outer1.segment(i);
     auto second = std::find(outer2.begin(), outer2.end(), segment.second);

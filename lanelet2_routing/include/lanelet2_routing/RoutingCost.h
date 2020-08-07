@@ -4,6 +4,7 @@
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_traffic_rules/TrafficRules.h>
+
 #include "lanelet2_routing/Forward.h"
 
 namespace lanelet {

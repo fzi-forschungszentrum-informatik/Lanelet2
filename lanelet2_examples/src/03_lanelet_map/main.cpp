@@ -2,6 +2,7 @@
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/geometry/Point.h>
 #include <lanelet2_core/primitives/Lanelet.h>
+
 #include "lanelet2_examples/internal/ExampleHelpers.h"
 
 #pragma GCC diagnostic ignored "-Wunused-variable"

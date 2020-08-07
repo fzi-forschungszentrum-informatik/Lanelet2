@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/primitives/LineString.h"
 #include "lanelet2_core/primitives/LineStringOrPolygon.h"

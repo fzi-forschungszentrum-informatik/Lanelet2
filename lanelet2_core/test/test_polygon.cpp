@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
+
 #include <boost/geometry/algorithms/perimeter.hpp>
 #include <random>
+
 #include "lanelet2_core/geometry/Polygon.h"
 #include "lanelet2_core/primitives/CompoundPolygon.h"
 #include "lanelet2_core/primitives/Polygon.h"

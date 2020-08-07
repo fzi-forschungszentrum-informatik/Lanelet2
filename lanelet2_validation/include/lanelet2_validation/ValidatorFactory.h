@@ -1,7 +1,9 @@
 #pragma once
 #include <lanelet2_core/utility/Utilities.h>
+
 #include <functional>
 #include <regex>
+
 #include "lanelet2_validation/BasicValidator.h"
 
 namespace lanelet {

@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+
 #include "lanelet2_io/Configuration.h"
 #include "lanelet2_io/Projection.h"
 

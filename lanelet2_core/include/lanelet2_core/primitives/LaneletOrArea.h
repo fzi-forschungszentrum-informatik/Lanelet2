@@ -1,5 +1,6 @@
 #pragma once
 #include <boost/variant.hpp>
+
 #include "lanelet2_core/primitives/Area.h"
 #include "lanelet2_core/primitives/Lanelet.h"
 

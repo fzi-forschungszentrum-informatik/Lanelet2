@@ -7,6 +7,7 @@
 #include <Eigen/Core>
 #pragma GCC diagnostic pop
 #include <utility>
+
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/primitives/Primitive.h"
 #include "lanelet2_core/primitives/Traits.h"

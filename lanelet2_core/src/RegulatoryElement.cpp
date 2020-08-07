@@ -1,4 +1,5 @@
 #include "lanelet2_core/primitives/RegulatoryElement.h"
+
 #include "lanelet2_core/primitives/Area.h"
 #include "lanelet2_core/primitives/BasicRegulatoryElements.h"
 #include "lanelet2_core/primitives/Lanelet.h"

@@ -3,8 +3,10 @@
 #include <lanelet2_core/primitives/Point.h>
 #include <lanelet2_traffic_rules/GermanTrafficRules.h>
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
+
 #include <memory>
 #include <utility>
+
 #include "lanelet2_routing/Forward.h"
 #include "lanelet2_routing/RoutingGraph.h"
 

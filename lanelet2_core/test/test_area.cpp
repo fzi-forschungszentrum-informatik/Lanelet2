@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include "lanelet2_core/geometry/Area.h"
 #include "lanelet2_core/geometry/Lanelet.h"
 #include "lanelet2_core/primitives/Area.h"

@@ -1,5 +1,7 @@
 #include "lanelet2_validation/validators/routing/RoutingGraphIsValid.h"
+
 #include <lanelet2_routing/RoutingGraph.h>
+
 #include "lanelet2_validation/ValidatorFactory.h"
 
 namespace lanelet {

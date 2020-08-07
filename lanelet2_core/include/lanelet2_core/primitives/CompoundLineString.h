@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/noncopyable.hpp>
 #include <utility>
+
 #include "lanelet2_core/primitives/LineString.h"
 #include "lanelet2_core/utility/CompoundIterator.h"
 

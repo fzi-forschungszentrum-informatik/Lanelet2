@@ -1,5 +1,7 @@
 #include "lanelet2_validation/validators/mapping/DuplicatedPoints.h"
+
 #include <lanelet2_core/primitives/Point.h>
+
 #include "lanelet2_validation/ValidatorFactory.h"
 
 namespace lanelet {

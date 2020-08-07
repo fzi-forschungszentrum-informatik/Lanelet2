@@ -1,5 +1,6 @@
 #include <pugixml.hpp>
 #include <sstream>
+
 #include "lanelet2_io/Exceptions.h"
 #include "lanelet2_io/io_handlers/Factory.h"
 #include "lanelet2_io/io_handlers/OsmFile.h"
@@ -175,7 +176,7 @@ class ToFileWriter {
     }
     try {
       const auto wayNodes =
-          utils::transform(mapWay, [& nodes = file_->nodes](const auto& elem) { return &nodes.at(elem.id()); });
+          utils::transform(mapWay, [&nodes = file_->nodes](const auto& elem) { return &nodes.at(elem.id()); });
       osmWays.emplace(id, osm::Way(id, std::move(wayAttributes), std::move(wayNodes)));
     } catch (NoSuchPrimitiveError& e) {
       writeError(id, "Way has points that are not point layer: "s + e.what());

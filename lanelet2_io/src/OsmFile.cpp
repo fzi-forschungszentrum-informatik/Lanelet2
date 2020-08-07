@@ -1,5 +1,7 @@
 #include "lanelet2_io/io_handlers/OsmFile.h"
+
 #include <lanelet2_core/utility/Utilities.h>
+
 #include <boost/format.hpp>
 #include <iostream>
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+
 #include "lanelet2_core/primitives/CompoundLineString.h"
 #include "lanelet2_core/primitives/CompoundPolygon.h"
 #include "lanelet2_core/primitives/Lanelet.h"

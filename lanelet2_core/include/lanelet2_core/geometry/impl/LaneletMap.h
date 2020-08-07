@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/geometry/algorithms/buffer.hpp>
 #include <boost/geometry/algorithms/distance.hpp>
+
 #include "lanelet2_core/LaneletMap.h"
 #include "lanelet2_core/primitives/BoundingBox.h"
 #include "lanelet2_core/primitives/Lanelet.h"

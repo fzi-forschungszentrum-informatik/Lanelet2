@@ -1,4 +1,5 @@
 #include "lanelet2_io/io_handlers/Factory.h"
+
 #include "lanelet2_io/Exceptions.h"
 
 namespace lanelet {

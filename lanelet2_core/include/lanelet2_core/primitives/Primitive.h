@@ -4,6 +4,7 @@
 #pragma once
 #include <limits>
 #include <utility>
+
 #include "lanelet2_core/Attribute.h"
 #include "lanelet2_core/Exceptions.h"
 #include "lanelet2_core/primitives/Traits.h"

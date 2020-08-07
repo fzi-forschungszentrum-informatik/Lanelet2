@@ -2,6 +2,7 @@
 #include <lanelet2_core/utility/Units.h>
 #include <lanelet2_traffic_rules/TrafficRules.h>
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
+
 #include <boost/python.hpp>
 
 using namespace boost::python;

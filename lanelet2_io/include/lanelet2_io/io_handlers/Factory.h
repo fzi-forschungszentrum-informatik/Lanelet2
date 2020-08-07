@@ -1,9 +1,11 @@
 #pragma once
 #include <lanelet2_core/utility/Utilities.h>
+
 #include <cstring>
 #include <functional>
 #include <map>
 #include <string>
+
 #include "lanelet2_io/Configuration.h"
 #include "lanelet2_io/Projection.h"
 #include "lanelet2_io/io_handlers/Parser.h"

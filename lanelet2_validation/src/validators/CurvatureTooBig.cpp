@@ -1,6 +1,9 @@
 #include "lanelet2_validation/validators/mapping/CurvatureTooBig.h"
+
 #include <lanelet2_core/geometry/LineString.h>
+
 #include <iostream>
+
 #include "lanelet2_validation/ValidatorFactory.h"
 
 namespace lanelet {

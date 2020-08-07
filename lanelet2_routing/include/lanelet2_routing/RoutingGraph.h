@@ -4,7 +4,9 @@
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/primitives/LaneletOrArea.h>
 #include <lanelet2_core/utility/Optional.h>
+
 #include <map>
+
 #include "lanelet2_routing/Forward.h"
 #include "lanelet2_routing/LaneletPath.h"
 #include "lanelet2_routing/RoutingCost.h"

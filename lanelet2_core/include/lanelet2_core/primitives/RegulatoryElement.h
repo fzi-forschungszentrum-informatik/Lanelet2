@@ -2,6 +2,7 @@
 
 #include <boost/variant.hpp>
 #include <utility>
+
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/primitives/Area.h"
 #include "lanelet2_core/primitives/Lanelet.h"

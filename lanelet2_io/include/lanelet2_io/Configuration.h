@@ -1,5 +1,6 @@
 #pragma once
 #include <lanelet2_core/Attribute.h>
+
 #include <map>
 #include <string>
 namespace lanelet {

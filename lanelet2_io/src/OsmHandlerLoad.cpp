@@ -1,11 +1,12 @@
-#include <iostream>
-
 #include <lanelet2_core/geometry/LineString.h>
 #include <lanelet2_core/geometry/Polygon.h>
+
 #include <boost/geometry/algorithms/is_valid.hpp>
 #include <fstream>
+#include <iostream>
 #include <pugixml.hpp>
 #include <sstream>
+
 #include "lanelet2_io/Exceptions.h"
 #include "lanelet2_io/io_handlers/Factory.h"
 #include "lanelet2_io/io_handlers/OsmFile.h"

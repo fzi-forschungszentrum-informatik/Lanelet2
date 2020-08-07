@@ -1,4 +1,5 @@
 #include <lanelet2_core/LaneletMap.h>
+
 #include "lanelet2_validation/BasicValidator.h"
 
 namespace lanelet {

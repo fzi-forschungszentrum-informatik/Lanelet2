@@ -1,5 +1,6 @@
 #pragma once
 #include <boost/geometry/geometries/register/ring.hpp>
+
 #include "lanelet2_core/geometry/LineString.h"
 #include "lanelet2_core/primitives/CompoundPolygon.h"
 #include "lanelet2_core/primitives/Polygon.h"

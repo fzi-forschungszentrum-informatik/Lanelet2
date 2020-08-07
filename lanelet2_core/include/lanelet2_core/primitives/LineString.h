@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/primitives/BoundingBox.h"
 #include "lanelet2_core/primitives/Point.h"

@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include "lanelet2_projection/Mercator.h"
 
 TEST(Mercator, origin) {  // NOLINT

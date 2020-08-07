@@ -1,4 +1,5 @@
 #include "lanelet2_routing/RoutingGraph.h"
+
 #include <lanelet2_core/Attribute.h>
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/LaneletMap.h>
@@ -6,12 +7,14 @@
 #include <lanelet2_core/primitives/Area.h>
 #include <lanelet2_core/primitives/Point.h>
 #include <lanelet2_traffic_rules/TrafficRules.h>
+
 #include <algorithm>
 #include <boost/graph/reverse_graph.hpp>
 #include <cassert>  // Asserts
 #include <memory>
 #include <queue>
 #include <utility>
+
 #include "lanelet2_routing/Exceptions.h"
 #include "lanelet2_routing/Forward.h"
 #include "lanelet2_routing/Route.h"

@@ -1,5 +1,6 @@
 #pragma once
 #include <lanelet2_core/Forward.h>
+
 #include <sstream>
 #include <vector>
 

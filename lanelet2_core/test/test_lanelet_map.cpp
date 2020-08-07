@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include <future>
+
 #include "lanelet2_core/LaneletMap.h"
 #include "lanelet_map_test_case.h"
 

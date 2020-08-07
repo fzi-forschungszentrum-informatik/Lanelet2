@@ -1,5 +1,6 @@
 #pragma once
 #include <boost/geometry/algorithms/intersection.hpp>
+
 #include "lanelet2_core/geometry/GeometryHelper.h"
 #include "lanelet2_core/geometry/Point.h"
 #include "lanelet2_core/primitives/LineString.h"

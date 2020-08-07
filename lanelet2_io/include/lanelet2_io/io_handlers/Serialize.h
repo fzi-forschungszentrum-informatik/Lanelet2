@@ -1,5 +1,6 @@
 #pragma once
 #include <lanelet2_core/LaneletMap.h>
+
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/shared_ptr.hpp>

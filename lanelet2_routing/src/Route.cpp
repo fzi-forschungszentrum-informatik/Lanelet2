@@ -1,10 +1,13 @@
 #include "lanelet2_routing/Route.h"
+
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/utility/Utilities.h>
+
 #include <boost/graph/reverse_graph.hpp>
 #include <unordered_map>
+
 #include "lanelet2_routing/Exceptions.h"
 #include "lanelet2_routing/internal/Graph.h"
 #include "lanelet2_routing/internal/GraphUtils.h"

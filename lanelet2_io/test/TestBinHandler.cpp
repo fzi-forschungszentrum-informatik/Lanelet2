@@ -2,6 +2,7 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <cstdio>
 #include <fstream>
+
 #include "TestSetup.h"
 #include "gtest/gtest.h"
 #include "lanelet2_io/Io.h"

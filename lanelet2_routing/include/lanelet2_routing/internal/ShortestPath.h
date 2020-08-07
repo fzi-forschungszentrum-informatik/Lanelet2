@@ -2,6 +2,7 @@
 #include <boost/graph/dijkstra_shortest_paths_no_color_map.hpp>
 #include <boost/graph/filtered_graph.hpp>
 #include <boost/property_map/property_map.hpp>
+
 #include "lanelet2_routing/Exceptions.h"
 #include "lanelet2_routing/internal/Graph.h"
 #include "lanelet2_routing/internal/GraphUtils.h"
