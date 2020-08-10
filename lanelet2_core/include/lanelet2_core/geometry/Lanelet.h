@@ -169,6 +169,7 @@ IfLL<Lanelet1T, IfLL<Lanelet2T, bool>> follows(const Lanelet1T& prev, const Lane
  * @brief find a common line string in ll and other.
  * @param ll Lanelet
  * @param other Lanelet
+ * @param allowInverted if true, the orientation of the line strings is ignored
  * @return line string in ll if it is shared with other
  */
 template <typename Lanelet1T, typename Lanelet2T>
