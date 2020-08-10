@@ -938,13 +938,17 @@ class NSmallestElements {
     auto pos =
         std::lower_bound(values_.begin(), values_.end(), measure, [](auto& v1, double v2) { return v1.first < v2; });
     if (pos != values_.end() || values_.size() < n_) {
+      if (values_.size() >= n_) {
+        values_.pop_back();
+      }
       values_.emplace(pos, measure, value);
       return true;
     }
     return false;
   }
   const auto& values() const { return values_; }
-  bool full() const { return n_ <= values_.size(); }
+  auto moveValues() { return std::move(values_); }
+  bool full() const { return values_.size() >= n_; }
   bool empty() const { return values_.empty(); }
 
  private:
@@ -969,7 +973,7 @@ auto findNearestImpl(LayerT&& map, const BasicPoint2d& pt, unsigned count) {
     return false;
   };
   map.nearestUntil(pt, searchFunction);
-  return closest.values();
+  return closest.moveValues();
 }
 }  // namespace
 

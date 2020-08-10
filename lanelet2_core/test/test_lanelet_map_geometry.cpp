@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <future>
+#include <random>
 
 #include "lanelet2_core/geometry/Area.h"
 #include "lanelet2_core/geometry/BoundingBox.h"
@@ -10,6 +11,35 @@
 using namespace lanelet;
 
 class LaneletMapGeometryTest : public ::testing::Test, public test_cases::LaneletMapTestCase {};
+
+LineStrings3d getRandomLinestringsSortedByDistanceToOrigin(size_t num) {
+  auto getLinestring = [rng = std::mt19937{}, dist = std::uniform_real_distribution<double>{}, id = 0L]() mutable {
+    id += 3;
+    return LineString3d(id - 2, {Point3d(id - 1, dist(rng), dist(rng)), Point3d(id, dist(rng), dist(rng))});
+  };
+  auto byDistanceToOrigin = [](auto ls1, auto ls2) {
+    using utils::to2D;
+    return geometry::distance(BasicPoint2d{}, to2D(ls1)) < geometry::distance(BasicPoint2d{}, to2D(ls2));
+  };
+  LineStrings3d lss(num);
+  std::generate(lss.begin(), lss.end(), getLinestring);
+  std::sort(lss.begin(), lss.end(), byDistanceToOrigin);
+  return lss;
+}
+
+TEST_F(LaneletMapGeometryTest, findNearestWorksForRandomLinestrings) {  // NOLINT
+  constexpr auto NumSearch = 5;
+  for (auto i = 0; i < 100; ++i) {
+    auto lss = getRandomLinestringsSortedByDistanceToOrigin(10);
+    this->map = utils::createMap(lss);
+    auto exp = ConstLineStrings3d(lss.begin(), lss.begin() + NumSearch);
+    testConstAndNonConst([&](auto& map) {
+      auto nearest = geometry::findNearest(map->lineStringLayer, BasicPoint2d(0, 0), NumSearch);
+      auto nearestLs = utils::transform(nearest, [](auto& ls) -> ConstLineString3d { return ls.second; });
+      EXPECT_EQ(exp, nearestLs);
+    });
+  }
+}
 
 TEST_F(LaneletMapGeometryTest, findWithin2dPoint) {  // NOLINT
   map->add(ll2);

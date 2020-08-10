@@ -13,8 +13,11 @@ namespace geometry {
  * @brief Returns all elements that are closer than maxDist to a geometry in 2d
  * @param layer for the check (a layer of LaneletMap)
  * @param geometry to check (any 2d geometry)
+ * @param maxDist maximum distance to the input geometry. If zero, only primitives containing the element are returned.
+ * Be aware that rounding errors can affect the result for primitives directly on (or very close to) the boundary.
  * @return vector of pairs: <actual distance, element> of all elements of a layer which are closer than maxDist to the
  * geometry. The return type differs depending on if the layer is const or not. Result sorted in ascending distance.
+ * @see findNearest
  */
 template <typename LayerT, typename GeometryT>
 auto findWithin2d(LayerT& layer, const GeometryT& geometry, double maxDist = 0.)
@@ -24,6 +27,8 @@ auto findWithin2d(LayerT& layer, const GeometryT& geometry, double maxDist = 0.)
  * @brief Returns all elements that are closer than maxDist to a geometry in 3d
  * @param layer for the check (a layer of LaneletMap)
  * @param geometry to check (any 3d geometry)
+ * @param maxDist maximum distance to the input geometry. If zero, only primitives containing the element are returned.
+ * Be aware that rounding errors can affect the result for primitives directly on (or very close to) the boundary.
  * @return vector of pairs: <actual distance, element> of all elements of a layer which are closer than maxDist to the
  * geometry. The return type differs depending on if the layer is const or not. Result sorted in ascending distance.
  */
