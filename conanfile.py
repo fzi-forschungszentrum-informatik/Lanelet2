@@ -97,7 +97,7 @@ class Lanelet2Conan(ConanFile):
 
     def source(self):
         if not os.path.exists("mrt_cmake_modules"):
-            self.run("git clone -b ament_support https://github.com/KIT-MRT/mrt_cmake_modules.git")
+            self.run("git clone https://github.com/KIT-MRT/mrt_cmake_modules.git")
         mrt_cmake_dir = os.path.join(os.getcwd(), "mrt_cmake_modules")
         with open("mrt_cmake_modules/cmake/mrt_cmake_modules-extras.cmake.in") as f:
             extras = f.read().replace("@DEVELSPACE@", "True").replace("@PROJECT_SOURCE_DIR@", mrt_cmake_dir).replace("@CMAKE_CURRENT_SOURCE_DIR@", mrt_cmake_dir)

@@ -88,7 +88,7 @@ RUN if [ "$ROS" = "ros" ]; \
     cd /home/developer/workspace \
     && mkdir -p /home/developer/workspace/src \
     && /bin/bash -c "$CATKIN_INIT" \
-    && git clone https://github.com/KIT-MRT/mrt_cmake_modules.git /home/developer/workspace/src/mrt_cmake_modules -b ament_support
+    && git clone https://github.com/KIT-MRT/mrt_cmake_modules.git /home/developer/workspace/src/mrt_cmake_modules
 
 # second stage: get the code and build the image
 FROM lanelet2_deps AS lanelet2
