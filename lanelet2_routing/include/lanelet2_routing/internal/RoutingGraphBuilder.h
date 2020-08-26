@@ -46,7 +46,7 @@ class RoutingGraphBuilder {
   //! Adds the first and last points of a lanelet to the search index
   void addPointsToSearchIndex(const ConstLanelet& ll);
   bool hasEdge(const ConstLanelet& from, const ConstLanelet& to);
-  void assignLaneChangeCosts(const ConstLanelets& froms, const ConstLanelets& tos, const RelationType& relation);
+  void assignLaneChangeCosts(ConstLanelets froms, ConstLanelets tos, const RelationType& relation);
 
   /** @brief Assigns routing costs of each routing cost module to a relation between two lanelets
    *  @param from Start lanelet

@@ -431,10 +431,10 @@ LaneletRelations RoutingGraph::previousRelations(const ConstLanelet& lanelet, bo
   return result;
 }
 
-ConstLanelets RoutingGraph::besides(const ConstLanelet& lanelet) const {
+ConstLanelets RoutingGraph::besides(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
   auto move = [](auto it) { return std::make_move_iterator(it); };
-  ConstLanelets left{lefts(lanelet)};
-  ConstLanelets right{rights(lanelet)};
+  ConstLanelets left{lefts(lanelet, routingCostId)};
+  ConstLanelets right{rights(lanelet, routingCostId)};
   ConstLanelets result;
   result.reserve(left.size() + right.size() + 1);
   result.insert(std::end(result), move(left.rbegin()), move(left.rend()));
@@ -443,45 +443,47 @@ ConstLanelets RoutingGraph::besides(const ConstLanelet& lanelet) const {
   return result;
 }
 
-Optional<ConstLanelet> RoutingGraph::left(const ConstLanelet& lanelet) const {
+Optional<ConstLanelet> RoutingGraph::left(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
   return ifLaneletInGraph(*graph_, lanelet,
-                          [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->left()); });
+                          [&](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->left(routingCostId)); });
 }
 
-Optional<ConstLanelet> RoutingGraph::adjacentLeft(const ConstLanelet& lanelet) const {
+Optional<ConstLanelet> RoutingGraph::adjacentLeft(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
+  return ifLaneletInGraph(*graph_, lanelet, [&](auto& vertex) {
+    return neighboringLaneletImpl(vertex, graph_->adjacentLeft(routingCostId));
+  });
+}
+
+Optional<ConstLanelet> RoutingGraph::right(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
   return ifLaneletInGraph(*graph_, lanelet,
-                          [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->adjacentLeft()); });
+                          [&](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->right(routingCostId)); });
 }
 
-Optional<ConstLanelet> RoutingGraph::right(const ConstLanelet& lanelet) const {
-  return ifLaneletInGraph(*graph_, lanelet,
-                          [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->right()); });
+Optional<ConstLanelet> RoutingGraph::adjacentRight(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
+  return ifLaneletInGraph(*graph_, lanelet, [&](auto& vertex) {
+    return neighboringLaneletImpl(vertex, graph_->adjacentRight(routingCostId));
+  });
 }
 
-Optional<ConstLanelet> RoutingGraph::adjacentRight(const ConstLanelet& lanelet) const {
-  return ifLaneletInGraph(*graph_, lanelet,
-                          [this](auto& vertex) { return neighboringLaneletImpl(vertex, graph_->adjacentRight()); });
+ConstLanelets RoutingGraph::lefts(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
+  return getUntilEnd(lanelet, [&](const ConstLanelet& llt) { return left(llt, routingCostId); });
 }
 
-ConstLanelets RoutingGraph::lefts(const ConstLanelet& lanelet) const {
-  return getUntilEnd(lanelet, [this](const ConstLanelet& llt) { return left(llt); });
+ConstLanelets RoutingGraph::adjacentLefts(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
+  return getUntilEnd(lanelet, [&](const ConstLanelet& llt) { return adjacentLeft(llt, routingCostId); });
 }
 
-ConstLanelets RoutingGraph::adjacentLefts(const ConstLanelet& lanelet) const {
-  return getUntilEnd(lanelet, [this](const ConstLanelet& llt) { return adjacentLeft(llt); });
-}
-
-LaneletRelations RoutingGraph::leftRelations(const ConstLanelet& lanelet) const {
+LaneletRelations RoutingGraph::leftRelations(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
   bool leftReached{false};
   ConstLanelet current = lanelet;
   LaneletRelations result;
   while (!leftReached) {
-    const ConstLanelets leftOf{lefts(current)};
+    const ConstLanelets leftOf{lefts(current, routingCostId)};
     for (auto const& it : leftOf) {
       result.emplace_back(LaneletRelation{it, RelationType::Left});
       current = it;
     }
-    const ConstLanelets adjacentLeftOf{adjacentLefts(current)};
+    const ConstLanelets adjacentLeftOf{adjacentLefts(current, routingCostId)};
     for (auto const& it : adjacentLeftOf) {
       result.emplace_back(LaneletRelation{it, RelationType::AdjacentLeft});
       current = it;
@@ -491,25 +493,25 @@ LaneletRelations RoutingGraph::leftRelations(const ConstLanelet& lanelet) const 
   return result;
 }
 
-ConstLanelets RoutingGraph::rights(const ConstLanelet& lanelet) const {
-  return getUntilEnd(lanelet, [this](const ConstLanelet& llt) { return right(llt); });
+ConstLanelets RoutingGraph::rights(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
+  return getUntilEnd(lanelet, [&](const ConstLanelet& llt) { return right(llt, routingCostId); });
 }
 
-ConstLanelets RoutingGraph::adjacentRights(const ConstLanelet& lanelet) const {
-  return getUntilEnd(lanelet, [this](const ConstLanelet& llt) { return adjacentRight(llt); });
+ConstLanelets RoutingGraph::adjacentRights(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
+  return getUntilEnd(lanelet, [&](const ConstLanelet& llt) { return adjacentRight(llt, routingCostId); });
 }
 
-LaneletRelations RoutingGraph::rightRelations(const ConstLanelet& lanelet) const {
+LaneletRelations RoutingGraph::rightRelations(const ConstLanelet& lanelet, RoutingCostId routingCostId) const {
   bool rightReached{false};
   ConstLanelet current = lanelet;
   auto result = reservedVector<LaneletRelations>(3);
   while (!rightReached) {
-    const ConstLanelets rightOf{rights(current)};
+    const ConstLanelets rightOf{rights(current, routingCostId)};
     for (auto const& it : rightOf) {
       result.emplace_back(LaneletRelation{it, RelationType::Right});
       current = it;
     }
-    const ConstLanelets adjacentRightOf{adjacentRights(current)};
+    const ConstLanelets adjacentRightOf{adjacentRights(current, routingCostId)};
     for (auto const& it : adjacentRightOf) {
       result.emplace_back(LaneletRelation{it, RelationType::AdjacentRight});
       current = it;

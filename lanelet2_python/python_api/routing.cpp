@@ -126,6 +126,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def_readwrite("numLaneChanges", &LaneletOrAreaVisitInformation::numLaneChanges,
                      "The number of lane changes necessary along the shortest path");
 
+  auto lltAndLc = (arg("lanelet"), arg("withLaneChanges") = false);
+  auto lltAndRoutingCost = (arg("lanelet"), arg("routingCostId") = 0);
   class_<RoutingGraph, boost::noncopyable, RoutingGraphPtr>(
       "RoutingGraph",
       "Main class of the routing module that holds routing information and can "
@@ -150,28 +152,24 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            (arg("start"), arg("via"), arg("end"), arg("routingCostId") = 0, arg("withLaneChanges") = true))
       .def("routingRelation", &RoutingGraph::routingRelation, "relation between two lanelets excluding 'conflicting'",
            (arg("from"), arg("to")))
-      .def("following", &RoutingGraph::following, "lanelets that can be reached from this lanelet",
-           (arg("lanelet"), arg("withLaneChanges") = false))
-      .def("followingRelations", &RoutingGraph::followingRelations, "relations to following lanelets",
-           (arg("lanelet"), arg("withLaneChanges") = false))
-      .def("previous", &RoutingGraph::previous, "previous lanelets of this lanelet",
-           (arg("lanelet"), arg("withLaneChanges") = false))
-      .def("previousRelations", &RoutingGraph::previousRelations, "relations to preceding lanelets",
-           (arg("lanelet"), arg("withLaneChanges") = false))
+      .def("following", &RoutingGraph::following, "lanelets that can be reached from this lanelet", lltAndLc)
+      .def("followingRelations", &RoutingGraph::followingRelations, "relations to following lanelets", lltAndLc)
+      .def("previous", &RoutingGraph::previous, "previous lanelets of this lanelet", lltAndLc)
+      .def("previousRelations", &RoutingGraph::previousRelations, "relations to preceding lanelets", lltAndLc)
       .def("besides", &RoutingGraph::besides,
            "all reachable left and right lanelets, including lanelet, from "
            "left to right",
-           (arg("lanelet")))
-      .def("left", &RoutingGraph::left, "left (routable)lanelet, if exists", (arg("lanelet")))
-      .def("right", &RoutingGraph::right, "right (routable)lanelet, if it exists", (arg("lanelet")))
-      .def("adjacentLeft", &RoutingGraph::adjacentLeft, "left non-routable lanelet", arg("lanelet"))
-      .def("adjacentRight", &RoutingGraph::adjacentRight, "right non-routable lanelet", arg("lanelet"))
-      .def("lefts", &RoutingGraph::lefts, "all left (routable) lanelets", arg("lanelet"))
-      .def("rights", &RoutingGraph::rights, "all right (routable) lanelets", arg("lanelet"))
-      .def("adjacentLefts", &RoutingGraph::adjacentLefts, "all left (non-routable) lanelets", arg("lanelet"))
-      .def("adjacentRights", &RoutingGraph::adjacentRights, "all right (non-routable) lanelets", arg("lanelet"))
-      .def("leftRelations", &RoutingGraph::leftRelations, "relations to left lanelets", arg("lanelet"))
-      .def("rightRelations", &RoutingGraph::rightRelations, "relations to right lanelets", arg("lanelet"))
+           lltAndRoutingCost)
+      .def("left", &RoutingGraph::left, "left (routable)lanelet, if exists", lltAndRoutingCost)
+      .def("right", &RoutingGraph::right, "right (routable)lanelet, if it exists", lltAndRoutingCost)
+      .def("adjacentLeft", &RoutingGraph::adjacentLeft, "left non-routable lanelet", lltAndRoutingCost)
+      .def("adjacentRight", &RoutingGraph::adjacentRight, "right non-routable lanelet", lltAndRoutingCost)
+      .def("lefts", &RoutingGraph::lefts, "all left (routable) lanelets", lltAndRoutingCost)
+      .def("rights", &RoutingGraph::rights, "all right (routable) lanelets", lltAndRoutingCost)
+      .def("adjacentLefts", &RoutingGraph::adjacentLefts, "all left (non-routable) lanelets", lltAndRoutingCost)
+      .def("adjacentRights", &RoutingGraph::adjacentRights, "all right (non-routable) lanelets", lltAndRoutingCost)
+      .def("leftRelations", &RoutingGraph::leftRelations, "relations to left lanelets", lltAndRoutingCost)
+      .def("rightRelations", &RoutingGraph::rightRelations, "relations to right lanelets", lltAndRoutingCost)
       .def("conflicting", &RoutingGraph::conflicting, "Conflicting lanelets", arg("lanelet"))
       .def("reachableSet", &RoutingGraph::reachableSet, "set of lanelets that can be reached from a given lanelet",
            (arg("lanelet"), arg("maxRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = true))

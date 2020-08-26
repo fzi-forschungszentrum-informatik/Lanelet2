@@ -173,68 +173,90 @@ class RoutingGraph {
 
   /** @brief Retrieve all reachable left and right lanelets
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return All left and right lanelets that can be reached, including lanelet, ordered left to right. */
-  ConstLanelets besides(const ConstLanelet& lanelet) const;
+  ConstLanelets besides(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Get left (routable) lanelet of a given lanelet if it exists.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return Left lanelet if it exists. Nothing if it doesn't.
    *  @see adjacentLeft, lefts, adjacentLefts */
-  Optional<ConstLanelet> left(const ConstLanelet& lanelet) const;
+  Optional<ConstLanelet> left(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Get adjacent left (non-routable) lanelet of a given lanelet if it exists.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return Adjacent left lanelet if it exists. Nothing if it doesn't.
    *  @see left, lefts, adjacentLefts */
-  Optional<ConstLanelet> adjacentLeft(const ConstLanelet& lanelet) const;
+  Optional<ConstLanelet> adjacentLeft(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Get right (routable) lanelet of a given lanelet if it exists.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return Right lanelet if it exists. Nothing if it doesn't.
    *  @see adjacentRight, rights, adjacentRights */
-  Optional<ConstLanelet> right(const ConstLanelet& lanelet) const;
+  Optional<ConstLanelet> right(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Get adjacent right (non-routable) lanelet of a given lanelet if it exists.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return Adjacent right lanelet if it exists. Nothing if it doesn't.
    *  @see right, rights, adjacentRights */
-  Optional<ConstLanelet> adjacentRight(const ConstLanelet& lanelet) const;
+  Optional<ConstLanelet> adjacentRight(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Get all left (routable) lanelets of a given lanelet if they exist.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return Left lanelets if they exists. Empty if they don't.
    *  @see adjacentLeft, left, adjacentLefts */
-  ConstLanelets lefts(const ConstLanelet& lanelet) const;
+  ConstLanelets lefts(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Get all adjacent left (non-routable) lanelets of a given lanelet if they exist.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return Adjacent left lanelets if they exists. Empty if they don't.
    *  @see adjacentLeft, left, lefts */
-  ConstLanelets adjacentLefts(const ConstLanelet& lanelet) const;
+  ConstLanelets adjacentLefts(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Retrieve all lanelets and relations left of a given lanelet.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return All lanelets and relations left of a given lanelet.
    *  @see lefts, adjacentLefts */
-  LaneletRelations leftRelations(const ConstLanelet& lanelet) const;
+  LaneletRelations leftRelations(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Get all right (routable) lanelets of a given lanelet if they exist.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return Right lanelets if they exists. Empty if they don't.
    *  @see adjacentRight, right, adjacentRights */
-  ConstLanelets rights(const ConstLanelet& lanelet) const;
+  ConstLanelets rights(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Get all adjacent right (non-routable) lanelets of a given lanelet if they exist.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return Adjacent right lanelets if they exists. Empty if they don't.
    *  @see adjacentRight, right, rights */
-  ConstLanelets adjacentRights(const ConstLanelet& lanelet) const;
+  ConstLanelets adjacentRights(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Retrieve all lanelets and relations right of a given lanelet.
    *  @param lanelet Start lanelet
+   *  @param routingCostId the routing cost module to be used. Can make a difference if one allows a lane change but the
+   * other one doesn't.
    *  @return All lanelets and relations right of a given lanelet.
    *  @see rights, adjacentRights */
-  LaneletRelations rightRelations(const ConstLanelet& lanelet) const;
+  LaneletRelations rightRelations(const ConstLanelet& lanelet, RoutingCostId routingCostId = {}) const;
 
   /** @brief Retrieve all lanelets that are conflicting with the given lanelet.
    *
