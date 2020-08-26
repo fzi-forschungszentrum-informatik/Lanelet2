@@ -17,10 +17,10 @@ namespace routing {
 namespace tests {
 
 inline RoutingGraphPtr setUpGermanVehicleGraph(LaneletMap& map, double laneChangeCost = 2.,
-                                               double participantHeight = 2.) {
+                                               double participantHeight = 2., double minLaneChangeLength = 0.) {
   traffic_rules::TrafficRulesPtr trafficRules{traffic_rules::TrafficRulesFactory::create(
       Locations::Germany, Participants::Vehicle, traffic_rules::TrafficRules::Configuration())};
-  RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost),
+  RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost, minLaneChangeLength),
                            std::make_shared<RoutingCostTravelTime>(laneChangeCost)};
   RoutingGraph::Configuration configuration;
   configuration.insert(std::make_pair(RoutingGraph::ParticipantHeight, participantHeight));

@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
-#include <sched.h>
 
 #include <algorithm>
 

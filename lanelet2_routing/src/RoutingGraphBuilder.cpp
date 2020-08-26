@@ -241,27 +241,27 @@ void RoutingGraphBuilder::addConflictingEdge(const ConstLanelet& ll, const Lanel
 }
 
 void RoutingGraphBuilder::addLaneChangeEdges(LaneChangeLaneletsCollector& laneChanges, const RelationType& relation) {
-  auto getSuccessors = [this](auto beginEdgeIt, auto endEdgeIt) {
+  auto getSuccessors = [this](auto beginEdgeIt, auto endEdgeIt, auto getVertex) {
     ConstLanelets nexts;
     for (; beginEdgeIt != endEdgeIt; ++beginEdgeIt) {
       auto& edgeInfo = graph_->get()[*beginEdgeIt];
       if (edgeInfo.relation == RelationType::Successor && edgeInfo.costId == 0) {
-        nexts.push_back(graph_->get()[boost::source(*beginEdgeIt, graph_->get())].lanelet());
+        nexts.push_back(graph_->get()[getVertex(*beginEdgeIt, graph_->get())].lanelet());
       }
     }
     return nexts;
   };
   auto next = [this, &getSuccessors](const ConstLanelet& llt) {
     auto edges = boost::out_edges(*graph_->getVertex(llt), graph_->get());
-    return getSuccessors(edges.first, edges.second);
+    return getSuccessors(edges.first, edges.second, [](auto edge, const auto& g) { return boost::target(edge, g); });
   };
   auto prev = [this, &getSuccessors](const ConstLanelet& llt) {
     auto edges = boost::in_edges(*graph_->getVertex(llt), graph_->get());
-    return getSuccessors(edges.first, edges.second);
+    return getSuccessors(edges.first, edges.second, [](auto edge, const auto& g) { return boost::source(edge, g); });
   };
   Optional<LaneChangeLaneletsCollector::LaneChangeLanelets> laneChangeLanelets;
   while (!!(laneChangeLanelets = laneChanges.getNextChangeLanelets(prev, next))) {
-    assignLaneChangeCosts(laneChangeLanelets->first, laneChangeLanelets->second, relation);
+    assignLaneChangeCosts(std::move(laneChangeLanelets->first), std::move(laneChangeLanelets->second), relation);
   }
 }
 
@@ -338,21 +338,19 @@ bool RoutingGraphBuilder::hasEdge(const ConstLanelet& from, const ConstLanelet& 
   return !!graph_->getEdgeInfo(from, to);
 }
 
-void RoutingGraphBuilder::assignLaneChangeCosts(const ConstLanelets& froms, const ConstLanelets& tos,
-                                                const RelationType& relation) {
+void RoutingGraphBuilder::assignLaneChangeCosts(ConstLanelets froms, ConstLanelets tos, const RelationType& relation) {
   assert(relation == RelationType::Left || relation == RelationType::Right);
   assert(froms.size() == tos.size());
-  auto costs = utils::transform(
-      routingCosts_, [&](const RoutingCostPtr& cost) { return cost->getCostLaneChange(trafficRules_, froms, tos); });
-  for (auto i = 0ul; i < froms.size(); ++i) {
+  for (; !froms.empty(); froms.erase(froms.begin()), tos.erase(tos.begin())) {
     for (RoutingCostId costId = 0; costId < RoutingCostId(routingCosts_.size()); ++costId) {
-      if (!std::isfinite(costs[costId])) {
+      auto cost = routingCosts_[costId]->getCostLaneChange(trafficRules_, froms, tos);
+      if (!std::isfinite(cost)) {
         // if the costs are infinite, we add an adjacent edge instead
         auto adjacent = relation == RelationType::Left ? RelationType::AdjacentLeft : RelationType::AdjacentRight;
-        graph_->addEdge(froms[i], tos[i], EdgeInfo{1, costId, adjacent});
+        graph_->addEdge(froms.front(), tos.front(), EdgeInfo{1, costId, adjacent});
         continue;
       }
-      graph_->addEdge(froms[i], tos[i], EdgeInfo{costs[costId], costId, relation});
+      graph_->addEdge(froms.front(), tos.front(), EdgeInfo{cost, costId, relation});
     }
   }
 }
