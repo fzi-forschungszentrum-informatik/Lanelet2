@@ -445,9 +445,6 @@ Optional<Route> RouteBuilder::getRouteFromShortestPath(const LaneletPath& path, 
   // get the container for all the things
   RouteUnderConstruction routeUnderConstruction{vertexIds, originalGraph};
 
-  //! @todo deleteme
-  auto ids = utils::transform(graph_.get().m_vertices, [&](auto& v) { return v.m_property.laneletOrArea.id(); });
-
   bool progress = true;
   while (progress) {
     progress = routeUnderConstruction.addAdjacentLaneletsToRoute();
