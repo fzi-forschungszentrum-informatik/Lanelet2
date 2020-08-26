@@ -6,7 +6,7 @@ ARG ROS=ros
 SHELL ["/bin/bash", "-c"]
 
 # basics
-RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "lunar" ]; \
+RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
     then export PY_VERSION=python; \
     else export PY_VERSION=python3; \
     fi; \
@@ -41,7 +41,7 @@ RUN echo "deb http://packages.ros.org/${ROS}/ubuntu $(lsb_release -sc) main" > /
       || apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654)
 
 # dependencies for lanelet2
-RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "lunar" ]; \
+RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
     then export PY_VERSION=python; \
     else export PY_VERSION=python3; \
     fi; \
@@ -57,8 +57,12 @@ RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "lunar" ]; \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ros version specific dependencies
-RUN if [ "$ROS" = "ros" ]; \
-    then export ROS_DEPS="ros-$ROS_DISTRO-catkin ros-$ROS_DISTRO-rosbash python-catkin-tools"; \
+RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
+    then export PY_VERSION=python; \
+    else export PY_VERSION=python3; \
+    fi; \
+    if [ "$ROS" = "ros" ]; \
+    then export ROS_DEPS="ros-$ROS_DISTRO-catkin ros-$ROS_DISTRO-rosbash ${PY_VERSION}-catkin-tools"; \
     else export ROS_DEPS="ros-$ROS_DISTRO-ament-cmake python3-colcon-ros ros-$ROS_DISTRO-ros2cli"; \
     fi; \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y $ROS_DEPS \

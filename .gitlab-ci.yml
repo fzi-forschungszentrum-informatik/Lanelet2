@@ -5,7 +5,7 @@ include:
      file: '/ci_templates/default_catkin_project.yml'
 
 # Tests installing on a plain system without mrt stuff using the provided Docker image
-.build_docker: &build_docker
+.build_docker:
   stage: build
   image: docker:18.09
   only:
@@ -23,7 +23,7 @@ include:
     - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then docker push $IMAGE_NAME; fi
 
 build_docker_xenial:
-  <<: *build_docker
+  extends: .build_docker
   variables:
     DISTRIBUTION: "16.04"
     TAG: "16.04"
@@ -33,7 +33,7 @@ build_docker_xenial:
     ROS: ros
 
 build_docker_bionic:
-  <<: *build_docker
+  extends: .build_docker
   variables:
     DISTRIBUTION: "18.04"
     TAG: "18.04"
@@ -42,8 +42,19 @@ build_docker_bionic:
     GIT_STRATEGY: fetch
     ROS: ros
 
+# disabled as long as https://github.com/catkin/catkin_tools/issues/594 persists
+.build_docker_focal:
+  extends: .build_docker
+  variables:
+    DISTRIBUTION: "20.04"
+    TAG: "20.04"
+    ROS_DISTRO: noetic
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: fetch
+    ROS: ros
+
 build_docker_ros2:
-  <<: *build_docker
+  extends: .build_docker
   variables:
     DISTRIBUTION: "18.04"
     TAG: ros2
