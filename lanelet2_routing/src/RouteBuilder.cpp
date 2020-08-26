@@ -13,6 +13,13 @@ namespace lanelet {
 namespace routing {
 namespace internal {
 namespace {
+template <typename Graph, typename StartVertex, typename Visitor>
+void breadthFirstSearch(const Graph& g, StartVertex v, Visitor vis) {
+  SparseColorMap cm;
+  boost::queue<StartVertex> q;
+  boost::breadth_first_visit(g, v, q, vis, cm);
+}
+
 struct VisitationCount {
   bool isLeaf() const { return numFollowers + numLaneChangesOut == 0; }
   unsigned numFollowers{};
@@ -114,6 +121,58 @@ class VisitedLaneletGraph {
   const RouteLanelets* routeLanelets_{};
 };
 
+//! Adaptor for boost graph. It is used to build the VisitedLaneletGraph.
+class NeighbouringGraphVisitor : public boost::default_bfs_visitor {
+ public:
+  explicit NeighbouringGraphVisitor(VisitedLaneletGraph& counter) : counter_{&counter} {}
+
+  // called by boost graph on a new vertex
+  template <typename GraphType>
+  void examine_vertex(LaneletVertexId v, const GraphType& /*g*/) {  // NOLINT
+    counter_->init(v);
+    vCurr_ = v;
+  }
+
+  // called directly after an all its edges
+  template <typename GraphType>
+  void examine_edge(NextToRouteGraph::edge_descriptor e, const GraphType& g) const {  // NOLINT
+    assert(vCurr_ == boost::source(e, g) && "Breadth first search seems to iterate in a weird manner");
+    counter_->add(vCurr_, e, g);
+  }
+
+ private:
+  LaneletVertexId vCurr_{};
+  VisitedLaneletGraph* counter_;
+};
+
+RouteLanelets getLeftAndRightLanelets(const LaneletVertexId& llt, const OriginalGraph& g) {
+  using LeftAndRightFilter = EdgeRelationFilter<RelationType::Left | RelationType::Right, OriginalGraph>;
+  using LeftAndRightGraph = boost::filtered_graph<OriginalGraph, LeftAndRightFilter>;
+  class GraphVisitor : public boost::default_bfs_visitor {
+   public:
+    explicit GraphVisitor(RouteLanelets& lanelets) : lanelets_{&lanelets} {}
+    // called by boost graph on a new vertex
+    void examine_vertex(LaneletVertexId v, const LeftAndRightGraph& /*g*/) {  // NOLINT
+      lanelets_->insert(v);
+    }
+
+   private:
+    RouteLanelets* lanelets_;
+  };
+
+  LeftAndRightGraph graph{g, LeftAndRightFilter{g}};
+  RouteLanelets leftAndRightLanelets;
+  breadthFirstSearch(graph, llt, GraphVisitor{leftAndRightLanelets});
+  return leftAndRightLanelets;
+}
+
+RouteLanelets lastLanelets(const std::vector<LaneletVertexId>& initialRoute, const OriginalGraph& originalGraph) {
+  if (initialRoute.empty() || initialRoute.front() == initialRoute.back()) {
+    return {};
+  }
+  return getLeftAndRightLanelets(initialRoute.back(), originalGraph);
+}
+
 //! The visited lanelet graph initially also contains lanelets that are always conflicting with the route, but the route
 //! is not always conflicting with them. This class finds these cases.
 class PathsOutOfRouteFinder {
@@ -213,27 +272,6 @@ class PathsOutOfRouteFinder {
   const RouteLanelets* llts_{};
 };
 
-//! Adaptor for boost graph. It is used to build the VisitedLaneletGraph.
-class NeighbouringGraphVisitor : public boost::default_bfs_visitor {
- public:
-  explicit NeighbouringGraphVisitor(VisitedLaneletGraph& counter) : counter_{&counter} {}
-  // called by boost graph on a new vertex
-  void examine_vertex(LaneletVertexId v, const NextToRouteGraph& /*g*/) {  // NOLINT
-    counter_->init(v);
-    vCurr_ = v;
-  }
-
-  // called directly after an all its edges
-  void examine_edge(NextToRouteGraph::edge_descriptor e, const NextToRouteGraph& g) const {  // NOLINT
-    assert(vCurr_ == boost::source(e, g) && "Breadth first search seems to iterate in a weird manner");
-    counter_->add(vCurr_, e, g);
-  }
-
- private:
-  LaneletVertexId vCurr_{};
-  VisitedLaneletGraph* counter_;
-};
-
 //! A visitor that constructs the final route object by searching though the graph of lanelets on the route.
 class RouteConstructionVisitor : public boost::default_bfs_visitor {
  public:
@@ -331,13 +369,6 @@ class RouteConstructionVisitor : public boost::default_bfs_visitor {
   LaneletVertexId sourceElem_{};
 };
 
-template <typename Graph, typename StartVertex, typename Visitor>
-void breadthFirstSearch(const Graph& g, StartVertex v, Visitor vis) {
-  SparseColorMap cm;
-  boost::queue<StartVertex> q;
-  boost::breadth_first_visit(g, v, q, vis, cm);
-}
-
 //! This is the class that handles building the route. It iteratively adds lanelets initial route (i.e. the shortest
 //! path) that fulfill the definition of a lanelet on the route. This is done until convergence is reached.
 class RouteUnderConstruction {
@@ -348,7 +379,8 @@ class RouteUnderConstruction {
         laneletsOnRoute_{initialRoute.begin(), initialRoute.end()},
         originalGraph_{originalGraph},
         routeGraph_{originalGraph_, {}, OnRouteFilter{laneletsOnRoute_}},
-        nextToRouteGraph_{originalGraph_, OnlyDrivableEdgesFilter{originalGraph_},
+        nextToRouteGraph_{originalGraph_,
+                          OnlyDrivableEdgesWithinFilter{lastLanelets(initialRoute, originalGraph), originalGraph_},
                           NextToRouteFilter{laneletsOnRoute_, originalGraph_}},
         laneletVisitor_{laneletsOnRoute_},
         pathOutOfRouteFinder_{originalGraph_, laneletsOnRoute_} {}

@@ -140,32 +140,24 @@ class OnRouteFilter {
   const RouteLanelets* onRoute_{};
 };
 
+template <RelationType relation, typename GraphType>
+class EdgeRelationFilter {
+ public:
+  EdgeRelationFilter() = default;
+  explicit EdgeRelationFilter(const GraphType& graph) : graph_{&graph} {}
+  bool operator()(FilteredRoutingGraph::edge_descriptor e) const {
+    auto type = (*graph_)[e].relation;
+    return (type & relation) != RelationType::None;
+  }
+
+ private:
+  const GraphType* graph_{};
+};
+
 //! Removes edges from the graph that are not drivable (e.g. adjacent or conflicing)
-class OnlyDrivableEdgesFilter {
- public:
-  OnlyDrivableEdgesFilter() = default;
-  explicit OnlyDrivableEdgesFilter(const OriginalGraph& originalGraph) : originalGraph_{&originalGraph} {}
-  bool operator()(FilteredRoutingGraph::edge_descriptor e) const {
-    auto type = (*originalGraph_)[e].relation;
-    return (type & (RelationType::Successor | RelationType::Left | RelationType::Right)) != RelationType::None;
-  }
-
- private:
-  const OriginalGraph* originalGraph_{};
-};
-
-class OnlyConflictingFilter {
- public:
-  OnlyConflictingFilter() = default;
-  explicit OnlyConflictingFilter(const OriginalGraph& originalGraph) : originalGraph_{&originalGraph} {}
-  bool operator()(FilteredRoutingGraph::edge_descriptor e) const {
-    auto type = (*originalGraph_)[e].relation;
-    return type == RelationType::Conflicting;
-  }
-
- private:
-  const OriginalGraph* originalGraph_{};
-};
+using OnlyDrivableEdgesFilter =
+    EdgeRelationFilter<RelationType::Successor | RelationType::Left | RelationType::Right, OriginalGraph>;
+using OnlyConflictingFilter = EdgeRelationFilter<RelationType::Conflicting, OriginalGraph>;
 
 //! Removes conflicting edges from the graph
 class NoConflictingFilter {
@@ -205,6 +197,24 @@ class NextToRouteFilter {
  private:
   const RouteLanelets* onRoute_{};
   const OriginalGraph* originalGraph_{};
+};
+
+//! Removes edges from the graph that are not drivable (e.g. adjacent or conflicing) OR leave the route at its end
+class OnlyDrivableEdgesWithinFilter {
+  using SuccessorFilter = EdgeRelationFilter<RelationType::Successor, OriginalGraph>;
+
+ public:
+  OnlyDrivableEdgesWithinFilter() = default;
+  explicit OnlyDrivableEdgesWithinFilter(RouteLanelets withinLanelets, const OriginalGraph& originalGraph)
+      : drivableEdge_{originalGraph}, successorEdge_{originalGraph}, withinLanelets_{std::move(withinLanelets)} {}
+  bool operator()(FilteredRoutingGraph::edge_descriptor e) const {
+    return drivableEdge_(e) && (!successorEdge_(e) || withinLanelets_.find(e.m_source) == withinLanelets_.end());
+  }
+
+ private:
+  OnlyDrivableEdgesFilter drivableEdge_;
+  SuccessorFilter successorEdge_;
+  RouteLanelets withinLanelets_;
 };
 
 //! Finds vertices that are in conflict or adjacent to some vertices (not reachable though bidirectional lane changes)
@@ -380,7 +390,7 @@ using OnRouteGraph = boost::filtered_graph<OriginalGraph, boost::keep_all, OnRou
 using DrivableGraph = boost::filtered_graph<OriginalGraph, OnlyDrivableEdgesFilter>;
 using NoConflictingGraph = boost::filtered_graph<OriginalGraph, NoConflictingFilter>;
 using OnlyConflictingGraph = boost::filtered_graph<OriginalGraph, OnlyConflictingFilter>;
-using NextToRouteGraph = boost::filtered_graph<OriginalGraph, OnlyDrivableEdgesFilter, NextToRouteFilter>;
+using NextToRouteGraph = boost::filtered_graph<OriginalGraph, OnlyDrivableEdgesWithinFilter, NextToRouteFilter>;
 using ConflictOrAdjacentToRouteGraph =
     boost::filtered_graph<OriginalGraph, OnlyDrivableEdgesFilter, ConflictingSectionFilter>;
 using ConflictsWithPathGraph = boost::filtered_graph<OriginalGraph, NoConflictingFilter, OnRouteAndConflictFilter>;
