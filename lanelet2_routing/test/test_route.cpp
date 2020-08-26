@@ -38,6 +38,7 @@ class Route1NoLc : public TestRoute<2001, 2014> {
 class Route2 : public TestRoute<2001, 2004> {};
 class Route3 : public TestRoute<2003, 2002> {};
 class Route4 : public TestRoute<2003, 2013> {};
+class Route5 : public TestRoute<2066, 2064> {};
 class RouteMaxHoseLeftRight : public TestRoute<2017, 2024> {};
 class RouteMaxHoseRightLeft : public TestRoute<2023, 2016> {};
 class RouteMaxHoseLeftRightDashedSolid : public TestRoute<2017, 2025> {};
@@ -59,7 +60,7 @@ template <typename T>
 class AllRoutesTest : public T {};
 
 using AllRoutes =
-    testing::Types<Route1, Route1NoLc, Route2, Route3, Route4, RouteMaxHoseLeftRight, RouteMaxHoseRightLeft,
+    testing::Types<Route1, Route1NoLc, Route2, Route3, Route4, Route5, RouteMaxHoseLeftRight, RouteMaxHoseRightLeft,
                    RouteMaxHoseLeftRightDashedSolid, RouteMaxHoseLeftRightDashedSolidFurther, RouteSolidDashed,
                    RouteSolidDashedWithAdjacent, RouteSplittedDiverging, RouteSplittedDivergingAndMerging,
                    RouteViaSimple, RouteMissingLanelet, RouteInCircle, RouteCircular, RouteCircularNoLc>;
@@ -213,6 +214,11 @@ TEST_F(Route4, CreateRoute4) {                                           // NOLI
   EXPECT_EQ(route.getDebugLaneletMap()->pointLayer.size(), route.size());  // NOLINT
   EXPECT_NE(route.laneletSubmap(), nullptr);
   EXPECT_EQ(route.laneletSubmap()->laneletLayer.size(), route.size());  // NOLINT
+}
+
+TEST_F(Route5, NoCircle) {
+  EXPECT_EQ(route.size(), 9);
+  EXPECT_FALSE(hasLanelet(route.laneletSubmap()->laneletLayer, lanelets.at(2065)));
 }
 
 TEST_F(RouteMaxHoseLeftRight, CreateRouteMaxHose1) {                     // NOLINT
