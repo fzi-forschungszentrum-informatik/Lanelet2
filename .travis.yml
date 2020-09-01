@@ -45,6 +45,7 @@ jobs:
       - DISTRIBUTION=20.04
       - ROS_DISTRO=foxy
       - ROS=ros2
+      <<: *ros2_build
 
 # setup the container with dependencies
 install: docker build --target lanelet2_deps -t lanelet2_deps --build-arg=DISTRIBUTION=$DISTRIBUTION --build-arg=ROS_DISTRO=$ROS_DISTRO --build-arg ROS=$ROS .
