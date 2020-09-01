@@ -37,13 +37,13 @@ jobs:
     - name: Bionic ROS2
       env:
       - DISTRIBUTION=18.04
-      - ROS_DISTRO=dasing
+      - ROS_DISTRO=eloquent
       - ROS=ros2
       <<: *ros2_build
     - name: Focal ROS2
       env:
       - DISTRIBUTION=20.04
-      - ROS_DISTRO=eloquent
+      - ROS_DISTRO=foxy
       - ROS=ros2
 
 # setup the container with dependencies
