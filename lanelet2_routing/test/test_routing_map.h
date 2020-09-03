@@ -389,7 +389,7 @@ class RoutingGraphTestData {
     addLine({points.at(129), points.at(131)});  // ls1215
     addLine({points.at(130), points.at(42)});   // ls1216
     lines.at(1205).setAttribute(AttributeName::Type, AttributeValueString::LineThin);
-    lines.at(1205).setAttribute(AttributeName::Type, AttributeValueString::Dashed);
+    lines.at(1205).setAttribute(AttributeName::Subtype, AttributeValueString::Dashed);
   }
   void initLanelets() {
     lanelets.clear();

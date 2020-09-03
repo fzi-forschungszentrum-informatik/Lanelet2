@@ -290,6 +290,50 @@ TEST_F(GermanVehicleGraph, possiblePathsMinRoutingCosts) {  // NOLINT
   EXPECT_TRUE(containsLanelet(firstRoute, 2006));
 }
 
+TEST_F(GermanVehicleGraph, possiblePathsIncludeShorterLc) {  // NOLINT
+  auto routes = graph->possiblePaths(lanelets.at(2041), PossiblePathsParams{1000, {}, 0, true, true});
+  EXPECT_EQ(routes.size(), 3);
+  auto lastLLts = utils::transform(routes, [](auto& route) { return route.back(); });
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2062)));
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2049)));
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2048)));
+}
+
+TEST_F(GermanVehicleGraph, possiblePathsIncludeShorterAllLimitsLc) {  // NOLINT
+  auto routes = graph->possiblePaths(lanelets.at(2041), PossiblePathsParams{1000, 100, 0, true, true});
+  EXPECT_EQ(routes.size(), 3);
+  auto lastLLts = utils::transform(routes, [](auto& route) { return route.back(); });
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2062)));
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2049)));
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2048)));
+}
+
+TEST_F(GermanVehicleGraph, possiblePathsIncludeShorterNoLc) {  // NOLINT
+  auto routes = graph->possiblePaths(lanelets.at(2041), PossiblePathsParams{1000, {}, 0, false, true});
+  EXPECT_EQ(routes.size(), 3);
+  auto lastLLts = utils::transform(routes, [](auto& route) { return route.back(); });
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2063)));
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2049)));
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2047)));
+}
+
+TEST_F(GermanVehicleGraph, possiblePathsIncludeShorterAllLimitsNoLc) {  // NOLINT
+  auto routes = graph->possiblePaths(lanelets.at(2041), PossiblePathsParams{1000, 100, 0, false, true});
+  EXPECT_EQ(routes.size(), 3);
+  auto lastLLts = utils::transform(routes, [](auto& route) { return route.back(); });
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2063)));
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2049)));
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2047)));
+}
+
+TEST_F(GermanVehicleGraph, possiblePathsLimitLengthNoLc) {  // NOLINT
+  auto routes = graph->possiblePaths(lanelets.at(2041), PossiblePathsParams{2.5, 3, 0, false, false});
+  EXPECT_TRUE(std::all_of(routes.begin(), routes.end(), [](auto& r) { return r.size() <= 3; }));
+  EXPECT_EQ(routes.size(), 3);
+  auto lastLLts = utils::transform(routes, [](auto& route) { return route.back(); });
+  EXPECT_TRUE(has(lastLLts, lanelets.at(2042)));
+}
+
 TEST_F(GermanVehicleGraph, possiblePathsMaxHose) {  // NOLINT
   // Max Hose Problem
   auto routes = graph->possiblePaths(lanelets.at(2017), 10.0, 0, true);

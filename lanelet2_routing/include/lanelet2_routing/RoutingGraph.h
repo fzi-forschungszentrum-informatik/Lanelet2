@@ -21,35 +21,38 @@ namespace routing {
  * Consider the following graph (- or \ connects followers, | is a lane change):
  * ```
  * 1-2-3-4-5
- *  \
+ *  \   /
  *   6-7
  *   | |
  *   8-9
  * ```
- * - routingCostLimit=50 (and the rest the default): Will give you all paths that are at least 50
+ * Assuming we are using lanelet 1 as start of the search you can get the following results:
+ * - routingCostLimit=50 (and the rest the default): Will give you all optimal paths that are at least 50
  * long (wrt to routing cost module zero, i.e. the first routing cost object from the "routingCosts"
- * parameter that the routing graph was crated with), do not include lane changes. The paths end
+ * parameter that the routing graph was crated with), does not include lane changes. The paths end
  * with the first lanelet that exceeds the 50 cost limit. Depending on the costs, the returned paths
  * might be only the path 1-2-3 (assuming 1-6-7 is too short).
- * - elementLimit=3: Will give you all paths with 3 lanelets (excluding lane changes). The result
- * might be 1-2-3 and 1-6-7
- * - elementLimit=5, includeShorterPaths=true, includeLaneChanges=true: Will give you all paths that
- * are at most 3 lanelets/areas long, including lane changes. The result might be 1-2-3, 1-6-7,
+ * - routingCostLimit=70: Will give you only 1-2-3-4, because 1-6-7-4 is a suboptimal path and 1-6-7 is too short.
+ * - routingCostLimit=70, includeShorterPaths=True: Will give you 1-2-3-4 and 1-6-7. 1-6-7-4 is not included because the
+ * path to 4 is suboptimal
+ * - elementLimit=3: Will give you all optimal paths with exactly 3 lanelets (excluding lane changes). The result
+ * will be 1-2-3 and 1-6-7
+ * - elementLimit=4: Will give you only 1-2-3-4, also because 1-6-7-4 is suboptimal
+ * - elementLimit=5, includeShorterPaths=true, includeLaneChanges=true: Will give you all optimal paths that
+ * are at most 5 lanelets/areas long, including lane changes. The result might be 1-2-3-4-5, 1-6-7,
  * 1-8-9.
- * - routingCostLimit=50, elementLimit=3, includeCheaperPaths=true: Will give you all paths where
- * only the last lanelet/area might exceed the 50 cost limit and include exactly 3 lanelets/areas.
- * The result might be 1-2-3 and 1-6-7
- * - routingCostLimit=50, elementLimit=3, includeLaneChanges=true: Will give you all paths
- * (including lane changes) where the last lanelet/area exceeds the 50 cost limit and that are 3
- * lanelets/areas. The result might be 1-2-3 and 1-8-9.
+ * - routingCostLimit=50, elementLimit=3, includeLaneChanges=true:  Will give you all optimal paths (including lane
+ * changes) where the last lanelet/area exceeds the 50 cost limit or that are 3 lanelets/areas long (whatever occurs
+ * first). The result might be 1-2-3, 1-6-7 and 1-8-9
+ * - routingCostLimit=70, elementLimit=4, includeShorterPaths=true: Will give you all optimal paths as above but also
+ * include shorter/cheaper paths. Result: 1-2-3-4, 1-6-7, 1-8-9.
  */
 struct PossiblePathsParams {
   Optional<double> routingCostLimit;  //!< cost limit for every path. Either that or maxElements must be valid.
   Optional<uint32_t> elementLimit;    //!< element limit for every path. Effect depends on includeShorterPaths
-  bool includeLaneChanges{false};     //!< if true, returned paths will include lane changes
-  bool includeCheaperPaths{false};    //!< also return paths that do not reach the cost limit (if it is valid)
-  bool includeShorterPaths{false};    //!< also return paths that do not reach the element limit (if its valid)
   RoutingCostId routingCostId{};      //!< the routing cost module to be used for the costs
+  bool includeLaneChanges{false};     //!< if true, returned paths will include lane changes
+  bool includeShorterPaths{false};    //!< also return paths that do not reach the limits
 };
 
 /** @brief Main class of the routing module that holds routing information and can be queried.

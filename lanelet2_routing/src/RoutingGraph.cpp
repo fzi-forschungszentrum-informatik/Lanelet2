@@ -260,13 +260,13 @@ struct StopIfCostMoreThan {
   double c;
 };
 
-template <bool Backw, typename OutVertexT, typename OutContainerT, typename Func>
+template <bool Backw, bool KeepShorter, typename OutVertexT, typename OutContainerT, typename Func>
 std::vector<OutContainerT> possiblePathsImpl(const GraphType::vertex_descriptor& start,
                                              const FilteredRoutingGraph& graph, Func stopCriterion) {
   auto g = GetGraph<Backw>{}(graph);
   DijkstraStyleSearch<decltype(g)> search(g);
   search.query(start, stopCriterion);
-  auto keepPath = [&](auto& vertex) { return vertex.second.isLeaf && !vertex.second.predicate; };
+  auto keepPath = [&](auto& vertex) { return vertex.second.isLeaf && (KeepShorter || !vertex.second.predicate); };
   auto numPaths = size_t(std::count_if(search.getMap().begin(), search.getMap().end(), keepPath));
   std::vector<OutContainerT> result;
   result.reserve(numPaths);
@@ -282,39 +282,28 @@ std::vector<OutContainerT> possiblePathsImpl(const GraphType::vertex_descriptor&
 template <bool Backw, typename OutVertexT, typename OutContainerT>
 std::vector<OutContainerT> possiblePathsImpl(const GraphType::vertex_descriptor& start,
                                              const FilteredRoutingGraph& graph, const PossiblePathsParams& params) {
-  if (params.routingCostLimit && !params.elementLimit && !params.includeCheaperPaths) {
-    return possiblePathsImpl<Backw, OutVertexT, OutContainerT>(start, graph,
-                                                               StopIfCostMoreThan<>(*params.routingCostLimit));
+  if (params.routingCostLimit && !params.elementLimit && !params.includeShorterPaths) {
+    return possiblePathsImpl<Backw, false, OutVertexT, OutContainerT>(start, graph,
+                                                                      StopIfCostMoreThan<>(*params.routingCostLimit));
   }
-  if (params.routingCostLimit && !params.elementLimit && params.includeCheaperPaths) {
-    return possiblePathsImpl<Backw, OutVertexT, OutContainerT>(start, graph,
-                                                               StopIfCostMoreThan<true>(*params.routingCostLimit));
+  if (params.routingCostLimit && !params.elementLimit && params.includeShorterPaths) {
+    return possiblePathsImpl<Backw, true, OutVertexT, OutContainerT>(start, graph,
+                                                                     StopIfCostMoreThan<>(*params.routingCostLimit));
   }
   if (!params.routingCostLimit && params.elementLimit && !params.includeShorterPaths) {
-    return possiblePathsImpl<Backw, OutVertexT, OutContainerT>(start, graph,
-                                                               StopIfLaneletsMoreThan<>(*params.elementLimit));
+    return possiblePathsImpl<Backw, false, OutVertexT, OutContainerT>(start, graph,
+                                                                      StopIfLaneletsMoreThan<>(*params.elementLimit));
   }
   if (!params.routingCostLimit && params.elementLimit && params.includeShorterPaths) {
-    return possiblePathsImpl<Backw, OutVertexT, OutContainerT>(start, graph,
-                                                               StopIfLaneletsMoreThan<true>(*params.elementLimit));
+    return possiblePathsImpl<Backw, true, OutVertexT, OutContainerT>(start, graph,
+                                                                     StopIfLaneletsMoreThan<>(*params.elementLimit));
   }
-  if (params.routingCostLimit && params.elementLimit && params.includeCheaperPaths && params.includeShorterPaths) {
-    return possiblePathsImpl<Backw, OutVertexT, OutContainerT>(
-        start, graph,
-        StopIfCostMoreThan<true>(*params.routingCostLimit) && StopIfLaneletsMoreThan<true>(*params.elementLimit));
+  if (params.routingCostLimit && params.elementLimit && !params.includeShorterPaths) {
+    return possiblePathsImpl<Backw, false, OutVertexT, OutContainerT>(
+        start, graph, StopIfCostMoreThan<>(*params.routingCostLimit) && StopIfLaneletsMoreThan<>(*params.elementLimit));
   }
-  if (params.routingCostLimit && params.elementLimit && !params.includeCheaperPaths && params.includeShorterPaths) {
-    return possiblePathsImpl<Backw, OutVertexT, OutContainerT>(
-        start, graph,
-        StopIfCostMoreThan<>(*params.routingCostLimit) && StopIfLaneletsMoreThan<true>(*params.elementLimit));
-  }
-  if (params.routingCostLimit && params.elementLimit && params.includeCheaperPaths && !params.includeShorterPaths) {
-    return possiblePathsImpl<Backw, OutVertexT, OutContainerT>(
-        start, graph,
-        StopIfCostMoreThan<true>(*params.routingCostLimit) && StopIfLaneletsMoreThan<>(*params.elementLimit));
-  }
-  if (params.routingCostLimit && params.elementLimit && params.includeCheaperPaths && params.includeShorterPaths) {
-    return possiblePathsImpl<Backw, OutVertexT, OutContainerT>(
+  if (params.routingCostLimit && params.elementLimit && params.includeShorterPaths) {
+    return possiblePathsImpl<Backw, true, OutVertexT, OutContainerT>(
         start, graph, StopIfCostMoreThan<>(*params.routingCostLimit) && StopIfLaneletsMoreThan<>(*params.elementLimit));
   }
   throw InvalidInputError("Possible paths called with invalid cost limit AND invalid element limit!");
@@ -624,13 +613,12 @@ LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, const P
 
 LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, double minRoutingCost,
                                          RoutingCostId routingCostId, bool allowLaneChanges) const {
-  return possiblePaths(startPoint,
-                       PossiblePathsParams{minRoutingCost, {}, allowLaneChanges, false, false, routingCostId});
+  return possiblePaths(startPoint, PossiblePathsParams{minRoutingCost, {}, routingCostId, allowLaneChanges, false});
 }
 
 LaneletPaths RoutingGraph::possiblePaths(const ConstLanelet& startPoint, uint32_t minLanelets, bool allowLaneChanges,
                                          RoutingCostId routingCostId) const {
-  return possiblePaths(startPoint, PossiblePathsParams{{}, minLanelets, allowLaneChanges, false, false, routingCostId});
+  return possiblePaths(startPoint, PossiblePathsParams{{}, minLanelets, routingCostId, allowLaneChanges, false});
 }
 
 LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanelet,
@@ -647,13 +635,13 @@ LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanele
 LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanelet, double minRoutingCost,
                                                 RoutingCostId routingCostId, bool allowLaneChanges) const {
   return possiblePathsTowards(targetLanelet,
-                              PossiblePathsParams{minRoutingCost, {}, allowLaneChanges, false, false, routingCostId});
+                              PossiblePathsParams{minRoutingCost, {}, routingCostId, allowLaneChanges, false});
 }
 
 LaneletPaths RoutingGraph::possiblePathsTowards(const ConstLanelet& targetLanelet, uint32_t minLanelets,
                                                 bool allowLaneChanges, RoutingCostId routingCostId) const {
   return possiblePathsTowards(targetLanelet,
-                              PossiblePathsParams{{}, minLanelets, allowLaneChanges, false, false, routingCostId});
+                              PossiblePathsParams{{}, minLanelets, routingCostId, allowLaneChanges, false});
 }
 
 LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint,
@@ -670,14 +658,14 @@ LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletO
 LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint,
                                                              double minRoutingCost, RoutingCostId routingCostId,
                                                              bool allowLaneChanges) const {
-  return possiblePathsIncludingAreas(
-      startPoint, PossiblePathsParams{minRoutingCost, {}, allowLaneChanges, false, false, routingCostId});
+  return possiblePathsIncludingAreas(startPoint,
+                                     PossiblePathsParams{minRoutingCost, {}, routingCostId, allowLaneChanges, false});
 }
 
 LaneletOrAreaPaths RoutingGraph::possiblePathsIncludingAreas(const ConstLaneletOrArea& startPoint, uint32_t minElements,
                                                              bool allowLaneChanges, RoutingCostId routingCostId) const {
-  return possiblePathsIncludingAreas(
-      startPoint, PossiblePathsParams{{}, minElements, allowLaneChanges, false, false, routingCostId});
+  return possiblePathsIncludingAreas(startPoint,
+                                     PossiblePathsParams{{}, minElements, routingCostId, allowLaneChanges, false});
 }
 
 void RoutingGraph::forEachSuccessor(const ConstLanelet& lanelet, const LaneletVisitFunction& f, bool allowLaneChanges,

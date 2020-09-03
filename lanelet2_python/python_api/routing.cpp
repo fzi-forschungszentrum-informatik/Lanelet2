@@ -1,6 +1,7 @@
 #include <lanelet2_routing/Route.h>
 #include <lanelet2_routing/RoutingGraph.h>
 
+#include <boost/make_shared.hpp>
 #include <boost/python.hpp>
 
 #include "lanelet2_python/internal/converter.h"
@@ -40,6 +41,16 @@ routing::RoutingGraphPtr makeRoutingGraphSubmap(LaneletSubmap& laneletMap,
                                                 const traffic_rules::TrafficRules& trafficRules,
                                                 const routing::RoutingCostPtrs& routingCosts) {
   return routing::RoutingGraph::build(laneletMap, trafficRules, routingCosts);
+}
+
+template <typename T>
+object optionalToObject(const Optional<T>& v) {
+  return v ? object(*v) : object();
+}
+
+template <typename T>
+Optional<T> objectToOptional(const object& o) {
+  return o == object() ? Optional<T>{} : Optional<T>{extract<T>(o)()};
 }
 
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
@@ -82,11 +93,16 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       &RoutingGraph::possiblePaths);
   auto possPLen = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, uint32_t, bool, RoutingCostId) const>(
       &RoutingGraph::possiblePaths);
+  auto possPParam = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, const PossiblePathsParams&) const>(
+      &RoutingGraph::possiblePaths);
   auto possPToCost =
       static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, double, RoutingCostId, bool) const>(
           &RoutingGraph::possiblePathsTowards);
   auto possPToLen =
       static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, uint32_t, bool, RoutingCostId) const>(
+          &RoutingGraph::possiblePathsTowards);
+  auto possPToParam =
+      static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, const PossiblePathsParams&) const>(
           &RoutingGraph::possiblePathsTowards);
 
   class_<LaneletPath>("LaneletPath",
@@ -125,6 +141,28 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def_readwrite("cost", &LaneletOrAreaVisitInformation::cost, "The cost along the shortest path")
       .def_readwrite("numLaneChanges", &LaneletOrAreaVisitInformation::numLaneChanges,
                      "The number of lane changes necessary along the shortest path");
+
+  class_<PossiblePathsParams>(
+      "PossiblePathsParams", "Parameters for configuring the behaviour of the possible path algorithms of RoutingGraph")
+      .def("__init__",
+           make_constructor(
+               +[](object costLimit, object elemLimit, RoutingCostId costId, bool includeLc, bool includeShorter) {
+                 return boost::make_shared<PossiblePathsParams>(PossiblePathsParams{
+                     objectToOptional<double>(costLimit), objectToOptional<std::uint32_t>(elemLimit), costId, includeLc,
+                     includeShorter});
+               },
+               default_call_policies{},
+               (arg("routingCostLimit") = object(), arg("elementLimit") = object(), arg("routingCostId") = 0,
+                arg("includeLaneChanges") = false, arg("includeShorterPaths") = false)))
+      .add_property(
+          "routingCostLimit", +[](const PossiblePathsParams& self) { return optionalToObject(self.routingCostLimit); },
+          +[](PossiblePathsParams& self, object value) { self.routingCostLimit = objectToOptional<double>(value); })
+      .add_property(
+          "elementLimit", +[](const PossiblePathsParams& self) { return optionalToObject(self.elementLimit); },
+          +[](PossiblePathsParams& self, object value) { self.elementLimit = objectToOptional<std::uint32_t>(value); })
+      .def_readwrite("routingCostId", &PossiblePathsParams::routingCostId)
+      .def_readwrite("includeLaneChanges", &PossiblePathsParams::includeLaneChanges)
+      .def_readwrite("includeShorterPaths", &PossiblePathsParams::includeShorterPaths);
 
   auto lltAndLc = (arg("lanelet"), arg("withLaneChanges") = false);
   auto lltAndRoutingCost = (arg("lanelet"), arg("routingCostId") = 0);
@@ -178,10 +216,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("possiblePaths", possPCost, "possible paths from a given start lanelet that are 'minRoutingCost'-long",
            (arg("lanelet"), arg("minRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = false,
             arg("routingCostId") = 0))
+      .def("possiblePaths", possPParam, "possible paths from a given start lanelet as configured in parameters",
+           (arg("lanelet"), arg("parameters")))
       .def("possiblePathsTowards", possPToCost,
            "possible paths to a given start lanelet that are 'minRoutingCost'-long",
            (arg("lanelet"), arg("minRoutingCost"), arg("RoutingCostId") = 0, arg("allowLaneChanges") = false,
             arg("routingCostId") = 0))
+      .def("possiblePathsTowards", possPToParam, "possible paths to a given lanelet as configured in parameters",
+           (arg("lanelet"), arg("parameters")))
       .def("possiblePathsMinLen", possPLen, "possible routes from a given start lanelet that are 'minLanelets'-long",
            (arg("lanelet"), arg("minLanelets"), arg("allowLaneChanges") = false, arg("routingCostId") = 0))
       .def("possiblePathsTowardsMinLen", possPToLen,
