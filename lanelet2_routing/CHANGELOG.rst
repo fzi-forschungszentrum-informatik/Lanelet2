@@ -2,8 +2,8 @@
 Changelog for package lanelet2_routing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2020-09-06)
+------------------
 * Implement more flexible configuration for obtaining possible paths. Still lacking proper tests
 * Add parameter to left/right/adjacentLeft/adjacentRight so that they can be queried based on routing cost id
 * Fix routing for lane changes, add tests for it

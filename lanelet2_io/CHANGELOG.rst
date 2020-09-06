@@ -2,8 +2,8 @@
 Changelog for package lanelet2_io
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2020-09-06)
+------------------
 * Add experimental support for building with colcon on ros2 and ament_cmake
 * Format files with clang-format 10
 * io: Fix random errors in bin serialization when serializing a HybridMap

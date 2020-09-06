@@ -2,8 +2,8 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2020-09-06)
+------------------
 * lanelet2 is now no longer a metapackage
 * Include ROS2 into CI scripts
 * Add experimental support for building with colcon on ros2 and ament_cmake

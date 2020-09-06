@@ -2,8 +2,8 @@
 Changelog for package lanelet2_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2020-09-06)
+------------------
 * Add experimental support for building with colcon on ros2 and ament_cmake
 * Make all includes of lanelet2_examples consistent
 * Updating package.xml files to format 3.
