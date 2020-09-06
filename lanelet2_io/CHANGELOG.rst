@@ -2,6 +2,16 @@
 Changelog for package lanelet2_io
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add experimental support for building with colcon on ros2 and ament_cmake
+* Format files with clang-format 10
+* io: Fix random errors in bin serialization when serializing a HybridMap
+  fixes fzi-forschungszentrum-informatik/Lanelet2#128
+* Making all includes in lanelet2_io consistent.
+* Updating package.xml files to format 3.
+* Contributors: Fabian Poggenhans, Joshua Whitley
+
 1.0.1 (2020-03-24)
 ------------------
 * Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules

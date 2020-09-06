@@ -2,6 +2,26 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add parameter to left/right/adjacentLeft/adjacentRight so that they can be queried based on routing cost id
+* Add experimental support for building with colcon on ros2 and ament_cmake
+* Format files with clang-format 10
+* Add interpolatedPointAtDistance for BasicLineString
+* Expose readwrite struct members to python
+* Python functions for distance between CompoundLineStrings and LineStrings
+* Python geometry interface for CompoundLineStrings
+* Making all includes in lanelet2_python consistent.
+* Add __hash__ for python bindings
+* Add bindings for findWithin geometry function
+* Updating package.xml files to format 3.
+* Fix bindings for shortestPath function
+* Fix memory leak in list->vector conversion
+  closes fzi-forschungszentrum-informatik/Lanelet2#111
+* SpeedLimitInformation now also offers m/s
+* Fix const ptr issue in ConstLanelet.RightOfWay
+* Contributors: Christian-Eike Framing, Fabian Poggenhans, Joshua Whitley, Maximilian Naumann
+
 1.0.1 (2020-03-24)
 ------------------
 * Fix python bindings for lanelet submap

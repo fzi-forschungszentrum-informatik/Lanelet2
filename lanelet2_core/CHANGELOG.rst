@@ -2,6 +2,26 @@
 Changelog for package lanelet2_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add experimental support for building with colcon on ros2 and ament_cmake
+* Document undocumented parameter in determineCommonLine
+* Fix an issue that findNearest returned more results than intended. Add test and clarify doc.
+  fixes fzi-forschungszentrum-informatik/Lanelet2#142
+* Python functions for distance between CompoundLineStrings and LineStrings
+* Removing extra semicolons causing warnings with wpedantic.
+* io: Fix random errors in bin serialization when serializing a HybridMap
+  fixes fzi-forschungszentrum-informatik/Lanelet2#128
+* Add missing std::hash specializations, add __hash__ for python bindings
+* Making all includes in lanelet2_core consistent.
+* Fix 2d/3d confusions in geometry functions and implemented proper errors. Extended distance3d interface
+* Updating package.xml files to format 3.
+* Improve and extend determineCommonLine utility function
+* Add functionality to create the bounding polygon from a Path
+* Remove useless regulatoryElementsAs template function from LineStringOrPolygon
+* Apply clang-tidy 10 recommendations
+* Contributors: Christian-Eike Framing, Fabian Poggenhans, Johannes Janosovits, Joshua Whitley, Yujie He, harderthan
+
 1.0.1 (2020-03-24)
 ------------------
 * Fix build failure if size_t is not unsigned long

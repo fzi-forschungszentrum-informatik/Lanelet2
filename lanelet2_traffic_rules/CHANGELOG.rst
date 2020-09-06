@@ -2,6 +2,14 @@
 Changelog for package lanelet2_traffic_rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add experimental support for building with colcon on ros2 and ament_cmake
+* Reorder includes with clang-format
+* Making all includes in lanelet2_traffic_rules consistent.
+* Updating package.xml files to format 3.
+* Contributors: Fabian Poggenhans, Joshua Whitley
+
 1.0.1 (2020-03-24)
 ------------------
 * Make sure lanelet2 buildtool_export_depends on mrt_cmake_modules

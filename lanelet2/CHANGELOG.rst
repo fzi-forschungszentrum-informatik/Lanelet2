@@ -2,6 +2,14 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* lanelet2 is now no longer a metapackage
+* Include ROS2 into CI scripts
+* Add experimental support for building with colcon on ros2 and ament_cmake
+* Updating package.xml files to format 3.
+* Contributors: Fabian Poggenhans, Joshua Whitley
+
 1.0.1 (2020-03-24)
 ------------------
 * Add changelogs

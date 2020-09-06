@@ -2,6 +2,23 @@
 Changelog for package lanelet2_routing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Implement more flexible configuration for obtaining possible paths. Still lacking proper tests
+* Add parameter to left/right/adjacentLeft/adjacentRight so that they can be queried based on routing cost id
+* Fix routing for lane changes, add tests for it
+* Fix wrong route in circles
+* Fix unittests that rely on a non-writable root directory
+* Add experimental support for building with colcon on ros2 and ament_cmake
+* Fix the documentation about how to create a routing graph
+* Removing extra semicolons causing warnings with wpedantic.
+* Making all includes in lanelet2_routing consistent.
+* Updating package.xml files to format 3.
+* Fix use of equals in older boost versions
+* Arbitrary lanelet and area adjacencies in LaneletPaths
+* Add functionality to create the bounding polygon from a Path
+* Contributors: Fabian Poggenhans, Johannes Janosovits, Joshua Whitley
+
 1.0.1 (2020-03-24)
 ------------------
 * Mention laneletSubmap in README
