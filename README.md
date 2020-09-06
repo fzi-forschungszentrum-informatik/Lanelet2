@@ -37,6 +37,12 @@ You can find more documentation in the individual packages and in doxygen commen
 
 ## Installation
 
+### Within ROS
+Lanelet2 has been released for ROS. Just install `ros-[distribution]-lanelet2`, e.g.:
+```
+sudo apt install ros-noetic-lanelet2
+```
+
 ### Using Docker
 
 There is a Docker container from which you can test things out:
