@@ -29,9 +29,13 @@ LineStrings are transformed to OSM *Ways*.
 Polygons are OSM *Ways* as well but are identified by a tag *area=yes*. Start point = end point is not sufficient and also not necessary.
 
 ### Lanelets
-Lanelets are represented as OSM *relations* with a tag `type=lanelet`. The right bound is a relation with role `right`, the left bound is a role with role `left`, the centerline (if present) is a relation with role `centerline` and all regulatory elements are relations with the role `regulatory_element`.
+Lanelets are represented as OSM *relations* with a tag `type=lanelet`. 
+- The right bound is a relation member of type *way* with role `right`
+- The left bound is a relation member of type *way* with role `left`
+- The centerline (if present) is a relation member of type *way* with role `centerline`
+- All regulatory elements are relation members of type *relation* with the role `regulatory_element`
 
-If there are more relations than the mentioned ones, Lanelet2 will raise an error.
+If there are more members to the lanelet relation than the mentioned ones, Lanelet2 will raise an error.
 
 ### Areas
 Areas are represented as OSM *relations* by making use of the *multipolygon* representation. They have a tag `type=multipolygon`. The outer bound is an ordered list of relations with the role `outer`, the inner bounds are an ordered list of relations with the role `inner`. Lanelet2 parses the inner bounds in this order and starts a new hole whenever the last point of one linestring matches the first one.
