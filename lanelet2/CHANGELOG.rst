@@ -2,8 +2,8 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.1 (2020-09-14)
+------------------
 * Add missing dependency to ros_environment
 * Contributors: Fabian Poggenhans
 
