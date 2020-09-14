@@ -2,6 +2,11 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add missing dependency to ros_environment
+* Contributors: Fabian Poggenhans
+
 1.1.0 (2020-09-06)
 ------------------
 * lanelet2 is now no longer a metapackage

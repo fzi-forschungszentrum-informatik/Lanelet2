@@ -2,6 +2,9 @@
 Changelog for package lanelet2_traffic_rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.1.0 (2020-09-06)
 ------------------
 * Add experimental support for building with colcon on ros2 and ament_cmake
