@@ -11,6 +11,7 @@
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
   <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
   <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake_core</buildtool_depend>
+  <buildtool_depend>ros_environment</buildtool_depend>
   <exec_depend>lanelet2_core</exec_depend>
   <exec_depend>lanelet2_io</exec_depend>
   <exec_depend>lanelet2_traffic_rules</exec_depend>
