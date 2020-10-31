@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <boost/optional/optional_io.hpp>
+
 #include "lanelet2_core/geometry/RegulatoryElement.h"
 #include "lanelet2_core/primitives/BasicRegulatoryElements.h"
 #include "lanelet2_core/utility/Utilities.h"
