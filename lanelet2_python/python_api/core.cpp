@@ -772,16 +772,16 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("outerBoundPolygon", &ConstArea::outerBoundPolygon)
       .def("innerBoundPolygon", &ConstArea::innerBoundPolygons);
 
-  auto outerBound = static_cast<const LineStrings3d& (Area::*)()>(&Area::outerBound);
-  auto innerBounds = static_cast<const std::vector<LineStrings3d>& (Area::*)()>(&Area::innerBounds);
   class_<Area, bases<ConstArea>>("Area", "Represents an area, potentially with holes, in the map",
                                  boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
                                      "Lanelet(id, outerBound, innerBounds, attributes"))
       .def(init<Id, LineStrings3d, InnerBounds>("Lanelet(id, outerBound, innerBounds"))
       .def(init<Id, LineStrings3d>("Lanelet(id, outerBound"))
       .def(IsPrimitive<Area>())
-      .add_property("outerBound", getRefFunc(outerBound), &Area::setOuterBound)
-      .add_property("innerBounds", getRefFunc(innerBounds), &Area::setInnerBounds)
+      .add_property(
+          "outerBound", +[](Area& self) { return self.outerBound(); }, &Area::setOuterBound)
+      .add_property(
+          "innerBounds", +[](Area& self) { return self.innerBounds(); }, &Area::setInnerBounds)
       .add_property(
           "regulatoryElements", +[](Area& self) { return self.regulatoryElements(); },
           "Regulatory elements of the area")
