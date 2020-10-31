@@ -140,14 +140,14 @@ class OnRouteFilter {
   const RouteLanelets* onRoute_{};
 };
 
-template <RelationType relation, typename GraphType>
+template <RelationType Relation, typename GraphType>
 class EdgeRelationFilter {
  public:
   EdgeRelationFilter() = default;
   explicit EdgeRelationFilter(const GraphType& graph) : graph_{&graph} {}
   bool operator()(FilteredRoutingGraph::edge_descriptor e) const {
     auto type = (*graph_)[e].relation;
-    return (type & relation) != RelationType::None;
+    return (type & Relation) != RelationType::None;
   }
 
  private:

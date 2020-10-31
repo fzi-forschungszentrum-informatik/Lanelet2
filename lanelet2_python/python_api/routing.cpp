@@ -146,7 +146,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "PossiblePathsParams", "Parameters for configuring the behaviour of the possible path algorithms of RoutingGraph")
       .def("__init__",
            make_constructor(
-               +[](object costLimit, object elemLimit, RoutingCostId costId, bool includeLc, bool includeShorter) {
+               +[](const object& costLimit, const object& elemLimit, RoutingCostId costId, bool includeLc,
+                   bool includeShorter) {
                  return boost::make_shared<PossiblePathsParams>(PossiblePathsParams{
                      objectToOptional<double>(costLimit), objectToOptional<std::uint32_t>(elemLimit), costId, includeLc,
                      includeShorter});
@@ -156,10 +157,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                 arg("includeLaneChanges") = false, arg("includeShorterPaths") = false)))
       .add_property(
           "routingCostLimit", +[](const PossiblePathsParams& self) { return optionalToObject(self.routingCostLimit); },
-          +[](PossiblePathsParams& self, object value) { self.routingCostLimit = objectToOptional<double>(value); })
+          +[](PossiblePathsParams& self, const object& value) {
+            self.routingCostLimit = objectToOptional<double>(value);
+          })
       .add_property(
           "elementLimit", +[](const PossiblePathsParams& self) { return optionalToObject(self.elementLimit); },
-          +[](PossiblePathsParams& self, object value) { self.elementLimit = objectToOptional<std::uint32_t>(value); })
+          +[](PossiblePathsParams& self, const object& value) {
+            self.elementLimit = objectToOptional<std::uint32_t>(value);
+          })
       .def_readwrite("routingCostId", &PossiblePathsParams::routingCostId)
       .def_readwrite("includeLaneChanges", &PossiblePathsParams::includeLaneChanges)
       .def_readwrite("includeShorterPaths", &PossiblePathsParams::includeShorterPaths);
