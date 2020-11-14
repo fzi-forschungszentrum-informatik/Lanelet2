@@ -240,6 +240,12 @@ TEST_F(LaneletMapTest, findUsagesInPolygon) {  // NOLINT
   });
 }
 
+TEST_F(LaneletMapTest, createMapWithCustomCenterline) {  // NOLINT
+  ll1.setCenterline(front);
+  auto map = utils::createConstMap(ConstLanelets{ll1}, {});
+  EXPECT_TRUE(map->lineStringLayer.exists(front.id()));
+}
+
 TEST_F(LaneletMapTest, createConstMap) {  // NOLINT
   auto map = utils::createConstMap(ConstLanelets{ll1, ll2}, ConstAreas{ar1});
   EXPECT_TRUE(map->laneletLayer.exists(ll1.id()));
