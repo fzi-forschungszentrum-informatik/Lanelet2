@@ -912,18 +912,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(
           "findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
       .def(
-          "findUsages", +[](AreaLayer& self, LineString3d& ls) { return self.findUsages(ls); });
+          "findUsages", +[](AreaLayer& self, ConstLineString3d& ls) { return self.findUsages(ls); });
   wrapLayer<LaneletLayer, bases<PrimitiveLayer<Lanelet>>>("LaneletLayer")
       .def(
           "findUsages", +[](LaneletLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
       .def(
-          "findUsages", +[](LaneletLayer& self, LineString3d& ls) { return self.findUsages(ls); });
+          "findUsages", +[](LaneletLayer& self, ConstLineString3d& ls) { return self.findUsages(ls); });
   wrapLayer<PolygonLayer>("PolygonLayer")
       .def(
-          "findUsages", +[](PolygonLayer& self, Point3d& p) { return self.findUsages(p); });
+          "findUsages", +[](PolygonLayer& self, ConstPoint3d& p) { return self.findUsages(p); });
   wrapLayer<LineStringLayer>("LineStringLayer")
       .def(
-          "findUsages", +[](LineStringLayer& self, Point3d& p) { return self.findUsages(p); });
+          "findUsages", +[](LineStringLayer& self, ConstPoint3d& p) { return self.findUsages(p); });
   wrapLayer<PointLayer>("PointLayer");
   wrapLayer<RegulatoryElementLayer>("RegulatoryElementLayer");
 
