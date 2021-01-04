@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lanelet2_matching</name>
+  <version>0.8.0</version>
+  <description>Library to match objects to lanelets</description>
+
+  <license>BSD</license>
+  <maintainer email="maximilian.naumann@kit.edu">Maximilian Naumann</maintainer>
+  <author email="maximilian.naumann@kit.edu">Maximilian Naumann</author>
+  <url type="repository">https://github.com/coincar-sim/lanelet2_matching</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mrt_cmake_modules</build_depend>
+  <test_depend>gtest</test_depend>
+
+  <depend>lanelet2_core</depend>
+  <depend>lanelet2_traffic_rules</depend>
+  <depend>lanelet2_python</depend>
+  <depend>libboost-python-dev</depend>
+
+  <!-- tests -->
+  <test_depend>lanelet2_io</test_depend>
+  <test_depend>lanelet2_projection</test_depend>
+  <test_depend>lanelet2_maps</test_depend>
+
+</package>
