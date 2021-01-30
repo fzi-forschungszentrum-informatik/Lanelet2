@@ -9,7 +9,9 @@ from lanelet2.projection import UtmProjector
 example_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../lanelet2_maps/res/mapping_example.osm")
 if not os.path.exists(example_file):
     # location after installing
-    example_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../share/lanelet2_maps/res/mapping_example.osm")
+    example_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "../../share/lanelet2_maps/res/mapping_example.osm")
+
 
 def tutorial():
     # We do our best to keep the python interface in sync with the c++ implementation. As a rule of thumb: Everything
