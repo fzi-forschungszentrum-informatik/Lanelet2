@@ -36,11 +36,13 @@ add_subdirectory(lanelet2_validation)
 add_subdirectory(lanelet2_examples)
 add_subdirectory(lanelet2_python)
 add_subdirectory(lanelet2_maps)
+add_subdirectory(lanelet2_matching)
 # declare dependencies
 target_link_libraries(lanelet2_io PUBLIC lanelet2_core)
 target_link_libraries(lanelet2_projection PUBLIC lanelet2_core)
 target_link_libraries(lanelet2_traffic_rules PUBLIC lanelet2_core)
 target_link_libraries(lanelet2_routing PUBLIC lanelet2_core lanelet2_traffic_rules)
+target_link_libraries(lanelet2_matching PUBLIC lanelet2_core lanelet2_traffic_rules)
 target_link_libraries(lanelet2_validation PUBLIC lanelet2_core lanelet2_io lanelet2_routing lanelet2_traffic_rules lanelet2_projection)
 target_link_libraries(lanelet2_examples_compiler_flags INTERFACE lanelet2_core lanelet2_io lanelet2_routing lanelet2_traffic_rules lanelet2_projection)
 target_link_libraries(lanelet2_python_compiler_flags INTERFACE lanelet2_core lanelet2_io lanelet2_routing lanelet2_traffic_rules lanelet2_projection)
@@ -79,6 +81,7 @@ class Lanelet2Conan(ConanFile):
     proj_list = [
         'lanelet2_core',
         'lanelet2_io',
+        'lanelet2_matching',
         'lanelet2_projection',
         'lanelet2_traffic_rules',
         'lanelet2_routing',
