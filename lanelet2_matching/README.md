@@ -1,8 +1,6 @@
-# Lanelet2 Matching
+# Lanelet2 Matching Module
 
-[![Build Status](https://api.travis-ci.org/coincar-sim/lanelet2_matching.svg)](https://travis-ci.org/coincar-sim/lanelet2_matching)
-
-The matching module for [lanelet2](https://github.com/fzi-forschungszentrum-informatik/Lanelet2). This module provides functions to determine in which lanelet an object is/could be currently located.
+This module provides functions to determine in which lanelet an object is/could be currently located.
 
 ## Matching functions
 

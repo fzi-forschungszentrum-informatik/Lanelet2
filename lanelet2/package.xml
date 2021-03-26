@@ -18,6 +18,7 @@
   <exec_depend>lanelet2_routing</exec_depend>
   <exec_depend>lanelet2_python</exec_depend>
   <exec_depend>lanelet2_maps</exec_depend>
+  <exec_depend>lanelet2_matching</exec_depend>
   <exec_depend>lanelet2_projection</exec_depend>
   <exec_depend>lanelet2_validation</exec_depend>
   <exec_depend>lanelet2_examples</exec_depend>

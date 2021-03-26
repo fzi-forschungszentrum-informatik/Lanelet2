@@ -1,16 +1,19 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>lanelet2_matching</name>
-  <version>0.8.0</version>
+  <version>1.1.1</version>
   <description>Library to match objects to lanelets</description>
 
   <license>BSD</license>
   <maintainer email="maximilian.naumann@kit.edu">Maximilian Naumann</maintainer>
   <author email="maximilian.naumann@kit.edu">Maximilian Naumann</author>
-  <url type="repository">https://github.com/coincar-sim/lanelet2_matching</url>
+  <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake_core</buildtool_depend>
   <build_depend>mrt_cmake_modules</build_depend>
+  <buildtool_export_depend>mrt_cmake_modules</buildtool_export_depend>
   <test_depend>gtest</test_depend>
 
   <depend>lanelet2_core</depend>
@@ -18,9 +21,13 @@
   <depend>lanelet2_python</depend>
   <depend>libboost-python-dev</depend>
 
-  <!-- tests -->
   <test_depend>lanelet2_io</test_depend>
   <test_depend>lanelet2_projection</test_depend>
   <test_depend>lanelet2_maps</test_depend>
 
+  <export>
+    <build_type condition="$ROS_VERSION == 1">catkin</build_type>
+    <build_type condition="$ROS_VERSION == 2">ament_cmake</build_type>
+    <rosdoc config="../rosdoc.yaml" />
+  </export>
 </package>

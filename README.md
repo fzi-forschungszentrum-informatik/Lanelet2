@@ -145,6 +145,7 @@ Examples and common use cases in both C++ and Python can be found [here](lanelet
 * **lanelet2_projection** for projecting maps from WGS84 (lat/lon) to local metric coordinates
 * **lanelet2_routing** implements the routing graph for routing or reachable set or queries as well as collision checking
 * **lanelet2_maps** provides example maps and functionality to visualize and modify them easily in JOSM
+* **lanelet2_matching** provides functions to determine in which lanelet an object is/could be currently located
 * **lanelet2_python** implements the python interface for lanelet2
 * **lanelet2_validation** provides checks to ensure a valid lanelet2 map
 * **lanelet2_examples** contains tutorials for working with Lanelet2 in C++ and Python
