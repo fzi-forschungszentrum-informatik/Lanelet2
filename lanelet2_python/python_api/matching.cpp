@@ -31,6 +31,8 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Point.h>
 #include <lanelet2_python/internal/converter.h>
+#include <lanelet2_matching/LaneletMatching.h>
+#include <lanelet2_matching/Types.h>
 #include <lanelet2_traffic_rules/TrafficRules.h>
 
 #include <boost/make_shared.hpp>
@@ -39,9 +41,6 @@
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/shared_ptr.hpp>
 #include <iostream>
-
-#include "lanelet2_matching/LaneletMatching.h"
-#include "lanelet2_matching/Types.h"
 
 namespace {
 using namespace boost::python;

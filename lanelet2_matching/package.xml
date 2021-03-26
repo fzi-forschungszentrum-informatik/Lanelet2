@@ -18,8 +18,6 @@
 
   <depend>lanelet2_core</depend>
   <depend>lanelet2_traffic_rules</depend>
-  <depend>lanelet2_python</depend>
-  <depend>libboost-python-dev</depend>
 
   <test_depend>lanelet2_io</test_depend>
   <test_depend>lanelet2_projection</test_depend>

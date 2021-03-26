@@ -20,6 +20,7 @@
   <depend>lanelet2_routing</depend>
   <depend>lanelet2_traffic_rules</depend>
   <depend>lanelet2_projection</depend>
+  <depend>lanelet2_matching</depend>
   <depend>libboost-python-dev</depend>
   <export>
     <build_type condition="$ROS_VERSION == 1">catkin</build_type>
