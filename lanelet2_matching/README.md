@@ -36,16 +36,15 @@ have a look at the C++ unittests for more examples
 
 ```python
 import lanelet2
-import lanelet2_matching
 
 # create objects to match
-obj = lanelet2_matching.Object2d()
+obj = lanelet2.matching.Object2d()
 
 # retrieve lanelet matches from map
-matches = lanelet2_matching.getDeterministicMatches(lanelet_map, obj, 4.)  # max distance = 4m
+matches = lanelet2.matching.getDeterministicMatches(lanelet_map, obj, 4.)  # max distance = 4m
 
 # remove non-compliant matches (such as driving in the wrong direction)
-compliant_matches = lanelet2_matching.removeNonRuleCompliantMatches(matches, traffic_rules)
+compliant_matches = lanelet2.matching.removeNonRuleCompliantMatches(matches, traffic_rules)
 
 ```
 

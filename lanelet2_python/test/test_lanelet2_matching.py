@@ -2,9 +2,8 @@ import unittest
 import lanelet2  # if we fail here, there is something wrong with lanelet2 registration
 from lanelet2.core import AttributeMap, getId, BasicPoint2d, Point3d, LineString3d, Lanelet, RegulatoryElement, TrafficLight, LaneletMap, createMapFromLanelets, ConstLanelet, ConstLineString3d
 from lanelet2.geometry import distance, intersects2d, boundingBox2d, to2D, equals
-import lanelet2_matching  # if we fail here, there is something wrong with registration of this package
-from lanelet2_matching import Pose2d, getDeterministicMatches, getProbabilisticMatches, Object2d, ObjectWithCovariance2d, PositionCovariance2d, removeNonRuleCompliantMatches
-from lanelet2_matching import ConstLaneletMatch, ConstLaneletMatchProbabilistic
+from lanelet2.matching import Pose2d, getDeterministicMatches, getProbabilisticMatches, Object2d, ObjectWithCovariance2d, PositionCovariance2d, removeNonRuleCompliantMatches
+from lanelet2.matching import ConstLaneletMatch, ConstLaneletMatchProbabilistic
 
 
 def get_sample_lanelet_map():
