@@ -15,7 +15,7 @@ This module provides functions to determine in which lanelet an object is/could 
 ### C++
 
 ```cpp
-#include "LaneletMatching.h"
+#include <lanelet2_matching/LaneletMatching.h>
 
 // create objects to match
 lanelet::matching::Object2d obj; // deterministic
@@ -30,12 +30,14 @@ auto compliantDetMatches = removeNonRuleCompliantMatches(detMatches, trafficRule
 auto compliantProbMatches = removeNonRuleCompliantMatches(probMatches, trafficRulesPtr);
 ```
 
-have a look at the C++ unittests for more examples
+have a look at the [C++ unittests](test/lanelet2_matching.cpp) for more examples
 
 ### Python
 
 ```python
 import lanelet2
+# Note: in the standalone version of lanelet2_matching, the python module was named
+#  "lanelet2_matching". Now it is a submodule of lanelet2: "lanelet2.matching"
 
 # create objects to match
 obj = lanelet2.matching.Object2d()
@@ -48,7 +50,7 @@ compliant_matches = lanelet2.matching.removeNonRuleCompliantMatches(matches, tra
 
 ```
 
-have a look at the python unittests for more examples, also supports uncertainty
+have a look at the [python unittests](../lanelet2_python/test/test_lanelet2_matching.py) for more examples, also supports uncertainty
 
 
 ## License
