@@ -7,6 +7,8 @@
 
   <license>BSD</license>
   <maintainer email="jan-hendrik.pauls@kit.edu">Jan-Hendrik Pauls</maintainer>
+  <author email="maximilian.naumann@kit.edu">Maximilian Naumann</author>
+  <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
   <author email="jan-hendrik.pauls@kit.edu">Jan-Hendrik Pauls</author>
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
 
