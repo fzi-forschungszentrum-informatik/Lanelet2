@@ -2,9 +2,6 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Add bindings for lanelet2_matching
-* Contributors: Maximilian Naumann
-
 1.1.1 (2020-09-14)
 ------------------
 
