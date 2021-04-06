@@ -17,7 +17,7 @@ LineStrings3d getRandomLinestringsSortedByDistanceToOrigin(size_t num, std::mt19
     id += 3;
     return LineString3d(id - 2, {Point3d(id - 1, dist(rng), dist(rng)), Point3d(id, dist(rng), dist(rng))});
   };
-  auto byDistanceToOrigin = [](LineString3d ls1, LineString3d ls2) {
+  auto byDistanceToOrigin = [](const LineString3d& ls1, const LineString3d& ls2) {
     using utils::to2D;
     return geometry::distance(BasicPoint2d(0, 0), to2D(ls1)) < geometry::distance(BasicPoint2d(0, 0), to2D(ls2));
   };
