@@ -84,20 +84,22 @@ class MatchingUtilitiesBase : public ::testing::Test {
    */
  public:
   MatchingUtilitiesBase() {
-    lanelet::Point3d p1{1, 0, 0}, p2{2, 2, 0}, p3{3, 0, 2}, p4{4, 2, 2};
-    lanelet::Point3d p5{1, 100, 0}, p6{2, 102, 0}, p7{3, 100, 2}, p8{4, 102, 2};
-    lanelet::LineString3d ls11{11, {p1, p2}}, ls12{12, {p3, p4}}, ls13{13, {p1, p3}}, ls14{14, {p2, p4}};
-    lanelet::LineString3d ls15{15, {p5, p6}}, ls16{16, {p7, p8}};
-    lanelet::AttributeMap vehicleAttr{{AttrStr::Subtype, Value::Road}, {AttrStr::Location, Value::Urban}};
-    lanelet::AttributeMap pedestrianAttr{{AttrStr::Subtype, Value::Walkway}, {AttrStr::Location, Value::Urban}};
-    lanelet::Lanelet ll21{21, ls11, ls12, vehicleAttr}, ll22{22, ls14, ls13, pedestrianAttr};
-    lanelet::Lanelet ll23{23, ls15, ls16, vehicleAttr};
     map = std::make_shared<LaneletMap>();
     map->add(ll21);
     map->add(ll22);
     map->add(ll23);
   }
   LaneletMapPtr map;
+
+ private:
+  lanelet::Point3d p1{1, 0, 0}, p2{2, 2, 0}, p3{3, 0, 2}, p4{4, 2, 2};
+  lanelet::Point3d p5{1, 100, 0}, p6{2, 102, 0}, p7{3, 100, 2}, p8{4, 102, 2};
+  lanelet::LineString3d ls11{11, {p1, p2}}, ls12{12, {p3, p4}}, ls13{13, {p1, p3}}, ls14{14, {p2, p4}};
+  lanelet::LineString3d ls15{15, {p5, p6}}, ls16{16, {p7, p8}};
+  lanelet::AttributeMap vehicleAttr{{AttrStr::Subtype, Value::Road}, {AttrStr::Location, Value::Urban}};
+  lanelet::AttributeMap pedestrianAttr{{AttrStr::Subtype, Value::Walkway}, {AttrStr::Location, Value::Urban}};
+  lanelet::Lanelet ll21{21, ls11, ls12, vehicleAttr}, ll22{22, ls14, ls13, pedestrianAttr};
+  lanelet::Lanelet ll23{23, ls15, ls16, vehicleAttr};
 };
 
 TEST_F(MatchingUtilitiesBase, fixtureSetupSuccessful) {  // NOLINT
