@@ -91,7 +91,6 @@ class MatchingUtilitiesBase : public ::testing::Test {
   }
   LaneletMapPtr map;
 
- private:
   lanelet::Point3d p1{1, 0, 0}, p2{2, 2, 0}, p3{3, 0, 2}, p4{4, 2, 2};
   lanelet::Point3d p5{1, 100, 0}, p6{2, 102, 0}, p7{3, 100, 2}, p8{4, 102, 2};
   lanelet::LineString3d ls11{11, {p1, p2}}, ls12{12, {p3, p4}}, ls13{13, {p1, p3}}, ls14{14, {p2, p4}};
