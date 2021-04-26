@@ -1,7 +1,7 @@
 import unittest
 import lanelet2  # if we fail here, there is something wrong with registration
 from lanelet2.core import AttributeMap, getId, BasicPoint2d, Point3d, LineString3d, Lanelet, RegulatoryElement, TrafficLight, LaneletMap, createMapFromLanelets
-from lanelet2.geometry import distance, intersects2d, boundingBox2d, to2D
+from lanelet2.geometry import distance, intersects2d, boundingBox2d, to2D, intersection
 
 
 def getAttributes():
@@ -99,6 +99,11 @@ class GeometryApiTestCase(unittest.TestCase):
     def test_bounding_box_line(self):
         bbox = boundingBox2d(to2D(getLineString()))
         self.assertEqual(bbox.min.x, 0)
+
+    def test_intersection_l2l(self):
+        point_list = intersection(to2D(getLineString()), to2D(getLineString()))
+        self.assertEqual(point_list[0].x, 0.0)
+        self.assertEqual(point_list[0].y, 0.0)
 
 
 if __name__ == '__main__':
