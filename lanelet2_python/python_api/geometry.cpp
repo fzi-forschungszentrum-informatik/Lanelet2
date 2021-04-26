@@ -467,21 +467,21 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   // boost::geometry functions for convenience
   def(
-      "intersection", +[](const BasicLineString2d ls1, const BasicLineString2d ls2) {
+      "intersection", +[](const BasicLineString2d& ls1, const BasicLineString2d& ls2) {
         BasicPoints2d pts;
         boost::geometry::intersection(ls1, ls2, pts);
         return toBasicVector(pts);
       });
 
   def(
-      "intersection", +[](const CompoundLineString2d ls1, const ConstLineString2d ls2) {
+      "intersection", +[](const CompoundLineString2d& ls1, const ConstLineString2d& ls2) {
         BasicPoints2d pts;
         boost::geometry::intersection(ls1.basicLineString(), ls2.basicLineString(), pts);
         return toBasicVector(pts);
       });
 
   def(
-      "intersection", +[](const CompoundLineString2d ls1, const CompoundLineString2d ls2) {
+      "intersection", +[](const CompoundLineString2d& ls1, const CompoundLineString2d& ls2) {
         BasicPoints2d pts;
         boost::geometry::intersection(ls1.basicLineString(), ls2.basicLineString(), pts);
         return toBasicVector(pts);
