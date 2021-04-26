@@ -6,6 +6,7 @@
 #include <lanelet2_core/geometry/Polygon.h>
 #include <lanelet2_core/geometry/RegulatoryElement.h>
 
+#include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/geometries/register/multi_linestring.hpp>
 #include <boost/python.hpp>
 
@@ -463,4 +464,34 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   wrapFindWithin2d<Area, Area>();
   wrapFindWithin3d<Area, Point3d>();
   wrapFindWithin3d<Area, BasicPoint3d>();
+
+  // boost::geometry functions for convenience
+  def(
+      "intersection", +[](const BasicLineString2d ls1, const BasicLineString2d ls2) {
+        BasicPoints2d pts;
+        boost::geometry::intersection(ls1, ls2, pts);
+        return toBasicVector(pts);
+      });
+
+  def(
+      "intersection", +[](const CompoundLineString2d ls1, const ConstLineString2d ls2) {
+        BasicPoints2d pts;
+        boost::geometry::intersection(ls1.basicLineString(), ls2.basicLineString(), pts);
+        return toBasicVector(pts);
+      });
+
+  def(
+      "intersection", +[](const CompoundLineString2d ls1, const CompoundLineString2d ls2) {
+        BasicPoints2d pts;
+        boost::geometry::intersection(ls1.basicLineString(), ls2.basicLineString(), pts);
+        return toBasicVector(pts);
+      });
+
+
+  def(
+      "intersection", +[](const ConstLineString2d& ls1, const ConstLineString2d& ls2) {
+        BasicPoints2d pts;
+        boost::geometry::intersection(ls1.basicLineString(), ls2.basicLineString(), pts);
+        return toBasicVector(pts);
+      });
 }

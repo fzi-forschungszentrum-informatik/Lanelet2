@@ -92,7 +92,6 @@ IfLL<Lanelet1T, bool> overlaps2d(const Lanelet1T& lanelet, const Lanelet2T& othe
 template <typename Lanelet1T, typename Lanelet2T>
 BasicPoints2d intersectCenterlines2d(const Lanelet1T& lanelet, const Lanelet2T& otherLanelet,
                                      std::vector<double>* distanceThis, std::vector<double>* distanceOther) {
-  //! @todo implement intersect_centerlines
   BasicPoints2d intersections;
   const auto centerline = traits::toHybrid(lanelet.centerline2d());
   const auto otherCenterline = traits::toHybrid(otherLanelet.centerline2d());
