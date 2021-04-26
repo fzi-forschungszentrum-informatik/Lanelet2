@@ -297,6 +297,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("toArcCoordinates", lg::toArcCoordinates<CompoundLineString2d>,
       "Project a point into arc coordinates of the linestring");
 
+  def("fromArcCoordinates", lg::fromArcCoordinates<ConstLineString2d>,
+      "Create a point from arc coordinates of the linestring");
+  def("fromArcCoordinates", lg::fromArcCoordinates<CompoundLineString2d>,
+      "Create a point from arc coordinates of the linestring");
+
   def("length", lg::length<ConstLineString2d>);
   def("length", lg::length<ConstLineString3d>);
   def("length", lg::length<CompoundLineString2d>);
