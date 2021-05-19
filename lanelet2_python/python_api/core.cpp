@@ -558,7 +558,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<ConstPoint2d>("ConstPoint2d", no_init)
       .def(IsConstPrimitive<ConstPoint2d>())
       .add_property("x", getXWrapper<ConstPoint2d>, "x coordinate")
-      .add_property("y", getYWrapper<ConstPoint2d>, "y coordinate");
+      .add_property("y", getYWrapper<ConstPoint2d>, "y coordinate")
+      .def("basicPoint", &ConstPoint2d::basicPoint, return_internal_reference<>());
 
   class_<Point2d, bases<ConstPoint2d>>(
       "Point2d", "Lanelets 2d point primitive",
@@ -569,7 +570,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           (arg("id"), arg("x"), arg("y"), arg("z") = 0., arg("attributes") = AttributeMap())))
       .add_property("x", getXWrapper<Point2d>, setXWrapper<Point2d>, "x coordinate")
       .add_property("y", getYWrapper<Point2d>, setYWrapper<Point2d>, "y coordinate")
-      .def("basicPoint", &ConstPoint2d::basicPoint, return_internal_reference<>())
       .def(IsPrimitive<Point2d>());
 
   class_<ConstPoint3d>("ConstPoint3d", no_init)
