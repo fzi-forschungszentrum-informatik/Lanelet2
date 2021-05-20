@@ -487,7 +487,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
         return toBasicVector(pts);
       });
 
-
   def(
       "intersection", +[](const ConstLineString2d& ls1, const ConstLineString2d& ls2) {
         BasicPoints2d pts;
