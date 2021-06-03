@@ -20,6 +20,7 @@
   <depend>lanelet2_traffic_rules</depend>
   <depend>lanelet2_routing</depend>
   <depend>lanelet2_projection</depend>
+  <depend>lanelet2_matching</depend>
   <test_depend>gtest</test_depend>
   <exec_depend condition="$ROS_VERSION == 1">rosbash</exec_depend>
   <exec_depend condition="$ROS_VERSION == 2">ros2cli</exec_depend>
