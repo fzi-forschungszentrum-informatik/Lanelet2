@@ -43,7 +43,7 @@ struct MapAndObject {
   matching::ObjectWithCovariance2d obj;
 };
 
-MapAndObject setup() {
+MapAndObject getSampleMapAndObject() {
   // load the map
   projection::UtmProjector projector{Origin({49, 8.4})};
   LaneletMapPtr map = load(exampleMapPath, projector);
@@ -78,7 +78,7 @@ int main() {
 
 void part1testSetup() {
   using namespace lanelet;
-  MapAndObject mao = setup();
+  MapAndObject mao = getSampleMapAndObject();
   LaneletMapPtr map = mao.map;
   matching::ObjectWithCovariance2d obj = mao.obj;
   assert(map->laneletLayer.exists(42440));
@@ -87,7 +87,7 @@ void part1testSetup() {
 void part2deterministicMatching() {
   using namespace lanelet;
 
-  MapAndObject mao = setup();
+  MapAndObject mao = getSampleMapAndObject();
   LaneletMapPtr map = mao.map;
   matching::ObjectWithCovariance2d obj = mao.obj;
 
@@ -116,7 +116,7 @@ void part2deterministicMatching() {
 void part3probabilisticMatching() {
   using namespace lanelet;
 
-  MapAndObject mao = setup();
+  MapAndObject mao = getSampleMapAndObject();
   LaneletMapPtr map = mao.map;
   matching::ObjectWithCovariance2d obj = mao.obj;
 
@@ -153,7 +153,7 @@ void part4matchingUtils() {
   using namespace lanelet;
   using namespace lanelet::matching;
 
-  MapAndObject mao = setup();
+  MapAndObject mao = getSampleMapAndObject();
   LaneletMapPtr map = mao.map;
   matching::ObjectWithCovariance2d obj = mao.obj;
 
