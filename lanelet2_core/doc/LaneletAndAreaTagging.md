@@ -39,8 +39,8 @@ Since the inferred information above might be incorrect in some situations, it c
 The following particiants can be used to define individual special situations. They are prefixed with the type of information they are supposed to override. Values are always *yes* or *no*:
 * vehicle (affects all "motorized" participants) *OR*
   * vehicle:car *OR*
-    * vehicle:car:electric
-    * vehicle:car:combustion
+    * vehicle:&#8203;car:electric
+    * vehicle:&#8203;car:combustion
   * vehicle:bus
   * vehicle:truck
   * vehicle:motorcycle
