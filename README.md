@@ -99,10 +99,10 @@ cd ..
 catkin build
 ```
 
-If unsure, see the [Dockerfile](Dockerfile) or the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2). It shows the the full installation process, with subsequent build and test based on a docker image with a clean ubuntu installation.
+If unsure, see the [Dockerfile](Dockerfile) or the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2). It shows the full installation process, with subsequent build and test based on a docker image with a clean Ubuntu installation.
 
 ### Manual, experimental installation using conan
-For non-catkin users, we also offer a conan based install proces. Its experimental and might not work on all platforms, expecially Windows.
+For non-catkin users, we also offer a conan based install process. Its experimental and might not work on all platforms, especially Windows.
 Since conan handles installing all C++ dependencies, all you need is a cloned repository, conan itself and a few python dependencies:
 ```bash
 pip install conan catkin_pkg numpy
@@ -129,7 +129,7 @@ source deactivate.sh
 
 ### Python3
 
-The python bindings are build for your default python installation by default (which currently is python2 on most systems). To build for python3 instead of python2, create a python3 virtualenv before initializing the workspace with `catkin init`. The command `python` should point to `python3`. 
+The python bindings are build for your default python installation by default (which currently is python2 on most systems). To build for python3 instead of python2, create a python3 virtualenv before initializing the workspace with `catkin init`. The command `python` should point to `python3`.
 
 After `catkin init` run `catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.6` to make sure that the correct python version is used. Then build and use as usual.
 
