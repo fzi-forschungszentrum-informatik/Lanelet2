@@ -1,17 +1,17 @@
 # Lanelet2 Maps
 
-This repo contains tools for creating and modifying maps. 
+This repo contains tools for creating and modifying maps.
 
 ## Editing Lanelet2 maps
 
-Lanelet2 maps are best edited using the OpenStreetMap-Editor [JOSM](https://josm.openstreetmap.de/). The josm-Folder of this package contains styles and presets for simple set-up.
+Lanelet2 maps are best edited using the OpenStreetMap-Editor [JOSM](https://josm.openstreetmap.de/). The josm folder of this package contains styles and presets for simple set-up.
 
 This repository contains two stylesheets. One for visualizing the physical layer of the map (the markings and borders) and one for visualizing the lanelet/area layer.
 
 To use them in JOSM:
 - Unzip the images in `style_images.zip` (containing images for traffic signs)
-- Under Preferences->Map Settings -> Map Paint styles -> add (+) select `lanelets.mapcss` and `lines.mapcss` to add the lanelt2 styles to JOSM.
-- Under Preferences->Map Settings -> Tagging Presets -> add (+) select `laneletpresets.xml` to add the lanelt2 tagging style to JOSM
+- Under Preferences->Map Settings -> Map Paint styles -> add (+) select `lanelets.mapcss` and `lines.mapcss` to add the lanelet2 styles to JOSM.
+- Under Preferences->Map Settings -> Tagging Presets -> add (+) select `laneletpresets.xml` to add the lanelet2 tagging style to JOSM
 
 After that, you can access the presets via Presets->lanelet2. For faster access, add them to the toolbar in Preferences->Toolbar customization.
 
@@ -29,7 +29,7 @@ LineStrings are transformed to OSM *Ways*.
 Polygons are OSM *Ways* as well but are identified by a tag *area=yes*. Start point = end point is not sufficient and also not necessary.
 
 ### Lanelets
-Lanelets are represented as OSM *relations* with a tag `type=lanelet`. 
+Lanelets are represented as OSM *relations* with a tag `type=lanelet`.
 - The right bound is a relation member of type *way* with role `right`
 - The left bound is a relation member of type *way* with role `left`
 - The centerline (if present) is a relation member of type *way* with role `centerline`
