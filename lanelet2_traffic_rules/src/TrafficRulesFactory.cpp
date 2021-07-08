@@ -12,7 +12,7 @@ TrafficRulesUPtr TrafficRulesFactory::create(const std::string& location, const 
   auto& registry = instance().registry_;
   auto elem = registry.find(std::make_pair(location, participant));
   const std::string vehicle = Participants::Vehicle;
-  if (participant.compare(0, vehicle.size(), vehicle) == 0) {
+  if (elem == registry.end() && participant.compare(0, vehicle.size(), vehicle) == 0) {
     // second try for vehicle types
     elem = registry.find(std::make_pair(location, std::string(Participants::Vehicle)));
   }
