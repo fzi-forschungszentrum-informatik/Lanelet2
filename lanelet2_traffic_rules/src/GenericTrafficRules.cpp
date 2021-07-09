@@ -69,7 +69,6 @@ Optional<LaneChangeType> getHardcodedChangeType(const ConstLineString3d& boundar
       }
       return {true, LaneChangeType::ToLeft};
     }
-    return {true, LaneChangeType::None};
   }
   if (boundary.hasAttribute(AttributeNamesString::LaneChangeRight)) {
     if (boundary.attributeOr(AttributeNamesString::LaneChangeRight, false)) {
