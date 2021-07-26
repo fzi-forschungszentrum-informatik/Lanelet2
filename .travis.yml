@@ -40,10 +40,16 @@ jobs:
       - ROS_DISTRO=eloquent
       - ROS=ros2
       <<: *ros2_build
-    - name: Focal ROS2
+    - name: Focal ROS2 (Foxy)
       env:
       - DISTRIBUTION=20.04
       - ROS_DISTRO=foxy
+      - ROS=ros2
+      <<: *ros2_build
+    - name: Focal ROS2 (Galactic)
+      env:
+      - DISTRIBUTION=20.04
+      - ROS_DISTRO=galactic
       - ROS=ros2
       <<: *ros2_build
 
