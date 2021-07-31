@@ -521,7 +521,13 @@ template <typename T>
 class AllGraphsTest : public T {};
 
 using AllGraphs = testing::Types<GermanVehicleGraph, GermanPedestrianGraph, GermanBicycleGraph>;
-TYPED_TEST_CASE(AllGraphsTest, AllGraphs);
+
+#ifndef TYPED_TEST_SUITE
+// backwards compability with old gtest versions
+#define TYPED_TEST_SUITE TYPED_TEST_CASE
+#endif
+
+TYPED_TEST_SUITE(AllGraphsTest, AllGraphs);
 }  // namespace tests
 }  // namespace routing
 }  // namespace lanelet

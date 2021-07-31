@@ -205,17 +205,21 @@ using HybridPolygons =
     testing::Types<ConstHybridPolygon2d, ConstHybridPolygon3d, CompoundHybridPolygon2d, CompoundHybridPolygon3d>;
 using HybridPolygonsTwoD = testing::Types<ConstHybridPolygon2d, CompoundHybridPolygon2d>;
 
-TYPED_TEST_CASE(AllPolygonsTest, AllPolygons);
-TYPED_TEST_CASE(TwoDPolygonsTest, TwoDPolygons);
-TYPED_TEST_CASE(ThreeDPolygonsTest, ThreeDPolygons);
-TYPED_TEST_CASE(TwoDAndBasicPolygonsTest, TwoDAndBasicPolygons);
-TYPED_TEST_CASE(ThreeDAndBasicPolygonsTest, ThreeDAndBasicPolygons);
-TYPED_TEST_CASE(NormalPolygonsTest, NormalPolygons);
-TYPED_TEST_CASE(MutablePolygonsTest, MutablePolygons);
-TYPED_TEST_CASE(PrimitivePolygonsTest, PrimitivePolygons);
-TYPED_TEST_CASE(NonHybridPolygonsTest, NonHybridPolygons);
-TYPED_TEST_CASE(HybridPolygonsTest, HybridPolygons);
-TYPED_TEST_CASE(HybridPolygonsTwoDTest, HybridPolygonsTwoD);
+#ifndef TYPED_TEST_SUITE
+// backwards compability with old gtest versions
+#define TYPED_TEST_SUITE TYPED_TEST_CASE
+#endif
+TYPED_TEST_SUITE(AllPolygonsTest, AllPolygons);
+TYPED_TEST_SUITE(TwoDPolygonsTest, TwoDPolygons);
+TYPED_TEST_SUITE(ThreeDPolygonsTest, ThreeDPolygons);
+TYPED_TEST_SUITE(TwoDAndBasicPolygonsTest, TwoDAndBasicPolygons);
+TYPED_TEST_SUITE(ThreeDAndBasicPolygonsTest, ThreeDAndBasicPolygons);
+TYPED_TEST_SUITE(NormalPolygonsTest, NormalPolygons);
+TYPED_TEST_SUITE(MutablePolygonsTest, MutablePolygons);
+TYPED_TEST_SUITE(PrimitivePolygonsTest, PrimitivePolygons);
+TYPED_TEST_SUITE(NonHybridPolygonsTest, NonHybridPolygons);
+TYPED_TEST_SUITE(HybridPolygonsTest, HybridPolygons);
+TYPED_TEST_SUITE(HybridPolygonsTwoDTest, HybridPolygonsTwoD);
 
 TYPED_TEST(MutablePolygonsTest, id) {  // NOLINT
   this->poly1.setId(100);
