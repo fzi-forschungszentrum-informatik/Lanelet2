@@ -43,7 +43,7 @@ build_docker_bionic:
     ROS: ros
 
 # disabled as long as https://github.com/catkin/catkin_tools/issues/594 persists
-.build_docker_focal:
+build_docker_focal:
   extends: .build_docker
   variables:
     DISTRIBUTION: "20.04"

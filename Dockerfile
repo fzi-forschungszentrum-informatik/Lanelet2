@@ -40,6 +40,11 @@ RUN echo "deb http://packages.ros.org/${ROS}/ubuntu $(lsb_release -sc) main" > /
     && (apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
       || apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654)
 
+# add catkin_tools repo for python3 catkin
+RUN if [ "${ROS_DISTRO}" != "melodic" ] && [ "${ROS_DISTRO}" != "kinetic" ]; \
+    then add-apt-repository ppa:catkin-tools/ppa; \
+    fi
+
 # dependencies for lanelet2
 RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
     then export PY_VERSION=python; \
