@@ -106,7 +106,8 @@ For non-catkin users, we also offer a conan based install proces. Its experiment
 Since conan handles installing all C++ dependencies, all you need is a cloned repository, conan itself and a few python dependencies:
 ```bash
 pip install conan catkin_pkg numpy
-conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan # requried for python bindings
+conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan # required for python bindings
+conan config set general.revisions_enabled=1 # requried to use bincrafters remote
 git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
 cd lanelet2
 ```

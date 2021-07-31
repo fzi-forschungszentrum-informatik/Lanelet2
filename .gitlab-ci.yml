@@ -75,6 +75,7 @@ build_conan:
   script:
   - apt update && env DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git cmake python3-dev
   - pip3 install conan catkin_pkg numpy
-  - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+  - conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
+  - conan config set general.revisions_enabled=1
   - conan source .
   - conan create . lanelet2/stable --build=missing
