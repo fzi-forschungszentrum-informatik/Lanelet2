@@ -1,8 +1,8 @@
 # Lanelet2
 
-| [Travis CI](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2) | Gitlab CI | Coverage |
-| --------- | --------- | -------- |
-| [![](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2.svg?branch=master)](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2) | ![build](https://www.mrt.kit.edu/z/gitlab/lanelet2/pipeline.svg) | ![coverage](https://www.mrt.kit.edu/z/gitlab/lanelet2/coverage.svg) |
+| [ROS focal/noetic](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild) | [ROS focal/foxy](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild) | Gitlab CI | Coverage |
+| --------- | --------- | -------- | -------- |
+| [![](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon)](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild) | [![](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild//badge/icon)](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild) | ![build](https://www.mrt.kit.edu/z/gitlab/lanelet2/pipeline.svg) | ![coverage](https://www.mrt.kit.edu/z/gitlab/lanelet2/coverage.svg) |
 
 ## Overview
 
