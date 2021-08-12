@@ -521,7 +521,7 @@ template <typename T>
 class AllGraphsTest : public T {};
 
 using AllGraphs = testing::Types<GermanVehicleGraph, GermanPedestrianGraph, GermanBicycleGraph>;
-TYPED_TEST_CASE(AllGraphsTest, AllGraphs);
+TYPED_TEST_SUITE(AllGraphsTest, AllGraphs);
 }  // namespace tests
 }  // namespace routing
 }  // namespace lanelet
