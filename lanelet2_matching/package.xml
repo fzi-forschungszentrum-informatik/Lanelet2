@@ -6,7 +6,7 @@
   <description>Library to match objects to lanelets</description>
 
   <license>BSD</license>
-  <maintainer email="maximilian.naumann@kit.edu">Maximilian Naumann</maintainer>
+  <maintainer email="fabian.poggenhans@kit.edu">Fabian Poggenhans</maintainer>
   <author email="maximilian.naumann@kit.edu">Maximilian Naumann</author>
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
 
