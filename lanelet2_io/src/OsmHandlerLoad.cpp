@@ -1,3 +1,6 @@
+#include <clocale>
+#include <string>
+
 #include <lanelet2_core/geometry/LineString.h>
 #include <lanelet2_core/geometry/Polygon.h>
 

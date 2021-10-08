@@ -1,3 +1,4 @@
+#include <clocale>
 #include <pugixml.hpp>
 #include <sstream>
 
