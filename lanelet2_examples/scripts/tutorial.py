@@ -73,9 +73,9 @@ def part2regulatory_elements():
     assert light in lights[0].trafficLights
 
     # RightOfWay
-    stop_linestring = get_linestring_at_y(4)
+    stop_linestring = get_linestring_at_y(0)
     right_of_way_lanelets = [get_a_lanelet(), get_a_lanelet(1)]
-    yielding_lanelets = [get_a_lanelet()]
+    yielding_lanelets = [get_a_lanelet(2)]
     right_of_way_regelem = RightOfWay(getId(),
                                       AttributeMap(),
                                       right_of_way_lanelets,
@@ -84,11 +84,11 @@ def part2regulatory_elements():
     map = LaneletMap()
     map.add(right_of_way_regelem)
     assert right_of_way_regelem in map.regulatoryElementLayer
-    rightOfWays = [regelem for regelem in map.regulatoryElementLayer if isinstance(
-        regelem, RightOfWay)]
+    rightOfWays = [regelem for regelem in map.regulatoryElementLayer
+                   if isinstance(regelem, RightOfWay)]
     assert right_of_way_regelem in rightOfWays
 
-    # AllWayStop()
+    # AllWayStop
     lanelets_with_stop_lines = [
         LaneletWithStopLine(get_a_lanelet(), get_linestring_at_y(0)),
         LaneletWithStopLine(get_a_lanelet(1), get_linestring_at_y(1)),
@@ -101,8 +101,8 @@ def part2regulatory_elements():
                                       lanelets_with_stop_lines)
     map.add(all_way_stop_regelem)
     assert all_way_stop_regelem in map.regulatoryElementLayer
-    allWayStops = [regelem for regelem in map.regulatoryElementLayer if isinstance(
-        regelem, AllWayStop)]
+    allWayStops = [regelem for regelem in map.regulatoryElementLayer
+                   if isinstance(regelem, AllWayStop)]
     assert all_way_stop_regelem in allWayStops
 
 
