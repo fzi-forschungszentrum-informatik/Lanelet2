@@ -866,7 +866,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "AllWayStop", "An all way stop regulatory element", no_init)
       .def("__init__", make_constructor(&AllWayStop::make, default_call_policies(),
                                         (arg("id"), arg("attributes"), arg("lltsWithStop"),
-                                         arg("signs") = Optional<LineStringsOrPolygons3d>{})))
+                                         arg("signs") = LineStringsOrPolygons3d{})))
       .def(
           "lanelets", +[](AllWayStop& self) { return self.lanelets(); })
       .def(

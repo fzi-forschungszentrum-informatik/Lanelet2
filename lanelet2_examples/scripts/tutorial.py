@@ -98,8 +98,7 @@ def part2regulatory_elements():
     map = LaneletMap()
     all_way_stop_regelem = AllWayStop(getId(),
                                       AttributeMap(),
-                                      lanelets_with_stop_lines,
-                                      [])
+                                      lanelets_with_stop_lines)
     map.add(all_way_stop_regelem)
     assert all_way_stop_regelem in map.regulatoryElementLayer
     allWayStops = [regelem for regelem in map.regulatoryElementLayer if isinstance(
