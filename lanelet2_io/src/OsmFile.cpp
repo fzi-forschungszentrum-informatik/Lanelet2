@@ -99,6 +99,7 @@ class OsmFileWriter {
     auto xml = std::make_unique<pugi::xml_document>();
     auto osmNode = xml->append_child(keyword::Osm);
     osmNode.append_attribute("version") = "0.6";
+    osmNode.append_attribute("upload") = "false";
     osmNode.append_attribute("generator") = "lanelet2";
     lanelet::osm::OsmFileWriter::writeNodes(osmNode, osmFile.nodes);
     lanelet::osm::OsmFileWriter::writeWays(osmNode, osmFile.ways);
@@ -129,7 +130,7 @@ class OsmFileWriter {
       if (node.second.point.ele != 0.) {
         auto tagNode = xmlNode.append_child(keyword::Tag);
         tagNode.append_attribute(keyword::Key) = keyword::Elevation;
-        tagNode.append_attribute(keyword::Value) = node.second.point.ele;
+        tagNode.append_attribute(keyword::Value) = toJosmStyle(node.second.point.ele).c_str();;
       }
       writeAttributes(xmlNode, node.second.attributes);
     }
