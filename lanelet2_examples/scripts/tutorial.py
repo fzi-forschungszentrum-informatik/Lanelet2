@@ -107,9 +107,10 @@ def part2regulatory_elements():
         LaneletWithStopLine(get_a_lanelet(3), get_linestring_at_y(3))
     ]
     map = LaneletMap()
-    # add the lanelets to the map
+    # add the lanelets to the map, access stop line
     for lanelet_with_stop_line in lanelets_with_stop_lines:
         map.add(lanelet_with_stop_line.lanelet)
+        lanelet_with_stop_line.stopLine
     all_way_stop_regelem = AllWayStop(getId(),
                                       AttributeMap(),
                                       lanelets_with_stop_lines)

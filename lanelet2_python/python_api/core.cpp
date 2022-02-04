@@ -379,6 +379,16 @@ LaneletSubmapPtr createSubmapWrapper(const PrimT& prim) {
   return utils::createSubmap(prim);
 }
 
+template <typename T>
+object optionalToObject(const Optional<T>& v) {
+  return v ? object(*v) : object();
+}
+
+template <typename T>
+Optional<T> objectToOptional(const object& o) {
+  return o == object() ? Optional<T>{} : Optional<T>{extract<T>(o)()};
+}
+
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<BasicPoint2d>("BasicPoint2d", "A simple point", init<double, double>((arg("x") = 0., arg("y") = 0.)))
       .def(init<>("BasicPoint2d()"))
@@ -765,7 +775,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           default_call_policies(),
           (arg("lanelet"), arg("stopLine") = Optional<ConstLineString3d>{})))
       .add_property("lanelet", &ConstLaneletWithStopLine::lanelet)
-      .add_property("stopLine", &ConstLaneletWithStopLine::stopLine);
+      .add_property(
+          "stopLine", +[](const ConstLaneletWithStopLine& self) { return optionalToObject(self.stopLine); },
+          +[](ConstLaneletWithStopLine& self, const object& value) {
+            self.stopLine = objectToOptional<LineString3d>(value);
+          });
 
   class_<LaneletWithStopLine>("LaneletWithStopLine", "A lanelet with a stopline", no_init)
       .def("__init__",
@@ -779,7 +793,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           default_call_policies(),
           (arg("lanelet"), arg("stopLine") = Optional<LineString3d>{})))
       .add_property("lanelet", &LaneletWithStopLine::lanelet)
-      .add_property("stopLine", &LaneletWithStopLine::stopLine);
+      .add_property(
+          "stopLine", +[](const LaneletWithStopLine& self) { return optionalToObject(self.stopLine); },
+          +[](LaneletWithStopLine& self, const object& value) {
+            self.stopLine = objectToOptional<LineString3d>(value);
+          });
 
   class_<ConstArea>("ConstArea", "Represents an area, potentially with holes, in the map",
                     boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
