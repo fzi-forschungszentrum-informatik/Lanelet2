@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>lanelet2_projection</name>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <description>Lanelet2 projection library for lat/lon to local x/y conversion</description>
 
   <license>BSD</license>
@@ -10,6 +10,7 @@
   <author email="maximilian.naumann@kit.edu">Maximilian Naumann</author>
   <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
   <author email="jan-hendrik.pauls@kit.edu">Jan-Hendrik Pauls</author>
+  <author email="michal.antkiewicz@uwaterloo.ca">Michal Antkiewicz</author>
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
 
   <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
