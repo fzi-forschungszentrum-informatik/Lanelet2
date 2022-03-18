@@ -11,11 +11,11 @@ class GeocentricProjectionTest : public ::testing::Test {
   }
   GeocentricProjector::Ptr geocentricProjector;
 
-  // Lat, Lon, Alt with respect to the WGS84 ellipsoid
+  // Lat, Lon, Ele with respect to the WGS84 ellipsoid
   double originLat{49.01439};
   double originLon{8.41722};
-  double originAlt{123.0};
-  lanelet::GPSPoint originGps{originLat, originLon, originAlt};
+  double originEle{123.0};
+  lanelet::GPSPoint originGps{originLat, originLon, originEle};
   lanelet::Origin origin{originGps};
 
   // X, Y, Z with respect to the center of the earth
@@ -36,5 +36,5 @@ TEST_F(GeocentricProjectionTest, TestReverse) {  // NOLINT
   lanelet::GPSPoint gpsPoint = geocentricProjector->reverse(originECEF);
   ASSERT_NEAR(gpsPoint.lat, originLat, 0.00001);
   ASSERT_NEAR(gpsPoint.lon, originLon, 0.00001);
-  ASSERT_NEAR(gpsPoint.ele, originAlt, 0.00001);
+  ASSERT_NEAR(gpsPoint.ele, originEle, 0.00001);
 }
