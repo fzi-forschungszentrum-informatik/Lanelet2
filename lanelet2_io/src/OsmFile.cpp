@@ -57,7 +57,7 @@ bool isDeleted(const pugi::xml_node& node) {
 }
 
 std::string toJosmStyle(double d, bool is_ele=false) {
-  std::string str = boost::str(boost::format{is_ele ? "%12.2f" : "%12.11f"} % d);
+  std::string str = boost::str(boost::format{is_ele ? "%.2f" : "%.11f"} % d);
   str.erase(str.find_last_not_of('0') + 1, std::string::npos);
   str.erase(str.find_last_not_of('.') + 1, std::string::npos);
   return str;
