@@ -56,8 +56,8 @@ bool isDeleted(const pugi::xml_node& node) {
   return action && std::string(action.value()) == keyword::Delete;  // NOLINT
 }
 
-std::string toJosmStyle(double d) {
-  std::string str = boost::str(boost::format{"%12.11f"} % d);
+std::string toJosmStyle(double d, bool is_ele=false) {
+  std::string str = boost::str(boost::format{is_ele ? "%12.2f" : "%12.11f"} % d);
   str.erase(str.find_last_not_of('0') + 1, std::string::npos);
   str.erase(str.find_last_not_of('.') + 1, std::string::npos);
   return str;
@@ -99,6 +99,7 @@ class OsmFileWriter {
     auto xml = std::make_unique<pugi::xml_document>();
     auto osmNode = xml->append_child(keyword::Osm);
     osmNode.append_attribute("version") = "0.6";
+    osmNode.append_attribute("upload") = "false";
     osmNode.append_attribute("generator") = "lanelet2";
     lanelet::osm::OsmFileWriter::writeNodes(osmNode, osmFile.nodes);
     lanelet::osm::OsmFileWriter::writeWays(osmNode, osmFile.ways);
@@ -129,7 +130,7 @@ class OsmFileWriter {
       if (node.second.point.ele != 0.) {
         auto tagNode = xmlNode.append_child(keyword::Tag);
         tagNode.append_attribute(keyword::Key) = keyword::Elevation;
-        tagNode.append_attribute(keyword::Value) = node.second.point.ele;
+        tagNode.append_attribute(keyword::Value) = toJosmStyle(node.second.point.ele, true).c_str();
       }
       writeAttributes(xmlNode, node.second.attributes);
     }
