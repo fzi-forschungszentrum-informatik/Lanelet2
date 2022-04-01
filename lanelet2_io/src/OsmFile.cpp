@@ -130,7 +130,7 @@ class OsmFileWriter {
       if (node.second.point.ele != 0.) {
         auto tagNode = xmlNode.append_child(keyword::Tag);
         tagNode.append_attribute(keyword::Key) = keyword::Elevation;
-        tagNode.append_attribute(keyword::Value) = toJosmStyle(node.second.point.ele, true).c_str();;
+        tagNode.append_attribute(keyword::Value) = toJosmStyle(node.second.point.ele, true).c_str();
       }
       writeAttributes(xmlNode, node.second.attributes);
     }
