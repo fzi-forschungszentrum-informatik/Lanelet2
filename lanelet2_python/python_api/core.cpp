@@ -36,7 +36,7 @@ struct AttributeFromPythonStr {
 #if PY_MAJOR_VERSION < 3
     const char* value = PyString_AsString(objPtr);
 #else
-    auto *pyStr = PyUnicode_AsUTF8String(objPtr);
+    auto* pyStr = PyUnicode_AsUTF8String(objPtr);
     const char* value = PyBytes_AsString(pyStr);
 #endif
     if (value == nullptr) {
