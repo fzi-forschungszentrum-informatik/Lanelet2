@@ -36,14 +36,9 @@ ENV LANG=en_US.UTF-8 \
     ROS=${ROS}
 
 # install ROS
-RUN echo "deb http://packages.ros.org/${ROS}/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list \
-    && (apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
-      || apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654)
-
-# add catkin_tools repo for python3 catkin
-RUN if [ "${ROS_DISTRO}" != "melodic" ] && [ "${ROS_DISTRO}" != "kinetic" ]; \
-    then add-apt-repository ppa:catkin-tools/ppa; \
-    fi
+RUN set -ex; \
+    curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/${ROS}/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros.list
 
 # dependencies for lanelet2
 RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
@@ -111,7 +106,7 @@ COPY --chown=developer:developer . /home/developer/workspace/src/lanelet2
 RUN git -C /home/developer/workspace/src/mrt_cmake_modules pull
 
 # build
-RUN set -ex \
+RUN set -ex; \
     if [ "$DEV" -ne "0" ]; then \
       export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Debug -DMRT_SANITIZER=checks -DMRT_ENABLE_COVERAGE=2" \
     else \
@@ -122,7 +117,10 @@ RUN set -ex \
       export BUILD_CMD="catkin build --no-status"; \
     else \
       export CONFIGURE=true; \
-      export BUILD_CMD="colcon build --symlink-install --cmake-args $CMAKE_ARGS; \
+      export BUILD_CMD="colcon build --symlink-install --cmake-args $CMAKE_ARGS"; \
     fi; \
-    /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && env && $CONFIGURE && $BUILD_CMD"
+    source /opt/ros/$ROS_DISTRO/setup.bash && \
+    env && \
+    $CONFIGURE && \
+    $BUILD_CMD
 

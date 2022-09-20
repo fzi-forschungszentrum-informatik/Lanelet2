@@ -73,4 +73,4 @@ jobs:
           else
             TEST_CMD="colcon test --return-code-on-test-failure"
           fi
-          docker run --rm -i lanelet2 /bin/bash -c "$CMD"
+          docker run --rm -i lanelet2:${{ matrix.rosdistro }} /bin/bash -c "$CMD"
