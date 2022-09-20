@@ -101,6 +101,8 @@ RUN if [ "$ROS" = "ros" ]; \
 
 # second stage: get the code and build the image
 FROM lanelet2_deps AS lanelet2
+# If ture, build docker container for development
+ARG DEV=0
 
 # bring in the code
 COPY --chown=developer:developer . /home/developer/workspace/src/lanelet2
@@ -109,9 +111,18 @@ COPY --chown=developer:developer . /home/developer/workspace/src/lanelet2
 RUN git -C /home/developer/workspace/src/mrt_cmake_modules pull
 
 # build
-RUN if [ "$ROS" = "ros" ]; \
-    then export BUILD_CMD="catkin build --no-status"; \
-    else export BUILD_CMD="colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo"; \
+RUN set -ex \
+    if [ "$DEV" -ne "0" ]; then \
+      export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Debug -DMRT_SANITIZER=checks -DMRT_ENABLE_COVERAGE=2" \
+    else \
+      export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo"; \
     fi; \
-    /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && env && echo $ROS && $BUILD_CMD"
+    if [ "$ROS" = "ros" ]; then \
+      export CONFIGURE="catkin config --cmake-args $CMAKE_ARGS"; \
+      export BUILD_CMD="catkin build --no-status"; \
+    else \
+      export CONFIGURE=true; \
+      export BUILD_CMD="colcon build --symlink-install --cmake-args $CMAKE_ARGS; \
+    fi; \
+    /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && env && $CONFIGURE && $BUILD_CMD"
 
