@@ -42,6 +42,37 @@ jobs:
         run: |
           set -ex
           docker run -i --rm lanelet2_src find . -name "*.cpp" -o -name "*.h" -execdir clang-format-11 -n -Werror --style=file {} +
+  
+  lint:
+    needs: formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup docker buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setup docker cache
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.docker-cache
+          key: ${{runner.os}}-docker-humble
+
+      - name: Build dependencies
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: lanelet2_src
+          cache-from: type=local,src=/tmp/.docker-cache
+          cache-to: type=local,dest=/tmp/.docker-cache
+          load: true
+          build-args: |
+            DEV=1
+            DISTRIBUTION=22.04
+            ROS_DISTRO=humble
+            ROS=ros2
+          target: lanelet2_src
+      - name: Run clang-tidy
+        run: docker run -i --rm lanelet2_src src/lanelet2/.github/lint.bash
 
   test:
     needs: formatting
