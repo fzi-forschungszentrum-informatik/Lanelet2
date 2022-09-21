@@ -3,10 +3,13 @@ set -ex
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 LANELET2_ROOT=$(dirname $SCRIPT_DIR)
 
-export BUILD_DIR=/tmp/lanelet2_build_lint_$USER
+export BUILD_DIR=/tmp/lanelet2_build_lint_$(id -u)
 
-# setup mrt_cmake_modules, otherwise assume it's installe
-if [[ -f $LANELET2_ROOT/../mrt_cmake_modules ]]; then
+# setup mrt_cmake_modules, otherwise assume it's installed
+set +x
+source /opt/ros/*/setup.bash
+set -x
+if [[ -e $LANELET2_ROOT/../mrt_cmake_modules ]]; then
     mkdir -p $BUILD_DIR/mrt_cmake_modules
     pushd $BUILD_DIR/mrt_cmake_modules
     cmake $LANELET2_ROOT/../mrt_cmake_modules -DCMAKE_INSTALL_PREFIX=$BUILD_DIR/mrt_cmake_modules
@@ -14,10 +17,7 @@ if [[ -f $LANELET2_ROOT/../mrt_cmake_modules ]]; then
     popd
 fi
 
-# configure build enviroment
-set +x
-source /opt/ros/*/setup.bash
-set -x
+# make sure cmake finds everything
 export CMAKE_PREFIX_PATH=$BUILD_DIR/mrt_cmake_modules:${CMAKE_PREFIX_PATH}
 export AMENT_PREFIX_PATH=${LANELET2_ROOT}
 

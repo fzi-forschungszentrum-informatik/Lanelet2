@@ -72,7 +72,7 @@ jobs:
             ROS=ros2
           target: lanelet2_src
       - name: Run clang-tidy
-        run: docker run -i --rm lanelet2_src src/lanelet2/.github/lint.bash
+        run: docker run -i --rm lanelet2_src /home/developer/workspace/src/lanelet2/.github/lint.bash
 
   test:
     needs: formatting

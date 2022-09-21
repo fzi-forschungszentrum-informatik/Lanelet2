@@ -20,7 +20,7 @@ RUN set -ex; \
         else export PY_VERSION=python3; \
     fi; \
     if [ "$DEV" -ne "0" ]; then \
-        export DEV_PACKAGES="clang-format-11 clang-tidy-11 i${PY_VERSION} nano libomp-dev lcov"; \
+        export DEV_PACKAGES="clang-format-11 clang-tidy-11 clang-11 i${PY_VERSION} nano lcov"; \
     fi; \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
