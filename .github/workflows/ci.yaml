@@ -118,6 +118,7 @@ jobs:
 
       - name: Build Lanelet2
         uses: docker/build-push-action@v2
+        if: ${{ matrix.rosdistro }} == 'galactic'
         with:
           builder: ${{ steps.buildx.outputs.name }}
           tags: lanelet2:${{ matrix.rosdistro }}
@@ -125,6 +126,21 @@ jobs:
           load: true
           build-args: |
             DEV=1
+            DISTRIBUTION=${{ matrix.os }}
+            ROS_DISTRO=${{ matrix.rosdistro }}
+            ROS=${{ matrix.ros }}
+          target: lanelet2
+
+      - name: Build Lanelet2 (skip lcov)
+        uses: docker/build-push-action@v2
+        if: ${{ matrix.rosdistro }} == 'humble' && ${{ matrix.rosdistro }} == 'noetic'
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: lanelet2:${{ matrix.rosdistro }}
+          cache-from: type=local,src=/tmp/.docker-cache
+          load: true
+          build-args: |
+            DEV=0
             DISTRIBUTION=${{ matrix.os }}
             ROS_DISTRO=${{ matrix.rosdistro }}
             ROS=${{ matrix.ros }}
@@ -138,4 +154,20 @@ jobs:
           else
             export TEST_CMD="colcon test --return-code-on-test-failure";
           fi;
-          docker run --rm -i lanelet2:${{ matrix.rosdistro }} /bin/bash -c "$TEST_CMD";
+          docker run -i lanelet2:${{ matrix.rosdistro }} /bin/bash -c "$TEST_CMD";
+
+      - name: Extract and Merge lcov Files
+        if: ${{ matrix.rosdistro }} == 'galactic'
+        run: |
+          docker run -i lanelet2:${{ matrix.rosdistro }} /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
+          mkdir /tmp/lcov
+          docker cp lanelet2:${{ matrix.rosdistro }}:/tmp/lcov/full_coverage.lcov /tmp/lcov/full_coverage.lcov
+
+      - name: Cleanup Docker Container
+        run: |
+          docker rm -f lanelet2:${{ matrix.rosdistro }}
+
+      - name: Comment lcov Results  
+        uses: romeovs/lcov-reporter-action@v0.2.16
+          with:
+            lcov-file: /tmp/lcov/full_coverage.lcov
