@@ -11,14 +11,16 @@ for d in ${LANELET2_ROOT}/*/ ; do
     src_dirs="${src_dirs} ${d}*"
 done
 
-echo "$src_dirs"
-
 lcov_filtered_files=""
 for d in ${LANELET2_ROOT}/*/ ; do
     [ "$(basename $d)" = ".github" ] && continue
     [ "$(basename $d)" = "lanelet2" ] && continue
     pkg="$(basename $d)"
     build_dir=$(find ${WORKSPACE_ROOT}/build -type d -name ${pkg} -prune)
+    
+    ls ${build_dir}
+    ls ${build_dir}/mrt_coverage
+    
     file="${build_dir}/mrt_coverage/full_coverage.lcov"
     if [ -f "$file" ]; then
         filtered_path="${d}mrt_coverage/full_coverage_filtered.lcov"
