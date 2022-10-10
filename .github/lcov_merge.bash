@@ -16,14 +16,11 @@ for d in ${LANELET2_ROOT}/*/ ; do
     [ "$(basename $d)" = ".github" ] && continue
     [ "$(basename $d)" = "lanelet2" ] && continue
     pkg="$(basename $d)"
-    build_dir=$(find ${WORKSPACE_ROOT}/build -type d -name ${pkg} -prune)
-    
-    ls ${build_dir}
-    ls ${build_dir}/mrt_coverage
+    build_dir="${WORKSPACE_ROOT}/build/${pkg}"
     
     file="${build_dir}/mrt_coverage/full_coverage.lcov"
     if [ -f "$file" ]; then
-        filtered_path="${d}mrt_coverage/full_coverage_filtered.lcov"
+        filtered_path="${build_dir}/mrt_coverage/full_coverage_filtered.lcov"
 
         set -f
         lcov -o ${filtered_path} -e ${file}${src_dirs}
