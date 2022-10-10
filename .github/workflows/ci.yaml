@@ -154,18 +154,18 @@ jobs:
           else
             export TEST_CMD="colcon test --return-code-on-test-failure";
           fi;
-          docker run -i lanelet2:${{ matrix.rosdistro }} /bin/bash -c "$TEST_CMD";
+          docker run -i --name lanelet2_test_${{ matrix.rosdistro }} lanelet2:${{ matrix.rosdistro }} /bin/bash -c "$TEST_CMD";
 
       - name: Extract and Merge lcov Files
         if: ${{ matrix.rosdistro == 'noetic' }}
         run: |
-          docker run -i lanelet2:${{ matrix.rosdistro }} /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
+          docker exec -i lanelet2_test_${{ matrix.rosdistro }} /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
           mkdir /tmp/lcov
-          docker cp lanelet2:${{ matrix.rosdistro }}:/tmp/lcov/full_coverage.lcov /tmp/lcov/full_coverage.lcov
+          docker cp lanelet2_test_${{ matrix.rosdistro }}:/tmp/lcov/full_coverage.lcov /tmp/lcov/full_coverage.lcov
 
       - name: Cleanup Docker Container
         run: |
-          docker rm -f lanelet2:${{ matrix.rosdistro }}
+          docker rm -f lanelet2_test_${{ matrix.rosdistro }}
 
       - name: Comment lcov Results  
         uses: romeovs/lcov-reporter-action@v0.2.16
