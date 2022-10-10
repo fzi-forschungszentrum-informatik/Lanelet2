@@ -30,5 +30,5 @@ for d in ${LANELET2_ROOT}/*/ ; do
     fi;
 done
 
-mkdir -p /tmp/lcov
-lcov -o /tmp/lcov/full_coverage.lcov ${lcov_filtered_files}
+mkdir -p "${WORKSPACE_ROOT}/lcov"
+lcov -o "${WORKSPACE_ROOT}/lcov/full_coverage.lcov" ${lcov_filtered_files}

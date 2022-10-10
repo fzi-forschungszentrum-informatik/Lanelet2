@@ -161,8 +161,8 @@ jobs:
         run: |
           docker commit lanelet2_test_${{ matrix.rosdistro }} lanelet2_test_${{ matrix.rosdistro }}_post_run
           docker run -i lanelet2_test_${{ matrix.rosdistro }}_post_run /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
-          mkdir /tmp/lcov
-          docker cp lanelet2_test_${{ matrix.rosdistro }}_post_run:/tmp/lcov/full_coverage.lcov /tmp/lcov/full_coverage.lcov
+          mkdir ./lcov
+          docker cp lanelet2_test_${{ matrix.rosdistro }}_post_run:$(docker inspect --format='{{.Config.WorkingDir}}' lanelet2_test_${{ matrix.rosdistro }}_post_run)/lcov/full_coverage.lcov ./lcov/full_coverage.lcov
 
       - name: Cleanup Docker Container
         run: |
@@ -172,4 +172,4 @@ jobs:
       - name: Comment lcov Results  
         uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          lcov-file: /tmp/lcov/full_coverage.lcov
+          lcov-file: ./lcov/full_coverage.lcov
