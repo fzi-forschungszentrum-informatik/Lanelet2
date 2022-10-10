@@ -166,10 +166,10 @@ jobs:
 
       - name: Cleanup Docker Container
         run: |
-          docker rm -f lanelet2:${{ matrix.rosdistro }};
-          docker rm -f lanelet2_${{ matrix.rosdistro }}_post_run;
+          docker rm -f lanelet2_test_${{ matrix.rosdistro }};
+          docker rm -f lanelet2_test_${{ matrix.rosdistro }}_lcov;
 
       - name: Comment lcov Results  
-        uses: romeovs/lcov-reporter-action@v0.2.16
+        uses: romeovs/lcov-reporter-action@v0.3.1
         with:
           lcov-file: ./lcov/full_coverage.lcov
