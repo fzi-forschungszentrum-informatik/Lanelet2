@@ -159,15 +159,17 @@ jobs:
       - name: Extract and Merge lcov Files
         if: ${{ matrix.rosdistro == 'noetic' }}
         run: |
-          docker commit lanelet2_test_${{ matrix.rosdistro }} lanelet2_test_${{ matrix.rosdistro }}_post_run
+          docker commit lanelet2_test_${{ matrix.rosdistro }} lanelet2_test_${{ matrix.rosdistro }}_post_run;
           docker run -i lanelet2_test_${{ matrix.rosdistro }}_post_run /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
-          mkdir ./lcov
-          docker cp lanelet2_test_${{ matrix.rosdistro }}_post_run:$(docker inspect --format='{{.Config.WorkingDir}}' lanelet2_test_${{ matrix.rosdistro }}_post_run)/lcov/full_coverage.lcov ./lcov/full_coverage.lcov
+          docker commit lanelet2_test_${{ matrix.rosdistro }}_post_run lanelet2_test_${{ matrix.rosdistro }}_post_lcov;
+          mkdir -p ./lcov;
+          docker cp lanelet2_test_${{ matrix.rosdistro }}_post_lcov:$(docker inspect --format='{{.Config.WorkingDir}}' lanelet2_test_${{ matrix.rosdistro }}_post_lcov)/lcov/full_coverage.lcov ./lcov/full_coverage.lcov;
 
       - name: Cleanup Docker Container
         run: |
           docker rm -f lanelet2_test_${{ matrix.rosdistro }}
           docker rm -f lanelet2_test_${{ matrix.rosdistro }}_post_run
+          docker rm -f lanelet2_test_${{ matrix.rosdistro }}_post_lcov
 
       - name: Comment lcov Results  
         uses: romeovs/lcov-reporter-action@v0.2.16
