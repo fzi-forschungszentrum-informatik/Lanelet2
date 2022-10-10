@@ -159,7 +159,7 @@ jobs:
       - name: Extract and Merge lcov Files
         if: ${{ matrix.rosdistro == 'noetic' }}
         run: |
-          docker exec -i lanelet2_test_${{ matrix.rosdistro }} /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
+          docker start -i lanelet2_test_${{ matrix.rosdistro }} /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
           mkdir /tmp/lcov
           docker cp lanelet2_test_${{ matrix.rosdistro }}:/tmp/lcov/full_coverage.lcov /tmp/lcov/full_coverage.lcov
 
