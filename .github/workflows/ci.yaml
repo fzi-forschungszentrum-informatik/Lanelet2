@@ -169,7 +169,10 @@ jobs:
           docker rm -f lanelet2_test_${{ matrix.rosdistro }};
           docker rm -f lanelet2_test_${{ matrix.rosdistro }}_lcov;
 
-      - name: Comment lcov Results  
-        uses: romeovs/lcov-reporter-action@v0.3.1
+      - name: Report code coverage
+        uses: zgosalvez/github-actions-report-lcov@v1.5.0
+        if: ${{ matrix.rosdistro == 'noetic' }}
         with:
-          lcov-file: ./lcov/full_coverage.lcov
+          coverage-files: ./lcov/full_coverage.lcov
+          artifact-name: code-coverage-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
