@@ -14,6 +14,7 @@ class LocalCartesianProjector : public Projector {
   BasicPoint3d forward(const GPSPoint& gps) const override;
 
   GPSPoint reverse(const BasicPoint3d& enu) const override;
+
  private:
   GeographicLib::LocalCartesian localCartesian;
 };
