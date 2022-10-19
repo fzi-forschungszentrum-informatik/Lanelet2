@@ -6,7 +6,7 @@
   <description>Examples for working with Lanelet2</description>
 
   <license>BSD</license>
-  <maintainer email="fabian.poggenhans@kit.edu">Fabian Poggenhans</maintainer>
+  <maintainer email="fabian.immel@kit.edu">Fabian Immel</maintainer>
   <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
 

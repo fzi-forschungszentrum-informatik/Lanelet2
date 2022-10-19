@@ -1,12 +1,12 @@
 # Lanelet2 IO
 
-IO Module for parsing and writing LaneletMaps. 
+IO Module for parsing and writing LaneletMaps.
 
 It contains a various reader/writer functions for different formats. Which format will be used is determined the extension of the given filename. If a writer/parser is registered for this extension, it will be chosen automatically.
 
 Currently available IO modules are:
 - **OSM (.osm)** writes/loads specialized lanelet maps from OpenStreetMap html files. See [maps module](../lanelet2_maps/README.md) for a primer on this.
-- **Binary (.bin)** writes/loads the map to/from an internal bin format. Very efficient for writing and reading but not human readable
+- **Binary (.bin)** writes/loads the map to/from an internal bin format. Very efficient for writing and reading but not human-readable
 
 
 ## Projections
