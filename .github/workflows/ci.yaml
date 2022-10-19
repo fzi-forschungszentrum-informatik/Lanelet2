@@ -170,7 +170,7 @@ jobs:
           docker rm -f lanelet2_test_${{ matrix.rosdistro }}_lcov;
 
       - name: Report code coverage
-        uses: immel-f/github-actions-report-lcov@v0.1.9
+        uses: immel-f/github-actions-report-lcov@v0.1.10
         if: ${{ matrix.rosdistro == 'noetic' }}
         with:
           coverage-files: ./lcov/full_coverage.lcov
