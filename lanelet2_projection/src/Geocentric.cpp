@@ -1,5 +1,7 @@
 #include "lanelet2_projection/Geocentric.h"
 
+#include <GeographicLib/Geocentric.hpp>
+
 namespace lanelet {
 namespace projection {
 

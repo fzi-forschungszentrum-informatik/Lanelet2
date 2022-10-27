@@ -1,8 +1,6 @@
 #pragma once
-#include <lanelet2_io/Exceptions.h>
 #include <lanelet2_io/Projection.h>
 
-#include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 
 namespace lanelet {
@@ -16,7 +14,7 @@ class LocalCartesianProjector : public Projector {
   GPSPoint reverse(const BasicPoint3d& enu) const override;
 
  private:
-  GeographicLib::LocalCartesian localCartesian;
+  GeographicLib::LocalCartesian localCartesian_;
 };
 
 }  // namespace projection

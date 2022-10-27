@@ -1,8 +1,5 @@
 #pragma once
-#include <lanelet2_io/Exceptions.h>
 #include <lanelet2_io/Projection.h>
-
-#include <GeographicLib/Geocentric.hpp>
 
 namespace lanelet {
 namespace projection {

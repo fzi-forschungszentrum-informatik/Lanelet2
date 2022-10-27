@@ -2,12 +2,6 @@
 Changelog for package lanelet2_projection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.1.2 (2022-03-18)
-------------------
-* Add LocalCartesian projector to better handle elevation
-* Add Geocentric projector
-* Contributors: Michał Antkiewicz
-
 1.1.1 (2020-09-14)
 ------------------
 
