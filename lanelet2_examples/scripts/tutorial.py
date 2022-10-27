@@ -3,10 +3,11 @@ import lanelet2
 import tempfile
 import os
 from lanelet2.core import AttributeMap, TrafficLight, Lanelet, LineString3d, Point2d, Point3d, getId, \
-    LaneletMap, BoundingBox2d, BasicPoint2d
+    LaneletMap, BoundingBox2d, BasicPoint2d, RightOfWay, AllWayStop, LaneletWithStopLine
 from lanelet2.projection import UtmProjector
 
-example_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../lanelet2_maps/res/mapping_example.osm")
+example_file = os.path.join(os.path.dirname(os.path.abspath(
+    __file__)), "../../lanelet2_maps/res/mapping_example.osm")
 if not os.path.exists(example_file):
     # location after installing
     example_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -59,14 +60,76 @@ def part1primitives():
 
 def part2regulatory_elements():
     # regulatory elements profit from pythons type system
+
+    # TrafficLight
     lanelet = get_a_lanelet()
     light = get_linestring_at_y(3)
-    regelem = TrafficLight(getId(), AttributeMap(), [light])
-    lanelet.addRegulatoryElement(regelem)
-    assert regelem in lanelet.regulatoryElements
-    lights = [regelem for regelem in lanelet.regulatoryElements if isinstance(regelem, TrafficLight)]
-    assert regelem in lights
+    traffic_light_regelem = TrafficLight(getId(), AttributeMap(), [light])
+    lanelet.addRegulatoryElement(traffic_light_regelem)
+    assert traffic_light_regelem in lanelet.regulatoryElements
+    lights = [regelem for regelem in lanelet.regulatoryElements if isinstance(
+        regelem, TrafficLight)]
+    assert traffic_light_regelem in lights
     assert light in lights[0].trafficLights
+
+    # RightOfWay
+    stop_linestring = get_linestring_at_y(0)
+    right_of_way_lanelets = [get_a_lanelet(), get_a_lanelet(1)]
+    yielding_lanelets = [get_a_lanelet(2)]
+    right_of_way_regelem = RightOfWay(getId(),
+                                      AttributeMap(),
+                                      right_of_way_lanelets,
+                                      yielding_lanelets,
+                                      stop_linestring)
+    map = LaneletMap()
+    map.add(yielding_lanelets[0])
+    map.add(right_of_way_lanelets[0])
+    map.add(right_of_way_lanelets[1])
+    # must add to the map explicitly
+    map.add(right_of_way_regelem)
+    assert right_of_way_regelem in map.regulatoryElementLayer
+    rightOfWays = [regelem for regelem in map.regulatoryElementLayer
+                   if isinstance(regelem, RightOfWay)]
+    assert right_of_way_regelem in rightOfWays
+    # must have the circular reference from the yielding lanelet
+    # otherwise, the last assertion will fail
+    # this should have been automatically inferred by the regulatoryElements
+    # getter function
+    yielding_lanelets[0].addRegulatoryElement(right_of_way_regelem)
+    # This regulatory element should affect the yielding lanelet
+    assert right_of_way_regelem in yielding_lanelets[0].regulatoryElements
+
+    # AllWayStop
+    lanelets_with_stop_lines = [
+        LaneletWithStopLine(get_a_lanelet(), get_linestring_at_y(0)),
+        LaneletWithStopLine(get_a_lanelet(1), get_linestring_at_y(1)),
+        LaneletWithStopLine(get_a_lanelet(2), get_linestring_at_y(2)),
+        LaneletWithStopLine(get_a_lanelet(3), get_linestring_at_y(3))
+    ]
+    map = LaneletMap()
+    # add the lanelets to the map, access stop line
+    for lanelet_with_stop_line in lanelets_with_stop_lines:
+        map.add(lanelet_with_stop_line.lanelet)
+        lanelet_with_stop_line.stopLine
+    all_way_stop_regelem = AllWayStop(getId(),
+                                      AttributeMap(),
+                                      lanelets_with_stop_lines)
+    # must add to the map explicitly
+    map.add(all_way_stop_regelem)
+    assert all_way_stop_regelem in map.regulatoryElementLayer
+    allWayStops = [regelem for regelem in map.regulatoryElementLayer
+                   if isinstance(regelem, AllWayStop)]
+    assert all_way_stop_regelem in allWayStops
+    # must have the circular reference from each yielding lanelet
+    # otherwise, the last assertion will fail
+    # this should have been automatically inferred by the regulatoryElements
+    # getter function
+    for lanelet_with_stop_line in lanelets_with_stop_lines:
+        lanelet_with_stop_line.lanelet.addRegulatoryElement(
+            all_way_stop_regelem)
+    # This regulatory element should affect each yielding lanelet
+    for lanelet_with_stop_line in lanelets_with_stop_lines:
+        assert all_way_stop_regelem in lanelet_with_stop_line.lanelet.regulatoryElements
 
 
 def part3lanelet_map():
@@ -162,8 +225,10 @@ def get_linestring_at_y(y):
     return LineString3d(getId(), [Point3d(getId(), i, y, 0) for i in range(0, 3)])
 
 
-def get_a_lanelet():
-    return Lanelet(getId(), get_linestring_at_y(2), get_linestring_at_y(0))
+def get_a_lanelet(index=0):
+    return Lanelet(getId(),
+                   get_linestring_at_y(2+index),
+                   get_linestring_at_y(0+index))
 
 
 if __name__ == '__main__':
