@@ -11,5 +11,7 @@ For more details, read [here](doc/Map_Projections_Coordinate_Systems.md).
 
 ## Supported Projections
 
- - `UTM.h`: WGS84 (for storage in .osm files) <-> UTM (internal processing) (wrapper of https://sourceforge.net/projects/geographiclib/). This projection has the advantage of being very precise, but all points in the map must fit into one UTM Tile. If points exceed a 100 km margin, the map can not be loaded.
- - `Mercator.h`: WGS84 (for storage in .osm files) <-> Local Mercator as in [liblanelet](https://github.com/phbender/liblanelet/blob/master/Commons/mercator.hpp). Approximates the earth
+- `UTM.h`: WGS84 (for storage in .osm files) <-> UTM (internal processing) (wrapper of https://sourceforge.net/projects/geographiclib/). This projection has the advantage of being very precise, but all points in the map must fit into one UTM Tile. If points exceed a 100 km margin, the map can not be loaded.
+- `Mercator.h`: WGS84 (for storage in .osm files) <-> Local Mercator as in [liblanelet](https://github.com/phbender/liblanelet/blob/master/Commons/mercator.hpp). Approximates the earth
+- `Geocentric.h`: WGS84 <-> ECEF (wrapper of https://sourceforge.net/projects/geographiclib/).
+- `LocalCartesian.h`: WGS84 <-> LocalCartesian (wrapper of https://sourceforge.net/projects/geographiclib/). This is similar to UTM; however, it properly treats elevation.
