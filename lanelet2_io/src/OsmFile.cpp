@@ -95,13 +95,29 @@ void removeAndFixPlaceholders(Primitive** toRemove, Roles& fromRoles, std::vecto
 
 class OsmFileWriter {
  public:
-  static std::unique_ptr<pugi::xml_document> write(const File& osmFile) {
+  static std::unique_ptr<pugi::xml_document> write(const File& osmFile, const io::Configuration& params) {
     auto xml = std::make_unique<pugi::xml_document>();
     auto osmNode = xml->append_child(keyword::Osm);
     osmNode.append_attribute("version") = "0.6";
-    osmNode.append_attribute("upload") = "false";
+    {
+      const auto iter = params.find("josm_prevent_upload");
+      if (iter != params.end() && iter->second.value() == "false") {
+        osmNode.append_attribute("upload") = "false";
+      } else {
+        osmNode.append_attribute("upload") = "true";
+      }
+    }
     osmNode.append_attribute("generator") = "lanelet2";
-    lanelet::osm::OsmFileWriter::writeNodes(osmNode, osmFile.nodes);
+
+    // whether to format elevation for JOSM (2 decimal places)
+    bool josm_format_elevation{false};
+    {
+      const auto iter = params.find("josm_format_elevation");
+      if (iter != params.end() && iter->second.value() == "true") {
+        josm_format_elevation = true;
+      }
+    }
+    lanelet::osm::OsmFileWriter::writeNodes(osmNode, osmFile.nodes, josm_format_elevation);
     lanelet::osm::OsmFileWriter::writeWays(osmNode, osmFile.ways);
     lanelet::osm::OsmFileWriter::writeRelations(osmNode, osmFile.relations);
     return xml;
@@ -116,7 +132,7 @@ class OsmFileWriter {
     }
   }
 
-  static void writeNodes(pugi::xml_node& osmNode, const Nodes& nodes) {
+  static void writeNodes(pugi::xml_node& osmNode, const Nodes& nodes, const bool josm_format_elevation = false) {
     for (const auto& node : nodes) {
       auto xmlNode = osmNode.append_child(keyword::Node);
       xmlNode.append_attribute(keyword::Id) = LongLong(node.second.id);
@@ -130,7 +146,7 @@ class OsmFileWriter {
       if (node.second.point.ele != 0.) {
         auto tagNode = xmlNode.append_child(keyword::Tag);
         tagNode.append_attribute(keyword::Key) = keyword::Elevation;
-        tagNode.append_attribute(keyword::Value) = toJosmStyle(node.second.point.ele, true).c_str();
+        tagNode.append_attribute(keyword::Value) = toJosmStyle(node.second.point.ele, josm_format_elevation).c_str();
       }
       writeAttributes(xmlNode, node.second.attributes);
     }
@@ -330,6 +346,7 @@ bool operator==(const File& lhs, const File& rhs) {
 
 File read(pugi::xml_document& node, Errors* errors) { return OsmFileParser::read(node, errors); }
 
-std::unique_ptr<pugi::xml_document> write(const File& file) { return OsmFileWriter::write(file); }
+std::unique_ptr<pugi::xml_document> write(const File& file, const io::Configuration& params) {
+  return OsmFileWriter::write(file, params); }
 }  // namespace osm
 }  // namespace lanelet
