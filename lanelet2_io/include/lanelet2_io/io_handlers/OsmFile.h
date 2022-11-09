@@ -2,13 +2,13 @@
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/primitives/GPSPoint.h>
 
-#include "lanelet2_io/Configuration.h"
-
 #include <deque>
 #include <map>
 #include <pugixml.hpp>
 #include <string>
 #include <utility>
+
+#include "lanelet2_io/Configuration.h"
 
 namespace lanelet {
 namespace osm {
