@@ -100,7 +100,7 @@ class OsmFileWriter {
     auto osmNode = xml->append_child(keyword::Osm);
     osmNode.append_attribute("version") = "0.6";
     {
-      const auto iter = params.find("josm_prevent_upload");
+      const auto iter = params.find("josm_upload");
       if (iter != params.end() && iter->second.value() == "false") {
         osmNode.append_attribute("upload") = "false";
       } else {
