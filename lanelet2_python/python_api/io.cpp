@@ -17,17 +17,17 @@ py::tuple loadWithErrorWrapper(const std::string& filename, const Projector& pro
   return py::make_tuple(map, errs);
 }
 
-void writeWrapper(const std::string& filename, const LaneletMap& map, const Origin& origin) {
-  write(filename, map, origin);
+void writeWrapper(const std::string& filename, const LaneletMap& map, const Origin& origin, const io::Configuration& params) {
+  write(filename, map, origin, nullptr, params);
 }
 
-void writeProjectorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector) {
-  write(filename, map, projector);
+void writeProjectorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, const io::Configuration& params) {
+  write(filename, map, projector, nullptr, params);
 }
 
-ErrorMessages writeWithErrorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector) {
+ErrorMessages writeWithErrorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, const io::Configuration& params) {
   ErrorMessages errs;
-  write(filename, map, projector, &errs);
+  write(filename, map, projector, &errs, params);
   return errs;
 }
 
@@ -51,13 +51,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "Loads a map robustly. Parser errors are returned as second member of "
       "the tuple. If there are errors, the map will be incomplete somewhere.");
 
-  def("write", writeProjectorWrapper, (arg("filename"), arg("map"), arg("projector") = DefaultProjector()),
+  def("write", writeProjectorWrapper, (arg("filename"), arg("map"), arg("projector") = DefaultProjector(), arg("params") = io::Configuration()),
       "Writes the map to a file. The extension determines which format will "
       "be used (usually .osm)");
-  def("write", writeWrapper, (arg("filename"), arg("map"), arg("origin")),
+  def("write", writeWrapper, (arg("filename"), arg("map"), arg("origin"), arg("params") = io::Configuration()),
       "Writes the map to a file. The extension determines which format will "
       "be used (usually .osm)");
-  def("writeRobust", writeWithErrorWrapper, (arg("filename"), arg("map"), arg("projector") = DefaultProjector()),
+  def("writeRobust", writeWithErrorWrapper, (arg("filename"), arg("map"), arg("projector") = DefaultProjector(), arg("params") = io::Configuration()),
       "Writes a map robustly and returns writer errors. If there are errors, "
       "the map will be incomplete somewhere.");
 }

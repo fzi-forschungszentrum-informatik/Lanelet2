@@ -12,9 +12,11 @@ class OsmWriter : public Writer {
  public:
   using Writer::Writer;
 
-  void write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors) const override;
+  void write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors,
+             const io::Configuration& params = io::Configuration()) const override;
 
-  std::unique_ptr<osm::File> toOsmFile(const LaneletMap& laneletMap, ErrorMessages& errors) const;
+  std::unique_ptr<osm::File> toOsmFile(const LaneletMap& laneletMap, ErrorMessages& errors,
+                                       const io::Configuration& params = io::Configuration()) const;
 
   static constexpr const char* extension() { return ".osm"; }
 

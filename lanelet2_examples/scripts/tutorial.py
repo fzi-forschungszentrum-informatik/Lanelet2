@@ -1,9 +1,12 @@
 #!/usr/bin/env python
-import lanelet2
-import tempfile
 import os
-from lanelet2.core import AttributeMap, TrafficLight, Lanelet, LineString3d, Point2d, Point3d, getId, \
-    LaneletMap, BoundingBox2d, BasicPoint2d, RightOfWay, AllWayStop, LaneletWithStopLine
+import tempfile
+
+import lanelet2
+from lanelet2.core import (AllWayStop, AttributeMap, BasicPoint2d,
+                           BoundingBox2d, Lanelet, LaneletMap,
+                           LaneletWithStopLine, LineString3d, Point2d, Point3d,
+                           RightOfWay, TrafficLight, getId)
 from lanelet2.projection import UtmProjector
 
 example_file = os.path.join(os.path.dirname(os.path.abspath(
@@ -157,10 +160,18 @@ def part4reading_and_writing():
     map.add(lanelet)
     path = os.path.join(tempfile.mkdtemp(), 'mapfile.osm')
     projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
-    lanelet2.io.write(path, map, projector)
-    mapLoad, errors = lanelet2.io.loadRobust(path, projector)
+    # Can provide the optional parameters for JOSM
+    lanelet2.io.write(path, map, projector, {
+                                                {"josm_upload": False},          # value for the attribute "upload"
+                                                {"josm_format_elevation": True}  # whether to limit up to 2 decimals
+                                            })
+    # Or use defaults (josm_upload=True and josm_format_elevation=False)
+    # lanelet2.io.write(path, map, projector)
+    # lanelet2.io.write(path, map, {49, 8.4})
+    # errors = lanelet2.io.writeRobust(path, map, projector)
+    loadedMap, errors = lanelet2.io.loadRobust(path, projector)
     assert not errors
-    assert mapLoad.laneletLayer.exists(lanelet.id)
+    assert loadedMap.laneletLayer.exists(lanelet.id)
 
 
 def part5traffic_rules():
