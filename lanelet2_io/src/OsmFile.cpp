@@ -99,9 +99,10 @@ class OsmFileWriter {
     auto xml = std::make_unique<pugi::xml_document>();
     auto osmNode = xml->append_child(keyword::Osm);
     osmNode.append_attribute("version") = "0.6";
+    // whether to upload the model in JOSM, true by default
     {
       const auto iter = params.find("josm_upload");
-      if (iter != params.end() && iter->second.value() == "false") {
+      if (iter != params.end() && !iter->second.asBool().value_or(true)) {
         osmNode.append_attribute("upload") = "false";
       } else {
         osmNode.append_attribute("upload") = "true";
@@ -109,11 +110,11 @@ class OsmFileWriter {
     }
     osmNode.append_attribute("generator") = "lanelet2";
 
-    // whether to format elevation for JOSM (2 decimal places)
+    // whether to format elevation for JOSM (2 decimal places), false by default
     bool josm_format_elevation{false};
     {
       const auto iter = params.find("josm_format_elevation");
-      if (iter != params.end() && iter->second.value() == "true") {
+      if (iter != params.end() && iter->second.asBool().value_or(false)) {
         josm_format_elevation = true;
       }
     }

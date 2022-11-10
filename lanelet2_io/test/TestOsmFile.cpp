@@ -48,7 +48,7 @@ TEST(OsmFile, readWriteJSON) {  // NOLINT
   file.ways.emplace(std::make_pair(-5, Way{-5, {{"wayKey", "wayValue"}}, {&file.nodes.at(-2), &file.nodes.at(-3)}}));
   file.relations.emplace(std::make_pair(-6,Relation{-6,{{"relKey", "relValue"}},{{"outer", &file.ways.at(-4)}, {"outer", &file.ways.at(-5)}, {"node", &file.nodes.at(-2)}}}));
   // clang-format on
-  auto doc = write(file, { {"josm_upload", "false"}, {"josm_format_elevation", "true"} });
+  auto doc = write(file, { {"josm_upload", false}, {"josm_format_elevation", true} });
   auto file2 = read(*doc);
 
   EXPECT_EQ(file2.relations, file.relations);
