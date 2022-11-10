@@ -7,7 +7,7 @@
 
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/indexing_suite.hpp>
-#include <boost/python/suite/indexing/map_indexing_suite.hpp>
+//#include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 #include "lanelet2_python/internal/converter.h"

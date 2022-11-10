@@ -9,6 +9,7 @@ from lanelet2.core import (AllWayStop, AttributeMap, BasicPoint2d,
                            RightOfWay, TrafficLight, getId)
 from lanelet2.projection import UtmProjector
 
+
 example_file = os.path.join(os.path.dirname(os.path.abspath(
     __file__)), "../../lanelet2_maps/res/mapping_example.osm")
 if not os.path.exists(example_file):
@@ -161,14 +162,15 @@ def part4reading_and_writing():
     path = os.path.join(tempfile.mkdtemp(), 'mapfile.osm')
     projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
     # Can provide the optional parameters for JOSM
-    lanelet2.io.write(path, map, projector, {
-                                                {"josm_upload": False},          # value for the attribute "upload"
-                                                {"josm_format_elevation": True}  # whether to limit up to 2 decimals
-                                            })
+    params = {
+               "josm_upload": False,          # value for the attribute "upload"
+               "josm_format_elevation": True  # whether to limit up to 2 decimals
+             };
+    lanelet2.io.write(path, map, projector, params)
     # Or use defaults (josm_upload=True and josm_format_elevation=False)
-    # lanelet2.io.write(path, map, projector)
-    # lanelet2.io.write(path, map, {49, 8.4})
-    # errors = lanelet2.io.writeRobust(path, map, projector)
+    #lanelet2.io.write(path, map, projector)
+    #lanelet2.io.write(path, map, {49, 8.4})
+    #errors = lanelet2.io.writeRobust(path, map, projector)
     loadedMap, errors = lanelet2.io.loadRobust(path, projector)
     assert not errors
     assert loadedMap.laneletLayer.exists(lanelet.id)
