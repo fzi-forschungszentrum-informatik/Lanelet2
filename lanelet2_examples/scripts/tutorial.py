@@ -166,13 +166,20 @@ def part4reading_and_writing():
                "josm_upload": False,          # value for the attribute "upload"
                "josm_format_elevation": True  # whether to limit up to 2 decimals
              };
+
     lanelet2.io.write(path, map, projector, params)
+
     # Or use defaults (josm_upload=True and josm_format_elevation=False)
-    #lanelet2.io.write(path, map, projector)
-    #lanelet2.io.write(path, map, {49, 8.4})
-    #errors = lanelet2.io.writeRobust(path, map, projector)
-    loadedMap, errors = lanelet2.io.loadRobust(path, projector)
-    assert not errors
+    ## With a projector
+    lanelet2.io.write(path, map, projector)
+    ## Or use the origin and the default Mercator projector
+    lanelet2.io.write(path, map, lanelet2.io.Origin(49, 8.4))
+    ## Or get the possible errors
+    write_errors = lanelet2.io.writeRobust(path, map, projector)
+    assert not write_errors
+
+    loadedMap, load_errors = lanelet2.io.loadRobust(path, projector)
+    assert not load_errors
     assert loadedMap.laneletLayer.exists(lanelet.id)
 
 

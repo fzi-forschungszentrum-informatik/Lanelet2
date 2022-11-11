@@ -46,17 +46,17 @@ boost::python::tuple loadWithErrorWrapper(const std::string& filename, const Pro
   return boost::python::make_tuple(map, errs);
 }
 
-void writeWrapper(const std::string& filename, const LaneletMap& map, const Origin& origin, const io::Configuration& params = io::Configuration()) {
-  write(filename, map, origin, nullptr, params);
+void writeWrapper(const std::string& filename, const LaneletMap& map, const Origin& origin, const Optional<io::Configuration>& params) {
+  write(filename, map, origin, nullptr, params.get_value_or(io::Configuration()));
 }
 
-void writeProjectorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, const io::Configuration& params = io::Configuration()) {
-  write(filename, map, projector, nullptr, params);
+void writeProjectorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, const Optional<io::Configuration>& params) {
+  write(filename, map, projector, nullptr, params.get_value_or(io::Configuration()));
 }
 
-ErrorMessages writeWithErrorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, const io::Configuration& params = io::Configuration()) {
+ErrorMessages writeWithErrorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, const Optional<io::Configuration>& params) {
   ErrorMessages errs;
-  write(filename, map, projector, &errs, params);
+  write(filename, map, projector, &errs, params.get_value_or(io::Configuration()));
   return errs;
 }
 
@@ -65,6 +65,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   auto proj = import("lanelet2.projection");
 
   DictToConfigurationConverter();
+  converters::OptionalConverter<io::Configuration>();
+  converters::ToOptionalConverter().fromPython<io::Configuration>();
 
   class_<Origin, std::shared_ptr<Origin>>("Origin", init<>())
       .def(init<GPSPoint>())
@@ -81,13 +83,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "Loads a map robustly. Parser errors are returned as second member of "
       "the tuple. If there are errors, the map will be incomplete somewhere.");
 
-  def("write", writeProjectorWrapper, (arg("filename"), arg("map"), arg("projector") = DefaultProjector(), arg("params")/*= io::Configuration()*/),
+  def("write", writeProjectorWrapper, (arg("filename"), arg("map"), arg("projector"), arg("params") = Optional<io::Configuration>{}),
       "Writes the map to a file. The extension determines which format will "
       "be used (usually .osm)");
-  def("write", writeWrapper, (arg("filename"), arg("map"), arg("origin"), arg("params")/*= io::Configuration()*/),
+  def("write", writeWrapper, (arg("filename"), arg("map"), arg("origin"), arg("params") = Optional<io::Configuration>{}),
       "Writes the map to a file. The extension determines which format will "
       "be used (usually .osm)");
-  def("writeRobust", writeWithErrorWrapper, (arg("filename"), arg("map"), arg("projector") = DefaultProjector(), arg("params")/*= io::Configuration()*/),
+  def("writeRobust", writeWithErrorWrapper, (arg("filename"), arg("map"), arg("projector"), arg("params") = Optional<io::Configuration>{}),
       "Writes a map robustly and returns writer errors. If there are errors, "
       "the map will be incomplete somewhere.");
 }
