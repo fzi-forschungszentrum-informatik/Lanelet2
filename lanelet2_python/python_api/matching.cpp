@@ -35,9 +35,6 @@
 #include <lanelet2_traffic_rules/TrafficRules.h>
 
 #include <boost/make_shared.hpp>
-#include <boost/python.hpp>
-#include <boost/python/suite/indexing/indexing_suite.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/shared_ptr.hpp>
 #include <iostream>
 

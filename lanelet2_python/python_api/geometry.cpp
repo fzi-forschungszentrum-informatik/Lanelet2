@@ -8,7 +8,6 @@
 
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/geometries/register/multi_linestring.hpp>
-#include <boost/python.hpp>
 
 #include "lanelet2_python/internal/converter.h"
 
