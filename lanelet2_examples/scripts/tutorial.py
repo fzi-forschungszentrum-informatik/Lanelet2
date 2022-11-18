@@ -162,12 +162,11 @@ def part4reading_and_writing():
     map.add(lanelet)
     path = os.path.join(tempfile.mkdtemp(), 'mapfile.osm')
     # Select a suitable projector depending on the data source
-    ## UtmProjector: (0,0,0) is at the privided lat/lon on the ellipsoid
+    ## UtmProjector: (0,0,0) is at the provided lat/lon on the WGS84 ellipsoid
     projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
-    ## MarcatorProjector: (0,0,0) is at the privided lat/lon on the mercator cylinder
-    ## This was the default projection in Lanelet1
+    ## MarcatorProjector: (0,0,0) is at the provided lat/lon on the mercator cylinder
     projector = MercatorProjector(lanelet2.io.Origin(49, 8.4))
-    ## LocalCartesianProjector: (0,0,0) is at the privided origin (including elevation)
+    ## LocalCartesianProjector: (0,0,0) is at the provided origin (including elevation)
     projector = LocalCartesianProjector(lanelet2.io.Origin(49, 8.4, 123))
 
     # Writing the map to a file
@@ -178,7 +177,8 @@ def part4reading_and_writing():
     write_errors = lanelet2.io.writeRobust(path, map, projector)
     assert not write_errors
 
-    ## 3. Write using the default spherical Mercator projector at the giver origin
+    ## 3. Write using the default spherical mercator projector at the giver origin
+    ## This was the default projection in Lanelet1
     lanelet2.io.write(path, map, lanelet2.io.Origin(49, 8.4))
 
     ## 4. Write usiung the given projector and override the default values of the optional parameters for JOSM
