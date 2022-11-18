@@ -162,26 +162,26 @@ def part4reading_and_writing():
     map.add(lanelet)
     path = os.path.join(tempfile.mkdtemp(), 'mapfile.osm')
     # Select a suitable projector depending on the data source
-    ## UtmProjector: (0,0,0) is at the privided lat/lon and at the elevation above the ellipsoid
+    ## UtmProjector: (0,0,0) is at the privided lat/lon on the ellipsoid
     projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
-    ## MarcatorProjector: (0,0,0) is at the privided lat/lon and at the elevation above the mercator cylinder
+    ## MarcatorProjector: (0,0,0) is at the privided lat/lon on the mercator cylinder
     ## This was the default projection in Lanelet1
     projector = MercatorProjector(lanelet2.io.Origin(49, 8.4))
     ## LocalCartesianProjector: (0,0,0) is at the privided origin (including elevation)
     projector = LocalCartesianProjector(lanelet2.io.Origin(49, 8.4, 123))
 
     # Writing the map to a file
-    ## 1. Can write with the given projector and use use default parameters
+    ## 1. Write with the given projector and use default parameters
     lanelet2.io.write(path, map, projector)
 
-    ## 2. Can optionally get the possible errors
+    ## 2. Write and get the possible errors
     write_errors = lanelet2.io.writeRobust(path, map, projector)
     assert not write_errors
 
-    ## 3. Or can use the origin and the default spherical Mercator projector
+    ## 3. Write using the default spherical Mercator projector at the giver origin
     lanelet2.io.write(path, map, lanelet2.io.Origin(49, 8.4))
 
-    ## 4. Can override the default values of the optional parameters for JOSM
+    ## 4. Write usiung the given projector and override the default values of the optional parameters for JOSM
     params = {
                "josm_upload": False,          # value for the attribute "upload", default is True
                "josm_format_elevation": True  # whether to limit up to 2 decimals, default is the same as for lat/lon
