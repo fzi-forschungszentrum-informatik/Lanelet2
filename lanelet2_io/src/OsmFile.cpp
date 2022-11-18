@@ -111,13 +111,8 @@ class OsmFileWriter {
     osmNode.append_attribute("generator") = "lanelet2";
 
     // whether to format elevation for JOSM (2 decimal places), false by default
-    bool josm_format_elevation{false};
-    {
-      const auto iter = params.find("josm_format_elevation");
-      if (iter != params.end() && iter->second.asBool().value_or(false)) {
-        josm_format_elevation = true;
-      }
-    }
+    const auto iter = params.find("josm_format_elevation");
+    const bool josm_format_elevation = iter != params.end() && iter->second.asBool().value_or(false);
     lanelet::osm::OsmFileWriter::writeNodes(osmNode, osmFile.nodes, josm_format_elevation);
     lanelet::osm::OsmFileWriter::writeWays(osmNode, osmFile.ways);
     lanelet::osm::OsmFileWriter::writeRelations(osmNode, osmFile.relations);

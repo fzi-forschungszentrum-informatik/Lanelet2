@@ -27,15 +27,15 @@ TEST(OsmFile, readWrite) {  // NOLINT
   EXPECT_EQ(std::string(upload_attribute.name()), "upload");
   EXPECT_EQ(std::string(upload_attribute.value()), "true");
   // Test josm_format_elevation (false by default)
-  EXPECT_EQ(file2.nodes.at(-1).point.lat, 12.3456789);
-  EXPECT_EQ(file2.nodes.at(-1).point.lon, 1.2345678);
-  EXPECT_EQ(file2.nodes.at(-1).point.ele, 9.0123);
-  EXPECT_EQ(file2.nodes.at(-2).point.lat, 45.6789);
-  EXPECT_EQ(file2.nodes.at(-2).point.lon, 12.3);
-  EXPECT_EQ(file2.nodes.at(-2).point.ele, 4.5);
-  EXPECT_EQ(file2.nodes.at(-3).point.lat, 67.8);
-  EXPECT_EQ(file2.nodes.at(-3).point.lon, 9.10);
-  EXPECT_EQ(file2.nodes.at(-3).point.ele, 11.0);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.lat, 12.3456789);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.lon, 1.2345678);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.ele, 9.0123);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.lat, 45.6789);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.lon, 12.3);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.ele, 4.5);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.lat, 67.8);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.lon, 9.10);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.ele, 11.0);
 }
 
 TEST(OsmFile, readWriteJSON) {  // NOLINT
@@ -60,15 +60,15 @@ TEST(OsmFile, readWriteJSON) {  // NOLINT
   EXPECT_EQ(std::string(upload_attribute.name()), "upload");
   EXPECT_EQ(std::string(upload_attribute.value()), "false");
   // Test josm_format_elevation
-  EXPECT_EQ(file2.nodes.at(-1).point.lat, 12.3456789);
-  EXPECT_EQ(file2.nodes.at(-1).point.lon, 1.2345678);
-  EXPECT_EQ(file2.nodes.at(-1).point.ele, 9.01);  // limited to 2 decimals
-  EXPECT_EQ(file2.nodes.at(-2).point.lat, 45.6789);
-  EXPECT_EQ(file2.nodes.at(-2).point.lon, 12.3);
-  EXPECT_EQ(file2.nodes.at(-2).point.ele, 4.5);
-  EXPECT_EQ(file2.nodes.at(-3).point.lat, 67.8);
-  EXPECT_EQ(file2.nodes.at(-3).point.lon, 9.10);
-  EXPECT_EQ(file2.nodes.at(-3).point.ele, 11.0);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.lat, 12.3456789);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.lon, 1.2345678);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.ele, 9.01);  // limited to 2 decimals
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.lat, 45.6789);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.lon, 12.3);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.ele, 4.5);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.lat, 67.8);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.lon, 9.10);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.ele, 11.0);
 }
 
 TEST(OsmFile, readEmptyFile) {  // NOLINT
