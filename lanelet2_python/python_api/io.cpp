@@ -20,9 +20,9 @@ struct DictToConfigurationConverter {
     io::Configuration attributes;
     for (auto i = 0u; i < py::len(keys); ++i) {
       std::string key = py::extract<std::string>(keys[i]);
-      if (values[i].operator boost::python::api::bool_type()) {
-        bool value = py::extract<bool>(values[i]);
-        attributes.insert(std::make_pair(key, value));
+      const py::extract<bool> bool_extractor(values[i]);
+      if (bool_extractor.check()) {
+        attributes.insert(std::make_pair(key, bool_extractor()));
       } else {
         std::string value = py::extract<std::string>(values[i]);
         attributes.insert(std::make_pair(key, value));
