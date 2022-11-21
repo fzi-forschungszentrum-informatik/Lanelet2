@@ -99,13 +99,13 @@ class OsmFileWriter {
     auto xml = std::make_unique<pugi::xml_document>();
     auto osmNode = xml->append_child(keyword::Osm);
     osmNode.append_attribute("version") = "0.6";
-    // whether to upload the model in JOSM, true by default
+    // whether to upload the model in JOSM, false by default
     {
       const auto iter = params.find("josm_upload");
-      if (iter != params.end() && !iter->second.asBool().value_or(true)) {
-        osmNode.append_attribute("upload") = "false";
-      } else {
+      if (iter != params.end() && iter->second.asBool().value_or(false)) {
         osmNode.append_attribute("upload") = "true";
+      } else {
+        osmNode.append_attribute("upload") = "false";
       }
     }
     osmNode.append_attribute("generator") = "lanelet2";
