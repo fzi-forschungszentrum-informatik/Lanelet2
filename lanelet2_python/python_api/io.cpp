@@ -20,13 +20,8 @@ struct DictToConfigurationConverter {
     io::Configuration attributes;
     for (auto i = 0u; i < py::len(keys); ++i) {
       std::string key = py::extract<std::string>(keys[i]);
-      const py::extract<bool> bool_extractor(values[i]);
-      if (bool_extractor.check()) {
-        attributes.insert(std::make_pair(key, bool_extractor()));
-      } else {
-        std::string value = py::extract<std::string>(values[i]);
-        attributes.insert(std::make_pair(key, value));
-      }
+      std::string value = py::extract<std::string>(values[i]);
+      attributes.insert(std::make_pair(key, value));
     }
     using StorageType = py::converter::rvalue_from_python_storage<io::Configuration>;
     void* storage = reinterpret_cast<StorageType*>(data)->storage.bytes;  // NOLINT

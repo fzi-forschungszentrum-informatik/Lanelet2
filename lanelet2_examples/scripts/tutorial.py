@@ -183,8 +183,8 @@ def part4reading_and_writing():
 
     ## 4. Write using the given projector and override the default values of the optional parameters for JOSM
     params = {
-               "josm_upload": True,          # value for the attribute "upload", default is False
-               "josm_format_elevation": True  # whether to limit up to 2 decimals, default is the same as for lat/lon
+               "josm_upload": "true",          # value for the attribute "upload", default is "false"
+               "josm_format_elevation": "true"  # whether to limit up to 2 decimals, default is the same as for lat/lon
              };
     lanelet2.io.write(path, map, projector, params)
 
