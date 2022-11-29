@@ -1,10 +1,15 @@
 #!/usr/bin/env python
-import lanelet2
-import tempfile
 import os
-from lanelet2.core import AttributeMap, TrafficLight, Lanelet, LineString3d, Point2d, Point3d, getId, \
-    LaneletMap, BoundingBox2d, BasicPoint2d, RightOfWay, AllWayStop, LaneletWithStopLine
-from lanelet2.projection import UtmProjector
+import tempfile
+
+import lanelet2
+from lanelet2.core import (AllWayStop, AttributeMap, BasicPoint2d,
+                           BoundingBox2d, Lanelet, LaneletMap,
+                           LaneletWithStopLine, LineString3d, Point2d, Point3d,
+                           RightOfWay, TrafficLight, getId)
+from lanelet2.projection import (UtmProjector, MercatorProjector,
+                                 LocalCartesianProjector, GeocentricProjector)
+
 
 example_file = os.path.join(os.path.dirname(os.path.abspath(
     __file__)), "../../lanelet2_maps/res/mapping_example.osm")
@@ -156,11 +161,37 @@ def part4reading_and_writing():
     lanelet = get_a_lanelet()
     map.add(lanelet)
     path = os.path.join(tempfile.mkdtemp(), 'mapfile.osm')
+    # Select a suitable projector depending on the data source
+    ## UtmProjector: (0,0,0) is at the provided lat/lon on the WGS84 ellipsoid
     projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
+    ## MarcatorProjector: (0,0,0) is at the provided lat/lon on the mercator cylinder
+    projector = MercatorProjector(lanelet2.io.Origin(49, 8.4))
+    ## LocalCartesianProjector: (0,0,0) is at the provided origin (including elevation)
+    projector = LocalCartesianProjector(lanelet2.io.Origin(49, 8.4, 123))
+
+    # Writing the map to a file
+    ## 1. Write with the given projector and use default parameters
     lanelet2.io.write(path, map, projector)
-    mapLoad, errors = lanelet2.io.loadRobust(path, projector)
-    assert not errors
-    assert mapLoad.laneletLayer.exists(lanelet.id)
+
+    ## 2. Write and get the possible errors
+    write_errors = lanelet2.io.writeRobust(path, map, projector)
+    assert not write_errors
+
+    ## 3. Write using the default spherical mercator projector at the giver origin
+    ## This was the default projection in Lanelet1
+    lanelet2.io.write(path, map, lanelet2.io.Origin(49, 8.4))
+
+    ## 4. Write using the given projector and override the default values of the optional parameters for JOSM
+    params = {
+               "josm_upload": "true",          # value for the attribute "upload", default is "false"
+               "josm_format_elevation": "true"  # whether to limit up to 2 decimals, default is the same as for lat/lon
+             };
+    lanelet2.io.write(path, map, projector, params)
+
+    # Loading the map from a file
+    loadedMap, load_errors = lanelet2.io.loadRobust(path, projector)
+    assert not load_errors
+    assert loadedMap.laneletLayer.exists(lanelet.id)
 
 
 def part5traffic_rules():

@@ -18,7 +18,7 @@ RegisterWriter<BinWriter> regWriter;
 
 }  // namespace
 
-void BinWriter::write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& /*errors*/) const {
+void BinWriter::write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& /*errors*/, const io::Configuration& /*params*/) const {
   std::ofstream fs(filename, std::ofstream::binary);
   if (!fs.good()) {
     throw ParseError("Failed open archive " + filename);
