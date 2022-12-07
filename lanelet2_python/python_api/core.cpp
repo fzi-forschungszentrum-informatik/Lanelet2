@@ -5,11 +5,6 @@
 #include <lanelet2_core/primitives/LaneletSequence.h>
 #include <lanelet2_core/primitives/RegulatoryElement.h>
 
-#include <boost/python.hpp>
-#include <boost/python/suite/indexing/indexing_suite.hpp>
-#include <boost/python/suite/indexing/map_indexing_suite.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
-
 #include "lanelet2_python/internal/converter.h"
 
 using namespace boost::python;
@@ -36,7 +31,7 @@ struct AttributeFromPythonStr {
 #if PY_MAJOR_VERSION < 3
     const char* value = PyString_AsString(objPtr);
 #else
-    auto pyStr = PyUnicode_AsUTF8String(objPtr);
+    auto* pyStr = PyUnicode_AsUTF8String(objPtr);
     const char* value = PyBytes_AsString(pyStr);
 #endif
     if (value == nullptr) {
@@ -379,6 +374,16 @@ LaneletSubmapPtr createSubmapWrapper(const PrimT& prim) {
   return utils::createSubmap(prim);
 }
 
+template <typename T>
+object optionalToObject(const Optional<T>& v) {
+  return v ? object(*v) : object();
+}
+
+template <typename T>
+Optional<T> objectToOptional(const object& o) {
+  return o == object() ? Optional<T>{} : Optional<T>{extract<T>(o)()};
+}
+
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<BasicPoint2d>("BasicPoint2d", "A simple point", init<double, double>((arg("x") = 0., arg("y") = 0.)))
       .def(init<>("BasicPoint2d()"))
@@ -558,7 +563,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<ConstPoint2d>("ConstPoint2d", no_init)
       .def(IsConstPrimitive<ConstPoint2d>())
       .add_property("x", getXWrapper<ConstPoint2d>, "x coordinate")
-      .add_property("y", getYWrapper<ConstPoint2d>, "y coordinate");
+      .add_property("y", getYWrapper<ConstPoint2d>, "y coordinate")
+      .def("basicPoint", &ConstPoint2d::basicPoint, return_internal_reference<>());
 
   class_<Point2d, bases<ConstPoint2d>>(
       "Point2d", "Lanelets 2d point primitive",
@@ -569,7 +575,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           (arg("id"), arg("x"), arg("y"), arg("z") = 0., arg("attributes") = AttributeMap())))
       .add_property("x", getXWrapper<Point2d>, setXWrapper<Point2d>, "x coordinate")
       .add_property("y", getYWrapper<Point2d>, setYWrapper<Point2d>, "y coordinate")
-      .def("basicPoint", &ConstPoint2d::basicPoint, return_internal_reference<>())
       .def(IsPrimitive<Point2d>());
 
   class_<ConstPoint3d>("ConstPoint3d", no_init)
@@ -754,12 +759,40 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__getitem__", wrappers::getItem<LaneletSequence>, return_internal_reference<>());
 
   class_<ConstLaneletWithStopLine>("ConstLaneletWithStopLine", "A lanelet with a stopline", no_init)
+      .def("__init__",
+          make_constructor(+[](Lanelet lanelet, Optional<ConstLineString3d> stopLine){
+                              return std::make_shared<ConstLaneletWithStopLine>(
+                                  ConstLaneletWithStopLine{
+                                    std::move(lanelet), std::move(stopLine)
+                                  }
+                              );
+                           },
+          default_call_policies(),
+          (arg("lanelet"), arg("stopLine") = Optional<ConstLineString3d>{})))
       .add_property("lanelet", &ConstLaneletWithStopLine::lanelet)
-      .add_property("stopLine", &ConstLaneletWithStopLine::stopLine);
+      .add_property(
+          "stopLine", +[](const ConstLaneletWithStopLine& self) { return optionalToObject(self.stopLine); },
+          +[](ConstLaneletWithStopLine& self, const object& value) {
+            self.stopLine = objectToOptional<LineString3d>(value);
+          });
 
   class_<LaneletWithStopLine>("LaneletWithStopLine", "A lanelet with a stopline", no_init)
+      .def("__init__",
+          make_constructor(+[](Lanelet lanelet, Optional<LineString3d> stopLine){
+                              return std::make_shared<LaneletWithStopLine>(
+                                  LaneletWithStopLine{
+                                    std::move(lanelet), std::move(stopLine)
+                                  }
+                              );
+                           },
+          default_call_policies(),
+          (arg("lanelet"), arg("stopLine") = Optional<LineString3d>{})))
       .add_property("lanelet", &LaneletWithStopLine::lanelet)
-      .add_property("stopLine", &LaneletWithStopLine::stopLine);
+      .add_property(
+          "stopLine", +[](const LaneletWithStopLine& self) { return optionalToObject(self.stopLine); },
+          +[](LaneletWithStopLine& self, const object& value) {
+            self.stopLine = objectToOptional<LineString3d>(value);
+          });
 
   class_<ConstArea>("ConstArea", "Represents an area, potentially with holes, in the map",
                     boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
@@ -846,7 +879,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "AllWayStop", "An all way stop regulatory element", no_init)
       .def("__init__", make_constructor(&AllWayStop::make, default_call_policies(),
                                         (arg("id"), arg("attributes"), arg("lltsWithStop"),
-                                         arg("signs") = Optional<LineStringsOrPolygons3d>{})))
+                                         arg("signs") = LineStringsOrPolygons3d{})))
       .def(
           "lanelets", +[](AllWayStop& self) { return self.lanelets(); })
       .def(
@@ -912,18 +945,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(
           "findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
       .def(
-          "findUsages", +[](AreaLayer& self, LineString3d& ls) { return self.findUsages(ls); });
+          "findUsages", +[](AreaLayer& self, ConstLineString3d& ls) { return self.findUsages(ls); });
   wrapLayer<LaneletLayer, bases<PrimitiveLayer<Lanelet>>>("LaneletLayer")
       .def(
           "findUsages", +[](LaneletLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); })
       .def(
-          "findUsages", +[](LaneletLayer& self, LineString3d& ls) { return self.findUsages(ls); });
+          "findUsages", +[](LaneletLayer& self, ConstLineString3d& ls) { return self.findUsages(ls); });
   wrapLayer<PolygonLayer>("PolygonLayer")
       .def(
-          "findUsages", +[](PolygonLayer& self, Point3d& p) { return self.findUsages(p); });
+          "findUsages", +[](PolygonLayer& self, ConstPoint3d& p) { return self.findUsages(p); });
   wrapLayer<LineStringLayer>("LineStringLayer")
       .def(
-          "findUsages", +[](LineStringLayer& self, Point3d& p) { return self.findUsages(p); });
+          "findUsages", +[](LineStringLayer& self, ConstPoint3d& p) { return self.findUsages(p); });
   wrapLayer<PointLayer>("PointLayer");
   wrapLayer<RegulatoryElementLayer>("RegulatoryElementLayer");
 

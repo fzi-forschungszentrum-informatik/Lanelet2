@@ -6,7 +6,7 @@
   <description>Python bindings for lanelet2</description>
 
   <license>BSD</license>
-  <maintainer email="fabian.poggenhans@kit.edu">Fabian Poggenhans</maintainer>
+  <maintainer email="fabian.immel@kit.edu">Fabian Immel</maintainer>
   <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
   <url type="repository">https://github.com/fzi-forschungszentrum-informatik/lanelet2.git</url>
 
@@ -20,6 +20,7 @@
   <depend>lanelet2_routing</depend>
   <depend>lanelet2_traffic_rules</depend>
   <depend>lanelet2_projection</depend>
+  <depend>lanelet2_matching</depend>
   <depend>libboost-python-dev</depend>
   <export>
     <build_type condition="$ROS_VERSION == 1">catkin</build_type>

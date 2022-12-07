@@ -1,0 +1,178 @@
+name: Lanelet2 CI
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "**"
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup docker buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setup docker cache
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.docker-cache
+          key: ${{runner.os}}-docker-humble
+
+      - name: Build dependencies
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: lanelet2_src
+          cache-from: type=local,src=/tmp/.docker-cache
+          cache-to: type=local,dest=/tmp/.docker-cache
+          load: true
+          build-args: |
+            DEV=1
+            DISTRIBUTION=22.04
+            ROS_DISTRO=humble
+            ROS=ros2
+          target: lanelet2_src
+
+      - name: Run clang formatting check
+        run: |
+          set -ex
+          docker run -i --rm lanelet2_src find . -name "*.cpp" -o -name "*.h" -execdir clang-format-11 -n -Werror --style=file {} +
+  
+  lint:
+    needs: formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup docker buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setup docker cache
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.docker-cache
+          key: ${{runner.os}}-docker-humble
+
+      - name: Build dependencies
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: lanelet2_src
+          cache-from: type=local,src=/tmp/.docker-cache
+          cache-to: type=local,dest=/tmp/.docker-cache
+          load: true
+          build-args: |
+            DEV=1
+            DISTRIBUTION=22.04
+            ROS_DISTRO=humble
+            ROS=ros2
+          target: lanelet2_src
+      - name: Run clang-tidy
+        run: docker run -i --rm lanelet2_src /home/developer/workspace/src/lanelet2/.github/lint.bash
+
+  test:
+    needs: formatting
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        rosdistro: [noetic, galactic, humble]
+        include:
+          - rosdistro: noetic
+            os: 20.04
+            ros: ros
+          - rosdistro: galactic
+            os: 20.04
+            ros: ros2
+          - rosdistro: humble
+            os: 22.04
+            ros: ros2
+    steps:
+      - name: Setup docker buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setup docker cache
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.docker-cache
+          key: ${{runner.os}}-docker-${{ matrix.rosdistro }}
+
+      - name: Build dependencies
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: lanelet2_base:${{ matrix.rosdistro }}
+          cache-from: type=local,src=/tmp/.docker-cache
+          cache-to: type=local,dest=/tmp/.docker-cache
+          build-args: |
+            DEV=1
+            DISTRIBUTION=${{ matrix.os }}
+            ROS_DISTRO=${{ matrix.rosdistro }}
+            ROS=${{ matrix.ros }}
+          target: lanelet2_deps
+
+      - name: Build Lanelet2
+        uses: docker/build-push-action@v3
+        if: ${{ matrix.rosdistro == 'noetic' }}
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: lanelet2:${{ matrix.rosdistro }}
+          cache-from: type=local,src=/tmp/.docker-cache
+          load: true
+          build-args: |
+            DEV=1
+            DISTRIBUTION=${{ matrix.os }}
+            ROS_DISTRO=${{ matrix.rosdistro }}
+            ROS=${{ matrix.ros }}
+          target: lanelet2
+
+      - name: Build Lanelet2 (skip lcov)
+        uses: docker/build-push-action@v3
+        if: ${{ matrix.rosdistro == 'humble' || matrix.rosdistro == 'galactic' }}
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: lanelet2:${{ matrix.rosdistro }}
+          cache-from: type=local,src=/tmp/.docker-cache
+          load: true
+          build-args: |
+            DEV=0
+            DISTRIBUTION=${{ matrix.os }}
+            ROS_DISTRO=${{ matrix.rosdistro }}
+            ROS=${{ matrix.ros }}
+          target: lanelet2
+
+      - name: Run Lanelet2 Tests
+        run: |
+          set -ex;
+          if [ "${{matrix.ros}}" = "ros" ]; then
+            export TEST_CMD="catkin build --no-status --catkin-make-args run_tests && source /opt/ros/${{matrix.rosdistro}}/setup.bash && catkin_test_results --verbose";
+          else
+            export TEST_CMD="colcon test --return-code-on-test-failure";
+          fi;
+          docker run -i --name lanelet2_test_${{ matrix.rosdistro }} lanelet2:${{ matrix.rosdistro }} /bin/bash -c "$TEST_CMD";
+
+      - name: Extract and Merge lcov Files
+        if: ${{ matrix.rosdistro == 'noetic' }}
+        run: |
+          docker commit lanelet2_test_${{ matrix.rosdistro }} lanelet2_${{ matrix.rosdistro }}_post_run;
+          docker run -i --name lanelet2_test_${{ matrix.rosdistro }}_lcov lanelet2_${{ matrix.rosdistro }}_post_run /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
+          mkdir -p ./lcov;
+          docker cp lanelet2_test_${{ matrix.rosdistro }}_lcov:$(docker inspect --format='{{.Config.WorkingDir}}' lanelet2_test_${{ matrix.rosdistro }}_lcov)/lcov/full_coverage.lcov ./lcov/full_coverage.lcov;
+
+      - name: Cleanup Docker Container
+        run: |
+          docker rm -f lanelet2_test_${{ matrix.rosdistro }};
+          docker rm -f lanelet2_test_${{ matrix.rosdistro }}_lcov;
+
+      - name: Report code coverage
+        uses: immel-f/github-actions-report-lcov@v0.1.11
+        if: ${{ matrix.rosdistro == 'noetic' }}
+        with:
+          coverage-files: ./lcov/full_coverage.lcov
+          artifact-name: code-coverage-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}

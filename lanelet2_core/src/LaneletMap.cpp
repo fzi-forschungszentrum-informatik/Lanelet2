@@ -825,6 +825,10 @@ LaneletMapUPtr createMap(const Lanelets& fromLanelets, const Areas& fromAreas) {
   for (auto ll : fromLanelets) {
     ls.push_back(ll.leftBound());
     ls.push_back(ll.rightBound());
+    if (ll.hasCustomCenterline()) {
+      auto center = ll.centerline();
+      ls.emplace_back(std::const_pointer_cast<LineStringData>(center.constData()), center.inverted());
+    }
   }
   auto appendMultiLs = [&ls](auto& lsappend) {
     std::for_each(lsappend.begin(), lsappend.end(), [&ls](auto& l) { ls.push_back(l); });

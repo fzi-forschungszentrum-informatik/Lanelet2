@@ -503,6 +503,20 @@ TEST_F(GermanTrafficRulesVehicle, canLaneChangeBothSidesBothExplicitly) {  // NO
   EXPECT_TRUE(germanVehicle->canChangeLane(lanelet, left));
   EXPECT_TRUE(germanVehicle->canChangeLane(left, lanelet));
 }
+TEST_F(GermanTrafficRulesVehicle, canLaneChangeLeftSideBothExplicitly) {  // NOLINT
+  ls3.setAttribute(Attr::Type, Value::Virtual);
+  ls3.setAttribute(AttrStr::LaneChangeLeft, true);
+  ls3.setAttribute(AttrStr::LaneChangeRight, false);
+  EXPECT_TRUE(germanVehicle->canChangeLane(lanelet, left));
+  EXPECT_FALSE(germanVehicle->canChangeLane(left, lanelet));
+}
+TEST_F(GermanTrafficRulesVehicle, canLaneChangeRightSideBothExplicitly) {  // NOLINT
+  ls3.setAttribute(Attr::Type, Value::Virtual);
+  ls3.setAttribute(AttrStr::LaneChangeLeft, false);
+  ls3.setAttribute(AttrStr::LaneChangeRight, true);
+  EXPECT_FALSE(germanVehicle->canChangeLane(lanelet, left));
+  EXPECT_TRUE(germanVehicle->canChangeLane(left, lanelet));
+}
 
 TEST_F(GermanTrafficRulesVehicle, canLaneChangeLeftExplicitly) {  // NOLINT
   ls3.setAttribute(Attr::Type, Value::Virtual);

@@ -6,8 +6,8 @@
 #include <lanelet2_core/geometry/Polygon.h>
 #include <lanelet2_core/geometry/RegulatoryElement.h>
 
+#include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/geometries/register/multi_linestring.hpp>
-#include <boost/python.hpp>
 
 #include "lanelet2_python/internal/converter.h"
 
@@ -297,6 +297,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("toArcCoordinates", lg::toArcCoordinates<CompoundLineString2d>,
       "Project a point into arc coordinates of the linestring");
 
+  def("fromArcCoordinates", lg::fromArcCoordinates<ConstLineString2d>,
+      "Create a point from arc coordinates of the linestring");
+  def("fromArcCoordinates", lg::fromArcCoordinates<CompoundLineString2d>,
+      "Create a point from arc coordinates of the linestring");
+
   def("length", lg::length<ConstLineString2d>);
   def("length", lg::length<ConstLineString3d>);
   def("length", lg::length<CompoundLineString2d>);
@@ -458,4 +463,33 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   wrapFindWithin2d<Area, Area>();
   wrapFindWithin3d<Area, Point3d>();
   wrapFindWithin3d<Area, BasicPoint3d>();
+
+  // boost::geometry functions for convenience
+  def(
+      "intersection", +[](const BasicLineString2d& ls1, const BasicLineString2d& ls2) {
+        BasicPoints2d pts;
+        boost::geometry::intersection(ls1, ls2, pts);
+        return toBasicVector(pts);
+      });
+
+  def(
+      "intersection", +[](const CompoundLineString2d& ls1, const ConstLineString2d& ls2) {
+        BasicPoints2d pts;
+        boost::geometry::intersection(ls1.basicLineString(), ls2.basicLineString(), pts);
+        return toBasicVector(pts);
+      });
+
+  def(
+      "intersection", +[](const CompoundLineString2d& ls1, const CompoundLineString2d& ls2) {
+        BasicPoints2d pts;
+        boost::geometry::intersection(ls1.basicLineString(), ls2.basicLineString(), pts);
+        return toBasicVector(pts);
+      });
+
+  def(
+      "intersection", +[](const ConstLineString2d& ls1, const ConstLineString2d& ls2) {
+        BasicPoints2d pts;
+        boost::geometry::intersection(ls1.basicLineString(), ls2.basicLineString(), pts);
+        return toBasicVector(pts);
+      });
 }

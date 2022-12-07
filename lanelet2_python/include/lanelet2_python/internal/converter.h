@@ -3,10 +3,7 @@
 #include <lanelet2_core/utility/Optional.h>
 
 #include <boost/python.hpp>
-#include <boost/python/suite/indexing/indexing_suite.hpp>
-#include <boost/variant/static_visitor.hpp>
-//#include <boost/python/suite/indexing/map_indexing_suite.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include <boost/python/suite/indexing/map_indexing_suite.hpp>
 
 namespace wrappers {
 namespace py = boost::python;

@@ -8,9 +8,9 @@ using namespace lanelet::osm;
 TEST(OsmFile, readWrite) {  // NOLINT
   File file;
   // clang-format off
-  file.nodes.emplace(std::make_pair(-1, Node{-1, {{"key", "value"}, {"key2", "value2"}}, {49, 8, 1}}));
-  file.nodes.emplace(std::make_pair(-2, Node{-2, {}, {50, 8, 0}}));
-  file.nodes.emplace(std::make_pair(-3, Node{-3, {}, {50, 8, 0}}));
+  file.nodes.emplace(std::make_pair(-1, Node{-1, {{"key", "value"}, {"key2", "value2"}}, {12.3456789, 0001.2345678000, 9.0123}}));
+  file.nodes.emplace(std::make_pair(-2, Node{-2, {}, {45.6789, 12.3, 4.5}}));
+  file.nodes.emplace(std::make_pair(-3, Node{-3, {}, {67.8, 9.10, 11.0}}));
   file.ways.emplace(std::make_pair(-4, Way{-4, {{"wayKey", "wayValue"}}, {&file.nodes.at(-1), &file.nodes.at(-2)}}));
   file.ways.emplace(std::make_pair(-5, Way{-5, {{"wayKey", "wayValue"}}, {&file.nodes.at(-2), &file.nodes.at(-3)}}));
   file.relations.emplace(std::make_pair(-6,Relation{-6,{{"relKey", "relValue"}},{{"outer", &file.ways.at(-4)}, {"outer", &file.ways.at(-5)}, {"node", &file.nodes.at(-2)}}}));
@@ -21,6 +21,54 @@ TEST(OsmFile, readWrite) {  // NOLINT
   EXPECT_EQ(file2.relations, file.relations);
   EXPECT_EQ(file2.ways, file.ways);
   EXPECT_EQ(file2, file);
+  // Test upload (false by default)
+  const auto osmNode = doc->first_child();
+  const auto upload_attribute = osmNode.attributes().begin()->next_attribute();
+  EXPECT_EQ(std::string(upload_attribute.name()), "upload");
+  EXPECT_EQ(std::string(upload_attribute.value()), "false");
+  // Test josm_format_elevation (false by default)
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.lat, 12.3456789);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.lon, 1.2345678);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.ele, 9.0123);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.lat, 45.6789);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.lon, 12.3);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.ele, 4.5);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.lat, 67.8);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.lon, 9.10);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.ele, 11.0);
+}
+
+TEST(OsmFile, readWriteJSON) {  // NOLINT
+  File file;
+  // clang-format off
+  file.nodes.emplace(std::make_pair(-1, Node{-1, {{"key", "value"}, {"key2", "value2"}}, {12.3456789, 0001.2345678000, 9.0123}}));
+  file.nodes.emplace(std::make_pair(-2, Node{-2, {}, {45.6789, 12.3, 4.5}}));
+  file.nodes.emplace(std::make_pair(-3, Node{-3, {}, {67.8, 9.10, 11.0}}));
+  file.ways.emplace(std::make_pair(-4, Way{-4, {{"wayKey", "wayValue"}}, {&file.nodes.at(-1), &file.nodes.at(-2)}}));
+  file.ways.emplace(std::make_pair(-5, Way{-5, {{"wayKey", "wayValue"}}, {&file.nodes.at(-2), &file.nodes.at(-3)}}));
+  file.relations.emplace(std::make_pair(-6,Relation{-6,{{"relKey", "relValue"}},{{"outer", &file.ways.at(-4)}, {"outer", &file.ways.at(-5)}, {"node", &file.nodes.at(-2)}}}));
+  // clang-format on
+  auto doc = write(file, { {"josm_upload", "true"}, {"josm_format_elevation", "true"} });
+  auto file2 = read(*doc);
+
+  EXPECT_EQ(file2.relations, file.relations);
+  EXPECT_EQ(file2.ways, file.ways);
+  EXPECT_EQ(file2, file);
+  // Test upload
+  const auto osmNode = doc->first_child();
+  const auto upload_attribute = osmNode.attributes().begin()->next_attribute();
+  EXPECT_EQ(std::string(upload_attribute.name()), "upload");
+  EXPECT_EQ(std::string(upload_attribute.value()), "true");
+  // Test josm_format_elevation
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.lat, 12.3456789);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.lon, 1.2345678);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-1).point.ele, 9.01);  // limited to 2 decimals
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.lat, 45.6789);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.lon, 12.3);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-2).point.ele, 4.5);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.lat, 67.8);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.lon, 9.10);
+  EXPECT_DOUBLE_EQ(file2.nodes.at(-3).point.ele, 11.0);
 }
 
 TEST(OsmFile, readEmptyFile) {  // NOLINT

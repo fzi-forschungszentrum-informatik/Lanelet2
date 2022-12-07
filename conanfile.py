@@ -36,14 +36,16 @@ add_subdirectory(lanelet2_validation)
 add_subdirectory(lanelet2_examples)
 add_subdirectory(lanelet2_python)
 add_subdirectory(lanelet2_maps)
+add_subdirectory(lanelet2_matching)
 # declare dependencies
 target_link_libraries(lanelet2_io PUBLIC lanelet2_core)
 target_link_libraries(lanelet2_projection PUBLIC lanelet2_core)
 target_link_libraries(lanelet2_traffic_rules PUBLIC lanelet2_core)
 target_link_libraries(lanelet2_routing PUBLIC lanelet2_core lanelet2_traffic_rules)
+target_link_libraries(lanelet2_matching PUBLIC lanelet2_core lanelet2_traffic_rules lanelet2_io lanelet2_projection lanelet2_maps)
 target_link_libraries(lanelet2_validation PUBLIC lanelet2_core lanelet2_io lanelet2_routing lanelet2_traffic_rules lanelet2_projection)
-target_link_libraries(lanelet2_examples_compiler_flags INTERFACE lanelet2_core lanelet2_io lanelet2_routing lanelet2_traffic_rules lanelet2_projection)
-target_link_libraries(lanelet2_python_compiler_flags INTERFACE lanelet2_core lanelet2_io lanelet2_routing lanelet2_traffic_rules lanelet2_projection)
+target_link_libraries(lanelet2_examples_compiler_flags INTERFACE lanelet2_core lanelet2_io lanelet2_routing lanelet2_traffic_rules lanelet2_projection lanelet2_matching)
+target_link_libraries(lanelet2_python_compiler_flags INTERFACE lanelet2_core lanelet2_io lanelet2_routing lanelet2_traffic_rules lanelet2_projection lanelet2_matching)
 """
 
 def read_version():
@@ -65,13 +67,13 @@ class Lanelet2Conan(ConanFile):
     url = "https://github.com/fzi-forschungszentrum-informatik/lanelet2"
     description = "Map handling framework for automated driving"
     options = {"shared": [True, False], "fPIC": [True]}
-    default_options = {"shared": False, "fPIC": True, "boost:python_version": get_py_version(), "boost:without_python": False, "python_dev_config:python": get_py_exec()}
+    default_options = {"shared": True, "fPIC": True, "boost:shared": True, "boost:python_version": get_py_version(), "boost:without_python": False, "python_dev_config:python": get_py_exec()}
 
     requires = ("python_dev_config/0.6@bincrafters/stable",
-                "boost/1.69.0@conan/stable",
-                "eigen/3.3.7@conan/stable",
-                "geographiclib/1.49@bincrafters/stable",
-                "pugixml/1.9@bincrafters/stable")
+                "boost/1.75.0",
+                "eigen/3.3.9",
+                "geographiclib/1.50.1",
+                "pugixml/1.11")
 
     exports_sources = "*"
     exports = "lanelet2_core/package.xml"
@@ -79,6 +81,7 @@ class Lanelet2Conan(ConanFile):
     proj_list = [
         'lanelet2_core',
         'lanelet2_io',
+        'lanelet2_matching',
         'lanelet2_projection',
         'lanelet2_traffic_rules',
         'lanelet2_routing',
@@ -122,4 +125,11 @@ class Lanelet2Conan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = list(reversed(self.proj_list))
+        libpath = os.path.join(self.package_folder, "lib")
+        boost_libpaths = self.deps_cpp_info["boost"].lib_paths
+        execs = ("lanelet2_examples", "lanelet2_validation", "lanelet2_python")
+        binpaths = [os.path.join(self.package_folder, "lib", libname) for libname in execs]
         self.env_info.PYTHONPATH.append(os.path.join(self.package_folder, self._pythonpath()))
+        self.env_info.LD_LIBRARY_PATH += [libpath] + boost_libpaths
+        self.env_info.DYLD_LIBRARY_PATH += [libpath] + boost_libpaths
+        self.env_info.PATH += binpaths

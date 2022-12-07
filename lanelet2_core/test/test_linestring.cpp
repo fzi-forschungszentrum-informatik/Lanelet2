@@ -152,16 +152,20 @@ using HybridLineStrings = testing::Types<ConstHybridLineString2d, ConstHybridLin
 
 using BasicLineStrings = testing::Types<BasicLineString2d, BasicLineString3d>;
 
-TYPED_TEST_CASE(TwoDPointsTest, TwoDPoints);
-TYPED_TEST_CASE(AllLineStringsTest, AllLineStrings);
-TYPED_TEST_CASE(TwoDLineStringsTest, TwoDLineStrings);
-TYPED_TEST_CASE(ThreeDLineStringsTest, ThreeDLineStrings);
-TYPED_TEST_CASE(NormalLineStringsTest, NormalLineStrings);
-TYPED_TEST_CASE(MutableLineStringsTest, MutableLineStrings);
-TYPED_TEST_CASE(PrimitiveLineStringsTest, PrimitiveLineStrings);
-TYPED_TEST_CASE(NonHybridLineStringsTest, NonHybridLineStrings);
-TYPED_TEST_CASE(HybridLineStringsTest, HybridLineStrings);
-TYPED_TEST_CASE(BasicLineStringsTest, BasicLineStrings);
+#ifndef TYPED_TEST_SUITE
+// backwards compability with old gtest versions
+#define TYPED_TEST_SUITE TYPED_TEST_CASE
+#endif
+TYPED_TEST_SUITE(TwoDPointsTest, TwoDPoints);
+TYPED_TEST_SUITE(AllLineStringsTest, AllLineStrings);
+TYPED_TEST_SUITE(TwoDLineStringsTest, TwoDLineStrings);
+TYPED_TEST_SUITE(ThreeDLineStringsTest, ThreeDLineStrings);
+TYPED_TEST_SUITE(NormalLineStringsTest, NormalLineStrings);
+TYPED_TEST_SUITE(MutableLineStringsTest, MutableLineStrings);
+TYPED_TEST_SUITE(PrimitiveLineStringsTest, PrimitiveLineStrings);
+TYPED_TEST_SUITE(NonHybridLineStringsTest, NonHybridLineStrings);
+TYPED_TEST_SUITE(HybridLineStringsTest, HybridLineStrings);
+TYPED_TEST_SUITE(BasicLineStringsTest, BasicLineStrings);
 
 TYPED_TEST(MutableLineStringsTest, id) {  // NOLINT
   this->ls1.setId(100);

@@ -12,14 +12,14 @@ using namespace lanelet;
 
 class LaneletMapGeometryTest : public ::testing::Test, public test_cases::LaneletMapTestCase {};
 
-LineStrings3d getRandomLinestringsSortedByDistanceToOrigin(size_t num) {
-  auto getLinestring = [rng = std::mt19937{}, dist = std::uniform_real_distribution<double>{}, id = 0L]() mutable {
+LineStrings3d getRandomLinestringsSortedByDistanceToOrigin(size_t num, std::mt19937& rng) {
+  auto getLinestring = [&rng, dist = std::uniform_real_distribution<double>{}, id = 0L]() mutable {
     id += 3;
     return LineString3d(id - 2, {Point3d(id - 1, dist(rng), dist(rng)), Point3d(id, dist(rng), dist(rng))});
   };
-  auto byDistanceToOrigin = [](auto ls1, auto ls2) {
+  auto byDistanceToOrigin = [](const LineString3d& ls1, const LineString3d& ls2) {
     using utils::to2D;
-    return geometry::distance(BasicPoint2d{}, to2D(ls1)) < geometry::distance(BasicPoint2d{}, to2D(ls2));
+    return geometry::distance(BasicPoint2d(0, 0), to2D(ls1)) < geometry::distance(BasicPoint2d(0, 0), to2D(ls2));
   };
   LineStrings3d lss(num);
   std::generate(lss.begin(), lss.end(), getLinestring);
@@ -29,14 +29,15 @@ LineStrings3d getRandomLinestringsSortedByDistanceToOrigin(size_t num) {
 
 TEST_F(LaneletMapGeometryTest, findNearestWorksForRandomLinestrings) {  // NOLINT
   constexpr auto NumSearch = 5;
+  std::mt19937 rng(1337);
   for (auto i = 0; i < 100; ++i) {
-    auto lss = getRandomLinestringsSortedByDistanceToOrigin(10);
+    auto lss = getRandomLinestringsSortedByDistanceToOrigin(10, rng);
     this->map = utils::createMap(lss);
     auto exp = ConstLineStrings3d(lss.begin(), lss.begin() + NumSearch);
     testConstAndNonConst([&](auto& map) {
       auto nearest = geometry::findNearest(map->lineStringLayer, BasicPoint2d(0, 0), NumSearch);
       auto nearestLs = utils::transform(nearest, [](auto& ls) -> ConstLineString3d { return ls.second; });
-      EXPECT_EQ(exp, nearestLs);
+      EXPECT_EQ(exp, nearestLs) << "i=" << i;
     });
   }
 }

@@ -65,7 +65,7 @@ using AllRoutes =
                    RouteSolidDashedWithAdjacent, RouteSplittedDiverging, RouteSplittedDivergingAndMerging,
                    RouteViaSimple, RouteMissingLanelet, RouteInCircle, RouteCircular, RouteCircularNoLc>;
 
-TYPED_TEST_CASE(AllRoutesTest, AllRoutes);
+TYPED_TEST_SUITE(AllRoutesTest, AllRoutes);
 
 TYPED_TEST(AllRoutesTest, CheckValidity) { EXPECT_NO_THROW(this->route.checkValidity()); }  // NOLINT
 

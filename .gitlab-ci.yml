@@ -43,7 +43,7 @@ build_docker_bionic:
     ROS: ros
 
 # disabled as long as https://github.com/catkin/catkin_tools/issues/594 persists
-.build_docker_focal:
+build_docker_focal:
   extends: .build_docker
   variables:
     DISTRIBUTION: "20.04"
@@ -74,7 +74,8 @@ build_conan:
   before_script: []
   script:
   - apt update && env DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git cmake python3-dev
-  - pip3 install conan catkin_pkg
-  - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+  - pip3 install conan catkin_pkg numpy
+  - conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
+  - conan config set general.revisions_enabled=1
   - conan source .
-  - conan create . lanelet2/stable --build=missing --options shared=True
+  - conan create . lanelet2/stable --build=missing
