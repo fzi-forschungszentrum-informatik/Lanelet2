@@ -8,6 +8,8 @@
 #include <string>
 #include <utility>
 
+#include "lanelet2_io/Configuration.h"
+
 namespace lanelet {
 namespace osm {
 
@@ -99,7 +101,7 @@ File read(pugi::xml_document& node, lanelet::osm::Errors* errors = nullptr);
 
 //! Creates an xml representation from an osm file representation. This is
 //! guaranteed to work without errors.
-std::unique_ptr<pugi::xml_document> write(const File& file);
+std::unique_ptr<pugi::xml_document> write(const File& file, const io::Configuration& params = io::Configuration());
 
 inline bool operator==(const Node& lhs, const Node& rhs) { return lhs.id == rhs.id; }
 bool operator==(const Way& lhs, const Way& rhs);

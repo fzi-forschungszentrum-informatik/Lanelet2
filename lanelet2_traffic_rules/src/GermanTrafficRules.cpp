@@ -24,7 +24,7 @@ Velocity trafficSignToVelocity(const std::string& typeString) {
       {"de274-20", 20_kmh},   {"de274-30", 30_kmh},   {"de274-40", 40_kmh},   {"de274-50", 50_kmh},
       {"de274-60", 60_kmh},   {"de274-70", 70_kmh},   {"de274-80", 80_kmh},   {"de274-90", 90_kmh},
       {"de274-100", 100_kmh}, {"de274-110", 110_kmh}, {"de274-120", 120_kmh}, {"de274-130", 130_kmh},
-      {"de310", 50_kmh}};
+      {"de274_1", 30_kmh},    {"de274_1-20", 20_kmh}, {"de310", 50_kmh}};
   try {
     return StrToVelocity.at(typeString);
   } catch (std::out_of_range&) {

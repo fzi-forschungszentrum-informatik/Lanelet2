@@ -2,7 +2,6 @@
 #include <lanelet2_routing/RoutingGraph.h>
 
 #include <boost/make_shared.hpp>
-#include <boost/python.hpp>
 
 #include "lanelet2_python/internal/converter.h"
 

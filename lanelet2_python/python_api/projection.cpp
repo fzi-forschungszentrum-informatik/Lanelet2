@@ -1,4 +1,6 @@
 #include <lanelet2_projection/UTM.h>
+#include <lanelet2_projection/Geocentric.h>
+#include <lanelet2_projection/LocalCartesian.h>
 
 #include <boost/python.hpp>
 
@@ -13,7 +15,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("origin", &Projector::origin, "Global origin of the converter", return_internal_reference<>());
   class_<projection::SphericalMercatorProjector, std::shared_ptr<projection::SphericalMercatorProjector>,  // NOLINT
          bases<Projector>>("MercatorProjector", init<Origin>("origin"));
-  class_<projection::UtmProjector, std::shared_ptr<projection::UtmProjector>, bases<Projector>>("UtmProjector",
-                                                                                                init<Origin>("origin"))
+  class_<projection::GeocentricProjector, std::shared_ptr<projection::GeocentricProjector>,  // NOLINT
+         bases<Projector>>("GeocentricProjector");
+  class_<projection::LocalCartesianProjector, std::shared_ptr<projection::LocalCartesianProjector>,  // NOLINT
+         bases<Projector>>("LocalCartesianProjector", init<Origin>("origin"));
+  class_<projection::UtmProjector, std::shared_ptr<projection::UtmProjector>,  // NOLINT
+         bases<Projector>>("UtmProjector", init<Origin>("origin"))
       .def(init<Origin, bool, bool>("UtmProjector(origin, useOffset, throwInPaddingArea)"));
 }

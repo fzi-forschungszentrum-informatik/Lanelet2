@@ -58,27 +58,24 @@ std::vector<std::string> supportedParsers() { return io_handlers::ParserFactory:
 
 std::vector<std::string> supportedParserExtensions() { return io_handlers::ParserFactory::availableExtensions(); }
 
-void write(const std::string& filename, const LaneletMap& map, const Origin& origin, ErrorMessages* errors,
-           const io::Configuration& params) {
+void write(const std::string& filename, const LaneletMap& map, const Origin& origin, ErrorMessages* errors, const io::Configuration& params) {
   write(filename, map, defaultProjection(origin), errors, params);
 }
 
-void write(const std::string& filename, const LaneletMap& map, const Projector& projector, ErrorMessages* errors,
-           const io::Configuration& params) {
+void write(const std::string& filename, const LaneletMap& map, const Projector& projector, ErrorMessages* errors, const io::Configuration& params) {
   ErrorMessages err;
-  io_handlers::WriterFactory::createFromExtension(extension(filename), projector, params)->write(filename, map, err);
+  io_handlers::WriterFactory::createFromExtension(extension(filename), projector, params)->write(filename, map, err, params);
   handleErrorsOrThrow<WriteError>(err, errors);
 }
 
-void write(const std::string& filename, const LaneletMap& map, const std::string& writerName, const Origin& origin,
-           ErrorMessages* errors, const io::Configuration& params) {
+void write(const std::string& filename, const LaneletMap& map, const std::string& writerName, const Origin& origin, ErrorMessages* errors, const io::Configuration& params) {
   write(filename, map, writerName, defaultProjection(origin), errors, params);
 }
 
 void write(const std::string& filename, const LaneletMap& map, const std::string& writerName,
            const Projector& projector, ErrorMessages* errors, const io::Configuration& params) {
   ErrorMessages err;
-  io_handlers::WriterFactory::create(writerName, projector, params)->write(filename, map, err);
+  io_handlers::WriterFactory::create(writerName, projector, params)->write(filename, map, err, params);
   handleErrorsOrThrow<WriteError>(err, errors);
 }
 
