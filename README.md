@@ -151,6 +151,11 @@ Examples and common use cases in both C++ and Python can be found [here](lanelet
 * **lanelet2_validation** provides checks to ensure a valid lanelet2 map
 * **lanelet2_examples** contains tutorials for working with Lanelet2 in C++ and Python
 
+## Contributing
+
+We encourage you to contribute to Lanelet2! Please check out the
+[Contributing to Lanelet2 guide](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/blob/master/CONTRIBUTING.md) for guidelines about how to proceed. You can find possible open issues for contribution [here](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/contribute).
+
 ## Citation
 
 If you are using Lanelet2 for scientific research, we would be pleased if you would cite our [publication](http://www.mrt.kit.edu/z/publ/download/2018/Poggenhans2018Lanelet2.pdf):
