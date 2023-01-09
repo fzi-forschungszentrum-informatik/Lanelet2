@@ -20,7 +20,7 @@
 
 #### **Do you have questions about the source code?**
 
-* You can find general info about the structure of Lanelet2 in the [documentation](https://github.com/fzi-forschungszentrum-informatik/Lanelet2#documentation). If you are stuck while implementing a contribution, you can search in the [Issues](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues) or [open a new one](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/new).
+* You can find general info about the structure of Lanelet2 in the [documentation](#documentation). If you are stuck while implementing a contribution, you can search in the [Issues](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues) or [open a new one](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/new).
 
 Lanelet2 as an open source project welcomes contributions. You can find possible open issues for contribution [here](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/contribute). We encourage you to pitch in!
 
