@@ -154,7 +154,7 @@ Examples and common use cases in both C++ and Python can be found [here](lanelet
 ## Contributing
 
 We encourage you to contribute to Lanelet2! Please check out the
-[Contributing to Lanelet2 guide](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/blob/master/CONTRIBUTING.md) for guidelines about how to proceed. You can find possible open issues for contribution [here](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/contribute).
+[Contributing to Lanelet2 guide](CONTRIBUTING.md) for guidelines about how to proceed. You can find possible open issues for contribution [here](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/contribute).
 
 ## Citation
 
