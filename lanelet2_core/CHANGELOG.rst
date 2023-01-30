@@ -2,8 +2,8 @@
 Changelog for package lanelet2_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2023-01-30)
+------------------
 * Add zero-width character after colon to avoid markdown emoji
   :car: :arrow_right: :&`#8203 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/8203>`_;car:
 * Use TYPED_TEST_SUITE over deprecated TYPED_TEST_CASE in unit tests

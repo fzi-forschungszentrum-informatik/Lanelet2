@@ -2,8 +2,8 @@
 Changelog for package lanelet2_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2023-01-30)
+------------------
 * Fix OSM file output for upload and elevation (`#245 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/245>`_)
   * discourage upload and format elevation to max 2 decimals to prevent JSOM excessive elevation precision errors
   * remove width to prevent leading spaces for lat/lon/ele

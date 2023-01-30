@@ -2,8 +2,8 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2023-01-30)
+------------------
 * Add CI using GitHub Actions (`#256 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/256>`_)
 * Increase minimum required cmake version.
 * Integrate into lanelet2

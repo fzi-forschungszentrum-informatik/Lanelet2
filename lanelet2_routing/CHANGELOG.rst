@@ -2,8 +2,8 @@
 Changelog for package lanelet2_routing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2023-01-30)
+------------------
 * Add CI using GitHub Actions (`#256 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/256>`_)
 * Use TYPED_TEST_SUITE over deprecated TYPED_TEST_CASE in unit tests
 * Add missing include for boost 1.69

@@ -2,8 +2,8 @@
 Changelog for package lanelet2_maps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2023-01-30)
+------------------
 * Add CI using GitHub Actions (`#256 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/256>`_)
 * Distinguish relations and their members in maps README.md
   In description of Lanelets

@@ -2,8 +2,8 @@
 Changelog for package lanelet2_matching
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2023-01-30)
+------------------
 * Add CI using GitHub Actions (`#256 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/256>`_)
 * Move matching integration test to examples
 * Name integration tests correctly and remove utils tests
