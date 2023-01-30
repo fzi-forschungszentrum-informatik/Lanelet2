@@ -2,6 +2,12 @@
 Changelog for package lanelet2_projection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.0 (2023-01-30)
+------------------
+* add Geocentric and Local Cartesian projectors (`#244 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/244>`_)
+* Correct authorship
+* Contributors: Maximilian Naumann, Michał Antkiewicz, Nico Neumann
+
 1.1.1 (2020-09-14)
 ------------------
 

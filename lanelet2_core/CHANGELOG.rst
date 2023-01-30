@@ -2,6 +2,19 @@
 Changelog for package lanelet2_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.0 (2023-01-30)
+------------------
+* Add zero-width character after colon to avoid markdown emoji
+  :car: :arrow_right: :&`#8203 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/8203>`_;car:
+* Use TYPED_TEST_SUITE over deprecated TYPED_TEST_CASE in unit tests
+* Add required boost::geometry functionalities to pyapi
+* Fix bug with custom centerlines
+  custom centerlines of lanelets are now properly added when creating a lanelet map. Added tests to ensure this
+  fixes `fzi-forschungszentrum-informatik/Lanelet2#159 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/159>`_
+* Remove randomness from test findNearestWorksForRandomLinestrings
+* Fix build for boost 1.69
+* Contributors: Fabian Poggenhans, Héctor Ochoa Ortiz, Maximilian Naumann, Sahin Tas, Fabian Immel
+
 1.1.1 (2020-09-14)
 ------------------
 

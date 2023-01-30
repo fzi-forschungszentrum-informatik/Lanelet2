@@ -2,6 +2,13 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.0 (2023-01-30)
+------------------
+* Add CI using GitHub Actions (`#256 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/256>`_)
+* Increase minimum required cmake version.
+* Integrate into lanelet2
+* Contributors: Johannes Beck, Maximilian Naumann, immel-f
+
 1.1.1 (2020-09-14)
 ------------------
 * Add missing dependency to ros_environment

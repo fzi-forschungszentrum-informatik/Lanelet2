@@ -2,6 +2,24 @@
 Changelog for package lanelet2_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.0 (2023-01-30)
+------------------
+* Fix OSM file output for upload and elevation (`#245 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/245>`_)
+  * discourage upload and format elevation to max 2 decimals to prevent JSOM excessive elevation precision errors
+  * remove width to prevent leading spaces for lat/lon/ele
+  * allow for providing parameters josm_prevent_upload and josm_format_elevation to write
+  * Test lat/lon/ele formatting with and without josm_format_elevation. Test josm_upload
+  * improve read/write tutorial section comments
+  * document params
+* Fix 223 all way stop python (`#231 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/231>`_)
+* Add CI using GitHub Actions (`#256 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/256>`_)
+* Add lanelet2_matching as dep for examples
+* Move matching integration test to examples
+* Update and fix conan build, deps and docs
+  closes `fzi-forschungszentrum-informatik/Lanelet2#174 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/174>`_
+* Fixed typo in README.md
+* Contributors: Denzel-Haverkamp, Fabian Poggenhans, Maximilian Naumann, Michał Antkiewicz, Fabian Immel
+
 1.1.1 (2020-09-14)
 ------------------
 
