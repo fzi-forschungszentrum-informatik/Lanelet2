@@ -2,6 +2,11 @@
 Changelog for package lanelet2_validation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add CI using GitHub Actions (`#256 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/256>`_)
+* Contributors: Fabian Immel
+
 1.1.1 (2020-09-14)
 ------------------
 
