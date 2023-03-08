@@ -125,7 +125,32 @@ COPY --chown=developer:developer . /home/developer/workspace/src/lanelet2
 # update dependencies
 RUN git -C /home/developer/workspace/src/mrt_cmake_modules pull
 
-# third stage: build
+# third stage: python package
+FROM lanelet2_src AS lanelet2_py
+RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
+    catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.6 && \
+    catkin build && \
+    cp -r /home/developer/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 lanelet2
+COPY --chown=developer:developer lanelet2_python/setup.py setup.py
+# install patchelf
+RUN cd $HOME && \
+    wget https://github.com/NixOS/patchelf/releases/download/0.17.2/patchelf-0.17.2-x86_64.tar.gz && \
+    tar -xzf patchelf-0.17.2-x86_64.tar.gz && \
+    sudo ln -s $HOME/bin/patchelf /bin/patchelf && \
+    patchelf --version
+
+# install pip
+ENV PATH="$PATH:$HOME/.local/bin"
+RUN cd $HOME && \
+    wget -q https://bootstrap.pypa.io/get-pip.py && \
+    python3 get-pip.py && \
+    pip install auditwheel
+
+# create wheel
+RUN pip wheel . && \
+    auditwheel -v repair -w . --plat linux_x86_64 ./lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl
+
+# fourth stage: build
 FROM lanelet2_src AS lanelet2
 
 # build
