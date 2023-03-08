@@ -14,13 +14,14 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          tags: lanelet2:latest
+          tags: lanelet2_src
           target: lanelet2_src
+          load: true
 
       - name: Do stuff inside the container
         uses: addnab/docker-run-action@v3
         with:
-          image: lanelet2:latest
+          image: lanelet2_src
           run: |
             source /opt/ros/noetic/setup.bash
             catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.9
