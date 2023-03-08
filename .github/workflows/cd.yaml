@@ -9,14 +9,22 @@ jobs:
       - name: Setup docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
+      
+      - name: Setup docker cache
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.docker-cache
+          key: ${{runner.os}}-docker-noetic
 
       - name: Build dependencies
         uses: docker/build-push-action@v3
         with:
           builder: ${{ steps.buildx.outputs.name }}
           tags: lanelet2_src
-          target: lanelet2_src
+          cache-from: type=local,src=/tmp/.docker-cache
+          cache-to: type=local,dest=/tmp/.docker-cache
           load: true
+          target: lanelet2_src
 
       - name: Do stuff inside the container
         uses: addnab/docker-run-action@v3
