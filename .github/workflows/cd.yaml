@@ -19,8 +19,9 @@ jobs:
 
       - name: Do stuff inside the container
         uses: addnab/docker-run-action@v3
-        run: |
-          source /opt/ros/noetic/setup.bash
-          catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.9
-          catkin build
-          cp -r /home/developer/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 lanelet2
+        with:
+          run: |
+            source /opt/ros/noetic/setup.bash
+            catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.9
+            catkin build
+            cp -r /home/developer/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 lanelet2
