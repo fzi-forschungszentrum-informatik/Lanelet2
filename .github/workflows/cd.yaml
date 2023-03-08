@@ -9,20 +9,12 @@ jobs:
       - name: Setup docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
-      
-      - name: Setup docker cache
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.docker-cache
-          key: ${{runner.os}}-docker-noetic
 
       - name: Build dependencies
         uses: docker/build-push-action@v3
         with:
           builder: ${{ steps.buildx.outputs.name }}
           tags: lanelet2_src
-          cache-from: type=local,src=/tmp/.docker-cache
-          cache-to: type=local,dest=/tmp/.docker-cache
           load: true
           target: lanelet2_src
 
@@ -59,8 +51,8 @@ jobs:
             pip wheel .
             auditwheel -v repair -w . --plat linux_x86_64 ./lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl
 
-      # - name: Do stuff inside the container
-      #   uses: addnab/docker-run-action@v3
-      #   with:
-      #     name: wheel
-      #     path: *.whl
+      - name: Store wheel
+        uses: github/upload-artifact@v3
+        with:
+          name: wheel
+          path: *.whl
