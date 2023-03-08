@@ -52,7 +52,7 @@ jobs:
             auditwheel -v repair -w . --plat linux_x86_64 ./lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl
 
       - name: Store wheel
-        uses: github/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: wheel
           path: "*.whl"
