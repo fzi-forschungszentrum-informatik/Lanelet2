@@ -22,8 +22,29 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: lanelet2_src
+          shell: bash
           run: |
+            # build lanelet2 with python
             source /opt/ros/noetic/setup.bash
-            catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.9
+            catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.8
             catkin build
             cp -r /home/developer/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 lanelet2
+          
+            # install patchelf
+            cd $HOME
+            wget https://github.com/NixOS/patchelf/releases/download/0.17.2/patchelf-0.17.2-x86_64.tar.gz
+            tar -xzf patchelf-0.17.2-x86_64.tar.gz
+            sudo ln -s $HOME/bin/patchelf /bin/patchelf
+            patchelf --version
+
+            # install pip
+            export PATH="$PATH:$HOME/.local/bin"
+            cd $HOME
+            wget -q https://bootstrap.pypa.io/get-pip.py
+            python3 get-pip.py
+            pip install auditwheel
+
+            # repair wheel
+            pip wheel .
+            auditwheel -v repair -w . --plat linux_x86_64 ./lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl
+
