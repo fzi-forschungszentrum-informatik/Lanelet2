@@ -55,4 +55,4 @@ jobs:
         uses: github/upload-artifact@v3
         with:
           name: wheel
-          path: *.whl
+          path: "*.whl"
