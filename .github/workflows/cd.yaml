@@ -31,12 +31,14 @@ jobs:
         with:
           image: lanelet2_src
           shell: bash
+          options: -v ${{ github.workspace }}:/work
           run: |
             # build lanelet2 with python
             source /opt/ros/noetic/setup.bash
             catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.8
             catkin build
-            cp -r /home/developer/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 lanelet2
+            cp -r /home/developer/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 /work/lanelet2
+            cp /home/developer/workspace/src/lanelet2_python/setup.py /work/lanelet2/setup.py
           
             # install patchelf
             cd $HOME
@@ -53,6 +55,12 @@ jobs:
             pip install auditwheel
 
             # repair wheel
+            cd /work/lanelet2
             pip wheel .
             auditwheel -v repair -w . --plat linux_x86_64 ./lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl
 
+        - name: Store wheel
+          uses: github/upload-artifact@v3
+          with:
+            name: wheel
+            path: *.whl
