@@ -18,19 +18,22 @@ jobs:
           load: true
           target: lanelet2_src
 
+      - name: Create output directory
+        run: mkdir -p ${{ github.workspace }}/output
+
       - name: Do stuff inside the container
         uses: addnab/docker-run-action@v3
         with:
           image: lanelet2_src
           shell: bash
-          options: -v ${{ github.workspace }}:/home/developer/github
+          options: -v ${{ github.workspace }}/output:/output
           run: |
             # build lanelet2 with python
             source /opt/ros/noetic/setup.bash
             catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.8
             catkin build
-            cp -r /home/developer/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 /home/developer/github/lanelet2
-            cp /home/developer/workspace/src/lanelet2_python/setup.py /home/developer/github/lanelet2/setup.py
+            sudo cp -r $HOME/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 $HOME/lanelet2
+            sudo cp $HOME/workspace/src/lanelet2_python/setup.py $HOME/lanelet2/setup.py
           
             # install patchelf
             cd $HOME
@@ -47,9 +50,12 @@ jobs:
             pip install auditwheel
 
             # repair wheel
-            cd /home/developer/lanelet2
+            cd $HOME/lanelet2
             pip wheel .
             auditwheel -v repair -w . --plat linux_x86_64 ./lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl
+
+            # copy wheel to output directory
+            sudo cp $HOME/lanelet2/lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl /output/.
 
       - name: Store wheel
         uses: actions/upload-artifact@v3
