@@ -74,8 +74,7 @@ jobs:
           path: dist/
 
   publish:
-    # TODO: activate guard in production
-    # if: contains(github.ref, 'refs/tags/')
+    if: contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -89,9 +88,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: dist/*
-          # TODO: do not use hardcoded name and tag_name in production
-          name: 1.2.0
-          tag_name: 1.2.0
 
       # can't publish to PyPI due to unsupported platform tag.
       # - name: Publish package to TestPyPI
