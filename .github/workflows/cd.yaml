@@ -85,16 +85,13 @@ jobs:
           name: dist
           path: dist/
 
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*
-          # TODO: do not use hardcoded tag in production
-          # tag: ${{ github.ref }}
-          tag: 1.2.0
-          overwrite: true
-          file_glob: true
+          files: dist/*
+          # TODO: do not use hardcoded name and tag_name in production
+          name: 1.2.0
+          tag_name: 1.2.0
 
       # can't publish to PyPI due to unsupported platform tag.
       # - name: Publish package to TestPyPI
