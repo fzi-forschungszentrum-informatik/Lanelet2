@@ -29,13 +29,14 @@ jobs:
           options: -v ${{ github.workspace }}/dist:/dist
           run: |
             set -e
+            export WORKSPACE=$(pwd)
 
             # build lanelet2 with python
             source /opt/ros/noetic/setup.bash
             catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.8
-            catkin build
-            sudo cp -r $HOME/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 $HOME/lanelet2
-            sudo cp $HOME/workspace/src/lanelet2/lanelet2_python/setup.py $HOME/lanelet2/setup.py
+            catkin build --no-status
+            sudo cp -r $HOME/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 $WORKSPACE/lanelet2
+            sudo cp $HOME/workspace/src/lanelet2/lanelet2_python/setup.py $WORKSPACE/setup.py
           
             # install patchelf
             cd $HOME
@@ -52,12 +53,12 @@ jobs:
             pip install auditwheel
 
             # repair wheel
-            cd $HOME/lanelet2
-            pip wheel .
-            auditwheel -v repair -w . --plat linux_x86_64 ./lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl
+            cd $WORKSPACE
+            pip wheel -w dist/ .
+            auditwheel repair -w dist/ --plat linux_x86_64 dist/*.whl
 
             # copy wheel to dist directory
-            sudo cp $HOME/lanelet2/lanelet2-1.2.0-cp38-cp38-linux_x86_64.whl /dist/.
+            sudo cp -r $WORKSPACE/dist/* /dist
 
       - name: Store wheel
         uses: actions/upload-artifact@v3
@@ -67,11 +68,15 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Restore wheel
         uses: actions/download-artifact@v3
         with:
           name: dist
+
+      - name: Inspect
+        run: ls -R .
 
       - name: Publish package to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1

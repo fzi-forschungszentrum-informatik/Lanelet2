@@ -128,8 +128,8 @@ RUN git -C /home/developer/workspace/src/mrt_cmake_modules pull
 # third stage: python package
 FROM lanelet2_src AS lanelet2_py
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
-    catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.6 && \
-    catkin build && \
+    catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.8 && \
+    catkin build --no-status && \
     cp -r /home/developer/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 lanelet2
 COPY --chown=developer:developer lanelet2_python/setup.py setup.py
 # install patchelf
