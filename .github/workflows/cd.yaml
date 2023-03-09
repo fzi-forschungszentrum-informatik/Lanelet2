@@ -1,6 +1,10 @@
 name: Lanelet2 CD
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -31,9 +35,12 @@ jobs:
             set -e
             export WORKSPACE=$(pwd)
 
+            # find python version
+            export PYTHON_VERSION=$(python3 -c "import sys; print('.'.join([str(i) for i in sys.version_info[:2]]))")
+
             # build lanelet2 with python
             source /opt/ros/noetic/setup.bash
-            catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.8
+            catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=$PYTHON_VERSION
             catkin build --no-status
             sudo cp -r $HOME/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 $WORKSPACE/lanelet2
             sudo cp $HOME/workspace/src/lanelet2/lanelet2_python/setup.py $WORKSPACE/setup.py
@@ -67,6 +74,8 @@ jobs:
           path: dist/
 
   publish:
+    # TODO: activate guard in production
+    # if: contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -76,11 +85,18 @@ jobs:
           name: dist
           path: dist/
 
-      - name: Inspect
-        run: ls -R .
-
-      - name: Publish package to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+
+      # can't publish to PyPI due to unsupported platform tag.
+      # - name: Publish package to TestPyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+      #     repository_url: https://test.pypi.org/legacy/
