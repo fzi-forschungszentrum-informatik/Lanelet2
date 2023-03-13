@@ -11,8 +11,8 @@ MAINTAINER = "Fabian Immel"
 MAINTAINER_EMAIL = "fabian.immel@kit.edu"
 URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2"
 LICENSE = "BSD"
-DOWNLOAD_URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2/releases/tag/${{ version }}"
-VERSION = "${{ version }}"
+DOWNLOAD_URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2/releases/tag/{{ version }}"
+VERSION = "{{ version }}"
 
 class ExtModules(list):
     def __bool__(self):
