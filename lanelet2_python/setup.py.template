@@ -1,3 +1,8 @@
+"""
+setup.py template. use e.g. sed to replace placeholders with the correct values
+
+	$ sed 's/${{ version }}/1.2.0/' setup.py.template > setup.py
+"""
 from setuptools import setup
 
 DISTNAME = "lanelet2"
@@ -6,9 +11,8 @@ MAINTAINER = "Fabian Immel"
 MAINTAINER_EMAIL = "fabian.immel@kit.edu"
 URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2"
 LICENSE = "BSD"
-DOWNLOAD_URL = ""
-VERSION = '1.2.0'
-PYTHON_VERSION = (3, 8, 10)
+DOWNLOAD_URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2/releases/tag/${{ version }}"
+VERSION = "${{ version }}"
 
 class ExtModules(list):
     def __bool__(self):

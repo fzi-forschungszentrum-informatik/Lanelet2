@@ -47,8 +47,11 @@ jobs:
             source /opt/ros/noetic/setup.bash
             catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=$PYTHON_VERSION
             catkin build --no-status
-            sudo cp -r $HOME/workspace/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 $WORKSPACE/lanelet2
-            sudo cp $HOME/workspace/src/lanelet2/lanelet2_python/setup.py $WORKSPACE/setup.py
+
+            # assemble python package contents
+            cp -r $WORKSPACE/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 $WORKSPACE/lanelet2
+            export LANELET2_VERSION=$(catkin_package_version $WORKSPACE/src/lanelet2)
+            sed 's/${{ version }}/"$LANELET2_VERSION"/' $WORKSPACE/src/lanelet2/lanelet2_python/setup.py > $WORKSPACE/setup.py
           
             # install patchelf
             cd $HOME
