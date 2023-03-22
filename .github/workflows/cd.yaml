@@ -72,9 +72,6 @@ jobs:
             pip wheel -w broken-dist/ .
             auditwheel repair -w dist/ --plat manylinux_2_31_x86_64 broken-dist/*.whl
             
-            # try hack to remove python version s/cp38-cp38/py3-none
-            find $WORKSPACE/dist/ -name '*.whl' -exec bash -c 'mv $0 ${0/cp38-cp38/py3-none}' {} \;
-
             # copy wheel to dist directory
             sudo cp -r $WORKSPACE/dist/* /dist
 
@@ -123,9 +120,8 @@ jobs:
         with:
           files: dist/*
 
-      # can't publish to PyPI due to unsupported platform tag.
-      # - name: Publish package to TestPyPI
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-      #     repository_url: https://test.pypi.org/legacy/
+      - name: Publish package to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
