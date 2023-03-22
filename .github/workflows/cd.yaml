@@ -45,7 +45,7 @@ jobs:
 
             # build lanelet2 with python
             source /opt/ros/noetic/setup.bash
-            catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=$PYTHON_VERSION
+            catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DPYTHON_VERSION=$PYTHON_VERSION
             catkin build --no-status
 
             # assemble python package contents
@@ -70,7 +70,7 @@ jobs:
             # repair wheel
             cd $WORKSPACE
             pip wheel -w dist/ .
-            auditwheel repair -w dist/ --plat linux_x86_64 dist/*.whl
+            auditwheel repair -w dist/ --plat manylinux_2_31 dist/*.whl
 
             # copy wheel to dist directory
             sudo cp -r $WORKSPACE/dist/* /dist
