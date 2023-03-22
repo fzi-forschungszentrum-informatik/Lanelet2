@@ -71,6 +71,9 @@ jobs:
             cd $WORKSPACE
             pip wheel -w broken-dist/ .
             auditwheel repair -w dist/ --plat manylinux_2_31_x86_64 broken-dist/*.whl
+            
+            # try hack to remove python version s/cp38-cp38/py3-none
+            find $WORKSPACE/dist/ -name '*.whl' -exec bash -c 'mv $0 ${0/cp38-cp38/py3-none}' {} \;
 
             # copy wheel to dist directory
             sudo cp -r $WORKSPACE/dist/* /dist
