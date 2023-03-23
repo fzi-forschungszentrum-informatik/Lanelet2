@@ -2,6 +2,11 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+unreleased
+----------
+* Release Python package to PyPI (`#278 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/pull/278>`_)
+* Contributors: Jan Rudolph
+
 1.2.0 (2023-01-30)
 ------------------
 * Fix OSM file output for upload and elevation (`#245 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/245>`_)
