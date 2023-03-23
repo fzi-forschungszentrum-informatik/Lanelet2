@@ -85,10 +85,11 @@ jobs:
     needs: build
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        # test only on currently supported version
+        # python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8"]
         os: ["ubuntu-22.04", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     steps:
       - name: Restore wheel
         uses: actions/download-artifact@v3
@@ -123,5 +124,4 @@ jobs:
       - name: Publish package to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
+          password: ${{ secrets.PYPI_API_TOKEN }}
