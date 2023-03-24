@@ -100,10 +100,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install wheel
+        run: pip install dist/*
       - name: Test wheel
-        run: |
-          pip install dist/*
-          python -c "import lanelet2; assert lanelet2.core.Point2d(0, 0, 0) is not None"
+        run: python -c "import lanelet2; assert lanelet2.core.Point2d(0, 0, 0) is not None"
 
   publish:
     if: contains(github.ref, 'refs/tags/')
