@@ -44,7 +44,7 @@ sudo apt install ros-noetic-lanelet2
 ```
 
 ### Without ROS
-Outside of ROS, Lanelet2 can be installed from PyPI. Note that currently only Python 3.8 builds are available.
+Outside of ROS, Lanelet2 can be installed from PyPI. Note that currently only Python 3.8 linux builds are available.
 ```
 pip install lanelet2
 ```
