@@ -53,7 +53,8 @@ pip install lanelet2
 If you receive the error
 
 ```
-ERROR: lanelet2-1.2.0-cp38-cp38-manylinux_2_31_x86_64.whl is not a supported wheel on this platform.
+ERROR: Could not find a version that satisfies the requirement lanelet2 (from versions: none)
+ERROR: No matching distribution found for lanelet2
 ```
 
 during installation, your pip version is probably too old, 
