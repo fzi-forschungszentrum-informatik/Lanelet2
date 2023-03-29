@@ -48,6 +48,22 @@ Outside of ROS, Lanelet2 can be installed from PyPI. Note that currently only Py
 ```
 pip install lanelet2
 ```
+#### Note:
+
+If you receive the error
+
+```
+ERROR: lanelet2-1.2.0-cp38-cp38-manylinux_2_31_x86_64.whl is not a supported wheel on this platform.
+```
+
+during installation, your pip version is probably too old, 
+as e.g. the pip version that comes with apt on Ubuntu 20.04 (20.0.2) is not recent enough for the provided package.
+
+In this case you need to simply update pip with 
+
+```
+pip3 install -U pip 
+```
 
 ### Using Docker
 
