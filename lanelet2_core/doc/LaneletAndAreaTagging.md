@@ -1,18 +1,18 @@
 # Tagging Lanelets and Areas
 
-This page explains the general mapping scheme for Lanelets. The tags are used by Lanelet2 to infer information on the traffic rules here. All Lanelets and Areas must be "self sustained" which means that all traffic restrictions that apply to a lanelet must be determined just by looking at the Lanelet. The following important informations have to be determinable:
-- The driving direction (only for Lanelets, by default assumed to be one-directional)
-- The road users that the lanelet is for (by default for vehicles only)
+This page explains the general mapping scheme for lanelets. The tags are used by Lanelet2 to infer information on the traffic rules. All lanelets and areas must be "self sustained" which means that all traffic restrictions that apply to a lanelet must be determined just by looking at the lanelet. The following important informations have to be determinable:
+
+- The driving direction (only for lanelets, by default assumed to be one-directional)
+- The road users that the lanelet is intended to be used by (by default vehicles only)
 - The speed limit (by default the maximum speed for urban regions)
 
-No tags are mandatory, but if you want your map to behave reasonably, you should make sure that at least these things can be correctly inferred.
-
+In Lanelet2 no tag is mandatory, but if you want your map to behave reasonably, you should make sure that at least the above listed items can be correctly inferred.
 
 ## Subtype and Location
 
 The **subtype** tag determines what the actual type of the lanelet is. It is used to determine the participants that are allowed to use the lanelet as well as partly to determine the speed limit in the absence of *SpeedLimit* regulatory elements. The location tag is used to distinguish between urban and nonurban regions which can (depending on the country) affect the speed limit.
 
-The *subtype* tag is not set, *lane* is assumed. If *location* is not set, urban is assumed. Note that speed limits can be *mandatory* or *non-mandatory*. Non-mandatory speed limits just recommendations. The determined speed limit is the minimum of the actual speed limit and the average speed of a participant on this road type. If it was based on average speed, it is assumed to be non-mandatory.
+The *subtype* tag is not set, *lane* is assumed. If *location* is not set, urban is assumed. Note that speed limits can be *mandatory* or *non-mandatory*. Non-mandatory speed limits  are only recommendations. The determined speed limit is the minimum of the actual speed limit and the average speed of a participant on this road type. If it was based on average speed, it is assumed to be non-mandatory.
 
 Note that the values in the following table are just the values inferred by default. The actual interpretation depends on the chosen `TrafficRule`object in `lanelet2_traffic_rules`.
 
@@ -71,9 +71,9 @@ Consider a lanelet with the following tags:
 | type    | lanelet   |
 | subtype | road      |
 | location| urban     |
-| participant:vehicle:taxi | yes  |
-| participant:vehicle:bus | yes   |
-| participant:pedestrian | yes    |
+| participant:vehicle:taxi | yes |
+| participant:vehicle:bus | yes |
+| participant:pedestrian | yes |
 | one_way:pedestrian | no |
 
 Since overriding is used, the subtype/location combination is ignored when determining allowed participants. This means that only the following participants are allowed: Taxi, Bus, Pedestrian. Because the speed limit is not overridden, it could be determined (depending on the country) as 50 km/h (the speed limit for vehicles in cities) for taxis and buses and as non-mandatory 4km/h for pedestrians, since the average walking speed of a pedestrian is assumed to be 4 km/h which is smaller than 50 km/h.
