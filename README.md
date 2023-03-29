@@ -57,7 +57,7 @@ ERROR: Could not find a version that satisfies the requirement lanelet2 (from ve
 ERROR: No matching distribution found for lanelet2
 ```
 
-during installation, your pip version is probably too old, 
+during installation, even when using python 3.8 on a recent linux such as Ubuntu 20.04 or newer, your pip version is probably too old, 
 as e.g. the pip version that comes with apt on Ubuntu 20.04 (20.0.2) is not recent enough for the provided package.
 
 In this case you need to simply update pip with 
