@@ -1,7 +1,9 @@
 # Lanelet2
 
-[![Build Status ROS focal/noetic](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS%20focal%2Fnoetic)](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/)
-[![Build Status ROS focal/foxy](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS%20focal%2Ffoxy)](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/)
+[![Build Status ROS focal/noetic](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS%20noetic%20%28on%20focal%29)](
+https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/)
+[![Build Status ROS2 focal/foxy](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS2%20foxy%20%28on%20focal%29)](
+https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/lanelet2.svg?label=PyPI%20downloads)](
 https://pypi.org/project/lanelet2/)
 
