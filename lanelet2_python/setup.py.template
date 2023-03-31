@@ -15,7 +15,7 @@ LICENSE = "BSD"
 DOWNLOAD_URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2/releases/tag/{{ version }}"
 VERSION = "{{ version }}"
 this_directory = Path(__file__).parent
-long_description = (this_directory /"src" / "Lanelet2" / "README.md").read_text()
+long_description = (this_directory /"src" / "lanelet2" / "README.md").read_text()
 
 class ExtModules(list):
     def __bool__(self):
