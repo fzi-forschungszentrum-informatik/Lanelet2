@@ -5,7 +5,7 @@ setup.py template. use e.g. sed to replace placeholders with the correct values
 """
 from setuptools import setup
 
-DISTNAME = "lanelet2"
+DISTNAME = "lanelet2_test"
 DESCRIPTION = "Map handling framework for automated driving."
 MAINTAINER = "Fabian Immel"
 MAINTAINER_EMAIL = "fabian.immel@kit.edu"
@@ -13,6 +13,8 @@ URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2"
 LICENSE = "BSD"
 DOWNLOAD_URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2/releases/tag/{{ version }}"
 VERSION = "{{ version }}"
+this_directory = Path(__file__).parent.parent.parent
+long_description = (this_directory /"src" / "Lanelet2" / "README.md").read_text()
 
 class ExtModules(list):
     def __bool__(self):
@@ -30,4 +32,6 @@ setup(name=DISTNAME,
       # Include pre-compiled extension
       package_data={"lanelet2": ["*"]},
       ext_modules=ExtModules(),
-      has_ext_modules=lambda: True)
+      has_ext_modules=lambda: True,
+      long_description=long_description,
+      long_description_content_type='text/markdown')
