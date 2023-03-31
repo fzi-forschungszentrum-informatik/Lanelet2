@@ -6,7 +6,7 @@ setup.py template. use e.g. sed to replace placeholders with the correct values
 from setuptools import setup
 from pathlib import Path
 
-DISTNAME = "lanelet2_test"
+DISTNAME = "lanelet2"
 DESCRIPTION = "Map handling framework for automated driving."
 MAINTAINER = "Fabian Immel"
 MAINTAINER_EMAIL = "fabian.immel@kit.edu"
