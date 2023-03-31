@@ -21,7 +21,7 @@ Features:
 - **Python** bindings for the whole C++ interface
 - **Boost Geometry** support for all thinkable kinds of geometry calculations on map primitives
 - Released under the [**BSD 3-Clause license**](LICENSE)
-- Support for **ROS1, ROS2, Docker, and Conan** (see instructions below)
+- Support for **ROS1, ROS2, Docker and Conan** (see instructions below)
 
 ![](lanelet2_core/doc/images/lanelet2_example_image.png)
 
