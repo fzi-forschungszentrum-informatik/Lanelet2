@@ -4,6 +4,7 @@ setup.py template. use e.g. sed to replace placeholders with the correct values
 	$ sed 's/${{ version }}/1.2.0/' setup.py.template > setup.py
 """
 from setuptools import setup
+from pathlib import Path
 
 DISTNAME = "lanelet2"
 DESCRIPTION = "Map handling framework for automated driving."
@@ -13,6 +14,8 @@ URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2"
 LICENSE = "BSD"
 DOWNLOAD_URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2/releases/tag/{{ version }}"
 VERSION = "{{ version }}"
+this_directory = Path(__file__).parent
+long_description = (this_directory /"src" / "lanelet2" / "README.md").read_text()
 
 class ExtModules(list):
     def __bool__(self):
@@ -30,4 +33,6 @@ setup(name=DISTNAME,
       # Include pre-compiled extension
       package_data={"lanelet2": ["*"]},
       ext_modules=ExtModules(),
-      has_ext_modules=lambda: True)
+      has_ext_modules=lambda: True,
+      long_description=long_description,
+      long_description_content_type='text/markdown')
