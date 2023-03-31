@@ -1,8 +1,9 @@
 # Lanelet2
 
-| [ROS focal/noetic](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild) | [ROS focal/foxy](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild) |
-| --------- | --------- |
-| [![](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon)](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild) | [![](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild//badge/icon)](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild) |
+[![Build Status ROS focal/noetic](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS%20focal%2Fnoetic)](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/)
+[![Build Status ROS focal/foxy](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS%20focal%2Ffoxy)](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/lanelet2.svg?label=PyPI%20downloads)](
+https://pypi.org/project/lanelet2/)
 
 ## Overview
 
@@ -20,7 +21,7 @@ Features:
 - **Python** bindings for the whole C++ interface
 - **Boost Geometry** support for all thinkable kinds of geometry calculations on map primitives
 - Released under the [**BSD 3-Clause license**](LICENSE)
-- Support for **ROS1, ROS2, Docker and Conan** (see instructions below)
+- Support for **ROS1, ROS2, Docker, and Conan** (see instructions below)
 
 ![](lanelet2_core/doc/images/lanelet2_example_image.png)
 
@@ -190,4 +191,5 @@ If you are using Lanelet2 for scientific research, we would be pleased if you wo
 }
 ```
 
-
+[pypi-image]: https://badge.fury.io/py/torch-geometric.svg
+[pypi-url]: https://pypi.python.org/pypi/lanelet2
