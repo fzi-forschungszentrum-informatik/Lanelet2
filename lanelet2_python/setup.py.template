@@ -4,6 +4,7 @@ setup.py template. use e.g. sed to replace placeholders with the correct values
 	$ sed 's/${{ version }}/1.2.0/' setup.py.template > setup.py
 """
 from setuptools import setup
+from pathlib import Path
 
 DISTNAME = "lanelet2_test"
 DESCRIPTION = "Map handling framework for automated driving."
