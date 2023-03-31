@@ -191,5 +191,3 @@ If you are using Lanelet2 for scientific research, we would be pleased if you wo
 }
 ```
 
-[pypi-image]: https://badge.fury.io/py/torch-geometric.svg
-[pypi-url]: https://pypi.python.org/pypi/lanelet2
