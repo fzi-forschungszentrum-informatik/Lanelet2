@@ -1,9 +1,15 @@
 # Lanelet2
 
+[![CI](https://github.com/fzi-forschungszentrum-informatik/lanelet2/actions/workflows/ci.yaml/badge.svg)](
+https://github.com/fzi-forschungszentrum-informatik/lanelet2/actions/workflows/ci.yaml)
+[![CD](https://github.com/fzi-forschungszentrum-informatik/lanelet2/actions/workflows/cd.yaml/badge.svg)](
+https://github.com/fzi-forschungszentrum-informatik/lanelet2/actions/workflows/cd.yaml)
 [![Build Status ROS focal/noetic](https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS%20noetic%20%28on%20focal%29)](
 https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/)
 [![Build Status ROS2 focal/foxy](https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS2%20foxy%20%28on%20focal%29)](
 https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/)
+[![Build Status ROS2 jammy/humble](https://build.ros2.org/job/Hdev__lanelet2__ubuntu_jammy_amd64/lastBuild/badge/icon?subject=ROS2%20humble%20%28on%20jammy%29)](
+https://build.ros2.org/job/Hdev__lanelet2__ubuntu_jammy_amd64/lastBuild/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/lanelet2.svg?label=PyPI%20downloads)](
 https://pypi.org/project/lanelet2/)
 
