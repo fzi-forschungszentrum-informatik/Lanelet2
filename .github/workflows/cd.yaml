@@ -70,7 +70,7 @@ jobs:
             # repair wheel
             cd $WORKSPACE
             pip wheel -w broken-dist/ .
-            auditwheel repair -w dist/ --plat manylinux_2_31_x86_64 broken-dist/*.whl
+            auditwheel repair -w dist/ --plat manylinux_2_28_x86_64 broken-dist/*.whl
             
             # copy wheel to dist directory
             sudo cp -r $WORKSPACE/dist/* /dist
@@ -122,6 +122,7 @@ jobs:
           files: dist/*
 
       - name: Publish package to PyPI
+        if: github.repository == 'fzi-forschungszentrum-informatik/Lanelet2'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
