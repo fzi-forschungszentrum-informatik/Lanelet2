@@ -5,7 +5,10 @@
 #include <lanelet2_core/primitives/LaneletSequence.h>
 #include <lanelet2_core/primitives/RegulatoryElement.h>
 
+#include <boost/python/object_core.hpp>
 #include <boost/python/return_by_value.hpp>
+#include <boost/python/return_internal_reference.hpp>
+#include <sstream>
 
 #include "lanelet2_core/Attribute.h"
 #include "lanelet2_core/Forward.h"
@@ -14,6 +17,44 @@
 
 using namespace boost::python;
 using namespace lanelet;
+
+namespace {
+void formatHelper(std::ostream& os) {}
+
+template <typename... Args>
+// NOLINTNEXTLINE(readability-identifier-naming)
+void formatHelper(std::ostream& os, const std::string& s, const Args&... Args_) {
+  if (!s.empty()) {
+    os << ", ";
+  }
+  os << s;
+  formatHelper(os, Args_...);
+}
+
+template <typename T, typename... Args>
+// NOLINTNEXTLINE(readability-identifier-naming)
+void formatHelper(std::ostream& os, const T& next, const Args&... Args_) {
+  os << ", ";
+  os << next;
+  formatHelper(os, Args_...);
+}
+
+template <typename T, typename... Args>
+// NOLINTNEXTLINE(readability-identifier-naming)
+void format(std::ostream& os, const T& first, const Args&... Args_) {
+  os << first;
+  formatHelper(os, Args_...);
+}
+
+template <typename... Args>
+// NOLINTNEXTLINE(readability-identifier-naming)
+std::string makeRepr(const char* name, const Args&... Args_) {
+  std::ostringstream os;
+  os << name << '(';
+  format(os, Args_...);
+  os << ')';
+  return os.str();
+}
 
 struct AttributeToPythonStr {
   static PyObject* convert(Attribute const& s) { return boost::python::incref(boost::python::object(s.value()).ptr()); }
@@ -397,8 +438,28 @@ Optional<T> objectToOptional(const object& o) {
   return o == object() ? Optional<T>{} : Optional<T>{extract<T>(o)()};
 }
 
+std::string repr(const object& o) {
+  object repr = import("builtins").attr("repr");
+  return call<std::string>(repr.ptr(), o);
+}
+
+std::string repr(const AttributeMap& a) {
+  if (a.empty()) {
+    return {};
+  }
+  return repr(object(a));
+}
+
+std::string repr(const RegulatoryElementConstPtrs& regelems) {
+  if (regelems.empty()) {
+    return {};
+  }
+  return repr(list(regelems));
+}
+}  // namespace
+
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
-  class_<BasicPoint2d>("BasicPoint2d", "A simple point", init<double, double>((arg("x") = 0., arg("y") = 0.)))
+  class_<BasicPoint2d>("BasicPoint2d", "A simple 2D point", init<double, double>((arg("x") = 0., arg("y") = 0.)))
       .def(init<>("BasicPoint2d()"))
       .add_property("x", getXWrapper<BasicPoint2d>, setXWrapper<BasicPoint2d>, "x coordinate")
       .add_property("y", getYWrapper<BasicPoint2d>, setYWrapper<BasicPoint2d>, "y coordinate")
@@ -407,6 +468,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__mul__", mulWrapper<BasicPoint2d, double>)
       .def("__rmul__", mulWrapper<BasicPoint2d, double>)
       .def("__div__", divWrapper<BasicPoint2d, double>)
+      .def(
+          "__repr__", +[](BasicPoint2d p) { return makeRepr("BasicPoint2d", p.x(), p.y()); })
       .def(self_ns::str(self_ns::self));
 
   class_<Eigen::Vector2d>("Vector2d", "A simple point", no_init)
@@ -417,6 +480,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__mul__", mulWrapper<BasicPoint2d, double>)
       .def("__rmul__", mulWrapper<BasicPoint2d, double>)
       .def("__div__", divWrapper<BasicPoint2d, double>)
+      .def(
+          "__repr__", +[](Eigen::Vector2d p) { return makeRepr("Vector2d", p.x(), p.y()); })
       .def(self_ns::str(self_ns::self));
 
   implicitly_convertible<Eigen::Vector2d, BasicPoint2d>();
@@ -431,23 +496,45 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__mul__", mulWrapper<BasicPoint3d, double>)
       .def("__rmul__", mulWrapper<BasicPoint3d, double>)
       .def("__div__", divWrapper<BasicPoint3d, double>)
+      .def(
+          "__repr__", +[](BasicPoint3d p) { return makeRepr("BasicPoint3d", p.x(), p.y(), p.z()); })
       .def(self_ns::str(self_ns::self));
 
   class_<BoundingBox2d>(
       "BoundingBox2d", init<BasicPoint2d, BasicPoint2d>((arg("min"), arg("max")),
                                                         "Initialize box with its minimum point and its maximum corner"))
       .add_property(
-          "min", +[](BoundingBox2d& self) { return self.min(); }, "Minimum corner")
+          "min",
+          make_function(
+              +[](BoundingBox2d& self) -> BasicPoint2d& { return self.min(); }, return_internal_reference<>()),
+          +[](BoundingBox2d& self, const BasicPoint2d& p) { self.min() = p; }, "Minimum corner")
       .add_property(
-          "max", +[](BoundingBox2d& self) { return self.max(); }, "Maximum corner");
+          "max",
+          make_function(
+              +[](BoundingBox2d& self) -> BasicPoint2d& { return self.max(); }, return_internal_reference<>()),
+          +[](BoundingBox2d& self, const BasicPoint2d& p) { self.max() = p; }, "Maximum corner")
+      .def(
+          "__repr__", +[](BoundingBox2d box) {
+            return makeRepr("BoundingBox2d", repr(object(box.min())), repr(object(box.max())));
+          });
 
   class_<BoundingBox3d>(
       "BoundingBox3d", init<BasicPoint3d, BasicPoint3d>((arg("min"), arg("max")),
                                                         "Initialize box with its minimum point and its maximum corner"))
       .add_property(
-          "min", +[](BoundingBox3d& self) { return self.min(); }, "Minimum corner")
+          "min",
+          make_function(
+              +[](BoundingBox3d& self) -> BasicPoint3d& { return self.min(); }, return_internal_reference<>{}),
+          +[](BoundingBox3d& self, const BasicPoint3d& p) { self.min() = p; }, "Minimum corner")
       .add_property(
-          "max", +[](BoundingBox3d& self) { return self.max(); }, "Maximum corner");
+          "max",
+          make_function(
+              +[](BoundingBox3d& self) -> BasicPoint3d& { return self.max(); }, return_internal_reference<>{}),
+          +[](BoundingBox3d& self, const BasicPoint3d& p) { self.max() = p; }, "Maximum corner")
+      .def(
+          "__repr__", +[](const BoundingBox3d& box) {
+            return makeRepr("BoundingBox3d", repr(object(box.min())), repr(object(box.max())));
+          });
 
   boost::python::to_python_converter<Attribute, AttributeToPythonStr>();
 
@@ -574,16 +661,23 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<AttributeMap>("AttributeMap", "Stores attributes as key-value pairs. Behaves similar to a dict.",
                        init<>("Create an empty attriute map"))
       .def(IsHybridMap<AttributeMap>())
-      .def(self_ns::str(self_ns::self));
+      .def(self_ns::str(self_ns::self))
+      .def(
+          "__repr__", +[](const AttributeMap& a) { return makeRepr("AttributeMap", repr(dict(a))); });
 
   class_<RuleParameterMap>("RuleParameterMap",
                            "Used by RegulatoryElement. Works like a dictionary that maps roles (strings) to a list of "
                            "primitives with that role (parameters).",
                            init<>("Create empty rule parameter map"))
-      .def(IsHybridMap<RuleParameterMap>());
+      .def(IsHybridMap<RuleParameterMap>())
+      .def(
+          "__repr__", +[](const RuleParameterMap& r) { return makeRepr("RuleParameterMap", repr(dict(r))); });
 
   class_<ConstRuleParameterMap>("ConstRuleParameterMap", init<>("ConstRuleParameterMap()"))
-      .def(IsHybridMap<ConstRuleParameterMap>());
+      .def(IsHybridMap<ConstRuleParameterMap>())
+      .def(
+          "__repr__", +[](const RuleParameterMap& r) { return makeRepr("RuleParameterMap", repr(dict(r))); });
+
   class_<ConstPoint2d>("ConstPoint2d",
                        "Immutable 2D point primitive. It can not be instanciated from python but is returned from a "
                        "few lanelet2 algorithms",
@@ -593,10 +687,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("y", getYWrapper<ConstPoint2d>, "y coordinate")
       .def("basicPoint", &ConstPoint2d::basicPoint, return_internal_reference<>(),
            "Returns a plain 2D point primitive (no ID, no attributes) for efficient geometry operations");
-
   class_<Point2d, bases<ConstPoint2d>>(
       "Point2d",
-      "Lanelets 2d point primitive. Directly convertible to a 3D point, because it is just a 2D view on the existing "
+      "Lanelets 2d point primitive. Directly convertible to a 3D point, because it is just a 2D view on the "
+      "existing "
       "3D data. Use lanelet2.geometry.to3D for this.",
       init<Id, BasicPoint3d, AttributeMap>((arg("id"), arg("point"), arg("attributes") = AttributeMap())))
       .def(init<>("Point2d()"))
@@ -605,6 +699,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           (arg("id"), arg("x"), arg("y"), arg("z") = 0., arg("attributes") = AttributeMap())))
       .add_property("x", getXWrapper<Point2d>, setXWrapper<Point2d>, "x coordinate")
       .add_property("y", getYWrapper<Point2d>, setYWrapper<Point2d>, "y coordinate")
+      .def(
+          "__repr__", +[](const Point2d& p) { return makeRepr("Point2d", p.id(), p.x(), p.y(), repr(p.attributes())); })
       .def(IsPrimitive<Point2d>());
 
   class_<ConstPoint3d>("ConstPoint3d",
@@ -615,6 +711,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("x", getXWrapper<ConstPoint3d>, "x coordinate")
       .add_property("y", getYWrapper<ConstPoint3d>, "y coordinate")
       .add_property("z", getZWrapper<ConstPoint3d>, "z coordinate")
+      .def(
+          "__repr__",
+          +[](const ConstPoint3d& p) {
+            return makeRepr("ConstPoint3d", p.id(), p.x(), p.y(), p.z(), repr(p.attributes()));
+          })
       .def("basicPoint", &ConstPoint3d::basicPoint, return_internal_reference<>(),
            "Returns a plain 3D point primitive (no ID, no attributes) for efficient geometry operations");
 
@@ -630,6 +731,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("x", getXWrapper<Point3d>, setXWrapper<Point3d>, "x coordinate")
       .add_property("y", getYWrapper<Point3d>, setYWrapper<Point3d>, "y coordinate")
       .add_property("z", getZWrapper<Point3d>, setZWrapper<Point3d>, "z coordinate")
+      .def(
+          "__repr__",
+          +[](const Point3d& p) { return makeRepr("Point3d", p.id(), p.x(), p.y(), p.z(), repr(p.attributes())); })
       .def(IsPrimitive<Point3d>());
 
   class_<GPSPoint, std::shared_ptr<GPSPoint>>("GPSPoint", "A raw GPS point", no_init)
@@ -641,7 +745,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                            default_call_policies(), (arg("lat") = 0., arg("lon") = 0., arg("alt") = 0)))
       .def_readwrite("lat", &GPSPoint::lat, "Latitude according to WGS84")
       .def_readwrite("lon", &GPSPoint::lon, "Longitude according to WGS84")
-      .def_readwrite("alt", &GPSPoint::ele, "Elevation according to WGS84 [m]");
+      .def_readwrite("alt", &GPSPoint::ele, "Elevation according to WGS84 [m]")
+      .def(
+          "__repr__", +[](const GPSPoint& p) { return makeRepr("GPSPoint", p.lat, p.lon, p.ele); });
 
   class_<ConstLineString2d>(
       "ConstLineString2d",
@@ -652,7 +758,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with points "
            "returned in reversed order")
       .def(IsConstLineString<ConstLineString2d>())
-      .def(IsConstPrimitive<ConstLineString2d>());
+      .def(IsConstPrimitive<ConstLineString2d>())
+      .def(
+          "__repr__", +[](const ConstLineString2d& ls) {
+            return makeRepr("ConstLineString2d", ls.id(), repr(list(ls)), repr(ls.attributes()));
+          });
 
   class_<LineString2d, bases<ConstLineString2d>>(
       "LineString2d",
@@ -666,8 +776,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(init<LineString3d>("Returns a 3D linestring for the current data. Both share the same data, modifications "
                               "affect both linestrings."))
       .def("invert", &LineString2d::invert,
-           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with points "
+           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with "
+           "points "
            "returned in reversed order")
+      .def(
+          "__repr__",
+          +[](const ConstLineString3d& ls) {
+            return makeRepr("LineString3d", ls.id(), repr(list(ls)), repr(ls.attributes()));
+          })
       .def(IsLineString<LineString2d>());
 
   class_<ConstLineString3d>("ConstLineString3d",
@@ -677,8 +793,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                             init<ConstLineString2d>("Convert 2d linestring to 3D linestring"))
       .def(init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap())))
       .def("invert", &ConstLineString3d::invert,
-           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with points "
+           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with "
+           "points "
            "returned in reversed order")
+      .def(
+          "__repr__",
+          +[](const ConstLineString3d& ls) {
+            return makeRepr("ConstLineString3d", ls.id(), repr(list(ls)), repr(ls.attributes()));
+          })
       .def(IsConstLineString<ConstLineString3d>())
       .def(IsConstPrimitive<ConstLineString3d>());
 
@@ -691,8 +813,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(init<LineString2d>(arg("linestring"),
                               "Converts a 2D linestring to a 3D linestring, sharing the same underlying data."))
       .def("invert", &LineString3d::invert,
-           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with points "
-           "returned in reversed order")
+           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with "
+           "points returned in reversed order")
+      .def(
+          "__repr__",
+          +[](const LineString3d& ls) {
+            return makeRepr("LineString3d", ls.id(), repr(list(ls)), repr(ls.attributes()));
+          })
       .def(IsLineString<LineString3d>())
       .def(IsPrimitive<LineString3d>());
 
@@ -702,8 +829,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "but still has an ID and attributes.",
       init<ConstLineString2d>(arg("linestring"), "Create from a 2D linestring"))
       .def("invert", &ConstHybridLineString2d::invert,
-           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with points "
-           "returned in reversed order")
+           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with "
+           "points returned in reversed order")
+      .def(
+          "__repr__",
+          +[](const ConstHybridLineString2d& ls) {
+            return makeRepr("ConstHybridLineString2d", ls.id(), repr(list(ls)), repr(ls.attributes()));
+          })
       .def(IsConstLineString<ConstHybridLineString2d, false>())
       .def(IsConstPrimitive<ConstHybridLineString2d>());
 
@@ -713,8 +845,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "but still has an ID and attributes.",
       init<ConstLineString3d>(arg("linestring"), "Create from a 3D linestring"))
       .def("invert", &ConstHybridLineString3d::invert,
-           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with points "
-           "returned in reversed order")
+           "Creates a new, inverted linestring from this. This is essentially a view on the existing data, with "
+           "points returned in reversed order")
+      .def(
+          "__repr__",
+          +[](const ConstHybridLineString3d& ls) {
+            return makeRepr("ConstHybridLineString3d", ls.id(), repr(list(ls)), repr(ls.attributes()));
+          })
       .def(IsConstLineString<ConstHybridLineString3d, false>())
       .def(IsConstPrimitive<ConstHybridLineString3d>());
 
@@ -737,11 +874,21 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap()),
                                        "Create from an ID, a list of points and optionally attributes"))
       .def(IsConstLineString<ConstPolygon2d>())
+      .def(
+          "__repr__",
+          +[](const ConstPolygon2d& p) {
+            return makeRepr("ConstPolygon2d", p.id(), repr(list(p)), repr(p.attributes()));
+          })
       .def(IsConstPrimitive<ConstPolygon2d>());
 
   class_<ConstPolygon3d>(
       "ConstPolygon3d", "A three-dimensional lanelet polygon",
       init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap())))
+      .def(
+          "__repr__",
+          +[](const ConstPolygon3d& p) {
+            return makeRepr("ConstPolygon3d", p.id(), repr(list(p)), repr(p.attributes()));
+          })
       .def(IsConstLineString<ConstPolygon3d>())
       .def(IsConstPrimitive<ConstPolygon3d>());
 
@@ -750,6 +897,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "A two-dimensional lanelet polygon. Points in clockwise order and open (i.e. start point != end point).",
       init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap()),
                                        "Create from an ID, the boundary points and (optionally) attributes"))
+      .def(
+          "__repr__",
+          +[](const Polygon2d& p) { return makeRepr("Polygon2d", p.id(), repr(list(p)), repr(p.attributes())); })
       .def(IsLineString<Polygon2d>())
       .def(IsPrimitive<Polygon2d>());
 
@@ -757,6 +907,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "Polygon3d",
       "A two-dimensional lanelet polygon. Points in clockwise order and open (i.e. start point != end point).",
       init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap())))
+      .def(
+          "__repr__",
+          +[](const Polygon3d& p) { return makeRepr("Polygon3d", p.id(), repr(list(p)), repr(p.attributes())); })
       .def(IsLineString<Polygon3d>())
       .def(IsPrimitive<Polygon3d>());
 
@@ -778,8 +931,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "ConstLanelet",
       "An immutable lanelet primitive. Consist of a left and right boundary, attributes and a set of "
       "traffic rules that apply here. It is not very useful within python, but returned by some lanelet2 algorihms",
-      init<Id, LineString3d, LineString3d, AttributeMap>(
-          (arg("id"), arg("leftBound"), arg("rightBound"), arg("attributes") = AttributeMap())))
+      init<Id, LineString3d, LineString3d, AttributeMap, RegulatoryElementPtrs>(
+          (arg("id"), arg("leftBound"), arg("rightBound"), arg("attributes") = AttributeMap(),
+           arg("regelems") = RegulatoryElementPtrs{})))
       .def(init<Lanelet>(arg("lanelet"), "Construct from a mutable lanelet"))
       .def(IsConstPrimitive<ConstLanelet>())
       .add_property(
@@ -806,7 +960,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("polygon3d", &ConstLanelet::polygon3d, "Outline of this lanelet as 3d polygon")
       .def("resetCache", &ConstLanelet::resetCache,
            "Reset the cache. Forces update of the centerline if points have changed. This does not clear a custom "
-           "centerline.");
+           "centerline.")
+      .def(
+          "__repr__", +[](const ConstLanelet& llt) {
+            return makeRepr("ConstLanelet", llt.id(), repr(object(llt.leftBound())), repr(object(llt.rightBound())),
+                            repr(llt.attributes()), repr(llt.regulatoryElements()));
+          });
 
   auto left = static_cast<LineString3d (Lanelet::*)()>(&Lanelet::leftBound);
   auto right = static_cast<LineString3d (Lanelet::*)()>(&Lanelet::rightBound);
@@ -814,8 +973,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<Lanelet, bases<ConstLanelet>>(
       "Lanelet", "The famous lanelet primitive",
-      init<Id, LineString3d, LineString3d, AttributeMap>(
-          (arg("id"), arg("leftBound"), arg("rightBound"), arg("attributes") = AttributeMap()),
+      init<Id, LineString3d, LineString3d, AttributeMap, RegulatoryElementPtrs>(
+          (arg("id"), arg("leftBound"), arg("rightBound"), arg("attributes") = AttributeMap(),
+           arg("regelems") = RegulatoryElementPtrs{}),
           "Create Lanelet from an ID, its left and right boundary and (optionally) attributes"))
       .def(IsPrimitive<Lanelet>())
       .add_property(
@@ -840,7 +1000,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("invert", &Lanelet::invert, "Returns inverted lanelet (flipped left/right bound, etc)")
       .def("inverted", &ConstLanelet::inverted, "Returns whether this lanelet has been inverted")
       .def("polygon2d", &ConstLanelet::polygon2d, "Outline of this lanelet as 2D polygon")
-      .def("polygon3d", &ConstLanelet::polygon3d, "Outline of this lanelet as 3D polygon");
+      .def("polygon3d", &ConstLanelet::polygon3d, "Outline of this lanelet as 3D polygon")
+      .def(
+          "__repr__", +[](Lanelet& llt) {
+            return makeRepr("Lanelet", llt.id(), repr(object(llt.leftBound())), repr(object(llt.rightBound())),
+                            repr(llt.attributes()), repr(ConstLanelet(llt).regulatoryElements()));
+          });
 
   class_<LaneletSequence>("LaneletSequence", "A combined lane formed from multiple lanelets", init<ConstLanelets>())
       .add_property("centerline", &LaneletSequence::centerline, "Centerline of the combined lanelets")
@@ -853,6 +1018,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__iter__", iterator<LaneletSequence>())
       .def("__len__", &LaneletSequence::size, "Number of lanelets in this sequence")
       .def("inverted", &LaneletSequence::inverted, "True if this lanelet sequence is inverted")
+      .def(
+          "__repr__", +[](const LaneletSequence& s) { return makeRepr("LaneletSequence", repr(object(s.lanelets()))); })
       .def("__getitem__", wrappers::getItem<LaneletSequence>, return_internal_reference<>(),
            "Returns a lanelet in the sequence");
 
@@ -893,9 +1060,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   // nothing.
   class_<ConstInnerBounds>("ConstInnerBounds", "An immutable list-like type to hold of inner boundaries of an Area",
                            no_init)
-      .def("__iter__", iterator<InnerBounds>())
+      .def("__iter__", iterator<ConstInnerBounds>())
       .def("__len__", &InnerBounds::size, "Number of holes")
-      .def("__getitem__", wrappers::getItem<ConstInnerBounds>, return_value_policy<return_by_value>());
+      .def("__getitem__", wrappers::getItem<ConstInnerBounds>, return_value_policy<return_by_value>())
+      .def(
+          "__repr__", +[](const ConstInnerBounds& b) { return repr(list(b)); });
 
   class_<InnerBounds>("InnerBounds", "A list-like type to hold of inner boundaries of an Area", no_init)
       .def("__setitem__", wrappers::setItem<InnerBounds, LineStrings3d>)
@@ -905,14 +1074,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           arg("hole"))
       .def("__iter__", iterator<InnerBounds>())
       .def("__len__", &InnerBounds::size, "Number of holes")
-      .def("__getitem__", wrappers::getItem<InnerBounds>, return_value_policy<return_by_value>());
+      .def("__getitem__", wrappers::getItem<InnerBounds>, return_value_policy<return_by_value>())
+      .def(
+          "__repr__", +[](const InnerBounds& b) { return repr(list(b)); });
 
   class_<ConstArea>(
       "ConstArea",
-      "Represents an immutable area, potentially with holes, in the map. It is composed of a list of linestrings that "
+      "Represents an immutable area, potentially with holes, in the map. It is composed of a list of linestrings "
+      "that "
       "form the outer boundary and a list of a list of linestrings that represent holes within it.",
-      boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
-          (arg("id"), arg("outerBound"), arg("innerBounds") = InnerBounds{}, arg("attributes") = AttributeMap{}),
+      boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap, RegulatoryElementPtrs>(
+          (arg("id"), arg("outerBound"), arg("innerBounds") = InnerBounds{}, arg("attributes") = AttributeMap{},
+           arg("regulatoryElements") = RegulatoryElementPtrs{}),
           "Construct an area from an ID, its inner and outer boundaries and attributes"))
       .def(IsConstPrimitive<ConstArea>())
       .add_property("outerBound", &ConstArea::outerBound,
@@ -924,12 +1097,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           "The regulatory elements of this area")
       .def("outerBoundPolygon", &ConstArea::outerBoundPolygon, "Returns the outer boundary as a CompoundPolygon3d")
       .def("innerBoundPolygon", &ConstArea::innerBoundPolygons,
-           "Returns the inner boundaries as a list of CompoundPolygon3d");
+           "Returns the inner boundaries as a list of CompoundPolygon3d")
+      .def(
+          "__repr__", +[](const ConstArea& ar) {
+            return makeRepr("ConstArea", ar.id(), repr(list(ar.outerBound())), repr(object(ar.innerBounds())),
+                            repr(ar.attributes()), repr(ar.regulatoryElements()));
+          });
 
   class_<Area, bases<ConstArea>>(
       "Area", "Represents an area, potentially with holes, in the map",
-      boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap>(
-          (arg("id"), arg("outerBound"), arg("innerBounds") = InnerBounds{}, arg("attributes") = AttributeMap{}),
+      boost::python::init<Id, LineStrings3d, InnerBounds, AttributeMap, RegulatoryElementPtrs>(
+          (arg("id"), arg("outerBound"), arg("innerBounds") = InnerBounds{}, arg("attributes") = AttributeMap{},
+           arg("regulatoryElements") = RegulatoryElementPtrs{}),
           "Construct an area from an ID, its inner and outer boundaries and attributes"))
       .def(IsPrimitive<Area>())
       .add_property(
@@ -951,7 +1130,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Removes a regulatory element, retunrs true on success", arg("regelem"))
       .def("outerBoundPolygon", &Area::outerBoundPolygon, "Returns the outer boundary as a CompoundPolygon3d")
       .def("innerBoundPolygon", &Area::innerBoundPolygons,
-           "Returns the inner boundaries as a list of CompoundPolygon3d");
+           "Returns the inner boundaries as a list of CompoundPolygon3d")
+      .def(
+          "__repr__", +[](Area& ar) {
+            return makeRepr("Area", ar.id(), repr(list(ar.outerBound())), repr(object(ar.innerBounds())),
+                            repr(ar.attributes()), repr(ConstArea(ar).regulatoryElements()));
+          });
 
   using GetParamSig = ConstRuleParameterMap (RegulatoryElement::*)() const;
 
@@ -968,7 +1152,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("roles", &RegulatoryElement::roles, "A list of roles (strings) used in this regulatory element")
       .def("find", &RegulatoryElement::find<ConstRuleParameter>, arg("id"),
            "Returns a primitive with matching ID, else None")
-      .def("__len__", &RegulatoryElement::size);
+      .def("__len__", &RegulatoryElement::size)
+      .def(
+          "__repr__", +[](RegulatoryElement& r) {
+            return makeRepr("RegulatoryElement", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+          });
   register_ptr_to_python<RegulatoryElementConstPtr>();
 
   class_<TrafficLight, boost::noncopyable, std::shared_ptr<TrafficLight>, bases<RegulatoryElement>>(
@@ -987,7 +1175,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Add a traffic light. Either a linestring from the left edge to the right edge or an area with the outline "
            "of the traffic light.")
       .def("removeTrafficLight", &TrafficLight::removeTrafficLight,
-           "Removes a given traffic light, returns true on success");
+           "Removes a given traffic light, returns true on success")
+      .def(
+          "__repr__", +[](TrafficLight& r) {
+            return makeRepr("TrafficLight", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+          });
   implicitly_convertible<std::shared_ptr<TrafficLight>, RegulatoryElementPtr>();
 
   enum_<ManeuverType>("ManeuverType")
@@ -1002,7 +1194,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            make_constructor(&RightOfWay::make, default_call_policies(),
                             (arg("id"), arg("attributes"), arg("rightOfWayLanelets"), arg("yieldLanelets"),
                              arg("stopLine") = Optional<LineString3d>{})),
-           "Creates a right of way regulatory element with an ID from attributes, the list lanelets with right of way, "
+           "Creates a right of way regulatory element with an ID from attributes, the list lanelets with right of "
+           "way, "
            "the list of yielding lanelets and an optional stop line")
       .add_property(
           "stopLine", +[](RightOfWay& self) { return self.stopLine(); }, &RightOfWay::setStopLine,
@@ -1021,7 +1214,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("addYieldLanelet", &RightOfWay::addYieldLanelet, arg("lanelet"),
            "Adds another lanelet that has to yield. The lanelet should also reference this regolatory element.")
       .def("removeYieldLanelet", &RightOfWay::removeYieldLanelet, arg("lanelet"),
-           "Removes the yielding lanelet, returns true on success.");
+           "Removes the yielding lanelet, returns true on success.")
+      .def(
+          "__repr__", +[](RightOfWay& r) {
+            return makeRepr("RightOfWay", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+          });
   implicitly_convertible<std::shared_ptr<RightOfWay>, RegulatoryElementPtr>();
 
   class_<AllWayStop, boost::noncopyable, std::shared_ptr<AllWayStop>, bases<RegulatoryElement>>(
@@ -1030,7 +1227,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            make_constructor(
                &AllWayStop::make, default_call_policies(),
                (arg("id"), arg("attributes"), arg("lltsWithStop"), arg("signs") = LineStringsOrPolygons3d{})),
-           "Constructs an all way stop regulatory element with an ID and attributes from a list of lanelets with their "
+           "Constructs an all way stop regulatory element with an ID and attributes from a list of lanelets with "
+           "their "
            "(optional) stop line and an optional list of traffic signs for this rule")
       .def(
           "lanelets", +[](AllWayStop& self) { return self.lanelets(); }, "Returns the lanelets")
@@ -1048,7 +1246,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("addLanelet", &AllWayStop::addLanelet, arg("lanelet"),
            "Adds another lanelet to the all way stop. The lanelet should also reference this all way stop.")
       .def("removeLanelet", &AllWayStop::removeLanelet, arg("lanelet"),
-           "Removes a lanelet from the all way stop, returns True on success.");
+           "Removes a lanelet from the all way stop, returns True on success.")
+      .def(
+          "__repr__", +[](AllWayStop& r) {
+            return makeRepr("AllWayStop", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+          });
   implicitly_convertible<std::shared_ptr<AllWayStop>, RegulatoryElementPtr>();
 
   class_<TrafficSignsWithType, std::shared_ptr<TrafficSignsWithType>>(
@@ -1079,7 +1281,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           "Get a list of all traffic signs (linestrings or polygons)")
       .def(
           "cancellingTrafficSigns", +[](TrafficSign& self) { return self.cancellingTrafficSigns(); },
-          "Get a list of all cancelling traffic signs (linestrings or polygons). These are the signs that mark the end "
+          "Get a list of all cancelling traffic signs (linestrings or polygons). These are the signs that mark the "
+          "end "
           "of a rule. E.g. a sign that cancels a speed limit.")
       .def(
           "refLines", +[](TrafficSign& self) { return self.refLines(); },
@@ -1105,7 +1308,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "itself or "
            "the explicitly set type. All signs are assumed to have the same type.")
       .def("cancelTypes", &TrafficSign::cancelTypes,
-           "Returns types of the cancelling traffic signs (a list of strings) if it exists.");
+           "Returns types of the cancelling traffic signs (a list of strings) if it exists.")
+      .def(
+          "__repr__", +[](TrafficSign& r) {
+            return makeRepr("TrafficSign", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+          });
 
   implicitly_convertible<std::shared_ptr<TrafficSign>, RegulatoryElementPtr>();
 
@@ -1117,7 +1324,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__init__", make_constructor(&TrafficSign::make, default_call_policies(),
                                         (arg("id"), arg("attributes"), arg("trafficSigns"),
                                          arg("cancellingTrafficSigns") = TrafficSignsWithType{},
-                                         arg("refLines") = LineStrings3d(), arg("cancelLines") = LineStrings3d())));
+                                         arg("refLines") = LineStrings3d(), arg("cancelLines") = LineStrings3d())))
+      .def(
+          "__repr__", +[](SpeedLimit& r) {
+            return makeRepr("SpeedLimit", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+          });
 
   class_<PrimitiveLayer<Area>, boost::noncopyable>("PrimitiveLayerArea", no_init);        // NOLINT
   class_<PrimitiveLayer<Lanelet>, boost::noncopyable>("PrimitiveLayerLanelet", no_init);  // NOLINT
@@ -1164,9 +1375,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LaneletMap, bases<LaneletMapLayers>, LaneletMapPtr, boost::noncopyable>(
       "LaneletMap",
-      "A lanelet map collects lanelet primitives. It can be used for writing and loading and creating routing graphs. "
+      "A lanelet map collects lanelet primitives. It can be used for writing and loading and creating routing "
+      "graphs. "
       "It also offers geometrical and relational queries for its objects. Note that this is not the right object for "
-      "querying neigborhood relations. Create a lanelet2.routing.RoutingGraph for this.\nNote that there is a utility "
+      "querying neigborhood relations. Create a lanelet2.routing.RoutingGraph for this.\nNote that there is a "
+      "utility "
       "function 'createMapFromX' to create a map from a list of primitives.",
       init<>("Create an empty lanelet map"))
       .def("add", selectAdd<Point3d>(), arg("point"),
@@ -1190,13 +1403,16 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LaneletSubmap, bases<LaneletMapLayers>, LaneletSubmapPtr, boost::noncopyable>(
       "LaneletSubmap",
-      "A submap manages parts of a lanelet map. An important difference is that adding an object to the map will *not* "
-      "add its subobjects too, making it more efficient to create. Apart from that, it offers a similar functionality "
+      "A submap manages parts of a lanelet map. An important difference is that adding an object to the map will "
+      "*not* "
+      "add its subobjects too, making it more efficient to create. Apart from that, it offers a similar "
+      "functionality "
       "compared to a lanelet map.",
       init<>("Create an empty lanelet submap"))
       .def(
           "laneletMap", +[](LaneletSubmap& self) { return LaneletMapPtr{self.laneletMap()}; },
-          "Create a lanelet map of this submap that also holds all subobjects. This is a potentially costly operation.")
+          "Create a lanelet map of this submap that also holds all subobjects. This is a potentially costly "
+          "operation.")
       .def("add", selectSubmapAdd<Point3d>(), arg("point"), "Add a point to the submap")
       .def("add", selectSubmapAdd<Lanelet>(), arg("lanelet"),
            "Add a lanelet to the submap, without its subobjects. If its ID is zero it will be set to a unique value "
