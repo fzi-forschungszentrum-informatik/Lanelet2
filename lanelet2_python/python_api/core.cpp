@@ -9,6 +9,7 @@
 #include <boost/python/return_by_value.hpp>
 #include <boost/python/return_internal_reference.hpp>
 #include <sstream>
+#include <stdexcept>
 
 #include "lanelet2_core/Attribute.h"
 #include "lanelet2_core/Forward.h"
@@ -320,7 +321,7 @@ class IsLineString : public def_visitor<IsLineString<LsT>> {
         .def("append", &LsT::push_back, "Appends a new point at the end of this linestring", arg("point"))
         .def("__iter__", iterator<LsT>())
         .def("__len__", &LsT::size, "Number of points in this linestring")
-        .def("inverted", &LsT::inverted, "Returns whether this an inverted linestring");
+        .def("inverted", &LsT::inverted, "Returns whether this is an inverted linestring");
     addGetitem(c);
   }
   template <typename ClassT>
@@ -385,10 +386,14 @@ auto wrapLayer(const char* layerName) {
       static_cast<typename LayerT::PrimitiveVec (LayerT::*)(const BasicPoint2d&, unsigned)>(&LayerT::nearest);
   return class_<LayerT, boost::noncopyable, ClassArgs...>(layerName,
                                                           "Primitive layer in a LaneletMap and LaneletSubmap", no_init)
-      .def("exists", &LayerT::exists, arg("id"), "Checks if a point ID exists")
-      .def("__contains__", &LayerT::exists, arg("id"), "Checks if a point ID exists")
-      .def("get", get, arg("id"), "Gets an element with specified Id")
-      .def("__iter__", iterator<LayerT>(), "Iterate elements in this layer in arbitrary order")
+      .def("exists", &LayerT::exists, arg("id"), "Check if a primitive ID exists")
+      .def("__contains__", &LayerT::exists, arg("id"), "Check if a primitive ID exists")
+      .def(
+          "__contains__",
+          +[](LayerT& self, const typename LayerT::PrimitiveT& elem) { return self.exists(utils::getId(elem)); },
+          arg("elem"), "Check if a primitive with this ID exists")
+      .def("get", get, arg("id"), "Get a primitive with this ID")
+      .def("__iter__", iterator<LayerT>(), "Iterate primitives in this layer in arbitrary order")
       .def("__len__", &LayerT::size, "Number of items in this layer")
       .def(
           "__getitem__", +[](LayerT& self, Id idx) { return self.get(idx); }, arg("id"),
@@ -500,27 +505,29 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           "__repr__", +[](BasicPoint3d p) { return makeRepr("BasicPoint3d", p.x(), p.y(), p.z()); })
       .def(self_ns::str(self_ns::self));
 
-  class_<BoundingBox2d>(
-      "BoundingBox2d", init<BasicPoint2d, BasicPoint2d>((arg("min"), arg("max")),
-                                                        "Initialize box with its minimum point and its maximum corner"))
+  class_<BoundingBox2d>("BoundingBox2d",
+                        init<BasicPoint2d, BasicPoint2d>(
+                            (arg("min"), arg("max")),
+                            "Initialize box with its minimum point (lower left) and its maximum (upper right) corner"))
       .add_property(
           "min",
           make_function(
               +[](BoundingBox2d& self) -> BasicPoint2d& { return self.min(); }, return_internal_reference<>()),
-          +[](BoundingBox2d& self, const BasicPoint2d& p) { self.min() = p; }, "Minimum corner")
+          +[](BoundingBox2d& self, const BasicPoint2d& p) { self.min() = p; }, "Minimum corner (lower left)")
       .add_property(
           "max",
           make_function(
               +[](BoundingBox2d& self) -> BasicPoint2d& { return self.max(); }, return_internal_reference<>()),
-          +[](BoundingBox2d& self, const BasicPoint2d& p) { self.max() = p; }, "Maximum corner")
+          +[](BoundingBox2d& self, const BasicPoint2d& p) { self.max() = p; }, "Maximum corner (upper right)")
       .def(
           "__repr__", +[](BoundingBox2d box) {
             return makeRepr("BoundingBox2d", repr(object(box.min())), repr(object(box.max())));
           });
 
-  class_<BoundingBox3d>(
-      "BoundingBox3d", init<BasicPoint3d, BasicPoint3d>((arg("min"), arg("max")),
-                                                        "Initialize box with its minimum point and its maximum corner"))
+  class_<BoundingBox3d>("BoundingBox3d",
+                        init<BasicPoint3d, BasicPoint3d>(
+                            (arg("min"), arg("max")),
+                            "Initialize box with its minimum (lower laft) and its maximum (upper right) corner"))
       .add_property(
           "min",
           make_function(
@@ -689,9 +696,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Returns a plain 2D point primitive (no ID, no attributes) for efficient geometry operations");
   class_<Point2d, bases<ConstPoint2d>>(
       "Point2d",
-      "Lanelets 2d point primitive. Directly convertible to a 3D point, because it is just a 2D view on the "
-      "existing "
-      "3D data. Use lanelet2.geometry.to3D for this.",
+      "Lanelet's 2D point primitive. Directly convertible to a 3D point, because it is just a 2D view on the "
+      "existing 3D data. Use lanelet2.geometry.to3D for this.",
       init<Id, BasicPoint3d, AttributeMap>((arg("id"), arg("point"), arg("attributes") = AttributeMap())))
       .def(init<>("Point2d()"))
       .def(init<Point3d>("Point3d()"))
@@ -724,8 +730,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "Lanelets 3D point primitive. Directly convertible to a 2D point, which shares the same view on the data. Use "
       "lanelet2.geometry.to2D for this.",
       init<Id, BasicPoint3d, AttributeMap>((arg("id"), arg("point"), arg("attributes") = AttributeMap())))
-      .def(init<>("Create an 3D point with ID 0 (invalid ID) at the origin"))
-      .def(init<Point2d>("Create a point from a 2D point"))
+      .def(init<>("Create a 3D point with ID 0 (invalid ID) at the origin"))
+      .def(init<Point2d>("Create a 3D point from a 2D point"))
       .def(init<Id, double, double, double, AttributeMap>(
           (arg("id"), arg("x"), arg("y"), arg("z") = 0., arg("attributes") = AttributeMap())))
       .add_property("x", getXWrapper<Point3d>, setXWrapper<Point3d>, "x coordinate")
@@ -742,10 +748,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                            +[](double lat, double lon, double alt) {
                              return std::make_shared<GPSPoint>(GPSPoint({lat, lon, alt}));
                            },
-                           default_call_policies(), (arg("lat") = 0., arg("lon") = 0., arg("alt") = 0)))
+                           default_call_policies(), (arg("lat") = 0., arg("lon") = 0., arg("ele") = 0)))
       .def_readwrite("lat", &GPSPoint::lat, "Latitude according to WGS84")
       .def_readwrite("lon", &GPSPoint::lon, "Longitude according to WGS84")
-      .def_readwrite("alt", &GPSPoint::ele, "Elevation according to WGS84 [m]")
+      .def_readwrite("alt", &GPSPoint::ele, "DEPRECATED: Elevation according to WGS84 [m]. Use ele instead.")
+      .def_readwrite("ele", &GPSPoint::ele, "Elevation according to WGS84 [m]")
       .def(
           "__repr__", +[](const GPSPoint& p) { return makeRepr("GPSPoint", p.lat, p.lon, p.ele); });
 
@@ -771,8 +778,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "because it is essentially a view on "
       "the same 3D data. Use lanelet2.geometry.to3D for this.",
       init<Id, Points3d, AttributeMap>("Create a linestring from an ID, a list of 3D points and attributes",
-                                       (arg("id"), arg("point3d"), arg("attributes"))))
-      .def(init<Id, Points3d>("Create a linestring from an ID and a list of 3D points", (arg("id"), arg("points3d"))))
+                                       (arg("id"), arg("points"), arg("attributes"))))
+      .def(init<Id, Points3d>("Create a linestring from an ID and a list of 3D points", (arg("id"), arg("points"))))
       .def(init<LineString3d>("Returns a 3D linestring for the current data. Both share the same data, modifications "
                               "affect both linestrings."))
       .def("invert", &LineString2d::invert,
@@ -806,7 +813,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LineString3d, bases<ConstLineString3d>>(
       "LineString3d",
-      "Lanelets 3d lineString primitive. Has an ID, attribtues and points. Accessing individual points works similar "
+      "Lanelet's 3d lineString primitive. Has an ID, attribtues and points. Accessing individual points works similar "
       "to python lists. Create mutable Linestring3d instead. Use lanelet2.geometry.to2D to convert to Linestring2d."
       "convert to Linestring2d.",
       init<Id, Points3d, AttributeMap>((arg("id") = 0, arg("points") = Points3d{}, arg("attributes") = AttributeMap())))
@@ -1096,7 +1103,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           "regulatoryElements", +[](ConstArea& self) { return self.regulatoryElements(); },
           "The regulatory elements of this area")
       .def("outerBoundPolygon", &ConstArea::outerBoundPolygon, "Returns the outer boundary as a CompoundPolygon3d")
-      .def("innerBoundPolygon", &ConstArea::innerBoundPolygons,
+      .def(
+          "innerBoundPolygon",
+          +[](const ConstArea& /*ar*/) {
+            throw std::runtime_error("innerBoundPolygon is deprecated. Use innerBoundPolygons instead!");
+          },
+          "DEPRECATED. Using it throws an exception. Use innerBoundPolygons instead!")
+      .def("innerBoundPolygons", &ConstArea::innerBoundPolygons,
            "Returns the inner boundaries as a list of CompoundPolygon3d")
       .def(
           "__repr__", +[](const ConstArea& ar) {
@@ -1129,7 +1142,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("removeRegulatoryElement", &Area::removeRegulatoryElement,
            "Removes a regulatory element, retunrs true on success", arg("regelem"))
       .def("outerBoundPolygon", &Area::outerBoundPolygon, "Returns the outer boundary as a CompoundPolygon3d")
-      .def("innerBoundPolygon", &Area::innerBoundPolygons,
+      .def("innerBoundPolygon", +[](const Area& /*ar*/) { throw std::runtime_error("innerBoundPolygon is deprecated. Use innerBoundPolygons instead!");}, "DEPRECATED. Using it throws an exception. Use innerBoundPolygons instead!")
+      .def("innerBoundPolygons", &Area::innerBoundPolygons,
            "Returns the inner boundaries as a list of CompoundPolygon3d")
       .def(
           "__repr__", +[](Area& ar) {
@@ -1335,14 +1349,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   wrapLayer<AreaLayer, bases<PrimitiveLayer<Area>>>("AreaLayer")
       .def(
-          "findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); }, arg("regElem"),
+          "findUsages", +[](AreaLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); }, arg("regelem"),
           "Find areas with this regulatory element")
       .def(
           "findUsages", +[](AreaLayer& self, ConstLineString3d& ls) { return self.findUsages(ls); }, arg("ls"),
           "Find areas with this linestring");
   wrapLayer<LaneletLayer, bases<PrimitiveLayer<Lanelet>>>("LaneletLayer")
       .def(
-          "findUsages", +[](LaneletLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); }, arg("regElem"),
+          "findUsages", +[](LaneletLayer& self, RegulatoryElementPtr& e) { return self.findUsages(e); }, arg("regelem"),
           "Find lanelets with this regualtory element")
       .def(
           "findUsages", +[](LaneletLayer& self, ConstLineString3d& ls) { return self.findUsages(ls); }, arg("ls"),
