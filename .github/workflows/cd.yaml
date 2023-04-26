@@ -48,9 +48,10 @@ jobs:
             export HOME=/home/conan
             export LANELET2_DIR=$HOME/src/lanelet2
             cd $LANELET2_DIR
+            source activate.sh
             export LANELET2_VERSION=$(conan inspect . --raw version)
             echo "Lanelet2 version: $LANELET2_VERSION"
-            export LANELET2_PACKAGE_DIR=$(conan info lanelet2/1.2.0@lanelet2/stable --paths --package-filter lanelet2/1.2.0@lanelet2/stable --only package_folder | tail -1 | tr -s ' ')
+            export LETAS_PACKAGE_DIR=$(python -c "import lanelet2; from pathlib import Path; print(Path(lanelet2.__file__).parent)")
             echo "Lanelet2 package directory: $LANELET2_PACKAGE_DIR"
 
             # source
@@ -77,8 +78,7 @@ jobs:
     strategy:
       matrix:
         # test only on currently supported version
-        # python-version: ["3.8", "3.9", "3.10", "3.11"]
-        python-version: ["3.8"]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
         os: ["ubuntu-22.04", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -92,7 +92,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install wheel
-        run: pip install dist/*
+        # use dist/ directory as package source instead of pypi.org
+        run: pip install lanelet2 --no-index --find-links dist/
       - name: Test wheel
         run: python -c "import lanelet2; assert lanelet2.core.Point2d(0, 0, 0) is not None"
 
