@@ -17,12 +17,13 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: Setup docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build dependencies
+      - name: Create build container
         uses: docker/build-push-action@v3
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -35,7 +36,7 @@ jobs:
       - name: Create output directory
         run: mkdir -p ${{ github.workspace }}/output
 
-      - name: Do stuff inside the container
+      - name: Package lanelet2 in build container
         uses: addnab/docker-run-action@v3
         with:
           image: lanelet2_conan
