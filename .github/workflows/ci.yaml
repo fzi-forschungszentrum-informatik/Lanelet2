@@ -176,3 +176,20 @@ jobs:
           coverage-files: ./lcov/full_coverage.lcov
           artifact-name: code-coverage-report
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  full_conan_installation:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup docker buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build dependencies
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          file: .github/conan_dockerfile/Dockerfile
+          tags: lanelet2_conan_with_pip_wheel
+          load: true
+          target: lanelet2_conan_with_pip_wheel
