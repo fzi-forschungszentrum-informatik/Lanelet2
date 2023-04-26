@@ -2,7 +2,7 @@
 # version
 
 # Uses gcc8 for glibc 2.28
-FROM conanio/gcc8:latest
+FROM conanio/gcc8:latest AS lanelet2_conan_deps
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -27,22 +27,33 @@ RUN wget https://github.com/NixOS/patchelf/releases/download/0.17.2/patchelf-0.1
 RUN conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan \
   && conan config set general.revisions_enabled=1
 
+
+FROM lanelet2_conan_deps as lanelet2_conan_src
+
 # checkout code
 RUN mkdir src
 WORKDIR /home/conan/src
 RUN git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
 
+FROM lanelet2_conan_src as lanelet2_conan
+
 # compile
 WORKDIR /home/conan/src/lanelet2
 RUN conan source . \
-  && conan create . lanelet2/stable --build=missing \
-  && conan install lanelet2/1.2.0@lanelet2/stable --build=missing -g virtualenv
+  && conan create . lanelet2/stable --build=missing
+RUN export LANELET2_VERSION=$(conan inspect . --raw version) \
+  && echo "Lanelet2 version: $LANELET2_VERSION" \
+  && conan install lanelet2/$LANELET2_VERSION@lanelet2/stable --build=missing -g virtualenv
+
+FROM lanelet2_conan as lanelet2_conan_with_pip_wheel
 
 SHELL ["/bin/bash", "-c"]
 WORKDIR /home/conan
 RUN source /home/conan/src/lanelet2/activate.sh \
   && cp -r $(dirname $(dirname $(which tutorial.py)))/python3.8/site-packages/lanelet2 .
-RUN sed 's/{{ version }}/'"1.2.0"'/' /home/conan/src/lanelet2/lanelet2_python/setup.py.template > /home/conan/setup.py
+RUN export LANELET2_VERSION=$(conan inspect ./src/lanelet2 --raw version) \
+  && echo "Lanelet2 version: $LANELET2_VERSION" \
+  && sed 's/{{ version }}/'"$LANELET2_VERSION"'/' /home/conan/src/lanelet2/lanelet2_python/setup.py.template > /home/conan/setup.py
 
 RUN source /home/conan/src/lanelet2/activate.sh \
   && pip wheel -w broken-dist/ . \

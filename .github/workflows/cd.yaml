@@ -23,9 +23,10 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          tags: lanelet2_src
+          file: .github/conan_dockerfile/Dockerfile
+          tags: lanelet2_conan
           load: true
-          target: lanelet2_src
+          target: lanelet2_conan
 
       - name: Create output directory
         run: mkdir -p ${{ github.workspace }}/output
@@ -33,39 +34,23 @@ jobs:
       - name: Do stuff inside the container
         uses: addnab/docker-run-action@v3
         with:
-          image: lanelet2_src
+          image: lanelet2_conan
           shell: bash
           options: -v ${{ github.workspace }}/dist:/dist
           run: |
             set -e
-            export WORKSPACE=$(pwd)
+            export WORKSPACE=/home/conan
 
             # find python version
             export PYTHON_VERSION=$(python3 -c "import sys; print('.'.join([str(i) for i in sys.version_info[:2]]))")
 
-            # build lanelet2 with python
-            source /opt/ros/noetic/setup.bash
-            catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DPYTHON_VERSION=$PYTHON_VERSION
-            catkin build --no-status
+            # source
+            source /home/conan/src/lanelet2/activate.sh  \
+              && cp -r $(dirname $(dirname $(which tutorial.py)))/python3.8/site-packages/lanelet2 .
 
-            # assemble python package contents
-            cp -r $WORKSPACE/devel/.private/lanelet2_python/lib/python3/dist-packages/lanelet2 $WORKSPACE/lanelet2
-            export LANELET2_VERSION=$(catkin_package_version $WORKSPACE/src/lanelet2)
-            sed 's/{{ version }}/'"$LANELET2_VERSION"'/' $WORKSPACE/src/lanelet2/lanelet2_python/setup.py.template > $WORKSPACE/setup.py
-          
-            # install patchelf
-            cd $HOME
-            wget https://github.com/NixOS/patchelf/releases/download/0.17.2/patchelf-0.17.2-x86_64.tar.gz
-            tar -xzf patchelf-0.17.2-x86_64.tar.gz
-            sudo ln -s $HOME/bin/patchelf /bin/patchelf
-            patchelf --version
-
-            # install pip
-            export PATH="$PATH:$HOME/.local/bin"
-            cd $HOME
-            wget -q https://bootstrap.pypa.io/get-pip.py
-            python3 get-pip.py
-            pip install auditwheel
+            # update setup.py
+            export LANELET2_VERSION=$(conan inspect . --raw version)
+            sed 's/{{ version }}/'"$LANELET2_VERSION"'/' /home/conan/src/lanelet2/lanelet2_python/setup.py.template > /home/conan/setup.py
 
             # repair wheel
             cd $WORKSPACE
