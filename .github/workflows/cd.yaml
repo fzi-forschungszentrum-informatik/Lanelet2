@@ -13,6 +13,9 @@ permissions:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
     runs-on: ubuntu-latest
     steps:
       - name: Setup docker buildx
@@ -27,6 +30,7 @@ jobs:
           tags: lanelet2_conan
           load: true
           target: lanelet2_conan
+          build-args: PYTHON_VERSION=${{ matrix.python-version }}
 
       - name: Create output directory
         run: mkdir -p ${{ github.workspace }}/output
@@ -39,27 +43,27 @@ jobs:
           options: -v ${{ github.workspace }}/dist:/dist
           run: |
             set -e
-            export WORKSPACE=/home/conan
-
-            # find python version
-            export PYTHON_VERSION=$(python3 -c "import sys; print('.'.join([str(i) for i in sys.version_info[:2]]))")
+            # set env variables
+            export HOME=/home/conan
+            export LANELET2_DIR=$HOME/src/lanelet2
+            cd $LANELET2_DIR
+            export LANELET2_VERSION=$(conan inspect . --raw version)
+            echo "Lanelet2 version: $LANELET2_VERSION"
+            export LANELET2_PACKAGE_DIR=$(conan info lanelet2/1.2.0@lanelet2/stable --paths --package-filter lanelet2/1.2.0@lanelet2/stable --only package_folder | tail -1 | tr -s ' ')
+            echo "Lanelet2 package directory: $LANELET2_PACKAGE_DIR"
 
             # source
-            cd $WORKSPACE
-            source /home/conan/src/lanelet2/activate.sh  \
-              && cp -r $(dirname $(dirname $(which tutorial.py)))/python3.8/site-packages/lanelet2 .
-
-            # update setup.py
-            export LANELET2_VERSION=$(conan inspect ./src/lanelet2 --raw version)
-            sed 's/{{ version }}/'"$LANELET2_VERSION"'/' /home/conan/src/lanelet2/lanelet2_python/setup.py.template > /home/conan/setup.py
+            cd $HOME
+            cp -r $LETAS_PACKAGE_DIR .
+            sed 's/{{ version }}/'"$LANELET2_VERSION"'/' $LANELET2_DIR/lanelet2_python/setup.py.template > setup.py
 
             # repair wheel
-            cd $WORKSPACE
+            cd $HOME
             pip wheel -w broken-dist/ .
             auditwheel repair -w dist/ --plat manylinux_2_28_x86_64 broken-dist/*.whl
             
             # copy wheel to dist directory
-            sudo cp -r $WORKSPACE/dist/* /dist
+            sudo cp -r $HOME/dist/* /dist
 
       - name: Store wheel
         uses: actions/upload-artifact@v3

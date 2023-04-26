@@ -10,8 +10,9 @@ RUN sudo -E apt-get update \
     libncursesw5-dev xz-utils libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
 # setup python environment
-RUN pyenv install 3.8 \
-  && pyenv global 3.8
+ARG PYTHON_VERSION=3.8
+RUN pyenv install $PYTHON_VERSION \
+  && pyenv global $PYTHON_VERSION
 RUN pip install "conan==1.59.0" catkin_pkg numpy wheel auditwheel
 
 # install patchelf
@@ -47,7 +48,8 @@ FROM lanelet2_conan as lanelet2_conan_with_pip_wheel
 SHELL ["/bin/bash", "-c"]
 WORKDIR /home/conan
 RUN source /home/conan/src/lanelet2/activate.sh \
-  && cp -r $(dirname $(dirname $(which tutorial.py)))/python3.8/site-packages/lanelet2 .
+  && LETAS_PACKAGE_DIR=$(python -c "import lanelet2; from pathlib import Path; print(Path(lanelet2.__file__).parent)") \
+  && cp -r $LETAS_PACKAGE_DIR .
 RUN export LANELET2_VERSION=$(conan inspect ./src/lanelet2 --raw version) \
   && echo "Lanelet2 version: $LANELET2_VERSION" \
   && sed 's/{{ version }}/'"$LANELET2_VERSION"'/' /home/conan/src/lanelet2/lanelet2_python/setup.py.template > /home/conan/setup.py
