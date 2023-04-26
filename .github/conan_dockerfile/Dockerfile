@@ -30,7 +30,7 @@ FROM lanelet2_conan_deps as lanelet2_conan_src
 # checkout code
 RUN mkdir src
 WORKDIR /home/conan/src
-RUN git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
+COPY --chown=conan:conan-1001 . lanelet2/
 
 FROM lanelet2_conan_src as lanelet2_conan
 
