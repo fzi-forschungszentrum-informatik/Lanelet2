@@ -248,8 +248,8 @@ void part4Lanelets() {
   using namespace lanelet;
   // Technically, lanelets are not very special, they have a left and a right bound. You already know how to create
   // them, so lets skip that.
-  LineString3d left = examples::getLineStringAtY(1);
-  LineString3d right = examples::getLineStringAtY(0);
+  LineString3d left = examples::getLineStringAtX(0);
+  LineString3d right = examples::getLineStringAtX(1);
 
   Lanelet lanelet(utils::getId(), left, right);
   assert(lanelet.leftBound() == left);
