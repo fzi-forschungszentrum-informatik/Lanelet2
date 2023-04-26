@@ -178,6 +178,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   full_conan_installation:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Setup docker buildx
