@@ -25,7 +25,7 @@ inline Area getAnArea() {
   LineString3d top = examples::getLineStringAtY(2);
   LineString3d right = examples::getLineStringAtX(2).invert();
   LineString3d bottom = examples::getLineStringAtY(0).invert();
-  LineString3d left = examples::getLineStringAtY(0);
+  LineString3d left = examples::getLineStringAtX(0);
   return Area(utils::getId(), {top, right, bottom, left});
 }
 
