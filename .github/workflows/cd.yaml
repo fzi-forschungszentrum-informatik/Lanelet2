@@ -45,11 +45,12 @@ jobs:
             export PYTHON_VERSION=$(python3 -c "import sys; print('.'.join([str(i) for i in sys.version_info[:2]]))")
 
             # source
+            cd $WORKSPACE
             source /home/conan/src/lanelet2/activate.sh  \
               && cp -r $(dirname $(dirname $(which tutorial.py)))/python3.8/site-packages/lanelet2 .
 
             # update setup.py
-            export LANELET2_VERSION=$(conan inspect . --raw version)
+            export LANELET2_VERSION=$(conan inspect ./src/lanelet2 --raw version)
             sed 's/{{ version }}/'"$LANELET2_VERSION"'/' /home/conan/src/lanelet2/lanelet2_python/setup.py.template > /home/conan/setup.py
 
             # repair wheel

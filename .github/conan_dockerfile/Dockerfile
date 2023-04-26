@@ -1,6 +1,3 @@
-# See Dockerfile_conan for a simpler version that relies on the already installed python
-# version
-
 # Uses gcc8 for glibc 2.28
 FROM conanio/gcc8:latest AS lanelet2_conan_deps
 
