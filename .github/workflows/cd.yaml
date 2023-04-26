@@ -15,9 +15,10 @@ jobs:
   build:
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        # builds for 3.10 and 3.11 are not yet working
+        # python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9"]
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Setup docker buildx
         id: buildx
@@ -78,7 +79,8 @@ jobs:
     strategy:
       matrix:
         # test only on currently supported version
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        # python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9"]
         os: ["ubuntu-22.04", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
     steps:
