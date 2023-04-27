@@ -179,6 +179,11 @@ jobs:
 
   full_conan_installation:
     needs: lint
+    strategy:
+       matrix:
+         # builds for 3.10 and 3.11 are not yet working
+         # python-version: ["3.8", "3.9", "3.10", "3.11"]
+         python-version: ["3.8", "3.9"]
     runs-on: ubuntu-latest
     steps:
       - name: Setup docker buildx
@@ -193,3 +198,4 @@ jobs:
           tags: lanelet2_conan_with_pip_wheel
           load: true
           target: lanelet2_conan_with_pip_wheel
+          build-args: PYTHON_VERSION=${{ matrix.python-version }}

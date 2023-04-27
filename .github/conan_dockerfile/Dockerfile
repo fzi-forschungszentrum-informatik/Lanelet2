@@ -48,8 +48,8 @@ FROM lanelet2_conan as lanelet2_conan_with_pip_wheel
 SHELL ["/bin/bash", "-c"]
 WORKDIR /home/conan
 RUN source /home/conan/src/lanelet2/activate.sh \
-  && LETAS_PACKAGE_DIR=$(python -c "import lanelet2; from pathlib import Path; print(Path(lanelet2.__file__).parent)") \
-  && cp -r $LETAS_PACKAGE_DIR .
+  && LANELET2_PACKAGE_DIR=$(python -c "import lanelet2; from pathlib import Path; print(Path(lanelet2.__file__).parent)") \
+  && cp -r $LANELET2_PACKAGE_DIR .
 RUN export LANELET2_VERSION=$(conan inspect ./src/lanelet2 --raw version) \
   && echo "Lanelet2 version: $LANELET2_VERSION" \
   && sed 's/{{ version }}/'"$LANELET2_VERSION"'/' /home/conan/src/lanelet2/lanelet2_python/setup.py.template > /home/conan/setup.py
