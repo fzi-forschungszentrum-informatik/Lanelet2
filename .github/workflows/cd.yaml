@@ -63,7 +63,7 @@ jobs:
             # repair wheel
             cd $HOME
             pip wheel -w broken-dist/ .
-            auditwheel repair -w dist/ --plat manylinux_2_28_x86_64 broken-dist/*.whl
+            auditwheel repair -w dist/ --plat manylinux_2_27_x86_64 broken-dist/*.whl
             
             # copy wheel to dist directory
             sudo cp -r $HOME/dist/* /dist
