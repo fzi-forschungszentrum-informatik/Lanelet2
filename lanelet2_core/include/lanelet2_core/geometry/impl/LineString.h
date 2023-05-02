@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/geometry/algorithms/equals.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 
 #include "lanelet2_core/geometry/GeometryHelper.h"
@@ -67,13 +68,18 @@ inline BasicLineString3d invert(const BasicLineString3d& ls) {
   return BasicLineString3d{ls.rbegin(), ls.rend()};
 }
 
+template <typename PointT>
+struct ProjectedPointInfo {
+  Segment<PointT> closestSegment;
+  PointT projectedPoint;
+};
+
 template <typename LineStringT, typename BasicPointT>
-bool isLeftOf(const LineStringT& ls, const BasicPointT& p, const helper::ProjectedPoint<BasicPointT>& projectedPoint) {
-  BasicPointT pSeg1 = projectedPoint.result->segmentPoint1;
-  BasicPointT pSeg2 = projectedPoint.result->segmentPoint2;
-  BasicPointT projPoint = projectedPoint.result->projectedPoint;
+bool isLeftOf(const LineStringT& ls, const BasicPointT& p, const ProjectedPointInfo<BasicPointT>& ppInfo) {
+  BasicPointT pSeg1 = ppInfo.closestSegment.first;
+  BasicPointT pSeg2 = ppInfo.closestSegment.second;
   bool isLeft = pointIsLeftOf(pSeg1, pSeg2, p);
-  if (pSeg2 == projPoint) {
+  if (pSeg2 == ppInfo.projectedPoint) {
     auto nextSegPointIt = std::next(findPoint(ls, pSeg2));
     if (nextSegPointIt != ls.end()) {
       // see stackoverflow.com/questions/10583212
@@ -87,35 +93,53 @@ bool isLeftOf(const LineStringT& ls, const BasicPointT& p, const helper::Project
   return isLeft;
 }
 
-template <typename LineStringT, typename PointT>
-std::pair<double, helper::ProjectedPoint<PointT>> signedDistanceImpl(const LineStringT lineString, const PointT& p) {
-  using BasicPoint = PointT;
-  helper::ProjectedPoint<BasicPoint> projectedPoint;
-  const auto d = distance(lineString, p, projectedPoint);
-  auto isLeft = isLeftOf(lineString, p, projectedPoint);
-  return {isLeft ? d : -d, projectedPoint};
-}
+std::pair<BasicPoint2d, BasicPoint2d> projectedPoint2d(const ConstHybridLineString2d& l1,
+                                                       const ConstHybridLineString2d& l2);
+std::pair<BasicPoint2d, BasicPoint2d> projectedPoint2d(const CompoundHybridLineString2d& l1,
+                                                       const CompoundHybridLineString2d& l2);
+std::pair<BasicPoint2d, BasicPoint2d> projectedPoint2d(const ConstHybridLineString2d& l1,
+                                                       const CompoundHybridLineString2d& l2);
+std::pair<BasicPoint2d, BasicPoint2d> projectedPoint2d(const CompoundHybridLineString2d& l1,
+                                                       const ConstHybridLineString2d& l2);
+std::pair<BasicPoint2d, BasicPoint2d> projectedPoint2d(const ConstHybridLineString2d& l1, const BasicLineString2d& l2);
+std::pair<BasicPoint2d, BasicPoint2d> projectedPoint2d(const BasicLineString2d& l1, const ConstHybridLineString2d& l2);
+std::pair<BasicPoint2d, BasicPoint2d> projectedPoint2d(const BasicLineString2d& l1, const BasicLineString2d& l2);
 
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const ConstHybridLineString3d& l1,
                                                        const ConstHybridLineString3d& l2);
-
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const CompoundHybridLineString3d& l1,
                                                        const CompoundHybridLineString3d& l2);
-
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const ConstHybridLineString3d& l1,
                                                        const CompoundHybridLineString3d& l2);
-
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const CompoundHybridLineString3d& l1,
                                                        const ConstHybridLineString3d& l2);
-
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const ConstHybridLineString3d& l1, const BasicLineString3d& l2);
-
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicLineString3d& l1, const ConstHybridLineString3d& l2);
-
 std::pair<BasicPoint3d, BasicPoint3d> projectedPoint3d(const BasicLineString3d& l1, const BasicLineString3d& l2);
 
+BasicPoint2d project(const BasicLineString2d& lineString, const BasicPoint2d& pointToProject);
+BasicPoint3d project(const BasicLineString3d& lineString, const BasicPoint3d& pointToProject);
+BasicPoint2d project(const ConstHybridLineString2d& lineString, const BasicPoint2d& pointToProject);
+BasicPoint3d project(const ConstHybridLineString3d& lineString, const BasicPoint3d& pointToProject);
+BasicPoint2d project(const CompoundHybridLineString2d& lineString, const BasicPoint2d& pointToProject);
+BasicPoint3d project(const CompoundHybridLineString3d& lineString, const BasicPoint3d& pointToProject);
+
+template <typename LineStringT, typename PointT>
+std::pair<double, ProjectedPointInfo<traits::BasicPointT<PointT>>> signedDistanceImpl(const LineStringT lineString,
+                                                                                      const PointT& p) {
+  using BasicPoint = PointT;
+  const auto basicP = utils::toBasicPoint(p);
+  const auto nextSegment = closestSegment(lineString, basicP);
+  const auto projPoint = lanelet::geometry::project(utils::toBasicSegment(nextSegment), basicP);
+  const auto d = distance(projPoint, p);
+  ProjectedPointInfo<traits::BasicPointT<PointT>> ppInfo{nextSegment, projPoint};
+  const auto isLeft = isLeftOf(lineString, p, ppInfo);
+  return {isLeft ? d : -d, ppInfo};
+}
+
 template <typename HybridLineStringT>
-BasicPoint2d fromArcCoords(const HybridLineStringT& hLineString, const BasicPoint2d& projStart, const size_t startIdx,
+BasicPoint2d fromArcCoords(const HybridLineStringT& hLineString, const BasicPoint2d& projStart,
+                           const size_t startIdx,  // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
                            const size_t endIdx, const double distance) {
   if (hLineString.size() < startIdx) {
     throw InvalidInputError(std::string("Linestring point out of bounds. Linestring size ") +
@@ -699,16 +723,15 @@ ArcCoordinates toArcCoordinates(const LineString2dT& lineString, const BasicPoin
   const auto& projectedPoint = res.second;
   // find first point in segment in linestring
   double length = 0.;
-  auto accumulateLength = [&length, &point = projectedPoint.result->segmentPoint1](const auto& first,
-                                                                                   const auto& second) {
-    if (boost::geometry::equals(first, point)) {
+  auto accumulateLength = [&](const auto& first, const auto& second) {
+    if (boost::geometry::equals(first, projectedPoint.closestSegment.first)) {
       return true;
     }
     length += distance(first, second);
     return false;
   };
   helper::forEachPairUntil(lineString.begin(), lineString.end(), accumulateLength);
-  length += distance(projectedPoint.result->segmentPoint1, projectedPoint.result->projectedPoint);
+  length += distance(projectedPoint.closestSegment.first, projectedPoint.projectedPoint);
   return {length, dist};
 }
 
@@ -734,17 +757,13 @@ IfLS<LineString2dT, BoundingBox2d> boundingBox2d(const LineString2dT& lineString
 template <typename LineString3dT, typename>
 BasicPoint3d project(const LineString3dT& lineString, const BasicPoint3d& pointToProject) {
   static_assert(traits::is3D<LineString3dT>(), "Please call this function with a 3D type!");
-  helper::ProjectedPoint<BasicPoint3d> projectedPoint;
-  distance(lineString, pointToProject, projectedPoint);
-  return projectedPoint.result->projectedPoint;
+  return internal::project(utils::toHybrid(lineString), pointToProject);
 }
 
 template <typename LineString2dT, typename>
 BasicPoint2d project(const LineString2dT& lineString, const BasicPoint2d& pointToProject) {
   static_assert(traits::is2D<LineString2dT>(), "Please call this function with a 2D type!");
-  helper::ProjectedPoint<BasicPoint2d> projectedPoint;
-  distance(lineString, pointToProject, projectedPoint);
-  return projectedPoint.result->projectedPoint;
+  return internal::project(utils::toHybrid(lineString), pointToProject);
 }
 
 template <typename LineString3dT>
@@ -760,6 +779,13 @@ IfLS<LineString3dT, bool> intersects3d(const LineString3dT& linestring, const Li
     return distance(pProj1, pProj2) < heightTolerance;
   };
   return std::any_of(intersections.begin(), intersections.end(), distanceSmallerTolerance);
+}
+
+template <typename LineString2dT>
+IfLS<LineString2dT, std::pair<BasicPoint2d, BasicPoint2d>> projectedPoint2d(const LineString2dT& l1,
+                                                                            const LineString2dT& l2) {
+  static_assert(traits::is2D<LineString2dT>(), "Please call this function with a 2D type!");
+  return internal::projectedPoint2d(traits::toHybrid(l1), traits::toHybrid(l2));
 }
 
 template <typename LineString3dT>
@@ -836,27 +862,6 @@ BasicLineString2d offset(const LineString2dT& lineString, const double distance)
   auto newLS = offsetNoThrow(lineString, distance);
   internal::checkForInversion(lineString, newLS, distance);
   return newLS;
-}
-
-template <typename LineString3dT, typename>
-Segment<traits::PointType<LineString3dT>> closestSegment(const LineString3dT& lineString,
-                                                         const BasicPoint3d& pointToProject) {
-  static_assert(traits::is3D<LineString3dT>(), "Please call this function with a 3D type!");
-  helper::ProjectedPoint<traits::PointType<LineString3dT>> projectedPoint;
-  distance(utils::toHybrid(lineString), pointToProject, projectedPoint);
-  return Segment<traits::PointType<LineString3dT>>(projectedPoint.result->segmentPoint1,
-                                                   projectedPoint.result->segmentPoint2);
-}
-
-//! Projects the given point in 2d to the LineString.
-template <typename LineString2dT, typename>
-Segment<traits::PointType<LineString2dT>> closestSegment(const LineString2dT& lineString,
-                                                         const BasicPoint2d& pointToProject) {
-  static_assert(traits::is2D<LineString2dT>(), "Please call this function with a 2D type!");
-  helper::ProjectedPoint<traits::PointType<LineString2dT>> projectedPoint;
-  distance(utils::toHybrid(lineString), pointToProject, projectedPoint);
-  return Segment<traits::PointType<LineString2dT>>(projectedPoint.result->segmentPoint1,
-                                                   projectedPoint.result->segmentPoint2);
 }
 }  // namespace geometry
 }  // namespace lanelet

@@ -2,6 +2,7 @@
 
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/primitives/LineString.h"
+#include "lanelet2_core/primitives/Traits.h"
 
 namespace lanelet {
 
@@ -392,6 +393,36 @@ inline BasicPolygon2d to2D<BasicPolygon3d>(const BasicPolygon3d& primitive) {
   std::transform(primitive.begin(), primitive.end(), p2d.begin(), utils::to2D<BasicPoint3d>);
   return p2d;
 }
+
+template <typename PolygonT>
+std::enable_if_t<traits::isPolygonT<PolygonT>(), BasicPolygon2d> toBasicPolygon2d(const PolygonT& t) {
+  return traits::to2D(t).basicPolygon();
+}
+
+template <>
+inline BasicPolygon2d toBasicPolygon2d<BasicPolygon2d>(const BasicPolygon2d& t) {
+  return t;
+}
+
+template <>
+inline BasicPolygon2d toBasicPolygon2d<BasicPolygon3d>(const BasicPolygon3d& t) {
+  return traits::to2D(t);
+}
+
+inline BasicPolygon2d toBasicPolygon2d(BasicPolygon2d&& t) { return std::move(t); }
+
+template <typename PolygonT>
+std::enable_if_t<traits::isPolygonT<PolygonT>(), BasicPolygon3d> toBasicPolygon3d(const PolygonT& t) {
+  return traits::to3D(t).basicPolygon();
+}
+
+template <>
+inline BasicPolygon3d toBasicPolygon3d<BasicPolygon3d>(const BasicPolygon3d& t) {
+  return t;
+}
+
+inline BasicPolygon3d toBasicPolygon3d(BasicPolygon3d&& t) { return std::move(t); }
+
 }  // namespace traits
 template <typename T, typename RetT>
 using IfPoly = std::enable_if_t<traits::isPolygonT<T>(), RetT>;

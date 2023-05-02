@@ -1,7 +1,11 @@
 #include <gtest/gtest.h>
 
+#include <boost/geometry/algorithms/equals.hpp>
+#include <vector>
+
 #include "lanelet2_core/geometry/LineString.h"
 #include "lanelet2_core/primitives/LineString.h"
+#include "primitives/Traits.h"
 using namespace lanelet;
 
 class LineStringPoints : public ::testing::Test {
@@ -58,6 +62,42 @@ class LineStringTypeTest : public LineStringPoints {
   }
 
  public:
+  static LineStringT getLinestringAt(double y, size_t n = 100) {
+    Id id{10};
+    std::vector<Point3d> points;
+    for (auto i = 0; i < n; i++) {
+      points.push_back(Point3d(++id, i, y, 0));
+    }
+    return LineStringT(++id, points);
+  }
+  LineStringT ls1, ls2, ls3, ls4;
+};
+
+template <typename T>
+class BasicLineStringTypeTest : public LineStringPoints {
+ protected:
+  using BaseLinestringT = T;
+  using LineStringT = typename T::BasicLineString;
+  void SetUp() override {
+    LineStringPoints::SetUp();
+    Id id{10};
+    ls1 = BaseLinestringT(++id, {p11, p12, p13},
+                          AttributeMap{{AttributeNamesString::Type, AttributeValueString::Curbstone}})
+              .basicLineString();
+    ls2 = BaseLinestringT(++id, {p21, p22, p23}).basicLineString();
+    ls3 = BaseLinestringT(++id, {p31, p32, p33}).basicLineString();
+    ls4 = BaseLinestringT(++id, {p11, p12, p43}).basicLineString();
+  }
+
+ public:
+  static LineStringT getLinestringAt(double y, size_t n = 100) {
+    Id id{10};
+    std::vector<Point3d> points;
+    for (auto i = 0; i < n; i++) {
+      points.push_back(Point3d(++id, i, y, 0));
+    }
+    return BaseLinestringT(++id, points).basicLineString();
+  }
   LineStringT ls1, ls2, ls3, ls4;
 };
 
@@ -80,6 +120,10 @@ class CompoundLineStringTypeTest : public LineStringPoints {
   }
 
  public:
+  static LineStringT getLinestringAt(double y, size_t n = 100) {
+    return LineStringT{{LineStringTypeTest<LineString3d>::getLinestringAt(y, n)}};
+  }
+
   LineStringT ls1, ls2, ls3, ls4;
 };
 
@@ -88,7 +132,7 @@ auto getZ(const T& p) -> std::enable_if_t<!traits::is2D<T>(), double> {
   return p.z();
 }
 template <typename T>
-auto getZ(const T & /*p*/) -> std::enable_if_t<traits::is2D<T>(), double> {
+auto getZ(const T& /*p*/) -> std::enable_if_t<traits::is2D<T>(), double> {
   return 0.;
 }
 
@@ -103,6 +147,11 @@ class LineStringTypeTest<CompoundHybridLineString2d> : public CompoundLineString
 
 template <>
 class LineStringTypeTest<CompoundHybridLineString3d> : public CompoundLineStringTypeTest<CompoundHybridLineString3d> {};
+
+template <>
+class LineStringTypeTest<BasicLineString2d> : public BasicLineStringTypeTest<LineString2d> {};
+template <>
+class LineStringTypeTest<BasicLineString3d> : public BasicLineStringTypeTest<LineString3d> {};
 
 template <typename T>
 class AllLineStringsTest : public LineStringTypeTest<T> {};
@@ -139,9 +188,9 @@ using AllLineStrings = testing::Types<LineString2d, LineString3d, ConstLineStrin
                                       CompoundLineString3d, CompoundHybridLineString2d, CompoundHybridLineString3d>;
 using NormalLineStrings = testing::Types<LineString2d, LineString3d, ConstLineString2d, ConstLineString3d>;
 using ThreeDLineStrings = testing::Types<LineString3d, ConstLineString3d, ConstHybridLineString3d, CompoundLineString3d,
-                                         CompoundHybridLineString3d>;
+                                         CompoundHybridLineString3d, BasicLineString3d>;
 using TwoDLineStrings = testing::Types<LineString2d, ConstLineString2d, ConstHybridLineString2d, CompoundLineString2d,
-                                       CompoundHybridLineString2d>;
+                                       CompoundHybridLineString2d, BasicLineString2d>;
 using MutableLineStrings = testing::Types<LineString2d, LineString3d>;
 using PrimitiveLineStrings = testing::Types<LineString2d, LineString3d, ConstLineString2d, ConstLineString3d,
                                             ConstHybridLineString2d, ConstHybridLineString3d>;
@@ -266,6 +315,12 @@ TYPED_TEST(ThreeDLineStringsTest, bounds3d) {  // NOLINT
 TYPED_TEST(ThreeDLineStringsTest, distance3d) {  // NOLINT
   EXPECT_NEAR(geometry::distance3d(this->ls1, this->ls2), 0.25, 0.05);
   EXPECT_DOUBLE_EQ(geometry::distance3d(this->ls2, this->ls3), 2.);
+}
+
+TYPED_TEST(ThreeDLineStringsTest, distance3dLongLinestring) {  // NOLINT
+  auto ls2 = this->getLinestringAt(0, 100);
+  auto ls1 = this->getLinestringAt(5, 100);
+  EXPECT_DOUBLE_EQ(geometry::distance3d(ls1, ls2), 5.);
 }
 
 TYPED_TEST(AllLineStringsTest, length) {  // NOLINT
@@ -406,6 +461,93 @@ TYPED_TEST(TwoDLineStringsTest, projectedPoint) {  // NOLINT
   auto projectedPoint = geometry::project(this->ls1, p);
   EXPECT_DOUBLE_EQ(0, projectedPoint.x());
   EXPECT_DOUBLE_EQ(1.5, projectedPoint.y());
+}
+
+TYPED_TEST(ThreeDLineStringsTest, projectedPoint) {  // NOLINT
+  auto p = BasicPoint3d(0, 1.5, 0.5);
+  auto projectedPoint = geometry::project(this->ls1, p);
+  EXPECT_DOUBLE_EQ(0, projectedPoint.x());
+  EXPECT_DOUBLE_EQ(1.5, projectedPoint.y());
+  EXPECT_DOUBLE_EQ(0.5, projectedPoint.z());
+}
+
+TYPED_TEST(TwoDLineStringsTest, projectedPointLongLinestring) {  // NOLINT
+  auto p = BasicPoint2d(0, 0);
+  auto ls = this->getLinestringAt(5, 100);
+  auto projectedPoint = geometry::project(ls, p);
+  EXPECT_DOUBLE_EQ(0, projectedPoint.x());
+  EXPECT_DOUBLE_EQ(5, projectedPoint.y());
+}
+
+TYPED_TEST(ThreeDLineStringsTest, projectedPointLongLinestring) {  // NOLINT
+  auto p = BasicPoint3d(0, 0, -1);
+  auto ls = this->getLinestringAt(5, 100);
+  auto projectedPoint = geometry::project(ls, p);
+  EXPECT_DOUBLE_EQ(0, projectedPoint.x());
+  EXPECT_DOUBLE_EQ(5, projectedPoint.y());
+  EXPECT_DOUBLE_EQ(0, projectedPoint.z());
+}
+
+TYPED_TEST(TwoDLineStringsTest, closestSegment) {  // NOLINT
+  auto p = BasicPoint2d(0, 0);
+  auto segm = geometry::closestSegment(this->ls1, p);
+  EXPECT_DOUBLE_EQ(boost::geometry::distance(utils::toBasicPoint(segm.first), this->ls1), 0.);
+  EXPECT_DOUBLE_EQ(boost::geometry::distance(utils::toBasicPoint(segm.second), this->ls1), 0.);
+  EXPECT_DOUBLE_EQ(boost::geometry::distance(utils::toBasicSegment(segm), p), geometry::distance2d(this->ls1, p));
+}
+
+TYPED_TEST(ThreeDLineStringsTest, closestSegment) {  // NOLINT
+  auto p = BasicPoint3d(0, 1, 2);
+  auto segm = geometry::closestSegment(this->ls1, p);
+  EXPECT_DOUBLE_EQ(boost::geometry::distance(utils::toBasicPoint(segm.first), this->ls1), 0.);
+  EXPECT_DOUBLE_EQ(boost::geometry::distance(utils::toBasicPoint(segm.second), this->ls1), 0.);
+  EXPECT_DOUBLE_EQ(boost::geometry::distance(utils::toBasicSegment(segm), p), geometry::distance3d(this->ls1, p));
+}
+
+TYPED_TEST(TwoDLineStringsTest, closestSegmentLongLinestring) {  // NOLINT
+  auto p = BasicPoint2d(0, 0);
+  auto ls = this->getLinestringAt(5, 100);
+  auto segm = geometry::closestSegment(ls, p);
+  EXPECT_DOUBLE_EQ(boost::geometry::distance(utils::toBasicSegment(segm), p), geometry::distance2d(ls, p));
+}
+
+TYPED_TEST(ThreeDLineStringsTest, closestSegmentLongLinestring) {  // NOLINT
+  auto p = BasicPoint3d(0, 1, 2);
+  auto ls = this->getLinestringAt(5, 100);
+  auto segm = geometry::closestSegment(ls, p);
+  EXPECT_DOUBLE_EQ(boost::geometry::distance(utils::toBasicSegment(segm), p), geometry::distance3d(ls, p));
+}
+
+TYPED_TEST(TwoDLineStringsTest, projectedPointL2L) {  // NOLINT
+  auto points = geometry::projectedPoint2d(this->ls1, this->ls2);
+  EXPECT_DOUBLE_EQ((points.first - points.second).norm(), geometry::distance2d(this->ls1, this->ls2));
+  EXPECT_NEAR(geometry::distance2d(points.first, this->ls1), 0., 1e-10);
+  EXPECT_NEAR(geometry::distance2d(points.second, this->ls2), 0., 1e-10);
+}
+
+TYPED_TEST(ThreeDLineStringsTest, projectedPointL2L) {  // NOLINT
+  auto points = geometry::projectedPoint3d(this->ls1, this->ls2);
+  EXPECT_DOUBLE_EQ((points.first - points.second).norm(), geometry::distance3d(this->ls1, this->ls2));
+  EXPECT_NEAR(geometry::distance3d(points.first, this->ls1), 0., 1e-10);
+  EXPECT_NEAR(geometry::distance3d(points.second, this->ls2), 0., 1e-10);
+}
+
+TYPED_TEST(TwoDLineStringsTest, projectedPointL2LLongLinestring) {  // NOLINT
+  auto ls1 = this->getLinestringAt(0, 100);
+  auto ls2 = this->getLinestringAt(5, 100);
+  auto points = geometry::projectedPoint2d(ls1, ls2);
+  EXPECT_DOUBLE_EQ((points.first - points.second).norm(), 5);
+  EXPECT_DOUBLE_EQ(geometry::distance2d(points.first, ls1), 0.);
+  EXPECT_DOUBLE_EQ(geometry::distance2d(points.second, ls2), 0.);
+}
+
+TYPED_TEST(ThreeDLineStringsTest, projectedPointL2LLongLinestring) {  // NOLINT
+  auto ls1 = this->getLinestringAt(0, 100);
+  auto ls2 = this->getLinestringAt(5, 100);
+  auto points = geometry::projectedPoint3d(ls1, ls2);
+  EXPECT_DOUBLE_EQ((points.first - points.second).norm(), 5);
+  EXPECT_DOUBLE_EQ(geometry::distance3d(points.first, ls1), 0.);
+  EXPECT_DOUBLE_EQ(geometry::distance3d(points.second, ls2), 0.);
 }
 
 TYPED_TEST(PrimitiveLineStringsTest, align) {  // NOLINT

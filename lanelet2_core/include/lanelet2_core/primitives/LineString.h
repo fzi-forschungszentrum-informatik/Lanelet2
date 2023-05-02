@@ -70,7 +70,17 @@ inline BasicLineString2d to2D<BasicLineString3d>(const BasicLineString3d& primit
   std::transform(primitive.begin(), primitive.end(), ls2d.begin(), utils::to2D<BasicPoint3d>);
   return ls2d;
 }
+
+template <typename PointT>
+auto toBasicSegment(const Segment<PointT>& s) {
+  return std::make_pair(toBasicPoint(s.first), toBasicPoint(s.second));
+}
+
 }  // namespace traits
+
+namespace utils {
+using traits::toBasicSegment;
+}
 
 namespace internal {
 template <typename PointT>

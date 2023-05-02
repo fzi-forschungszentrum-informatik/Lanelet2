@@ -16,8 +16,8 @@ namespace geometry {
 namespace internal {
 template <typename T>
 struct GetGeometry<T, IfLL<T, void>> {
-  static inline auto twoD(const T& geometry) { return traits::toHybrid(geometry.polygon2d()); }
-  static inline auto threeD(const T& geometry) { return traits::toHybrid(geometry.polygon3d()); }
+  static inline auto twoD(const T& geometry) { return geometry.polygon2d().basicPolygon(); }
+  static inline auto threeD(const T& geometry) { return geometry.polygon3d().basicPolygon(); }
 };
 }  // namespace internal
 

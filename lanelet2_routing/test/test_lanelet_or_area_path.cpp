@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <lanelet2_core/geometry/Polygon.h>
 
+#include <boost/geometry/algorithms/equals.hpp>
+
 #include "lanelet2_routing/LaneletPath.h"
 
 using namespace lanelet;

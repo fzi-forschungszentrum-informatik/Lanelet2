@@ -73,7 +73,7 @@ struct PointTraits<BasicPoint2d> : PrimitiveTraits<BasicPoint2d> {
   using ConstPoint = typename PrimitiveTraits<BasicPoint2d>::ConstType;
   using MutablePoint = typename PrimitiveTraits<BasicPoint2d>::MutableType;
   static constexpr bool IsPrimitive = false;
-  static constexpr Dimensions Dimension = Dimensions::Three;
+  static constexpr Dimensions Dimension = Dimensions::Two;
 };
 template <>
 struct PointTraits<Eigen::Vector2d> : PrimitiveTraits<Eigen::Vector2d> {
@@ -81,7 +81,7 @@ struct PointTraits<Eigen::Vector2d> : PrimitiveTraits<Eigen::Vector2d> {
   using ConstPoint = typename PrimitiveTraits<BasicPoint2d>::ConstType;
   using MutablePoint = typename PrimitiveTraits<BasicPoint2d>::MutableType;
   static constexpr bool IsPrimitive = false;
-  static constexpr Dimensions Dimension = Dimensions::Three;
+  static constexpr Dimensions Dimension = Dimensions::Two;
 };
 
 template <>
