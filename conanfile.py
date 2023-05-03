@@ -72,7 +72,7 @@ class Lanelet2Conan(ConanFile):
 
     requires = (
         "python_dev_config/0.6@bincrafters/stable",
-        "boost/1.81.0",
+        "boost/[>=1.75.0 <=1.81.0]",
         "eigen/3.4.0",
         "geographiclib/1.52",
         "pugixml/1.13",
