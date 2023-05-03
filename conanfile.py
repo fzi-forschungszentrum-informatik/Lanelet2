@@ -71,6 +71,7 @@ class Lanelet2Conan(ConanFile):
     default_options = {"shared": True, "fPIC": True, "boost:shared": True, "boost:python_version": get_py_version(), "boost:without_python": False, "python_dev_config:python": get_py_exec()}
 
     requires = (
+        "python_dev_config/0.6@bincrafters/stable",
         "boost/1.81.0",
         "eigen/3.4.0",
         "geographiclib/1.52",
