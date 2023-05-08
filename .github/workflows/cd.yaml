@@ -67,23 +67,6 @@ jobs:
             set -e
             # set env variables
             export HOME=/home/conan
-            export LANELET2_DIR=$HOME/src/lanelet2
-            cd $LANELET2_DIR
-            source activate.sh
-            export LANELET2_VERSION=$(conan inspect . --raw version)
-            echo "Lanelet2 version: $LANELET2_VERSION"
-            export LETAS_PACKAGE_DIR=$(python -c "import lanelet2; from pathlib import Path; print(Path(lanelet2.__file__).parent)")
-            echo "Lanelet2 package directory: $LANELET2_PACKAGE_DIR"
-
-            # source
-            cd $HOME
-            cp -r $LETAS_PACKAGE_DIR .
-            sed 's/{{ version }}/'"$LANELET2_VERSION"'/' $LANELET2_DIR/lanelet2_python/setup.py.template > setup.py
-
-            # repair wheel
-            cd $HOME
-            pip wheel -w broken-dist/ .
-            auditwheel repair -w dist/ --plat manylinux_2_31_x86_64 broken-dist/*.whl
             
             # copy wheel to dist directory
             sudo cp -r $HOME/dist/* /dist
