@@ -172,6 +172,20 @@ BasicPoint3d project(const LineString3dT& lineString, const BasicPoint3d& pointT
 //! Projects the given point in 2d to the LineString.
 template <typename LineString2dT, typename = std::enable_if_t<traits::is2D<LineString2dT>()>>
 BasicPoint2d project(const LineString2dT& lineString, const BasicPoint2d& pointToProject);
+
+BasicPoint2d project(const BasicSegment2d& segment, const BasicPoint2d& pointToProject);
+BasicPoint3d project(const BasicSegment3d& segment, const BasicPoint3d& pointToProject);
+
+/**
+ * @brief Computes the projected points on the two linestrings for the shortest
+ * distance
+ *
+ * First element of the pair is located on l1, second on l2
+ */
+template <typename LineString2dT>
+IfLS<LineString2dT, std::pair<BasicPoint2d, BasicPoint2d>> projectedPoint2d(const LineString2dT& l1,
+                                                                            const LineString2dT& l2);
+
 /**
  * @brief Computes the projected points on the two linestrings for the shortest
  * distance
@@ -253,25 +267,6 @@ template <typename LineString2dT>
 BasicLineString2d offsetNoThrow(const LineString2dT& lineString, double distance);
 
 /**
- * @brief find the segment on a 3d line string that is closest to a given point, determined by boost::geometry::distance
- * @param lineString the line string the distance function is evaluated on
- * @param pointToProject 3d point that is projected on to the linestring
- * @returns a new segment that is identical to the closest one on the line string
- */
-template <typename LineString3dT, typename = std::enable_if_t<traits::is3D<LineString3dT>()>>
-Segment<traits::PointType<LineString3dT>> closestSegment(const LineString3dT& lineString,
-                                                         const BasicPoint3d& pointToProject);
-/**
- * @brief find the segment on a 2d line string that is closest to a given point, determined by boost::geometry::distance
- * @param lineString the line string the distance function is evaluated on
- * @param pointToProject 2d point that is projected on to the linestring
- * @returns a new segment that is identical to the closest one on the line string
- */
-template <typename LineString2dT, typename = std::enable_if_t<traits::is2D<LineString2dT>()>>
-Segment<traits::PointType<LineString2dT>> closestSegment(const LineString2dT& lineString,
-                                                         const BasicPoint2d& pointToProject);
-
-/**
  * @brief find the segment on a 2d line string that is closest to a given point, determined by boost::geometry::distance
  * @param lineString the line string the distance function is evaluated on
  * @param pointToProject 2d point that is projected on to the linestring
@@ -286,6 +281,14 @@ Segment<BasicPoint2d> closestSegment(const BasicLineString2d& lineString, const 
  * @returns a new segment that is identical to the closest one on the line string
  */
 Segment<BasicPoint3d> closestSegment(const BasicLineString3d& lineString, const BasicPoint3d& pointToProject);
+Segment<ConstPoint2d> closestSegment(const ConstLineString2d& lineString, const BasicPoint2d& pointToProject);
+Segment<ConstPoint3d> closestSegment(const ConstLineString3d& lineString, const BasicPoint3d& pointToProject);
+Segment<BasicPoint2d> closestSegment(const ConstHybridLineString2d& lineString, const BasicPoint2d& pointToProject);
+Segment<BasicPoint3d> closestSegment(const ConstHybridLineString3d& lineString, const BasicPoint3d& pointToProject);
+Segment<ConstPoint2d> closestSegment(const CompoundLineString2d& lineString, const BasicPoint2d& pointToProject);
+Segment<ConstPoint3d> closestSegment(const CompoundLineString3d& lineString, const BasicPoint3d& pointToProject);
+Segment<BasicPoint2d> closestSegment(const CompoundHybridLineString2d& lineString, const BasicPoint2d& pointToProject);
+Segment<BasicPoint3d> closestSegment(const CompoundHybridLineString3d& lineString, const BasicPoint3d& pointToProject);
 }  // namespace geometry
 }  // namespace lanelet
 

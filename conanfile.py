@@ -21,6 +21,7 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(SKIP_STD)
 
 # hint to gtest
+set(GOOGLETEST_VERSION 1.0.0)
 set(MRT_GTEST_DIR ${CMAKE_CURRENT_LIST_DIR})
 enable_testing()
 
@@ -69,11 +70,13 @@ class Lanelet2Conan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True]}
     default_options = {"shared": True, "fPIC": True, "boost:shared": True, "boost:python_version": get_py_version(), "boost:without_python": False, "python_dev_config:python": get_py_exec()}
 
-    requires = ("python_dev_config/0.6@bincrafters/stable",
-                "boost/1.75.0",
-                "eigen/3.3.9",
-                "geographiclib/1.50.1",
-                "pugixml/1.11")
+    requires = (
+        "python_dev_config/0.6@bincrafters/stable",
+        "boost/[>=1.75.0 <=1.81.0]",
+        "eigen/3.4.0",
+        "geographiclib/1.52",
+        "pugixml/1.13",
+    )
 
     exports_sources = "*"
     exports = "lanelet2_core/package.xml"

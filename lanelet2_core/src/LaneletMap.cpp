@@ -2,6 +2,8 @@
 #include "lanelet2_core/LaneletMap.h"
 
 #include <atomic>
+#include <boost/geometry/algorithms/disjoint.hpp>  //used but not included by rtree
+#include <boost/geometry/algorithms/equals.hpp>    //used but not included by rtree
 #include <boost/geometry/index/rtree.hpp>
 #include <chrono>
 #include <random>

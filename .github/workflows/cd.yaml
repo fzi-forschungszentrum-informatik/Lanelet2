@@ -15,9 +15,25 @@ jobs:
   build:
     strategy:
       matrix:
-        # builds for 3.10 and 3.11 are not yet working
-        # python-version: ["3.8", "3.9", "3.10", "3.11"]
-        python-version: ["3.8", "3.9"]
+        # this should be kept in sync with ci.yaml
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        include:
+          - python-version: "3.8"
+            boost-version: "1.75.0"
+            platform-version: manylinux_2_27_x86_64
+            image-version: conanio/gcc7:latest
+          - python-version: "3.9"
+            boost-version: "1.75.0"
+            platform-version: manylinux_2_27_x86_64
+            image-version: conanio/gcc7:latest
+          - python-version: "3.10"
+            boost-version: "1.81.0"
+            platform-version: manylinux_2_31_x86_64
+            image-version: conanio/gcc10:latest
+          - python-version: "3.11"
+            boost-version: "1.81.0"
+            platform-version: manylinux_2_31_x86_64
+            image-version: conanio/gcc10:latest
     runs-on: ubuntu-latest
     steps:
       - name: Setup docker buildx
@@ -32,7 +48,11 @@ jobs:
           tags: lanelet2_conan
           load: true
           target: lanelet2_conan
-          build-args: PYTHON_VERSION=${{ matrix.python-version }}
+          build-args: |
+            FROM=${{ matrix.image-version }}
+            PY_VERSION=${{ matrix.python-version }}
+            PLATFORM=${{ matrix.platform-version }}
+            CONAN_ARGS=--require-override=boost/${{ matrix.boost-version }}
 
       - name: Create output directory
         run: mkdir -p ${{ github.workspace }}/output
@@ -47,23 +67,6 @@ jobs:
             set -e
             # set env variables
             export HOME=/home/conan
-            export LANELET2_DIR=$HOME/src/lanelet2
-            cd $LANELET2_DIR
-            source activate.sh
-            export LANELET2_VERSION=$(conan inspect . --raw version)
-            echo "Lanelet2 version: $LANELET2_VERSION"
-            export LETAS_PACKAGE_DIR=$(python -c "import lanelet2; from pathlib import Path; print(Path(lanelet2.__file__).parent)")
-            echo "Lanelet2 package directory: $LANELET2_PACKAGE_DIR"
-
-            # source
-            cd $HOME
-            cp -r $LETAS_PACKAGE_DIR .
-            sed 's/{{ version }}/'"$LANELET2_VERSION"'/' $LANELET2_DIR/lanelet2_python/setup.py.template > setup.py
-
-            # repair wheel
-            cd $HOME
-            pip wheel -w broken-dist/ .
-            auditwheel repair -w dist/ --plat manylinux_2_27_x86_64 broken-dist/*.whl
             
             # copy wheel to dist directory
             sudo cp -r $HOME/dist/* /dist
@@ -79,8 +82,7 @@ jobs:
     strategy:
       matrix:
         # test only on currently supported version
-        # python-version: ["3.8", "3.9", "3.10", "3.11"]
-        python-version: ["3.8", "3.9"]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
         os: ["ubuntu-22.04", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
     steps:
