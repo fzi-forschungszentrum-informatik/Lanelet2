@@ -45,9 +45,9 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           file: .github/conan_dockerfile/Dockerfile
-          tags: lanelet2_conan
+          tags: lanelet2_conan_with_pip_wheel
           load: true
-          target: lanelet2_conan
+          target: lanelet2_conan_with_pip_wheel
           build-args: |
             FROM=${{ matrix.image-version }}
             PY_VERSION=${{ matrix.python-version }}
@@ -60,7 +60,7 @@ jobs:
       - name: Package lanelet2 in build container
         uses: addnab/docker-run-action@v3
         with:
-          image: lanelet2_conan
+          image: lanelet2_conan_with_pip_wheel
           shell: bash
           options: -v ${{ github.workspace }}/dist:/dist
           run: |
