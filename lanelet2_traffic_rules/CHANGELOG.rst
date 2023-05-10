@@ -2,6 +2,9 @@
 Changelog for package lanelet2_traffic_rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.1 (2023-05-10)
+------------------
+
 1.2.0 (2023-01-30)
 ------------------
 * Add signs for German zone 30 and zone 20 (`#264 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/264>`_)

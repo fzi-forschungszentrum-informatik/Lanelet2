@@ -2,6 +2,9 @@
 Changelog for package lanelet2_io
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.1 (2023-05-10)
+------------------
+
 1.2.0 (2023-01-30)
 ------------------
 * Fix OSM file output for upload and elevation (`#245 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/245>`_)

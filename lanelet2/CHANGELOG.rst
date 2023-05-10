@@ -2,6 +2,9 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.1 (2023-05-10)
+------------------
+
 1.2.0 (2023-01-30)
 ------------------
 * Add CI using GitHub Actions (`#256 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/256>`_)

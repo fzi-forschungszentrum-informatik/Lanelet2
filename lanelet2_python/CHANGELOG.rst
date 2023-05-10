@@ -2,10 +2,16 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-unreleased
-----------
-* Release Python package to PyPI (`#278 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/pull/278>`_)
-* Contributors: Jan Rudolph
+1.2.1 (2023-05-10)
+------------------
+* Improve python core module (`#293 <https://github.com/immel-f/Lanelet2/issues/293>`_)
+  Improve lanelet2.core python wrappers
+  add docstrings, named arguments and __repr_\_ methods to core primitives in python, fix bugs and add more initialization options
+  ---------
+  Co-authored-by: Fabian Poggenhans <fabian.poggenhans@partner.kit.edu>
+* Add readme to PyPi package description and fix readme icons (`#283 <https://github.com/immel-f/Lanelet2/issues/283>`_)
+* Build lanelet2 wheel and publish in GH release and PyPI (`#278 <https://github.com/immel-f/Lanelet2/issues/278>`_)
+* Contributors: Jan Rudolph, immel-f, poggenhans
 
 1.2.0 (2023-01-30)
 ------------------

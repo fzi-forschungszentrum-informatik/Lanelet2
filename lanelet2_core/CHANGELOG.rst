@@ -2,6 +2,12 @@
 Changelog for package lanelet2_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.1 (2023-05-10)
+------------------
+* Update thirdparty deps, rework projected point, enable python 3.10/3.11 (`#300 <https://github.com/immel-f/Lanelet2/issues/300>`_)
+* Fix typos in documentation (`#286 <https://github.com/immel-f/Lanelet2/issues/286>`_)
+* Contributors: Johannes Schmitz, poggenhans
+
 1.2.0 (2023-01-30)
 ------------------
 * Add zero-width character after colon to avoid markdown emoji
