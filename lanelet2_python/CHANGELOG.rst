@@ -2,8 +2,8 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.1 (2023-05-10)
+------------------
 * Improve python core module (`#293 <https://github.com/immel-f/Lanelet2/issues/293>`_)
   Improve lanelet2.core python wrappers
   add docstrings, named arguments and __repr_\_ methods to core primitives in python, fix bugs and add more initialization options
