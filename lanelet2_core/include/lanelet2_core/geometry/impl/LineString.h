@@ -127,7 +127,6 @@ BasicPoint3d project(const CompoundHybridLineString3d& lineString, const BasicPo
 template <typename LineStringT, typename PointT>
 std::pair<double, ProjectedPointInfo<traits::BasicPointT<PointT>>> signedDistanceImpl(const LineStringT lineString,
                                                                                       const PointT& p) {
-  using BasicPoint = PointT;
   const auto basicP = utils::toBasicPoint(p);
   const auto nextSegment = closestSegment(lineString, basicP);
   const auto projPoint = lanelet::geometry::project(utils::toBasicSegment(nextSegment), basicP);
