@@ -40,7 +40,7 @@ The most common roles that are used across all regulatory elements are:
 
 ### Traffic Sign
 
-A traffic sign generically expresses a restriction that is expressed by a traffic sign. The *refers* part refers to traffic signs that form the rule. The *cancels* parameter then refers to traffic signs that mark the end of the restriction expressed by the sign (e.g. the end of no-overtaking section). The *ref_line* and *cancel_line* parameters can then be used to define the exact start and end points of the rule. The LineStrings referenced by that must not have an intersection with the referencing lanelet or Area. If they do, the rule is valid from/to this intersection point. If not, the rule is valid for the whole lanelet/area.
+A traffic sign generically expresses a restriction that is expressed by a traffic sign. The *refers* part refers to traffic signs that form the rule. The *cancels* parameter then refers to traffic signs that mark the end of the restriction expressed by the sign (e.g. the end of no-overtaking section). The *ref_line* and *cancel_line* parameters can then be used to define the exact start and end points of the rule. The LineStrings referenced by that do not necessarily need to have an intersection with the referencing lanelet or Area. If they do, the rule is valid from/to this intersection point. If not, the rule is valid for the whole lanelet/area.
 
 ### Speed Limit
 
