@@ -23,15 +23,6 @@ struct VertexInfo {
   ConstLaneletOrArea laneletOrArea;
 };
 
-/** @brief Internal information of a vertex in the route graph */
-struct MapVertexInfo {
-  const ConstLanelet& get() const { return lanelet; }
-
-  ConstLanelet lanelet;
-  LaneId laneId{};
-  ConstLaneletOrAreas conflictingInMap;
-};
-
 /** @brief Internal information of an edge in the graph */
 struct EdgeInfo {
   RelationType relation;  ///< Relation between the two lanelets. E.g. SUCCESSOR or CONFLICTING.
@@ -39,7 +30,6 @@ struct EdgeInfo {
 
 /// General graph type definitions
 using GraphType = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, VertexInfo, EdgeInfo>;
-using RouteGraphType = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, MapVertexInfo, EdgeInfo>;
 using GraphTraits = boost::graph_traits<GraphType>;
 
 template <typename BaseGraphT>
@@ -53,7 +43,6 @@ template <typename BaseGraphT>
 using FilteredGraphTraits = boost::graph_traits<FilteredGraphT<BaseGraphT>>;
 
 using FilteredMapGraph = FilteredGraphT<GraphType>;
-using FilteredRouteGraph = FilteredGraphT<RouteGraphType>;
 
 /** @brief An internal edge filter to get a filtered view on the graph. */
 template <typename GraphT>
@@ -86,12 +75,12 @@ struct EdgeFilter {
 using LaneletOrAreaToVertex = std::unordered_map<ConstLaneletOrArea, std::uint32_t>;
 using FilteredGraphDesc = std::pair<size_t, RelationType>;
 
-/// @brief Manages the actual graph and provieds different views on the edges (lazily computed)
+/// @brief Manages the actual graph and provides different views on the edges (lazily computed)
 template <typename BaseGraphT>
 class Graph {
  public:
   using FilteredGraph = FilteredGraphT<BaseGraphT>;
-  using CostFilter = EdgeFilter<BaseGraphT>;
+  using Filter = EdgeFilter<BaseGraphT>;
   using Vertex = typename boost::graph_traits<BaseGraphT>::vertex_descriptor;
   using Edge = typename boost::graph_traits<BaseGraphT>::edge_descriptor;
 
@@ -190,16 +179,13 @@ class Graph {
 
  private:
   FilteredGraph getFilteredGraph(RelationType relations) const {
-    return FilteredGraph(graph_, CostFilter(graph_, relations));
+    return FilteredGraph(graph_, Filter(graph_, relations));
   }
   BaseGraphT graph_;                             //!< The actual graph object
   LaneletOrAreaToVertex laneletOrAreaToVertex_;  //!< Mapping of lanelets/areas to vertices of the graph
 };
 
 class MapGraphGraph : public Graph<GraphType> {
-  using Graph::Graph;
-};
-class RouteGraph : public Graph<RouteGraphType> {
   using Graph::Graph;
 };
 

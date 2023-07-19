@@ -207,6 +207,7 @@ void RoutingGraphBuilder::addSidewayEdge(LaneChangeLaneletsCollector& laneChange
         // we process lane changes later, when we know all lanelets that can participate in lane change
         laneChangeLanelets.add(ll, it->second);
       } else {
+        std::cerr << "Lanelet with id " << ll.id() << "cannot change lane to lanelet " << it->second << "\n";
         assignCosts(ll, it->second, relation);
       }
     }
@@ -357,6 +358,8 @@ void RoutingGraphBuilder::assignLaneChangeCosts(ConstLanelets froms, ConstLanele
 
 void RoutingGraphBuilder::assignCosts(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to,
                                       const RelationType& relation) {
+  std::cerr << "Adding Edge from ll with id " << from.id() << " to lanelet " << to.id() << " with type "
+            << relationToString(relation) << "\n";
   for (RoutingCostId rci = 0; rci < RoutingCostId(routingCosts_.size()); rci++) {
     EdgeInfo edgeInfo{};
     edgeInfo.costId = rci;

@@ -3,10 +3,10 @@
 #include <boost/optional/optional_io.hpp>
 
 #include "lanelet2_map_learning/MapGraph.h"
-#include "test_routing_map.h"
+#include "test_map.h"
 
 using namespace lanelet;
-using namespace lanelet::routing::tests;
+using namespace lanelet::map_learning::tests;
 
 TEST_F(GermanVehicleGraph, LaneChangesLeft) {  // NOLINT
   // Multiple1
@@ -522,15 +522,4 @@ TEST_F(GermanVehicleGraph, conflictingDiverging) {  // NOLINT
   auto result = graph->conflicting(lanelets.at(2008));
   ASSERT_EQ(result.size(), 1ul);
   EXPECT_EQ(result.front(), lanelets.at(2009));
-}
-
-TEST_F(MapGraphTest, routingCostOnLaneChange) {  // NOLINT
-  // tests that all lane changes are not possible when the space for a lane change is too small according to the routing
-  // cost object
-  auto graph = setUpGermanVehicleGraph(*testData.laneletMap, 2, 2, 3);
-  auto llt = [&](auto id) -> ConstLanelet { return lanelets.at(id); };
-  EXPECT_EQ(graph->left(lanelets.at(2012)), llt(2011));
-  EXPECT_EQ(graph->adjacentLeft(lanelets.at(2015)), llt(2014));
-  EXPECT_EQ(graph->right(lanelets.at(2011)), llt(2012));
-  EXPECT_EQ(graph->adjacentRight(lanelets.at(2014)), llt(2015));
 }

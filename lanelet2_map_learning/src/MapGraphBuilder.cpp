@@ -184,6 +184,10 @@ void MapGraphBuilder::addFollowingEdges(const ConstLanelet& ll) {
       merging.push_back(it.second);
     }
   });
+  RelationType relation = RelationType::Successor;
+  for (auto& followingIt : following) {
+    assignEdge(ll, followingIt, relation);
+  }
 }
 
 void MapGraphBuilder::addSidewayEdge(LaneChangeLaneletsCollector& laneChangeLanelets, const ConstLanelet& ll,
@@ -333,22 +337,21 @@ void MapGraphBuilder::assignLaneChange(ConstLanelets froms, ConstLanelets tos, c
   assert(relation == RelationType::Left || relation == RelationType::Right);
   assert(froms.size() == tos.size());
   for (; !froms.empty(); froms.erase(froms.begin()), tos.erase(tos.begin())) {
-    auto adjacent = relation == RelationType::Left ? RelationType::AdjacentLeft : RelationType::AdjacentRight;
-    graph_->addEdge(froms.front(), tos.front(), EdgeInfo{adjacent});
+    graph_->addEdge(froms.front(), tos.front(), EdgeInfo{relation});
   }
 }
 
 void MapGraphBuilder::assignEdge(const ConstLaneletOrArea& from, const ConstLaneletOrArea& to,
                                  const RelationType& relation) {
-  EdgeInfo edgeInfo{};
-  edgeInfo.relation = relation;
+  EdgeInfo edgeInfo{relation};
   if (relation == RelationType::Successor || relation == RelationType::Area || relation == RelationType::Left ||
       relation == RelationType::Right || relation == RelationType::AdjacentLeft ||
       relation == RelationType::AdjacentRight || relation == RelationType::Conflicting) {
+    graph_->addEdge(from, to, edgeInfo);
+  } else {
     assert(false && "Trying to add edge with wrong relation type to graph.");  // NOLINT
-    return;
   }
-  graph_->addEdge(from, to, edgeInfo);
+  return;
 }
 
 }  // namespace internal

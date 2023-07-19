@@ -4,11 +4,11 @@
 #include "lanelet2_map_learning/Forward.h"
 #include "lanelet2_map_learning/MapGraph.h"
 #include "lanelet2_map_learning/MapGraphContainer.h"
-#include "test_routing_map.h"
+#include "test_map.h"
 
 using namespace lanelet;
-using namespace lanelet::routing;
-using namespace lanelet::routing::tests;
+using namespace lanelet::map_learning;
+using namespace lanelet::map_learning::tests;
 
 class MapGraphContainerTest : public MapGraphTest {
  public:
@@ -18,21 +18,6 @@ class MapGraphContainerTest : public MapGraphTest {
   }
 
   MapGraphContainerUPtr container;
-};
-
-class RouteMapGraphContainerTest : public MapGraphContainerTest {
- public:
-  void getAndCheckRoute(const MapGraphConstPtr& graph, Id from, Id to, routing::RoutingCostId routingCostId = 0) {
-    ASSERT_NE(graph->passableSubmap()->laneletLayer.find(from), graph->passableSubmap()->laneletLayer.end());
-    ConstLanelet fromLanelet{*graph->passableSubmap()->laneletLayer.find(from)};
-    ASSERT_NE(graph->passableSubmap()->laneletLayer.find(to), graph->passableSubmap()->laneletLayer.end());
-    ConstLanelet toLanelet{*graph->passableSubmap()->laneletLayer.find(to)};
-    Optional<Route> tempRoute = graph->getRoute(fromLanelet, toLanelet, routingCostId);
-    ASSERT_TRUE(!!tempRoute);
-    route = std::make_unique<Route>(std::move(*tempRoute));
-  }
-
-  std::unique_ptr<Route> route;
 };
 
 TEST_F(MapGraphContainerTest, ConflictingInGraph) {  // NOLINT
@@ -56,27 +41,6 @@ TEST_F(MapGraphContainerTest, ConflictingInGraphs) {  // NOLINT
 
   ConstLanelets conflictingPedestrian{result[1].second};
   EXPECT_EQ(conflictingPedestrian.size(), 0ul);
-}
-
-TEST_F(RouteMapGraphContainerTest, ConflictingOfRouteInGraph) {  // NOLINT
-  getAndCheckRoute(container->MapGraphs()[0], 2017, 2024);
-  ConstLanelets conflictingVehicle{container->conflictingOfRouteInGraph(route.get(), 0)};
-  EXPECT_EQ(conflictingVehicle.size(), 2ul);
-
-  ConstLanelets conflictingPedestrian{container->conflictingOfRouteInGraph(route.get(), 1)};
-  EXPECT_EQ(conflictingPedestrian.size(), 1ul);
-}
-
-TEST_F(RouteMapGraphContainerTest, ConflictingOfRouteInGraphs) {  // NOLINT
-  getAndCheckRoute(container->MapGraphs()[0], 2017, 2024);
-  MapGraphContainer::ConflictingInGraphs result{container->conflictingOfRouteInGraphs(route.get(), 0)};
-  ASSERT_EQ(result.size(), 2ul);
-
-  ConstLanelets conflictingVehicle{result[0].second};
-  EXPECT_EQ(conflictingVehicle.size(), 2ul);
-
-  ConstLanelets conflictingPedestrian{result[1].second};
-  EXPECT_EQ(conflictingPedestrian.size(), 1ul);
 }
 
 TEST_F(MapGraphContainerTest, ConflictingInGraph3dFits) {  // NOLINT

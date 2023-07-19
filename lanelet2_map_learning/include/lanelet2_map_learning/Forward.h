@@ -29,14 +29,8 @@ using MapGraphConstPtr = std::shared_ptr<const MapGraph>;
 class MapGraphContainer;
 using MapGraphContainerUPtr = std::unique_ptr<MapGraphContainer>;
 
-class Route;
 struct LaneletRelation;
 using LaneletRelations = std::vector<LaneletRelation>;
-
-class LaneletPath;
-using LaneletPaths = std::vector<LaneletPath>;
-class LaneletOrAreaPath;
-using LaneletOrAreaPaths = std::vector<LaneletOrAreaPath>;
 
 //! This enum expresses the types of relations lanelet2 distiguishes internally. Between two lanelets a and b (in this
 //! order), exactly one of these relation exists.

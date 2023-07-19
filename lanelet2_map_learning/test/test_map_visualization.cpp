@@ -4,11 +4,11 @@
 
 #include "lanelet2_map_learning/Exceptions.h"
 #include "lanelet2_map_learning/MapGraph.h"
-#include "test_routing_map.h"
+#include "test_map.h"
 
 using namespace lanelet;
-using namespace lanelet::routing;
-using namespace lanelet::routing::tests;
+using namespace lanelet::map_learning;
+using namespace lanelet::map_learning::tests;
 namespace fs = boost::filesystem;
 
 class Tempfile {

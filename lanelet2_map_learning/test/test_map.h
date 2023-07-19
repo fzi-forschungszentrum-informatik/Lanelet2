@@ -13,32 +13,27 @@
 /// The coordinates and relations for this test can be found in "LaneletTestMap.xml" which can be viewed in
 /// https://www.draw.io
 namespace lanelet {
-namespace routing {
+namespace map_learning {
 namespace tests {
 
-inline MapGraphPtr setUpGermanVehicleGraph(LaneletMap& map, double laneChangeCost = 2.,
-                                               double participantHeight = 2., double minLaneChangeLength = 0.) {
+inline MapGraphPtr setUpGermanVehicleGraph(LaneletMap& map, double participantHeight = 2.) {
   traffic_rules::TrafficRulesPtr trafficRules{traffic_rules::TrafficRulesFactory::create(
       Locations::Germany, Participants::Vehicle, traffic_rules::TrafficRules::Configuration())};
-  RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost, minLaneChangeLength),
-                           std::make_shared<RoutingCostTravelTime>(laneChangeCost)};
   MapGraph::Configuration configuration;
   configuration.insert(std::make_pair(MapGraph::ParticipantHeight, participantHeight));
-  return MapGraph::build(map, *trafficRules, costPtrs, configuration);
+  return MapGraph::build(map, *trafficRules, configuration);
 }
 
-inline MapGraphPtr setUpGermanPedestrianGraph(LaneletMap& map, double laneChangeCost = 2.) {
+inline MapGraphPtr setUpGermanPedestrianGraph(LaneletMap& map) {
   traffic_rules::TrafficRulesPtr trafficRules{
       traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Pedestrian)};
-  RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost)};
-  return MapGraph::build(map, *trafficRules, costPtrs);
+  return MapGraph::build(map, *trafficRules);
 }
 
-inline MapGraphPtr setUpGermanBicycleGraph(LaneletMap& map, double laneChangeCost = 2.) {
+inline MapGraphPtr setUpGermanBicycleGraph(LaneletMap& map) {
   traffic_rules::TrafficRulesPtr trafficRules{
       traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Bicycle)};
-  RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost)};
-  return MapGraph::build(map, *trafficRules, costPtrs);
+  return MapGraph::build(map, *trafficRules);
 }
 
 class MapGraphTestData {
@@ -50,9 +45,9 @@ class MapGraphTestData {
     initAreas();
     laneletMap = std::make_shared<LaneletMap>(lanelets, areas, std::unordered_map<Id, RegulatoryElementPtr>(),
                                               std::unordered_map<Id, Polygon3d>(), lines, points);
-    vehicleGraph = setUpGermanVehicleGraph(*laneletMap, laneChangeCost);
-    pedestrianGraph = setUpGermanPedestrianGraph(*laneletMap, laneChangeCost);
-    bicycleGraph = setUpGermanBicycleGraph(*laneletMap, laneChangeCost);
+    vehicleGraph = setUpGermanVehicleGraph(*laneletMap);
+    pedestrianGraph = setUpGermanPedestrianGraph(*laneletMap);
+    bicycleGraph = setUpGermanBicycleGraph(*laneletMap);
   }
 
   void addPoint(double x, double y, double z) {
@@ -94,7 +89,6 @@ class MapGraphTestData {
   std::unordered_map<Id, Point3d> points;
   std::unordered_map<Id, LineString3d> lines;
   std::unordered_map<Id, Area> areas;
-  const double laneChangeCost{2.};
   MapGraphPtr vehicleGraph, pedestrianGraph, bicycleGraph;
   LaneletMapPtr laneletMap;
 
@@ -477,7 +471,7 @@ class MapGraphTestData {
   }
 };
 
-namespace {                            // NOLINT
+namespace {                        // NOLINT
 static MapGraphTestData testData;  // NOLINT
 }  // namespace
 
@@ -496,7 +490,6 @@ class GermanVehicleGraph : public MapGraphTest {
 
  public:
   MapGraphConstPtr graph{testData.vehicleGraph};
-  uint8_t numCostModules{2};
 };
 
 class GermanPedestrianGraph : public MapGraphTest {
@@ -505,7 +498,6 @@ class GermanPedestrianGraph : public MapGraphTest {
 
  public:
   MapGraphConstPtr graph{testData.pedestrianGraph};
-  uint8_t numCostModules{2};
 };
 
 class GermanBicycleGraph : public MapGraphTest {
@@ -514,7 +506,6 @@ class GermanBicycleGraph : public MapGraphTest {
 
  public:
   MapGraphConstPtr graph{testData.bicycleGraph};
-  uint8_t numCostModules{2};
 };
 
 template <typename T>
@@ -529,5 +520,5 @@ using AllGraphs = testing::Types<GermanVehicleGraph, GermanPedestrianGraph, Germ
 
 TYPED_TEST_SUITE(AllGraphsTest, AllGraphs);
 }  // namespace tests
-}  // namespace routing
+}  // namespace map_learning
 }  // namespace lanelet
