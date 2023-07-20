@@ -98,7 +98,7 @@ class MapGraph {
   Optional<ConstLanelet> left(const ConstLanelet& lanelet) const;
 
   /** @brief Get adjacent left (non-routable) lanelet of a given lanelet if it exists.
-   *  @param lanelet Start lanelet
+   *  @param lanelet Start laneletfoo
    *  @return Adjacent left lanelet if it exists. Nothing if it doesn't.
    *  @see left, lefts, adjacentLefts */
   Optional<ConstLanelet> adjacentLeft(const ConstLanelet& lanelet) const;
