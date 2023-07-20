@@ -43,7 +43,7 @@ class EdgeWriterGraphViz {
   template <class VertexOrEdge>
   void operator()(std::ostream& out, const VertexOrEdge& v) const {
     const RelationType relation{(*graph_)[v].relation};
-    out << "[label=\"" << relationToString(relation) << "\" color=\"" << relationToColor(relation);
+    out << "[label=\"" << relationToString(relation) << "\" color=\"" << relationToColor(relation) << "\"]";
   }
 
  private:
