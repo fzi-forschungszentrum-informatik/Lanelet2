@@ -271,7 +271,7 @@
         </item>
         <item name="Speed limit" icon="presets/vehicle/restriction/maxspeed.svg" type="way">
             <key key="type" value="traffic_sign"/>
-            <combo key="type" text="Speed limit" values_searchable="true">
+            <combo key="subtype" text="Speed limit" values_searchable="true">
                 <list_entry value="de274-30" short_description="30 kmh" />
                 <list_entry value="de274-50" short_description="50 kmh" />
                 <list_entry value="de274-60" short_description="60 kmh" />
