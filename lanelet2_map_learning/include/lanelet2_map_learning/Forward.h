@@ -86,6 +86,28 @@ inline std::string relationToString(RelationType type) {
   return "";  // some compilers need that
 }
 
+inline int relationToInt(RelationType type) {
+  switch (type) {
+    case RelationType::None:
+      return 0;
+    case RelationType::Successor:
+      return 1;
+    case RelationType::Left:
+      return 2;
+    case RelationType::Right:
+      return 3;
+    case RelationType::AdjacentLeft:
+      return 4;
+    case RelationType::AdjacentRight:
+      return 5;
+    case RelationType::Conflicting:
+      throw std::runtime_error("The relation type Conflicting should not exist in the graph!");
+    case RelationType::Area:
+      throw std::runtime_error("The relation type Area should not exist in the graph!");
+  }
+  return 0;  // some compilers need that
+}
+
 inline std::string relationToColor(RelationType type) {
   switch (type) {
     case RelationType::None:
@@ -106,5 +128,10 @@ inline std::string relationToColor(RelationType type) {
   }
   return "";  // some compilers need that
 }
+
+struct TensorGraphData;
+TensorGraphData getLaneLaneData(MapGraphConstPtr localSubmapGraph);
+TensorGraphData getLaneTEData(MapGraphConstPtr localSubmapGraph);
+
 }  // namespace map_learning
 }  // namespace lanelet

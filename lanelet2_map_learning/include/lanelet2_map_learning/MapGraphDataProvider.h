@@ -13,9 +13,9 @@ class LaneletLayer;
 namespace map_learning {
 
 struct TensorGraphData {
-  Eigen::MatrixXd x;  // node features
-  Eigen::MatrixXd a;  // adjacency matrix
-  Eigen::MatrixXd e;  // edge features
+  Eigen::MatrixXd x;   // node features
+  Eigen::MatrixX2i a;  // adjacency matrix (sparse)
+  Eigen::MatrixXd e;   // edge features
 };
 
 class MapGraphDataProvider {

@@ -90,6 +90,8 @@ class Graph {
   inline BaseGraphT& get() noexcept { return graph_; }
   inline const LaneletOrAreaToVertex& vertexLookup() const noexcept { return laneletOrAreaToVertex_; }
 
+  FilteredGraph withAllRelations() const { return FilteredGraph(graph_, Filter(graph_)); }
+
   FilteredGraph withLaneChanges() const {
     return getFilteredGraph(RelationType::Successor | RelationType::Left | RelationType::Right);
   }

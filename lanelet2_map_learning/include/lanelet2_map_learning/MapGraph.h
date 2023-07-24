@@ -58,6 +58,9 @@ class MapGraph {
   Optional<RelationType> routingRelation(const ConstLanelet& from, const ConstLanelet& to,
                                          bool includeConflicting = false) const;
 
+  //! Return type neccessary for vertex std::map comparison
+  ConstLaneletOrAreas getLaneletEdges(const ConstLanelet& lanelet, bool edgesOut = true) const;
+
   /** @brief Returns the lanelets that can be reached from this lanelet.
    *  @param lanelet Start lanelet
    *  @param withLaneChanges Include left and right lanes or not
@@ -213,6 +216,9 @@ class MapGraph {
    * Constructs the graph. Don't call this directly, use MapGraph::build instead.
    */
   MapGraph(std::unique_ptr<internal::MapGraphGraph>&& graph, lanelet::LaneletSubmapConstPtr&& passableMap);
+
+  friend TensorGraphData getLaneLaneData(MapGraphConstPtr localSubmapGraph);
+  friend TensorGraphData getLaneTEData(MapGraphConstPtr localSubmapGraph);
 
  private:
   //! Documentation to be found in the cpp file.

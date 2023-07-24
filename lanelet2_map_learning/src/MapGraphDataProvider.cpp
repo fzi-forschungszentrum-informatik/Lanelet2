@@ -29,15 +29,44 @@ MapGraphDataProvider::MapGraphDataProvider(LaneletMapConstPtr laneletMap, Config
       currPos_{currPos},
       trafficRules_{traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)} {}
 
-void getLaneLaneData(MapGraphConstPtr localSubmapGraph) {}
+TensorGraphData getLaneLaneData(MapGraphConstPtr localSubmapGraph) {
+  const auto& graph = localSubmapGraph->graph_;
+  const auto& llVertices = graph->vertexLookup();
 
-void getLaneTEData(MapGraphConstPtr localSubmapGraph) {}
+  int numNodes = llVertices.size();
+  std::unordered_map<ConstLaneletOrArea, int> key2index;
+  int i = 0;
+  for (const auto& entry : llVertices) {
+    key2index[entry.first] = i++;
+  }
+
+  TensorGraphData result;
+  for (const auto& laWithVertex : llVertices) {
+    const auto& la = laWithVertex.first;
+    auto ll = laWithVertex.first.lanelet();
+    const auto& vertex = laWithVertex.second;
+    auto id = la.id();
+
+    ConstLaneletOrAreas connectedLLs = localSubmapGraph->getLaneletEdges(*ll);
+    int32_t edgeCount = 1;
+    for (const auto& connectedLL : connectedLLs) {
+      result.a.resize(edgeCount, 2);
+      result.a(edgeCount - 1, 0) = key2index[la];
+      result.a(edgeCount - 1, 0) = key2index[connectedLL];
+      edgeCount++;
+    }
+  }
+  return result;
+}
+
+TensorGraphData getLaneTEData(MapGraphConstPtr localSubmapGraph) { return TensorGraphData(); }
 
 TensorGraphData MapGraphDataProvider::laneLaneTensors() {
   if (!currPos_) {
     throw InvalidObjectStateError(
         "Your current position is not set! Call setCurrPosAndExtractSubmap() before trying to get the data!");
   }
+
   return TensorGraphData();
 }
 

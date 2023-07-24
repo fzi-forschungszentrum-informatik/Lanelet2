@@ -148,6 +148,18 @@ ConstLanelets getLaneletEdgesFromGraph(const MapGraphGraph& graph, const Filtere
   return result;
 }
 
+ConstLaneletOrAreas MapGraph::getLaneletEdges(const ConstLanelet& lanelet, bool edgesOut) const {
+  ConstLaneletOrAreas result;
+  auto allEdges = getAllEdgesFromGraph(*graph_, graph_->withAllRelations(), lanelet, edgesOut);
+  result = reservedVector<ConstLaneletOrAreas>(allEdges.size());
+  for (auto& edge : allEdges) {
+    if (edge.isLanelet()) {
+      result.push_back(edge);
+    }
+  }
+  return result;
+}
+
 MapGraph::MapGraph(MapGraph&& /*other*/) noexcept = default;
 MapGraph& MapGraph::operator=(MapGraph&& /*other*/) noexcept = default;
 MapGraph::~MapGraph() = default;
