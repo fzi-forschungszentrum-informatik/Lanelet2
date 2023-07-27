@@ -13,7 +13,8 @@ class LaneletLayer;
 namespace map_learning {
 
 enum class LaneletRepresentationType { Centerline, Boundaries };
-enum class ParametrizationType { Bezier, BezierEndpointFixed, Polyline11Pts, Polyline15Pts };
+enum class ParametrizationType { Bezier, BezierEndpointFixed, Polyline };
+
 struct TensorGraphData {
   TensorGraphData() noexcept {}
   Eigen::MatrixXd x;   // node features
@@ -27,10 +28,10 @@ class MapGraphDataProvider {
     Configuration() noexcept {}
     int32_t getNodeFeatureLength();
     LaneletRepresentationType reprType{LaneletRepresentationType::Boundaries};
-    ParametrizationType paramType{ParametrizationType::Polyline15Pts};
+    ParametrizationType paramType{ParametrizationType::Polyline};
     double submapAreaX{100};
     double submapAreaY{100};
-    int bezierNPoints{11};
+    int nPoints{11};
   };
 
   MapGraphDataProvider(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
