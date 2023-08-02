@@ -133,8 +133,8 @@ enum class LaneletRepresentationType;
 enum class ParametrizationType;
 struct TensorGraphData;
 TensorGraphData getLaneLaneData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                                const ParametrizationType& paramType, int bezierNPoints);
+                                const ParametrizationType& paramType, int nPoints, int noRelTypes, int noBdTypes);
 TensorGraphData getLaneTEData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                              const ParametrizationType& paramType, int bezierNPoints);
+                              const ParametrizationType& paramType, int nPoints, int noRelTypes, int noBdTypes);
 }  // namespace map_learning
 }  // namespace lanelet

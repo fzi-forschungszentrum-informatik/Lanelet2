@@ -218,9 +218,11 @@ class MapGraph {
   MapGraph(std::unique_ptr<internal::MapGraphGraph>&& graph, lanelet::LaneletSubmapConstPtr&& passableMap);
 
   friend TensorGraphData getLaneLaneData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                                         const ParametrizationType& paramType, int bezierNPoints);
+                                         const ParametrizationType& paramType, int nPoints, int noRelTypes,
+                                         int noBdTypes);
   friend TensorGraphData getLaneTEData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                                       const ParametrizationType& paramType, int bezierNPoints);
+                                       const ParametrizationType& paramType, int nPoints, int noRelTypes,
+                                       int noBdTypes);
 
  private:
   //! Documentation to be found in the cpp file.

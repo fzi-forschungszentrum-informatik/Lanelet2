@@ -32,6 +32,7 @@ class MapGraphDataProvider {
     double submapAreaX{100};
     double submapAreaY{100};
     int nPoints{11};
+    int noRelTypes{7};
   };
 
   MapGraphDataProvider(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
