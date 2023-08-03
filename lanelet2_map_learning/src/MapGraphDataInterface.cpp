@@ -1,4 +1,4 @@
-#include "lanelet2_map_learning/MapGraphDataProvider.h"
+#include "lanelet2_map_learning/MapGraphDataInterface.h"
 
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/Forward.h>
@@ -20,14 +20,14 @@ LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPo
   return utils::createConstSubmap(inRegion, {});
 }
 
-void MapGraphDataProvider::setCurrPosAndExtractSubmap(const BasicPoint2d& pt) {
+void MapGraphDataInterface::setCurrPosAndExtractSubmap(const BasicPoint2d& pt) {
   currPos_ = pt;
   localSubmap_ = extractSubmap(laneletMap_, *currPos_, config_.submapAreaX, config_.submapAreaY);
   localSubmapGraph_ = MapGraph::build(*laneletMap_, *trafficRules_);
 }
 
-MapGraphDataProvider::MapGraphDataProvider(LaneletMapConstPtr laneletMap, Configuration config,
-                                           Optional<BasicPoint2d> currPos)
+MapGraphDataInterface::MapGraphDataInterface(LaneletMapConstPtr laneletMap, Configuration config,
+                                             Optional<BasicPoint2d> currPos)
     : laneletMap_{laneletMap},
       config_{config},
       currPos_{currPos},
@@ -122,29 +122,24 @@ Eigen::Vector3d getNodeFeatureVec(const ConstLanelet& ll, const LaneletRepresent
   return featureVec;
 }
 
-TensorGraphData getLaneLaneData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                                const ParametrizationType& paramType, int nPoints, int noRelTypes = 7,
-                                int noBdTypes = 3) {
+TensorGraphDataLaneLane getLaneLaneData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
+                                        const ParametrizationType& paramType, int nPoints, int noRelTypes = 7,
+                                        int noBdTypes = 3) {
   const auto& graph = localSubmapGraph->graph_;
   const auto& llVertices = graph->vertexLookup();
 
-  TensorGraphData result;
+  TensorGraphDataLaneLane result;
   int numNodes = llVertices.size();
   int32_t nodeFeatLength = getNodeFeatureLength(reprType, paramType, nPoints, noBdTypes);
   result.x.resize(numNodes, nodeFeatLength);
 
-  std::unordered_map<ConstLaneletOrArea, int> key2index;
-  int i = 0;
-  for (const auto& entry : llVertices) {
-    key2index[entry.first] = i++;
-  }
+  std::unordered_map<ConstLaneletOrArea, int> key2index = graph->getKey2Index();
 
   int32_t edgeCount = 0;
   for (const auto& laWithVertex : llVertices) {
     const auto& la = laWithVertex.first;
     auto ll = laWithVertex.first.lanelet();
     const auto& vertex = laWithVertex.second;
-    auto id = la.id();
     result.x.row(key2index[la]) = getNodeFeatureVec(*ll, reprType, paramType, nPoints, nodeFeatLength, noBdTypes);
 
     ConstLaneletOrAreas connectedLLs = localSubmapGraph->getLaneletEdges(*ll);
@@ -166,27 +161,66 @@ TensorGraphData getLaneLaneData(MapGraphConstPtr localSubmapGraph, const Lanelet
   return result;
 }
 
-TensorGraphData getLaneTEData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                              const ParametrizationType& paramType, int nPoints, int noRelTypes = 7,
-                              int noBdTypes = 3) {
-  return TensorGraphData();
+TensorGraphDataLaneTE getLaneTEData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
+                                    const ParametrizationType& paramType, int nPoints, int noRelTypes = 7,
+                                    int noBdTypes = 3) {
+  const auto& graph = localSubmapGraph->graph_;
+  const auto& llVertices = graph->vertexLookup();
+
+  TensorGraphDataLaneTE result;
+  int numNodesLane = llVertices.size();
+  int32_t nodeFeatLengthLane = getNodeFeatureLength(reprType, paramType, nPoints, noBdTypes);
+  result.xLane.resize(numNodesLane, nodeFeatLengthLane);
+
+  std::unordered_map<ConstLaneletOrArea, int> key2index = graph->getKey2Index();
+  int i = 0;
+  for (const auto& entry : llVertices) {
+    key2index[entry.first] = i++;
+  }
+
+  int32_t edgeCount = 0;
+  for (const auto& laWithVertex : llVertices) {
+    const auto& la = laWithVertex.first;
+    auto ll = laWithVertex.first.lanelet();
+    const auto& vertex = laWithVertex.second;
+    result.xLane.row(key2index[la]) =
+        getNodeFeatureVec(*ll, reprType, paramType, nPoints, nodeFeatLengthLane, noBdTypes);
+
+    ConstLaneletOrAreas connectedLLs = localSubmapGraph->getLaneletEdges(*ll);
+    for (const auto& connectedLL : connectedLLs) {
+      result.a.resize(edgeCount + 1, 2);
+      result.a(edgeCount, 0) = key2index[la];
+      result.a(edgeCount, 0) = key2index[connectedLL];
+
+      result.e.resize(edgeCount + 1, noRelTypes);
+      Eigen::Vector3d edgeFeatureVec(noRelTypes);
+      edgeFeatureVec.setZero();
+      ConstLanelet connectedLLasLL = connectedLL.lanelet().get();
+      RelationType edgeType = graph->getEdgeInfo(*ll, connectedLLasLL).get().relation;
+      edgeFeatureVec[relationToInt(edgeType)] = 1;
+      result.e.row(edgeCount) = edgeFeatureVec;
+      edgeCount++;
+    }
+  }
+  return result;
 }
 
-TensorGraphData MapGraphDataProvider::laneLaneTensors() {
+TensorGraphDataLaneLane MapGraphDataInterface::laneLaneTensors() {
   if (!currPos_) {
     throw InvalidObjectStateError(
         "Your current position is not set! Call setCurrPosAndExtractSubmap() before trying to get the data!");
   }
 
-  return TensorGraphData();
+  return getLaneLaneData(localSubmapGraph_, config_.reprType, config_.paramType, config_.nPoints, config_.noRelTypes,
+                         config_.noBdTypes);
 }
 
-TensorGraphData MapGraphDataProvider::laneTETensors() {
+TensorGraphDataLaneTE MapGraphDataInterface::laneTETensors() {
   if (!currPos_) {
     throw InvalidObjectStateError(
         "Your current position is not set! Call setCurrPosAndExtractSubmap() before trying to get the data!");
   }
-  return TensorGraphData();
+  return TensorGraphDataLaneTE();
 }
 
 }  // namespace map_learning

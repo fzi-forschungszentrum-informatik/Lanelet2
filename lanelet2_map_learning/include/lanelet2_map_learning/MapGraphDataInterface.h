@@ -15,14 +15,26 @@ namespace map_learning {
 enum class LaneletRepresentationType { Centerline, Boundaries };
 enum class ParametrizationType { Bezier, BezierEndpointFixed, Polyline };
 
-struct TensorGraphData {
-  TensorGraphData() noexcept {}
+struct TensorGraphDataLaneLane {
+  TensorGraphDataLaneLane() noexcept {}
   Eigen::MatrixXd x;   // node features
   Eigen::MatrixX2i a;  // adjacency matrix (sparse)
   Eigen::MatrixXd e;   // edge features
 };
 
-class MapGraphDataProvider {
+struct TensorGraphDataLaneTE {
+  TensorGraphDataLaneTE() noexcept {}
+  Eigen::MatrixXd xLane;  // node features lanelets
+  Eigen::MatrixXd xTE;    // node features traffic elements
+
+  /// @brief adjacency matrix (sparse). Node indices are assigned as
+  ///        xLane and xTE stacked, with xLane being first
+  Eigen::MatrixX2i a;
+
+  Eigen::MatrixXd e;  // edge features
+};
+
+class MapGraphDataInterface {
  public:
   struct Configuration {
     Configuration() noexcept {}
@@ -33,17 +45,18 @@ class MapGraphDataProvider {
     double submapAreaY{100};
     int nPoints{11};
     int noRelTypes{7};
+    int noBdTypes{3};
   };
 
-  MapGraphDataProvider(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
-                       Optional<BasicPoint2d> currPos = boost::none);
+  MapGraphDataInterface(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
+                        Optional<BasicPoint2d> currPos = boost::none);
 
   void setCurrPosAndExtractSubmap(const BasicPoint2d& pt);
-  TensorGraphData laneLaneTensors();
-  TensorGraphData laneTETensors();
+  TensorGraphDataLaneLane laneLaneTensors();
+  TensorGraphDataLaneTE laneTETensors();
 
-  TensorGraphData laneLaneTensorsBatch(const BasicPoints2d& pts);
-  TensorGraphData laneTETensorsBatch(const BasicPoints2d& pts);
+  TensorGraphDataLaneLane laneLaneTensorsBatch(const BasicPoints2d& pts);
+  TensorGraphDataLaneTE laneTETensorsBatch(const BasicPoints2d& pts);
 
  private:
   LaneletMapConstPtr laneletMap_;

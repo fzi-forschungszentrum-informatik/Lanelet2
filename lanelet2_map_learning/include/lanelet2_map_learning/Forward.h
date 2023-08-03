@@ -131,10 +131,12 @@ inline std::string relationToColor(RelationType type) {
 
 enum class LaneletRepresentationType;
 enum class ParametrizationType;
-struct TensorGraphData;
-TensorGraphData getLaneLaneData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                                const ParametrizationType& paramType, int nPoints, int noRelTypes, int noBdTypes);
-TensorGraphData getLaneTEData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                              const ParametrizationType& paramType, int nPoints, int noRelTypes, int noBdTypes);
+struct TensorGraphDataLaneLane;
+struct TensorGraphDataLaneTE;
+TensorGraphDataLaneLane getLaneLaneData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
+                                        const ParametrizationType& paramType, int nPoints, int noRelTypes,
+                                        int noBdTypes);
+TensorGraphDataLaneTE getLaneTEData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
+                                    const ParametrizationType& paramType, int nPoints, int noRelTypes, int noBdTypes);
 }  // namespace map_learning
 }  // namespace lanelet
