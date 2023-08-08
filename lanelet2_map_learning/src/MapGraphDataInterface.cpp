@@ -3,6 +3,7 @@
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/geometry/LineString.h>
+#include <lanelet2_core/primitives/BasicRegulatoryElements.h>;
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
 
 #include <boost/geometry.hpp>
@@ -34,13 +35,12 @@ MapGraphDataInterface::MapGraphDataInterface(LaneletMapConstPtr laneletMap, Conf
       trafficRules_{traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)} {}
 
 int32_t getNodeFeatureLength(const LaneletRepresentationType& reprType, const ParametrizationType& paramType,
-                             int nPoints, int noBdTypes) {
+                             int nPoints) {
   int32_t nodeFeatureLength;
   if (reprType == LaneletRepresentationType::Boundaries)
-    nodeFeatureLength =
-        2 * nPoints + 2 * noBdTypes;  // 2 boundary types with 2 possible values and unknown types (one-hot encoding)
+    nodeFeatureLength = 2 * 3 * nPoints + 2;  // 2 boundary types with 2 possible types
   else if (reprType == LaneletRepresentationType::Centerline)
-    nodeFeatureLength = 1 * nPoints;
+    nodeFeatureLength = 3 * nPoints + 2;
   else
     throw std::runtime_error("Unknown LaneletRepresentationType!");
 
@@ -82,100 +82,137 @@ Eigen::Vector3d getPolylineRepr(const ConstLanelet& ll, const LaneletRepresentat
   }
 }
 
-inline int linestringSubtypeToInt(ConstLineString3d lString) {
+inline int bdSubtypeToInt(ConstLineString3d lString) {
   std::string subtype = lString.attribute(AttributeName::Subtype).value();
   if (subtype == AttributeValueString::Dashed)
-    return 0;
+    return 1;
   else if (subtype == AttributeValueString::Solid)
-    return 1;
+    return 2;
   else if (subtype == AttributeValueString::SolidSolid)
-    return 1;
+    return 2;
   else if (subtype == AttributeValueString::SolidDashed)
-    return 1;
+    return 2;
   else if (subtype == AttributeValueString::DashedSolid)
-    return 1;
+    return 2;
   else {
     throw std::runtime_error("Unexpected Line String Subtype!");
-    return 1;
+    return 0;
   }
 }
 
 Eigen::Vector3d getNodeFeatureVec(const ConstLanelet& ll, const LaneletRepresentationType& reprType,
-                                  const ParametrizationType& paramType, int nPoints, int nodeFeatLength,
-                                  int noBdTypes) {
+                                  const ParametrizationType& paramType, int nPoints, int nodeFeatLength) {
   Eigen::Vector3d featureVec(nodeFeatLength);
   Eigen::Vector3d polylineRepr = getPolylineRepr(ll, reprType, paramType, nPoints);
   featureVec(Eigen::seq(0, polylineRepr.size() - 1)) = polylineRepr;
-
-  Eigen::Vector3d typeFeatureVecLeft(noBdTypes);
-  typeFeatureVecLeft.setZero();
-  typeFeatureVecLeft[linestringSubtypeToInt(ll.leftBound3d())] = 1;
-
-  Eigen::Vector3d typeFeatureVecRight(noBdTypes);
-  typeFeatureVecRight.setZero();
-  typeFeatureVecRight[linestringSubtypeToInt(ll.rightBound3d())] = 1;
-
-  featureVec(Eigen::seq(polylineRepr.size(), noBdTypes - 1)) = typeFeatureVecLeft;
-  featureVec(Eigen::seq(polylineRepr.size() + noBdTypes, polylineRepr.size() + 2 * noBdTypes - 1)) =
-      typeFeatureVecRight;
-
+  featureVec[polylineRepr.size()] = bdSubtypeToInt(ll.leftBound3d());
+  featureVec[polylineRepr.size() + 1] = bdSubtypeToInt(ll.rightBound3d());
   return featureVec;
 }
 
-TensorGraphDataLaneLane getLaneLaneData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                                        const ParametrizationType& paramType, int nPoints, int noRelTypes = 7,
-                                        int noBdTypes = 3) {
+TensorGraphDataLaneLane MapGraphDataInterface::getLaneLaneData(MapGraphConstPtr localSubmapGraph) {
   const auto& graph = localSubmapGraph->graph_;
   const auto& llVertices = graph->vertexLookup();
 
   TensorGraphDataLaneLane result;
   int numNodes = llVertices.size();
-  int32_t nodeFeatLength = getNodeFeatureLength(reprType, paramType, nPoints, noBdTypes);
+  int32_t nodeFeatLength = getNodeFeatureLength(config_.reprType, config_.paramType, config_.nPoints);
   result.x.resize(numNodes, nodeFeatLength);
 
-  std::unordered_map<ConstLaneletOrArea, int> key2index = graph->getKey2Index();
+  std::unordered_map<Id, int> llId2Index = graph->getllId2Index();
 
   int32_t edgeCount = 0;
   for (const auto& laWithVertex : llVertices) {
     const auto& la = laWithVertex.first;
     auto ll = laWithVertex.first.lanelet();
     const auto& vertex = laWithVertex.second;
-    result.x.row(key2index[la]) = getNodeFeatureVec(*ll, reprType, paramType, nPoints, nodeFeatLength, noBdTypes);
+
+    if (nodeFeatureBuffer_.find(la.id()) != nodeFeatureBuffer_.end()) {
+      result.x.row(llId2Index[la.id()]) = nodeFeatureBuffer_[la.id()];
+    } else {
+      Eigen::Vector3d nodeFeatureVec =
+          getNodeFeatureVec(*ll, config_.reprType, config_.paramType, config_.nPoints, nodeFeatLength);
+      nodeFeatureBuffer_[la.id()] = nodeFeatureVec;
+      result.x.row(llId2Index[la.id()]) = nodeFeatureVec;
+    }
 
     ConstLaneletOrAreas connectedLLs = localSubmapGraph->getLaneletEdges(*ll);
     for (const auto& connectedLL : connectedLLs) {
       result.a.resize(edgeCount + 1, 2);
-      result.a(edgeCount, 0) = key2index[la];
-      result.a(edgeCount, 0) = key2index[connectedLL];
+      result.a(edgeCount, 0) = llId2Index[la.id()];
+      result.a(edgeCount, 1) = llId2Index[connectedLL.id()];
 
-      result.e.resize(edgeCount + 1, noRelTypes);
-      Eigen::Vector3d edgeFeatureVec(noRelTypes);
-      edgeFeatureVec.setZero();
+      result.e.resize(edgeCount + 1, 1);
       ConstLanelet connectedLLasLL = connectedLL.lanelet().get();
       RelationType edgeType = graph->getEdgeInfo(*ll, connectedLLasLL).get().relation;
-      edgeFeatureVec[relationToInt(edgeType)] = 1;
-      result.e.row(edgeCount) = edgeFeatureVec;
+      result.e.row(edgeCount).array() = relationToInt(edgeType);
       edgeCount++;
     }
   }
   return result;
 }
 
-TensorGraphDataLaneTE getLaneTEData(MapGraphConstPtr localSubmapGraph, const LaneletRepresentationType& reprType,
-                                    const ParametrizationType& paramType, int nPoints, int noRelTypes = 7,
-                                    int noBdTypes = 3) {
+inline int teTypeToInt(const ConstLineString3d& te) {
+  std::string type = te.attribute(AttributeName::Type).value();
+  std::string subtype = te.attribute(AttributeName::Subtype).value();
+  if (type == AttributeValueString::TrafficLight) {
+    return 1;
+  } else if (type == AttributeValueString::TrafficSign) {
+    return 2;
+  } else {
+    throw std::runtime_error("Unexpected Traffic Element Type!");
+    return 0;
+  }
+}
+
+Eigen::Vector3d getTEPolylineRepr(const BasicLineString3d& te) {
+  Eigen::Vector3d repr(12);
+  for (size_t i = 0; i < te.size(); i++) {
+    repr(Eigen::seq(i, i + 2)) = te[i](Eigen::seq(i, i + 2));
+  }
+  return repr;
+}
+
+Eigen::Vector3d getTEFeatureVec(const ConstLineString3d& te) {
+  if (te.size() != 4) {
+    throw std::runtime_error("Number of points in traffic element is not 4!");
+  }
+  Eigen::Vector3d featureVec(13);  // 4 points with 3 dims + type
+  Eigen::Vector3d polylineRepr = getTEPolylineRepr(te.basicLineString());
+  featureVec(Eigen::seq(0, polylineRepr.size() - 1)) = polylineRepr;
+  featureVec[polylineRepr.size()] = teTypeToInt(te);
+  return featureVec;
+}
+
+bool isTe(ConstLineString3d ls) {
+  std::string type = ls.attribute(AttributeName::Type).value();
+  return type == AttributeValueString::TrafficLight || type == AttributeValueString::TrafficSign;
+}
+
+TensorGraphDataLaneTE MapGraphDataInterface::getLaneTEData(MapGraphConstPtr localSubmapGraph,
+                                                           LaneletSubmapConstPtr localSubmap,
+                                                           std::unordered_map<Id, int>& teId2Index) {
   const auto& graph = localSubmapGraph->graph_;
   const auto& llVertices = graph->vertexLookup();
 
   TensorGraphDataLaneTE result;
   int numNodesLane = llVertices.size();
-  int32_t nodeFeatLengthLane = getNodeFeatureLength(reprType, paramType, nPoints, noBdTypes);
+  int32_t nodeFeatLengthLane = getNodeFeatureLength(config_.reprType, config_.paramType, config_.nPoints);
   result.xLane.resize(numNodesLane, nodeFeatLengthLane);
 
-  std::unordered_map<ConstLaneletOrArea, int> key2index = graph->getKey2Index();
+  std::unordered_map<Id, int> llId2Index = graph->getllId2Index();
+
+  std::unordered_map<Id, ConstLineString3d> trafficElems;
+  for (const auto& ls : localSubmap->lineStringLayer) {
+    if (isTe(ls)) {
+      trafficElems[ls.id()] = ls;
+    }
+  }
+
+  teId2Index.clear();
   int i = 0;
-  for (const auto& entry : llVertices) {
-    key2index[entry.first] = i++;
+  for (const auto& entry : trafficElems) {
+    teId2Index[entry.second.id()] = i++;
   }
 
   int32_t edgeCount = 0;
@@ -183,23 +220,39 @@ TensorGraphDataLaneTE getLaneTEData(MapGraphConstPtr localSubmapGraph, const Lan
     const auto& la = laWithVertex.first;
     auto ll = laWithVertex.first.lanelet();
     const auto& vertex = laWithVertex.second;
-    result.xLane.row(key2index[la]) =
-        getNodeFeatureVec(*ll, reprType, paramType, nPoints, nodeFeatLengthLane, noBdTypes);
 
-    ConstLaneletOrAreas connectedLLs = localSubmapGraph->getLaneletEdges(*ll);
-    for (const auto& connectedLL : connectedLLs) {
-      result.a.resize(edgeCount + 1, 2);
-      result.a(edgeCount, 0) = key2index[la];
-      result.a(edgeCount, 0) = key2index[connectedLL];
+    if (nodeFeatureBuffer_.find(la.id()) != nodeFeatureBuffer_.end()) {
+      result.xLane.row(llId2Index[la.id()]) = nodeFeatureBuffer_[la.id()];
+    } else {
+      Eigen::Vector3d nodeFeatureVec =
+          getNodeFeatureVec(*ll, config_.reprType, config_.paramType, config_.nPoints, nodeFeatLengthLane);
+      nodeFeatureBuffer_[la.id()] = nodeFeatureVec;
+      result.xLane.row(llId2Index[la.id()]) = nodeFeatureVec;
+    }
 
-      result.e.resize(edgeCount + 1, noRelTypes);
-      Eigen::Vector3d edgeFeatureVec(noRelTypes);
-      edgeFeatureVec.setZero();
-      ConstLanelet connectedLLasLL = connectedLL.lanelet().get();
-      RelationType edgeType = graph->getEdgeInfo(*ll, connectedLLasLL).get().relation;
-      edgeFeatureVec[relationToInt(edgeType)] = 1;
-      result.e.row(edgeCount) = edgeFeatureVec;
-      edgeCount++;
+    RegulatoryElementConstPtrs regElems = ll->regulatoryElements();
+    for (const auto& regElem : regElems) {
+      ConstLineStrings3d refs = regElem->getParameters<ConstLineString3d>(RoleName::Refers);
+      for (const auto& ref : refs) {
+        if (isTe(ref)) {
+          result.a.resize(edgeCount + 1, 2);
+          result.a(edgeCount, 0) = llId2Index[la.id()];
+          result.a(edgeCount, 1) = result.xLane.rows() + teId2Index[ref.id()];
+
+          result.xTE.resize(edgeCount + 1, 13);
+          if (teFeatureBuffer_.find(ref.id()) != teFeatureBuffer_.end()) {
+            result.xTE.row(llId2Index[ref.id()]) = teFeatureBuffer_[ref.id()];
+          } else {
+            Eigen::Vector3d teFeatureVec = getTEFeatureVec(ref);
+            teFeatureBuffer_[ref.id()] = teFeatureVec;
+            result.xTE.row(llId2Index[ref.id()]) = teFeatureVec;
+          }
+
+          result.e.resize(edgeCount + 1, 1);
+          result.e.row(edgeCount).array() = 1;
+          edgeCount++;
+        }
+      }
     }
   }
   return result;
@@ -211,8 +264,7 @@ TensorGraphDataLaneLane MapGraphDataInterface::laneLaneTensors() {
         "Your current position is not set! Call setCurrPosAndExtractSubmap() before trying to get the data!");
   }
 
-  return getLaneLaneData(localSubmapGraph_, config_.reprType, config_.paramType, config_.nPoints, config_.noRelTypes,
-                         config_.noBdTypes);
+  return getLaneLaneData(localSubmapGraph_);
 }
 
 TensorGraphDataLaneTE MapGraphDataInterface::laneTETensors() {

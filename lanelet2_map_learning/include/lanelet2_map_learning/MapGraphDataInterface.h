@@ -36,16 +36,15 @@ struct TensorGraphDataLaneTE {
 
 class MapGraphDataInterface {
  public:
+  using FeatureBuffer = std::unordered_map<Id, Eigen::Vector3d, std::hash<Id>, std::equal_to<Id>,
+                                           Eigen::aligned_allocator<std::pair<const Id, Eigen::Vector3d>>>;
   struct Configuration {
     Configuration() noexcept {}
-    int32_t getNodeFeatureLength();
     LaneletRepresentationType reprType{LaneletRepresentationType::Boundaries};
     ParametrizationType paramType{ParametrizationType::Polyline};
     double submapAreaX{100};
     double submapAreaY{100};
     int nPoints{11};
-    int noRelTypes{7};
-    int noBdTypes{3};
   };
 
   MapGraphDataInterface(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
@@ -59,9 +58,17 @@ class MapGraphDataInterface {
   TensorGraphDataLaneTE laneTETensorsBatch(const BasicPoints2d& pts);
 
  private:
+  TensorGraphDataLaneLane getLaneLaneData(MapGraphConstPtr localSubmapGraph);
+
+  TensorGraphDataLaneTE getLaneTEData(MapGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
+                                      std::unordered_map<Id, int>& teId2Index);
+
   LaneletMapConstPtr laneletMap_;
   LaneletSubmapConstPtr localSubmap_;
+  std::unordered_map<Id, int> teId2Index_;
   MapGraphConstPtr localSubmapGraph_;
+  FeatureBuffer nodeFeatureBuffer_;
+  FeatureBuffer teFeatureBuffer_;
   Optional<BasicPoint2d> currPos_;  // in the map frame
   Configuration config_;
   traffic_rules::TrafficRulesPtr trafficRules_;
