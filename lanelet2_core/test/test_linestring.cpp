@@ -5,7 +5,7 @@
 
 #include "lanelet2_core/geometry/LineString.h"
 #include "lanelet2_core/primitives/LineString.h"
-#include "primitives/Traits.h"
+#include "lanelet2_core/primitives/Traits.h"
 using namespace lanelet;
 
 class LineStringPoints : public ::testing::Test {
