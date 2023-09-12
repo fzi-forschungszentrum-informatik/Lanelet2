@@ -28,12 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "LaneletMatching.h"
+#include "lanelet2_matching/LaneletMatching.h"
 
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/geometry/Polygon.h>
 
-#include "Utilities.h"
+#include "lanelet2_matching/Utilities.h"
 
 namespace {
 template <typename LaneletT, typename MatchT>

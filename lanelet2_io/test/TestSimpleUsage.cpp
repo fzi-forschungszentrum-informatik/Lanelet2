@@ -5,7 +5,7 @@
 TEST(lanelet2_io, exampleUsage) {  // NOLINT
   using namespace lanelet;
   Origin origin({49, 8.4, 0});
-  std::string filenameIn = "../../lanelet2_maps/res/mapping_example.osm";
+  std::string filenameIn = std::string(PKG_DIR) + "/../lanelet2_maps/res/mapping_example.osm";
   LaneletMapPtr laneletMap = lanelet::load(filenameIn, origin);
 
   lanelet::test_setup::Tempfile file("file.osm");

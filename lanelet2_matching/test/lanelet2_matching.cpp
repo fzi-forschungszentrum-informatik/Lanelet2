@@ -33,7 +33,7 @@
 #include <lanelet2_traffic_rules/TrafficRules.h>
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
 
-#include "LaneletMatching.h"
+#include "lanelet2_matching/LaneletMatching.h"
 #include "gtest/gtest.h"
 
 using namespace lanelet;

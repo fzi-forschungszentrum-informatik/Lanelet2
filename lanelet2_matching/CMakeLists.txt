@@ -1,4 +1,3 @@
-set(MRT_PKG_VERSION 4.0.0)
 # Modify only if you know what you are doing!
 cmake_minimum_required(VERSION 3.5.1)
 project(lanelet2_matching)
@@ -6,9 +5,7 @@ project(lanelet2_matching)
 ###################
 ## Find packages ##
 ###################
-find_package(mrt_cmake_modules REQUIRED)
-include(UseMrtStdCompilerFlags)
-include(GatherDeps)
+find_package(ament_cmake REQUIRED)
 
 # You can add a custom.cmake in order to add special handling for this package. E.g. you can do:
 # list(REMOVE_ITEM DEPENDEND_PACKAGES <package name 1> <package name 2> ...)
@@ -18,52 +15,69 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/custom.cmake")
     include("${CMAKE_CURRENT_SOURCE_DIR}/custom.cmake")
 endif()
 
-find_package(AutoDeps REQUIRED COMPONENTS ${DEPENDEND_PACKAGES})
-
-mrt_parse_package_xml()
-
-########################
-## Add python modules ##
-########################
-# This adds a python module if located under src/{PROJECT_NAME)
-mrt_python_module_setup()
-
-mrt_glob_files(PROJECT_PYTHON_SOURCE_FILES_SRC "python_api/*.cpp")
-if (PROJECT_PYTHON_SOURCE_FILES_SRC)
-    # Add a cpp-python api library. Make sure there are no name collisions with python modules in this project
-    mrt_add_python_api( ${PROJECT_NAME}
-        FILES ${PROJECT_PYTHON_SOURCE_FILES_SRC}
-        )
-endif()
 
 ############################
 ## Read source code files ##
 ############################
-mrt_glob_files_recurse(PROJECT_HEADER_FILES_INC "include/*.h" "include/*.hpp" "include/*.cuh")
-mrt_glob_files(PROJECT_SOURCE_FILES_INC "src/*.h" "src/*.hpp" "src/*.cuh")
-mrt_glob_files(PROJECT_SOURCE_FILES_SRC "src/*.cpp" "src/*.cu")
+file(GLOB_RECURSE PROJECT_SOURCE_FILES_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+)
 
 ###########
 ## Build ##
 ###########
 # Declare a cpp library
-mrt_add_library(${PROJECT_NAME}
-    INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC}
-    SOURCES ${PROJECT_SOURCE_FILES_SRC}
+add_library(${PROJECT_NAME}    
+    ${PROJECT_SOURCE_FILES_SRC}
     )
+target_include_directories(${PROJECT_NAME}  
+    PUBLIC
+      "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+      "$<INSTALL_INTERFACE:include>")
 
+find_package(lanelet2_core  REQUIRED)      
+ament_target_dependencies(${PROJECT_NAME} PUBLIC lanelet2_core)          
+
+find_package(lanelet2_traffic_rules  REQUIRED)      
+ament_target_dependencies(${PROJECT_NAME} PUBLIC lanelet2_traffic_rules)    
 #############
 ## Install ##
 #############
-# Install all targets, headers by default and scripts and other files if specified (folders or files).
-# This command also exports libraries and config files for dependent packages and this supersedes catkin_package.
-mrt_install(PROGRAMS scripts FILES res data ${PROJECT_INSTALL_FILES})
+install(
+  DIRECTORY include/lanelet2_matching
+  DESTINATION include/
+)
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT export_${PROJECT_NAME}
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
 
 #############
 ## Testing ##
 #############
-# Add test targets for cpp and python tests
-if (CATKIN_ENABLE_TESTING)
-    mrt_add_tests(test)
-    mrt_add_nosetests(test)
+#############
+## Testing ##
+#############
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  file(GLOB TEST_SOURCES "test/*.cpp")
+  # Add ament_gtest for your test file
+  foreach(TEST_SOURCE ${TEST_SOURCES})
+    get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
+    ament_add_gtest(test_${TEST_NAME} ${TEST_SOURCE})
+    target_link_libraries(test_${TEST_NAME}
+      ${PROJECT_NAME}
+      ${ament_LIBRARIES}
+    )
+    find_package(lanelet2_io  REQUIRED)      
+    ament_target_dependencies(test_${TEST_NAME} lanelet2_io)   
+    find_package(lanelet2_projection  REQUIRED)      
+    ament_target_dependencies(test_${TEST_NAME} lanelet2_projection)  
+  endforeach()
 endif()
+
+ament_package()

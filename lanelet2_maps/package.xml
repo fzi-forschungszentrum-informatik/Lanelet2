@@ -12,8 +12,6 @@
 
   <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
   <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake_core</buildtool_depend>
-  <buildtool_depend>mrt_cmake_modules</buildtool_depend>
-  <buildtool_export_depend>mrt_cmake_modules</buildtool_export_depend>
   <exec_depend>lanelet2_core</exec_depend>
   <export>
     <build_type condition="$ROS_VERSION == 1">catkin</build_type>
