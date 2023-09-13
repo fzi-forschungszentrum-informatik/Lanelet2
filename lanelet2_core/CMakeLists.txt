@@ -31,8 +31,12 @@ target_include_directories(${PROJECT_NAME}
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
 
+find_package(Boost REQUIRED COMPONENTS polygon)
 find_package(Eigen3 REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+  Eigen3::Eigen
+  Boost::polygon
+  )
 
 #############
 ## Install ##
@@ -71,4 +75,4 @@ if(BUILD_TESTING)
   endforeach()
 endif()
 
-ament_package()
+ament_package(CONFIG_EXTRAS "cmake/ConfigExtras.cmake")

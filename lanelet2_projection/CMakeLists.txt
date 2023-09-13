@@ -6,10 +6,7 @@ project(lanelet2_projection)
 ## Find packages ##
 ###################
 find_package(ament_cmake REQUIRED)
-find_package(PkgConfig)
-find_path(GeographicLib INCLUDE_DIR GeographicLib/config.h
-  PATH_SUFFIXES GeographicLib
-)
+find_package(GeographicLib REQUIRED)
 
 ############################
 ## Read source code files ##
@@ -52,6 +49,7 @@ install(
   RUNTIME DESTINATION bin
 )
 ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
+ament_export_dependencies(GeographicLib)
 
 #############
 ## Testing ##

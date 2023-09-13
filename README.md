@@ -99,7 +99,6 @@ At least **C++14** is required.
 Besides [Catkin](https://catkin-tools.readthedocs.io/en/latest/index.html), the dependencies are
 * `Boost` (from 1.58)
 * `eigen3`
-* [`mrt_cmake_modules`](https://github.com/KIT-MRT/mrt_cmake_modules), a CMake helper library
 * `pugixml` (for lanelet2_io)
 * `boost-python, python2 or python3` (for lanelet2_python)
 * `geographiclib` (for lanelet2_projection)

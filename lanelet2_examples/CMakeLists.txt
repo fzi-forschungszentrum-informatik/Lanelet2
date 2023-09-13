@@ -31,7 +31,6 @@ find_package(lanelet2_traffic_rules  REQUIRED)
 foreach(SUBFOLDER IN LISTS SUBFOLDERS)
     if(IS_DIRECTORY ${SUBFOLDER})
         get_filename_component(SUBFOLDER_NAME ${SUBFOLDER} NAME)
-        message("Subfolder: ${SUBFOLDER_NAME}")
         add_executable(${SUBFOLDER_NAME}
             src/${SUBFOLDER_NAME}/main.cpp
         )
