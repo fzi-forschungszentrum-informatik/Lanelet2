@@ -6,6 +6,11 @@ project(lanelet2_projection)
 ## Find packages ##
 ###################
 find_package(ament_cmake REQUIRED)
+
+# https://bugs.launchpad.net/ubuntu/+source/geographiclib/+bug/1805173
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+  set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};/usr/share/cmake/geographiclib")
+endif()
 find_package(GeographicLib REQUIRED)
 
 ############################
@@ -69,4 +74,4 @@ if(BUILD_TESTING)
   endforeach()
 endif()
 
-ament_package()
+ament_package(CONFIG_EXTRAS "cmake/ConfigExtras.cmake")

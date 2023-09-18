@@ -27,7 +27,8 @@ find_package(lanelet2_traffic_rules  REQUIRED)
 
 foreach(PROJECT_SOURCE_FILE ${PROJECT_SOURCE_FILES_SRC})
     get_filename_component(SOURCE_NAME ${PROJECT_SOURCE_FILE} NAME_WE)
-    add_library(${SOURCE_NAME} ${PROJECT_SOURCE_FILE})
+    add_library(${SOURCE_NAME} SHARED ${PROJECT_SOURCE_FILE})
+    target_compile_definitions(${SOURCE_NAME} PRIVATE PYTHON_API_MODULE_NAME=${SOURCE_NAME})
     # prevent cmake from creating a "lib" prefix
     set_target_properties(${SOURCE_NAME} PROPERTIES PREFIX "")
     target_link_libraries(${SOURCE_NAME}
@@ -73,17 +74,13 @@ install(
 #############
 # Add test targets for python tests
 if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
   find_package(ament_cmake_pytest REQUIRED)
 
   file(GLOB TEST_SOURCES "test/*.py")
   # Add ament_gtest for your test file
   foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
-    ament_add_gtest(${TEST_NAME} ${TEST_SOURCE})
-    target_link_libraries(${TEST_NAME}
-      ${ament_LIBRARIES}
-    )
+    ament_add_pytest_test(${TEST_NAME} ${TEST_SOURCE})
   endforeach()
 endif()
 
