@@ -8,7 +8,7 @@ on:
       - "**"
   # Run tests for any PRs.
   pull_request:
-
+  workflow_dispatch:
 jobs:
   formatting:
     runs-on: ubuntu-latest
