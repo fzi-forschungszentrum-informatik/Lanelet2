@@ -18,7 +18,7 @@ lanelet::traffic_rules::SpeedLimitInformation speedLimit = trafficRulesPtr->spee
 
 This package offers the abstract `TrafficRules` class that is used as an interface to interpret the data in the map. It provides information whether a lanelet is usable/drivable, where lane changes are possible and what the speed limits are.
 
-Derived from this is the abstract `GenericTrafficRules` class that implements the traffic rules based on the [tagging specification](../lanelet2_core/doc). This class can then be derived to create traffic rules for individual countries and participants. This is especially important for the speed limits and interpreting country specific traffic signs.
+Derived from this is the abstract `GenericTrafficRules` class that implements the traffic rules based on the [tagging specification](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/tree/master/lanelet2_core/doc). This class can then be derived to create traffic rules for individual countries and participants. This is especially important for the speed limits and interpreting country specific traffic signs.
 
 After registering this class using `RegisterTrafficRules`, Lanelet2 is able to create instances of this traffic rule using the `TrafficRuleFactory`.
 

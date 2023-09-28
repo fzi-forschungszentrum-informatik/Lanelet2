@@ -1,0 +1,29 @@
+site_name: Lanelet2
+repo_url: https://github.com/fzi-forschungszentrum-informatik/Lanelet2
+docs_dir: docs
+edit_uri: 'edit/master/docs/'
+theme: readthedocs
+
+nav:
+- Home: 'index.md'
+- lanelet2_core: 'lanelet2_core.md'
+- lanelet2_examples: 'lanelet2_examples.md'
+- lanelet2_io: 'lanelet2_io.md'
+- lanelet2_maps: 'lanelet2_maps.md'
+- lanelet2_matching: 'lanelet2_matching.md'
+- lanelet2_projection: 'lanelet2_projection.md'
+- lanelet2_python: 'lanelet2_python.md'
+- lanelet2_routing: 'lanelet2_routing.md'
+- lanelet2_traffic_rules: 'lanelet2_traffic_rules.md'
+- lanelet2_validation: 'lanelet2_validation.md'
+
+- Detailed Documentation:
+    - 'Architecture': 'lanelet2_core/Architecture.md'
+    - 'GeometryPrimer': 'lanelet2_core/GeometryPrimer.md'
+    - 'Lanelet1Compability': 'lanelet2_core/Lanelet1Compability.md'
+    - 'LaneletAndAreaTagging': 'lanelet2_core/LaneletAndAreaTagging.md'
+    - 'LaneletPrimitives': 'lanelet2_core/LaneletPrimitives.md'
+    - 'LinestringTagging': 'lanelet2_core/LinestringTagging.md'
+    - 'RegulatoryElementTagging': 'lanelet2_core/RegulatoryElementTagging.md'
+    - 'Map_Projections_Coordinate_Systems': 'lanelet2_projection/Map_Projections_Coordinate_Systems.md'
+
