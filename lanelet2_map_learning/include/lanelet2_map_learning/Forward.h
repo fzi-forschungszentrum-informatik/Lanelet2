@@ -131,8 +131,8 @@ inline std::string relationToColor(RelationType type) {
 
 enum class LaneletRepresentationType;
 enum class ParametrizationType;
-struct TensorGraphDataLaneLane;
-struct TensorGraphDataLaneTE;
+struct TensorLaneData;
+struct TensorTEData;
 class MapGraphDataInterface;
 
 }  // namespace map_learning

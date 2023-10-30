@@ -12,38 +12,17 @@ class LaneletLayer;
 
 namespace map_learning {
 
-enum class LaneletRepresentationType { Centerline, Boundaries };
-enum class ParametrizationType { Bezier, BezierEndpointFixed, Polyline };
-
-struct TensorGraphDataLaneLane {
-  TensorGraphDataLaneLane() noexcept {}
-  Eigen::MatrixXd x;   // node features
-  Eigen::MatrixX2i a;  // adjacency matrix (sparse)
-  Eigen::MatrixXd e;   // edge features
-};
-
-struct TensorGraphDataLaneTE {
-  TensorGraphDataLaneTE() noexcept {}
-  Eigen::MatrixXd xLane;  // node features lanelets
-  Eigen::MatrixXd xTE;    // node features traffic elements
-
-  /// @brief adjacency matrix (sparse). Node indices are assigned as
-  ///        xLane and xTE stacked, with xLane being first
-  Eigen::MatrixX2i a;
-
-  Eigen::MatrixXd e;  // edge features
-};
-
 class MapGraphDataInterface {
  public:
-  using FeatureBuffer = std::unordered_map<Id, Eigen::Vector3d, std::hash<Id>, std::equal_to<Id>,
-                                           Eigen::aligned_allocator<std::pair<const Id, Eigen::Vector3d>>>;
+  using FeatureBuffer = std::unordered_map<Id, MapFeature, std::hash<Id>, std::equal_to<Id>,
+                                           Eigen::aligned_allocator<std::pair<const Id, MapFeature>>>;
+
   struct Configuration {
     Configuration() noexcept {}
     LaneletRepresentationType reprType{LaneletRepresentationType::Boundaries};
     ParametrizationType paramType{ParametrizationType::Polyline};
-    double submapAreaX{100};
-    double submapAreaY{100};
+    double submapAreaLongitudinal{30};  // in driving direction
+    double submapAreaLateral{15};       // in lateral direction
     int nPoints{11};
   };
 
@@ -51,17 +30,17 @@ class MapGraphDataInterface {
                         Optional<BasicPoint2d> currPos = boost::none);
 
   void setCurrPosAndExtractSubmap(const BasicPoint2d& pt);
-  TensorGraphDataLaneLane laneLaneTensors();
-  TensorGraphDataLaneTE laneTETensors();
+  TensorLaneData laneLaneTensors();
+  TensorTEData laneTETensors();
 
-  TensorGraphDataLaneLane laneLaneTensorsBatch(const BasicPoints2d& pts);
-  TensorGraphDataLaneTE laneTETensorsBatch(const BasicPoints2d& pts);
+  TensorLaneData laneLaneTensorsBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
+  TensorTEData laneTETensorsBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
 
  private:
-  TensorGraphDataLaneLane getLaneLaneData(MapGraphConstPtr localSubmapGraph);
+  TensorLaneData getLaneLaneData(MapGraphConstPtr localSubmapGraph);
 
-  TensorGraphDataLaneTE getLaneTEData(MapGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
-                                      std::unordered_map<Id, int>& teId2Index);
+  TensorTEData getLaneTEData(MapGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
+                             std::unordered_map<Id, int>& teId2Index);
 
   LaneletMapConstPtr laneletMap_;
   LaneletSubmapConstPtr localSubmap_;
@@ -70,6 +49,7 @@ class MapGraphDataInterface {
   FeatureBuffer nodeFeatureBuffer_;
   FeatureBuffer teFeatureBuffer_;
   Optional<BasicPoint2d> currPos_;  // in the map frame
+  Optional<double> currYaw_;        // in the map frame
   Configuration config_;
   traffic_rules::TrafficRulesPtr trafficRules_;
 };
