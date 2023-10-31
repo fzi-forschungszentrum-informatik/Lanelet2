@@ -14,8 +14,9 @@ namespace map_learning {
 
 class MapGraphDataInterface {
  public:
-  using FeatureBuffer = std::unordered_map<Id, MapFeature, std::hash<Id>, std::equal_to<Id>,
-                                           Eigen::aligned_allocator<std::pair<const Id, MapFeature>>>;
+  template <typename T>
+  using FeatureBuffer =
+      std::unordered_map<Id, T, std::hash<Id>, std::equal_to<Id>, Eigen::aligned_allocator<std::pair<const Id, T>>>;
 
   struct Configuration {
     Configuration() noexcept {}
@@ -30,24 +31,25 @@ class MapGraphDataInterface {
                         Optional<BasicPoint2d> currPos = boost::none);
 
   void setCurrPosAndExtractSubmap(const BasicPoint2d& pt);
-  TensorLaneData laneLaneTensors();
-  TensorTEData laneTETensors();
+  LaneData laneData();
+  TEData teData();
 
-  TensorLaneData laneLaneTensorsBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
-  TensorTEData laneTETensorsBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
+  LaneData laneDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
+  TEData laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
 
  private:
-  TensorLaneData getLaneLaneData(MapGraphConstPtr localSubmapGraph);
+  LaneData getLaneData(MapGraphConstPtr localSubmapGraph);
 
-  TensorTEData getLaneTEData(MapGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
-                             std::unordered_map<Id, int>& teId2Index);
+  TEData getLaneTEData(MapGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
+                       std::unordered_map<Id, int>& teId2Index);
 
   LaneletMapConstPtr laneletMap_;
   LaneletSubmapConstPtr localSubmap_;
   std::unordered_map<Id, int> teId2Index_;
   MapGraphConstPtr localSubmapGraph_;
-  FeatureBuffer nodeFeatureBuffer_;
-  FeatureBuffer teFeatureBuffer_;
+  FeatureBuffer<LaneletFeature> laneletFeatureBuffer_;
+  FeatureBuffer<PolylineFeature> polylineFeatureBuffer_;
+  FeatureBuffer<PolylineFeature> teFeatureBuffer_;
   Optional<BasicPoint2d> currPos_;  // in the map frame
   Optional<double> currYaw_;        // in the map frame
   Configuration config_;
