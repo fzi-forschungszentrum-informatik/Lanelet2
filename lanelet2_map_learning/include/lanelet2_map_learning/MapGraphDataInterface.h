@@ -21,7 +21,8 @@ class MapGraphDataInterface {
   struct Configuration {
     Configuration() noexcept {}
     LaneletRepresentationType reprType{LaneletRepresentationType::Boundaries};
-    ParametrizationType paramType{ParametrizationType::Polyline};
+    ParametrizationType paramType{ParametrizationType::LineString};
+    bool includeLaneletBdTypes{false};
     double submapAreaLongitudinal{30};  // in driving direction
     double submapAreaLateral{15};       // in lateral direction
     int nPoints{11};
@@ -48,8 +49,8 @@ class MapGraphDataInterface {
   std::unordered_map<Id, int> teId2Index_;
   MapGraphConstPtr localSubmapGraph_;
   FeatureBuffer<LaneletFeature> laneletFeatureBuffer_;
-  FeatureBuffer<PolylineFeature> polylineFeatureBuffer_;
-  FeatureBuffer<PolylineFeature> teFeatureBuffer_;
+  FeatureBuffer<LineStringFeature> polylineFeatureBuffer_;
+  FeatureBuffer<LineStringFeature> teFeatureBuffer_;
   Optional<BasicPoint2d> currPos_;  // in the map frame
   Optional<double> currYaw_;        // in the map frame
   Configuration config_;

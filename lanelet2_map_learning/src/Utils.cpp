@@ -31,57 +31,40 @@ LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPo
   return utils::createConstSubmap(initRegion, {});
 }
 
-Eigen::Vector3d getLaneletRepr(const LaneletRepresentationType& reprType, const ParametrizationType& paramType,
-                               int nPoints) {
-  int32_t nodeFeatureLength;
-  if (reprType == LaneletRepresentationType::Boundaries)
-    nodeFeatureLength = 2 * 3 * nPoints + 2;  // 2 boundary types
-  else if (reprType == LaneletRepresentationType::Centerline)
-    nodeFeatureLength = 3 * nPoints + 2;
-  else
-    throw std::runtime_error("Unknown LaneletRepresentationType!");
-
-  return Eigen::Vector3d(nodeFeatureLength);
-}
-
-inline int bdSubtypeToInt(ConstLineString3d lString) {
+inline LineStringType bdSubtypeToEnum(ConstLineString3d lString) {
   std::string subtype = lString.attribute(AttributeName::Subtype).value();
   if (subtype == AttributeValueString::Dashed)
-    return 1;
+    return LineStringType::Dashed;
   else if (subtype == AttributeValueString::Solid)
-    return 2;
+    return LineStringType::Solid;
   else if (subtype == AttributeValueString::SolidSolid)
-    return 2;
+    return LineStringType::Solid;
   else if (subtype == AttributeValueString::SolidDashed)
-    return 2;
+    return LineStringType::Solid;
   else if (subtype == AttributeValueString::DashedSolid)
-    return 2;
+    return LineStringType::Solid;
   else if (subtype == AttributeValueString::Virtual)
-    return 3;
+    return LineStringType::Virtual;
   else {
     throw std::runtime_error("Unexpected Line String Subtype!");
-    return 0;
+    return LineStringType::Unknown;
   }
 }
 
-inline int teTypeToInt(const ConstLineString3d& te) {
+inline TEType teTypeToEnum(const ConstLineString3d& te) {
   std::string type = te.attribute(AttributeName::Type).value();
   std::string subtype = te.attribute(AttributeName::Subtype).value();
   if (type == AttributeValueString::TrafficLight) {
-    return 1;
+    return TEType::TrafficLight;
   } else if (type == AttributeValueString::TrafficSign) {
-    return 2;
+    return TEType::TrafficSign;
   } else {
     throw std::runtime_error("Unexpected Traffic Element Type!");
-    return 0;
+    return TEType::Unknown;
   }
 }
 
-Eigen::Vector3d getTERepr() {
-  return Eigen::Vector3d(13);  // 4 points with 3 dims + type;
-}
-
-BasicLineString3d resamplePolyline(const BasicLineString3d& polyline, int32_t nPoints) {
+BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t nPoints) {
   double length = boost::geometry::length(polyline, boost::geometry::strategy::distance::pythagoras<double>());
   double dist = length / static_cast<double>(nPoints);
   boost::geometry::model::multi_point<BasicPoint3d> bdInterp;
@@ -90,7 +73,7 @@ BasicLineString3d resamplePolyline(const BasicLineString3d& polyline, int32_t nP
   return bdInterp;
 }
 
-BasicLineString3d cutPolyline(const OrientedRect& bbox, const BasicLineString3d& polyline, int32_t nPoints) {
+BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline, int32_t nPoints) {
   std::deque<BasicLineString3d> output;
   boost::geometry::intersection(bbox, polyline, output);
   assert(output.size() == 1);

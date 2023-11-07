@@ -20,18 +20,13 @@ boost::geometry::model::polygon<BasicPoint2d> getRotatedRect(const BasicPoint2d&
 LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPoint2d& center, double yaw,
                                     double extentLongitudinal, double extentLateral);
 
-Eigen::Vector3d getLaneletRepr(const LaneletRepresentationType& reprType, const ParametrizationType& paramType,
-                               int nPoints);
+inline LineStringType bdSubtypeToEnum(ConstLineString3d lString);
 
-inline int bdSubtypeToInt(ConstLineString3d lString);
+inline TEType teTypeToEnum(const ConstLineString3d& te);
 
-inline int teTypeToInt(const ConstLineString3d& te);
+BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t nPoints);
 
-Eigen::Vector3d getTERepr();
-
-BasicLineString3d resamplePolyline(const BasicLineString3d& polyline, int32_t nPoints);
-
-BasicLineString3d cutPolyline(const OrientedRect& bbox, const BasicLineString3d& polyline);
+BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
 
 }  // namespace map_learning
 }  // namespace lanelet
