@@ -63,6 +63,16 @@ struct LaneletFeature {
   Eigen::VectorXd computeFeatureVector(const LaneletRepresentationType& reprType, bool onlyPoints = false);
 };
 
+struct CompoundLaneLineStringFeature {
+  LaneLineStringFeatures features_;
+  std::vector<double> pathLengths_;
+  LineStringType compoundType_;
+  CompoundLaneLineStringFeature() {}
+  // features for this constructor are required to be given in sorted order
+  CompoundLaneLineStringFeature(const LaneLineStringFeatures& features, LineStringType compoundType);
+  virtual Eigen::VectorXd computeFeatureVector();
+};
+
 using LineStringFeatures = std::vector<LineStringFeature>;
 using LaneLineStringFeatures = std::vector<LaneLineStringFeature>;
 using TEFeatures = std::vector<TEFeature>;

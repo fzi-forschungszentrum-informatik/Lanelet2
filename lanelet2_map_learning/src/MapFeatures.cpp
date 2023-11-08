@@ -103,5 +103,19 @@ Eigen::VectorXd LaneletFeature::computeFeatureVector(const LaneletRepresentation
   }
 }
 
+CompoundLaneLineStringFeature::CompoundLaneLineStringFeature(const LaneLineStringFeatures& features,
+                                                             LineStringType compoundType)
+    : features_{features}, pathLengths_{std::vector<double>(features.size())}, compoundType_{compoundType} {
+  for (size_t i = 0; i < features.size(); i++) {
+    double currLength =
+        boost::geometry::length(features[i].rawFeature_, boost::geometry::strategy::distance::pythagoras<double>());
+    if (i > 0) {
+      pathLengths_[i] = pathLengths_[i - 1] + currLength;
+    } else {
+      pathLengths_[i] = currLength;
+    }
+  }
+}
+
 }  // namespace map_learning
 }  // namespace lanelet
