@@ -179,24 +179,11 @@ class Graph {
     }
   }
 
-  std::unordered_map<Id, int> getllId2Index(bool recompute = false) {
-    if (recompute || !llId2index_) {
-      std::unordered_map<Id, int> llId2index;
-      int i = 0;
-      for (const auto& entry : laneletOrAreaToVertex_) {
-        llId2index[entry.first.id()] = i++;
-      }
-      llId2index_ = llId2index;
-    }
-    return *llId2index_;
-  }
-
  private:
   FilteredGraph getFilteredGraph(RelationType relations) const {
     return FilteredGraph(graph_, Filter(graph_, relations));
   }
-  BaseGraphT graph_;  //!< The actual graph object
-  Optional<std::unordered_map<Id, int>> llId2index_;
+  BaseGraphT graph_;                             //!< The actual graph object
   LaneletOrAreaToVertex laneletOrAreaToVertex_;  //!< Mapping of lanelets/areas to vertices of the graph
 };
 

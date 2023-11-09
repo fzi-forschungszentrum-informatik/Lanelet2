@@ -48,10 +48,7 @@ class MapGraphDataInterface {
   LaneletSubmapConstPtr localSubmap_;
   std::unordered_map<Id, int> teId2Index_;
   MapGraphConstPtr localSubmapGraph_;
-  FeatureBuffer<LaneletFeature> laneletFeatureBuffer_;
-  FeatureBuffer<LineStringFeature> polylineFeatureBuffer_;
-  FeatureBuffer<LineStringFeature> teFeatureBuffer_;
-  Optional<BasicPoint2d> currPos_;  // in the map frame
+  Optional<BasicPoint3d> currPos_;  // in the map frame
   Optional<double> currYaw_;        // in the map frame
   Configuration config_;
   traffic_rules::TrafficRulesPtr trafficRules_;

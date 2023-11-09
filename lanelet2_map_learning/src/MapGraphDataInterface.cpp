@@ -9,13 +9,13 @@
 #include <boost/geometry.hpp>
 #include <type_traits>
 
-#include "lanelet2_map_learning/MapFeatures.h"
+#include "lanelet2_map_learning/MapData.h"
 #include "lanelet2_map_learning/Utils.h"
 
 namespace lanelet {
 namespace map_learning {
 
-void MapGraphDataInterface::setCurrPosAndExtractSubmap(const BasicPoint2d& pt) {
+void MapGraphDataInterface::setCurrPosAndExtractSubmap(const BasicPoint3d& pt) {
   currPos_ = pt;
   localSubmap_ =
       extractSubmap(laneletMap_, *currPos_, *currYaw_, config_.submapAreaLongitudinal, config_.submapAreaLateral);
@@ -33,21 +33,19 @@ LaneData MapGraphDataInterface::getLaneData(MapGraphConstPtr localSubmapGraph) {
   const auto& graph = localSubmapGraph->graph_;
   const auto& llVertices = graph->vertexLookup();
 
-  LaneData result;
-  int numNodes = llVertices.size();
-  int32_t nodeFeatLength = getNodeFeatureLength(config_.reprType, config_.paramType, config_.nPoints);
-  result.laneletFeatures.resize(numNodes);
-
-  std::unordered_map<Id, int> llId2Index = graph->getllId2Index();
-
+  ConstLanelets lls;
+  Eigen::MatrixX2i edgeList;
+  Eigen::MatrixXd edgeFeatures;
   int32_t edgeCount = 0;
   for (const auto& laWithVertex : llVertices) {
     const auto& la = laWithVertex.first;
+    if (!la.isLanelet()) continue;
+
     auto ll = laWithVertex.first.lanelet();
     const auto& vertex = laWithVertex.second;
 
-    if (nodeFeatureBuffer_.find(la.id()) != nodeFeatureBuffer_.end()) {
-      result.laneletFeatures[llId2Index[la.id()]] = nodeFeatureBuffer_[la.id()];
+    if (laneletFeatureBuffer_.find(la.id()) != laneletFeatureBuffer_.end()) {
+      lls.push_back(nodeFeatureBuffer_[la.id()]);
     } else {
       MapFeature nodeFeatureVec =
           getMapFeature(*ll, config_.reprType, config_.paramType, config_.nPoints, nodeFeatLength);
@@ -57,6 +55,8 @@ LaneData MapGraphDataInterface::getLaneData(MapGraphConstPtr localSubmapGraph) {
 
     ConstLaneletOrAreas connectedLLs = localSubmapGraph->getLaneletEdges(*ll);
     for (const auto& connectedLL : connectedLLs) {
+      if (!connectedLL.isLanelet()) continue;
+
       result.edgeList.resize(edgeCount + 1, 2);
       result.edgeList(edgeCount, 0) = llId2Index[la.id()];
       result.edgeList(edgeCount, 1) = llId2Index[connectedLL.id()];

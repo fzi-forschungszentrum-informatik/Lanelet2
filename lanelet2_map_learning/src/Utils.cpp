@@ -73,11 +73,33 @@ BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t 
   return bdInterp;
 }
 
-BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline, int32_t nPoints) {
-  std::deque<BasicLineString3d> output;
-  boost::geometry::intersection(bbox, polyline, output);
-  assert(output.size() == 1);
-  return output[0];
+BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline) {
+  BasicLineString2d polyline2d;
+  for (const auto& pt : polyline) {
+    polyline2d.push_back(BasicPoint2d(pt.x(), pt.y()));
+  }
+  std::deque<BasicLineString2d> cut2d;
+  boost::geometry::intersection(bbox, polyline2d, cut2d);
+  assert(cut2d.size() == 1);
+
+  // restore z value from closest point on the original linestring
+  BasicLineString3d cut3d;
+  for (const auto& pt2d : cut2d[0]) {
+    double lastDist = std::numeric_limits<double>::max();
+    for (const auto& pt : polyline) {
+      double currDist = (pt2d - BasicPoint2d(pt.x(), pt.y())).norm();
+      if (currDist < lastDist) {
+        lastDist = currDist;
+        if (pt == polyline.back()) {
+          cut3d.push_back(BasicPoint3d(pt2d.x(), pt2d.y(), pt.z()));
+        }
+      } else {
+        cut3d.push_back(BasicPoint3d(pt2d.x(), pt2d.y(), pt.z()));
+      }
+    }
+  }
+
+  return cut3d;
 }
 
 }  // namespace map_learning
