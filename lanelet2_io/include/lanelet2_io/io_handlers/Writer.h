@@ -26,7 +26,7 @@ class Writer : public IOHandler {
   using Ptr = std::shared_ptr<Writer>;
 
   virtual void write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors,
-                     const io::Configuration& params = io::Configuration()) const = 0;
+                     const io::Configuration& params = io::Configuration(), bool increment_versions = false) const = 0;
 
   // IOHandler interface
  private:

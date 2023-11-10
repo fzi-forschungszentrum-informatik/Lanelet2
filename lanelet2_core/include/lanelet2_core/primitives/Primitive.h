@@ -39,9 +39,11 @@ class PrimitiveData {
   /**
    * @brief Constructs a PrimitiveData object
    */
-  explicit PrimitiveData(Id id, AttributeMap attributes = AttributeMap()) : id{id}, attributes{std::move(attributes)} {}
+  
+  PrimitiveData(Id id, AttributeMap attributes = AttributeMap(), uint32_t version = 0) : id{id}, attributes{std::move(attributes)}, version{version} {}
 
   Id id{InvalId};           //!< Id of this primitive (unique across one map)
+  uint32_t version{0};           //!< Version of this primitive 
   AttributeMap attributes;  //!< attributes of this primitive
  protected:
   ~PrimitiveData() = default;
@@ -94,6 +96,8 @@ class ConstPrimitive {
    * structure that is not a part of the map.
    */
   Id id() const noexcept { return constData_->id; }
+
+  uint32_t version() const noexcept { return constData_->version; }
 
   //! check whether this primitive has a specific attribute
   bool hasAttribute(const std::string& name) const noexcept { return attributes().find(name) != attributes().end(); }
@@ -268,6 +272,8 @@ class Primitive : public DerivedConstPrimitive {
    * identified by their id. Make sure you know what you are doing!
    */
   void setId(Id id) noexcept { data()->id = id; }
+
+  void setVersion(uint32_t version) noexcept { data()->version = version; }
 
   //! @brief set or overwrite an attribute
   void setAttribute(const std::string& name, const Attribute& attribute) { attributes()[name] = attribute; }

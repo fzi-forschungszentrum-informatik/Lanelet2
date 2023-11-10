@@ -42,17 +42,17 @@ py::tuple loadWithErrorWrapper(const std::string& filename, const Projector& pro
   return py::make_tuple(map, errs);
 }
 
-void writeWrapper(const std::string& filename, const LaneletMap& map, const Origin& origin, const Optional<io::Configuration>& params) {
-  write(filename, map, origin, nullptr, params.get_value_or(io::Configuration()));
+void writeWrapper(const std::string& filename, const LaneletMap& map, const Origin& origin, bool increment_versions, const Optional<io::Configuration>& params) {
+  write(filename, map, origin, nullptr, params.get_value_or(io::Configuration()), increment_versions);
 }
 
-void writeProjectorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, const Optional<io::Configuration>& params) {
-  write(filename, map, projector, nullptr, params.get_value_or(io::Configuration()));
+void writeProjectorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, bool increment_versions, const Optional<io::Configuration>& params) {
+  write(filename, map, projector, nullptr, params.get_value_or(io::Configuration()), increment_versions);
 }
 
-ErrorMessages writeWithErrorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, const Optional<io::Configuration>& params) {
+ErrorMessages writeWithErrorWrapper(const std::string& filename, const LaneletMap& map, const Projector& projector, bool increment_versions, const Optional<io::Configuration>& params) {
   ErrorMessages errs;
-  write(filename, map, projector, &errs, params.get_value_or(io::Configuration()));
+  write(filename, map, projector, &errs, params.get_value_or(io::Configuration()), increment_versions);
   return errs;
 }
 
@@ -79,13 +79,15 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "Loads a map robustly. Parser errors are returned as second member of "
       "the tuple. If there are errors, the map will be incomplete somewhere.");
 
-  py::def("write", writeProjectorWrapper, (py::arg("filename"), py::arg("map"), py::arg("projector"), py::arg("params") = Optional<io::Configuration>{}),
+  py::def("write", writeProjectorWrapper, (py::arg("filename"), py::arg("map"), py::arg("projector"), py::arg("increment_versions") = false, py::arg("params") = Optional<io::Configuration>{}),
       "Writes the map to a file. The extension determines which format will "
       "be used (usually .osm)");
-  py::def("write", writeWrapper, (py::arg("filename"), py::arg("map"), py::arg("origin"), py::arg("params") = Optional<io::Configuration>{}),
+
+  py::def("write", writeWrapper, (py::arg("filename"), py::arg("map"), py::arg("origin"), py::arg("increment_versions") = false, py::arg("params") = Optional<io::Configuration>{}),
       "Writes the map to a file. The extension determines which format will "
       "be used (usually .osm)");
-  py::def("writeRobust", writeWithErrorWrapper, (py::arg("filename"), py::arg("map"), py::arg("projector"), py::arg("params") = Optional<io::Configuration>{}),
+
+  py::def("writeRobust", writeWithErrorWrapper, (py::arg("filename"), py::arg("map"), py::arg("projector"), py::arg("increment_versions") = false, py::arg("params") = Optional<io::Configuration>{}),
       "Writes a map robustly and returns writer errors. If there are errors, "
       "the map will be incomplete somewhere.");
 }

@@ -53,15 +53,15 @@ void removeAndFixPlaceholders(osm::Primitive** toRemove, osm::Roles& fromRoles,
 class ToFileWriter {
  public:
   static std::unique_ptr<osm::File> writeMap(const LaneletMap& laneletMap, const Projector& projector,
-                                             ErrorMessages& errors, const io::Configuration& params) {
+                                             ErrorMessages& errors, const io::Configuration& params, bool increment_versions = false) {
     ToFileWriter writer;
 
-    writer.writeNodes(laneletMap, projector);
-    writer.writeWays(laneletMap);
+    writer.writeNodes(laneletMap, projector, increment_versions);
+    writer.writeWays(laneletMap, increment_versions);
 
     // we have to wait until lanelets/areas are written
     auto unparsedLaneletAndAreaParameters = writer.appendRegulatoryElements(laneletMap.regulatoryElementLayer);
-    writer.appendLanelets(laneletMap.laneletLayer);
+    writer.appendLanelets(laneletMap.laneletLayer, increment_versions);
     writer.appendAreas(laneletMap.areaLayer);
     writer.resolveUnparsedMembers(unparsedLaneletAndAreaParameters);
 
@@ -73,38 +73,48 @@ class ToFileWriter {
   ToFileWriter() = default;
 
   // writers for every primitive
-  void writeNodes(const LaneletMap& map, const Projector& projector) {
+  void writeNodes(const LaneletMap& map, const Projector& projector, bool increment_versions = false) {
     auto& osmNodes = file_->nodes;
     for (const auto& point : map.pointLayer) {
+
+      const uint32_t version = increment_versions ?
+                     point.version() + 1  :
+                     point.version() == 0 ? 1 : point.version();
+
       try {
         const GPSPoint gpsPoint = projector.reverse(point);
-        osmNodes.emplace(point.id(), osm::Node(point.id(), getAttributes(point.attributes()), gpsPoint));
+        osmNodes.emplace(point.id(), osm::Node(point.id(), getAttributes(point.attributes()), gpsPoint, version));
       } catch (ReverseProjectionError& e) {
         writeError(point.id(), e.what());
       }
     }
   }
 
-  void writeWays(const LaneletMap& map) {
+  void writeWays(const LaneletMap& map, bool increment_versions = false) {
     auto& osmWays = file_->ways;
     for (const auto& lineString : map.lineStringLayer) {
       if (lineString.inverted()) {
-        writeOsmWay(lineString.invert(), osmWays);
+        writeOsmWay(lineString.invert(), osmWays, increment_versions);
       } else {
-        writeOsmWay(lineString, osmWays);
+        writeOsmWay(lineString, osmWays, increment_versions);
       }
     }
     for (const auto& polygon : map.polygonLayer) {
-      writeOsmWay(polygon, osmWays);
+      writeOsmWay(polygon, osmWays, increment_versions);
     }
   }
 
-  void appendLanelets(const LaneletLayer& laneletLayer) {
+  void appendLanelets(const LaneletLayer& laneletLayer, bool increment_versions = false) {
     for (const auto& lanelet : laneletLayer) {
       const auto id = lanelet.id();
       auto attributes = getAttributes(lanelet.attributes());
       attributes.emplace(AttributeNamesString::Type, AttributeValueString::Lanelet);
-      auto& insertedRelation = file_->relations.emplace(id, osm::Relation(id, attributes)).first->second;
+
+      const uint32_t version = increment_versions ?
+                     lanelet.version() + 1  :
+                     lanelet.version() == 0 ? 1 : lanelet.version();
+
+      auto& insertedRelation = file_->relations.emplace(id, osm::Relation(id, attributes, {}, version)).first->second;
       auto& members = insertedRelation.members;
       tryInsertMembers(members, RoleNameString::Left, lanelet.leftBound().id(), file_->ways, id);
       tryInsertMembers(members, RoleNameString::Right, lanelet.rightBound().id(), file_->ways, id);
@@ -168,16 +178,21 @@ class ToFileWriter {
   }
 
   template <typename PrimT>
-  void writeOsmWay(const PrimT& mapWay, osm::Ways& osmWays) {
+  void writeOsmWay(const PrimT& mapWay, osm::Ways& osmWays, bool increment_versions) {
     const auto id = mapWay.id();
     auto wayAttributes = getAttributes(mapWay.attributes());
+
+    const uint32_t version = increment_versions ?
+                   mapWay.version() + 1  :
+                   mapWay.version() == 0 ? 1 : mapWay.version();
+
     if (std::is_same<PrimT, ConstPolygon3d>::value) {
       wayAttributes.emplace(AttributeNamesString::Area, "true");
     }
     try {
       const auto wayNodes =
           utils::transform(mapWay, [&nodes = file_->nodes](const auto& elem) { return &nodes.at(elem.id()); });
-      osmWays.emplace(id, osm::Way(id, std::move(wayAttributes), std::move(wayNodes)));
+      osmWays.emplace(id, osm::Way(id, std::move(wayAttributes), std::move(wayNodes), version));
     } catch (NoSuchPrimitiveError& e) {
       writeError(id, "Way has points that are not point layer: "s + e.what());
     } catch (std::out_of_range&) {
@@ -296,9 +311,9 @@ void testAndPrintLocaleWarning(ErrorMessages& errors) {
 }
 }  // namespace
 
-void OsmWriter::write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors, const io::Configuration& params) const {
+void OsmWriter::write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors, const io::Configuration& params,  bool increment_versions) const {
   testAndPrintLocaleWarning(errors);
-  auto file = toOsmFile(laneletMap, errors, params);
+  auto file = toOsmFile(laneletMap, errors, params, increment_versions);
   auto doc = osm::write(*file, params);
   auto res = doc->save_file(filename.c_str(), "  ");
   if (!res) {
@@ -306,8 +321,8 @@ void OsmWriter::write(const std::string& filename, const LaneletMap& laneletMap,
   }
 }
 
-std::unique_ptr<osm::File> OsmWriter::toOsmFile(const LaneletMap& laneletMap, ErrorMessages& errors, const io::Configuration& params) const {
-  return ToFileWriter::writeMap(laneletMap, projector(), errors, params);
+std::unique_ptr<osm::File> OsmWriter::toOsmFile(const LaneletMap& laneletMap, ErrorMessages& errors, const io::Configuration& params, bool increment_versions) const {
+  return ToFileWriter::writeMap(laneletMap, projector(), errors, params, increment_versions);
 }
 }  // namespace io_handlers
 }  // namespace lanelet

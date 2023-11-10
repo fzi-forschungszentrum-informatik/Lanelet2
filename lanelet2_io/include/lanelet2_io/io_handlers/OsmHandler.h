@@ -18,10 +18,11 @@ class OsmWriter : public Writer {
    * "josm_format_elevation": whether to format elevation to 2 decimal places as required by JSOM, "false" by default
    */
   void write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& errors,
-             const io::Configuration& params = io::Configuration()) const override;
-
+             const io::Configuration& params = io::Configuration(), bool increment_versions = false) const override;
+  
   std::unique_ptr<osm::File> toOsmFile(const LaneletMap& laneletMap, ErrorMessages& errors,
-                                       const io::Configuration& params = io::Configuration()) const;
+                                       const io::Configuration& params = io::Configuration(),  
+                                       bool increment_versions = false) const;
 
   static constexpr const char* extension() { return ".osm"; }
 

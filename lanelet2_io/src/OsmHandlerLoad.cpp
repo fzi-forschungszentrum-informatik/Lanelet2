@@ -90,7 +90,7 @@ class FromFileLoader {  // NOLINT
     for (const auto& nodeElem : nodes) {
       const auto& node = nodeElem.second;
       try {
-        points_.emplace(node.id, Point3d(node.id, projector.forward(node.point), getAttributes(node.attributes)));
+        points_.emplace(node.id, Point3d(node.id, projector.forward(node.point), getAttributes(node.attributes), node.version));
       } catch (ForwardProjectionError& e) {
         parserError(node.id, e.what());
       }
@@ -109,6 +109,7 @@ class FromFileLoader {  // NOLINT
       }
 
       const auto id = way.id;
+      const auto version = way.version;
       const auto attributes = getAttributes(way.attributes);
 
       // determine area or way
@@ -116,7 +117,7 @@ class FromFileLoader {  // NOLINT
       if (isArea != attributes.end() && isArea->second.asBool().get_value_or(false)) {
         polygons_.emplace(id, Polygon3d(id, points, attributes));
       } else {
-        lineStrings_.emplace(id, LineString3d(id, points, attributes));
+        lineStrings_.emplace(id, LineString3d(id, points, attributes, version));
       }
     }
   }
@@ -133,6 +134,7 @@ class FromFileLoader {  // NOLINT
       }
       const auto id = llElem.id;
       const auto attributes = getAttributes(llElem.attributes);
+      const auto version = llElem.version;
       auto left = getLaneletBorder(llElem, RoleNameString::Left);
       auto right = getLaneletBorder(llElem, RoleNameString::Right);
 
@@ -140,7 +142,7 @@ class FromFileLoader {  // NOLINT
       std::tie(left, right) = geometry::align(left, right);
 
       // look for optional centerline
-      Lanelet lanelet(id, left, right, attributes);
+      Lanelet lanelet(id, left, right, attributes, {}, version);
       if (findRole(llElem.members, RoleNameString::Centerline) != llElem.members.end()) {
         auto center = getLaneletBorder(llElem, RoleNameString::Centerline);
         lanelet.setCenterline(center);

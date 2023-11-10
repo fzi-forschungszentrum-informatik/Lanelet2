@@ -139,8 +139,10 @@ struct SelectInsertIterator<typename SelectLsIterator<Point2d>::Iterator> {
 class LineStringData : public PrimitiveData {
  public:
   explicit LineStringData(Id id) : PrimitiveData(id) {}
-  LineStringData(Id id, Points3d points, AttributeMap attributes)
-      : PrimitiveData(id, std::move(attributes)), points_(std::move(points)) {}
+
+  LineStringData(Id id, Points3d points, AttributeMap attributes, uint32_t version = 0)
+      : PrimitiveData(id, std::move(attributes), version), points_(std::move(points)) {}
+
   // NOLINTNEXTLINE
   using iterator = internal::ReverseAndForwardIterator<Points3d::iterator>;
   // NOLINTNEXTLINE
@@ -241,8 +243,8 @@ class ConstLineStringImpl : public ConstPrimitive<LineStringData> {
 
   //! Constructs a LineString or similar from an Id and a list of points
   explicit ConstLineStringImpl(Id id = InvalId, Points3d points = Points3d(),
-                               const AttributeMap& attributes = AttributeMap())
-      : ConstPrimitive{std::make_shared<LineStringData>(id, std::move(points), attributes)} {}
+                               const AttributeMap& attributes = AttributeMap(), uint32_t version = 0)
+      : ConstPrimitive{std::make_shared<LineStringData>(id, std::move(points), attributes, version)} {}
 
   //! Constructs a linestring from the data object of another linestring
   explicit ConstLineStringImpl(const std::shared_ptr<const LineStringData>& data, bool inverted = false)

@@ -194,6 +194,8 @@ class RegulatoryElement  // NOLINT
    */
   void setId(Id id) noexcept { data()->id = id; }
 
+  void setVersion(uint32_t version) noexcept { data()->version = version; }
+
   //! Returns all parameters as const object (coversion overhead for const)
   ConstRuleParameterMap getParameters() const;
 

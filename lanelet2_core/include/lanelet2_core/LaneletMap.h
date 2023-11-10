@@ -152,6 +152,17 @@ class PrimitiveLayer {
    */
   size_t size() const { return elements_.size(); }
 
+  /**
+   * @brief increments versions for all elements in this layer
+   */
+  void incrementVersions();
+
+  /**
+   * @brief sets target version to all elements in this layer
+   * @param version target version
+   */
+  void setVersions(uint32_t version);
+
   using ConstSearchFunction = std::function<bool(const internal::SearchBoxT<T>& box, const ConstPrimitiveT& prim)>;
   using SearchFunction = std::function<bool(const internal::SearchBoxT<T>& box, const PrimitiveT& prim)>;
 
@@ -540,6 +551,9 @@ void registerId(Id id);
 
 template <typename PrimitiveT>
 std::vector<ConstLayerPrimitive<PrimitiveT>> findUsages(const PrimitiveLayer<PrimitiveT>& layer, Id id);
+
+template <typename PrimitiveT>
+void incrementVersions(const PrimitiveLayer<PrimitiveT>& layer);
 
 ConstLanelets findUsagesInLanelets(const LaneletMapLayers& map, const ConstPoint3d& p);
 ConstAreas findUsagesInAreas(const LaneletMapLayers& map, const ConstPoint3d& p);

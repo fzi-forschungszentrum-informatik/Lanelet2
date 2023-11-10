@@ -80,7 +80,8 @@ class FakeWriter : public lanelet::io_handlers::Writer {
  public:
   using Writer::Writer;
   void write(const std::string& /*filename*/, const lanelet::LaneletMap& /*laneletMap*/,
-             lanelet::ErrorMessages& /*errors*/, const lanelet::io::Configuration& /*params*/) const override {
+             lanelet::ErrorMessages& /*errors*/, const lanelet::io::Configuration& /*params*/, 
+             bool /*increment_versions*/) const override {
     // this writer does just nothing
   }
   static constexpr const char* extension() {

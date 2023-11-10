@@ -254,6 +254,8 @@ class IsPrimitive : public def_visitor<IsPrimitive<PrimT>> {
     const AttributeMap& (PrimT::*attr)() const = &PrimT::attributes;
     c.add_property("id", &PrimT::id, &PrimT::setId,
                    "Unique ID of this primitive. 0 is a special value for temporary objects.");
+    c.add_property("version", &PrimT::version, &PrimT::setVersion,
+                   "Version of this primitive. 0 is a special value for newly created objects, on write it will be set to 1.");
     c.add_property("attributes", getRefFunc(attr), setAttributeWrapper<PrimT>,
                    "The attributes of this primitive as key value types. Behaves like a dictionary.");
     c.def(self == self);  // NOLINT
@@ -400,7 +402,13 @@ auto wrapLayer(const char* layerName) {
           "Retrieve an element by its ID")
       .def("search", search, arg("boundingBox"), "Search in a search area defined by a 2D bounding box")
       .def("nearest", nearest, (arg("point"), arg("n") = 1), "Gets a list of the nearest n primitives to a given point")
-      .def("uniqueId", &LayerT::uniqueId, "Retrieve an ID that not yet used in this layer");
+      .def("uniqueId", &LayerT::uniqueId, "Retrieve an ID that not yet used in this layer")
+      .def(
+          "setVersions", &LayerT::setVersions, arg("version"),
+          "set given version to primitives")
+      .def(
+          "increment_versions", &LayerT::incrementVersions,
+          "update primitives versions");
 }
 
 template <typename PrimT>
@@ -1160,6 +1168,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       no_init)
       .def(IsConstPrimitive<RegulatoryElement>())
       .add_property("id", &RegulatoryElement::id, &RegulatoryElement::setId)
+      .add_property("version", &RegulatoryElement::version, &RegulatoryElement::setVersion,
+                   "Version of this primitive. 0 is a special value for newly created objects, on write it will be set to 1.")
       .add_property("parameters", static_cast<GetParamSig>(&RegulatoryElement::getParameters),
                     "The parameters (ie traffic signs, lanelets) that affect "
                     "this RegulatoryElement")

@@ -12,7 +12,7 @@ class BinWriter : public Writer {
   using Writer::Writer;
 
   void write(const std::string& filename, const LaneletMap& laneletMap, ErrorMessages& /*errors*/,
-             const io::Configuration& /*params*/) const override;
+             const io::Configuration& /*params*/, bool /*increment_versions*/ = false) const override;
 
   static constexpr const char* extension() { return ".bin"; }
 
