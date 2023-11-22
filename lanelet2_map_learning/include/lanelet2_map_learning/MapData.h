@@ -22,12 +22,12 @@ class LaneData {
   LaneLineStringFeatures roadBorders_;   // auxilliary features
   LaneLineStringFeatures laneDividers_;  // auxilliary features
 
-  CompoundLaneLineStringFeatures compoundRoadBorders_;
-  CompoundLaneLineStringFeatures compoundLaneDividers_;
+  CompoundLaneLineStringFeatures compoundRoadBorders_;   // auxilliary features
+  CompoundLaneLineStringFeatures compoundLaneDividers_;  // auxilliary features
   CompoundLaneLineStringFeatures compoundCenterlines_;
 
   LaneletFeatures laneletFeatures_;  // node features
-  Eigen::MatrixX2i edgeList_;        // adjacency matrix (sparse)
+  Eigen::MatrixX2i edgeList_;        // adjacency matrix (sparse) for centerlines
   Eigen::MatrixXd edgeFeatures_;     // edge features
 };
 

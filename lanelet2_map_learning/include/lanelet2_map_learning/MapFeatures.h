@@ -19,7 +19,7 @@ class MapFeature {
   const bool& initialized() const { return initialized_; }
   const bool& valid() const { return valid_; }
 
-  virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/) const = 0;
+  virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/, bool /*unused*/) const = 0;
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) = 0;
 
  protected:
@@ -37,7 +37,7 @@ class LineStringFeature : public MapFeature {
  public:
   const BasicLineString3d& rawFeature() const { return rawFeature_; }
 
-  virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/) const = 0;
+  virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/, bool /*unused*/) const = 0;
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) = 0;
 
  protected:
@@ -57,7 +57,8 @@ class LaneLineStringFeature : public LineStringFeature {
 
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
   virtual Eigen::VectorXd computeFeatureVector(
-      bool onlyPoints = false) const override;  // uses processedFeature_ when available
+      bool onlyPoints,
+      bool pointsIn2d) const override;  // uses processedFeature_ when available
 
   const bool& wasCut() const { return wasCut_; }
   const BasicLineString3d& cutFeature() const { return cutFeature_; }
@@ -71,6 +72,10 @@ class LaneLineStringFeature : public LineStringFeature {
   LineStringType type_;
 };
 
+using MapFeatures = std::vector<MapFeature>;
+using LineStringFeatures = std::vector<LineStringFeature>;
+using LaneLineStringFeatures = std::vector<LaneLineStringFeature>;
+
 class TEFeature : public LineStringFeature {
  public:
   TEFeature() {}
@@ -78,8 +83,10 @@ class TEFeature : public LineStringFeature {
       : LineStringFeature(feature, mapID), teType_{type} {}
   virtual ~TEFeature() noexcept = default;
 
-  bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) override;
-  Eigen::VectorXd computeFeatureVector(bool onlyPoints = false) const override;
+  bool process(const OrientedRect& bbox, const ParametrizationType& paramType,
+               int32_t /*unused*/) override;  // not implemented yet
+  Eigen::VectorXd computeFeatureVector(bool onlyPoints,
+                                       bool pointsIn2d) const override;  // currently uses raw feature only
 
   const TEType& teType() { return teType_; }
 
@@ -96,7 +103,7 @@ class LaneletFeature : public MapFeature {
   virtual ~LaneletFeature() noexcept = default;
 
   bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
-  Eigen::VectorXd computeFeatureVector(bool onlyPoints = false) const override;
+  Eigen::VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const override;
 
   void setReprType(LaneletRepresentationType reprType) { reprType_ = reprType; }
 
@@ -124,7 +131,7 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   const std::vector<double>& pathLengthsProcessed() const { return pathLengthsProcessed_; }
 
   bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
-  Eigen::VectorXd computeFeatureVector(bool onlyPoints = false) const override;
+  Eigen::VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const override;
 
  private:
   LaneLineStringFeatures individualFeatures_;
@@ -132,11 +139,11 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   std::vector<double> pathLengthsProcessed_;
 };
 
-using LineStringFeatures = std::vector<LineStringFeature>;
-using LaneLineStringFeatures = std::vector<LaneLineStringFeature>;
 using CompoundLaneLineStringFeatures = std::vector<CompoundLaneLineStringFeature>;
 using TEFeatures = std::vector<TEFeature>;
 using LaneletFeatures = std::vector<LaneletFeature>;
+
+Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatures& mapFeatures, bool onlyPoints, bool pointsIn2d);
 
 }  // namespace map_learning
 }  // namespace lanelet

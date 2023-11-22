@@ -1,4 +1,4 @@
-#include "lanelet2_map_learning/MapGraphDataInterface.h"
+#include "lanelet2_map_learning/MapDataInterface.h"
 
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/Forward.h>
@@ -15,21 +15,20 @@
 namespace lanelet {
 namespace map_learning {
 
-void MapGraphDataInterface::setCurrPosAndExtractSubmap(const BasicPoint3d& pt) {
+void MapDataInterface::setCurrPosAndExtractSubmap(const BasicPoint3d& pt) {
   currPos_ = pt;
   localSubmap_ =
       extractSubmap(laneletMap_, *currPos_, *currYaw_, config_.submapAreaLongitudinal, config_.submapAreaLateral);
   localSubmapGraph_ = MapGraph::build(*laneletMap_, *trafficRules_);
 }
 
-MapGraphDataInterface::MapGraphDataInterface(LaneletMapConstPtr laneletMap, Configuration config,
-                                             Optional<BasicPoint2d> currPos)
+MapDataInterface::MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config, Optional<BasicPoint2d> currPos)
     : laneletMap_{laneletMap},
       config_{config},
       currPos_{currPos},
       trafficRules_{traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)} {}
 
-LaneData MapGraphDataInterface::getLaneData(MapGraphConstPtr localSubmapGraph) {
+LaneData MapDataInterface::getLaneData(MapGraphConstPtr localSubmapGraph) {
   const auto& graph = localSubmapGraph->graph_;
   const auto& llVertices = graph->vertexLookup();
 
@@ -76,8 +75,8 @@ bool isTe(ConstLineString3d ls) {
   return type == AttributeValueString::TrafficLight || type == AttributeValueString::TrafficSign;
 }
 
-TEData MapGraphDataInterface::getLaneTEData(MapGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
-                                            std::unordered_map<Id, int>& teId2Index) {
+TEData MapDataInterface::getLaneTEData(MapGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
+                                       std::unordered_map<Id, int>& teId2Index) {
   const auto& graph = localSubmapGraph->graph_;
   const auto& llVertices = graph->vertexLookup();
 
@@ -144,7 +143,7 @@ TEData MapGraphDataInterface::getLaneTEData(MapGraphConstPtr localSubmapGraph, L
   return result;
 }
 
-LaneData MapGraphDataInterface::laneData() {
+LaneData MapDataInterface::laneData() {
   if (!currPos_) {
     throw InvalidObjectStateError(
         "Your current position is not set! Call setCurrPosAndExtractSubmap() before trying to get the data!");
@@ -153,7 +152,7 @@ LaneData MapGraphDataInterface::laneData() {
   return getLaneData(localSubmapGraph_);
 }
 
-TEData MapGraphDataInterface::teData() {
+TEData MapDataInterface::teData() {
   if (!currPos_) {
     throw InvalidObjectStateError(
         "Your current position is not set! Call setCurrPosAndExtractSubmap() before trying to get the data!");

@@ -12,7 +12,7 @@ class LaneletLayer;
 
 namespace map_learning {
 
-class MapGraphDataInterface {
+class MapDataInterface {
  public:
   template <typename T>
   using FeatureBuffer =
@@ -28,8 +28,8 @@ class MapGraphDataInterface {
     int nPoints{11};
   };
 
-  MapGraphDataInterface(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
-                        Optional<BasicPoint2d> currPos = boost::none);
+  MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
+                   Optional<BasicPoint2d> currPos = boost::none);
 
   void setCurrPosAndExtractSubmap(const BasicPoint2d& pt);
   LaneData laneData();
