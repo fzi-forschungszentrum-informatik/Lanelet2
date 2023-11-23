@@ -217,7 +217,7 @@ class MapGraph {
    */
   MapGraph(std::unique_ptr<internal::MapGraphGraph>&& graph, lanelet::LaneletSubmapConstPtr&& passableMap);
 
-  friend class MapGraphDataInterface;
+  const internal::MapGraphGraph& internalGraph() const { return *graph_; }
 
  private:
   //! Documentation to be found in the cpp file.

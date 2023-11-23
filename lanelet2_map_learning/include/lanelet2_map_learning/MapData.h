@@ -8,15 +8,26 @@
 
 #include "lanelet2_map_learning/Forward.h"
 #include "lanelet2_map_learning/MapFeatures.h"
+#include "lanelet2_map_learning/MapGraph.h"
 #include "lanelet2_map_learning/Types.h"
+#include "lanelet2_map_learning/internal/Graph.h"
 
 namespace lanelet {
 namespace map_learning {
 
+// results are given in whatever order they are in the graph object, no guarantees!
+LaneLineStringFeatures extractRoadBorders(MapGraphConstPtr localSubmapGraph);
+LaneLineStringFeatures extractLaneDividers(MapGraphConstPtr localSubmapGraph);
+
+// results are given in whatever order they are in the graph object, no guarantees!
+CompoundLaneLineStringFeatures extractCompoundRoadBorders(MapGraphConstPtr localSubmapGraph);
+CompoundLaneLineStringFeatures extractCompoundLaneDividers(MapGraphConstPtr localSubmapGraph);
+CompoundLaneLineStringFeatures extractCompoundCenterlines(MapGraphConstPtr localSubmapGraph);
+
 class LaneData {
  public:
   LaneData() noexcept {}
-  LaneData(const ConstLanelets& lls);
+  LaneData(MapGraphConstPtr localSubmapGraph);
 
  private:
   LaneLineStringFeatures roadBorders_;   // auxilliary features

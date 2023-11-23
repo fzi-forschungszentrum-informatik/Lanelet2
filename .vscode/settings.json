@@ -1,0 +1,9 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/opt/mrtros/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/mrtros/lib/python3/dist-packages"
+    ],
+    "cmake.sourceDirectory": "/home/immel/workspaces/av2_link_pred_ws/src"
+}

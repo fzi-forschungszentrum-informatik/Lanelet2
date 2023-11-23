@@ -179,7 +179,9 @@ Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatures& mapFeatures, bool only
   assert(!mapFeatures.empty());
   std::vector<Eigen::VectorXd> featureVectors;
   for (const auto& feat : mapFeatures) {
-    featureVectors.push_back(feat.computeFeatureVector(onlyPoints, pointsIn2d));
+    if (!feat.valid()) {
+      throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
+    }
   }
   if (std::adjacent_find(featureVectors.begin(), featureVectors.end(),
                          [](const Eigen::VectorXd& v1, const Eigen::VectorXd& v2) { return v1.size() != v2.size(); }) ==
