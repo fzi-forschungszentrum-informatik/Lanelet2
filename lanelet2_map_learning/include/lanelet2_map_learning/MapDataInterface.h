@@ -4,8 +4,10 @@
 #include <lanelet2_core/utility/Optional.h>
 
 #include "lanelet2_map_learning/Forward.h"
-#include "lanelet2_map_learning/MapGraph.h"
-#include "lanelet2_map_learning/internal/Graph.h"
+#include "lanelet2_map_learning/MapData.h"
+#include "lanelet2_map_learning/Types.h"
+#include "lanelet2_routing/RoutingGraph.h"
+#include "lanelet2_routing/internal/Graph.h"
 
 namespace lanelet {
 class LaneletLayer;
@@ -39,15 +41,15 @@ class MapDataInterface {
   TEData laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
 
  private:
-  LaneData getLaneData(MapGraphConstPtr localSubmapGraph);
+  LaneData getLaneData(lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
 
-  TEData getLaneTEData(MapGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
+  TEData getLaneTEData(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
                        std::unordered_map<Id, int>& teId2Index);
 
   LaneletMapConstPtr laneletMap_;
   LaneletSubmapConstPtr localSubmap_;
   std::unordered_map<Id, int> teId2Index_;
-  MapGraphConstPtr localSubmapGraph_;
+  lanelet::routing::RoutingGraphConstPtr localSubmapGraph_;
   Optional<BasicPoint3d> currPos_;  // in the map frame
   Optional<double> currYaw_;        // in the map frame
   Configuration config_;

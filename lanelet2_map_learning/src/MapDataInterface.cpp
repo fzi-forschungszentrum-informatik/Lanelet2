@@ -19,7 +19,7 @@ void MapDataInterface::setCurrPosAndExtractSubmap(const BasicPoint3d& pt) {
   currPos_ = pt;
   localSubmap_ =
       extractSubmap(laneletMap_, *currPos_, *currYaw_, config_.submapAreaLongitudinal, config_.submapAreaLateral);
-  localSubmapGraph_ = MapGraph::build(*laneletMap_, *trafficRules_);
+  localSubmapGraph_ = lanelet::routing::RoutingGraph::build(*laneletMap_, *trafficRules_);
 }
 
 MapDataInterface::MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config, Optional<BasicPoint2d> currPos)
@@ -28,7 +28,7 @@ MapDataInterface::MapDataInterface(LaneletMapConstPtr laneletMap, Configuration 
       currPos_{currPos},
       trafficRules_{traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)} {}
 
-LaneData MapDataInterface::getLaneData(MapGraphConstPtr localSubmapGraph) {
+LaneData MapDataInterface::getLaneData(lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   const auto& graph = localSubmapGraph->graph_;
   const auto& llVertices = graph->vertexLookup();
 

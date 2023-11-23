@@ -72,9 +72,9 @@ class LaneLineStringFeature : public LineStringFeature {
   LineStringType type_;
 };
 
-using MapFeatures = std::vector<MapFeature>;
-using LineStringFeatures = std::vector<LineStringFeature>;
-using LaneLineStringFeatures = std::vector<LaneLineStringFeature>;
+using MapFeatures = std::map<Id, MapFeature>;
+using LineStringFeatures = std::map<Id, LineStringFeature>;
+using LaneLineStringFeatures = std::map<Id, LaneLineStringFeature>;
 
 class TEFeature : public LineStringFeature {
  public:
@@ -139,9 +139,9 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   std::vector<double> pathLengthsProcessed_;
 };
 
-using CompoundLaneLineStringFeatures = std::vector<CompoundLaneLineStringFeature>;
-using TEFeatures = std::vector<TEFeature>;
-using LaneletFeatures = std::vector<LaneletFeature>;
+using CompoundLaneLineStringFeatures = std::map<Id, CompoundLaneLineStringFeature>;
+using TEFeatures = std::map<Id, TEFeature>;
+using LaneletFeatures = std::map<Id, LaneletFeature>;
 
 Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatures& mapFeatures, bool onlyPoints, bool pointsIn2d);
 

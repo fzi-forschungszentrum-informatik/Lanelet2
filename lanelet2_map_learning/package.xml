@@ -17,6 +17,7 @@
   <test_depend>gtest</test_depend>
   <depend>boost</depend>
   <depend>lanelet2_core</depend>
+  <depend>lanelet2_routing</depend>
   <depend>lanelet2_traffic_rules</depend>
 
   <export>
