@@ -32,7 +32,7 @@ using LaneEdges = std::vector<LaneEdge>;
 class LaneData {
  public:
   LaneData() noexcept {}
-  LaneData(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  static LaneData build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
 
  private:
   LaneLineStringFeatures roadBorders_;   // auxilliary features

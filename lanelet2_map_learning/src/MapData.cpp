@@ -9,10 +9,11 @@ bool isRoadBorder(const ConstLineString3d& lstring) {
          type == AttributeValueString::Fence;
 }
 
-LaneData::LaneData(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+LaneData LaneData::build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+  LaneData data;
   for (const auto& lstring : localSubmap->lineStringLayer) {
     if (isRoadBorder(lstring)) {
-      roadBorders_.insert(
+      data.roadBorders_.insert(
           {lstring.id(), LaneLineStringFeature(lstring.basicLineString(), lstring.id(), LineStringType::RoadBorder)});
       continue;
     }
@@ -25,17 +26,17 @@ LaneData::LaneData(LaneletSubmapConstPtr& localSubmap, lanelet::routing::Routing
     Optional<ConstLanelet> leftLL = localSubmapGraph->left(ll);
     Optional<ConstLanelet> adjLeftLL = localSubmapGraph->adjacentLeft(ll);
     if (leftLL) {
-      laneDividers_.insert(
+      data.laneDividers_.insert(
           {ll.leftBound3d().id(),
            LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(), LineStringType::Dashed)});
-      edgeList_.push_back(LaneEdge(ll.id(), leftLL->id(), routing::RelationType::Left));
+      data.edgeList_.push_back(LaneEdge(ll.id(), leftLL->id(), routing::RelationType::Left));
     } else if (adjLeftLL) {
-      laneDividers_.insert(
+      data.laneDividers_.insert(
           {ll.leftBound3d().id(),
            LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(), LineStringType::Solid)});
-      edgeList_.push_back(LaneEdge(ll.id(), leftLL->id(), routing::RelationType::AdjacentLeft));
+      data.edgeList_.push_back(LaneEdge(ll.id(), leftLL->id(), routing::RelationType::AdjacentLeft));
     } else if (ll.leftBound3d().attribute(AttributeName::Type) != AttributeValueString::Virtual) {
-      laneDividers_.insert(
+      data.laneDividers_.insert(
           {ll.leftBound3d().id(),
            LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(), LineStringType::Solid)});
     }
@@ -44,17 +45,17 @@ LaneData::LaneData(LaneletSubmapConstPtr& localSubmap, lanelet::routing::Routing
     Optional<ConstLanelet> rightLL = localSubmapGraph->right(ll);
     Optional<ConstLanelet> adjRightLL = localSubmapGraph->adjacentRight(ll);
     if (rightLL) {
-      laneDividers_.insert(
+      data.laneDividers_.insert(
           {ll.rightBound3d().id(),
            LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(), LineStringType::Dashed)});
-      edgeList_.push_back(LaneEdge(ll.id(), rightLL->id(), routing::RelationType::Right));
+      data.edgeList_.push_back(LaneEdge(ll.id(), rightLL->id(), routing::RelationType::Right));
     } else if (adjRightLL) {
-      laneDividers_.insert(
+      data.laneDividers_.insert(
           {ll.rightBound3d().id(),
            LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(), LineStringType::Solid)});
-      edgeList_.push_back(LaneEdge(ll.id(), adjRightLL->id(), routing::RelationType::AdjacentRight));
+      data.edgeList_.push_back(LaneEdge(ll.id(), adjRightLL->id(), routing::RelationType::AdjacentRight));
     } else if (ll.rightBound3d().attribute(AttributeName::Type) != AttributeValueString::Virtual) {
-      laneDividers_.insert(
+      data.laneDividers_.insert(
           {ll.rightBound3d().id(),
            LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(), LineStringType::Solid)});
     }
@@ -62,7 +63,11 @@ LaneData::LaneData(LaneletSubmapConstPtr& localSubmap, lanelet::routing::Routing
   for (const auto& ll : localSubmap->laneletLayer) {
     ConstLanelets previousLLs = localSubmapGraph->previous(ll);
     ConstLanelets followingLLs = localSubmapGraph->following(ll);
+
+    // Idea: algorithm for paths that starts with LLs with no previous, splits on junctions and terminates on LLs with
+    // no successors
   }
+  return data;
 }
 
 }  // namespace map_learning
