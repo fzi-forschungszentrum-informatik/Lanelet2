@@ -38,6 +38,7 @@ class LineStringFeature : public MapFeature {
   const BasicLineString3d& rawFeature() const { return rawFeature_; }
 
   virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/, bool /*unused*/) const = 0;
+  virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const = 0;
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) = 0;
 
  protected:
@@ -58,12 +59,14 @@ class LaneLineStringFeature : public LineStringFeature {
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
   virtual Eigen::VectorXd computeFeatureVector(
       bool onlyPoints,
-      bool pointsIn2d) const override;  // uses processedFeature_ when available
+      bool pointsIn2d) const override;                         // uses processedFeature_ when available
+  virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const;  // uses processedFeature_ when available
 
   const bool& wasCut() const { return wasCut_; }
   const BasicLineString3d& cutFeature() const { return cutFeature_; }
   const BasicLineString3d& cutAndResampledFeature() const { return cutAndResampledFeature_; }
   const LineStringType& type() const { return type_; }
+  int typeInt() const { return static_cast<int>(type_); }
 
  protected:
   BasicLineString3d cutFeature_;
@@ -75,6 +78,10 @@ class LaneLineStringFeature : public LineStringFeature {
 using MapFeatures = std::map<Id, MapFeature>;
 using LineStringFeatures = std::map<Id, LineStringFeature>;
 using LaneLineStringFeatures = std::map<Id, LaneLineStringFeature>;
+
+using MapFeatureList = std::vector<MapFeature>;
+using LineStringFeatureList = std::vector<LineStringFeature>;
+using LaneLineStringFeatureList = std::vector<LaneLineStringFeature>;
 
 class TEFeature : public LineStringFeature {
  public:
@@ -122,11 +129,11 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
  public:
   CompoundLaneLineStringFeature() {}
   // features for this constructor are required to be given in already sorted order
-  CompoundLaneLineStringFeature(const LaneLineStringFeatures& features, LineStringType compoundType);
+  CompoundLaneLineStringFeature(const LaneLineStringFeatureList& features, LineStringType compoundType);
 
   virtual ~CompoundLaneLineStringFeature() noexcept = default;
 
-  const LaneLineStringFeatures& features() const { return individualFeatures_; }
+  const LaneLineStringFeatureList& features() const { return individualFeatures_; }
   const std::vector<double>& pathLengthsRaw() const { return pathLengthsRaw_; }
   const std::vector<double>& pathLengthsProcessed() const { return pathLengthsProcessed_; }
 
@@ -134,16 +141,20 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   Eigen::VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const override;
 
  private:
-  LaneLineStringFeatures individualFeatures_;
+  LaneLineStringFeatureList individualFeatures_;
   std::vector<double> pathLengthsRaw_;
   std::vector<double> pathLengthsProcessed_;
 };
 
-using CompoundLaneLineStringFeatures = std::map<Id, CompoundLaneLineStringFeature>;
+using CompoundLaneLineStringFeatureList = std::vector<CompoundLaneLineStringFeature>;
 using TEFeatures = std::map<Id, TEFeature>;
 using LaneletFeatures = std::map<Id, LaneletFeature>;
 
 Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatures& mapFeatures, bool onlyPoints, bool pointsIn2d);
+Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatureList& mapFeatures, bool onlyPoints, bool pointsIn2d);
+
+std::vector<Eigen::MatrixXd> getPointsMatrixList(const LaneLineStringFeatures& mapFeatures, bool pointsIn2d);
+std::vector<Eigen::MatrixXd> getPointsMatrixList(const LaneLineStringFeatureList& mapFeatures, bool pointsIn2d);
 
 }  // namespace map_learning
 }  // namespace lanelet

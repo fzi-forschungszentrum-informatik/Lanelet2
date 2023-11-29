@@ -35,12 +35,25 @@ class LaneData {
   static LaneData build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
 
  private:
+  void processLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
+                             lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  void processRightBoundaries(LaneletSubmapConstPtr& localSubmap,
+                              lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  void processCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
+                               lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+
+  LineStringType getLineStringTypeFromId(Id id);
+  LaneLineStringFeature getLineStringFeatFromId(Id id);
+  std::vector<std::vector<Id>> computeCompoundLeftBorders(const ConstLanelets& path);
+  std::vector<std::vector<Id>> LaneData::computeCompoundRightBorders(const ConstLanelets& path);
+  CompoundLaneLineStringFeature LaneData::computeCompoundCenterline(const ConstLanelets& path);
+
   LaneLineStringFeatures roadBorders_;   // auxilliary features
   LaneLineStringFeatures laneDividers_;  // auxilliary features
 
-  CompoundLaneLineStringFeatures compoundRoadBorders_;   // auxilliary features
-  CompoundLaneLineStringFeatures compoundLaneDividers_;  // auxilliary features
-  CompoundLaneLineStringFeatures compoundCenterlines_;
+  CompoundLaneLineStringFeatureList compoundRoadBorders_;   // auxilliary features
+  CompoundLaneLineStringFeatureList compoundLaneDividers_;  // auxilliary features
+  CompoundLaneLineStringFeatureList compoundCenterlines_;
 
   LaneletFeatures laneletFeatures_;  // node features
   LaneEdges edgeList_;               // edge list for centerlines
