@@ -2,7 +2,7 @@
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/geometry/LineString.h>
-#include <lanelet2_core/primitives/BasicRegulatoryElements.h>;
+#include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
 
 #include <boost/geometry.hpp>

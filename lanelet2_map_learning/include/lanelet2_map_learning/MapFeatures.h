@@ -28,7 +28,7 @@ class MapFeature {
   bool valid_{true};
   Optional<Id> mapID_;
 
-  MapFeature() {}
+  MapFeature();
   MapFeature(Id mapID) : mapID_{mapID}, initialized_{true} {}
   virtual ~MapFeature() noexcept = default;
 };
@@ -59,8 +59,8 @@ class LaneLineStringFeature : public LineStringFeature {
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
   virtual Eigen::VectorXd computeFeatureVector(
       bool onlyPoints,
-      bool pointsIn2d) const override;                         // uses processedFeature_ when available
-  virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const;  // uses processedFeature_ when available
+      bool pointsIn2d) const override;                                  // uses processedFeature_ when available
+  virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const override;  // uses processedFeature_ when available
 
   const bool& wasCut() const { return wasCut_; }
   const BasicLineString3d& cutFeature() const { return cutFeature_; }
@@ -75,12 +75,7 @@ class LaneLineStringFeature : public LineStringFeature {
   LineStringType type_;
 };
 
-using MapFeatures = std::map<Id, MapFeature>;
-using LineStringFeatures = std::map<Id, LineStringFeature>;
 using LaneLineStringFeatures = std::map<Id, LaneLineStringFeature>;
-
-using MapFeatureList = std::vector<MapFeature>;
-using LineStringFeatureList = std::vector<LineStringFeature>;
 using LaneLineStringFeatureList = std::vector<LaneLineStringFeature>;
 
 class TEFeature : public LineStringFeature {
@@ -94,6 +89,7 @@ class TEFeature : public LineStringFeature {
                int32_t /*unused*/) override;  // not implemented yet
   Eigen::VectorXd computeFeatureVector(bool onlyPoints,
                                        bool pointsIn2d) const override;  // currently uses raw feature only
+  virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const override;
 
   const TEType& teType() { return teType_; }
 
@@ -150,8 +146,10 @@ using CompoundLaneLineStringFeatureList = std::vector<CompoundLaneLineStringFeat
 using TEFeatures = std::map<Id, TEFeature>;
 using LaneletFeatures = std::map<Id, LaneletFeature>;
 
-Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatures& mapFeatures, bool onlyPoints, bool pointsIn2d);
-Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatureList& mapFeatures, bool onlyPoints, bool pointsIn2d);
+template <class T>
+Eigen::MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool onlyPoints, bool pointsIn2d);
+template <class T>
+Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool onlyPoints, bool pointsIn2d);
 
 std::vector<Eigen::MatrixXd> getPointsMatrixList(const LaneLineStringFeatures& mapFeatures, bool pointsIn2d);
 std::vector<Eigen::MatrixXd> getPointsMatrixList(const LaneLineStringFeatureList& mapFeatures, bool pointsIn2d);

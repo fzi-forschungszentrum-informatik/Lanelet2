@@ -45,8 +45,8 @@ class LaneData {
   LineStringType getLineStringTypeFromId(Id id);
   LaneLineStringFeature getLineStringFeatFromId(Id id);
   std::vector<std::vector<Id>> computeCompoundLeftBorders(const ConstLanelets& path);
-  std::vector<std::vector<Id>> LaneData::computeCompoundRightBorders(const ConstLanelets& path);
-  CompoundLaneLineStringFeature LaneData::computeCompoundCenterline(const ConstLanelets& path);
+  std::vector<std::vector<Id>> computeCompoundRightBorders(const ConstLanelets& path);
+  CompoundLaneLineStringFeature computeCompoundCenterline(const ConstLanelets& path);
 
   LaneLineStringFeatures roadBorders_;   // auxilliary features
   LaneLineStringFeatures laneDividers_;  // auxilliary features

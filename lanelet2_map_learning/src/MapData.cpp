@@ -153,6 +153,7 @@ std::vector<std::vector<Id>> LaneData::computeCompoundLeftBorders(const ConstLan
       compoundBorders.push_back(std::vector<Id>{start.leftBound3d().id()});
     }
   }
+  return compoundBorders;
 }
 
 std::vector<std::vector<Id>> LaneData::computeCompoundRightBorders(const ConstLanelets& path) {
@@ -170,6 +171,7 @@ std::vector<std::vector<Id>> LaneData::computeCompoundRightBorders(const ConstLa
       compoundBorders.push_back(std::vector<Id>{start.rightBound3d().id()});
     }
   }
+  return compoundBorders;
 }
 
 CompoundLaneLineStringFeature LaneData::computeCompoundCenterline(const ConstLanelets& path) {

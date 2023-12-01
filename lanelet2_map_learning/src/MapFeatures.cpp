@@ -99,7 +99,7 @@ Eigen::MatrixXd LaneLineStringFeature::pointMatrix(bool pointsIn2d) const {
   const BasicLineString3d& selectedFeature =
       (cutAndResampledFeature_.size() > 0) ? cutAndResampledFeature_ : rawFeature_;
   Eigen::MatrixXd mat = pointsIn2d ? Eigen::MatrixXd(selectedFeature.size(), 2)
-                                   : Eigen::MatrixXd(3 * selectedFeature.size(), 3);  // n points with 2/3 dims + type
+                                   : Eigen::MatrixXd(selectedFeature.size(), 3);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
     for (size_t i = 0; i < selectedFeature.size(); i++) {
       mat.row(i) = selectedFeature[i](Eigen::seq(0, 1));
@@ -107,6 +107,21 @@ Eigen::MatrixXd LaneLineStringFeature::pointMatrix(bool pointsIn2d) const {
   } else {
     for (size_t i = 0; i < selectedFeature.size(); i++) {
       mat.row(i) = selectedFeature[i](Eigen::seq(0, 2));
+    }
+  }
+  return mat;
+}
+
+Eigen::MatrixXd TEFeature::pointMatrix(bool pointsIn2d) const {
+  Eigen::MatrixXd mat = pointsIn2d ? Eigen::MatrixXd(rawFeature_.size(), 2)
+                                   : Eigen::MatrixXd(rawFeature_.size(), 3);  // n points with 2/3 dims + type
+  if (pointsIn2d == true) {
+    for (size_t i = 0; i < rawFeature_.size(); i++) {
+      mat.row(i) = rawFeature_[i](Eigen::seq(0, 1));
+    }
+  } else {
+    for (size_t i = 0; i < rawFeature_.size(); i++) {
+      mat.row(i) = rawFeature_[i](Eigen::seq(0, 2));
     }
   }
   return mat;
@@ -135,6 +150,7 @@ bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType
   if (!leftBoundary_.valid() || !rightBoundary_.valid() || !centerline_.valid()) {
     valid_ = false;
   }
+  return valid_;
 }
 
 Eigen::VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
@@ -192,15 +208,17 @@ CompoundLaneLineStringFeature::CompoundLaneLineStringFeature(const LaneLineStrin
   }
 }
 
-Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatures& mapFeatures, bool onlyPoints, bool pointsIn2d) {
-  MapFeatureList featList;
+template <class T>
+Eigen::MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
+  std::vector<T> featList;
   for (const auto& pair : mapFeatures) {
     featList.push_back(pair.second);
   }
   return getFeatureVectorMatrix(featList, onlyPoints, pointsIn2d);
 }
 
-Eigen::MatrixXd getFeatureVectorMatrix(const MapFeatureList& mapFeatures, bool onlyPoints, bool pointsIn2d) {
+template <class T>
+Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
   assert(!mapFeatures.empty());
   std::vector<Eigen::VectorXd> featureVectors;
   for (const auto& feat : mapFeatures) {

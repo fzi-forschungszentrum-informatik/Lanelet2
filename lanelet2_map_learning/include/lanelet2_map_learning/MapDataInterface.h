@@ -41,16 +41,15 @@ class MapDataInterface {
   TEData laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
 
  private:
-  LaneData getLaneData(lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  LaneData getLaneData(LaneletSubmapConstPtr localSubmap, routing::RoutingGraphConstPtr localSubmapGraph);
 
-  TEData getLaneTEData(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
-                       std::unordered_map<Id, int>& teId2Index);
+  TEData getLaneTEData(routing::RoutingGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap);
 
   LaneletMapConstPtr laneletMap_;
   LaneletSubmapConstPtr localSubmap_;
   std::unordered_map<Id, int> teId2Index_;
-  lanelet::routing::RoutingGraphConstPtr localSubmapGraph_;
-  Optional<BasicPoint3d> currPos_;  // in the map frame
+  routing::RoutingGraphConstPtr localSubmapGraph_;
+  Optional<BasicPoint2d> currPos_;  // in the map frame
   Optional<double> currYaw_;        // in the map frame
   Configuration config_;
   traffic_rules::TrafficRulesPtr trafficRules_;
