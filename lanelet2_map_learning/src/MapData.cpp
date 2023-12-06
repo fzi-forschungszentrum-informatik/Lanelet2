@@ -77,23 +77,6 @@ void LaneData::processRightBoundaries(LaneletSubmapConstPtr& localSubmap,
   }
 }
 
-// template <typename T>
-// Optional<std::pair<size_t, size_t>> getElementIndex2d(const std::vector<std::vector<T>>& vec, const T& el) {
-//   Optional<std::pair<size_t, size_t>> result;
-//   for (size_t i = 0; i < vec.size(); i++) {
-//     for (size_t j = 0; j < vec[i].size(); j++) {
-//       if (vec[i][j] == el) {
-//         std::pair<size_t, size_t> resIdx;
-//         resIdx->first = i;
-//         resIdx->second = j;
-//         result = resIdx;
-//         break;
-//       }
-//     }
-//   }
-//   return result
-// }
-
 // Idea: algorithm for paths that starts with LLs with no previous, splits on junctions and terminates on LLs with
 // no successors
 void getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, std::vector<ConstLanelets>& paths,
