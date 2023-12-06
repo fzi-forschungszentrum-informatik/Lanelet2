@@ -178,7 +178,7 @@ def part4reading_and_writing():
     assert not write_errors
 
     ## 3. Write using the default spherical mercator projector at the giver origin
-    ## This was the default projection in Lanelet1
+    ## This was the default projection in Lanelet1. Use is not recommended.
     lanelet2.io.write(path, map, lanelet2.io.Origin(49, 8.4))
 
     ## 4. Write using the given projector and override the default values of the optional parameters for JOSM
@@ -190,6 +190,14 @@ def part4reading_and_writing():
 
     # Loading the map from a file
     loadedMap, load_errors = lanelet2.io.loadRobust(path, projector)
+    assert not load_errors
+    assert loadedMap.laneletLayer.exists(lanelet.id)
+
+    ## GeocentricProjector: the origin is the centre of the Earth
+    gc_projector = GeocentricProjector()
+    write_errors = lanelet2.io.writeRobust(path, map, gc_projector)
+    assert not write_errors
+    loadedMap, load_errors = lanelet2.io.loadRobust(path, gc_projector)
     assert not load_errors
     assert loadedMap.laneletLayer.exists(lanelet.id)
 
