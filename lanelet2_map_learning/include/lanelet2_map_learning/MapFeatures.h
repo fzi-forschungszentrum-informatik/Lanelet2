@@ -28,7 +28,7 @@ class MapFeature {
   bool valid_{true};
   Optional<Id> mapID_;
 
-  MapFeature();
+  MapFeature() = default;
   MapFeature(Id mapID) : mapID_{mapID}, initialized_{true} {}
   virtual ~MapFeature() noexcept = default;
 };
@@ -133,9 +133,6 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   const std::vector<double>& pathLengthsRaw() const { return pathLengthsRaw_; }
   const std::vector<double>& pathLengthsProcessed() const { return pathLengthsProcessed_; }
 
-  bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
-  Eigen::VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const override;
-
  private:
   LaneLineStringFeatureList individualFeatures_;
   std::vector<double> pathLengthsRaw_;
@@ -153,6 +150,30 @@ Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool o
 
 std::vector<Eigen::MatrixXd> getPointsMatrixList(const LaneLineStringFeatures& mapFeatures, bool pointsIn2d);
 std::vector<Eigen::MatrixXd> getPointsMatrixList(const LaneLineStringFeatureList& mapFeatures, bool pointsIn2d);
+
+template <typename T>
+bool processFeatureMap(std::map<Id, T>& featMap, const OrientedRect& bbox, const ParametrizationType& paramType,
+                       int32_t nPoints) {
+  bool allValid = true;
+  for (auto& feat : featMap) {
+    if (!feat.second.process(bbox, paramType, nPoints)) {
+      allValid = false;
+    }
+  }
+  return allValid;
+}
+
+template <typename T>
+bool processFeatureVec(std::vector<T>& featVec, const OrientedRect& bbox, const ParametrizationType& paramType,
+                       int32_t nPoints) {
+  bool allValid = true;
+  for (auto& feat : featVec) {
+    if (!feat.process(bbox, paramType, nPoints)) {
+      allValid = false;
+    }
+  }
+  return allValid;
+}
 
 }  // namespace map_learning
 }  // namespace lanelet

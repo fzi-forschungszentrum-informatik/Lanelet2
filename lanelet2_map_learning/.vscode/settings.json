@@ -1,0 +1,8 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/opt/mrtros/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/mrtros/lib/python3/dist-packages"
+    ]
+}

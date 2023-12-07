@@ -33,14 +33,13 @@ class LaneData {
  public:
   LaneData() noexcept {}
   static LaneData build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  bool processAll(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints);
 
  private:
-  void processLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
-                             lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
-  void processRightBoundaries(LaneletSubmapConstPtr& localSubmap,
-                              lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
-  void processCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
-                               lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  void initLeftBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  void initRightBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  void initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
+                            lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
 
   LineStringType getLineStringTypeFromId(Id id);
   LaneLineStringFeature getLineStringFeatFromId(Id id);

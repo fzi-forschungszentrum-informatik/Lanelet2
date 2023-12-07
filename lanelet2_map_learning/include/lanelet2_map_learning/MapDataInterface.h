@@ -41,9 +41,11 @@ class MapDataInterface {
   TEData laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
 
  private:
-  LaneData getLaneData(LaneletSubmapConstPtr localSubmap, routing::RoutingGraphConstPtr localSubmapGraph);
+  LaneData getLaneData(LaneletSubmapConstPtr localSubmap, routing::RoutingGraphConstPtr localSubmapGraph,
+                       bool processAll = false);
 
-  TEData getLaneTEData(routing::RoutingGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap);
+  TEData getLaneTEData(routing::RoutingGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
+                       bool processAll);
 
   LaneletMapConstPtr laneletMap_;
   LaneletSubmapConstPtr localSubmap_;

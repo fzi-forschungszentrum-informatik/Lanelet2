@@ -1,5 +1,7 @@
 #include "lanelet2_map_learning/MapData.h"
 
+#include "lanelet2_map_learning/Utils.h"
+
 namespace lanelet {
 namespace map_learning {
 
@@ -12,15 +14,15 @@ bool isRoadBorder(const ConstLineString3d& lstring) {
 LaneData LaneData::build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   LaneData data;
 
-  data.processLeftBoundaries(localSubmap, localSubmapGraph);
-  data.processRightBoundaries(localSubmap, localSubmapGraph);
-  data.processCompoundFeatures(localSubmap, localSubmapGraph);
+  data.initLeftBoundaries(localSubmap, localSubmapGraph);
+  data.initRightBoundaries(localSubmap, localSubmapGraph);
+  data.initCompoundFeatures(localSubmap, localSubmapGraph);
 
   return data;
 }
 
-void LaneData::processLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
-                                     lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
+                                  lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   for (const auto& ll : localSubmap->laneletLayer) {
     if (isRoadBorder(ll.leftBound3d())) {
       roadBorders_.insert(
@@ -48,8 +50,8 @@ void LaneData::processLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
   }
 }
 
-void LaneData::processRightBoundaries(LaneletSubmapConstPtr& localSubmap,
-                                      lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
+                                   lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   for (const auto& ll : localSubmap->laneletLayer) {
     if (isRoadBorder(ll.rightBound3d())) {
       roadBorders_.insert(
@@ -196,8 +198,8 @@ void insertAndCheckNewCompoundFeatures(std::vector<std::vector<Id>>& compFeats,
   }
 }
 
-void LaneData::processCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
-                                       lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+void LaneData::initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
+                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   std::vector<std::vector<Id>> compoundedBordersAndDividers;
   std::map<Id, size_t> elInsertIdx;
   for (const auto& bd : roadBorders_) {
@@ -247,6 +249,22 @@ void LaneData::processCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
     } else {
       compoundLaneDividers_.push_back(CompoundLaneLineStringFeature(toBeCompounded, cmpdType));
     }
+  }
+}
+
+bool LaneData::processAll(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) {
+  bool validRoadBorders = processFeatureMap(roadBorders_, bbox, paramType, nPoints);
+  bool validLaneDividers = processFeatureMap(laneDividers_, bbox, paramType, nPoints);
+  bool validLaneletFeatures = processFeatureMap(laneletFeatures_, bbox, paramType, nPoints);
+  bool validCompoundRoadBorders = processFeatureVec(compoundRoadBorders_, bbox, paramType, nPoints);
+  bool validCompoundLaneDividers = processFeatureVec(compoundLaneDividers_, bbox, paramType, nPoints);
+  bool validCompoundCenterlines = processFeatureVec(compoundCenterlines_, bbox, paramType, nPoints);
+
+  if (validRoadBorders && validLaneDividers && validLaneletFeatures && validCompoundRoadBorders &&
+      validCompoundLaneDividers && validCompoundCenterlines) {
+    return true;
+  } else {
+    return false;
   }
 }
 

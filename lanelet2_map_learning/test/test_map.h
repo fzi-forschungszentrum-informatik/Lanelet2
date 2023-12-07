@@ -15,13 +15,12 @@ namespace lanelet {
 namespace map_learning {
 namespace tests {
 
-class MapGraphTestData {
+class MapTestData {
  public:
-  MapGraphTestData() {
+  MapTestData() {
     initPoints();
     initLineStrings();
     initLanelets();
-    initAreas();
     laneletMap = std::make_shared<LaneletMap>(lanelets, areas, std::unordered_map<Id, RegulatoryElementPtr>(),
                                               std::unordered_map<Id, Polygon3d>(), lines, points);
   }
@@ -171,6 +170,22 @@ class MapGraphTestData {
     addLaneletVehicle(lines.at(1020), lines.at(1019));  // ll2012
     addLaneletVehicle(lines.at(1020), lines.at(1009));  // ll2013
   }
+};
+
+namespace {                   // NOLINT
+static MapTestData testData;  // NOLINT
+}  // namespace
+
+class MapLearningTest : public ::testing::Test {
+ public:
+  const std::unordered_map<Id, Lanelet>& lanelets{testData.lanelets};
+  const std::unordered_map<Id, Point3d>& points{testData.points};
+  const std::unordered_map<Id, LineString3d>& lines{testData.lines};
+  const LaneletMapConstPtr laneletMap{testData.laneletMap};
+  const BasicPoint2d centerBbox{5, 5};
+  const double extentLongitudinalBbox{15};
+  const double extentLateralBbox{10};
+  const double yawBbox{M_PI / 2.0};
 };
 
 }  // namespace tests

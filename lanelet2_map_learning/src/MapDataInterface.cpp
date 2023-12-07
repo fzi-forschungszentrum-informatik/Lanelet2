@@ -3,7 +3,7 @@
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/geometry/LineString.h>
-#include <lanelet2_core/primitives/BasicRegulatoryElements.h>;
+#include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
 
 #include <boost/geometry.hpp>
@@ -17,8 +17,7 @@ namespace map_learning {
 
 void MapDataInterface::setCurrPosAndExtractSubmap(const BasicPoint2d& pt) {
   currPos_ = pt;
-  localSubmap_ =
-      extractSubmap(laneletMap_, *currPos_, *currYaw_, config_.submapAreaLongitudinal, config_.submapAreaLateral);
+  localSubmap_ = extractSubmap(laneletMap_, *currPos_, config_.submapAreaLongitudinal, config_.submapAreaLateral);
   localSubmapGraph_ = lanelet::routing::RoutingGraph::build(*laneletMap_, *trafficRules_);
 }
 
@@ -29,8 +28,16 @@ MapDataInterface::MapDataInterface(LaneletMapConstPtr laneletMap, Configuration 
       trafficRules_{traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)} {}
 
 LaneData MapDataInterface::getLaneData(LaneletSubmapConstPtr localSubmap,
-                                       lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
-  return LaneData::build(localSubmap, localSubmapGraph);
+                                       lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool processAll) {
+  LaneData laneData = LaneData::build(localSubmap, localSubmapGraph);
+  OrientedRect bbox = getRotatedRect(*currPos_, config_.submapAreaLongitudinal, config_.submapAreaLateral, *currYaw_);
+  if (processAll) {
+    bool valid = laneData.processAll(bbox, config_.paramType, config_.nPoints);
+    if (!valid) {
+      throw std::runtime_error("Invalid result in processing lane data!");
+    }
+  }
+  return laneData;
 }
 
 bool isTe(ConstLineString3d ls) {
@@ -39,7 +46,7 @@ bool isTe(ConstLineString3d ls) {
 }
 
 TEData MapDataInterface::getLaneTEData(routing::RoutingGraphConstPtr localSubmapGraph,
-                                       LaneletSubmapConstPtr localSubmap) {
+                                       LaneletSubmapConstPtr localSubmap, bool processAll) {
   throw std::runtime_error("Not implemented yet!");
 }
 
