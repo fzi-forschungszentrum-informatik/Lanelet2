@@ -8,16 +8,14 @@ using namespace lanelet::map_learning;
 using namespace lanelet::map_learning::tests;
 
 TEST_F(MapLearningTest, GetRotatedRect) {  // NOLINT
-  OrientedRect rotatedRect = getRotatedRect(centerBbox, extentLongitudinalBbox, extentLateralBbox, yawBbox);
-
-  EXPECT_DOUBLE_EQ(rotatedRect.outer()[0].x(), -5);
-  EXPECT_DOUBLE_EQ(rotatedRect.outer()[0].y(), 20);
-  EXPECT_DOUBLE_EQ(rotatedRect.outer()[1].x(), 15);
-  EXPECT_DOUBLE_EQ(rotatedRect.outer()[1].y(), 20);
-  EXPECT_DOUBLE_EQ(rotatedRect.outer()[2].x(), 15);
-  EXPECT_DOUBLE_EQ(rotatedRect.outer()[2].y(), -10);
-  EXPECT_DOUBLE_EQ(rotatedRect.outer()[3].x(), -5);
-  EXPECT_DOUBLE_EQ(rotatedRect.outer()[3].y(), -10);
+  EXPECT_DOUBLE_EQ(bbox.outer()[0].x(), -5);
+  EXPECT_DOUBLE_EQ(bbox.outer()[0].y(), 20);
+  EXPECT_DOUBLE_EQ(bbox.outer()[1].x(), 15);
+  EXPECT_DOUBLE_EQ(bbox.outer()[1].y(), 20);
+  EXPECT_DOUBLE_EQ(bbox.outer()[2].x(), 15);
+  EXPECT_DOUBLE_EQ(bbox.outer()[2].y(), -10);
+  EXPECT_DOUBLE_EQ(bbox.outer()[3].x(), -5);
+  EXPECT_DOUBLE_EQ(bbox.outer()[3].y(), -10);
 }
 
 TEST_F(MapLearningTest, ExtractSubmap) {  // NOLINT
@@ -45,7 +43,6 @@ TEST(UtilsTest, ResampleLineString) {  // NOLINT
 
 TEST_F(MapLearningTest, CutLineString) {  // NOLINT
   BasicLineString3d polyline{BasicPoint3d{0, 0, 0}, BasicPoint3d{30, 0, 0}};
-  OrientedRect bbox = getRotatedRect(centerBbox, extentLongitudinalBbox, extentLateralBbox, yawBbox);
   BasicLineString3d polylineCut = cutLineString(bbox, polyline);
 
   // for (const auto& pt : polylineCut) {

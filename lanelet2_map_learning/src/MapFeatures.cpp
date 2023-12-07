@@ -69,7 +69,7 @@ Eigen::VectorXd LaneLineStringFeature::computeFeatureVector(bool onlyPoints, boo
 
   vec[vec.size() - 1] = typeInt();
   if (onlyPoints) {
-    return vec(Eigen::seq(0, vec.size() - 1));
+    return vec(Eigen::seq(0, vec.size() - 2));
   } else {
     return vec;
   }
@@ -89,7 +89,7 @@ Eigen::VectorXd TEFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d
   }
   vec[vec.size() - 1] = static_cast<int>(teType_);
   if (onlyPoints) {
-    return vec(Eigen::seq(0, vec.size() - 1));
+    return vec(Eigen::seq(0, vec.size() - 2));
   } else {
     return vec;
   }
@@ -154,7 +154,10 @@ bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType
 }
 
 Eigen::VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-  if (reprType_ == LaneletRepresentationType::Centerline) {
+  if (!reprType_.has_value()) {
+    throw std::runtime_error(
+        "You need to set a LaneletRepresentationType with setReprType() before computing the feature vector!");
+  } else if (*reprType_ == LaneletRepresentationType::Centerline) {
     Eigen::VectorXd vecCenterlinePts = centerline_.computeFeatureVector(true, pointsIn2d);
     Eigen::VectorXd vec(vecCenterlinePts.size() + 2);  // pts vec + left and right type
     vec(Eigen::seq(0, vecCenterlinePts.size() - 1)) = vecCenterlinePts;
@@ -165,9 +168,10 @@ Eigen::VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool point
     } else {
       return vec;
     }
-  } else if (reprType_ == LaneletRepresentationType::Boundaries) {
+  } else if (*reprType_ == LaneletRepresentationType::Boundaries) {
     Eigen::VectorXd vecLeftBdPts = leftBoundary_.computeFeatureVector(true, pointsIn2d);
     Eigen::VectorXd vecRightBdPts = rightBoundary_.computeFeatureVector(true, pointsIn2d);
+
     Eigen::VectorXd vec(vecLeftBdPts.size() + vecRightBdPts.size() + 2);  // pts vec + left and right type
     vec(Eigen::seq(0, vecLeftBdPts.size() - 1)) = vecLeftBdPts;
     vec(Eigen::seq(vecLeftBdPts.size(), vecLeftBdPts.size() + vecRightBdPts.size() - 1)) = vecRightBdPts;
@@ -186,7 +190,10 @@ Eigen::VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool point
 
 CompoundLaneLineStringFeature::CompoundLaneLineStringFeature(const LaneLineStringFeatureList& features,
                                                              LineStringType compoundType)
-    : individualFeatures_{features}, pathLengthsRaw_{std::vector<double>(features.size())} {
+    : individualFeatures_{features},
+      pathLengthsRaw_{std::vector<double>(features.size())},
+      pathLengthsProcessed_{std::vector<double>(features.size())},
+      processedFeaturesValid_{std::vector<bool>(features.size())} {
   type_ = compoundType;
 
   for (size_t i = 0; i < features.size(); i++) {
@@ -199,13 +206,33 @@ CompoundLaneLineStringFeature::CompoundLaneLineStringFeature(const LaneLineStrin
 
     double rawLength =
         boost::geometry::length(features[i].rawFeature(), boost::geometry::strategy::distance::pythagoras<double>());
-    if (features[i].cutFeature().size() > 1)
-      if (i > 0) {
-        pathLengthsRaw_[i] = pathLengthsRaw_[i - 1] + rawLength;
-      } else {
-        pathLengthsRaw_[i] = rawLength;
-      }
+    if (i > 0) {
+      pathLengthsRaw_[i] = pathLengthsRaw_[i - 1] + rawLength;
+    } else {
+      pathLengthsRaw_[i] = rawLength;
+    }
   }
+}
+
+bool CompoundLaneLineStringFeature::process(const OrientedRect& bbox, const ParametrizationType& paramType,
+                                            int32_t nPoints) {
+  bool valid = LaneLineStringFeature::process(bbox, paramType, nPoints);
+  for (size_t i = 0; i < individualFeatures_.size(); i++) {
+    individualFeatures_[i].process(bbox, paramType, nPoints);
+    double processedLength = boost::geometry::length(individualFeatures_[i].cutFeature(),
+                                                     boost::geometry::strategy::distance::pythagoras<double>());
+
+    if (processedLength > validLengthThresh_) {
+      processedFeaturesValid_[i] = true;
+    }
+
+    if (i > 0) {
+      pathLengthsProcessed_[i] = pathLengthsProcessed_[i - 1] + processedLength;
+    } else {
+      pathLengthsProcessed_[i] = processedLength;
+    }
+  }
+  return valid;
 }
 
 template <class T>

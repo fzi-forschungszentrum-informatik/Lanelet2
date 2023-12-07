@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "lanelet2_map_learning/Forward.h"
+#include "lanelet2_map_learning/Utils.h"
 
 /// The coordinates and relations for this test can be found in "LaneletTestMap.xml" which can be viewed in
 /// https://www.draw.io
@@ -186,6 +187,8 @@ class MapLearningTest : public ::testing::Test {
   const double extentLongitudinalBbox{15};
   const double extentLateralBbox{10};
   const double yawBbox{M_PI / 2.0};
+  OrientedRect bbox;
+  MapLearningTest() : bbox{getRotatedRect(centerBbox, extentLongitudinalBbox, extentLateralBbox, yawBbox)} {}
 };
 
 }  // namespace tests

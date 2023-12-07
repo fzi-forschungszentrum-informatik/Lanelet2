@@ -118,7 +118,7 @@ class LaneletFeature : public MapFeature {
   LaneLineStringFeature leftBoundary_;
   LaneLineStringFeature rightBoundary_;
   LaneLineStringFeature centerline_;
-  LaneletRepresentationType reprType_;
+  Optional<LaneletRepresentationType> reprType_;
 };
 
 class CompoundLaneLineStringFeature : public LaneLineStringFeature {
@@ -128,15 +128,19 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   CompoundLaneLineStringFeature(const LaneLineStringFeatureList& features, LineStringType compoundType);
 
   virtual ~CompoundLaneLineStringFeature() noexcept = default;
+  bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
 
   const LaneLineStringFeatureList& features() const { return individualFeatures_; }
   const std::vector<double>& pathLengthsRaw() const { return pathLengthsRaw_; }
   const std::vector<double>& pathLengthsProcessed() const { return pathLengthsProcessed_; }
+  const std::vector<bool>& processedFeaturesValid() const { return processedFeaturesValid_; }
 
  private:
   LaneLineStringFeatureList individualFeatures_;
   std::vector<double> pathLengthsRaw_;
   std::vector<double> pathLengthsProcessed_;
+  std::vector<bool> processedFeaturesValid_;
+  double validLengthThresh_{0.5};
 };
 
 using CompoundLaneLineStringFeatureList = std::vector<CompoundLaneLineStringFeature>;
