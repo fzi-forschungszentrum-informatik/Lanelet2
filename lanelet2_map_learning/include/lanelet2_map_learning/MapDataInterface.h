@@ -7,7 +7,6 @@
 #include "lanelet2_map_learning/MapData.h"
 #include "lanelet2_map_learning/Types.h"
 #include "lanelet2_routing/RoutingGraph.h"
-#include "lanelet2_routing/internal/Graph.h"
 
 namespace lanelet {
 class LaneletLayer;

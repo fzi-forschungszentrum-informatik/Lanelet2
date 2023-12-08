@@ -235,57 +235,5 @@ bool CompoundLaneLineStringFeature::process(const OrientedRect& bbox, const Para
   return valid;
 }
 
-template <class T>
-Eigen::MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
-  std::vector<T> featList;
-  for (const auto& pair : mapFeatures) {
-    featList.push_back(pair.second);
-  }
-  return getFeatureVectorMatrix(featList, onlyPoints, pointsIn2d);
-}
-
-template <class T>
-Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
-  assert(!mapFeatures.empty());
-  std::vector<Eigen::VectorXd> featureVectors;
-  for (const auto& feat : mapFeatures) {
-    if (!feat.valid()) {
-      throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
-    }
-    featureVectors.push_back(feat.computeFeatureVector(onlyPoints, pointsIn2d));
-  }
-  if (std::adjacent_find(featureVectors.begin(), featureVectors.end(),
-                         [](const Eigen::VectorXd& v1, const Eigen::VectorXd& v2) { return v1.size() != v2.size(); }) ==
-      featureVectors.end()) {
-    throw std::runtime_error(
-        "Unequal length of feature vectors! To create a matrix all feature vectors must have the same length!");
-  }
-  Eigen::MatrixXd featureMat(featureVectors.size(), featureVectors[0].size());
-  for (size_t i = 0; i < featureVectors.size(); i++) {
-    featureMat.row(i) = featureVectors[i];
-  }
-  return featureMat;
-}
-
-std::vector<Eigen::MatrixXd> getPointsMatrixList(const LaneLineStringFeatures& mapFeatures, bool pointsIn2d) {
-  LaneLineStringFeatureList featList;
-  for (const auto& pair : mapFeatures) {
-    featList.push_back(pair.second);
-  }
-  return getPointsMatrixList(featList, pointsIn2d);
-}
-
-std::vector<Eigen::MatrixXd> getPointsMatrixList(const LaneLineStringFeatureList& mapFeatures, bool pointsIn2d) {
-  assert(!mapFeatures.empty());
-  std::vector<Eigen::MatrixXd> pointMatrices;
-  for (const auto& feat : mapFeatures) {
-    if (!feat.valid()) {
-      throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
-    }
-    pointMatrices.push_back(feat.pointMatrix(pointsIn2d));
-  }
-  return pointMatrices;
-}
-
 }  // namespace map_learning
 }  // namespace lanelet

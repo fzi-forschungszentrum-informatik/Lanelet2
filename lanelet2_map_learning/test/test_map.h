@@ -156,20 +156,20 @@ class MapTestData {
   }
   void initLanelets() {
     lanelets.clear();
-    addLaneletVehicle(lines.at(1005), lines.at(1002));  // ll2000
-    addLaneletVehicle(lines.at(1004), lines.at(1001));  // ll2001
-    addLaneletVehicle(lines.at(1003), lines.at(1000));  // ll2002
-    addLaneletVehicle(lines.at(1005), lines.at(1006));  // ll2003
-    addLaneletVehicle(lines.at(1004), lines.at(1007));  // ll2004
-    addLaneletVehicle(lines.at(1003), lines.at(1008));  // ll2005
-    addLaneletVehicle(lines.at(1012), lines.at(1011));  // ll2006
-    addLaneletVehicle(lines.at(1012), lines.at(1013));  // ll2007
-    addLaneletVehicle(lines.at(1015), lines.at(1014));  // ll2008
-    addLaneletVehicle(lines.at(1015), lines.at(1016));  // ll2009
-    addLaneletVehicle(lines.at(1017), lines.at(1010));  // ll2010
-    addLaneletVehicle(lines.at(1017), lines.at(1018));  // ll2011
-    addLaneletVehicle(lines.at(1020), lines.at(1019));  // ll2012
-    addLaneletVehicle(lines.at(1020), lines.at(1009));  // ll2013
+    addLaneletVehicle(lines.at(1005), lines.at(1002));           // ll2000
+    addLaneletVehicle(lines.at(1004), lines.at(1001));           // ll2001
+    addLaneletVehicle(lines.at(1003), lines.at(1000));           // ll2002
+    addLaneletVehicle(lines.at(1005).invert(), lines.at(1006));  // ll2003
+    addLaneletVehicle(lines.at(1004).invert(), lines.at(1007));  // ll2004
+    addLaneletVehicle(lines.at(1003).invert(), lines.at(1008));  // ll2005
+    addLaneletVehicle(lines.at(1012), lines.at(1011));           // ll2006
+    addLaneletVehicle(lines.at(1012).invert(), lines.at(1013));  // ll2007
+    addLaneletVehicle(lines.at(1015), lines.at(1014));           // ll2008
+    addLaneletVehicle(lines.at(1015).invert(), lines.at(1016));  // ll2009
+    addLaneletVehicle(lines.at(1017), lines.at(1010));           // ll2010
+    addLaneletVehicle(lines.at(1017).invert(), lines.at(1018));  // ll2011
+    addLaneletVehicle(lines.at(1020), lines.at(1019));           // ll2012
+    addLaneletVehicle(lines.at(1020).invert(), lines.at(1009));  // ll2013
   }
 };
 

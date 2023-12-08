@@ -35,6 +35,16 @@ class LaneData {
   static LaneData build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
   bool processAll(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints);
 
+  const LaneLineStringFeatures& roadBorders() { return roadBorders_; }
+  const LaneLineStringFeatures& laneDividers() { return laneDividers_; }
+
+  const CompoundLaneLineStringFeatureList& compoundRoadBorders() { return compoundRoadBorders_; }
+  const CompoundLaneLineStringFeatureList& compoundLaneDividers() { return compoundLaneDividers_; }
+  const CompoundLaneLineStringFeatureList& compoundCenterlines() { return compoundCenterlines_; }
+
+  const LaneletFeatures& laneletFeatures() { return laneletFeatures_; }
+  const LaneEdges& edgeList() { return edgeList_; }
+
  private:
   void initLeftBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
   void initRightBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);

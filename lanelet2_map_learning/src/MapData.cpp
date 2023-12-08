@@ -104,7 +104,8 @@ LineStringType LaneData::getLineStringTypeFromId(Id id) {
   } else if (itRoadBd != roadBorders_.end()) {
     bdType = itRoadBd->second.type();
   } else {
-    throw std::runtime_error("Lanelet boundary is neither a road border nor a lane divider!");
+    throw std::runtime_error("Lanelet boundary " + std::to_string(id) +
+                             " is neither a road border nor a lane divider!");
   }
   return bdType;
 }
@@ -118,7 +119,8 @@ LaneLineStringFeature LaneData::getLineStringFeatFromId(Id id) {
   } else if (itRoadBd != roadBorders_.end()) {
     lstringFeat = itRoadBd->second;
   } else {
-    throw std::runtime_error("Lanelet boundary is neither a road border nor a lane divider!");
+    throw std::runtime_error("Lanelet boundary " + std::to_string(id) +
+                             " is neither a road border nor a lane divider!");
   }
   return lstringFeat;
 }
