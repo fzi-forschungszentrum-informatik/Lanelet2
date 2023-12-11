@@ -13,7 +13,15 @@ namespace map_learning {
 
 enum class LaneletRepresentationType { Centerline, Boundaries };
 enum class ParametrizationType { Bezier, BezierEndpointFixed, LineString };
-enum class LineStringType { RoadBorder, Dashed, Solid, Virtual, Centerline, Unknown };
+enum class LineStringType {
+  RoadBorder,
+  Dashed,
+  Solid,
+  Mixed,
+  Virtual,
+  Centerline,
+  Unknown
+};  // Mixed == DashedSolid or SolidDashed
 enum class TEType { TrafficLight, TrafficSign, Unknown };
 
 using OrientedRect = boost::geometry::model::polygon<BasicPoint2d>;

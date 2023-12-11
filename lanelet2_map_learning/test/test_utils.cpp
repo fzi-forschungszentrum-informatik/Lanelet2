@@ -26,8 +26,8 @@ TEST_F(MapLearningTest, ExtractSubmap) {  // NOLINT
   EXPECT_TRUE(submap->laneletLayer.exists(2003));
   EXPECT_TRUE(submap->laneletLayer.exists(2004));
   EXPECT_TRUE(submap->laneletLayer.exists(2005));
-  EXPECT_TRUE(submap->laneletLayer.exists(2012));
-  EXPECT_TRUE(submap->laneletLayer.exists(2013));
+  EXPECT_TRUE(submap->laneletLayer.exists(2009));
+  EXPECT_TRUE(submap->laneletLayer.exists(2010));
 }
 
 TEST(UtilsTest, ResampleLineString) {  // NOLINT

@@ -21,13 +21,17 @@ struct Edge {
   Id el1_;
   Id el2_;
 };
-struct LaneEdge : Edge {
-  LaneEdge(Id el1, Id el2, lanelet::routing::RelationType type) : Edge(el1, el2), type_{type} {}
-  lanelet::routing::RelationType type_;
+
+namespace internal {
+struct CompoundElsList {
+  CompoundElsList(const Id& start, LineStringType type) : ids{start}, type{type} {}
+  CompoundElsList(const std::vector<Id>& ids, LineStringType type) : ids{ids}, type{type} {}
+  std::vector<Id> ids;
+  LineStringType type;
 };
+}  // namespace internal
 
 using Edges = std::vector<Edge>;
-using LaneEdges = std::vector<LaneEdge>;
 
 class LaneData {
  public:
@@ -43,18 +47,19 @@ class LaneData {
   const CompoundLaneLineStringFeatureList& compoundCenterlines() { return compoundCenterlines_; }
 
   const LaneletFeatures& laneletFeatures() { return laneletFeatures_; }
-  const LaneEdges& edgeList() { return edgeList_; }
+  const Edges& edgeList() { return edgeList_; }
 
  private:
   void initLeftBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
   void initRightBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  void initLaneletFeatures(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
   void initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
                             lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
 
   LineStringType getLineStringTypeFromId(Id id);
   LaneLineStringFeature getLineStringFeatFromId(Id id);
-  std::vector<std::vector<Id>> computeCompoundLeftBorders(const ConstLanelets& path);
-  std::vector<std::vector<Id>> computeCompoundRightBorders(const ConstLanelets& path);
+  std::vector<internal::CompoundElsList> computeCompoundLeftBorders(const ConstLanelets& path);
+  std::vector<internal::CompoundElsList> computeCompoundRightBorders(const ConstLanelets& path);
   CompoundLaneLineStringFeature computeCompoundCenterline(const ConstLanelets& path);
 
   LaneLineStringFeatures roadBorders_;   // auxilliary features
@@ -65,7 +70,7 @@ class LaneData {
   CompoundLaneLineStringFeatureList compoundCenterlines_;
 
   LaneletFeatures laneletFeatures_;  // node features
-  LaneEdges edgeList_;               // edge list for centerlines
+  Edges edgeList_;                   // edge list for centerlines
 };
 
 class TEData {

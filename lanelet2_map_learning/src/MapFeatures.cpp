@@ -133,9 +133,9 @@ LaneletFeature::LaneletFeature(const LaneLineStringFeature& leftBoundary, const 
 
 LaneletFeature::LaneletFeature(const ConstLanelet& ll)
     : leftBoundary_{LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
-                                          bdSubtypeToEnum(ll.leftBound3d()))},
+                                          bdTypeToEnum(ll.leftBound3d()))},
       rightBoundary_{LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
-                                           bdSubtypeToEnum(ll.rightBound3d()))},
+                                           bdTypeToEnum(ll.rightBound3d()))},
       centerline_{LaneLineStringFeature(ll.centerline3d().basicLineString(), ll.centerline3d().id(),
                                         LineStringType::Centerline)} {}
 

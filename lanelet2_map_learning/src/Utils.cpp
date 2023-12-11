@@ -38,6 +38,7 @@ LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPo
   return utils::createConstSubmap(initRegion, {});
 }
 
+/// TODO: FURTHER INVESTIGATE THE WIERD BEHAVIOR OF BOOST LINE_INTERPOLATE
 BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t nPoints) {
   double length = boost::geometry::length(polyline, boost::geometry::strategy::distance::pythagoras<double>());
   double dist = length / static_cast<double>(nPoints - 1);  // to get all points of line

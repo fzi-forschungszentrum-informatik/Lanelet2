@@ -20,7 +20,20 @@ boost::geometry::model::polygon<BasicPoint2d> getRotatedRect(const BasicPoint2d&
 LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPoint2d& center,
                                     double extentLongitudinal, double extentLateral);
 
-inline LineStringType bdSubtypeToEnum(ConstLineString3d lString) {
+inline bool isRoadBorder(const ConstLineString3d& lstring) {
+  Attribute type = lstring.attribute(AttributeName::Type);
+  return type == AttributeValueString::RoadBorder || type == AttributeValueString::Curbstone ||
+         type == AttributeValueString::Fence;
+}
+
+inline LineStringType bdTypeToEnum(ConstLineString3d lString) {
+  Attribute type = lString.attribute(AttributeName::Type);
+  if (type == AttributeValueString::RoadBorder || type == AttributeValueString::Curbstone ||
+      type == AttributeValueString::Fence) {
+    return LineStringType::RoadBorder;
+  } else if (type == AttributeValueString::Virtual) {
+    return LineStringType::Virtual;
+  }
   std::string subtype = lString.attribute(AttributeName::Subtype).value();
   if (subtype == AttributeValueString::Dashed)
     return LineStringType::Dashed;
@@ -29,11 +42,9 @@ inline LineStringType bdSubtypeToEnum(ConstLineString3d lString) {
   else if (subtype == AttributeValueString::SolidSolid)
     return LineStringType::Solid;
   else if (subtype == AttributeValueString::SolidDashed)
-    return LineStringType::Solid;
+    return LineStringType::Mixed;
   else if (subtype == AttributeValueString::DashedSolid)
-    return LineStringType::Solid;
-  else if (subtype == AttributeValueString::Virtual)
-    return LineStringType::Virtual;
+    return LineStringType::Mixed;
   else {
     throw std::runtime_error("Unexpected Line String Subtype!");
     return LineStringType::Unknown;
