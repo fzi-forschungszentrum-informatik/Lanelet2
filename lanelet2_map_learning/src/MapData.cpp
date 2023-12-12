@@ -9,13 +9,9 @@ using namespace internal;
 
 LaneData LaneData::build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   LaneData data;
-  std::cerr << "Building Lane Data" << std::endl;
   data.initLeftBoundaries(localSubmap, localSubmapGraph);
-  std::cerr << "Left Boundaries Initialized" << std::endl;
   data.initRightBoundaries(localSubmap, localSubmapGraph);
-  std::cerr << "Right Boundaries Initialized" << std::endl;
   data.initLaneletFeatures(localSubmap, localSubmapGraph);
-  std::cerr << "Lanelet Features Initialized" << std::endl;
   data.initCompoundFeatures(localSubmap, localSubmapGraph);
 
   return data;
@@ -38,7 +34,7 @@ void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
     Optional<ConstLanelet> adjLeftLL = localSubmapGraph->adjacentLeft(ll);
 
     if (leftLL) {
-      edgeList_.push_back(Edge(ll.id(), leftLL->id()));
+      edges_.insert({ll.id(), Edge(ll.id(), leftLL->id())});
     }
   }
 }
@@ -58,7 +54,7 @@ void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
     Optional<ConstLanelet> rightLL = localSubmapGraph->right(ll);
     Optional<ConstLanelet> adjRightLL = localSubmapGraph->adjacentRight(ll);
     if (rightLL) {
-      edgeList_.push_back(Edge(ll.id(), rightLL->id()));
+      edges_.insert({ll.id(), Edge(ll.id(), rightLL->id())});
     }
   }
 }
@@ -194,7 +190,7 @@ void insertAndCheckNewCompoundFeatures(std::vector<CompoundElsList>& compFeats,
       for (const Id& el : compEl.ids) {
         elInsertIdx[el] = firstOccIt->second;
       }
-    } else {
+    } else if (compFeats[firstOccIt->second].ids.size() != compEl.ids.size()) {
       compFeats.push_back(compEl);
       for (const Id& el : compEl.ids) {
         elInsertIdx[el] = compFeats.size() - 1;
@@ -224,28 +220,28 @@ void LaneData::initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
     insertAndCheckNewCompoundFeatures(compoundedBordersAndDividers, compoundedRight, elInsertIdx);
     compoundCenterlines_.push_back(computeCompoundCenterline(path));
 
-    std::cerr << "---------------------" << std::endl;
-    std::cerr << "Path Lanelets: " << std::endl;
-    for (const auto& ll : path) {
-      std::cerr << ll.id() << " ";
-    }
-    std::cerr << std::endl;
-
-    for (const auto& cpd : compoundedLeft) {
-      std::cerr << "compoundedLeft : " << std::endl;
-      for (const auto& id : cpd.ids) {
-        std::cerr << id << " ";
-      }
-      std::cerr << std::endl;
-    }
-
-    for (const auto& cpd : compoundedRight) {
-      std::cerr << "compoundedRight : " << std::endl;
-      for (const auto& id : cpd.ids) {
-        std::cerr << id << " ";
-      }
-      std::cerr << std::endl;
-    }
+    // std::cerr << "---------------------" << std::endl;
+    // std::cerr << "Path Lanelets: " << std::endl;
+    // for (const auto& ll : path) {
+    //   std::cerr << ll.id() << " ";
+    // }
+    // std::cerr << std::endl;
+    //
+    // for (const auto& cpd : compoundedLeft) {
+    //   std::cerr << "compoundedLeft : " << std::endl;
+    //   for (const auto& id : cpd.ids) {
+    //     std::cerr << id << " ";
+    //   }
+    //   std::cerr << std::endl;
+    // }
+    //
+    // for (const auto& cpd : compoundedRight) {
+    //   std::cerr << "compoundedRight : " << std::endl;
+    //   for (const auto& id : cpd.ids) {
+    //     std::cerr << id << " ";
+    //   }
+    //   std::cerr << std::endl;
+    // }
   }
   for (const auto& compFeat : compoundedBordersAndDividers) {
     LaneLineStringFeatureList toBeCompounded;

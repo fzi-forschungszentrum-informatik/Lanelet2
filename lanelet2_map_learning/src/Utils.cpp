@@ -38,14 +38,20 @@ LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPo
   return utils::createConstSubmap(initRegion, {});
 }
 
-/// TODO: FURTHER INVESTIGATE THE WIERD BEHAVIOR OF BOOST LINE_INTERPOLATE
+/// TODO: FURTHER INVESTIGATE THE WEIRD BEHAVIOR OF BOOST LINE_INTERPOLATE
 BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t nPoints) {
   double length = boost::geometry::length(polyline, boost::geometry::strategy::distance::pythagoras<double>());
   double dist = length / static_cast<double>(nPoints - 1);  // to get all points of line
   boost::geometry::model::multi_point<BasicPoint3d> bdInterp;
   boost::geometry::line_interpolate(polyline, dist, bdInterp);
   bdInterp.insert(bdInterp.begin(), polyline.front());
-  assert(bdInterp.size() == nPoints);
+  if (bdInterp.size() != nPoints && (bdInterp.back() - polyline.back()).norm() > 10e-5) {
+    bdInterp.insert(bdInterp.end(), polyline.back());
+  } else if (bdInterp.size() == nPoints && (bdInterp.back() - polyline.back()).norm() > 10e-5) {
+    bdInterp.back() = polyline.back();
+  } else if (bdInterp.size() != nPoints) {
+    throw std::runtime_error("LineString resampling failed to produce the desired number of points!");
+  }
   return bdInterp;
 }
 

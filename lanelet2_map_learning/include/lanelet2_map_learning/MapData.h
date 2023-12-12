@@ -31,7 +31,7 @@ struct CompoundElsList {
 };
 }  // namespace internal
 
-using Edges = std::vector<Edge>;
+using Edges = std::map<Id, Edge>;  // key = id from
 
 class LaneData {
  public:
@@ -47,7 +47,7 @@ class LaneData {
   const CompoundLaneLineStringFeatureList& compoundCenterlines() { return compoundCenterlines_; }
 
   const LaneletFeatures& laneletFeatures() { return laneletFeatures_; }
-  const Edges& edgeList() { return edgeList_; }
+  const Edges& edges() { return edges_; }
 
  private:
   void initLeftBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
@@ -70,7 +70,7 @@ class LaneData {
   CompoundLaneLineStringFeatureList compoundCenterlines_;
 
   LaneletFeatures laneletFeatures_;  // node features
-  Edges edgeList_;                   // edge list for centerlines
+  Edges edges_;                      // edge list for centerlines
 };
 
 class TEData {

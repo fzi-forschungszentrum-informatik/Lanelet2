@@ -110,9 +110,9 @@ class LaneletFeature : public MapFeature {
 
   void setReprType(LaneletRepresentationType reprType) { reprType_ = reprType; }
 
-  const LaneLineStringFeature& leftBoundary() { return leftBoundary_; }
-  const LaneLineStringFeature& rightBoundary() { return rightBoundary_; }
-  const LaneLineStringFeature& centerline() { return centerline_; }
+  const LaneLineStringFeature& leftBoundary() const { return leftBoundary_; }
+  const LaneLineStringFeature& rightBoundary() const { return rightBoundary_; }
+  const LaneLineStringFeature& centerline() const { return centerline_; }
 
  private:
   LaneLineStringFeature leftBoundary_;

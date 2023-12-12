@@ -32,13 +32,13 @@ TEST_F(MapLearningTest, ExtractSubmap) {  // NOLINT
 
 TEST(UtilsTest, ResampleLineString) {  // NOLINT
   BasicLineString3d polyline{BasicPoint3d{0, 0, 0}, BasicPoint3d{3, 0, 0}, BasicPoint3d{6, 0, 0},
-                             BasicPoint3d{9, 0, 0}};
-  BasicLineString3d polylineResampled = resampleLineString(polyline, 10);
+                             BasicPoint3d{15, 0, 0}};
+  BasicLineString3d polylineResampled = resampleLineString(polyline, 11);
 
-  EXPECT_EQ(polylineResampled.size(), 10);
-  EXPECT_NEAR(polylineResampled[3].x(), 3, 10e-5);
-  EXPECT_NEAR(polylineResampled[6].x(), 6, 10e-5);
-  EXPECT_NEAR(polylineResampled[9].x(), 9, 10e-5);
+  EXPECT_EQ(polylineResampled.size(), 11);
+  EXPECT_NEAR(polylineResampled[3].x(), 4.5, 10e-5);
+  EXPECT_NEAR(polylineResampled[6].x(), 9, 10e-5);
+  EXPECT_NEAR(polylineResampled[10].x(), 15, 10e-5);
 }
 
 TEST_F(MapLearningTest, CutLineString) {  // NOLINT

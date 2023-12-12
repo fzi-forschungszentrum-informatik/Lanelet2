@@ -11,7 +11,7 @@ using namespace lanelet;
 using namespace lanelet::map_learning;
 using namespace lanelet::map_learning::tests;
 
-TEST_F(MapLearningTest, LaneDataPlot) {  // NOLINT
+TEST_F(MapLearningTest, LaneData) {  // NOLINT
   traffic_rules::TrafficRulesPtr trafficRules{
       traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)};
   routing::RoutingGraphConstPtr laneletMapGraph = routing::RoutingGraph::build(*laneletMap, *trafficRules);
@@ -57,73 +57,82 @@ TEST_F(MapLearningTest, LaneDataPlot) {  // NOLINT
   std::vector<Eigen::MatrixXd> rawCompoundLaneDividers = getPointsMatrixList(laneData.compoundLaneDividers(), true);
   std::vector<Eigen::MatrixXd> rawCompoundCenterlines = getPointsMatrixList(laneData.compoundCenterlines(), true);
 
-  for (const auto& mat : rawCompoundRoadBorders) {
-    std::vector<double> x;
-    std::vector<double> y;
-    x.resize(mat.rows());
-    y.resize(mat.rows());
-    Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-    Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-    matplot::plot(x, y, "r")->line_width(3);
-  }
-  for (const auto& mat : rawCompoundLaneDividers) {
-    std::vector<double> x;
-    std::vector<double> y;
-    x.resize(mat.rows());
-    y.resize(mat.rows());
-    Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-    Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-    matplot::plot(x, y, "b")->line_width(3);
-  }
-  for (const auto& mat : rawCompoundCenterlines) {
-    std::vector<double> x;
-    std::vector<double> y;
-    x.resize(mat.rows());
-    y.resize(mat.rows());
-    Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-    Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-    matplot::plot(x, y, "--gs")->line_width(3).marker_color("g");
-  }
-
-  matplot::save("map_data_raw.png");
-  matplot::cla();
-  matplot::hold(matplot::on);
-  matplot::xlim({-2, 16});
-  matplot::ylim({-13, 2});
-  matplot::gcf()->size(1000, 1000);
+  // for (const auto& mat : rawCompoundRoadBorders) {
+  //   std::vector<double> x;
+  //   std::vector<double> y;
+  //   x.resize(mat.rows());
+  //   y.resize(mat.rows());
+  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+  //   matplot::plot(x, y, "r")->line_width(3);
+  // }
+  // for (const auto& mat : rawCompoundLaneDividers) {
+  //   std::vector<double> x;
+  //   std::vector<double> y;
+  //   x.resize(mat.rows());
+  //   y.resize(mat.rows());
+  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+  //   matplot::plot(x, y, "b")->line_width(3);
+  // }
+  // for (const auto& mat : rawCompoundCenterlines) {
+  //   std::vector<double> x;
+  //   std::vector<double> y;
+  //   x.resize(mat.rows());
+  //   y.resize(mat.rows());
+  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+  //   matplot::plot(x, y, "--gs")->line_width(3).marker_color("g");
+  // }
+  //
+  // matplot::save("map_data_raw.png");
+  // matplot::cla();
+  // matplot::hold(matplot::on);
+  // matplot::xlim({-2, 16});
+  // matplot::ylim({-13, 2});
+  // matplot::gcf()->size(1000, 1000);
 
   bool valid = laneData.processAll(bbox, ParametrizationType::LineString, 10);
   std::vector<Eigen::MatrixXd> compoundRoadBorders = getPointsMatrixList(laneData.compoundRoadBorders(), true);
   std::vector<Eigen::MatrixXd> compoundLaneDividers = getPointsMatrixList(laneData.compoundLaneDividers(), true);
   std::vector<Eigen::MatrixXd> compoundCenterlines = getPointsMatrixList(laneData.compoundCenterlines(), true);
 
-  for (const auto& mat : compoundRoadBorders) {
-    std::vector<double> x;
-    std::vector<double> y;
-    x.resize(mat.rows());
-    y.resize(mat.rows());
-    Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-    Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-    matplot::plot(x, y, "r")->line_width(3);
-  }
-  for (const auto& mat : compoundLaneDividers) {
-    std::vector<double> x;
-    std::vector<double> y;
-    x.resize(mat.rows());
-    y.resize(mat.rows());
-    Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-    Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-    matplot::plot(x, y, "b")->line_width(3);
-  }
-  for (const auto& mat : compoundCenterlines) {
-    std::vector<double> x;
-    std::vector<double> y;
-    x.resize(mat.rows());
-    y.resize(mat.rows());
-    Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-    Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-    matplot::plot(x, y, "--gs")->line_width(3).marker_color("g");
-  }
+  EXPECT_TRUE(laneData.laneletFeatures().find(2007) != laneData.laneletFeatures().end());
+  EXPECT_EQ(laneData.laneletFeatures().find(2007)->second.leftBoundary().mapID().value(), 1012);
+  EXPECT_TRUE(laneData.roadBorders().find(1001) != laneData.roadBorders().end());
 
-  matplot::save("map_data_processed.png");
+  EXPECT_EQ(compoundRoadBorders.size(), 3);
+  EXPECT_EQ(compoundLaneDividers.size(), 8);
+  EXPECT_EQ(compoundCenterlines.size(), 4);
+
+  // for (const auto& mat : compoundRoadBorders) {
+  //   std::vector<double> x;
+  //   std::vector<double> y;
+  //   x.resize(mat.rows());
+  //   y.resize(mat.rows());
+  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+  //   matplot::plot(x, y, "r")->line_width(3);
+  // }
+
+  // for (const auto& mat : compoundLaneDividers) {
+  //    std::vector<double> x;
+  //    std::vector<double> y;
+  //    x.resize(mat.rows());
+  //    y.resize(mat.rows());
+  //    Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+  //    Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+  //    matplot::plot(x, y, "b")->line_width(3);
+  // }
+  // for (const auto& mat : compoundCenterlines) {
+  //   std::vector<double> x;
+  //   std::vector<double> y;
+  //   x.resize(mat.rows());
+  //   y.resize(mat.rows());
+  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+  //   matplot::plot(x, y, "--gs")->line_width(3).marker_color("g");
+  // }
+  //
+  // matplot::save("map_data_processed.png");
 }
