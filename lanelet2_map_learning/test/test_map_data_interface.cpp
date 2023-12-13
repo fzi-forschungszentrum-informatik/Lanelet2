@@ -3,6 +3,7 @@
 // #include <matplot/matplot.h>
 
 #include "lanelet2_map_learning/MapData.h"
+#include "lanelet2_map_learning/MapDataInterface.h"
 #include "lanelet2_map_learning/MapFeatures.h"
 #include "lanelet2_routing/RoutingGraph.h"
 #include "test_map.h"

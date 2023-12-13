@@ -30,7 +30,7 @@ OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudina
 
 LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPoint2d& center,
                                     double extentLongitudinal, double extentLateral) {
-  double maxExtent = std::max(extentLongitudinal, extentLateral);
+  double maxExtent = sqrt(extentLongitudinal * extentLongitudinal + extentLateral * extentLateral);
   BasicPoint2d initRegionRear = {center.x() - 1.1 * maxExtent, center.y() - 1.1 * maxExtent};
   BasicPoint2d initRegionFront = {center.x() + 1.1 * maxExtent, center.y() + 1.1 * maxExtent};
   BoundingBox2d initSearchRegion{initRegionRear, initRegionFront};
