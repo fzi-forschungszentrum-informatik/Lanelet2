@@ -64,7 +64,7 @@ class LaneData {
   void updateAssociatedCpdFeatureIndices();
 
   LineStringType getLineStringTypeFromId(Id id);
-  LaneLineStringFeature getLineStringFeatFromId(Id id);
+  const LaneLineStringFeature& getLineStringFeatFromId(Id id);
   std::vector<internal::CompoundElsList> computeCompoundLeftBorders(const ConstLanelets& path);
   std::vector<internal::CompoundElsList> computeCompoundRightBorders(const ConstLanelets& path);
   CompoundLaneLineStringFeature computeCompoundCenterline(const ConstLanelets& path);
@@ -77,10 +77,10 @@ class LaneData {
   CompoundLaneLineStringFeatureList compoundCenterlines_;
 
   LaneletFeatures laneletFeatures_;
-  std::map<Id, std::vector<size_t>> associatedCpdRoadBorderIndices_;
-  std::map<Id, std::vector<size_t>> associatedCpdLaneDividerIndices_;
-  std::map<Id, std::vector<size_t>> associatedCpdCenterlineIndices_;
-  Edges edges_;  // edge list for centerlines
+  std::map<Id, std::vector<size_t>> associatedCpdRoadBorderIndices_;   // related to the "unfiltered" compound features!
+  std::map<Id, std::vector<size_t>> associatedCpdLaneDividerIndices_;  // related to the "unfiltered" compound features!
+  std::map<Id, std::vector<size_t>> associatedCpdCenterlineIndices_;   // related to the "unfiltered" compound features!
+  Edges edges_;                                                        // edge list for centerlines
 };
 
 class TEData {
@@ -95,6 +95,20 @@ class TEData {
   /// @brief adjacency matrix (sparse). Node indices are assigned as
   ///        xLane and xTE stacked, with xLane being first
 };
+
+template <typename T>
+std::vector<T> getValidElements(const std::vector<T>& vec) {
+  std::vector<T> res;
+  std::copy_if(vec.begin(), vec.end(), std::back_inserter(res), [](T el) { return el.valid(); });
+  return res;
+}
+
+template <typename T>
+std::map<Id, T> getValidElements(const std::map<Id, T>& map) {
+  std::map<Id, T> res;
+  std::copy_if(map.begin(), map.end(), std::back_inserter(res), [](const auto& pair) { return pair.second.valid(); });
+  return res;
+}
 
 }  // namespace map_learning
 }  // namespace lanelet

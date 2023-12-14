@@ -121,19 +121,17 @@ LineStringType LaneData::getLineStringTypeFromId(Id id) {
   return bdType;
 }
 
-LaneLineStringFeature LaneData::getLineStringFeatFromId(Id id) {
-  LaneLineStringFeature lstringFeat;
+const LaneLineStringFeature& LaneData::getLineStringFeatFromId(Id id) {
   LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(id);
   LaneLineStringFeatures::iterator itLaneBd = laneDividers_.find(id);
   if (itLaneBd != laneDividers_.end()) {
-    lstringFeat = itLaneBd->second;
+    return itLaneBd->second;
   } else if (itRoadBd != roadBorders_.end()) {
-    lstringFeat = itRoadBd->second;
+    return itRoadBd->second;
   } else {
     throw std::runtime_error("Lanelet boundary " + std::to_string(id) +
                              " is neither a road border nor a lane divider!");
   }
-  return lstringFeat;
 }
 
 std::vector<CompoundElsList> LaneData::computeCompoundLeftBorders(const ConstLanelets& path) {

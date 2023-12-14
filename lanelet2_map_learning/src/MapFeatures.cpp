@@ -216,7 +216,8 @@ CompoundLaneLineStringFeature::CompoundLaneLineStringFeature(const LaneLineStrin
 
 bool CompoundLaneLineStringFeature::process(const OrientedRect& bbox, const ParametrizationType& paramType,
                                             int32_t nPoints) {
-  bool valid = LaneLineStringFeature::process(bbox, paramType, nPoints);
+  bool valid = false;
+  LaneLineStringFeature::process(bbox, paramType, nPoints);
   for (size_t i = 0; i < individualFeatures_.size(); i++) {
     individualFeatures_[i].process(bbox, paramType, nPoints);
     double processedLength = boost::geometry::length(individualFeatures_[i].cutFeature(),
@@ -224,6 +225,7 @@ bool CompoundLaneLineStringFeature::process(const OrientedRect& bbox, const Para
 
     if (processedLength > validLengthThresh_) {
       processedFeaturesValid_[i] = true;
+      valid = true;
     }
 
     if (i > 0) {

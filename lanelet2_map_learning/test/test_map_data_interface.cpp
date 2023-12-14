@@ -12,129 +12,82 @@ using namespace lanelet;
 using namespace lanelet::map_learning;
 using namespace lanelet::map_learning::tests;
 
-TEST_F(MapLearningTest, LaneData) {  // NOLINT
+TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
   traffic_rules::TrafficRulesPtr trafficRules{
       traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)};
-  routing::RoutingGraphConstPtr laneletMapGraph = routing::RoutingGraph::build(*laneletMap, *trafficRules);
-  ConstLanelets lls;
-  lls.insert(lls.end(), laneletMap->laneletLayer.begin(), laneletMap->laneletLayer.end());
-  LaneletSubmapConstPtr laneletSubmap = utils::createConstSubmap(lls, {});
+  MapDataInterface::Configuration config{};
+  config.reprType = LaneletRepresentationType::Centerline;
+  config.paramType = ParametrizationType::LineString;
+  config.submapExtentLongitudinal = 5;
+  config.submapExtentLateral = 3;
+  config.nPoints = 20;
 
-  // matplot::hold(matplot::on);
-  // matplot::xlim({-2, 16});
-  // matplot::ylim({-13, 2});
-  // matplot::gcf()->size(1000, 1000);
+  MapDataInterface parser(laneletMap, config);
+  BasicPoints2d pts{BasicPoint2d(0, -3), BasicPoint2d(3, -3), BasicPoint2d(5, -3),
+                    BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
+  std::vector<double> yaws{0, 0, M_PI / 4, M_PI / 3, M_PI / 2, M_PI / 2};
+  std::vector<LaneData> lDataVec = parser.laneDataBatch(pts, yaws);
 
-  // for (const auto& ll : lls) {
-  //   BasicLineString2d leftBound = ll.leftBound2d().basicLineString();
-  //   BasicLineString2d rightBound = ll.rightBound2d().basicLineString();
-  //   BasicLineString2d centerline = ll.centerline2d().basicLineString();
-  //   BasicLineString2d centerline = ll.centerline2d().basicLineString();
-  //   std::vector<double> xl;
-  //   std::vector<double> yl;
-  //   for (const auto& pt : leftBound) {
-  //     xl.push_back(pt.x());
-  //     yl.push_back(pt.y());
-  //   }
-  //   std::vector<double> xr;
-  //   std::vector<double> yr;
-  //   for (const auto& pt : rightBound) {
-  //     xr.push_back(pt.x());
-  //     yr.push_back(pt.y());
-  //   }
-  //   std::vector<double> xc;
-  //   std::vector<double> yc;
-  //   for (const auto& pt : centerline) {
-  //     xc.push_back(pt.x());
-  //     yc.push_back(pt.y());
-  //   }
-  //   matplot::plot(xl, yl, "b")->line_width(3);
-  //   matplot::plot(xr, yr, "r")->line_width(3);
-  //   matplot::plot(xc, yc, "--gs")->line_width(3).marker_color("g");
-  // }
+  for (size_t i = 0; i < lDataVec.size(); i++) {
+    std::vector<Eigen::MatrixXd> compoundRoadBorders =
+        getPointsMatrixList(getValidElements(lDataVec[i].compoundRoadBorders()), true);
+    std::vector<Eigen::MatrixXd> compoundLaneDividers =
+        getPointsMatrixList(getValidElements(lDataVec[i].compoundLaneDividers()), true);
+    std::vector<Eigen::MatrixXd> compoundCenterlines =
+        getPointsMatrixList(getValidElements(lDataVec[i].compoundCenterlines()), true);
 
-  LaneData laneData = LaneData::build(laneletSubmap, laneletMapGraph);
+    switch (i) {
+      case 0: {
+        LaneletFeatures::const_iterator itLL0 = lDataVec[i].laneletFeatures().find(2000);
+        EXPECT_TRUE(itLL0 != lDataVec[i].laneletFeatures().end());
+        LaneletFeatures::const_iterator itLL1 = lDataVec[i].laneletFeatures().find(2002);
+        EXPECT_TRUE(itLL1 == lDataVec[i].laneletFeatures().end());
+        break;
+      }
+      case 1: {
+        LaneletFeatures::const_iterator itLL = lDataVec[i].laneletFeatures().find(2011);
+        EXPECT_TRUE(itLL != lDataVec[i].laneletFeatures().end());
+        break;
+      }
+      case 5: {
+        LaneletFeatures::const_iterator itLL = lDataVec[i].laneletFeatures().find(2004);
+        EXPECT_TRUE(itLL == lDataVec[i].laneletFeatures().end());
+        break;
+      }
+    }
 
-  std::vector<Eigen::MatrixXd> rawCompoundRoadBorders = getPointsMatrixList(laneData.compoundRoadBorders(), true);
-  std::vector<Eigen::MatrixXd> rawCompoundLaneDividers = getPointsMatrixList(laneData.compoundLaneDividers(), true);
-  std::vector<Eigen::MatrixXd> rawCompoundCenterlines = getPointsMatrixList(laneData.compoundCenterlines(), true);
-
-  // for (const auto& mat : rawCompoundRoadBorders) {
-  //   std::vector<double> x;
-  //   std::vector<double> y;
-  //   x.resize(mat.rows());
-  //   y.resize(mat.rows());
-  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-  //   matplot::plot(x, y, "r")->line_width(3);
-  // }
-  // for (const auto& mat : rawCompoundLaneDividers) {
-  //   std::vector<double> x;
-  //   std::vector<double> y;
-  //   x.resize(mat.rows());
-  //   y.resize(mat.rows());
-  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-  //   matplot::plot(x, y, "b")->line_width(3);
-  // }
-  // for (const auto& mat : rawCompoundCenterlines) {
-  //   std::vector<double> x;
-  //   std::vector<double> y;
-  //   x.resize(mat.rows());
-  //   y.resize(mat.rows());
-  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-  //   matplot::plot(x, y, "--gs")->line_width(3).marker_color("g");
-  // }
-  //
-  // matplot::save("map_data_raw.png");
-  // matplot::cla();
-  // matplot::hold(matplot::on);
-  // matplot::xlim({-2, 16});
-  // matplot::ylim({-13, 2});
-  // matplot::gcf()->size(1000, 1000);
-
-  bool valid = laneData.processAll(bbox, ParametrizationType::LineString, 10);
-  std::vector<Eigen::MatrixXd> compoundRoadBorders = getPointsMatrixList(laneData.compoundRoadBorders(), true);
-  std::vector<Eigen::MatrixXd> compoundLaneDividers = getPointsMatrixList(laneData.compoundLaneDividers(), true);
-  std::vector<Eigen::MatrixXd> compoundCenterlines = getPointsMatrixList(laneData.compoundCenterlines(), true);
-
-  EXPECT_TRUE(laneData.laneletFeatures().find(2007) != laneData.laneletFeatures().end());
-  EXPECT_EQ(laneData.laneletFeatures().find(2007)->second.leftBoundary().mapID(), 1012);
-  EXPECT_TRUE(laneData.roadBorders().find(1001) != laneData.roadBorders().end());
-
-  EXPECT_EQ(compoundRoadBorders.size(), 3);
-  EXPECT_EQ(compoundLaneDividers.size(), 8);
-  EXPECT_EQ(compoundCenterlines.size(), 4);
-
-  // for (const auto& mat : compoundRoadBorders) {
-  //   std::vector<double> x;
-  //   std::vector<double> y;
-  //   x.resize(mat.rows());
-  //   y.resize(mat.rows());
-  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-  //   matplot::plot(x, y, "r")->line_width(3);
-  // }
-
-  // for (const auto& mat : compoundLaneDividers) {
-  //    std::vector<double> x;
-  //    std::vector<double> y;
-  //    x.resize(mat.rows());
-  //    y.resize(mat.rows());
-  //    Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-  //    Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-  //    matplot::plot(x, y, "b")->line_width(3);
-  // }
-  // for (const auto& mat : compoundCenterlines) {
-  //   std::vector<double> x;
-  //   std::vector<double> y;
-  //   x.resize(mat.rows());
-  //   y.resize(mat.rows());
-  //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
-  //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-  //   matplot::plot(x, y, "--gs")->line_width(3).marker_color("g");
-  // }
-  //
-  // matplot::save("map_data_processed.png");
+    // matplot::hold(matplot::on);
+    // matplot::cla();
+    // matplot::xlim({-2, 16});
+    // matplot::ylim({-13, 2});
+    // matplot::gcf()->size(1000, 1000);
+    // for (const auto& mat : compoundRoadBorders) {
+    //   std::vector<double> x;
+    //   std::vector<double> y;
+    //   x.resize(mat.rows());
+    //   y.resize(mat.rows());
+    //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+    //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+    //   matplot::plot(x, y, "r")->line_width(3);
+    // }
+    // for (const auto& mat : compoundLaneDividers) {
+    //   std::vector<double> x;
+    //   std::vector<double> y;
+    //   x.resize(mat.rows());
+    //   y.resize(mat.rows());
+    //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+    //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+    //   matplot::plot(x, y, "b")->line_width(3);
+    // }
+    // for (const auto& mat : compoundCenterlines) {
+    //   std::vector<double> x;
+    //   std::vector<double> y;
+    //   x.resize(mat.rows());
+    //   y.resize(mat.rows());
+    //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
+    //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
+    //   matplot::plot(x, y, "--gs")->line_width(3).marker_color("g");
+    // }
+    // matplot::save("map_data_processed_" + std::to_string(i) + ".png");
+  }
 }

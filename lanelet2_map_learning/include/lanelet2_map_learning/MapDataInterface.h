@@ -21,30 +21,35 @@ class MapDataInterface {
 
   struct Configuration {
     Configuration() noexcept {}
+    Configuration(LaneletRepresentationType reprType, ParametrizationType paramType, double submapAreaLongitudinal,
+                  double submapAreaLateral, int nPoints) noexcept
+        : reprType{reprType},
+          paramType{paramType},
+          submapExtentLongitudinal{submapExtentLongitudinal},
+          submapExtentLateral{submapExtentLateral} {}
     LaneletRepresentationType reprType{LaneletRepresentationType::Boundaries};
     ParametrizationType paramType{ParametrizationType::LineString};
-    bool includeLaneletBdTypes{false};
-    double submapAreaLongitudinal{30};  // in driving direction
-    double submapAreaLateral{15};       // in lateral direction
-    int nPoints{11};
+    double submapExtentLongitudinal{30};  // in driving direction
+    double submapExtentLateral{15};       // in lateral direction
+    int nPoints{20};
   };
 
   MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
                    Optional<BasicPoint2d> currPos = boost::none);
 
-  void setCurrPosAndExtractSubmap(const BasicPoint2d& pt);
+  void setCurrPosAndExtractSubmap(const BasicPoint2d& pt, double yaw);
   LaneData laneData();
   TEData teData();
 
-  LaneData laneDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
-  TEData laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
+  std::vector<LaneData> laneDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
+  std::vector<TEData> laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws);
 
  private:
-  LaneData getLaneData(LaneletSubmapConstPtr localSubmap, routing::RoutingGraphConstPtr localSubmapGraph,
-                       bool processAll = false);
+  LaneData getLaneData(LaneletSubmapConstPtr localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                       const BasicPoint2d& pos, double yaw, bool processAll = true);
 
-  TEData getLaneTEData(routing::RoutingGraphConstPtr localSubmapGraph, LaneletSubmapConstPtr localSubmap,
-                       bool processAll);
+  TEData getLaneTEData(LaneletSubmapConstPtr localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                       const BasicPoint2d& pos, double yaw, bool processAll = true);
 
   LaneletMapConstPtr laneletMap_;
   LaneletSubmapConstPtr localSubmap_;

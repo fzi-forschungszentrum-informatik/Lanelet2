@@ -20,7 +20,7 @@
   <depend>lanelet2_routing</depend>
   <depend>lanelet2_traffic_rules</depend>
 
-  <depend>Matplot++</depend>
+  <!-- <depend>Matplot++</depend> -->
 
   <export>
     <build_type condition="$ROS_VERSION == 1">catkin</build_type>
