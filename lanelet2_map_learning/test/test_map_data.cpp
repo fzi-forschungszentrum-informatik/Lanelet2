@@ -99,12 +99,29 @@ TEST_F(MapLearningTest, LaneData) {  // NOLINT
   std::vector<Eigen::MatrixXd> compoundCenterlines = getPointsMatrixList(laneData.compoundCenterlines(), true);
 
   EXPECT_TRUE(laneData.laneletFeatures().find(2007) != laneData.laneletFeatures().end());
-  EXPECT_EQ(laneData.laneletFeatures().find(2007)->second.leftBoundary().mapID().value(), 1012);
+  EXPECT_EQ(laneData.laneletFeatures().find(2007)->second.leftBoundary().mapID(), 1012);
   EXPECT_TRUE(laneData.roadBorders().find(1001) != laneData.roadBorders().end());
 
   EXPECT_EQ(compoundRoadBorders.size(), 3);
   EXPECT_EQ(compoundLaneDividers.size(), 8);
   EXPECT_EQ(compoundCenterlines.size(), 4);
+
+  EXPECT_EQ(laneData.associatedCpdRoadBorderIndices().at(2001).size(), 1);
+  size_t assoBorderIdx = laneData.associatedCpdRoadBorderIndices().at(2001).front();
+  EXPECT_EQ(laneData.compoundRoadBorders()[assoBorderIdx].features().back().mapID(), 1000);
+  EXPECT_EQ(laneData.compoundRoadBorders()[assoBorderIdx].features().back().laneletIDs().front(), 2002);
+
+  EXPECT_EQ(laneData.associatedCpdLaneDividerIndices().at(2004).size(), 2);
+  EXPECT_EQ(laneData.associatedCpdLaneDividerIndices().at(2009).size(), 1);
+  size_t assoDividerIdx = laneData.associatedCpdLaneDividerIndices().at(2009).front();
+  EXPECT_EQ(laneData.compoundLaneDividers()[assoDividerIdx].features().front().mapID(), 1015);
+  EXPECT_EQ(laneData.compoundLaneDividers()[assoDividerIdx].features().front().laneletIDs().size(), 2);
+
+  EXPECT_EQ(laneData.associatedCpdCenterlineIndices().at(2003).size(), 2);
+  EXPECT_EQ(laneData.associatedCpdCenterlineIndices().at(2000).size(), 1);
+  size_t assoCenterlineIdx = laneData.associatedCpdCenterlineIndices().at(2000).front();
+  EXPECT_EQ(laneData.compoundCenterlines()[assoCenterlineIdx].features().front().mapID(), 2000);
+  EXPECT_EQ(laneData.compoundCenterlines()[assoCenterlineIdx].features().front().laneletIDs().front(), 2000);
 
   // for (const auto& mat : compoundRoadBorders) {
   //   std::vector<double> x;

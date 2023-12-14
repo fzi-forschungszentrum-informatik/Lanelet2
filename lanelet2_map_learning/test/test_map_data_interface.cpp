@@ -100,7 +100,7 @@ TEST_F(MapLearningTest, LaneData) {  // NOLINT
   std::vector<Eigen::MatrixXd> compoundCenterlines = getPointsMatrixList(laneData.compoundCenterlines(), true);
 
   EXPECT_TRUE(laneData.laneletFeatures().find(2007) != laneData.laneletFeatures().end());
-  EXPECT_EQ(laneData.laneletFeatures().find(2007)->second.leftBoundary().mapID().value(), 1012);
+  EXPECT_EQ(laneData.laneletFeatures().find(2007)->second.leftBoundary().mapID(), 1012);
   EXPECT_TRUE(laneData.roadBorders().find(1001) != laneData.roadBorders().end());
 
   EXPECT_EQ(compoundRoadBorders.size(), 3);

@@ -133,11 +133,11 @@ LaneletFeature::LaneletFeature(const LaneLineStringFeature& leftBoundary, const 
 
 LaneletFeature::LaneletFeature(const ConstLanelet& ll)
     : leftBoundary_{LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
-                                          bdTypeToEnum(ll.leftBound3d()))},
+                                          bdTypeToEnum(ll.leftBound3d()), ll.id())},
       rightBoundary_{LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
-                                           bdTypeToEnum(ll.rightBound3d()))},
+                                           bdTypeToEnum(ll.rightBound3d()), ll.id())},
       centerline_{LaneLineStringFeature(ll.centerline3d().basicLineString(), ll.centerline3d().id(),
-                                        LineStringType::Centerline)} {}
+                                        LineStringType::Centerline, ll.id())} {}
 
 bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) {
   leftBoundary_.process(bbox, paramType, nPoints);

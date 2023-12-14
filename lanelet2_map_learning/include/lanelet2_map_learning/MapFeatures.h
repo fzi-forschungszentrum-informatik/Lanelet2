@@ -15,7 +15,7 @@ namespace map_learning {
 
 class MapFeature {
  public:
-  const Optional<Id>& mapID() const { return mapID_; }
+  const Id& mapID() const { return mapID_.get_value_or(InvalId); }
   const bool& initialized() const { return initialized_; }
   const bool& valid() const { return valid_; }
 
@@ -52,8 +52,8 @@ class LineStringFeature : public MapFeature {
 class LaneLineStringFeature : public LineStringFeature {
  public:
   LaneLineStringFeature() {}
-  LaneLineStringFeature(const BasicLineString3d& feature, Id mapID, LineStringType type)
-      : LineStringFeature(feature, mapID), type_{type} {}
+  LaneLineStringFeature(const BasicLineString3d& feature, Id mapID, LineStringType type, Id laneletID)
+      : LineStringFeature(feature, mapID), type_{type}, laneletIDs_{laneletID} {}
   virtual ~LaneLineStringFeature() noexcept = default;
 
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
@@ -67,12 +67,15 @@ class LaneLineStringFeature : public LineStringFeature {
   const BasicLineString3d& cutAndResampledFeature() const { return cutAndResampledFeature_; }
   const LineStringType& type() const { return type_; }
   int typeInt() const { return static_cast<int>(type_); }
+  const std::vector<Id>& laneletIDs() const { return laneletIDs_; }
+  void addLaneletID(Id id) { laneletIDs_.push_back(id); }
 
  protected:
   BasicLineString3d cutFeature_;
   BasicLineString3d cutAndResampledFeature_;
   bool wasCut_{false};
   LineStringType type_;
+  std::vector<Id> laneletIDs_;
 };
 
 using LaneLineStringFeatures = std::map<Id, LaneLineStringFeature>;

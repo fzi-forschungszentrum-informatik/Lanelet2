@@ -46,6 +46,12 @@ class LaneData {
   const CompoundLaneLineStringFeatureList& compoundLaneDividers() { return compoundLaneDividers_; }
   const CompoundLaneLineStringFeatureList& compoundCenterlines() { return compoundCenterlines_; }
 
+  const std::map<Id, std::vector<size_t>>& associatedCpdRoadBorderIndices() { return associatedCpdRoadBorderIndices_; }
+  const std::map<Id, std::vector<size_t>>& associatedCpdLaneDividerIndices() {
+    return associatedCpdLaneDividerIndices_;
+  }
+  const std::map<Id, std::vector<size_t>>& associatedCpdCenterlineIndices() { return associatedCpdCenterlineIndices_; }
+
   const LaneletFeatures& laneletFeatures() { return laneletFeatures_; }
   const Edges& edges() { return edges_; }
 
@@ -55,6 +61,7 @@ class LaneData {
   void initLaneletFeatures(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
   void initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
                             lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  void updateAssociatedCpdFeatureIndices();
 
   LineStringType getLineStringTypeFromId(Id id);
   LaneLineStringFeature getLineStringFeatFromId(Id id);
@@ -69,8 +76,11 @@ class LaneData {
   CompoundLaneLineStringFeatureList compoundLaneDividers_;  // auxilliary features
   CompoundLaneLineStringFeatureList compoundCenterlines_;
 
-  LaneletFeatures laneletFeatures_;  // node features
-  Edges edges_;                      // edge list for centerlines
+  LaneletFeatures laneletFeatures_;
+  std::map<Id, std::vector<size_t>> associatedCpdRoadBorderIndices_;
+  std::map<Id, std::vector<size_t>> associatedCpdLaneDividerIndices_;
+  std::map<Id, std::vector<size_t>> associatedCpdCenterlineIndices_;
+  Edges edges_;  // edge list for centerlines
 };
 
 class TEData {

@@ -13,7 +13,7 @@ LaneData LaneData::build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::R
   data.initRightBoundaries(localSubmap, localSubmapGraph);
   data.initLaneletFeatures(localSubmap, localSubmapGraph);
   data.initCompoundFeatures(localSubmap, localSubmapGraph);
-
+  data.updateAssociatedCpdFeatureIndices();
   return data;
 }
 
@@ -21,13 +21,23 @@ void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
                                   lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   for (const auto& ll : localSubmap->laneletLayer) {
     if (isRoadBorder(ll.leftBound3d())) {
-      roadBorders_.insert(
-          {ll.leftBound3d().id(), LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
-                                                        bdTypeToEnum(ll.leftBound3d()))});
+      LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(ll.leftBound3d().id());
+      if (itRoadBd != roadBorders_.end()) {
+        itRoadBd->second.addLaneletID(ll.id());
+      } else {
+        roadBorders_.insert(
+            {ll.leftBound3d().id(), LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
+                                                          bdTypeToEnum(ll.leftBound3d()), ll.id())});
+      }
     } else {
-      laneDividers_.insert(
-          {ll.leftBound3d().id(), LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
-                                                        bdTypeToEnum(ll.leftBound3d()))});
+      LaneLineStringFeatures::iterator itLaneBd = laneDividers_.find(ll.leftBound3d().id());
+      if (itLaneBd != laneDividers_.end()) {
+        itLaneBd->second.addLaneletID(ll.id());
+      } else {
+        laneDividers_.insert(
+            {ll.leftBound3d().id(), LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
+                                                          bdTypeToEnum(ll.leftBound3d()), ll.id())});
+      }
     }
 
     Optional<ConstLanelet> leftLL = localSubmapGraph->left(ll);
@@ -43,13 +53,23 @@ void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   for (const auto& ll : localSubmap->laneletLayer) {
     if (isRoadBorder(ll.rightBound3d())) {
-      roadBorders_.insert(
-          {ll.rightBound3d().id(), LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
-                                                         bdTypeToEnum(ll.rightBound3d()))});
+      LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(ll.rightBound3d().id());
+      if (itRoadBd != roadBorders_.end()) {
+        itRoadBd->second.addLaneletID(ll.id());
+      } else {
+        roadBorders_.insert(
+            {ll.rightBound3d().id(), LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
+                                                           bdTypeToEnum(ll.rightBound3d()), ll.id())});
+      }
     } else {
-      laneDividers_.insert(
-          {ll.rightBound3d().id(), LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
-                                                         bdTypeToEnum(ll.rightBound3d()))});
+      LaneLineStringFeatures::iterator itLaneBd = laneDividers_.find(ll.rightBound3d().id());
+      if (itLaneBd != laneDividers_.end()) {
+        itLaneBd->second.addLaneletID(ll.id());
+      } else {
+        laneDividers_.insert(
+            {ll.rightBound3d().id(), LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
+                                                           bdTypeToEnum(ll.rightBound3d()), ll.id())});
+      }
     }
     Optional<ConstLanelet> rightLL = localSubmapGraph->right(ll);
     Optional<ConstLanelet> adjRightLL = localSubmapGraph->adjacentRight(ll);
@@ -65,7 +85,7 @@ void LaneData::initLaneletFeatures(LaneletSubmapConstPtr& localSubmap,
     const LaneLineStringFeature& leftBoundary = getLineStringFeatFromId(ll.leftBound().id());
     const LaneLineStringFeature& rightBoundary = getLineStringFeatFromId(ll.rightBound().id());
     LaneLineStringFeature centerline{ll.centerline3d().basicLineString(), ll.centerline3d().id(),
-                                     LineStringType::Centerline};
+                                     LineStringType::Centerline, ll.id()};
     laneletFeatures_.insert({ll.id(), LaneletFeature(leftBoundary, rightBoundary, centerline, ll.id())});
   }
 }
@@ -158,7 +178,7 @@ CompoundLaneLineStringFeature LaneData::computeCompoundCenterline(const ConstLan
   LaneLineStringFeatureList compoundCenterlines;
   for (const auto& ll : path) {
     compoundCenterlines.push_back(
-        LaneLineStringFeature(ll.centerline3d().basicLineString(), ll.id(), LineStringType::Centerline));
+        LaneLineStringFeature(ll.centerline3d().basicLineString(), ll.id(), LineStringType::Centerline, ll.id()));
   }
   return CompoundLaneLineStringFeature(compoundCenterlines, LineStringType::Centerline);
 }
@@ -219,29 +239,6 @@ void LaneData::initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
     std::vector<CompoundElsList> compoundedRight = computeCompoundRightBorders(path);
     insertAndCheckNewCompoundFeatures(compoundedBordersAndDividers, compoundedRight, elInsertIdx);
     compoundCenterlines_.push_back(computeCompoundCenterline(path));
-
-    // std::cerr << "---------------------" << std::endl;
-    // std::cerr << "Path Lanelets: " << std::endl;
-    // for (const auto& ll : path) {
-    //   std::cerr << ll.id() << " ";
-    // }
-    // std::cerr << std::endl;
-    //
-    // for (const auto& cpd : compoundedLeft) {
-    //   std::cerr << "compoundedLeft : " << std::endl;
-    //   for (const auto& id : cpd.ids) {
-    //     std::cerr << id << " ";
-    //   }
-    //   std::cerr << std::endl;
-    // }
-    //
-    // for (const auto& cpd : compoundedRight) {
-    //   std::cerr << "compoundedRight : " << std::endl;
-    //   for (const auto& id : cpd.ids) {
-    //     std::cerr << id << " ";
-    //   }
-    //   std::cerr << std::endl;
-    // }
   }
   for (const auto& compFeat : compoundedBordersAndDividers) {
     LaneLineStringFeatureList toBeCompounded;
@@ -254,6 +251,33 @@ void LaneData::initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
       compoundRoadBorders_.push_back(CompoundLaneLineStringFeature(toBeCompounded, cmpdType));
     } else {
       compoundLaneDividers_.push_back(CompoundLaneLineStringFeature(toBeCompounded, cmpdType));
+    }
+  }
+}
+
+void LaneData::updateAssociatedCpdFeatureIndices() {
+  for (size_t i = 0; i < compoundRoadBorders_.size(); i++) {
+    const auto& cpdFeat = compoundRoadBorders_[i];
+    for (const auto& indFeat : cpdFeat.features()) {
+      for (const auto& id : indFeat.laneletIDs()) {
+        associatedCpdRoadBorderIndices_[id].push_back(i);
+      }
+    }
+  }
+  for (size_t i = 0; i < compoundLaneDividers_.size(); i++) {
+    const auto& cpdFeat = compoundLaneDividers_[i];
+    for (const auto& indFeat : cpdFeat.features()) {
+      for (const auto& id : indFeat.laneletIDs()) {
+        associatedCpdLaneDividerIndices_[id].push_back(i);
+      }
+    }
+  }
+  for (size_t i = 0; i < compoundCenterlines_.size(); i++) {
+    const auto& cpdFeat = compoundCenterlines_[i];
+    for (const auto& indFeat : cpdFeat.features()) {
+      for (const auto& id : indFeat.laneletIDs()) {
+        associatedCpdCenterlineIndices_[id].push_back(i);
+      }
     }
   }
 }
