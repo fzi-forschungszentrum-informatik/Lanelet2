@@ -91,3 +91,32 @@ TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
     // matplot::save("map_data_processed_" + std::to_string(i) + ".png");
   }
 }
+
+TEST_F(MapLearningTest, MapDataSaveLoad) {
+  traffic_rules::TrafficRulesPtr trafficRules{
+      traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)};
+  MapDataInterface::Configuration config{};
+  config.reprType = LaneletRepresentationType::Centerline;
+  config.paramType = ParametrizationType::LineString;
+  config.submapExtentLongitudinal = 5;
+  config.submapExtentLateral = 3;
+  config.nPoints = 20;
+  MapDataInterface parser(laneletMap, config);
+
+  BasicPoints2d pts{BasicPoint2d(0, -3), BasicPoint2d(3, -3), BasicPoint2d(5, -3),
+                    BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
+  std::vector<double> yaws{0, 0, M_PI / 4, M_PI / 3, M_PI / 2, M_PI / 2};
+
+  std::cerr << "Generated MapDataInterface!" << std::endl;
+
+  std::vector<LaneData> lDataVec = parser.laneDataBatch(pts, yaws);
+  std::cerr << "Generated LaneData!" << std::endl;
+
+  saveLaneData("/tmp/lane_data_save_test.bin", lDataVec);
+  std::vector<LaneData> lDataLoaded = loadLaneData("/tmp/lane_data_save_test.bin");
+
+  EXPECT_EQ(lDataVec.size(), lDataLoaded.size());
+  EXPECT_EQ(lDataVec.front().compoundCenterlines().size(), lDataLoaded.front().compoundCenterlines().size());
+  EXPECT_EQ(lDataVec.front().compoundRoadBorders().size(), lDataLoaded.front().compoundRoadBorders().size());
+  EXPECT_EQ(lDataVec.back().compoundLaneDividers().size(), lDataLoaded.back().compoundLaneDividers().size());
+}

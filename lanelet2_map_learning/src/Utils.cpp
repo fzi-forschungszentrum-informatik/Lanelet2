@@ -3,6 +3,11 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Lanelet.h>
 
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
 namespace lanelet {
 namespace map_learning {
 
@@ -69,6 +74,8 @@ BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3
   for (const auto& pt2d : cut2d[0]) {
     double lastDist = std::numeric_limits<double>::max();
     for (const auto& pt : polyline) {
+      std::cerr << "Point: " << pt.x() << ", " << pt.y() << std::endl;
+
       double currDist = (pt2d - BasicPoint2d(pt.x(), pt.y())).norm();
       if (currDist < lastDist) {
         lastDist = currDist;
@@ -82,6 +89,29 @@ BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3
   }
 
   return cut3d;
+}
+
+void saveLaneData(const std::string& filename, const std::vector<LaneData>& lDataVec) {
+  std::ofstream fs(filename, std::ofstream::binary);
+  if (!fs.good()) {
+    throw std::runtime_error("Failed to open archive " + filename);
+  }
+  boost::archive::binary_oarchive oa(fs);
+  oa << lDataVec;
+}
+
+std::vector<LaneData> loadLaneData(const std::string& filename) {
+  if (!fs::exists(fs::path(filename))) {
+    throw std::runtime_error("Could not find file under " + filename);
+  }
+  std::ifstream fs(filename, std::ifstream::binary);
+  if (!fs.good()) {
+    throw std::runtime_error("Failed to open archive " + filename);
+  }
+  boost::archive::binary_iarchive ia(fs);
+  std::vector<LaneData> lDataVec;
+  ia >> lDataVec;
+  return lDataVec;
 }
 
 }  // namespace map_learning

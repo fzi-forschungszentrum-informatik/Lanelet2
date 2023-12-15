@@ -17,6 +17,7 @@ namespace lanelet {
 namespace map_learning {
 
 struct Edge {
+  Edge() = default;
   Edge(Id el1, Id el2) : el1_{el1}, el2_{el2} {}
   Id el1_;
   Id el2_;
@@ -54,6 +55,10 @@ class LaneData {
 
   const LaneletFeatures& laneletFeatures() { return laneletFeatures_; }
   const Edges& edges() { return edges_; }
+
+  template <class Archive>
+  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LaneData& feat,
+                                              const unsigned int /*version*/);
 
  private:
   void initLeftBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);

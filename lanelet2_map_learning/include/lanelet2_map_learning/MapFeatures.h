@@ -22,6 +22,12 @@ class MapFeature {
   virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/, bool /*unused*/) const = 0;
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) = 0;
 
+  template <class Archive>
+  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::MapFeature& feat,
+                                              const unsigned int /*version*/);
+
+  virtual ~MapFeature() noexcept = default;
+
  protected:
   bool initialized_{false};
   bool wasCut_{false};
@@ -30,7 +36,6 @@ class MapFeature {
 
   MapFeature() = default;
   MapFeature(Id mapID) : mapID_{mapID}, initialized_{true} {}
-  virtual ~MapFeature() noexcept = default;
 };
 
 class LineStringFeature : public MapFeature {
@@ -41,12 +46,17 @@ class LineStringFeature : public MapFeature {
   virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const = 0;
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) = 0;
 
+  template <class Archive>
+  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LineStringFeature& feat,
+                                              const unsigned int /*version*/);
+
+  virtual ~LineStringFeature() noexcept = default;
+
  protected:
   BasicLineString3d rawFeature_;
 
   LineStringFeature() {}
   LineStringFeature(const BasicLineString3d& feature, Id mapID) : MapFeature(mapID), rawFeature_{feature} {}
-  virtual ~LineStringFeature() noexcept = default;
 };
 
 class LaneLineStringFeature : public LineStringFeature {
@@ -69,6 +79,10 @@ class LaneLineStringFeature : public LineStringFeature {
   int typeInt() const { return static_cast<int>(type_); }
   const std::vector<Id>& laneletIDs() const { return laneletIDs_; }
   void addLaneletID(Id id) { laneletIDs_.push_back(id); }
+
+  template <class Archive>
+  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LaneLineStringFeature& feat,
+                                              const unsigned int /*version*/);
 
  protected:
   BasicLineString3d cutFeature_;
@@ -117,6 +131,10 @@ class LaneletFeature : public MapFeature {
   const LaneLineStringFeature& rightBoundary() const { return rightBoundary_; }
   const LaneLineStringFeature& centerline() const { return centerline_; }
 
+  template <class Archive>
+  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LaneletFeature& feat,
+                                              const unsigned int /*version*/);
+
  private:
   LaneLineStringFeature leftBoundary_;
   LaneLineStringFeature rightBoundary_;
@@ -137,6 +155,10 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   const std::vector<double>& pathLengthsRaw() const { return pathLengthsRaw_; }
   const std::vector<double>& pathLengthsProcessed() const { return pathLengthsProcessed_; }
   const std::vector<bool>& processedFeaturesValid() const { return processedFeaturesValid_; }
+
+  template <class Archive>
+  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::CompoundLaneLineStringFeature& feat,
+                                              const unsigned int /*version*/);
 
  private:
   LaneLineStringFeatureList individualFeatures_;

@@ -33,5 +33,36 @@ inline int relationToInt(lanelet::routing::RelationType type) {
 enum class LaneletRepresentationType;
 enum class ParametrizationType;
 
+class MapFeature;
+class LineStringFeature;
+class LaneLineStringFeature;
+class CompoundLaneLineStringFeature;
+class LaneletFeature;
+class LaneData;
+
 }  // namespace map_learning
 }  // namespace lanelet
+
+namespace boost {
+namespace serialization {
+
+template <class Archive>
+void serialize(Archive& ar, lanelet::map_learning::MapFeature& feat, const unsigned int /*version*/);
+
+template <class Archive>
+void serialize(Archive& ar, lanelet::map_learning::LineStringFeature& feat, const unsigned int /*version*/);
+
+template <class Archive>
+void serialize(Archive& ar, lanelet::map_learning::LaneLineStringFeature& feat, const unsigned int /*version*/);
+
+template <class Archive>
+void serialize(Archive& ar, lanelet::map_learning::CompoundLaneLineStringFeature& feat, const unsigned int /*version*/);
+
+template <class Archive>
+void serialize(Archive& ar, lanelet::map_learning::LaneletFeature& feat, const unsigned int /*version*/);
+
+template <class Archive>
+void serialize(Archive& ar, lanelet::map_learning::LaneData& feat, const unsigned int /*version*/);
+
+}  // namespace serialization
+}  // namespace boost

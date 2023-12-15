@@ -6,11 +6,10 @@
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
 
 #include <boost/geometry.hpp>
-#include <type_traits>
 
-#include "lanelet2_map_learning/Forward.h"
-#include "lanelet2_map_learning/Types.h"
-
+#include "Forward.h"
+#include "Serialize.h"
+#include "Types.h"
 namespace lanelet {
 namespace map_learning {
 
@@ -67,6 +66,10 @@ inline TEType teTypeToEnum(const ConstLineString3d& te) {
 BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t nPoints);
 
 BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
+
+void saveLaneData(const std::string& filename, const std::vector<LaneData>& lDataVec);
+
+std::vector<LaneData> loadLaneData(const std::string& filename);
 
 }  // namespace map_learning
 }  // namespace lanelet
