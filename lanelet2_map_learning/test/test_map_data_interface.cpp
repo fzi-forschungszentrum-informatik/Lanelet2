@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
+
+#include <chrono>
 // #include <matplot/matplot.h>
 
 #include "lanelet2_map_learning/MapData.h"
@@ -11,6 +13,12 @@
 using namespace lanelet;
 using namespace lanelet::map_learning;
 using namespace lanelet::map_learning::tests;
+
+// template <class result_t = std::chrono::microseconds, class clock_t = std::chrono::steady_clock,
+//           class duration_t = std::chrono::microseconds>
+// auto since(std::chrono::time_point<clock_t, duration_t> const& start) {
+//   return std::chrono::duration_cast<result_t>(clock_t::now() - start);
+//  }
 
 TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
   traffic_rules::TrafficRulesPtr trafficRules{
@@ -26,7 +34,10 @@ TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
   BasicPoints2d pts{BasicPoint2d(0, -3), BasicPoint2d(3, -3), BasicPoint2d(5, -3),
                     BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
   std::vector<double> yaws{0, 0, M_PI / 4, M_PI / 3, M_PI / 2, M_PI / 2};
+
+  // auto start = std::chrono::steady_clock::now();
   std::vector<LaneData> lDataVec = parser.laneDataBatch(pts, yaws);
+  // std::cerr << "Elapsed(micros)=" << since(start).count() << std::endl;
 
   for (size_t i = 0; i < lDataVec.size(); i++) {
     std::vector<Eigen::MatrixXd> compoundRoadBorders =
@@ -107,14 +118,17 @@ TEST_F(MapLearningTest, MapDataSaveLoad) {
                     BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
   std::vector<double> yaws{0, 0, M_PI / 4, M_PI / 3, M_PI / 2, M_PI / 2};
 
-  std::cerr << "Generated MapDataInterface!" << std::endl;
-
   std::vector<LaneData> lDataVec = parser.laneDataBatch(pts, yaws);
-  std::cerr << "Generated LaneData!" << std::endl;
 
-  saveLaneData("/tmp/lane_data_save_test.bin", lDataVec);
-  std::vector<LaneData> lDataLoaded = loadLaneData("/tmp/lane_data_save_test.bin");
+  saveLaneData("/tmp/lane_data_save_test.xml", lDataVec);
+  std::vector<LaneData> lDataLoaded = loadLaneData("/tmp/lane_data_save_test.xml");
+  EXPECT_EQ(lDataVec.size(), lDataLoaded.size());
+  EXPECT_EQ(lDataVec.front().compoundCenterlines().size(), lDataLoaded.front().compoundCenterlines().size());
+  EXPECT_EQ(lDataVec.front().compoundRoadBorders().size(), lDataLoaded.front().compoundRoadBorders().size());
+  EXPECT_EQ(lDataVec.back().compoundLaneDividers().size(), lDataLoaded.back().compoundLaneDividers().size());
 
+  saveLaneData("/tmp/lane_data_save_test.bin", lDataVec, true);
+  lDataLoaded = loadLaneData("/tmp/lane_data_save_test.bin", true);
   EXPECT_EQ(lDataVec.size(), lDataLoaded.size());
   EXPECT_EQ(lDataVec.front().compoundCenterlines().size(), lDataLoaded.front().compoundCenterlines().size());
   EXPECT_EQ(lDataVec.front().compoundRoadBorders().size(), lDataLoaded.front().compoundRoadBorders().size());

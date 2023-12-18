@@ -18,6 +18,7 @@
   <depend>lanelet2_core</depend>
   <depend>lanelet2_io</depend>
   <depend>lanelet2_routing</depend>
+  <depend>lanelet2_map_learning</depend>
   <depend>lanelet2_traffic_rules</depend>
   <depend>lanelet2_projection</depend>
   <depend>lanelet2_matching</depend>

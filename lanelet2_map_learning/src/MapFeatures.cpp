@@ -33,7 +33,6 @@ LStringProcessResult processLineStringImpl(const BasicLineString3d& lstring, con
   double lengthProcessed = boost::geometry::length(result.cutAndResampledFeature_,
                                                    boost::geometry::strategy::distance::pythagoras<double>());
 
-  assert(lengthOriginal - lengthProcessed > -1e-2);
   if (lengthOriginal - lengthProcessed > 1e-2) {
     result.wasCut_ = true;
   }
@@ -197,7 +196,9 @@ CompoundLaneLineStringFeature::CompoundLaneLineStringFeature(const LaneLineStrin
   type_ = compoundType;
 
   for (size_t i = 0; i < features.size(); i++) {
-    assert(features[i].rawFeature().size() > 1);
+    if (features[i].rawFeature().empty()) {
+      throw std::runtime_error("Feature with empty rawFeature() supplied!");
+    }
     if (i == features.size() - 1) {
       rawFeature_.insert(rawFeature_.end(), features[i].rawFeature().begin(), features[i].rawFeature().end());
     } else {

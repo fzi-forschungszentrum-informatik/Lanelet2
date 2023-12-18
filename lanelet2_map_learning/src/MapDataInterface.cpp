@@ -39,7 +39,8 @@ LaneData MapDataInterface::getLaneData(LaneletSubmapConstPtr localSubmap,
   return laneData;
 }
 
-std::vector<LaneData> MapDataInterface::laneDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws) {
+std::vector<LaneData> MapDataInterface::laneDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws,
+                                                      bool processAll) {
   if (pts.size() != yaws.size()) {
     throw std::runtime_error("Unequal sizes of pts and yaws!");
   }
@@ -49,12 +50,13 @@ std::vector<LaneData> MapDataInterface::laneDataBatch(const BasicPoints2d& pts, 
         extractSubmap(laneletMap_, pts[i], config_.submapExtentLongitudinal, config_.submapExtentLateral);
     routing::RoutingGraphConstPtr localSubmapGraph =
         lanelet::routing::RoutingGraph::build(*localSubmap, *trafficRules_);
-    lDataVec.push_back(getLaneData(localSubmap, localSubmapGraph, pts[i], yaws[i]));
+    lDataVec.push_back(getLaneData(localSubmap, localSubmapGraph, pts[i], yaws[i], processAll));
   }
   return lDataVec;
 }
 
-std::vector<TEData> MapDataInterface::laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws) {
+std::vector<TEData> MapDataInterface::laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws,
+                                                      bool processAll) {
   throw std::runtime_error("Not implemented yet!");
 }
 

@@ -42,14 +42,9 @@ TEST(UtilsTest, ResampleLineString) {  // NOLINT
 }
 
 TEST_F(MapLearningTest, CutLineString) {  // NOLINT
-  BasicLineString3d polyline{BasicPoint3d{0, 0, 0}, BasicPoint3d{30, 0, 0}};
+  BasicLineString3d polyline{BasicPoint3d{0, 0, 0}, BasicPoint3d{30, 0, 0}, BasicPoint3d{40, 0, 0},
+                             BasicPoint3d{50, 0, 0}};
   BasicLineString3d polylineCut = cutLineString(bbox, polyline);
-
-  // for (const auto& pt : polylineCut) {
-  //   std::cerr << pt << '\n';
-  //   std::cerr << "---" << '\n';
-  // }
-  // std::cerr << "---------------------------" << '\n';
 
   EXPECT_EQ(polylineCut.size(), 2);
   EXPECT_NEAR(polylineCut[1].x(), 15, 10e-5);

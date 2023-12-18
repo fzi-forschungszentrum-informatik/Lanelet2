@@ -183,7 +183,9 @@ Eigen::MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool 
 
 template <class T>
 Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
-  assert(!mapFeatures.empty());
+  if (mapFeatures.empty()) {
+    throw std::runtime_error("Empty mapFeatures vector supplied!");
+  }
   std::vector<Eigen::VectorXd> featureVectors;
   for (const auto& feat : mapFeatures) {
     if (!feat.valid()) {
@@ -215,7 +217,9 @@ std::vector<Eigen::MatrixXd> getPointsMatrixList(const std::map<Id, T>& mapFeatu
 
 template <class T>
 std::vector<Eigen::MatrixXd> getPointsMatrixList(const std::vector<T>& mapFeatures, bool pointsIn2d) {
-  assert(!mapFeatures.empty());
+  if (mapFeatures.empty()) {
+    throw std::runtime_error("Empty mapFeatures vector supplied!");
+  }
   std::vector<Eigen::MatrixXd> pointMatrices;
   for (const auto& feat : mapFeatures) {
     if (!feat.valid()) {

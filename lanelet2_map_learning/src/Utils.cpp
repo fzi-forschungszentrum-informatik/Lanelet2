@@ -5,6 +5,8 @@
 
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
 #include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
@@ -67,50 +69,69 @@ BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3
   }
   std::deque<BasicLineString2d> cut2d;
   boost::geometry::intersection(bbox, polyline2d, cut2d);
-  assert(cut2d.size() == 1);
 
-  // restore z value from closest point on the original linestring
   BasicLineString3d cut3d;
+  if (cut2d.empty()) {
+    return cut3d;
+  } else if (cut2d.size() > 1) {
+    throw std::runtime_error("More than one cut line!");
+  }
+
+  // restore z value from closest point on the original linestring and remove double points of boost intersection
   for (const auto& pt2d : cut2d[0]) {
     double lastDist = std::numeric_limits<double>::max();
+    double bestZ;
     for (const auto& pt : polyline) {
-      std::cerr << "Point: " << pt.x() << ", " << pt.y() << std::endl;
-
       double currDist = (pt2d - BasicPoint2d(pt.x(), pt.y())).norm();
       if (currDist < lastDist) {
         lastDist = currDist;
-        if (pt == polyline.back()) {
-          cut3d.push_back(BasicPoint3d(pt2d.x(), pt2d.y(), pt.z()));
-        }
-      } else {
-        cut3d.push_back(BasicPoint3d(pt2d.x(), pt2d.y(), pt.z()));
+        bestZ = pt.z();
       }
     }
+    cut3d.push_back(BasicPoint3d(pt2d.x(), pt2d.y(), bestZ));
   }
-
   return cut3d;
 }
 
-void saveLaneData(const std::string& filename, const std::vector<LaneData>& lDataVec) {
-  std::ofstream fs(filename, std::ofstream::binary);
-  if (!fs.good()) {
-    throw std::runtime_error("Failed to open archive " + filename);
+void saveLaneData(const std::string& filename, const std::vector<LaneData>& lDataVec, bool binary) {
+  if (binary) {
+    std::ofstream fs(filename, std::ofstream::binary);
+    if (!fs.good()) {
+      throw std::runtime_error("Failed to open archive " + filename);
+    }
+    boost::archive::binary_oarchive oa(fs);
+    oa << lDataVec;
+  } else {
+    std::ofstream fs(filename);
+    if (!fs.good()) {
+      throw std::runtime_error("Failed to open archive " + filename);
+    }
+    boost::archive::xml_oarchive oa(fs, boost::archive::no_header);
+    oa << BOOST_SERIALIZATION_NVP(lDataVec);
   }
-  boost::archive::binary_oarchive oa(fs);
-  oa << lDataVec;
 }
 
-std::vector<LaneData> loadLaneData(const std::string& filename) {
+std::vector<LaneData> loadLaneData(const std::string& filename, bool binary) {
   if (!fs::exists(fs::path(filename))) {
     throw std::runtime_error("Could not find file under " + filename);
   }
-  std::ifstream fs(filename, std::ifstream::binary);
-  if (!fs.good()) {
-    throw std::runtime_error("Failed to open archive " + filename);
-  }
-  boost::archive::binary_iarchive ia(fs);
   std::vector<LaneData> lDataVec;
-  ia >> lDataVec;
+  if (binary) {
+    std::ifstream fs(filename, std::ifstream::binary);
+    if (!fs.good()) {
+      throw std::runtime_error("Failed to open archive " + filename);
+    }
+    boost::archive::binary_iarchive ia(fs);
+    ia >> lDataVec;
+  } else {
+    std::ifstream fs(filename);
+    if (!fs.good()) {
+      throw std::runtime_error("Failed to open archive " + filename);
+    }
+    boost::archive::xml_iarchive ia(fs, boost::archive::no_header);
+    ia >> BOOST_SERIALIZATION_NVP(lDataVec);
+  }
+
   return lDataVec;
 }
 
