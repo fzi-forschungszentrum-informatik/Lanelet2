@@ -30,7 +30,6 @@ class MapFeature {
 
  protected:
   bool initialized_{false};
-  bool wasCut_{false};
   bool valid_{true};
   Optional<Id> mapID_;
 

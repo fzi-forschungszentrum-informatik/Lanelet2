@@ -1,13 +1,13 @@
 #include <gtest/gtest.h>
-#include <lanelet2_traffic_rules/TrafficRulesFactory.h>
 
-#include <chrono>
+// #include <chrono>
 // #include <matplot/matplot.h>
 
 #include "lanelet2_map_learning/MapData.h"
 #include "lanelet2_map_learning/MapDataInterface.h"
 #include "lanelet2_map_learning/MapFeatures.h"
 #include "lanelet2_routing/RoutingGraph.h"
+#include "lanelet2_traffic_rules/TrafficRulesFactory.h"
 #include "test_map.h"
 
 using namespace lanelet;
