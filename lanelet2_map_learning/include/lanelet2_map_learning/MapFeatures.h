@@ -15,9 +15,10 @@ namespace map_learning {
 
 class MapFeature {
  public:
-  const Id& mapID() const { return mapID_.get_value_or(InvalId); }
-  const bool& initialized() const { return initialized_; }
-  const bool& valid() const { return valid_; }
+  const Id mapID() const { return mapID_.get_value_or(InvalId); }
+  bool initialized() const { return initialized_; }
+  bool valid() const { return valid_; }
+  bool wasCut() const { return wasCut_; }
 
   virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/, bool /*unused*/) const = 0;
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) = 0;
@@ -31,6 +32,7 @@ class MapFeature {
  protected:
   bool initialized_{false};
   bool valid_{true};
+  bool wasCut_{false};
   Optional<Id> mapID_;
 
   MapFeature() = default;
@@ -71,10 +73,9 @@ class LaneLineStringFeature : public LineStringFeature {
       bool pointsIn2d) const override;                                  // uses processedFeature_ when available
   virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const override;  // uses processedFeature_ when available
 
-  const bool& wasCut() const { return wasCut_; }
   const BasicLineString3d& cutFeature() const { return cutFeature_; }
   const BasicLineString3d& cutAndResampledFeature() const { return cutAndResampledFeature_; }
-  const LineStringType& type() const { return type_; }
+  LineStringType type() const { return type_; }
   int typeInt() const { return static_cast<int>(type_); }
   const std::vector<Id>& laneletIDs() const { return laneletIDs_; }
   void addLaneletID(Id id) { laneletIDs_.push_back(id); }
@@ -86,7 +87,6 @@ class LaneLineStringFeature : public LineStringFeature {
  protected:
   BasicLineString3d cutFeature_;
   BasicLineString3d cutAndResampledFeature_;
-  bool wasCut_{false};
   LineStringType type_;
   std::vector<Id> laneletIDs_;
 };
@@ -164,7 +164,7 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   std::vector<double> pathLengthsRaw_;
   std::vector<double> pathLengthsProcessed_;
   std::vector<bool> processedFeaturesValid_;
-  double validLengthThresh_{0.5};
+  double validLengthThresh_{0.3};
 };
 
 using CompoundLaneLineStringFeatureList = std::vector<CompoundLaneLineStringFeature>;
@@ -206,16 +206,16 @@ Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool o
 }
 
 template <class T>
-std::vector<Eigen::MatrixXd> getPointsMatrixList(const std::map<Id, T>& mapFeatures, bool pointsIn2d) {
+std::vector<Eigen::MatrixXd> getPointsMatrices(const std::map<Id, T>& mapFeatures, bool pointsIn2d) {
   std::vector<T> featList;
   for (const auto& pair : mapFeatures) {
     featList.push_back(pair.second);
   }
-  return getPointsMatrixList(featList, pointsIn2d);
+  return getPointsMatrices(featList, pointsIn2d);
 }
 
 template <class T>
-std::vector<Eigen::MatrixXd> getPointsMatrixList(const std::vector<T>& mapFeatures, bool pointsIn2d) {
+std::vector<Eigen::MatrixXd> getPointsMatrices(const std::vector<T>& mapFeatures, bool pointsIn2d) {
   if (mapFeatures.empty()) {
     throw std::runtime_error("Empty mapFeatures vector supplied!");
   }

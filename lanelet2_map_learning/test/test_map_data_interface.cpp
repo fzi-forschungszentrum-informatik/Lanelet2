@@ -41,11 +41,11 @@ TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
 
   for (size_t i = 0; i < lDataVec.size(); i++) {
     std::vector<Eigen::MatrixXd> compoundRoadBorders =
-        getPointsMatrixList(getValidElements(lDataVec[i].compoundRoadBorders()), true);
+        getPointsMatrices(getValidElements(lDataVec[i].compoundRoadBorders()), true);
     std::vector<Eigen::MatrixXd> compoundLaneDividers =
-        getPointsMatrixList(getValidElements(lDataVec[i].compoundLaneDividers()), true);
+        getPointsMatrices(getValidElements(lDataVec[i].compoundLaneDividers()), true);
     std::vector<Eigen::MatrixXd> compoundCenterlines =
-        getPointsMatrixList(getValidElements(lDataVec[i].compoundCenterlines()), true);
+        getPointsMatrices(getValidElements(lDataVec[i].compoundCenterlines()), true);
 
     switch (i) {
       case 0: {
