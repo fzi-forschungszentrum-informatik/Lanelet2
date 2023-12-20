@@ -29,8 +29,8 @@ class GetPointsMatricesWrapper {
     // Expose the templated functions to Python
     def("getPointsMatricesMap", &GetPointsMatricesWrapper::getPointsMatricesMap<LaneLineStringFeature>);
     def("getPointsMatricesVector", &GetPointsMatricesWrapper::getPointsMatricesVector<LaneLineStringFeature>);
-    def("getPointsMatricesMap", &GetPointsMatricesWrapper::getPointsMatricesMap<CompoundLaneLineStringFeature>);
-    def("getPointsMatricesVector", &GetPointsMatricesWrapper::getPointsMatricesVector<CompoundLaneLineStringFeature>);
+    // def("getPointsMatricesVector",
+    // &GetPointsMatricesWrapper::getPointsMatricesVector<CompoundLaneLineStringFeature>);
   }
 };
 
@@ -67,7 +67,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   class_<LineStringFeature, bases<MapFeature>, boost::noncopyable>("LineStringFeature",
                                                                    "Abstract line string feature class", no_init)
       .add_property("rawFeature",
-                    make_function(&LineStringFeature::rawFeature, return_value_policy<reference_existing_object>()))
+                    make_function(&LineStringFeature::rawFeature, return_value_policy<copy_const_reference>()))
       .def("computeFeatureVector", pure_virtual(&LineStringFeature::computeFeatureVector))
       .def("process", pure_virtual(&LineStringFeature::process))
       .def("pointMatrix", pure_virtual(&LineStringFeature::pointMatrix));
@@ -76,13 +76,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                                           init<BasicLineString3d, Id, LineStringType, Id>())
       .def(init<>())
       .add_property("cutFeature",
-                    make_function(&LaneLineStringFeature::cutFeature, return_value_policy<reference_existing_object>()))
+                    make_function(&LaneLineStringFeature::cutFeature, return_value_policy<copy_const_reference>()))
       .add_property("cutAndResampledFeature", make_function(&LaneLineStringFeature::cutAndResampledFeature,
-                                                            return_value_policy<reference_existing_object>()))
+                                                            return_value_policy<copy_const_reference>()))
       .add_property("type", &LaneLineStringFeature::type)
       .add_property("typeInt", &LaneLineStringFeature::typeInt)
       .add_property("laneletIDs",
-                    make_function(&LaneLineStringFeature::laneletIDs, return_value_policy<reference_existing_object>()))
+                    make_function(&LaneLineStringFeature::laneletIDs, return_value_policy<copy_const_reference>()))
       .add_property("addLaneletID", &LaneLineStringFeature::addLaneletID);
 
   class_<LaneletFeature, bases<MapFeature>>(
@@ -91,11 +91,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(init<ConstLanelet>())
       .def(init<>())
       .add_property("leftBoundary",
-                    make_function(&LaneletFeature::leftBoundary, return_value_policy<reference_existing_object>()))
+                    make_function(&LaneletFeature::leftBoundary, return_value_policy<copy_const_reference>()))
       .add_property("rightBoundary",
-                    make_function(&LaneletFeature::rightBoundary, return_value_policy<reference_existing_object>()))
+                    make_function(&LaneletFeature::rightBoundary, return_value_policy<copy_const_reference>()))
       .add_property("centerline",
-                    make_function(&LaneletFeature::centerline, return_value_policy<reference_existing_object>()))
+                    make_function(&LaneletFeature::centerline, return_value_policy<copy_const_reference>()))
       .add_property("setReprType", &LaneletFeature::setReprType);
 
   class_<CompoundLaneLineStringFeature, bases<LaneLineStringFeature>>(
@@ -104,13 +104,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       init<LaneLineStringFeatureList, LineStringType>())
       .def(init<>())
       .add_property("features", make_function(&CompoundLaneLineStringFeature::features,
-                                              return_value_policy<reference_existing_object>()))
+                                              return_value_policy<copy_const_reference>()))
       .add_property("pathLengthsRaw", make_function(&CompoundLaneLineStringFeature::pathLengthsRaw,
-                                                    return_value_policy<reference_existing_object>()))
+                                                    return_value_policy<copy_const_reference>()))
       .add_property("pathLengthsProcessed", make_function(&CompoundLaneLineStringFeature::pathLengthsProcessed,
-                                                          return_value_policy<reference_existing_object>()))
+                                                          return_value_policy<copy_const_reference>()))
       .add_property("processedFeaturesValid", make_function(&CompoundLaneLineStringFeature::processedFeaturesValid,
-                                                            return_value_policy<reference_existing_object>()));
+                                                            return_value_policy<copy_const_reference>()));
 
   class_<Edge>("Edge");
 
@@ -124,10 +124,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>,
       converters::eigen_matrix_to_numpy_array<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>>>();
   converters::VectorToListConverter<std::vector<Eigen::MatrixXd>>();
-  converters::IterableConverter().fromPython<std::vector<Eigen::MatrixXd>>().fromPython<BasicLineString3d>();
-  class_<std::map<Id, LaneLineStringFeature>>("IdToLaneLineStringFeatureMap")
+  converters::VectorToListConverter<LaneLineStringFeatureList>();
+  converters::VectorToListConverter<CompoundLaneLineStringFeatureList>();
+  converters::IterableConverter()
+      .fromPython<std::vector<Eigen::MatrixXd>>()
+      .fromPython<BasicLineString3d>()
+      .fromPython<LaneLineStringFeatureList>()
+      .fromPython<CompoundLaneLineStringFeatureList>();
+  class_<std::map<Id, LaneLineStringFeature>>("LaneLineStringFeatures")
       .def(map_indexing_suite<std::map<Id, LaneLineStringFeature>>());
-  class_<std::map<Id, LaneletFeature>>("IdToLaneletFeatureMap").def(map_indexing_suite<std::map<Id, LaneletFeature>>());
-  class_<std::map<Id, CompoundLaneLineStringFeature>>("IdToCompoundLaneLineStringFeatureMap")
-      .def(map_indexing_suite<std::map<Id, CompoundLaneLineStringFeature>>());
+  class_<std::map<Id, LaneletFeature>>("LaneletFeatures").def(map_indexing_suite<LaneletFeatures>());
 }
