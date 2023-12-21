@@ -51,11 +51,11 @@ bool LaneLineStringFeature::process(const OrientedRect& bbox, const Parametrizat
   return result.valid_;
 }
 
-Eigen::VectorXd LaneLineStringFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
+VectorXd LaneLineStringFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
   const BasicLineString3d& selectedFeature =
       (cutAndResampledFeature_.size() > 0) ? cutAndResampledFeature_ : rawFeature_;
-  Eigen::VectorXd vec = pointsIn2d ? Eigen::VectorXd(2 * selectedFeature.size() + 1)
-                                   : Eigen::VectorXd(3 * selectedFeature.size() + 1);  // n points with 2/3 dims + type
+  VectorXd vec = pointsIn2d ? VectorXd(2 * selectedFeature.size() + 1)
+                            : VectorXd(3 * selectedFeature.size() + 1);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
     for (size_t i = 0; i < selectedFeature.size(); i++) {
       vec(Eigen::seq(2 * i, 2 * i + 1)) = selectedFeature[i](Eigen::seq(0, 1));
@@ -74,9 +74,9 @@ Eigen::VectorXd LaneLineStringFeature::computeFeatureVector(bool onlyPoints, boo
   }
 }
 
-Eigen::VectorXd TEFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-  Eigen::VectorXd vec = pointsIn2d ? Eigen::VectorXd(2 * rawFeature_.size() + 1)
-                                   : Eigen::VectorXd(3 * rawFeature_.size() + 1);  // n points with 2/3 dims + type
+VectorXd TEFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
+  VectorXd vec = pointsIn2d ? VectorXd(2 * rawFeature_.size() + 1)
+                            : VectorXd(3 * rawFeature_.size() + 1);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
     for (size_t i = 0; i < rawFeature_.size(); i++) {
       vec(Eigen::seq(2 * i, 2 * i + 1)) = rawFeature_[i](Eigen::seq(0, 1));
@@ -94,11 +94,11 @@ Eigen::VectorXd TEFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d
   }
 }
 
-Eigen::MatrixXd LaneLineStringFeature::pointMatrix(bool pointsIn2d) const {
+MatrixXd LaneLineStringFeature::pointMatrix(bool pointsIn2d) const {
   const BasicLineString3d& selectedFeature =
       (cutAndResampledFeature_.size() > 0) ? cutAndResampledFeature_ : rawFeature_;
-  Eigen::MatrixXd mat = pointsIn2d ? Eigen::MatrixXd(selectedFeature.size(), 2)
-                                   : Eigen::MatrixXd(selectedFeature.size(), 3);  // n points with 2/3 dims + type
+  MatrixXd mat = pointsIn2d ? MatrixXd(selectedFeature.size(), 2)
+                            : MatrixXd(selectedFeature.size(), 3);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
     for (size_t i = 0; i < selectedFeature.size(); i++) {
       mat.row(i) = selectedFeature[i](Eigen::seq(0, 1));
@@ -111,9 +111,9 @@ Eigen::MatrixXd LaneLineStringFeature::pointMatrix(bool pointsIn2d) const {
   return mat;
 }
 
-Eigen::MatrixXd TEFeature::pointMatrix(bool pointsIn2d) const {
-  Eigen::MatrixXd mat = pointsIn2d ? Eigen::MatrixXd(rawFeature_.size(), 2)
-                                   : Eigen::MatrixXd(rawFeature_.size(), 3);  // n points with 2/3 dims + type
+MatrixXd TEFeature::pointMatrix(bool pointsIn2d) const {
+  MatrixXd mat =
+      pointsIn2d ? MatrixXd(rawFeature_.size(), 2) : MatrixXd(rawFeature_.size(), 3);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
     for (size_t i = 0; i < rawFeature_.size(); i++) {
       mat.row(i) = rawFeature_[i](Eigen::seq(0, 1));
@@ -152,13 +152,13 @@ bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType
   return valid_;
 }
 
-Eigen::VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
+VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
   if (!reprType_.has_value()) {
     throw std::runtime_error(
         "You need to set a LaneletRepresentationType with setReprType() before computing the feature vector!");
   } else if (*reprType_ == LaneletRepresentationType::Centerline) {
-    Eigen::VectorXd vecCenterlinePts = centerline_.computeFeatureVector(true, pointsIn2d);
-    Eigen::VectorXd vec(vecCenterlinePts.size() + 2);  // pts vec + left and right type
+    VectorXd vecCenterlinePts = centerline_.computeFeatureVector(true, pointsIn2d);
+    VectorXd vec(vecCenterlinePts.size() + 2);  // pts vec + left and right type
     vec(Eigen::seq(0, vecCenterlinePts.size() - 1)) = vecCenterlinePts;
     vec[vec.size() - 2] = leftBoundary_.typeInt();
     vec[vec.size() - 1] = rightBoundary_.typeInt();
@@ -168,10 +168,10 @@ Eigen::VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool point
       return vec;
     }
   } else if (*reprType_ == LaneletRepresentationType::Boundaries) {
-    Eigen::VectorXd vecLeftBdPts = leftBoundary_.computeFeatureVector(true, pointsIn2d);
-    Eigen::VectorXd vecRightBdPts = rightBoundary_.computeFeatureVector(true, pointsIn2d);
+    VectorXd vecLeftBdPts = leftBoundary_.computeFeatureVector(true, pointsIn2d);
+    VectorXd vecRightBdPts = rightBoundary_.computeFeatureVector(true, pointsIn2d);
 
-    Eigen::VectorXd vec(vecLeftBdPts.size() + vecRightBdPts.size() + 2);  // pts vec + left and right type
+    VectorXd vec(vecLeftBdPts.size() + vecRightBdPts.size() + 2);  // pts vec + left and right type
     vec(Eigen::seq(0, vecLeftBdPts.size() - 1)) = vecLeftBdPts;
     vec(Eigen::seq(vecLeftBdPts.size(), vecLeftBdPts.size() + vecRightBdPts.size() - 1)) = vecRightBdPts;
     vec[vec.size() - 2] = leftBoundary_.typeInt();
@@ -183,7 +183,7 @@ Eigen::VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool point
     }
   } else {
     throw std::runtime_error("Unknown LaneletRepresentationType!");
-    return Eigen::VectorXd();
+    return VectorXd();
   }
 }
 

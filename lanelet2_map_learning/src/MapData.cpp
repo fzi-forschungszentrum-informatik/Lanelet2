@@ -281,12 +281,12 @@ void LaneData::updateAssociatedCpdFeatureIndices() {
 }
 
 bool LaneData::processAll(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) {
-  bool validRoadBorders = processFeatureMap(roadBorders_, bbox, paramType, nPoints);
-  bool validLaneDividers = processFeatureMap(laneDividers_, bbox, paramType, nPoints);
-  bool validLaneletFeatures = processFeatureMap(laneletFeatures_, bbox, paramType, nPoints);
-  bool validCompoundRoadBorders = processFeatureVec(compoundRoadBorders_, bbox, paramType, nPoints);
-  bool validCompoundLaneDividers = processFeatureVec(compoundLaneDividers_, bbox, paramType, nPoints);
-  bool validCompoundCenterlines = processFeatureVec(compoundCenterlines_, bbox, paramType, nPoints);
+  bool validRoadBorders = processFeatures(roadBorders_, bbox, paramType, nPoints);
+  bool validLaneDividers = processFeatures(laneDividers_, bbox, paramType, nPoints);
+  bool validLaneletFeatures = processFeatures(laneletFeatures_, bbox, paramType, nPoints);
+  bool validCompoundRoadBorders = processFeatures(compoundRoadBorders_, bbox, paramType, nPoints);
+  bool validCompoundLaneDividers = processFeatures(compoundLaneDividers_, bbox, paramType, nPoints);
+  bool validCompoundCenterlines = processFeatures(compoundCenterlines_, bbox, paramType, nPoints);
 
   if (validRoadBorders && validLaneDividers && validLaneletFeatures && validCompoundRoadBorders &&
       validCompoundLaneDividers && validCompoundCenterlines) {

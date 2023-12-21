@@ -13,6 +13,9 @@
 namespace lanelet {
 namespace map_learning {
 
+using VectorXd = Eigen::Matrix<double, Eigen::Dynamic, 1>;
+using MatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
+
 class MapFeature {
  public:
   const Id mapID() const { return mapID_.get_value_or(InvalId); }
@@ -20,8 +23,8 @@ class MapFeature {
   bool valid() const { return valid_; }
   bool wasCut() const { return wasCut_; }
 
-  virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/, bool /*unused*/) const = 0;
-  virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) = 0;
+  virtual VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const = 0;
+  virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) = 0;
 
   template <class Archive>
   friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::MapFeature& feat,
@@ -43,9 +46,9 @@ class LineStringFeature : public MapFeature {
  public:
   const BasicLineString3d& rawFeature() const { return rawFeature_; }
 
-  virtual Eigen::VectorXd computeFeatureVector(bool /*unused*/, bool /*unused*/) const = 0;
-  virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const = 0;
-  virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) = 0;
+  virtual VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const = 0;
+  virtual MatrixXd pointMatrix(bool pointsIn2d) const = 0;
+  virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) = 0;
 
   template <class Archive>
   friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LineStringFeature& feat,
@@ -68,10 +71,9 @@ class LaneLineStringFeature : public LineStringFeature {
   virtual ~LaneLineStringFeature() noexcept = default;
 
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
-  virtual Eigen::VectorXd computeFeatureVector(
-      bool onlyPoints,
-      bool pointsIn2d) const override;                                  // uses processedFeature_ when available
-  virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const override;  // uses processedFeature_ when available
+  virtual VectorXd computeFeatureVector(bool onlyPoints,
+                                        bool pointsIn2d) const override;  // uses processedFeature_ when available
+  virtual MatrixXd pointMatrix(bool pointsIn2d) const override;           // uses processedFeature_ when available
 
   const BasicLineString3d& cutFeature() const { return cutFeature_; }
   const BasicLineString3d& cutAndResampledFeature() const { return cutAndResampledFeature_; }
@@ -103,9 +105,9 @@ class TEFeature : public LineStringFeature {
 
   bool process(const OrientedRect& bbox, const ParametrizationType& paramType,
                int32_t /*unused*/) override;  // not implemented yet
-  Eigen::VectorXd computeFeatureVector(bool onlyPoints,
-                                       bool pointsIn2d) const override;  // currently uses raw feature only
-  virtual Eigen::MatrixXd pointMatrix(bool pointsIn2d) const override;
+  VectorXd computeFeatureVector(bool onlyPoints,
+                                bool pointsIn2d) const override;  // currently uses raw feature only
+  virtual MatrixXd pointMatrix(bool pointsIn2d) const override;
 
   const TEType& teType() { return teType_; }
 
@@ -122,7 +124,7 @@ class LaneletFeature : public MapFeature {
   virtual ~LaneletFeature() noexcept = default;
 
   bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
-  Eigen::VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const override;
+  VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const override;
 
   void setReprType(LaneletRepresentationType reprType) { reprType_ = reprType; }
 
@@ -172,7 +174,7 @@ using TEFeatures = std::map<Id, TEFeature>;
 using LaneletFeatures = std::map<Id, LaneletFeature>;
 
 template <class T>
-Eigen::MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
+MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
   std::vector<T> featList;
   for (const auto& pair : mapFeatures) {
     featList.push_back(pair.second);
@@ -181,11 +183,11 @@ Eigen::MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool 
 }
 
 template <class T>
-Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
+MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
   if (mapFeatures.empty()) {
     throw std::runtime_error("Empty mapFeatures vector supplied!");
   }
-  std::vector<Eigen::VectorXd> featureVectors;
+  std::vector<VectorXd> featureVectors;
   for (const auto& feat : mapFeatures) {
     if (!feat.valid()) {
       throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
@@ -193,12 +195,13 @@ Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool o
     featureVectors.push_back(feat.computeFeatureVector(onlyPoints, pointsIn2d));
   }
   if (std::adjacent_find(featureVectors.begin(), featureVectors.end(),
-                         [](const Eigen::VectorXd& v1, const Eigen::VectorXd& v2) { return v1.size() != v2.size(); }) ==
-      featureVectors.end()) {
+                         [](const VectorXd& v1, const VectorXd& v2) { return v1.size() != v2.size(); }) ==
+          featureVectors.end() &&
+      featureVectors.size() > 1) {
     throw std::runtime_error(
         "Unequal length of feature vectors! To create a matrix all feature vectors must have the same length!");
   }
-  Eigen::MatrixXd featureMat(featureVectors.size(), featureVectors[0].size());
+  MatrixXd featureMat(featureVectors.size(), featureVectors[0].size());
   for (size_t i = 0; i < featureVectors.size(); i++) {
     featureMat.row(i) = featureVectors[i];
   }
@@ -206,7 +209,7 @@ Eigen::MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool o
 }
 
 template <class T>
-std::vector<Eigen::MatrixXd> getPointsMatrices(const std::map<Id, T>& mapFeatures, bool pointsIn2d) {
+std::vector<MatrixXd> getPointsMatrices(const std::map<Id, T>& mapFeatures, bool pointsIn2d) {
   std::vector<T> featList;
   for (const auto& pair : mapFeatures) {
     featList.push_back(pair.second);
@@ -215,11 +218,11 @@ std::vector<Eigen::MatrixXd> getPointsMatrices(const std::map<Id, T>& mapFeature
 }
 
 template <class T>
-std::vector<Eigen::MatrixXd> getPointsMatrices(const std::vector<T>& mapFeatures, bool pointsIn2d) {
+std::vector<MatrixXd> getPointsMatrices(const std::vector<T>& mapFeatures, bool pointsIn2d) {
   if (mapFeatures.empty()) {
     throw std::runtime_error("Empty mapFeatures vector supplied!");
   }
-  std::vector<Eigen::MatrixXd> pointMatrices;
+  std::vector<MatrixXd> pointMatrices;
   for (const auto& feat : mapFeatures) {
     if (!feat.valid()) {
       throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
@@ -230,8 +233,8 @@ std::vector<Eigen::MatrixXd> getPointsMatrices(const std::vector<T>& mapFeatures
 }
 
 template <typename T>
-bool processFeatureMap(std::map<Id, T>& featMap, const OrientedRect& bbox, const ParametrizationType& paramType,
-                       int32_t nPoints) {
+bool processFeatures(std::map<Id, T>& featMap, const OrientedRect& bbox, const ParametrizationType& paramType,
+                     int32_t nPoints) {
   bool allValid = true;
   for (auto& feat : featMap) {
     if (!feat.second.process(bbox, paramType, nPoints)) {
@@ -242,8 +245,8 @@ bool processFeatureMap(std::map<Id, T>& featMap, const OrientedRect& bbox, const
 }
 
 template <typename T>
-bool processFeatureVec(std::vector<T>& featVec, const OrientedRect& bbox, const ParametrizationType& paramType,
-                       int32_t nPoints) {
+bool processFeatures(std::vector<T>& featVec, const OrientedRect& bbox, const ParametrizationType& paramType,
+                     int32_t nPoints) {
   bool allValid = true;
   for (auto& feat : featVec) {
     if (!feat.process(bbox, paramType, nPoints)) {
