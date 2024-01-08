@@ -13,8 +13,7 @@
 namespace lanelet {
 namespace map_learning {
 
-boost::geometry::model::polygon<BasicPoint2d> getRotatedRect(const BasicPoint2d& center, double extentLongitudinal,
-                                                             double extentLateral, double yaw);
+OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudinal, double extentLateral, double yaw);
 
 LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPoint2d& center,
                                     double extentLongitudinal, double extentLateral);

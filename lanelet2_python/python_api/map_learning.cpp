@@ -6,6 +6,7 @@
 #include "lanelet2_map_learning/MapData.h"
 #include "lanelet2_map_learning/MapDataInterface.h"
 #include "lanelet2_map_learning/MapFeatures.h"
+#include "lanelet2_map_learning/Utils.h"
 #include "lanelet2_python/internal/converter.h"
 #include "lanelet2_python/internal/eigen_converter.h"
 
@@ -123,6 +124,9 @@ class LaneletFeatureWrap : public LaneletFeature, public wrapper<LaneletFeature>
 
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
+  Py_Initialize();
+  np::initialize();
+
   enum_<LaneletRepresentationType>("LaneletRepresentationType")
       .value("Centerline", LaneletRepresentationType::Centerline)
       .value("Boundaries", LaneletRepresentationType::Boundaries);
@@ -140,6 +144,19 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .value("Virtual", LineStringType::Virtual)
       .value("Centerline", LineStringType::Centerline)
       .value("Unknown", LineStringType::Unknown);
+
+  class_<OrientedRect>("OrientedRect", "Oriented rectangle for feature crop area", init<>())
+      .add_property("bounds", make_function(&OrientedRect::bounds_const, return_value_policy<copy_const_reference>()));
+
+  def("getRotatedRect", &getRotatedRect);
+  def("extractSubmap", &extractSubmap);
+  def("isRoadBorder", &isRoadBorder);
+  def("bdTypeToEnum", &bdTypeToEnum);
+  def("teTypeToEnum", &teTypeToEnum);
+  def("resampleLineString", &resampleLineString);
+  def("cutLineString", &cutLineString);
+  def("saveLaneData", &saveLaneData);
+  def("loadLaneData", &loadLaneData);
 
   class_<MapFeatureWrap, boost::noncopyable>("MapFeature", "Abstract base map feature class", no_init)
       .add_property("wasCut", &MapFeature::wasCut)
@@ -185,7 +202,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                     make_function(&LaneletFeature::rightBoundary, return_value_policy<copy_const_reference>()))
       .add_property("centerline",
                     make_function(&LaneletFeature::centerline, return_value_policy<copy_const_reference>()))
-      .add_property("setReprType", &LaneletFeature::setReprType)
+      .def("setReprType", &LaneletFeature::setReprType)
       .def("computeFeatureVector", &LaneletFeature::computeFeatureVector,
            &LaneletFeatureWrap::default_computeFeatureVector)
       .def("process", &LaneletFeature::process, &LaneletFeatureWrap::default_process);
@@ -209,22 +226,65 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("pointMatrix", &CompoundLaneLineStringFeature::pointMatrix,
            &CompoundLaneLineStringFeatureWrap::default_pointMatrix);
 
-  class_<Edge>("Edge");
+  class_<Edge>("Edge", "Struct of a lane graph edge", init<Id, Id>())
+      .def(init<>())
+      .add_property("el1", &Edge::el1_)
+      .add_property("el2", &Edge::el2_);
 
-  class_<LaneData>("LaneData");
+  class_<LaneData>("LaneData", "Class for holding, accessing and processing of lane data")
+      .def(init<>())
+      .def("build", &LaneData::build)
+      .staticmethod("build")
+      .def("processAll", &LaneData::processAll)
+      .add_property("roadBorders", make_function(&LaneData::roadBorders, return_value_policy<copy_const_reference>()))
+      .add_property("laneDividers", make_function(&LaneData::laneDividers, return_value_policy<copy_const_reference>()))
+      .add_property("compoundRoadBorders",
+                    make_function(&LaneData::compoundRoadBorders, return_value_policy<copy_const_reference>()))
+      .add_property("compoundLaneDividers",
+                    make_function(&LaneData::compoundLaneDividers, return_value_policy<copy_const_reference>()))
+      .add_property("compoundCenterlines",
+                    make_function(&LaneData::compoundCenterlines, return_value_policy<copy_const_reference>()))
+      .add_property("associatedCpdRoadBorderIndices", make_function(&LaneData::associatedCpdRoadBorderIndices,
+                                                                    return_value_policy<copy_const_reference>()))
+      .add_property("associatedCpdLaneDividerIndices", make_function(&LaneData::associatedCpdLaneDividerIndices,
+                                                                     return_value_policy<copy_const_reference>()))
+      .add_property("associatedCpdCenterlineIndices", make_function(&LaneData::associatedCpdCenterlineIndices,
+                                                                    return_value_policy<copy_const_reference>()))
+      .add_property("laneletFeatures",
+                    make_function(&LaneData::laneletFeatures, return_value_policy<copy_const_reference>()))
+      .add_property("edges", make_function(&LaneData::edges, return_value_policy<copy_const_reference>()));
 
-  // Eigen and stl converters
-  converters::numpy_array_to_eigen_matrix<MatrixXd>();
-  converters::python_list_to_eigen_matrix<MatrixXd>();
-  py::to_python_converter<MatrixXd, converters::eigen_matrix_to_numpy_array<MatrixXd>>();
+  {
+    scope inMapDataInterface =
+        class_<MapDataInterface>("MapDataInterface", "Main Interface Class for processing of Lanelet maps",
+                                 init<LaneletMapConstPtr>())
+            .def(init<LaneletMapConstPtr, MapDataInterface::Configuration>())
+            .add_property("config",
+                          make_function(&MapDataInterface::config, return_value_policy<copy_const_reference>()))
+            .def("setCurrPosAndExtractSubmap", &MapDataInterface::setCurrPosAndExtractSubmap)
+            .def("laneData", &MapDataInterface::laneData)
+            .def("teData", &MapDataInterface::teData)
+            .def("laneDataBatch", &MapDataInterface::laneDataBatch)
+            .def("laneTEDataBatch", &MapDataInterface::laneTEDataBatch);
 
-  converters::numpy_array_to_eigen_vector<VectorXd>();
-  converters::python_list_to_eigen_vector<VectorXd>();
-  py::to_python_converter<VectorXd, converters::eigen_vector_to_numpy_array<VectorXd>>();
+    class_<MapDataInterface::Configuration>("Configuration", "Configuration class for MapDataInterface", init<>())
+        .def(init<LaneletRepresentationType, ParametrizationType, double, double, int>())
+        .def_readwrite("reprType", &MapDataInterface::Configuration::reprType)
+        .def_readwrite("paramType", &MapDataInterface::Configuration::paramType)
+        .def_readwrite("submapExtentLongitudinal", &MapDataInterface::Configuration::submapExtentLongitudinal)
+        .def_readwrite("submapExtentLateral", &MapDataInterface::Configuration::submapExtentLateral)
+        .def_readwrite("nPoints", &MapDataInterface::Configuration::nPoints);
+  }
+
+  // Eigen, stl etc. converters
+  converters::convertMatrix<MatrixXd>(true);
+  converters::convertVector<VectorXd>(true);
 
   converters::VectorToListConverter<std::vector<MatrixXd>>();
   converters::VectorToListConverter<LaneLineStringFeatureList>();
   converters::VectorToListConverter<CompoundLaneLineStringFeatureList>();
+  converters::VectorToListConverter<
+      boost::geometry::model::ring<BasicPoint2d, true, true, std::vector, std::allocator>>();
   converters::IterableConverter()
       .fromPython<std::vector<MatrixXd>>()
       .fromPython<BasicLineString3d>()
@@ -236,38 +296,41 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   converters::VectorToListConverter<std::vector<double>>();
   class_<std::vector<bool>>("BoolList").def(vector_indexing_suite<std::vector<bool>>());
 
-  // overloaded template function instantiations
-  def<std::vector<MatrixXd> (*)(const std::map<Id, LaneLineStringFeature> &, bool)>("getPointsMatrices",
-                                                                                    &getPointsMatrices);
-  def<std::vector<MatrixXd> (*)(const std::vector<LaneLineStringFeature> &, bool)>("getPointsMatrices",
-                                                                                   &getPointsMatrices);
-  def<std::vector<MatrixXd> (*)(const std::map<Id, CompoundLaneLineStringFeature> &, bool)>("getPointsMatrices",
-                                                                                            &getPointsMatrices);
-  def<std::vector<MatrixXd> (*)(const std::vector<CompoundLaneLineStringFeature> &, bool)>("getPointsMatrices",
-                                                                                           &getPointsMatrices);
+  implicitly_convertible<routing::RoutingGraphPtr, routing::RoutingGraphConstPtr>();
 
-  def<MatrixXd (*)(const std::map<Id, LaneLineStringFeature> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                             &getFeatureVectorMatrix);
-  def<MatrixXd (*)(const std::vector<LaneLineStringFeature> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                            &getFeatureVectorMatrix);
-  def<MatrixXd (*)(const std::map<Id, CompoundLaneLineStringFeature> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                                     &getFeatureVectorMatrix);
-  def<MatrixXd (*)(const std::vector<CompoundLaneLineStringFeature> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                                    &getFeatureVectorMatrix);
+  // overloaded template function instantiations
+  def<std::vector<MatrixXd> (*)(const std::map<Id, LaneLineStringFeature> &, bool)>(
+      "getPointsMatrices", &getPointsMatrices<LaneLineStringFeature>);
+  def<std::vector<MatrixXd> (*)(const std::vector<LaneLineStringFeature> &, bool)>(
+      "getPointsMatrices", &getPointsMatrices<LaneLineStringFeature>);
+  def<std::vector<MatrixXd> (*)(const std::map<Id, CompoundLaneLineStringFeature> &, bool)>(
+      "getPointsMatrices", &getPointsMatrices<CompoundLaneLineStringFeature>);
+  def<std::vector<MatrixXd> (*)(const std::vector<CompoundLaneLineStringFeature> &, bool)>(
+      "getPointsMatrices", &getPointsMatrices<CompoundLaneLineStringFeature>);
+
+  def<MatrixXd (*)(const std::map<Id, LaneLineStringFeature> &, bool, bool)>(
+      "getFeatureVectorMatrix", &getFeatureVectorMatrix<LaneLineStringFeature>);
+  def<MatrixXd (*)(const std::vector<LaneLineStringFeature> &, bool, bool)>(
+      "getFeatureVectorMatrix", &getFeatureVectorMatrix<LaneLineStringFeature>);
+  def<MatrixXd (*)(const std::map<Id, CompoundLaneLineStringFeature> &, bool, bool)>(
+      "getFeatureVectorMatrix", &getFeatureVectorMatrix<CompoundLaneLineStringFeature>);
+  def<MatrixXd (*)(const std::vector<CompoundLaneLineStringFeature> &, bool, bool)>(
+      "getFeatureVectorMatrix", &getFeatureVectorMatrix<CompoundLaneLineStringFeature>);
   def<MatrixXd (*)(const std::map<Id, LaneletFeature> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                      &getFeatureVectorMatrix);
-  def<MatrixXd (*)(const std::vector<LaneletFeature> &, bool, bool)>("getFeatureVectorMatrix", &getFeatureVectorMatrix);
+                                                                      &getFeatureVectorMatrix<LaneletFeature>);
+  def<MatrixXd (*)(const std::vector<LaneletFeature> &, bool, bool)>("getFeatureVectorMatrix",
+                                                                     &getFeatureVectorMatrix<LaneletFeature>);
 
   def<bool (*)(std::map<Id, LaneLineStringFeature> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
-      "processFeatures", &processFeatures);
+      "processFeatures", &processFeatures<LaneLineStringFeature>);
   def<bool (*)(std::vector<LaneLineStringFeature> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
-      "processFeatures", &processFeatures);
+      "processFeatures", &processFeatures<LaneLineStringFeature>);
   def<bool (*)(std::map<Id, CompoundLaneLineStringFeature> &, const OrientedRect &, const ParametrizationType &,
-               int32_t)>("processFeatures", &processFeatures);
+               int32_t)>("processFeatures", &processFeatures<CompoundLaneLineStringFeature>);
   def<bool (*)(std::vector<CompoundLaneLineStringFeature> &, const OrientedRect &, const ParametrizationType &,
-               int32_t)>("processFeatures", &processFeatures);
+               int32_t)>("processFeatures", &processFeatures<CompoundLaneLineStringFeature>);
   def<bool (*)(std::map<Id, LaneletFeature> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
-      "processFeatures", &processFeatures);
+      "processFeatures", &processFeatures<LaneletFeature>);
   def<bool (*)(std::vector<LaneletFeature> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
-      "processFeatures", &processFeatures);
+      "processFeatures", &processFeatures<LaneletFeature>);
 }

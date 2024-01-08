@@ -15,27 +15,25 @@ namespace map_learning {
 
 class MapDataInterface {
  public:
-  template <typename T>
-  using FeatureBuffer =
-      std::unordered_map<Id, T, std::hash<Id>, std::equal_to<Id>, Eigen::aligned_allocator<std::pair<const Id, T>>>;
-
   struct Configuration {
     Configuration() noexcept {}
-    Configuration(LaneletRepresentationType reprType, ParametrizationType paramType, double submapAreaLongitudinal,
-                  double submapAreaLateral, int nPoints) noexcept
+    Configuration(LaneletRepresentationType reprType, ParametrizationType paramType, double submapExtentLongitudinal,
+                  double submapExtentLateral, int nPoints) noexcept
         : reprType{reprType},
           paramType{paramType},
           submapExtentLongitudinal{submapExtentLongitudinal},
-          submapExtentLateral{submapExtentLateral} {}
+          submapExtentLateral{submapExtentLateral},
+          nPoints{nPoints} {}
     LaneletRepresentationType reprType{LaneletRepresentationType::Boundaries};
     ParametrizationType paramType{ParametrizationType::LineString};
     double submapExtentLongitudinal{30};  // in driving direction
     double submapExtentLateral{15};       // in lateral direction
     int nPoints{20};
   };
+  MapDataInterface(LaneletMapConstPtr laneletMap);
+  MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config);
 
-  MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config = Configuration(),
-                   Optional<BasicPoint2d> currPos = boost::none);
+  const Configuration& config() { return config_; }
 
   void setCurrPosAndExtractSubmap(const BasicPoint2d& pt, double yaw);
   LaneData laneData();

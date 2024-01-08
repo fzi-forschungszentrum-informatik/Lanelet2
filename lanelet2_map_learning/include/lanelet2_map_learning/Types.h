@@ -24,7 +24,12 @@ enum class LineStringType {
 };  // Mixed == DashedSolid or SolidDashed
 enum class TEType { TrafficLight, TrafficSign, Unknown };
 
-using OrientedRect = boost::geometry::model::polygon<BasicPoint2d>;
+// wrapper for boost::python reasons
+struct OrientedRect {
+  boost::geometry::model::polygon<BasicPoint2d> bg_poly;
+  boost::geometry::model::polygon<BasicPoint2d>::ring_type& bounds() { return bg_poly.outer(); }
+  const boost::geometry::model::polygon<BasicPoint2d>::ring_type& bounds_const() { return bg_poly.outer(); }
+};
 
 }  // namespace map_learning
 }  // namespace lanelet

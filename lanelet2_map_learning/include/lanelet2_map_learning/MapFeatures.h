@@ -140,7 +140,7 @@ class LaneletFeature : public MapFeature {
   LaneLineStringFeature leftBoundary_;
   LaneLineStringFeature rightBoundary_;
   LaneLineStringFeature centerline_;
-  Optional<LaneletRepresentationType> reprType_;
+  LaneletRepresentationType reprType_{LaneletRepresentationType::Centerline};
 };
 
 class CompoundLaneLineStringFeature : public LaneLineStringFeature {

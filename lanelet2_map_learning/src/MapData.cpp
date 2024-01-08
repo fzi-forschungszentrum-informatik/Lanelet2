@@ -226,7 +226,7 @@ void LaneData::initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
   for (const auto& ll : localSubmap->laneletLayer) {
     ConstLanelets previousLLs = localSubmapGraph->previous(ll, false);
     ConstLanelets successorLLs = localSubmapGraph->following(ll, false);
-    if (previousLLs.empty() && !successorLLs.empty()) {
+    if (previousLLs.empty()) {
       getPaths(localSubmapGraph, paths, ll);
     }
   }

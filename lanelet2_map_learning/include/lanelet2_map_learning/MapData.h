@@ -88,6 +88,7 @@ class LaneData {
   Edges edges_;                                                        // edge list for centerlines
 };
 
+/// TODO: finish TE support
 class TEData {
  public:
   TEData() noexcept {}

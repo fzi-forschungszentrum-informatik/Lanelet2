@@ -153,10 +153,7 @@ bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType
 }
 
 VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-  if (!reprType_.has_value()) {
-    throw std::runtime_error(
-        "You need to set a LaneletRepresentationType with setReprType() before computing the feature vector!");
-  } else if (*reprType_ == LaneletRepresentationType::Centerline) {
+  if (reprType_ == LaneletRepresentationType::Centerline) {
     VectorXd vecCenterlinePts = centerline_.computeFeatureVector(true, pointsIn2d);
     VectorXd vec(vecCenterlinePts.size() + 2);  // pts vec + left and right type
     vec(Eigen::seq(0, vecCenterlinePts.size() - 1)) = vecCenterlinePts;
@@ -167,7 +164,7 @@ VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) 
     } else {
       return vec;
     }
-  } else if (*reprType_ == LaneletRepresentationType::Boundaries) {
+  } else if (reprType_ == LaneletRepresentationType::Boundaries) {
     VectorXd vecLeftBdPts = leftBoundary_.computeFeatureVector(true, pointsIn2d);
     VectorXd vecRightBdPts = rightBoundary_.computeFeatureVector(true, pointsIn2d);
 

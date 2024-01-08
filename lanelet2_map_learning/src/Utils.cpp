@@ -20,7 +20,7 @@ OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudina
                     BasicPoint2d{center.x() + extentLongitudinal, center.y() - extentLateral},
                     BasicPoint2d{center.x() - extentLongitudinal, center.y() - extentLateral}};
   OrientedRect axisAlignedRect;
-  boost::geometry::assign_points(axisAlignedRect, pts);
+  boost::geometry::assign_points(axisAlignedRect.bg_poly, pts);
 
   boost::geometry::strategy::transform::translate_transformer<double, 2, 2> trans1(-center.x(), -center.y());
   boost::geometry::strategy::transform::rotate_transformer<boost::geometry::radian, double, 2, 2> rotate(yaw);
@@ -29,9 +29,9 @@ OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudina
   OrientedRect trans1Rect;
   OrientedRect rotatedRect;
   OrientedRect trans2Rect;
-  boost::geometry::transform(axisAlignedRect, trans1Rect, trans1);
-  boost::geometry::transform(trans1Rect, rotatedRect, rotate);
-  boost::geometry::transform(rotatedRect, trans2Rect, trans2);
+  boost::geometry::transform(axisAlignedRect.bg_poly, trans1Rect.bg_poly, trans1);
+  boost::geometry::transform(trans1Rect.bg_poly, rotatedRect.bg_poly, rotate);
+  boost::geometry::transform(rotatedRect.bg_poly, trans2Rect.bg_poly, trans2);
   return trans2Rect;
 }
 
@@ -68,7 +68,7 @@ BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3
     polyline2d.push_back(BasicPoint2d(pt.x(), pt.y()));
   }
   std::deque<BasicLineString2d> cut2d;
-  boost::geometry::intersection(bbox, polyline2d, cut2d);
+  boost::geometry::intersection(bbox.bg_poly, polyline2d, cut2d);
 
   BasicLineString3d cut3d;
   if (cut2d.empty()) {

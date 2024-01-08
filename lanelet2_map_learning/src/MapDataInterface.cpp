@@ -22,10 +22,14 @@ void MapDataInterface::setCurrPosAndExtractSubmap(const BasicPoint2d& pt, double
   localSubmapGraph_ = lanelet::routing::RoutingGraph::build(*laneletMap_, *trafficRules_);
 }
 
-MapDataInterface::MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config, Optional<BasicPoint2d> currPos)
+MapDataInterface::MapDataInterface(LaneletMapConstPtr laneletMap)
+    : laneletMap_{laneletMap},
+      config_{},
+      trafficRules_{traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)} {}
+
+MapDataInterface::MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config)
     : laneletMap_{laneletMap},
       config_{config},
-      currPos_{currPos},
       trafficRules_{traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)} {}
 
 LaneData MapDataInterface::getLaneData(LaneletSubmapConstPtr localSubmap,
