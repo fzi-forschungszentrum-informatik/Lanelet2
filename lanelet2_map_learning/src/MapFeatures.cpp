@@ -126,27 +126,27 @@ MatrixXd TEFeature::pointMatrix(bool pointsIn2d) const {
   return mat;
 }
 
-LaneletFeature::LaneletFeature(const LaneLineStringFeature& leftBoundary, const LaneLineStringFeature& rightBoundary,
-                               const LaneLineStringFeature& centerline, Id mapID)
+LaneletFeature::LaneletFeature(LaneLineStringFeaturePtr leftBoundary, LaneLineStringFeaturePtr rightBoundary,
+                               LaneLineStringFeaturePtr centerline, Id mapID)
     : MapFeature(mapID), leftBoundary_{leftBoundary}, rightBoundary_{rightBoundary}, centerline_{centerline} {}
 
 LaneletFeature::LaneletFeature(const ConstLanelet& ll)
-    : leftBoundary_{LaneLineStringFeature(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
-                                          bdTypeToEnum(ll.leftBound3d()), ll.id())},
-      rightBoundary_{LaneLineStringFeature(ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
-                                           bdTypeToEnum(ll.rightBound3d()), ll.id())},
-      centerline_{LaneLineStringFeature(ll.centerline3d().basicLineString(), ll.centerline3d().id(),
-                                        LineStringType::Centerline, ll.id())} {}
+    : leftBoundary_{std::make_shared<LaneLineStringFeature>(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
+                                                            bdTypeToEnum(ll.leftBound3d()), ll.id())},
+      rightBoundary_{std::make_shared<LaneLineStringFeature>(
+          ll.rightBound3d().basicLineString(), ll.rightBound3d().id(), bdTypeToEnum(ll.rightBound3d()), ll.id())},
+      centerline_{std::make_shared<LaneLineStringFeature>(ll.centerline3d().basicLineString(), ll.centerline3d().id(),
+                                                          LineStringType::Centerline, ll.id())} {}
 
 bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) {
-  leftBoundary_.process(bbox, paramType, nPoints);
-  rightBoundary_.process(bbox, paramType, nPoints);
-  centerline_.process(bbox, paramType, nPoints);
+  leftBoundary_->process(bbox, paramType, nPoints);
+  rightBoundary_->process(bbox, paramType, nPoints);
+  centerline_->process(bbox, paramType, nPoints);
 
-  if (leftBoundary_.wasCut() || rightBoundary_.wasCut() || centerline_.wasCut()) {
+  if (leftBoundary_->wasCut() || rightBoundary_->wasCut() || centerline_->wasCut()) {
     wasCut_ = true;
   }
-  if (!leftBoundary_.valid() || !rightBoundary_.valid() || !centerline_.valid()) {
+  if (!leftBoundary_->valid() || !rightBoundary_->valid() || !centerline_->valid()) {
     valid_ = false;
   }
   return valid_;
@@ -154,25 +154,25 @@ bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType
 
 VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
   if (reprType_ == LaneletRepresentationType::Centerline) {
-    VectorXd vecCenterlinePts = centerline_.computeFeatureVector(true, pointsIn2d);
+    VectorXd vecCenterlinePts = centerline_->computeFeatureVector(true, pointsIn2d);
     VectorXd vec(vecCenterlinePts.size() + 2);  // pts vec + left and right type
     vec(Eigen::seq(0, vecCenterlinePts.size() - 1)) = vecCenterlinePts;
-    vec[vec.size() - 2] = leftBoundary_.typeInt();
-    vec[vec.size() - 1] = rightBoundary_.typeInt();
+    vec[vec.size() - 2] = leftBoundary_->typeInt();
+    vec[vec.size() - 1] = rightBoundary_->typeInt();
     if (onlyPoints) {
       return vec(Eigen::seq(0, vec.size() - 2));
     } else {
       return vec;
     }
   } else if (reprType_ == LaneletRepresentationType::Boundaries) {
-    VectorXd vecLeftBdPts = leftBoundary_.computeFeatureVector(true, pointsIn2d);
-    VectorXd vecRightBdPts = rightBoundary_.computeFeatureVector(true, pointsIn2d);
+    VectorXd vecLeftBdPts = leftBoundary_->computeFeatureVector(true, pointsIn2d);
+    VectorXd vecRightBdPts = rightBoundary_->computeFeatureVector(true, pointsIn2d);
 
     VectorXd vec(vecLeftBdPts.size() + vecRightBdPts.size() + 2);  // pts vec + left and right type
     vec(Eigen::seq(0, vecLeftBdPts.size() - 1)) = vecLeftBdPts;
     vec(Eigen::seq(vecLeftBdPts.size(), vecLeftBdPts.size() + vecRightBdPts.size() - 1)) = vecRightBdPts;
-    vec[vec.size() - 2] = leftBoundary_.typeInt();
-    vec[vec.size() - 1] = rightBoundary_.typeInt();
+    vec[vec.size() - 2] = leftBoundary_->typeInt();
+    vec[vec.size() - 1] = rightBoundary_->typeInt();
     if (onlyPoints) {
       return vec(Eigen::seq(0, vec.size() - 2));
     } else {
@@ -193,17 +193,17 @@ CompoundLaneLineStringFeature::CompoundLaneLineStringFeature(const LaneLineStrin
   type_ = compoundType;
 
   for (size_t i = 0; i < features.size(); i++) {
-    if (features[i].rawFeature().empty()) {
+    if (features[i]->rawFeature().empty()) {
       throw std::runtime_error("Feature with empty rawFeature() supplied!");
     }
     if (i == features.size() - 1) {
-      rawFeature_.insert(rawFeature_.end(), features[i].rawFeature().begin(), features[i].rawFeature().end());
+      rawFeature_.insert(rawFeature_.end(), features[i]->rawFeature().begin(), features[i]->rawFeature().end());
     } else {
-      rawFeature_.insert(rawFeature_.end(), features[i].rawFeature().begin(), features[i].rawFeature().end() - 1);
+      rawFeature_.insert(rawFeature_.end(), features[i]->rawFeature().begin(), features[i]->rawFeature().end() - 1);
     }
 
     double rawLength =
-        boost::geometry::length(features[i].rawFeature(), boost::geometry::strategy::distance::pythagoras<double>());
+        boost::geometry::length(features[i]->rawFeature(), boost::geometry::strategy::distance::pythagoras<double>());
     if (i > 0) {
       pathLengthsRaw_[i] = pathLengthsRaw_[i - 1] + rawLength;
     } else {
@@ -217,8 +217,8 @@ bool CompoundLaneLineStringFeature::process(const OrientedRect& bbox, const Para
   bool valid = false;
   LaneLineStringFeature::process(bbox, paramType, nPoints);
   for (size_t i = 0; i < individualFeatures_.size(); i++) {
-    individualFeatures_[i].process(bbox, paramType, nPoints);
-    double processedLength = boost::geometry::length(individualFeatures_[i].cutFeature(),
+    individualFeatures_[i]->process(bbox, paramType, nPoints);
+    double processedLength = boost::geometry::length(individualFeatures_[i]->cutFeature(),
                                                      boost::geometry::strategy::distance::pythagoras<double>());
 
     if (processedLength > validLengthThresh_) {

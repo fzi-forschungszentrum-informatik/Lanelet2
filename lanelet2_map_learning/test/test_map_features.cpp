@@ -36,22 +36,25 @@ TEST_F(MapLearningTest, LaneLineStringFeature) {  // NOLINT
 TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
   BasicLineString3d leftBd{BasicPoint3d{0, 0, 0}, BasicPoint3d{5, 0, 0}, BasicPoint3d{10, 0, 0},
                            BasicPoint3d{20, 0, 0}};
-  LaneLineStringFeature leftBdFeat(leftBd, Id(123), LineStringType::Solid, Id(1234));
+  LaneLineStringFeaturePtr leftBdFeat =
+      std::make_shared<LaneLineStringFeature>(leftBd, Id(123), LineStringType::Solid, Id(1234));
   BasicLineString3d rightBd{BasicPoint3d{0, 4, 0}, BasicPoint3d{5, 4, 0}, BasicPoint3d{10, 4, 0},
                             BasicPoint3d{20, 4, 0}};
-  LaneLineStringFeature rightBdFeat(rightBd, Id(124), LineStringType::Dashed, Id(1234));
+  LaneLineStringFeaturePtr rightBdFeat =
+      std::make_shared<LaneLineStringFeature>(rightBd, Id(124), LineStringType::Dashed, Id(1234));
   BasicLineString3d centerline{BasicPoint3d{0, 2, 0}, BasicPoint3d{5, 2, 0}, BasicPoint3d{10, 2, 0},
                                BasicPoint3d{20, 2, 0}};
-  LaneLineStringFeature centerlineFeat(centerline, Id(125), LineStringType::Centerline, Id(1234));
+  LaneLineStringFeaturePtr centerlineFeat =
+      std::make_shared<LaneLineStringFeature>(centerline, Id(125), LineStringType::Centerline, Id(1234));
 
   LaneletFeature llFeat(leftBdFeat, rightBdFeat, centerlineFeat, Id(1234));
   llFeat.setReprType(LaneletRepresentationType::Boundaries);
 
   llFeat.process(bbox, ParametrizationType::LineString, 4);
-  EXPECT_EQ(llFeat.centerline().cutAndResampledFeature().size(), 4);
-  EXPECT_NEAR(llFeat.centerline().cutAndResampledFeature()[0].x(), 0, 10e-5);
-  EXPECT_NEAR(llFeat.centerline().cutAndResampledFeature()[1].x(), 5, 10e-5);
-  EXPECT_NEAR(llFeat.centerline().cutAndResampledFeature()[3].x(), 15, 10e-5);
+  EXPECT_EQ(llFeat.centerline()->cutAndResampledFeature().size(), 4);
+  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[0].x(), 0, 10e-5);
+  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[1].x(), 5, 10e-5);
+  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[3].x(), 15, 10e-5);
 
   Eigen::VectorXd vec = llFeat.computeFeatureVector(false, true);
 
@@ -64,15 +67,20 @@ TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
 
 TEST_F(MapLearningTest, CompoundLaneLineStringFeature) {  // NOLINT
   BasicLineString3d p1{BasicPoint3d{-10, 0, 0}, BasicPoint3d{-5, 0, 0}};
-  LaneLineStringFeature feat1(p1, Id(123), LineStringType::Solid, Id(1234));
+  LaneLineStringFeaturePtr feat1 =
+      std::make_shared<LaneLineStringFeature>(p1, Id(123), LineStringType::Solid, Id(1234));
   BasicLineString3d p2{BasicPoint3d{-5, 0, 0}, BasicPoint3d{0, 0, 0}};
-  LaneLineStringFeature feat2(p2, Id(123), LineStringType::Solid, Id(1234));
+  LaneLineStringFeaturePtr feat2 =
+      std::make_shared<LaneLineStringFeature>(p2, Id(123), LineStringType::Solid, Id(1234));
   BasicLineString3d p3{BasicPoint3d{0, 0, 0}, BasicPoint3d{5, 0, 0}};
-  LaneLineStringFeature feat3(p3, Id(123), LineStringType::Solid, Id(1234));
+  LaneLineStringFeaturePtr feat3 =
+      std::make_shared<LaneLineStringFeature>(p3, Id(123), LineStringType::Solid, Id(1234));
   BasicLineString3d p4{BasicPoint3d{5, 0, 0}, BasicPoint3d{10, 0, 0}};
-  LaneLineStringFeature feat4(p4, Id(124), LineStringType::Solid, Id(1234));
+  LaneLineStringFeaturePtr feat4 =
+      std::make_shared<LaneLineStringFeature>(p4, Id(124), LineStringType::Solid, Id(1234));
   BasicLineString3d p5{BasicPoint3d{10, 0, 0}, BasicPoint3d{20, 0, 0}};
-  LaneLineStringFeature feat5(p5, Id(125), LineStringType::Solid, Id(1234));
+  LaneLineStringFeaturePtr feat5 =
+      std::make_shared<LaneLineStringFeature>(p5, Id(125), LineStringType::Solid, Id(1234));
 
   CompoundLaneLineStringFeature cpdFeat(LaneLineStringFeatureList{feat1, feat2, feat3, feat4, feat5},
                                         LineStringType::Solid);

@@ -93,8 +93,9 @@ class LaneLineStringFeature : public LineStringFeature {
   std::vector<Id> laneletIDs_;
 };
 
-using LaneLineStringFeatures = std::map<Id, LaneLineStringFeature>;
-using LaneLineStringFeatureList = std::vector<LaneLineStringFeature>;
+using LaneLineStringFeaturePtr = std::shared_ptr<LaneLineStringFeature>;
+using LaneLineStringFeatures = std::map<Id, LaneLineStringFeaturePtr>;
+using LaneLineStringFeatureList = std::vector<LaneLineStringFeaturePtr>;
 
 class TEFeature : public LineStringFeature {
  public:
@@ -118,8 +119,8 @@ class TEFeature : public LineStringFeature {
 class LaneletFeature : public MapFeature {
  public:
   LaneletFeature() {}
-  LaneletFeature(const LaneLineStringFeature& leftBoundary, const LaneLineStringFeature& rightBoundary,
-                 const LaneLineStringFeature& centerline, Id mapID);
+  LaneletFeature(LaneLineStringFeaturePtr leftBoundary, LaneLineStringFeaturePtr rightBoundary,
+                 LaneLineStringFeaturePtr centerline, Id mapID);
   LaneletFeature(const ConstLanelet& ll);
   virtual ~LaneletFeature() noexcept = default;
 
@@ -128,18 +129,18 @@ class LaneletFeature : public MapFeature {
 
   void setReprType(LaneletRepresentationType reprType) { reprType_ = reprType; }
 
-  const LaneLineStringFeature& leftBoundary() const { return leftBoundary_; }
-  const LaneLineStringFeature& rightBoundary() const { return rightBoundary_; }
-  const LaneLineStringFeature& centerline() const { return centerline_; }
+  LaneLineStringFeaturePtr leftBoundary() const { return leftBoundary_; }
+  LaneLineStringFeaturePtr rightBoundary() const { return rightBoundary_; }
+  LaneLineStringFeaturePtr centerline() const { return centerline_; }
 
   template <class Archive>
   friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LaneletFeature& feat,
                                               const unsigned int /*version*/);
 
  private:
-  LaneLineStringFeature leftBoundary_;
-  LaneLineStringFeature rightBoundary_;
-  LaneLineStringFeature centerline_;
+  LaneLineStringFeaturePtr leftBoundary_;
+  LaneLineStringFeaturePtr rightBoundary_;
+  LaneLineStringFeaturePtr centerline_;
   LaneletRepresentationType reprType_{LaneletRepresentationType::Centerline};
 };
 
@@ -152,7 +153,7 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   virtual ~CompoundLaneLineStringFeature() noexcept = default;
   bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
 
-  const LaneLineStringFeatureList& features() const { return individualFeatures_; }
+  LaneLineStringFeatureList features() const { return individualFeatures_; }
   const std::vector<double>& pathLengthsRaw() const { return pathLengthsRaw_; }
   const std::vector<double>& pathLengthsProcessed() const { return pathLengthsProcessed_; }
   const std::vector<bool>& processedFeaturesValid() const { return processedFeaturesValid_; }
@@ -169,13 +170,16 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   double validLengthThresh_{0.3};
 };
 
-using CompoundLaneLineStringFeatureList = std::vector<CompoundLaneLineStringFeature>;
-using TEFeatures = std::map<Id, TEFeature>;
-using LaneletFeatures = std::map<Id, LaneletFeature>;
+using CompoundLaneLineStringFeaturePtr = std::shared_ptr<CompoundLaneLineStringFeature>;
+using TEFeaturePtr = std::shared_ptr<TEFeature>;
+using LaneletFeaturePtr = std::shared_ptr<LaneletFeature>;
+using CompoundLaneLineStringFeatureList = std::vector<CompoundLaneLineStringFeaturePtr>;
+using TEFeatures = std::map<Id, TEFeaturePtr>;
+using LaneletFeatures = std::map<Id, LaneletFeaturePtr>;
 
 template <class T>
-MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
-  std::vector<T> featList;
+MatrixXd getFeatureVectorMatrix(const std::map<Id, std::shared_ptr<T>>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
+  std::vector<std::shared_ptr<T>> featList;
   for (const auto& pair : mapFeatures) {
     featList.push_back(pair.second);
   }
@@ -183,16 +187,16 @@ MatrixXd getFeatureVectorMatrix(const std::map<Id, T>& mapFeatures, bool onlyPoi
 }
 
 template <class T>
-MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
+MatrixXd getFeatureVectorMatrix(const std::vector<std::shared_ptr<T>>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
   if (mapFeatures.empty()) {
     throw std::runtime_error("Empty mapFeatures vector supplied!");
   }
   std::vector<VectorXd> featureVectors;
   for (const auto& feat : mapFeatures) {
-    if (!feat.valid()) {
+    if (!feat->valid()) {
       throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
     }
-    featureVectors.push_back(feat.computeFeatureVector(onlyPoints, pointsIn2d));
+    featureVectors.push_back(feat->computeFeatureVector(onlyPoints, pointsIn2d));
   }
   if (std::adjacent_find(featureVectors.begin(), featureVectors.end(),
                          [](const VectorXd& v1, const VectorXd& v2) { return v1.size() != v2.size(); }) ==
@@ -209,8 +213,8 @@ MatrixXd getFeatureVectorMatrix(const std::vector<T>& mapFeatures, bool onlyPoin
 }
 
 template <class T>
-std::vector<MatrixXd> getPointsMatrices(const std::map<Id, T>& mapFeatures, bool pointsIn2d) {
-  std::vector<T> featList;
+std::vector<MatrixXd> getPointsMatrices(const std::map<Id, std::shared_ptr<T>>& mapFeatures, bool pointsIn2d) {
+  std::vector<std::shared_ptr<T>> featList;
   for (const auto& pair : mapFeatures) {
     featList.push_back(pair.second);
   }
@@ -218,26 +222,26 @@ std::vector<MatrixXd> getPointsMatrices(const std::map<Id, T>& mapFeatures, bool
 }
 
 template <class T>
-std::vector<MatrixXd> getPointsMatrices(const std::vector<T>& mapFeatures, bool pointsIn2d) {
+std::vector<MatrixXd> getPointsMatrices(const std::vector<std::shared_ptr<T>>& mapFeatures, bool pointsIn2d) {
   if (mapFeatures.empty()) {
     throw std::runtime_error("Empty mapFeatures vector supplied!");
   }
   std::vector<MatrixXd> pointMatrices;
   for (const auto& feat : mapFeatures) {
-    if (!feat.valid()) {
+    if (!feat->valid()) {
       throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
     }
-    pointMatrices.push_back(feat.pointMatrix(pointsIn2d));
+    pointMatrices.push_back(feat->pointMatrix(pointsIn2d));
   }
   return pointMatrices;
 }
 
 template <typename T>
-bool processFeatures(std::map<Id, T>& featMap, const OrientedRect& bbox, const ParametrizationType& paramType,
-                     int32_t nPoints) {
+bool processFeatures(std::map<Id, std::shared_ptr<T>>& featMap, const OrientedRect& bbox,
+                     const ParametrizationType& paramType, int32_t nPoints) {
   bool allValid = true;
   for (auto& feat : featMap) {
-    if (!feat.second.process(bbox, paramType, nPoints)) {
+    if (!feat.second->process(bbox, paramType, nPoints)) {
       allValid = false;
     }
   }
@@ -245,11 +249,11 @@ bool processFeatures(std::map<Id, T>& featMap, const OrientedRect& bbox, const P
 }
 
 template <typename T>
-bool processFeatures(std::vector<T>& featVec, const OrientedRect& bbox, const ParametrizationType& paramType,
-                     int32_t nPoints) {
+bool processFeatures(std::vector<std::shared_ptr<T>>& featVec, const OrientedRect& bbox,
+                     const ParametrizationType& paramType, int32_t nPoints) {
   bool allValid = true;
   for (auto& feat : featVec) {
-    if (!feat.process(bbox, paramType, nPoints)) {
+    if (!feat->process(bbox, paramType, nPoints)) {
       allValid = false;
     }
   }

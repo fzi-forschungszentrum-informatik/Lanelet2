@@ -24,7 +24,7 @@ class MapDataInterfaceTestCase(unittest.TestCase):
         mDataIf = MapDataInterface(mymap)
         mDataIf.setCurrPosAndExtractSubmap(pos, 0)
         lData = mDataIf.laneData()
-        fmat = lData.compoundRoadBorders[0].pointMatrix(True)
+        fmat = lanelet2.map_learning.getPointsMatrices(lData.compoundRoadBorders, True)
         print(fmat)
 
 

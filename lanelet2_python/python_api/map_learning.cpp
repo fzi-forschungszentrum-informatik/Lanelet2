@@ -101,8 +101,8 @@ class LaneletFeatureWrap : public LaneletFeature, public wrapper<LaneletFeature>
  public:
   LaneletFeatureWrap() {}
 
-  LaneletFeatureWrap(const LaneLineStringFeature &leftBoundary, const LaneLineStringFeature &rightBoundary,
-                     const LaneLineStringFeature &centerline, Id mapID)
+  LaneletFeatureWrap(LaneLineStringFeaturePtr leftBoundary, LaneLineStringFeaturePtr rightBoundary,
+                     LaneLineStringFeaturePtr centerline, Id mapID)
       : LaneletFeature(leftBoundary, rightBoundary, centerline, mapID) {}
   LaneletFeatureWrap(const ConstLanelet &ll) : LaneletFeature(ll) {}
 
@@ -174,7 +174,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("process", pure_virtual(&LineStringFeature::process))
       .def("pointMatrix", pure_virtual(&LineStringFeature::pointMatrix));
 
-  class_<LaneLineStringFeatureWrap, bases<LineStringFeature>, boost::noncopyable>(
+  class_<LaneLineStringFeatureWrap, bases<LineStringFeature>, LaneLineStringFeaturePtr, boost::noncopyable>(
       "LaneLineStringFeature", "Lane line string feature class", init<BasicLineString3d, Id, LineStringType, Id>())
       .def(init<>())
       .add_property("cutFeature",
@@ -191,29 +191,25 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("process", &LaneLineStringFeature::process, &LaneLineStringFeatureWrap::default_process)
       .def("pointMatrix", &LaneLineStringFeature::pointMatrix, &LaneLineStringFeatureWrap::default_pointMatrix);
 
-  class_<LaneletFeatureWrap, bases<MapFeature>, boost::noncopyable>(
+  class_<LaneletFeatureWrap, bases<MapFeature>, LaneletFeaturePtr, boost::noncopyable>(
       "LaneletFeature", "Lanelet feature class that contains lower level LaneLineStringFeatures",
-      init<LaneLineStringFeature, LaneLineStringFeature, LaneLineStringFeature, Id>())
+      init<LaneLineStringFeaturePtr, LaneLineStringFeaturePtr, LaneLineStringFeaturePtr, Id>())
       .def(init<ConstLanelet>())
       .def(init<>())
-      .add_property("leftBoundary",
-                    make_function(&LaneletFeature::leftBoundary, return_value_policy<copy_const_reference>()))
-      .add_property("rightBoundary",
-                    make_function(&LaneletFeature::rightBoundary, return_value_policy<copy_const_reference>()))
-      .add_property("centerline",
-                    make_function(&LaneletFeature::centerline, return_value_policy<copy_const_reference>()))
+      .add_property("leftBoundary", make_function(&LaneletFeature::leftBoundary))
+      .add_property("rightBoundary", make_function(&LaneletFeature::rightBoundary))
+      .add_property("centerline", make_function(&LaneletFeature::centerline))
       .def("setReprType", &LaneletFeature::setReprType)
       .def("computeFeatureVector", &LaneletFeature::computeFeatureVector,
            &LaneletFeatureWrap::default_computeFeatureVector)
       .def("process", &LaneletFeature::process, &LaneletFeatureWrap::default_process);
 
-  class_<CompoundLaneLineStringFeatureWrap, bases<LaneLineStringFeature>, boost::noncopyable>(
-      "CompoundLaneLineStringFeature",
-      "Compound lane line string feature class that can trace back the individual features",
-      init<LaneLineStringFeatureList, LineStringType>())
+  class_<CompoundLaneLineStringFeatureWrap, bases<LaneLineStringFeature>, CompoundLaneLineStringFeaturePtr,
+         boost::noncopyable>("CompoundLaneLineStringFeature",
+                             "Compound lane line string feature class that can trace back the individual features",
+                             init<LaneLineStringFeatureList, LineStringType>())
       .def(init<>())
-      .add_property("features", make_function(&CompoundLaneLineStringFeature::features,
-                                              return_value_policy<copy_const_reference>()))
+      .add_property("features", make_function(&CompoundLaneLineStringFeature::features))
       .add_property("pathLengthsRaw", make_function(&CompoundLaneLineStringFeature::pathLengthsRaw,
                                                     return_value_policy<copy_const_reference>()))
       .add_property("pathLengthsProcessed", make_function(&CompoundLaneLineStringFeature::pathLengthsProcessed,
@@ -290,47 +286,50 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .fromPython<BasicLineString3d>()
       .fromPython<LaneLineStringFeatureList>()
       .fromPython<CompoundLaneLineStringFeatureList>();
-  class_<std::map<Id, LaneLineStringFeature>>("LaneLineStringFeatures")
-      .def(map_indexing_suite<std::map<Id, LaneLineStringFeature>>());
-  class_<std::map<Id, LaneletFeature>>("LaneletFeatures").def(map_indexing_suite<LaneletFeatures>());
+  class_<LaneLineStringFeatures>("LaneLineStringFeatures").def(map_indexing_suite<LaneLineStringFeatures>());
+  class_<LaneletFeatures>("LaneletFeatures").def(map_indexing_suite<LaneletFeatures>());
   converters::VectorToListConverter<std::vector<double>>();
   class_<std::vector<bool>>("BoolList").def(vector_indexing_suite<std::vector<bool>>());
+  // class_<LaneLineStringFeatureList>("LaneLineStringFeatureList")
+  // .def(vector_indexing_suite<LaneLineStringFeatureList>());
+  // class_<CompoundLaneLineStringFeatureList>("CompoundLaneLineStringFeatureList")
+  // .def(vector_indexing_suite<CompoundLaneLineStringFeatureList>());
 
   implicitly_convertible<routing::RoutingGraphPtr, routing::RoutingGraphConstPtr>();
 
   // overloaded template function instantiations
-  def<std::vector<MatrixXd> (*)(const std::map<Id, LaneLineStringFeature> &, bool)>(
+  def<std::vector<MatrixXd> (*)(const std::map<Id, LaneLineStringFeaturePtr> &, bool)>(
       "getPointsMatrices", &getPointsMatrices<LaneLineStringFeature>);
-  def<std::vector<MatrixXd> (*)(const std::vector<LaneLineStringFeature> &, bool)>(
+  def<std::vector<MatrixXd> (*)(const std::vector<LaneLineStringFeaturePtr> &, bool)>(
       "getPointsMatrices", &getPointsMatrices<LaneLineStringFeature>);
-  def<std::vector<MatrixXd> (*)(const std::map<Id, CompoundLaneLineStringFeature> &, bool)>(
+  def<std::vector<MatrixXd> (*)(const std::map<Id, CompoundLaneLineStringFeaturePtr> &, bool)>(
       "getPointsMatrices", &getPointsMatrices<CompoundLaneLineStringFeature>);
-  def<std::vector<MatrixXd> (*)(const std::vector<CompoundLaneLineStringFeature> &, bool)>(
+  def<std::vector<MatrixXd> (*)(const std::vector<CompoundLaneLineStringFeaturePtr> &, bool)>(
       "getPointsMatrices", &getPointsMatrices<CompoundLaneLineStringFeature>);
 
-  def<MatrixXd (*)(const std::map<Id, LaneLineStringFeature> &, bool, bool)>(
+  def<MatrixXd (*)(const std::map<Id, LaneLineStringFeaturePtr> &, bool, bool)>(
       "getFeatureVectorMatrix", &getFeatureVectorMatrix<LaneLineStringFeature>);
-  def<MatrixXd (*)(const std::vector<LaneLineStringFeature> &, bool, bool)>(
+  def<MatrixXd (*)(const std::vector<LaneLineStringFeaturePtr> &, bool, bool)>(
       "getFeatureVectorMatrix", &getFeatureVectorMatrix<LaneLineStringFeature>);
-  def<MatrixXd (*)(const std::map<Id, CompoundLaneLineStringFeature> &, bool, bool)>(
+  def<MatrixXd (*)(const std::map<Id, CompoundLaneLineStringFeaturePtr> &, bool, bool)>(
       "getFeatureVectorMatrix", &getFeatureVectorMatrix<CompoundLaneLineStringFeature>);
-  def<MatrixXd (*)(const std::vector<CompoundLaneLineStringFeature> &, bool, bool)>(
+  def<MatrixXd (*)(const std::vector<CompoundLaneLineStringFeaturePtr> &, bool, bool)>(
       "getFeatureVectorMatrix", &getFeatureVectorMatrix<CompoundLaneLineStringFeature>);
-  def<MatrixXd (*)(const std::map<Id, LaneletFeature> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                      &getFeatureVectorMatrix<LaneletFeature>);
-  def<MatrixXd (*)(const std::vector<LaneletFeature> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                     &getFeatureVectorMatrix<LaneletFeature>);
+  def<MatrixXd (*)(const std::map<Id, LaneletFeaturePtr> &, bool, bool)>("getFeatureVectorMatrix",
+                                                                         &getFeatureVectorMatrix<LaneletFeature>);
+  def<MatrixXd (*)(const std::vector<LaneletFeaturePtr> &, bool, bool)>("getFeatureVectorMatrix",
+                                                                        &getFeatureVectorMatrix<LaneletFeature>);
 
-  def<bool (*)(std::map<Id, LaneLineStringFeature> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
+  def<bool (*)(std::map<Id, LaneLineStringFeaturePtr> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
       "processFeatures", &processFeatures<LaneLineStringFeature>);
-  def<bool (*)(std::vector<LaneLineStringFeature> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
+  def<bool (*)(std::vector<LaneLineStringFeaturePtr> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
       "processFeatures", &processFeatures<LaneLineStringFeature>);
-  def<bool (*)(std::map<Id, CompoundLaneLineStringFeature> &, const OrientedRect &, const ParametrizationType &,
+  def<bool (*)(std::map<Id, CompoundLaneLineStringFeaturePtr> &, const OrientedRect &, const ParametrizationType &,
                int32_t)>("processFeatures", &processFeatures<CompoundLaneLineStringFeature>);
-  def<bool (*)(std::vector<CompoundLaneLineStringFeature> &, const OrientedRect &, const ParametrizationType &,
+  def<bool (*)(std::vector<CompoundLaneLineStringFeaturePtr> &, const OrientedRect &, const ParametrizationType &,
                int32_t)>("processFeatures", &processFeatures<CompoundLaneLineStringFeature>);
-  def<bool (*)(std::map<Id, LaneletFeature> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
+  def<bool (*)(std::map<Id, LaneletFeaturePtr> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
       "processFeatures", &processFeatures<LaneletFeature>);
-  def<bool (*)(std::vector<LaneletFeature> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
+  def<bool (*)(std::vector<LaneletFeaturePtr> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
       "processFeatures", &processFeatures<LaneletFeature>);
 }

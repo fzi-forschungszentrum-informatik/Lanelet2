@@ -4,6 +4,7 @@
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/optional.hpp>
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
 
 #include "MapData.h"
