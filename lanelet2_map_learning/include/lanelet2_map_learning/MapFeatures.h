@@ -77,6 +77,7 @@ class LaneLineStringFeature : public LineStringFeature {
 
   const BasicLineString3d& cutFeature() const { return cutFeature_; }
   const BasicLineString3d& cutAndResampledFeature() const { return cutAndResampledFeature_; }
+  const BasicLineString3d& cutResampledAndTransformedFeature() const { return cutResampledAndTransformedFeature_; }
   LineStringType type() const { return type_; }
   int typeInt() const { return static_cast<int>(type_); }
   const std::vector<Id>& laneletIDs() const { return laneletIDs_; }
@@ -89,6 +90,7 @@ class LaneLineStringFeature : public LineStringFeature {
  protected:
   BasicLineString3d cutFeature_;
   BasicLineString3d cutAndResampledFeature_;
+  BasicLineString3d cutResampledAndTransformedFeature_;
   LineStringType type_;
   std::vector<Id> laneletIDs_;
 };
@@ -213,16 +215,16 @@ MatrixXd getFeatureVectorMatrix(const std::vector<std::shared_ptr<T>>& mapFeatur
 }
 
 template <class T>
-std::vector<MatrixXd> getPointsMatrices(const std::map<Id, std::shared_ptr<T>>& mapFeatures, bool pointsIn2d) {
+std::vector<MatrixXd> getPointMatrices(const std::map<Id, std::shared_ptr<T>>& mapFeatures, bool pointsIn2d) {
   std::vector<std::shared_ptr<T>> featList;
   for (const auto& pair : mapFeatures) {
     featList.push_back(pair.second);
   }
-  return getPointsMatrices(featList, pointsIn2d);
+  return getPointMatrices(featList, pointsIn2d);
 }
 
 template <class T>
-std::vector<MatrixXd> getPointsMatrices(const std::vector<std::shared_ptr<T>>& mapFeatures, bool pointsIn2d) {
+std::vector<MatrixXd> getPointMatrices(const std::vector<std::shared_ptr<T>>& mapFeatures, bool pointsIn2d) {
   if (mapFeatures.empty()) {
     throw std::runtime_error("Empty mapFeatures vector supplied!");
   }

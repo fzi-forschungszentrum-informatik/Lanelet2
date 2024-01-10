@@ -5,6 +5,9 @@
 #include <lanelet2_routing/Forward.h>
 
 #include <boost/geometry.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include <type_traits>
 
 #include "lanelet2_map_learning/Forward.h"
@@ -36,7 +39,30 @@ using Edges = std::map<Id, Edge>;  // key = id from
 
 class LaneData {
  public:
-  LaneData() noexcept {}
+  struct TensorFeatureData {
+   public:
+    const std::vector<MatrixXd>& roadBorders() { return roadBorders_; }
+    const std::vector<MatrixXd>& laneDividers() { return laneDividers_; }
+    const std::vector<int>& laneDividerTypes() { return laneDividerTypes_; }
+    const std::vector<MatrixXd>& compoundRoadBorders() { return compoundRoadBorders_; }
+    const std::vector<MatrixXd>& compoundLaneDividers() { return compoundLaneDividers_; }
+    const std::vector<int>& compoundLaneDividerTypes() { return compoundLaneDividerTypes_; }
+    const std::vector<MatrixXd>& compoundCenterlines() { return compoundCenterlines_; }
+    const std::string& uuid() { return uuid_; }
+    friend class LaneData;
+
+   private:
+    std::vector<MatrixXd> roadBorders_;
+    std::vector<MatrixXd> laneDividers_;
+    std::vector<int> laneDividerTypes_;
+    std::vector<MatrixXd> compoundRoadBorders_;
+    std::vector<MatrixXd> compoundLaneDividers_;
+    std::vector<int> compoundLaneDividerTypes_;
+    std::vector<MatrixXd> compoundCenterlines_;
+    std::string uuid_;
+  };
+
+  LaneData() noexcept : uuid_{boost::lexical_cast<std::string>(boost::uuids::random_generator()())} {}
   static LaneData build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
   bool processAll(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints);
 
@@ -55,6 +81,10 @@ class LaneData {
 
   const LaneletFeatures& laneletFeatures() { return laneletFeatures_; }
   const Edges& edges() { return edges_; }
+  const std::string& uuid() { return uuid_; }
+
+  /// The computed data will be buffered, if the underlying features change you need to set ignoreBuffer appropriately
+  TensorFeatureData getTensorFeatureData(bool pointsIn2d, bool ignoreBuffer);
 
   template <class Archive>
   friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LaneData& feat,
@@ -82,10 +112,14 @@ class LaneData {
   CompoundLaneLineStringFeatureList compoundCenterlines_;
 
   LaneletFeatures laneletFeatures_;
+
   std::map<Id, std::vector<size_t>> associatedCpdRoadBorderIndices_;   // related to the "unfiltered" compound features!
   std::map<Id, std::vector<size_t>> associatedCpdLaneDividerIndices_;  // related to the "unfiltered" compound features!
   std::map<Id, std::vector<size_t>> associatedCpdCenterlineIndices_;   // related to the "unfiltered" compound features!
   Edges edges_;                                                        // edge list for centerlines
+  std::string uuid_;                                                   // sample id
+
+  Optional<TensorFeatureData> tfData_;
 };
 
 /// TODO: finish TE support

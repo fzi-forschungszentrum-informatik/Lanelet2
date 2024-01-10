@@ -11,6 +11,7 @@ namespace map_learning {
 struct LStringProcessResult {
   BasicLineString3d cutFeature_;
   BasicLineString3d cutAndResampledFeature_;
+  BasicLineString3d cutResampledAndTransformedFeature_;
   bool wasCut_{false};
   bool valid_{true};
 };
@@ -28,6 +29,7 @@ LStringProcessResult processLineStringImpl(const BasicLineString3d& lstring, con
     return result;
   }
   result.cutAndResampledFeature_ = resampleLineString(result.cutFeature_, nPoints);
+  result.cutResampledAndTransformedFeature_ = transformLineString(bbox, result.cutAndResampledFeature_);
 
   double lengthOriginal = boost::geometry::length(lstring, boost::geometry::strategy::distance::pythagoras<double>());
   double lengthProcessed = boost::geometry::length(result.cutAndResampledFeature_,
@@ -44,6 +46,7 @@ bool LaneLineStringFeature::process(const OrientedRect& bbox, const Parametrizat
   if (result.valid_) {
     cutFeature_ = result.cutFeature_;
     cutAndResampledFeature_ = result.cutAndResampledFeature_;
+    cutResampledAndTransformedFeature_ = result.cutResampledAndTransformedFeature_;
   } else {
     valid_ = result.valid_;
   }
@@ -53,7 +56,7 @@ bool LaneLineStringFeature::process(const OrientedRect& bbox, const Parametrizat
 
 VectorXd LaneLineStringFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
   const BasicLineString3d& selectedFeature =
-      (cutAndResampledFeature_.size() > 0) ? cutAndResampledFeature_ : rawFeature_;
+      (cutResampledAndTransformedFeature_.size() > 0) ? cutResampledAndTransformedFeature_ : rawFeature_;
   VectorXd vec = pointsIn2d ? VectorXd(2 * selectedFeature.size() + 1)
                             : VectorXd(3 * selectedFeature.size() + 1);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
@@ -96,7 +99,7 @@ VectorXd TEFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const
 
 MatrixXd LaneLineStringFeature::pointMatrix(bool pointsIn2d) const {
   const BasicLineString3d& selectedFeature =
-      (cutAndResampledFeature_.size() > 0) ? cutAndResampledFeature_ : rawFeature_;
+      (cutResampledAndTransformedFeature_.size() > 0) ? cutResampledAndTransformedFeature_ : rawFeature_;
   MatrixXd mat = pointsIn2d ? MatrixXd(selectedFeature.size(), 2)
                             : MatrixXd(selectedFeature.size(), 3);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {

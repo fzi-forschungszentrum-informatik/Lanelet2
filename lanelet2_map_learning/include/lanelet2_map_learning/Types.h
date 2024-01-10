@@ -24,11 +24,18 @@ enum class LineStringType {
 };  // Mixed == DashedSolid or SolidDashed
 enum class TEType { TrafficLight, TrafficSign, Unknown };
 
-// wrapper for boost::python reasons
 struct OrientedRect {
+  BasicPoint2d center;
+  double yaw;
   boost::geometry::model::polygon<BasicPoint2d> bg_poly;
   boost::geometry::model::polygon<BasicPoint2d>::ring_type& bounds() { return bg_poly.outer(); }
   const boost::geometry::model::polygon<BasicPoint2d>::ring_type& bounds_const() { return bg_poly.outer(); }
+
+  friend OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudinal, double extentLateral,
+                                     double yaw);
+
+ private:
+  OrientedRect() noexcept {}
 };
 
 }  // namespace map_learning

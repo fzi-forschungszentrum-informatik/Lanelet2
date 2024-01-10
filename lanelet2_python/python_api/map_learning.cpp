@@ -122,6 +122,32 @@ class LaneletFeatureWrap : public LaneletFeature, public wrapper<LaneletFeature>
   }
 };
 
+template <typename T>
+struct DictToMapConverter {
+  DictToMapConverter() { converter::registry::push_back(&convertible, &construct, type_id<T>()); }
+  static void *convertible(PyObject *obj) {
+    if (!PyDict_CheckExact(obj)) {  // NOLINT
+      return nullptr;
+    }
+    return obj;
+  }
+  static void construct(PyObject *obj, converter::rvalue_from_python_stage1_data *data) {
+    dict d(borrowed(obj));
+    list keys = d.keys();
+    list values = d.values();
+    T map;
+    for (auto i = 0u; i < len(keys); ++i) {
+      typename T::key_type key = extract<typename T::key_type>(keys[i]);
+      typename T::mapped_type value = extract<typename T::mapped_type>(values[i]);
+      map.insert(std::make_pair(key, value));
+    }
+    using StorageType = converter::rvalue_from_python_storage<T>;
+    void *storage = reinterpret_cast<StorageType *>(data)->storage.bytes;  // NOLINT
+    new (storage) T(map);
+    data->convertible = storage;
+  }
+};
+
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   Py_Initialize();
@@ -145,7 +171,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .value("Centerline", LineStringType::Centerline)
       .value("Unknown", LineStringType::Unknown);
 
-  class_<OrientedRect>("OrientedRect", "Oriented rectangle for feature crop area", init<>())
+  class_<OrientedRect>("OrientedRect", "Oriented rectangle for feature crop area", no_init)
       .add_property("bounds", make_function(&OrientedRect::bounds_const, return_value_policy<copy_const_reference>()));
 
   def("getRotatedRect", &getRotatedRect);
@@ -181,6 +207,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                     make_function(&LaneLineStringFeature::cutFeature, return_value_policy<copy_const_reference>()))
       .add_property("cutAndResampledFeature", make_function(&LaneLineStringFeature::cutAndResampledFeature,
                                                             return_value_policy<copy_const_reference>()))
+      .add_property("cutResampledAndTransformedFeature",
+                    make_function(&LaneLineStringFeature::cutResampledAndTransformedFeature,
+                                  return_value_policy<copy_const_reference>()))
       .add_property("type", &LaneLineStringFeature::type)
       .add_property("typeInt", &LaneLineStringFeature::typeInt)
       .add_property("laneletIDs",
@@ -224,31 +253,56 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<Edge>("Edge", "Struct of a lane graph edge", init<Id, Id>())
       .def(init<>())
-      .add_property("el1", &Edge::el1_)
-      .add_property("el2", &Edge::el2_);
+      .def_readwrite("el1", &Edge::el1_)
+      .def_readwrite("el2", &Edge::el2_);
 
-  class_<LaneData>("LaneData", "Class for holding, accessing and processing of lane data")
-      .def(init<>())
-      .def("build", &LaneData::build)
-      .staticmethod("build")
-      .def("processAll", &LaneData::processAll)
-      .add_property("roadBorders", make_function(&LaneData::roadBorders, return_value_policy<copy_const_reference>()))
-      .add_property("laneDividers", make_function(&LaneData::laneDividers, return_value_policy<copy_const_reference>()))
-      .add_property("compoundRoadBorders",
-                    make_function(&LaneData::compoundRoadBorders, return_value_policy<copy_const_reference>()))
-      .add_property("compoundLaneDividers",
-                    make_function(&LaneData::compoundLaneDividers, return_value_policy<copy_const_reference>()))
-      .add_property("compoundCenterlines",
-                    make_function(&LaneData::compoundCenterlines, return_value_policy<copy_const_reference>()))
-      .add_property("associatedCpdRoadBorderIndices", make_function(&LaneData::associatedCpdRoadBorderIndices,
-                                                                    return_value_policy<copy_const_reference>()))
-      .add_property("associatedCpdLaneDividerIndices", make_function(&LaneData::associatedCpdLaneDividerIndices,
-                                                                     return_value_policy<copy_const_reference>()))
-      .add_property("associatedCpdCenterlineIndices", make_function(&LaneData::associatedCpdCenterlineIndices,
-                                                                    return_value_policy<copy_const_reference>()))
-      .add_property("laneletFeatures",
-                    make_function(&LaneData::laneletFeatures, return_value_policy<copy_const_reference>()))
-      .add_property("edges", make_function(&LaneData::edges, return_value_policy<copy_const_reference>()));
+  {
+    scope inLaneData =
+        class_<LaneData>("LaneData", "Class for holding, accessing and processing of lane data")
+            .def(init<>())
+            .def("build", &LaneData::build)
+            .staticmethod("build")
+            .def("processAll", &LaneData::processAll)
+            .add_property("roadBorders",
+                          make_function(&LaneData::roadBorders, return_value_policy<copy_const_reference>()))
+            .add_property("laneDividers",
+                          make_function(&LaneData::laneDividers, return_value_policy<copy_const_reference>()))
+            .add_property("compoundRoadBorders",
+                          make_function(&LaneData::compoundRoadBorders, return_value_policy<copy_const_reference>()))
+            .add_property("compoundLaneDividers",
+                          make_function(&LaneData::compoundLaneDividers, return_value_policy<copy_const_reference>()))
+            .add_property("compoundCenterlines",
+                          make_function(&LaneData::compoundCenterlines, return_value_policy<copy_const_reference>()))
+            .add_property("associatedCpdRoadBorderIndices", make_function(&LaneData::associatedCpdRoadBorderIndices,
+                                                                          return_value_policy<copy_const_reference>()))
+            .add_property("associatedCpdLaneDividerIndices", make_function(&LaneData::associatedCpdLaneDividerIndices,
+                                                                           return_value_policy<copy_const_reference>()))
+            .add_property("associatedCpdCenterlineIndices", make_function(&LaneData::associatedCpdCenterlineIndices,
+                                                                          return_value_policy<copy_const_reference>()))
+            .add_property("laneletFeatures",
+                          make_function(&LaneData::laneletFeatures, return_value_policy<copy_const_reference>()))
+            .add_property("edges", make_function(&LaneData::edges, return_value_policy<copy_const_reference>()))
+            .add_property("uuid", make_function(&LaneData::uuid, return_value_policy<copy_const_reference>()))
+            .def("getTensorFeatureData", &LaneData::getTensorFeatureData);
+
+    class_<LaneData::TensorFeatureData>("TensorFeatureData", "TensorFeatureData class for LaneData", init<>())
+        .add_property("roadBorders", make_function(&LaneData::TensorFeatureData::roadBorders,
+                                                   return_value_policy<copy_const_reference>()))
+        .add_property("laneDividers", make_function(&LaneData::TensorFeatureData::laneDividers,
+                                                    return_value_policy<copy_const_reference>()))
+        .add_property("laneDividerTypes", make_function(&LaneData::TensorFeatureData::laneDividerTypes,
+                                                        return_value_policy<copy_const_reference>()))
+        .add_property("compoundRoadBorders", make_function(&LaneData::TensorFeatureData::compoundRoadBorders,
+                                                           return_value_policy<copy_const_reference>()))
+        .add_property("compoundLaneDividers", make_function(&LaneData::TensorFeatureData::compoundLaneDividers,
+                                                            return_value_policy<copy_const_reference>()))
+        .add_property("compoundLaneDividerTypes", make_function(&LaneData::TensorFeatureData::compoundLaneDividerTypes,
+                                                                return_value_policy<copy_const_reference>()))
+        .add_property("compoundCenterlines", make_function(&LaneData::TensorFeatureData::compoundCenterlines,
+                                                           return_value_policy<copy_const_reference>()))
+        .add_property("uuid",
+                      make_function(&LaneData::TensorFeatureData::uuid, return_value_policy<copy_const_reference>()));
+  }
 
   {
     scope inMapDataInterface =
@@ -281,55 +335,21 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   converters::VectorToListConverter<CompoundLaneLineStringFeatureList>();
   converters::VectorToListConverter<
       boost::geometry::model::ring<BasicPoint2d, true, true, std::vector, std::allocator>>();
+  converters::VectorToListConverter<std::vector<double>>();
+  converters::VectorToListConverter<std::vector<int>>();
   converters::IterableConverter()
       .fromPython<std::vector<MatrixXd>>()
       .fromPython<BasicLineString3d>()
       .fromPython<LaneLineStringFeatureList>()
       .fromPython<CompoundLaneLineStringFeatureList>();
-  class_<LaneLineStringFeatures>("LaneLineStringFeatures").def(map_indexing_suite<LaneLineStringFeatures>());
-  class_<LaneletFeatures>("LaneletFeatures").def(map_indexing_suite<LaneletFeatures>());
-  converters::VectorToListConverter<std::vector<double>>();
+  converters::MapToDictConverter<LaneLineStringFeatures>();
+  converters::MapToDictConverter<LaneletFeatures>();
+  DictToMapConverter<LaneLineStringFeatures>();
+  DictToMapConverter<LaneletFeatures>();
   class_<std::vector<bool>>("BoolList").def(vector_indexing_suite<std::vector<bool>>());
-  // class_<LaneLineStringFeatureList>("LaneLineStringFeatureList")
-  // .def(vector_indexing_suite<LaneLineStringFeatureList>());
-  // class_<CompoundLaneLineStringFeatureList>("CompoundLaneLineStringFeatureList")
-  // .def(vector_indexing_suite<CompoundLaneLineStringFeatureList>());
+
+  def<std::vector<MatrixXd> (*)(const std::vector<CompoundLaneLineStringFeaturePtr> &, bool)>(
+      "getPointsMatrices", &getPointMatrices<CompoundLaneLineStringFeature>);
 
   implicitly_convertible<routing::RoutingGraphPtr, routing::RoutingGraphConstPtr>();
-
-  // overloaded template function instantiations
-  def<std::vector<MatrixXd> (*)(const std::map<Id, LaneLineStringFeaturePtr> &, bool)>(
-      "getPointsMatrices", &getPointsMatrices<LaneLineStringFeature>);
-  def<std::vector<MatrixXd> (*)(const std::vector<LaneLineStringFeaturePtr> &, bool)>(
-      "getPointsMatrices", &getPointsMatrices<LaneLineStringFeature>);
-  def<std::vector<MatrixXd> (*)(const std::map<Id, CompoundLaneLineStringFeaturePtr> &, bool)>(
-      "getPointsMatrices", &getPointsMatrices<CompoundLaneLineStringFeature>);
-  def<std::vector<MatrixXd> (*)(const std::vector<CompoundLaneLineStringFeaturePtr> &, bool)>(
-      "getPointsMatrices", &getPointsMatrices<CompoundLaneLineStringFeature>);
-
-  def<MatrixXd (*)(const std::map<Id, LaneLineStringFeaturePtr> &, bool, bool)>(
-      "getFeatureVectorMatrix", &getFeatureVectorMatrix<LaneLineStringFeature>);
-  def<MatrixXd (*)(const std::vector<LaneLineStringFeaturePtr> &, bool, bool)>(
-      "getFeatureVectorMatrix", &getFeatureVectorMatrix<LaneLineStringFeature>);
-  def<MatrixXd (*)(const std::map<Id, CompoundLaneLineStringFeaturePtr> &, bool, bool)>(
-      "getFeatureVectorMatrix", &getFeatureVectorMatrix<CompoundLaneLineStringFeature>);
-  def<MatrixXd (*)(const std::vector<CompoundLaneLineStringFeaturePtr> &, bool, bool)>(
-      "getFeatureVectorMatrix", &getFeatureVectorMatrix<CompoundLaneLineStringFeature>);
-  def<MatrixXd (*)(const std::map<Id, LaneletFeaturePtr> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                         &getFeatureVectorMatrix<LaneletFeature>);
-  def<MatrixXd (*)(const std::vector<LaneletFeaturePtr> &, bool, bool)>("getFeatureVectorMatrix",
-                                                                        &getFeatureVectorMatrix<LaneletFeature>);
-
-  def<bool (*)(std::map<Id, LaneLineStringFeaturePtr> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
-      "processFeatures", &processFeatures<LaneLineStringFeature>);
-  def<bool (*)(std::vector<LaneLineStringFeaturePtr> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
-      "processFeatures", &processFeatures<LaneLineStringFeature>);
-  def<bool (*)(std::map<Id, CompoundLaneLineStringFeaturePtr> &, const OrientedRect &, const ParametrizationType &,
-               int32_t)>("processFeatures", &processFeatures<CompoundLaneLineStringFeature>);
-  def<bool (*)(std::vector<CompoundLaneLineStringFeaturePtr> &, const OrientedRect &, const ParametrizationType &,
-               int32_t)>("processFeatures", &processFeatures<CompoundLaneLineStringFeature>);
-  def<bool (*)(std::map<Id, LaneletFeaturePtr> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
-      "processFeatures", &processFeatures<LaneletFeature>);
-  def<bool (*)(std::vector<LaneletFeaturePtr> &, const OrientedRect &, const ParametrizationType &, int32_t)>(
-      "processFeatures", &processFeatures<LaneletFeature>);
 }

@@ -20,17 +20,18 @@ TEST_F(MapLearningTest, LaneLineStringFeature) {  // NOLINT
 
   Eigen::VectorXd vec = feat.computeFeatureVector(false, true);
   EXPECT_EQ(vec.size(), 9);
-  EXPECT_NEAR(vec[0], 0, 10e-5);
-  EXPECT_NEAR(vec[2], 5, 10e-5);
-  EXPECT_NEAR(vec[6], 15, 10e-5);
+  EXPECT_NEAR(vec[0], 5, 10e-5);
+  EXPECT_NEAR(vec[1], -5, 10e-5);
+  EXPECT_NEAR(vec[6], 5, 10e-5);
+  EXPECT_NEAR(vec[7], 10, 10e-5);
   EXPECT_EQ(vec[8], 2);
 
   Eigen::MatrixXd pointMat = feat.pointMatrix(false);
   EXPECT_EQ(pointMat.rows(), 4);
   EXPECT_EQ(pointMat.cols(), 3);
-  EXPECT_NEAR(pointMat(0, 0), 0, 10e-5);
-  EXPECT_NEAR(pointMat(2, 0), 10, 10e-5);
-  EXPECT_NEAR(pointMat(3, 0), 15, 10e-5);
+  EXPECT_NEAR(pointMat(0, 1), -5, 10e-5);
+  EXPECT_NEAR(pointMat(2, 1), 5, 10e-5);
+  EXPECT_NEAR(pointMat(3, 1), 10, 10e-5);
 }
 
 TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
@@ -59,9 +60,9 @@ TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
   Eigen::VectorXd vec = llFeat.computeFeatureVector(false, true);
 
   EXPECT_EQ(vec.size(), 18);
-  EXPECT_NEAR(vec[8], 0, 10e-5);
-  EXPECT_NEAR(vec[10], 5, 10e-5);
-  EXPECT_NEAR(vec[14], 15, 10e-5);
+  EXPECT_NEAR(vec[9], -5, 10e-5);
+  EXPECT_NEAR(vec[10], 1, 10e-5);
+  EXPECT_NEAR(vec[15], 10, 10e-5);
   EXPECT_EQ(vec[17], 1);
 }
 
@@ -99,15 +100,18 @@ TEST_F(MapLearningTest, CompoundLaneLineStringFeature) {  // NOLINT
 
   Eigen::VectorXd vec = cpdFeat.computeFeatureVector(false, true);
   EXPECT_EQ(vec.size(), 11);
-  EXPECT_NEAR(vec[0], -5, 10e-5);
-  EXPECT_NEAR(vec[2], 0, 10e-5);
-  EXPECT_NEAR(vec[6], 10, 10e-5);
+  EXPECT_NEAR(vec[1], -10, 10e-5);
+  EXPECT_NEAR(vec[2], 5, 10e-5);
+  EXPECT_NEAR(vec[3], -5, 10e-5);
+  EXPECT_NEAR(vec[6], 5, 10e-5);
+  EXPECT_NEAR(vec[7], 5, 10e-5);
   EXPECT_EQ(vec[10], 2);
 
   Eigen::MatrixXd pointMat = cpdFeat.pointMatrix(false);
   EXPECT_EQ(pointMat.rows(), 5);
   EXPECT_EQ(pointMat.cols(), 3);
-  EXPECT_NEAR(pointMat(0, 0), -5, 10e-5);
-  EXPECT_NEAR(pointMat(2, 0), 5, 10e-5);
-  EXPECT_NEAR(pointMat(3, 0), 10, 10e-5);
+  EXPECT_NEAR(pointMat(0, 1), -10, 10e-5);
+  EXPECT_NEAR(pointMat(2, 1), 0, 10e-5);
+  EXPECT_NEAR(pointMat(3, 1), 5, 10e-5);
+  EXPECT_NEAR(pointMat(4, 0), 5, 10e-5);
 }

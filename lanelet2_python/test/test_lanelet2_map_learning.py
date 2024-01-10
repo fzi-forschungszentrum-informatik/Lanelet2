@@ -1,7 +1,7 @@
 import unittest
 import lanelet2  # if we fail here, there is something wrong with lanelet2 registration
 from lanelet2.core import getId, Point3d, BasicPoint2d, LineString3d, Lanelet, LaneletMap
-from lanelet2.map_learning import MapDataInterface, getFeatureVectorMatrix
+from lanelet2.map_learning import MapDataInterface
 
 def get_sample_lanelet_map():
     mymap = LaneletMap()
@@ -24,8 +24,9 @@ class MapDataInterfaceTestCase(unittest.TestCase):
         mDataIf = MapDataInterface(mymap)
         mDataIf.setCurrPosAndExtractSubmap(pos, 0)
         lData = mDataIf.laneData()
-        fmat = lanelet2.map_learning.getPointsMatrices(lData.compoundRoadBorders, True)
-        print(fmat)
+        tfData = lData.getTensorFeatureData(True, False)
+        self.assertEqual(len(tfData.compoundCenterlines), 2)
+        self.assertEqual(tfData.compoundLaneDividerTypes[-1], 1)
 
 
 if __name__ == '__main__':

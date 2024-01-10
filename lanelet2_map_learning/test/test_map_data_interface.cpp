@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-
-// #include <chrono>
 // #include <matplot/matplot.h>
+
+#include <chrono>
 
 #include "lanelet2_map_learning/MapData.h"
 #include "lanelet2_map_learning/MapDataInterface.h"
@@ -41,11 +41,11 @@ TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
 
   for (size_t i = 0; i < lDataVec.size(); i++) {
     std::vector<Eigen::MatrixXd> compoundRoadBorders =
-        getPointsMatrices(getValidElements(lDataVec[i].compoundRoadBorders()), true);
+        getPointMatrices(getValidElements(lDataVec[i].compoundRoadBorders()), true);
     std::vector<Eigen::MatrixXd> compoundLaneDividers =
-        getPointsMatrices(getValidElements(lDataVec[i].compoundLaneDividers()), true);
+        getPointMatrices(getValidElements(lDataVec[i].compoundLaneDividers()), true);
     std::vector<Eigen::MatrixXd> compoundCenterlines =
-        getPointsMatrices(getValidElements(lDataVec[i].compoundCenterlines()), true);
+        getPointMatrices(getValidElements(lDataVec[i].compoundCenterlines()), true);
 
     switch (i) {
       case 0: {
@@ -69,8 +69,8 @@ TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
 
     // matplot::hold(matplot::on);
     // matplot::cla();
-    // matplot::xlim({-2, 16});
-    // matplot::ylim({-13, 2});
+    // matplot::xlim({-15, 15});
+    // matplot::ylim({-15, 15});
     // matplot::gcf()->size(1000, 1000);
     // for (const auto& mat : compoundRoadBorders) {
     //   std::vector<double> x;

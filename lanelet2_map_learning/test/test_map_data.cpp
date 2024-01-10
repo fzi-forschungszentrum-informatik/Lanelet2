@@ -21,14 +21,14 @@ TEST_F(MapLearningTest, LaneData) {  // NOLINT
 
   LaneData laneData = LaneData::build(laneletSubmap, laneletMapGraph);
 
-  std::vector<Eigen::MatrixXd> rawCompoundRoadBorders = getPointsMatrices(laneData.compoundRoadBorders(), true);
-  std::vector<Eigen::MatrixXd> rawCompoundLaneDividers = getPointsMatrices(laneData.compoundLaneDividers(), true);
-  std::vector<Eigen::MatrixXd> rawCompoundCenterlines = getPointsMatrices(laneData.compoundCenterlines(), true);
+  std::vector<Eigen::MatrixXd> rawCompoundRoadBorders = getPointMatrices(laneData.compoundRoadBorders(), true);
+  std::vector<Eigen::MatrixXd> rawCompoundLaneDividers = getPointMatrices(laneData.compoundLaneDividers(), true);
+  std::vector<Eigen::MatrixXd> rawCompoundCenterlines = getPointMatrices(laneData.compoundCenterlines(), true);
 
   bool valid = laneData.processAll(bbox, ParametrizationType::LineString, 20);
-  std::vector<Eigen::MatrixXd> compoundRoadBorders = getPointsMatrices(laneData.compoundRoadBorders(), true);
-  std::vector<Eigen::MatrixXd> compoundLaneDividers = getPointsMatrices(laneData.compoundLaneDividers(), true);
-  std::vector<Eigen::MatrixXd> compoundCenterlines = getPointsMatrices(laneData.compoundCenterlines(), true);
+  std::vector<Eigen::MatrixXd> compoundRoadBorders = getPointMatrices(laneData.compoundRoadBorders(), true);
+  std::vector<Eigen::MatrixXd> compoundLaneDividers = getPointMatrices(laneData.compoundLaneDividers(), true);
+  std::vector<Eigen::MatrixXd> compoundCenterlines = getPointMatrices(laneData.compoundCenterlines(), true);
 
   EXPECT_TRUE(laneData.laneletFeatures().find(2007) != laneData.laneletFeatures().end());
   EXPECT_EQ(laneData.laneletFeatures().find(2007)->second->leftBoundary()->mapID(), 1012);

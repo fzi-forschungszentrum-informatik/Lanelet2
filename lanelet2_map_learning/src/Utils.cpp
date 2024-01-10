@@ -32,6 +32,9 @@ OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudina
   boost::geometry::transform(axisAlignedRect.bg_poly, trans1Rect.bg_poly, trans1);
   boost::geometry::transform(trans1Rect.bg_poly, rotatedRect.bg_poly, rotate);
   boost::geometry::transform(rotatedRect.bg_poly, trans2Rect.bg_poly, trans2);
+
+  trans2Rect.center = center;
+  trans2Rect.yaw = yaw;
   return trans2Rect;
 }
 
@@ -91,6 +94,16 @@ BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3
     cut3d.push_back(BasicPoint3d(pt2d.x(), pt2d.y(), bestZ));
   }
   return cut3d;
+}
+
+BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline) {
+  boost::geometry::strategy::transform::translate_transformer<double, 2, 2> trans1(-bbox.center.x(), -bbox.center.y());
+  boost::geometry::strategy::transform::rotate_transformer<boost::geometry::radian, double, 2, 2> rotate(-bbox.yaw);
+  BasicLineString3d transPolyline;
+  BasicLineString3d rotatedPolyline;
+  boost::geometry::transform(polyline, transPolyline, trans1);
+  boost::geometry::transform(transPolyline, rotatedPolyline, rotate);
+  return rotatedPolyline;
 }
 
 void saveLaneData(const std::string& filename, const std::vector<LaneData>& lDataVec, bool binary) {

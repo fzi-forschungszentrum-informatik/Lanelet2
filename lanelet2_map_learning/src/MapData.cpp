@@ -297,5 +297,24 @@ bool LaneData::processAll(const OrientedRect& bbox, const ParametrizationType& p
   }
 }
 
+LaneData::TensorFeatureData LaneData::getTensorFeatureData(bool pointsIn2d, bool ignoreBuffer) {
+  if (!tfData_.has_value() || ignoreBuffer) {
+    tfData_ = LaneData::TensorFeatureData();
+    tfData_->uuid_ = uuid_;
+    tfData_->roadBorders_ = getPointMatrices(roadBorders_, pointsIn2d);
+    tfData_->laneDividers_ = getPointMatrices(laneDividers_, pointsIn2d);
+    tfData_->compoundRoadBorders_ = getPointMatrices(compoundRoadBorders_, pointsIn2d);
+    tfData_->compoundLaneDividers_ = getPointMatrices(compoundLaneDividers_, pointsIn2d);
+    tfData_->compoundCenterlines_ = getPointMatrices(compoundCenterlines_, pointsIn2d);
+    for (const auto& ft : laneDividers_) {
+      tfData_->laneDividerTypes_.push_back(ft.second->typeInt());
+    }
+    for (const auto& ft : compoundLaneDividers_) {
+      tfData_->compoundLaneDividerTypes_.push_back(ft->typeInt());
+    }
+  }
+  return tfData_.value();
+}
+
 }  // namespace map_learning
 }  // namespace lanelet
