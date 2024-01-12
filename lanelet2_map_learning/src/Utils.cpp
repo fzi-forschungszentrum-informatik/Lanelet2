@@ -65,7 +65,7 @@ BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t 
   return bdInterp;
 }
 
-BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline) {
+std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline) {
   BasicLineString2d polyline2d;
   for (const auto& pt : polyline) {
     polyline2d.push_back(BasicPoint2d(pt.x(), pt.y()));
@@ -73,25 +73,38 @@ BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3
   std::deque<BasicLineString2d> cut2d;
   boost::geometry::intersection(bbox.bg_poly, polyline2d, cut2d);
 
-  BasicLineString3d cut3d;
+  std::vector<BasicLineString3d> cut3d;
   if (cut2d.empty()) {
     return cut3d;
   } else if (cut2d.size() > 1) {
-    throw std::runtime_error("More than one cut line!");
+    for (const auto& ls : cut2d) {
+      std::cerr << "Cut line:" << std::endl;
+      for (const auto& pt : ls) {
+        std::cerr << pt << std::endl;
+      }
+      std::cerr << "--------------" << std::endl;
+    }
+
+    std::cerr << "More than one cut line!" << std::endl;
+    // throw std::runtime_error("More than one cut line!");
   }
 
   // restore z value from closest point on the original linestring and remove double points of boost intersection
-  for (const auto& pt2d : cut2d[0]) {
-    double lastDist = std::numeric_limits<double>::max();
-    double bestZ;
-    for (const auto& pt : polyline) {
-      double currDist = (pt2d - BasicPoint2d(pt.x(), pt.y())).norm();
-      if (currDist < lastDist) {
-        lastDist = currDist;
-        bestZ = pt.z();
+  for (const auto& el : cut2d) {
+    BasicLineString3d ls;
+    for (const auto& pt2d : el) {
+      double lastDist = std::numeric_limits<double>::max();
+      double bestZ;
+      for (const auto& pt : polyline) {
+        double currDist = (pt2d - BasicPoint2d(pt.x(), pt.y())).norm();
+        if (currDist < lastDist) {
+          lastDist = currDist;
+          bestZ = pt.z();
+        }
       }
+      ls.push_back(BasicPoint3d(pt2d.x(), pt2d.y(), bestZ));
     }
-    cut3d.push_back(BasicPoint3d(pt2d.x(), pt2d.y(), bestZ));
+    cut3d.push_back(ls);
   }
   return cut3d;
 }

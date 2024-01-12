@@ -19,7 +19,7 @@ void MapDataInterface::setCurrPosAndExtractSubmap(const BasicPoint2d& pt, double
   currPos_ = pt;
   currYaw_ = yaw;
   localSubmap_ = extractSubmap(laneletMap_, *currPos_, config_.submapExtentLongitudinal, config_.submapExtentLateral);
-  localSubmapGraph_ = lanelet::routing::RoutingGraph::build(*laneletMap_, *trafficRules_);
+  localSubmapGraph_ = lanelet::routing::RoutingGraph::build(*localSubmap_, *trafficRules_);
 }
 
 MapDataInterface::MapDataInterface(LaneletMapConstPtr laneletMap)

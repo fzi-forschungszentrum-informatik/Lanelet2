@@ -19,20 +19,20 @@ LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPo
                                     double extentLongitudinal, double extentLateral);
 
 inline bool isRoadBorder(const ConstLineString3d& lstring) {
-  Attribute type = lstring.attribute(AttributeName::Type);
+  Attribute type = lstring.attributeOr(AttributeName::Type, "");
   return type == AttributeValueString::RoadBorder || type == AttributeValueString::Curbstone ||
          type == AttributeValueString::Fence;
 }
 
 inline LineStringType bdTypeToEnum(ConstLineString3d lString) {
-  Attribute type = lString.attribute(AttributeName::Type);
+  Attribute type = lString.attributeOr(AttributeName::Type, "");
   if (type == AttributeValueString::RoadBorder || type == AttributeValueString::Curbstone ||
       type == AttributeValueString::Fence) {
     return LineStringType::RoadBorder;
   } else if (type == AttributeValueString::Virtual) {
     return LineStringType::Virtual;
   }
-  std::string subtype = lString.attribute(AttributeName::Subtype).value();
+  Attribute subtype = lString.attributeOr(AttributeName::Subtype, "");
   if (subtype == AttributeValueString::Dashed)
     return LineStringType::Dashed;
   else if (subtype == AttributeValueString::Solid)
@@ -44,27 +44,27 @@ inline LineStringType bdTypeToEnum(ConstLineString3d lString) {
   else if (subtype == AttributeValueString::DashedSolid)
     return LineStringType::Mixed;
   else {
-    throw std::runtime_error("Unexpected Line String Subtype!");
+    // throw std::runtime_error("Unexpected Line String Subtype!");
     return LineStringType::Unknown;
   }
 }
 
 inline TEType teTypeToEnum(const ConstLineString3d& te) {
-  std::string type = te.attribute(AttributeName::Type).value();
-  std::string subtype = te.attribute(AttributeName::Subtype).value();
+  Attribute type = te.attributeOr(AttributeName::Type, "");
+  Attribute subtype = te.attributeOr(AttributeName::Subtype, "");
   if (type == AttributeValueString::TrafficLight) {
     return TEType::TrafficLight;
   } else if (type == AttributeValueString::TrafficSign) {
     return TEType::TrafficSign;
   } else {
-    throw std::runtime_error("Unexpected Traffic Element Type!");
+    // throw std::runtime_error("Unexpected Traffic Element Type!");
     return TEType::Unknown;
   }
 }
 
 BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t nPoints);
 
-BasicLineString3d cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
+std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
 
 BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
 

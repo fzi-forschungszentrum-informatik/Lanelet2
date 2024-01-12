@@ -95,12 +95,14 @@ void LaneData::initLaneletFeatures(LaneletSubmapConstPtr& localSubmap,
 // no successors
 void getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, std::vector<ConstLanelets>& paths,
               ConstLanelet start, ConstLanelets initPath = ConstLanelets()) {
+  std::cerr << "Starting new path from " << start.id() << std::endl;
   initPath.push_back(start);
   ConstLanelets successorLLs = localSubmapGraph->following(start, false);
   while (!successorLLs.empty()) {
     for (size_t i = 1; i != successorLLs.size(); i++) {
       getPaths(localSubmapGraph, paths, successorLLs[i], initPath);
     }
+    std::cerr << "Adding ll to path: " << successorLLs.front().id() << std::endl;
     initPath.push_back(successorLLs.front());
     successorLLs = localSubmapGraph->following(successorLLs.front(), false);
   }

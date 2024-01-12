@@ -22,7 +22,12 @@ LStringProcessResult processLineStringImpl(const BasicLineString3d& lstring, con
   if (paramType != ParametrizationType::LineString) {
     throw std::runtime_error("Only polyline parametrization is implemented so far!");
   }
-  result.cutFeature_ = cutLineString(bbox, lstring);
+  std::vector<BasicLineString3d> cutLines = cutLineString(bbox, lstring);
+  result.cutFeature_ = std::accumulate(cutLines.begin(), cutLines.end(), BasicLineString3d(),
+                                       [](BasicLineString3d a, BasicLineString3d b) {
+                                         a.insert(a.end(), b.begin(), b.end());
+                                         return a;
+                                       });
   if (result.cutFeature_.empty()) {
     result.wasCut_ = true;
     result.valid_ = false;

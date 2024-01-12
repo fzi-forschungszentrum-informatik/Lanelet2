@@ -182,17 +182,14 @@ using LaneletFeatures = std::map<Id, LaneletFeaturePtr>;
 template <class T>
 MatrixXd getFeatureVectorMatrix(const std::map<Id, std::shared_ptr<T>>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
   std::vector<std::shared_ptr<T>> featList;
-  for (const auto& pair : mapFeatures) {
-    featList.push_back(pair.second);
-  }
+  // for (const auto& pair : mapFeatures) {
+  //   featList.push_back(pair.second);
+  // }
   return getFeatureVectorMatrix(featList, onlyPoints, pointsIn2d);
 }
 
 template <class T>
 MatrixXd getFeatureVectorMatrix(const std::vector<std::shared_ptr<T>>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
-  if (mapFeatures.empty()) {
-    throw std::runtime_error("Empty mapFeatures vector supplied!");
-  }
   std::vector<VectorXd> featureVectors;
   for (const auto& feat : mapFeatures) {
     if (!feat->valid()) {
@@ -225,13 +222,11 @@ std::vector<MatrixXd> getPointMatrices(const std::map<Id, std::shared_ptr<T>>& m
 
 template <class T>
 std::vector<MatrixXd> getPointMatrices(const std::vector<std::shared_ptr<T>>& mapFeatures, bool pointsIn2d) {
-  if (mapFeatures.empty()) {
-    throw std::runtime_error("Empty mapFeatures vector supplied!");
-  }
   std::vector<MatrixXd> pointMatrices;
   for (const auto& feat : mapFeatures) {
     if (!feat->valid()) {
-      throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
+      continue;
+      // throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
     }
     pointMatrices.push_back(feat->pointMatrix(pointsIn2d));
   }
