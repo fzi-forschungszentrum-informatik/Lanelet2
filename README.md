@@ -44,7 +44,7 @@ You can find more documentation in the individual packages and in doxygen commen
 - If you are interested in Lanelet2's **projections**, you will find more [here](lanelet2_projection/doc/Map_Projections_Coordinate_Systems.md).
 - To get more information on how to create valid maps, see [here](lanelet2_maps/README.md).
 
-You can also find the documentation at this [link](https://fzi-forschungszentrum-informatik.github.io/lanelet2).
+You can also find the documentation at this [link](https://fzi-forschungszentrum-informatik.github.io/Lanelet2).
 
 ## Installation
 
