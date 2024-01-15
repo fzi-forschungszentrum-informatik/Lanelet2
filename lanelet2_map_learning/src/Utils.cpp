@@ -77,19 +77,22 @@ std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const Bas
   if (cut2d.empty()) {
     return cut3d;
   } else if (cut2d.size() > 1) {
+    std::cerr << "More than one cut line!" << std::endl;
+    std::cerr << "Raw line:" << std::endl;
+    for (const auto& pt : polyline) {
+      std::cerr << "[" << pt.x() << "," << pt.y() << "]" << std::endl;
+    }
     for (const auto& ls : cut2d) {
       std::cerr << "Cut line:" << std::endl;
       for (const auto& pt : ls) {
-        std::cerr << pt << std::endl;
+        std::cerr << "[" << pt.x() << "," << pt.y() << "]" << std::endl;
       }
       std::cerr << "--------------" << std::endl;
     }
-
-    std::cerr << "More than one cut line!" << std::endl;
-    // throw std::runtime_error("More than one cut line!");
+    throw std::runtime_error("More than one cut line!");
   }
 
-  // restore z value from closest point on the original linestring and remove double points of boost intersection
+  // restore z value from closest point on the original linestring
   for (const auto& el : cut2d) {
     BasicLineString3d ls;
     for (const auto& pt2d : el) {

@@ -28,14 +28,32 @@ struct Edge {
 
 namespace internal {
 struct CompoundElsList {
-  CompoundElsList(const Id& start, LineStringType type) : ids{start}, type{type} {}
-  CompoundElsList(const std::vector<Id>& ids, LineStringType type) : ids{ids}, type{type} {}
+  CompoundElsList(const Id& start, bool startInverted, LineStringType type)
+      : ids{start}, inverted{startInverted}, type{type} {}
+  CompoundElsList(const std::vector<Id>& ids, const std::vector<bool>& inverted, LineStringType type)
+      : ids{ids}, inverted{inverted}, type{type} {}
   std::vector<Id> ids;
+  std::vector<bool> inverted;
   LineStringType type;
 };
 }  // namespace internal
 
 using Edges = std::map<Id, Edge>;  // key = id from
+
+template <typename T>
+std::vector<std::shared_ptr<T>> getValidElements(const std::vector<std::shared_ptr<T>>& vec) {
+  std::vector<std::shared_ptr<T>> res;
+  std::copy_if(vec.begin(), vec.end(), std::back_inserter(res), [](std::shared_ptr<T> el) { return el->valid(); });
+  return res;
+}
+
+template <typename T>
+std::map<Id, std::shared_ptr<T>> getValidElements(const std::map<Id, std::shared_ptr<T>>& map) {
+  std::map<Id, std::shared_ptr<T>> res;
+  std::copy_if(map.begin(), map.end(), std::inserter(res, res.end()),
+               [](const auto& pair) { return pair.second->valid(); });
+  return res;
+}
 
 class LaneData {
  public:
@@ -73,6 +91,13 @@ class LaneData {
   const CompoundLaneLineStringFeatureList& compoundLaneDividers() { return compoundLaneDividers_; }
   const CompoundLaneLineStringFeatureList& compoundCenterlines() { return compoundCenterlines_; }
 
+  LaneLineStringFeatures validRoadBorders() { return getValidElements(roadBorders_); }
+  LaneLineStringFeatures validLaneDividers() { return getValidElements(laneDividers_); }
+
+  CompoundLaneLineStringFeatureList validCompoundRoadBorders() { return getValidElements(compoundRoadBorders_); }
+  CompoundLaneLineStringFeatureList validCompoundLaneDividers() { return getValidElements(compoundLaneDividers_); }
+  CompoundLaneLineStringFeatureList validCompoundCenterlines() { return getValidElements(compoundCenterlines_); }
+
   const std::map<Id, std::vector<size_t>>& associatedCpdRoadBorderIndices() { return associatedCpdRoadBorderIndices_; }
   const std::map<Id, std::vector<size_t>>& associatedCpdLaneDividerIndices() {
     return associatedCpdLaneDividerIndices_;
@@ -99,7 +124,7 @@ class LaneData {
   void updateAssociatedCpdFeatureIndices();
 
   LineStringType getLineStringTypeFromId(Id id);
-  LaneLineStringFeaturePtr getLineStringFeatFromId(Id id);
+  LaneLineStringFeaturePtr getLineStringFeatFromId(Id id, bool inverted);
   std::vector<internal::CompoundElsList> computeCompoundLeftBorders(const ConstLanelets& path);
   std::vector<internal::CompoundElsList> computeCompoundRightBorders(const ConstLanelets& path);
   CompoundLaneLineStringFeaturePtr computeCompoundCenterline(const ConstLanelets& path);
@@ -135,20 +160,6 @@ class TEData {
   /// @brief adjacency matrix (sparse). Node indices are assigned as
   ///        xLane and xTE stacked, with xLane being first
 };
-
-template <typename T>
-std::vector<std::shared_ptr<T>> getValidElements(const std::vector<std::shared_ptr<T>>& vec) {
-  std::vector<std::shared_ptr<T>> res;
-  std::copy_if(vec.begin(), vec.end(), std::back_inserter(res), [](std::shared_ptr<T> el) { return el->valid(); });
-  return res;
-}
-
-template <typename T>
-std::map<Id, std::shared_ptr<T>> getValidElements(const std::map<Id, std::shared_ptr<T>>& map) {
-  std::map<Id, std::shared_ptr<T>> res;
-  std::copy_if(map.begin(), map.end(), std::back_inserter(res), [](const auto& pair) { return pair.second->valid(); });
-  return res;
-}
 
 }  // namespace map_learning
 }  // namespace lanelet

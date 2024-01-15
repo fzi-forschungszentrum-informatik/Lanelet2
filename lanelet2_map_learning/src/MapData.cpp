@@ -20,23 +20,24 @@ LaneData LaneData::build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::R
 void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
                                   lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   for (const auto& ll : localSubmap->laneletLayer) {
+    Id boundID = ll.leftBound3d().id();
+    BasicLineString3d bound =
+        !ll.leftBound3d().inverted() ? ll.leftBound3d().basicLineString() : ll.leftBound3d().invert().basicLineString();
     if (isRoadBorder(ll.leftBound3d())) {
-      LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(ll.leftBound3d().id());
+      LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(boundID);
       if (itRoadBd != roadBorders_.end()) {
         itRoadBd->second->addLaneletID(ll.id());
       } else {
-        roadBorders_.insert({ll.leftBound3d().id(), std::make_shared<LaneLineStringFeature>(
-                                                        ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
-                                                        bdTypeToEnum(ll.leftBound3d()), ll.id())});
+        roadBorders_.insert({boundID, std::make_shared<LaneLineStringFeature>(
+                                          bound, boundID, bdTypeToEnum(ll.leftBound3d()), Ids{ll.id()}, false)});
       }
     } else {
-      LaneLineStringFeatures::iterator itLaneBd = laneDividers_.find(ll.leftBound3d().id());
+      LaneLineStringFeatures::iterator itLaneBd = laneDividers_.find(boundID);
       if (itLaneBd != laneDividers_.end()) {
         itLaneBd->second->addLaneletID(ll.id());
       } else {
-        laneDividers_.insert({ll.leftBound3d().id(), std::make_shared<LaneLineStringFeature>(
-                                                         ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
-                                                         bdTypeToEnum(ll.leftBound3d()), ll.id())});
+        laneDividers_.insert({boundID, std::make_shared<LaneLineStringFeature>(
+                                           bound, boundID, bdTypeToEnum(ll.leftBound3d()), Ids{ll.id()}, false)});
       }
     }
 
@@ -52,23 +53,24 @@ void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
 void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   for (const auto& ll : localSubmap->laneletLayer) {
+    Id boundID = ll.rightBound3d().id();
+    BasicLineString3d bound = !ll.rightBound3d().inverted() ? ll.rightBound3d().basicLineString()
+                                                            : ll.rightBound3d().invert().basicLineString();
     if (isRoadBorder(ll.rightBound3d())) {
-      LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(ll.rightBound3d().id());
+      LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(boundID);
       if (itRoadBd != roadBorders_.end()) {
         itRoadBd->second->addLaneletID(ll.id());
       } else {
-        roadBorders_.insert({ll.rightBound3d().id(), std::make_shared<LaneLineStringFeature>(
-                                                         ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
-                                                         bdTypeToEnum(ll.rightBound3d()), ll.id())});
+        roadBorders_.insert({boundID, std::make_shared<LaneLineStringFeature>(
+                                          bound, boundID, bdTypeToEnum(ll.rightBound3d()), Ids{ll.id()}, false)});
       }
     } else {
-      LaneLineStringFeatures::iterator itLaneBd = laneDividers_.find(ll.rightBound3d().id());
+      LaneLineStringFeatures::iterator itLaneBd = laneDividers_.find(boundID);
       if (itLaneBd != laneDividers_.end()) {
         itLaneBd->second->addLaneletID(ll.id());
       } else {
-        laneDividers_.insert({ll.rightBound3d().id(), std::make_shared<LaneLineStringFeature>(
-                                                          ll.rightBound3d().basicLineString(), ll.rightBound3d().id(),
-                                                          bdTypeToEnum(ll.rightBound3d()), ll.id())});
+        laneDividers_.insert({boundID, std::make_shared<LaneLineStringFeature>(
+                                           bound, boundID, bdTypeToEnum(ll.rightBound3d()), Ids{ll.id()}, false)});
       }
     }
     Optional<ConstLanelet> rightLL = localSubmapGraph->right(ll);
@@ -82,10 +84,10 @@ void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
 void LaneData::initLaneletFeatures(LaneletSubmapConstPtr& localSubmap,
                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   for (const auto& ll : localSubmap->laneletLayer) {
-    LaneLineStringFeaturePtr leftBoundary = getLineStringFeatFromId(ll.leftBound().id());
-    LaneLineStringFeaturePtr rightBoundary = getLineStringFeatFromId(ll.rightBound().id());
+    LaneLineStringFeaturePtr leftBoundary = getLineStringFeatFromId(ll.leftBound().id(), ll.leftBound().inverted());
+    LaneLineStringFeaturePtr rightBoundary = getLineStringFeatFromId(ll.rightBound().id(), ll.leftBound().inverted());
     LaneLineStringFeaturePtr centerline = std::make_shared<LaneLineStringFeature>(
-        ll.centerline3d().basicLineString(), ll.centerline3d().id(), LineStringType::Centerline, ll.id());
+        ll.centerline3d().basicLineString(), ll.centerline3d().id(), LineStringType::Centerline, Ids{ll.id()}, false);
     laneletFeatures_.insert(
         {ll.id(), std::make_shared<LaneletFeature>(leftBoundary, rightBoundary, centerline, ll.id())});
   }
@@ -95,14 +97,12 @@ void LaneData::initLaneletFeatures(LaneletSubmapConstPtr& localSubmap,
 // no successors
 void getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, std::vector<ConstLanelets>& paths,
               ConstLanelet start, ConstLanelets initPath = ConstLanelets()) {
-  std::cerr << "Starting new path from " << start.id() << std::endl;
   initPath.push_back(start);
   ConstLanelets successorLLs = localSubmapGraph->following(start, false);
   while (!successorLLs.empty()) {
     for (size_t i = 1; i != successorLLs.size(); i++) {
       getPaths(localSubmapGraph, paths, successorLLs[i], initPath);
     }
-    std::cerr << "Adding ll to path: " << successorLLs.front().id() << std::endl;
     initPath.push_back(successorLLs.front());
     successorLLs = localSubmapGraph->following(successorLLs.front(), false);
   }
@@ -124,13 +124,19 @@ LineStringType LaneData::getLineStringTypeFromId(Id id) {
   return bdType;
 }
 
-LaneLineStringFeaturePtr LaneData::getLineStringFeatFromId(Id id) {
+LaneLineStringFeaturePtr makeInverted(const LaneLineStringFeaturePtr& feat) {
+  return std::make_shared<LaneLineStringFeature>(
+      BasicLineString3d(feat->rawFeature().rbegin(), feat->rawFeature().rend()), feat->mapID(), feat->type(),
+      feat->laneletIDs(), !feat->inverted());
+}
+
+LaneLineStringFeaturePtr LaneData::getLineStringFeatFromId(Id id, bool inverted) {
   LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(id);
   LaneLineStringFeatures::iterator itLaneBd = laneDividers_.find(id);
   if (itLaneBd != laneDividers_.end()) {
-    return itLaneBd->second;
+    return (inverted == itLaneBd->second->inverted()) ? itLaneBd->second : makeInverted(itLaneBd->second);
   } else if (itRoadBd != roadBorders_.end()) {
-    return itRoadBd->second;
+    return (inverted == itRoadBd->second->inverted()) ? itRoadBd->second : makeInverted(itRoadBd->second);
   } else {
     throw std::runtime_error("Lanelet boundary " + std::to_string(id) +
                              " is neither a road border nor a lane divider!");
@@ -142,14 +148,15 @@ std::vector<CompoundElsList> LaneData::computeCompoundLeftBorders(const ConstLan
   ConstLanelet start = path.front();
   LineStringType currType = getLineStringTypeFromId(start.leftBound3d().id());
 
-  compoundBorders.push_back(CompoundElsList{start.leftBound3d().id(), currType});
+  compoundBorders.push_back(CompoundElsList{start.leftBound3d().id(), start.leftBound3d().inverted(), currType});
 
   for (size_t i = 1; i != path.size(); i++) {
     LineStringType newType = getLineStringTypeFromId(path[i].leftBound3d().id());
     if (currType == newType) {
       compoundBorders.back().ids.push_back(path[i].leftBound3d().id());
+      compoundBorders.back().inverted.push_back(path[i].leftBound3d().inverted());
     } else {
-      compoundBorders.push_back(CompoundElsList{path[i].leftBound3d().id(), newType});
+      compoundBorders.push_back(CompoundElsList{path[i].leftBound3d().id(), path[i].leftBound3d().inverted(), newType});
       currType = newType;
     }
   }
@@ -161,14 +168,16 @@ std::vector<CompoundElsList> LaneData::computeCompoundRightBorders(const ConstLa
   ConstLanelet start = path.front();
   LineStringType currType = getLineStringTypeFromId(start.rightBound3d().id());
 
-  compoundBorders.push_back(CompoundElsList{start.rightBound3d().id(), currType});
+  compoundBorders.push_back(CompoundElsList{start.rightBound3d().id(), start.rightBound3d().inverted(), currType});
 
   for (size_t i = 1; i != path.size(); i++) {
     LineStringType newType = getLineStringTypeFromId(path[i].rightBound3d().id());
     if (currType == newType) {
       compoundBorders.back().ids.push_back(path[i].rightBound3d().id());
+      compoundBorders.back().inverted.push_back(path[i].rightBound3d().inverted());
     } else {
-      compoundBorders.push_back(CompoundElsList{path[i].rightBound3d().id(), newType});
+      compoundBorders.push_back(
+          CompoundElsList{path[i].rightBound3d().id(), path[i].rightBound3d().inverted(), newType});
       currType = newType;
     }
   }
@@ -178,8 +187,8 @@ std::vector<CompoundElsList> LaneData::computeCompoundRightBorders(const ConstLa
 CompoundLaneLineStringFeaturePtr LaneData::computeCompoundCenterline(const ConstLanelets& path) {
   LaneLineStringFeatureList compoundCenterlines;
   for (const auto& ll : path) {
-    compoundCenterlines.push_back(std::make_shared<LaneLineStringFeature>(ll.centerline3d().basicLineString(), ll.id(),
-                                                                          LineStringType::Centerline, ll.id()));
+    compoundCenterlines.push_back(std::make_shared<LaneLineStringFeature>(
+        ll.centerline3d().basicLineString(), ll.id(), LineStringType::Centerline, Ids{ll.id()}, false));
   }
   return std::make_shared<CompoundLaneLineStringFeature>(compoundCenterlines, LineStringType::Centerline);
 }
@@ -243,8 +252,11 @@ void LaneData::initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
   }
   for (const auto& compFeat : compoundedBordersAndDividers) {
     LaneLineStringFeatureList toBeCompounded;
-    for (const auto& el : compFeat.ids) {
-      LaneLineStringFeaturePtr cmpdFeat = getLineStringFeatFromId(el);
+    if (compFeat.ids.size() != compFeat.inverted.size()) {
+      throw std::runtime_error("Unequal sizes of ids and inverted!");
+    }
+    for (size_t i = 0; i < compFeat.ids.size(); i++) {
+      LaneLineStringFeaturePtr cmpdFeat = getLineStringFeatFromId(compFeat.ids[i], compFeat.inverted[i]);
       toBeCompounded.push_back(cmpdFeat);
     }
     LineStringType cmpdType = toBeCompounded.front()->type();
@@ -303,15 +315,15 @@ LaneData::TensorFeatureData LaneData::getTensorFeatureData(bool pointsIn2d, bool
   if (!tfData_.has_value() || ignoreBuffer) {
     tfData_ = LaneData::TensorFeatureData();
     tfData_->uuid_ = uuid_;
-    tfData_->roadBorders_ = getPointMatrices(roadBorders_, pointsIn2d);
-    tfData_->laneDividers_ = getPointMatrices(laneDividers_, pointsIn2d);
-    tfData_->compoundRoadBorders_ = getPointMatrices(compoundRoadBorders_, pointsIn2d);
-    tfData_->compoundLaneDividers_ = getPointMatrices(compoundLaneDividers_, pointsIn2d);
-    tfData_->compoundCenterlines_ = getPointMatrices(compoundCenterlines_, pointsIn2d);
-    for (const auto& ft : laneDividers_) {
+    tfData_->roadBorders_ = getPointMatrices(validRoadBorders(), pointsIn2d);
+    tfData_->laneDividers_ = getPointMatrices(validLaneDividers(), pointsIn2d);
+    tfData_->compoundRoadBorders_ = getPointMatrices(validCompoundRoadBorders(), pointsIn2d);
+    tfData_->compoundLaneDividers_ = getPointMatrices(validCompoundLaneDividers(), pointsIn2d);
+    tfData_->compoundCenterlines_ = getPointMatrices(validCompoundCenterlines(), pointsIn2d);
+    for (const auto& ft : validLaneDividers()) {
       tfData_->laneDividerTypes_.push_back(ft.second->typeInt());
     }
-    for (const auto& ft : compoundLaneDividers_) {
+    for (const auto& ft : validCompoundLaneDividers()) {
       tfData_->compoundLaneDividerTypes_.push_back(ft->typeInt());
     }
   }

@@ -70,6 +70,7 @@ void serialize(Archive& ar, lanelet::map_learning::LaneLineStringFeature& feat, 
   ar& BOOST_SERIALIZATION_NVP(feat.cutFeature_);
   ar& BOOST_SERIALIZATION_NVP(feat.cutAndResampledFeature_);
   ar& BOOST_SERIALIZATION_NVP(feat.type_);
+  ar& BOOST_SERIALIZATION_NVP(feat.inverted_);
   ar& BOOST_SERIALIZATION_NVP(feat.laneletIDs_);
 }
 

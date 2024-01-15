@@ -58,7 +58,6 @@ class LineStringFeature : public MapFeature {
 
  protected:
   BasicLineString3d rawFeature_;
-
   LineStringFeature() {}
   LineStringFeature(const BasicLineString3d& feature, Id mapID) : MapFeature(mapID), rawFeature_{feature} {}
 };
@@ -66,8 +65,9 @@ class LineStringFeature : public MapFeature {
 class LaneLineStringFeature : public LineStringFeature {
  public:
   LaneLineStringFeature() {}
-  LaneLineStringFeature(const BasicLineString3d& feature, Id mapID, LineStringType type, Id laneletID)
-      : LineStringFeature(feature, mapID), type_{type}, laneletIDs_{laneletID} {}
+  LaneLineStringFeature(const BasicLineString3d& feature, Id mapID, LineStringType type,
+                        const std::vector<Id>& laneletID, bool inverted)
+      : LineStringFeature(feature, mapID), type_{type}, laneletIDs_{laneletID}, inverted_{inverted} {}
   virtual ~LaneLineStringFeature() noexcept = default;
 
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
@@ -79,8 +79,9 @@ class LaneLineStringFeature : public LineStringFeature {
   const BasicLineString3d& cutAndResampledFeature() const { return cutAndResampledFeature_; }
   const BasicLineString3d& cutResampledAndTransformedFeature() const { return cutResampledAndTransformedFeature_; }
   LineStringType type() const { return type_; }
+  bool inverted() const { return inverted_; }
   int typeInt() const { return static_cast<int>(type_); }
-  const std::vector<Id>& laneletIDs() const { return laneletIDs_; }
+  const Ids& laneletIDs() const { return laneletIDs_; }
   void addLaneletID(Id id) { laneletIDs_.push_back(id); }
 
   template <class Archive>
@@ -92,7 +93,8 @@ class LaneLineStringFeature : public LineStringFeature {
   BasicLineString3d cutAndResampledFeature_;
   BasicLineString3d cutResampledAndTransformedFeature_;
   LineStringType type_;
-  std::vector<Id> laneletIDs_;
+  bool inverted_{false};  // = inverted compared to element with that Id in lineStringLayer
+  Ids laneletIDs_;
 };
 
 using LaneLineStringFeaturePtr = std::shared_ptr<LaneLineStringFeature>;
@@ -182,9 +184,9 @@ using LaneletFeatures = std::map<Id, LaneletFeaturePtr>;
 template <class T>
 MatrixXd getFeatureVectorMatrix(const std::map<Id, std::shared_ptr<T>>& mapFeatures, bool onlyPoints, bool pointsIn2d) {
   std::vector<std::shared_ptr<T>> featList;
-  // for (const auto& pair : mapFeatures) {
-  //   featList.push_back(pair.second);
-  // }
+  for (const auto& pair : mapFeatures) {
+    featList.push_back(pair.second);
+  }
   return getFeatureVectorMatrix(featList, onlyPoints, pointsIn2d);
 }
 
@@ -225,8 +227,7 @@ std::vector<MatrixXd> getPointMatrices(const std::vector<std::shared_ptr<T>>& ma
   std::vector<MatrixXd> pointMatrices;
   for (const auto& feat : mapFeatures) {
     if (!feat->valid()) {
-      continue;
-      // throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
+      throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
     }
     pointMatrices.push_back(feat->pointMatrix(pointsIn2d));
   }
@@ -256,6 +257,8 @@ bool processFeatures(std::vector<std::shared_ptr<T>>& featVec, const OrientedRec
   }
   return allValid;
 }
+
+MatrixXd toPointMatrix(const BasicLineString3d& lString, bool pointsIn2d);
 
 }  // namespace map_learning
 }  // namespace lanelet

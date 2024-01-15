@@ -42,8 +42,9 @@ class LaneLineStringFeatureWrap : public LaneLineStringFeature, public wrapper<L
  public:
   LaneLineStringFeatureWrap() {}
 
-  LaneLineStringFeatureWrap(const BasicLineString3d &feature, Id mapID, LineStringType type, Id laneletID)
-      : LaneLineStringFeature(feature, mapID, type, laneletID) {}
+  LaneLineStringFeatureWrap(const BasicLineString3d &feature, Id mapID, LineStringType type,
+                            const std::vector<Id> &laneletID, bool inverted)
+      : LaneLineStringFeature(feature, mapID, type, laneletID, inverted) {}
 
   VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
     if (override f = this->get_override("computeFeatureVector")) return f(onlyPoints, pointsIn2d);
@@ -201,7 +202,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("pointMatrix", pure_virtual(&LineStringFeature::pointMatrix));
 
   class_<LaneLineStringFeatureWrap, bases<LineStringFeature>, LaneLineStringFeaturePtr, boost::noncopyable>(
-      "LaneLineStringFeature", "Lane line string feature class", init<BasicLineString3d, Id, LineStringType, Id>())
+      "LaneLineStringFeature", "Lane line string feature class",
+      init<BasicLineString3d, Id, LineStringType, Ids, bool>())
       .def(init<>())
       .add_property("cutFeature",
                     make_function(&LaneLineStringFeature::cutFeature, return_value_policy<copy_const_reference>()))
@@ -211,6 +213,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                     make_function(&LaneLineStringFeature::cutResampledAndTransformedFeature,
                                   return_value_policy<copy_const_reference>()))
       .add_property("type", &LaneLineStringFeature::type)
+      .add_property("inverted", &LaneLineStringFeature::inverted)
       .add_property("typeInt", &LaneLineStringFeature::typeInt)
       .add_property("laneletIDs",
                     make_function(&LaneLineStringFeature::laneletIDs, return_value_policy<copy_const_reference>()))
@@ -273,6 +276,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                           make_function(&LaneData::compoundLaneDividers, return_value_policy<copy_const_reference>()))
             .add_property("compoundCenterlines",
                           make_function(&LaneData::compoundCenterlines, return_value_policy<copy_const_reference>()))
+            .add_property("validRoadBorders", &LaneData::validRoadBorders)
+            .add_property("validLaneDividers", &LaneData::validLaneDividers)
+            .add_property("validCompoundRoadBorders", &LaneData::validCompoundRoadBorders)
+            .add_property("validCompoundLaneDividers", &LaneData::validCompoundLaneDividers)
+            .add_property("validCompoundCenterlines", &LaneData::validCompoundCenterlines)
             .add_property("associatedCpdRoadBorderIndices", make_function(&LaneData::associatedCpdRoadBorderIndices,
                                                                           return_value_policy<copy_const_reference>()))
             .add_property("associatedCpdLaneDividerIndices", make_function(&LaneData::associatedCpdLaneDividerIndices,
@@ -348,8 +356,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   DictToMapConverter<LaneletFeatures>();
   class_<std::vector<bool>>("BoolList").def(vector_indexing_suite<std::vector<bool>>());
 
-  def<std::vector<MatrixXd> (*)(const std::vector<CompoundLaneLineStringFeaturePtr> &, bool)>(
-      "getPointsMatrices", &getPointMatrices<CompoundLaneLineStringFeature>);
+  def("toPointMatrix", &toPointMatrix);
 
   implicitly_convertible<routing::RoutingGraphPtr, routing::RoutingGraphConstPtr>();
 }

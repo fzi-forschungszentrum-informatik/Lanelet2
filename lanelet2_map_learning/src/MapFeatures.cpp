@@ -60,8 +60,7 @@ bool LaneLineStringFeature::process(const OrientedRect& bbox, const Parametrizat
 }
 
 VectorXd LaneLineStringFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-  const BasicLineString3d& selectedFeature =
-      (cutResampledAndTransformedFeature_.size() > 0) ? cutResampledAndTransformedFeature_ : rawFeature_;
+  const BasicLineString3d& selectedFeature = cutResampledAndTransformedFeature_;
   VectorXd vec = pointsIn2d ? VectorXd(2 * selectedFeature.size() + 1)
                             : VectorXd(3 * selectedFeature.size() + 1);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
@@ -103,36 +102,10 @@ VectorXd TEFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const
 }
 
 MatrixXd LaneLineStringFeature::pointMatrix(bool pointsIn2d) const {
-  const BasicLineString3d& selectedFeature =
-      (cutResampledAndTransformedFeature_.size() > 0) ? cutResampledAndTransformedFeature_ : rawFeature_;
-  MatrixXd mat = pointsIn2d ? MatrixXd(selectedFeature.size(), 2)
-                            : MatrixXd(selectedFeature.size(), 3);  // n points with 2/3 dims + type
-  if (pointsIn2d == true) {
-    for (size_t i = 0; i < selectedFeature.size(); i++) {
-      mat.row(i) = selectedFeature[i](Eigen::seq(0, 1));
-    }
-  } else {
-    for (size_t i = 0; i < selectedFeature.size(); i++) {
-      mat.row(i) = selectedFeature[i](Eigen::seq(0, 2));
-    }
-  }
-  return mat;
+  return toPointMatrix(cutResampledAndTransformedFeature_, pointsIn2d);
 }
 
-MatrixXd TEFeature::pointMatrix(bool pointsIn2d) const {
-  MatrixXd mat =
-      pointsIn2d ? MatrixXd(rawFeature_.size(), 2) : MatrixXd(rawFeature_.size(), 3);  // n points with 2/3 dims + type
-  if (pointsIn2d == true) {
-    for (size_t i = 0; i < rawFeature_.size(); i++) {
-      mat.row(i) = rawFeature_[i](Eigen::seq(0, 1));
-    }
-  } else {
-    for (size_t i = 0; i < rawFeature_.size(); i++) {
-      mat.row(i) = rawFeature_[i](Eigen::seq(0, 2));
-    }
-  }
-  return mat;
-}
+MatrixXd TEFeature::pointMatrix(bool pointsIn2d) const { return toPointMatrix(rawFeature_, pointsIn2d); }
 
 LaneletFeature::LaneletFeature(LaneLineStringFeaturePtr leftBoundary, LaneLineStringFeaturePtr rightBoundary,
                                LaneLineStringFeaturePtr centerline, Id mapID)
@@ -140,11 +113,13 @@ LaneletFeature::LaneletFeature(LaneLineStringFeaturePtr leftBoundary, LaneLineSt
 
 LaneletFeature::LaneletFeature(const ConstLanelet& ll)
     : leftBoundary_{std::make_shared<LaneLineStringFeature>(ll.leftBound3d().basicLineString(), ll.leftBound3d().id(),
-                                                            bdTypeToEnum(ll.leftBound3d()), ll.id())},
-      rightBoundary_{std::make_shared<LaneLineStringFeature>(
-          ll.rightBound3d().basicLineString(), ll.rightBound3d().id(), bdTypeToEnum(ll.rightBound3d()), ll.id())},
+                                                            bdTypeToEnum(ll.leftBound3d()), Ids{ll.id()},
+                                                            ll.leftBound3d().inverted())},
+      rightBoundary_{std::make_shared<LaneLineStringFeature>(ll.rightBound3d().basicLineString(),
+                                                             ll.rightBound3d().id(), bdTypeToEnum(ll.rightBound3d()),
+                                                             Ids{ll.id()}, ll.rightBound3d().inverted())},
       centerline_{std::make_shared<LaneLineStringFeature>(ll.centerline3d().basicLineString(), ll.centerline3d().id(),
-                                                          LineStringType::Centerline, ll.id())} {}
+                                                          LineStringType::Centerline, Ids{ll.id()}, false)} {}
 
 bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) {
   leftBoundary_->process(bbox, paramType, nPoints);
@@ -204,6 +179,7 @@ CompoundLaneLineStringFeature::CompoundLaneLineStringFeature(const LaneLineStrin
     if (features[i]->rawFeature().empty()) {
       throw std::runtime_error("Feature with empty rawFeature() supplied!");
     }
+    // checking if the linestring is correctly
     if (i == features.size() - 1) {
       rawFeature_.insert(rawFeature_.end(), features[i]->rawFeature().begin(), features[i]->rawFeature().end());
     } else {
@@ -241,6 +217,21 @@ bool CompoundLaneLineStringFeature::process(const OrientedRect& bbox, const Para
     }
   }
   return valid;
+}
+
+MatrixXd toPointMatrix(const BasicLineString3d& lString, bool pointsIn2d) {
+  MatrixXd mat =
+      pointsIn2d ? MatrixXd(lString.size(), 2) : MatrixXd(lString.size(), 3);  // n points with 2/3 dims + type
+  if (pointsIn2d == true) {
+    for (size_t i = 0; i < lString.size(); i++) {
+      mat.row(i) = lString[i](Eigen::seq(0, 1));
+    }
+  } else {
+    for (size_t i = 0; i < lString.size(); i++) {
+      mat.row(i) = lString[i](Eigen::seq(0, 2));
+    }
+  }
+  return mat;
 }
 
 }  // namespace map_learning
