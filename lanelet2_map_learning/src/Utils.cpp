@@ -89,7 +89,7 @@ std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const Bas
       }
       std::cerr << "--------------" << std::endl;
     }
-    throw std::runtime_error("More than one cut line!");
+    // throw std::runtime_error("More than one cut line!");
   }
 
   // restore z value from closest point on the original linestring
@@ -122,7 +122,7 @@ BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineS
   return rotatedPolyline;
 }
 
-void saveLaneData(const std::string& filename, const std::vector<LaneData>& lDataVec, bool binary) {
+void saveLaneData(const std::string& filename, const std::vector<LaneDataPtr>& lDataVec, bool binary) {
   if (binary) {
     std::ofstream fs(filename, std::ofstream::binary);
     if (!fs.good()) {
@@ -140,11 +140,11 @@ void saveLaneData(const std::string& filename, const std::vector<LaneData>& lDat
   }
 }
 
-std::vector<LaneData> loadLaneData(const std::string& filename, bool binary) {
+std::vector<LaneDataPtr> loadLaneData(const std::string& filename, bool binary) {
   if (!fs::exists(fs::path(filename))) {
     throw std::runtime_error("Could not find file under " + filename);
   }
-  std::vector<LaneData> lDataVec;
+  std::vector<LaneDataPtr> lDataVec;
   if (binary) {
     std::ifstream fs(filename, std::ifstream::binary);
     if (!fs.good()) {

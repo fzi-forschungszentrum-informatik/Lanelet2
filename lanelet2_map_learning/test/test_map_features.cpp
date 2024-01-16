@@ -13,25 +13,27 @@ TEST_F(MapLearningTest, LaneLineStringFeature) {  // NOLINT
   LaneLineStringFeature feat(polyline, Id(123), LineStringType::Solid, Ids(1234), false);
 
   feat.process(bbox, ParametrizationType::LineString, 4);
-  EXPECT_EQ(feat.cutAndResampledFeature().size(), 4);
-  EXPECT_NEAR(feat.cutAndResampledFeature()[0].x(), 0, 10e-5);
-  EXPECT_NEAR(feat.cutAndResampledFeature()[1].x(), 5, 10e-5);
-  EXPECT_NEAR(feat.cutAndResampledFeature()[3].x(), 15, 10e-5);
+  EXPECT_EQ(feat.cutAndResampledFeature().size(), 1);
+  EXPECT_EQ(feat.cutAndResampledFeature()[0].size(), 4);
+  EXPECT_NEAR(feat.cutAndResampledFeature()[0][0].x(), 0, 10e-5);
+  EXPECT_NEAR(feat.cutAndResampledFeature()[0][1].x(), 5, 10e-5);
+  EXPECT_NEAR(feat.cutAndResampledFeature()[0][3].x(), 15, 10e-5);
 
-  Eigen::VectorXd vec = feat.computeFeatureVector(false, true);
-  EXPECT_EQ(vec.size(), 9);
-  EXPECT_NEAR(vec[0], 5, 10e-5);
-  EXPECT_NEAR(vec[1], -5, 10e-5);
-  EXPECT_NEAR(vec[6], 5, 10e-5);
-  EXPECT_NEAR(vec[7], 10, 10e-5);
-  EXPECT_EQ(vec[8], 2);
+  std::vector<VectorXd> vec = feat.computeFeatureVectors(false, true);
+  EXPECT_EQ(vec.size(), 1);
+  EXPECT_EQ(vec[0].size(), 9);
+  EXPECT_NEAR(vec[0][0], 5, 10e-5);
+  EXPECT_NEAR(vec[0][1], -5, 10e-5);
+  EXPECT_NEAR(vec[0][6], 5, 10e-5);
+  EXPECT_NEAR(vec[0][7], 10, 10e-5);
+  EXPECT_EQ(vec[0][8], 2);
 
-  Eigen::MatrixXd pointMat = feat.pointMatrix(false);
-  EXPECT_EQ(pointMat.rows(), 4);
-  EXPECT_EQ(pointMat.cols(), 3);
-  EXPECT_NEAR(pointMat(0, 1), -5, 10e-5);
-  EXPECT_NEAR(pointMat(2, 1), 5, 10e-5);
-  EXPECT_NEAR(pointMat(3, 1), 10, 10e-5);
+  std::vector<MatrixXd> pointMat = feat.pointMatrices(false);
+  EXPECT_EQ(pointMat[0].rows(), 4);
+  EXPECT_EQ(pointMat[0].cols(), 3);
+  EXPECT_NEAR(pointMat[0](0, 1), -5, 10e-5);
+  EXPECT_NEAR(pointMat[0](2, 1), 5, 10e-5);
+  EXPECT_NEAR(pointMat[0](3, 1), 10, 10e-5);
 }
 
 TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
@@ -52,18 +54,18 @@ TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
   llFeat.setReprType(LaneletRepresentationType::Boundaries);
 
   llFeat.process(bbox, ParametrizationType::LineString, 4);
-  EXPECT_EQ(llFeat.centerline()->cutAndResampledFeature().size(), 4);
-  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[0].x(), 0, 10e-5);
-  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[1].x(), 5, 10e-5);
-  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[3].x(), 15, 10e-5);
+  EXPECT_EQ(llFeat.centerline()->cutAndResampledFeature()[0].size(), 4);
+  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[0][0].x(), 0, 10e-5);
+  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[0][1].x(), 5, 10e-5);
+  EXPECT_NEAR(llFeat.centerline()->cutAndResampledFeature()[0][3].x(), 15, 10e-5);
 
-  Eigen::VectorXd vec = llFeat.computeFeatureVector(false, true);
-
-  EXPECT_EQ(vec.size(), 18);
-  EXPECT_NEAR(vec[9], -5, 10e-5);
-  EXPECT_NEAR(vec[10], 1, 10e-5);
-  EXPECT_NEAR(vec[15], 10, 10e-5);
-  EXPECT_EQ(vec[17], 1);
+  std::vector<VectorXd> vec = llFeat.computeFeatureVectors(false, true);
+  EXPECT_EQ(vec.size(), 1);
+  EXPECT_EQ(vec[0].size(), 18);
+  EXPECT_NEAR(vec[0][9], -5, 10e-5);
+  EXPECT_NEAR(vec[0][10], 1, 10e-5);
+  EXPECT_NEAR(vec[0][15], 10, 10e-5);
+  EXPECT_EQ(vec[0][17], 1);
 }
 
 TEST_F(MapLearningTest, CompoundLaneLineStringFeature) {  // NOLINT
@@ -87,31 +89,34 @@ TEST_F(MapLearningTest, CompoundLaneLineStringFeature) {  // NOLINT
                                         LineStringType::Solid);
 
   cpdFeat.process(bbox, ParametrizationType::LineString, 5);
-  EXPECT_EQ(cpdFeat.cutAndResampledFeature().size(), 5);
-  EXPECT_NEAR(cpdFeat.cutAndResampledFeature()[0].x(), -5, 10e-5);
-  EXPECT_NEAR(cpdFeat.cutAndResampledFeature()[1].x(), 0, 10e-5);
-  EXPECT_NEAR(cpdFeat.cutAndResampledFeature()[3].x(), 10, 10e-5);
+  EXPECT_EQ(cpdFeat.cutAndResampledFeature().size(), 1);
+  EXPECT_EQ(cpdFeat.cutAndResampledFeature()[0].size(), 5);
+  EXPECT_NEAR(cpdFeat.cutAndResampledFeature()[0][0].x(), -5, 10e-5);
+  EXPECT_NEAR(cpdFeat.cutAndResampledFeature()[0][1].x(), 0, 10e-5);
+  EXPECT_NEAR(cpdFeat.cutAndResampledFeature()[0][3].x(), 10, 10e-5);
 
   EXPECT_NEAR(cpdFeat.pathLengthsProcessed().front(), 0, 10e-5);
   EXPECT_EQ(cpdFeat.processedFeaturesValid().front(), false);
   double cpdFeatLength =
-      boost::geometry::length(cpdFeat.cutFeature(), boost::geometry::strategy::distance::pythagoras<double>());
+      boost::geometry::length(cpdFeat.cutFeature()[0], boost::geometry::strategy::distance::pythagoras<double>());
   EXPECT_NEAR(cpdFeatLength, cpdFeat.pathLengthsProcessed().back(), 10e-5);
 
-  Eigen::VectorXd vec = cpdFeat.computeFeatureVector(false, true);
-  EXPECT_EQ(vec.size(), 11);
-  EXPECT_NEAR(vec[1], -10, 10e-5);
-  EXPECT_NEAR(vec[2], 5, 10e-5);
-  EXPECT_NEAR(vec[3], -5, 10e-5);
-  EXPECT_NEAR(vec[6], 5, 10e-5);
-  EXPECT_NEAR(vec[7], 5, 10e-5);
-  EXPECT_EQ(vec[10], 2);
+  std::vector<VectorXd> vec = cpdFeat.computeFeatureVectors(false, true);
+  EXPECT_EQ(vec.size(), 1);
+  EXPECT_EQ(vec[0].size(), 11);
+  EXPECT_NEAR(vec[0][1], -10, 10e-5);
+  EXPECT_NEAR(vec[0][2], 5, 10e-5);
+  EXPECT_NEAR(vec[0][3], -5, 10e-5);
+  EXPECT_NEAR(vec[0][6], 5, 10e-5);
+  EXPECT_NEAR(vec[0][7], 5, 10e-5);
+  EXPECT_EQ(vec[0][10], 2);
 
-  Eigen::MatrixXd pointMat = cpdFeat.pointMatrix(false);
-  EXPECT_EQ(pointMat.rows(), 5);
-  EXPECT_EQ(pointMat.cols(), 3);
-  EXPECT_NEAR(pointMat(0, 1), -10, 10e-5);
-  EXPECT_NEAR(pointMat(2, 1), 0, 10e-5);
-  EXPECT_NEAR(pointMat(3, 1), 5, 10e-5);
-  EXPECT_NEAR(pointMat(4, 0), 5, 10e-5);
+  std::vector<MatrixXd> pointMat = cpdFeat.pointMatrices(false);
+  EXPECT_EQ(pointMat.size(), 1);
+  EXPECT_EQ(pointMat[0].rows(), 5);
+  EXPECT_EQ(pointMat[0].cols(), 3);
+  EXPECT_NEAR(pointMat[0](0, 1), -10, 10e-5);
+  EXPECT_NEAR(pointMat[0](2, 1), 0, 10e-5);
+  EXPECT_NEAR(pointMat[0](3, 1), 5, 10e-5);
+  EXPECT_NEAR(pointMat[0](4, 0), 5, 10e-5);
 }

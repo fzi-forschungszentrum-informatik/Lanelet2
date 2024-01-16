@@ -16,6 +16,8 @@ namespace map_learning {
 using VectorXd = Eigen::Matrix<double, Eigen::Dynamic, 1>;
 using MatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
 
+using BasicLineStrings3d = std::vector<BasicLineString3d>;
+
 class MapFeature {
  public:
   const Id mapID() const { return mapID_.get_value_or(InvalId); }
@@ -23,7 +25,7 @@ class MapFeature {
   bool valid() const { return valid_; }
   bool wasCut() const { return wasCut_; }
 
-  virtual VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const = 0;
+  virtual std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const = 0;
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) = 0;
 
   template <class Archive>
@@ -46,8 +48,8 @@ class LineStringFeature : public MapFeature {
  public:
   const BasicLineString3d& rawFeature() const { return rawFeature_; }
 
-  virtual VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const = 0;
-  virtual MatrixXd pointMatrix(bool pointsIn2d) const = 0;
+  virtual std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const = 0;
+  virtual std::vector<MatrixXd> pointMatrices(bool pointsIn2d) const = 0;
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) = 0;
 
   template <class Archive>
@@ -71,13 +73,14 @@ class LaneLineStringFeature : public LineStringFeature {
   virtual ~LaneLineStringFeature() noexcept = default;
 
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
-  virtual VectorXd computeFeatureVector(bool onlyPoints,
-                                        bool pointsIn2d) const override;  // uses processedFeature_ when available
-  virtual MatrixXd pointMatrix(bool pointsIn2d) const override;           // uses processedFeature_ when available
+  virtual std::vector<VectorXd> computeFeatureVectors(
+      bool onlyPoints,
+      bool pointsIn2d) const override;                                          // uses processedFeature_ when available
+  virtual std::vector<MatrixXd> pointMatrices(bool pointsIn2d) const override;  // uses processedFeature_ when available
 
-  const BasicLineString3d& cutFeature() const { return cutFeature_; }
-  const BasicLineString3d& cutAndResampledFeature() const { return cutAndResampledFeature_; }
-  const BasicLineString3d& cutResampledAndTransformedFeature() const { return cutResampledAndTransformedFeature_; }
+  const BasicLineStrings3d& cutFeature() const { return cutFeatures_; }
+  const BasicLineStrings3d& cutAndResampledFeature() const { return cutAndResampledFeatures_; }
+  const BasicLineStrings3d& cutResampledAndTransformedFeature() const { return cutResampledAndTransformedFeatures_; }
   LineStringType type() const { return type_; }
   bool inverted() const { return inverted_; }
   int typeInt() const { return static_cast<int>(type_); }
@@ -89,9 +92,9 @@ class LaneLineStringFeature : public LineStringFeature {
                                               const unsigned int /*version*/);
 
  protected:
-  BasicLineString3d cutFeature_;
-  BasicLineString3d cutAndResampledFeature_;
-  BasicLineString3d cutResampledAndTransformedFeature_;
+  BasicLineStrings3d cutFeatures_;
+  BasicLineStrings3d cutAndResampledFeatures_;
+  BasicLineStrings3d cutResampledAndTransformedFeatures_;
   LineStringType type_;
   bool inverted_{false};  // = inverted compared to element with that Id in lineStringLayer
   Ids laneletIDs_;
@@ -110,9 +113,9 @@ class TEFeature : public LineStringFeature {
 
   bool process(const OrientedRect& bbox, const ParametrizationType& paramType,
                int32_t /*unused*/) override;  // not implemented yet
-  VectorXd computeFeatureVector(bool onlyPoints,
-                                bool pointsIn2d) const override;  // currently uses raw feature only
-  virtual MatrixXd pointMatrix(bool pointsIn2d) const override;
+  std::vector<VectorXd> computeFeatureVectors(bool onlyPoints,
+                                              bool pointsIn2d) const override;  // currently uses raw feature only
+  virtual std::vector<MatrixXd> pointMatrices(bool pointsIn2d) const override;
 
   const TEType& teType() { return teType_; }
 
@@ -129,7 +132,7 @@ class LaneletFeature : public MapFeature {
   virtual ~LaneletFeature() noexcept = default;
 
   bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) override;
-  VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const override;
+  std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const override;
 
   void setReprType(LaneletRepresentationType reprType) { reprType_ = reprType; }
 
@@ -197,7 +200,8 @@ MatrixXd getFeatureVectorMatrix(const std::vector<std::shared_ptr<T>>& mapFeatur
     if (!feat->valid()) {
       throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
     }
-    featureVectors.push_back(feat->computeFeatureVector(onlyPoints, pointsIn2d));
+    std::vector<VectorXd> individualVecs = feat->computeFeatureVectors(onlyPoints, pointsIn2d);
+    featureVectors.insert(featureVectors.end(), individualVecs.begin(), individualVecs.end());
   }
   if (std::adjacent_find(featureVectors.begin(), featureVectors.end(),
                          [](const VectorXd& v1, const VectorXd& v2) { return v1.size() != v2.size(); }) ==
@@ -229,7 +233,8 @@ std::vector<MatrixXd> getPointMatrices(const std::vector<std::shared_ptr<T>>& ma
     if (!feat->valid()) {
       throw std::runtime_error("Invalid feature in list! This function requires all given features to be valid!");
     }
-    pointMatrices.push_back(feat->pointMatrix(pointsIn2d));
+    std::vector<MatrixXd> individualMats = feat->pointMatrices(pointsIn2d);
+    pointMatrices.insert(pointMatrices.end(), individualMats.begin(), individualMats.end());
   }
   return pointMatrices;
 }
@@ -259,6 +264,6 @@ bool processFeatures(std::vector<std::shared_ptr<T>>& featVec, const OrientedRec
 }
 
 MatrixXd toPointMatrix(const BasicLineString3d& lString, bool pointsIn2d);
-
+VectorXd toFeatureVector(const BasicLineString3d& line, int typeInt, bool onlyPoints, bool pointsIn2d);
 }  // namespace map_learning
 }  // namespace lanelet

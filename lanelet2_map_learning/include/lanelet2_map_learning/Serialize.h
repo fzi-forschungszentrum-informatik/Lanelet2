@@ -67,8 +67,9 @@ void serialize(Archive& ar, lanelet::map_learning::LineStringFeature& feat, cons
 template <class Archive>
 void serialize(Archive& ar, lanelet::map_learning::LaneLineStringFeature& feat, const unsigned int /*version*/) {
   ar& make_nvp("LineStringFeature", boost::serialization::base_object<lanelet::map_learning::LineStringFeature>(feat));
-  ar& BOOST_SERIALIZATION_NVP(feat.cutFeature_);
-  ar& BOOST_SERIALIZATION_NVP(feat.cutAndResampledFeature_);
+  ar& BOOST_SERIALIZATION_NVP(feat.cutFeatures_);
+  ar& BOOST_SERIALIZATION_NVP(feat.cutAndResampledFeatures_);
+  ar& BOOST_SERIALIZATION_NVP(feat.cutResampledAndTransformedFeatures_);
   ar& BOOST_SERIALIZATION_NVP(feat.type_);
   ar& BOOST_SERIALIZATION_NVP(feat.inverted_);
   ar& BOOST_SERIALIZATION_NVP(feat.laneletIDs_);

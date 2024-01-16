@@ -9,9 +9,9 @@ namespace lanelet {
 namespace map_learning {
 
 struct LStringProcessResult {
-  BasicLineString3d cutFeature_;
-  BasicLineString3d cutAndResampledFeature_;
-  BasicLineString3d cutResampledAndTransformedFeature_;
+  BasicLineStrings3d cutFeatures;
+  BasicLineStrings3d cutAndResampledFeatures;
+  BasicLineStrings3d cutResampledAndTransformedFeatures;
   bool wasCut_{false};
   bool valid_{true};
 };
@@ -23,22 +23,25 @@ LStringProcessResult processLineStringImpl(const BasicLineString3d& lstring, con
     throw std::runtime_error("Only polyline parametrization is implemented so far!");
   }
   std::vector<BasicLineString3d> cutLines = cutLineString(bbox, lstring);
-  result.cutFeature_ = std::accumulate(cutLines.begin(), cutLines.end(), BasicLineString3d(),
-                                       [](BasicLineString3d a, BasicLineString3d b) {
-                                         a.insert(a.end(), b.begin(), b.end());
-                                         return a;
-                                       });
-  if (result.cutFeature_.empty()) {
+  if (cutLines.empty()) {
     result.wasCut_ = true;
     result.valid_ = false;
     return result;
   }
-  result.cutAndResampledFeature_ = resampleLineString(result.cutFeature_, nPoints);
-  result.cutResampledAndTransformedFeature_ = transformLineString(bbox, result.cutAndResampledFeature_);
+
+  for (const auto& line : cutLines) {
+    result.cutFeatures.push_back(line);
+    BasicLineString3d lineResampled = resampleLineString(line, nPoints);
+    result.cutAndResampledFeatures.push_back(lineResampled);
+    result.cutResampledAndTransformedFeatures.push_back(transformLineString(bbox, lineResampled));
+  }
 
   double lengthOriginal = boost::geometry::length(lstring, boost::geometry::strategy::distance::pythagoras<double>());
-  double lengthProcessed = boost::geometry::length(result.cutAndResampledFeature_,
-                                                   boost::geometry::strategy::distance::pythagoras<double>());
+  double lengthProcessed = 0;
+  for (const auto& line : result.cutResampledAndTransformedFeatures) {
+    lengthProcessed =
+        lengthProcessed + boost::geometry::length(line, boost::geometry::strategy::distance::pythagoras<double>());
+  }
 
   if (lengthOriginal - lengthProcessed > 1e-2) {
     result.wasCut_ = true;
@@ -49,9 +52,9 @@ LStringProcessResult processLineStringImpl(const BasicLineString3d& lstring, con
 bool LaneLineStringFeature::process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) {
   LStringProcessResult result = processLineStringImpl(rawFeature_, bbox, paramType, nPoints);
   if (result.valid_) {
-    cutFeature_ = result.cutFeature_;
-    cutAndResampledFeature_ = result.cutAndResampledFeature_;
-    cutResampledAndTransformedFeature_ = result.cutResampledAndTransformedFeature_;
+    cutFeatures_ = result.cutFeatures;
+    cutAndResampledFeatures_ = result.cutAndResampledFeatures;
+    cutResampledAndTransformedFeatures_ = result.cutResampledAndTransformedFeatures;
   } else {
     valid_ = result.valid_;
   }
@@ -59,29 +62,15 @@ bool LaneLineStringFeature::process(const OrientedRect& bbox, const Parametrizat
   return result.valid_;
 }
 
-VectorXd LaneLineStringFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-  const BasicLineString3d& selectedFeature = cutResampledAndTransformedFeature_;
-  VectorXd vec = pointsIn2d ? VectorXd(2 * selectedFeature.size() + 1)
-                            : VectorXd(3 * selectedFeature.size() + 1);  // n points with 2/3 dims + type
-  if (pointsIn2d == true) {
-    for (size_t i = 0; i < selectedFeature.size(); i++) {
-      vec(Eigen::seq(2 * i, 2 * i + 1)) = selectedFeature[i](Eigen::seq(0, 1));
-    }
-  } else {
-    for (size_t i = 0; i < selectedFeature.size(); i++) {
-      vec(Eigen::seq(3 * i, 3 * i + 2)) = selectedFeature[i](Eigen::seq(0, 2));
-    }
+std::vector<VectorXd> LaneLineStringFeature::computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+  std::vector<VectorXd> featVecs;
+  for (const auto& split : cutResampledAndTransformedFeatures_) {
+    featVecs.push_back(toFeatureVector(split, typeInt(), onlyPoints, pointsIn2d));
   }
-
-  vec[vec.size() - 1] = typeInt();
-  if (onlyPoints) {
-    return vec(Eigen::seq(0, vec.size() - 2));
-  } else {
-    return vec;
-  }
+  return featVecs;
 }
 
-VectorXd TEFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
+std::vector<VectorXd> TEFeature::computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
   VectorXd vec = pointsIn2d ? VectorXd(2 * rawFeature_.size() + 1)
                             : VectorXd(3 * rawFeature_.size() + 1);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
@@ -95,17 +84,23 @@ VectorXd TEFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const
   }
   vec[vec.size() - 1] = static_cast<int>(teType_);
   if (onlyPoints) {
-    return vec(Eigen::seq(0, vec.size() - 2));
+    return std::vector<VectorXd>{vec(Eigen::seq(0, vec.size() - 2))};
   } else {
-    return vec;
+    return std::vector<VectorXd>{vec};
   }
 }
 
-MatrixXd LaneLineStringFeature::pointMatrix(bool pointsIn2d) const {
-  return toPointMatrix(cutResampledAndTransformedFeature_, pointsIn2d);
+std::vector<MatrixXd> LaneLineStringFeature::pointMatrices(bool pointsIn2d) const {
+  std::vector<MatrixXd> pointMatrices;
+  for (const auto& split : cutResampledAndTransformedFeatures_) {
+    pointMatrices.push_back(toPointMatrix(split, pointsIn2d));
+  }
+  return pointMatrices;
 }
 
-MatrixXd TEFeature::pointMatrix(bool pointsIn2d) const { return toPointMatrix(rawFeature_, pointsIn2d); }
+std::vector<MatrixXd> TEFeature::pointMatrices(bool pointsIn2d) const {
+  return std::vector<MatrixXd>{toPointMatrix(rawFeature_, pointsIn2d)};
+}
 
 LaneletFeature::LaneletFeature(LaneLineStringFeaturePtr leftBoundary, LaneLineStringFeaturePtr rightBoundary,
                                LaneLineStringFeaturePtr centerline, Id mapID)
@@ -135,35 +130,54 @@ bool LaneletFeature::process(const OrientedRect& bbox, const ParametrizationType
   return valid_;
 }
 
-VectorXd LaneletFeature::computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-  if (reprType_ == LaneletRepresentationType::Centerline) {
-    VectorXd vecCenterlinePts = centerline_->computeFeatureVector(true, pointsIn2d);
-    VectorXd vec(vecCenterlinePts.size() + 2);  // pts vec + left and right type
-    vec(Eigen::seq(0, vecCenterlinePts.size() - 1)) = vecCenterlinePts;
-    vec[vec.size() - 2] = leftBoundary_->typeInt();
-    vec[vec.size() - 1] = rightBoundary_->typeInt();
-    if (onlyPoints) {
-      return vec(Eigen::seq(0, vec.size() - 2));
-    } else {
-      return vec;
-    }
-  } else if (reprType_ == LaneletRepresentationType::Boundaries) {
-    VectorXd vecLeftBdPts = leftBoundary_->computeFeatureVector(true, pointsIn2d);
-    VectorXd vecRightBdPts = rightBoundary_->computeFeatureVector(true, pointsIn2d);
+VectorXd stackVector(const std::vector<VectorXd>& vec) {
+  size_t flattenedLength = 0;
+  for (const auto& el : vec) {
+    flattenedLength = flattenedLength + el.size();
+  }
+  VectorXd stacked(flattenedLength);
+  size_t currIndex = 0;
+  for (const auto& el : vec) {
+    stacked(Eigen::seq(currIndex, currIndex + el.size())) = el;
+  }
+  return stacked;
+}
 
-    VectorXd vec(vecLeftBdPts.size() + vecRightBdPts.size() + 2);  // pts vec + left and right type
-    vec(Eigen::seq(0, vecLeftBdPts.size() - 1)) = vecLeftBdPts;
-    vec(Eigen::seq(vecLeftBdPts.size(), vecLeftBdPts.size() + vecRightBdPts.size() - 1)) = vecRightBdPts;
+std::vector<VectorXd> LaneletFeature::computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+  if (reprType_ == LaneletRepresentationType::Centerline) {
+    std::vector<VectorXd> vecCenterlinePts = centerline_->computeFeatureVectors(true, pointsIn2d);
+    if (onlyPoints) {
+      return vecCenterlinePts;
+    }
+    std::vector<VectorXd> featureVecs(vecCenterlinePts.size());
+    for (size_t i = 0; i < vecCenterlinePts.size(); i++) {
+      VectorXd vec(vecCenterlinePts[i].size() + 2);  // pts vec + left and right type
+      vec(Eigen::seq(0, vecCenterlinePts.size() - 1)) = vecCenterlinePts[i];
+      vec[vec.size() - 2] = leftBoundary_->typeInt();
+      vec[vec.size() - 1] = rightBoundary_->typeInt();
+      featureVecs[i] = vec;
+    }
+    return featureVecs;
+  } else if (reprType_ == LaneletRepresentationType::Boundaries) {
+    std::vector<VectorXd> vecLeftBdPts = leftBoundary_->computeFeatureVectors(true, pointsIn2d);
+    VectorXd leftBdPts = stackVector(vecLeftBdPts);
+    std::vector<VectorXd> vecRightBdPts = rightBoundary_->computeFeatureVectors(true, pointsIn2d);
+    VectorXd rightBdPts = stackVector(vecRightBdPts);
+
+    VectorXd vec(leftBdPts.size() + rightBdPts.size() + 2);  // pts vec + left and right type
+    vec(Eigen::seq(0, leftBdPts.size() - 1)) = leftBdPts;
+    vec(Eigen::seq(leftBdPts.size(), leftBdPts.size() + rightBdPts.size() - 1)) = rightBdPts;
     vec[vec.size() - 2] = leftBoundary_->typeInt();
     vec[vec.size() - 1] = rightBoundary_->typeInt();
+
     if (onlyPoints) {
-      return vec(Eigen::seq(0, vec.size() - 2));
+      return std::vector<VectorXd>{vec(Eigen::seq(0, vec.size() - 2))};
     } else {
-      return vec;
+      return std::vector<VectorXd>{vec};
     }
   } else {
     throw std::runtime_error("Unknown LaneletRepresentationType!");
-    return VectorXd();
+    return std::vector<VectorXd>();
   }
 }
 
@@ -202,8 +216,12 @@ bool CompoundLaneLineStringFeature::process(const OrientedRect& bbox, const Para
   LaneLineStringFeature::process(bbox, paramType, nPoints);
   for (size_t i = 0; i < individualFeatures_.size(); i++) {
     individualFeatures_[i]->process(bbox, paramType, nPoints);
-    double processedLength = boost::geometry::length(individualFeatures_[i]->cutFeature(),
-                                                     boost::geometry::strategy::distance::pythagoras<double>());
+
+    double processedLength = 0;
+    for (const auto& line : individualFeatures_[i]->cutFeature()) {
+      processedLength =
+          processedLength + boost::geometry::length(line, boost::geometry::strategy::distance::pythagoras<double>());
+    }
 
     if (processedLength > validLengthThresh_) {
       processedFeaturesValid_[i] = true;
@@ -232,6 +250,26 @@ MatrixXd toPointMatrix(const BasicLineString3d& lString, bool pointsIn2d) {
     }
   }
   return mat;
+}
+
+VectorXd toFeatureVector(const BasicLineString3d& line, int typeInt, bool onlyPoints, bool pointsIn2d) {
+  VectorXd vec =
+      pointsIn2d ? VectorXd(2 * line.size() + 1) : VectorXd(3 * line.size() + 1);  // n points with 2/3 dims + type
+  if (pointsIn2d == true) {
+    for (size_t i = 0; i < line.size(); i++) {
+      vec(Eigen::seq(2 * i, 2 * i + 1)) = line[i](Eigen::seq(0, 1));
+    }
+  } else {
+    for (size_t i = 0; i < line.size(); i++) {
+      vec(Eigen::seq(3 * i, 3 * i + 2)) = line[i](Eigen::seq(0, 2));
+    }
+  }
+  vec[vec.size() - 1] = typeInt;
+  if (onlyPoints) {
+    return vec(Eigen::seq(0, vec.size() - 2));
+  } else {
+    return vec;
+  }
 }
 
 }  // namespace map_learning

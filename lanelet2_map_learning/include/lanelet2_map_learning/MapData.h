@@ -19,6 +19,8 @@
 namespace lanelet {
 namespace map_learning {
 
+using LaneDataPtr = std::shared_ptr<LaneData>;
+
 struct Edge {
   Edge() = default;
   Edge(Id el1, Id el2) : el1_{el1}, el2_{el2} {}
@@ -81,7 +83,7 @@ class LaneData {
   };
 
   LaneData() noexcept : uuid_{boost::lexical_cast<std::string>(boost::uuids::random_generator()())} {}
-  static LaneData build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  static LaneDataPtr build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
   bool processAll(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints);
 
   const LaneLineStringFeatures& roadBorders() { return roadBorders_; }

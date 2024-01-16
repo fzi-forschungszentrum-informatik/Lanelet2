@@ -19,8 +19,8 @@ using namespace lanelet::map_learning;
 
 class MapFeatureWrap : public MapFeature, public wrapper<MapFeature> {
  public:
-  VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-    return this->get_override("computeFeatureVector")(onlyPoints, pointsIn2d);
+  std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+    return this->get_override("computeFeatureVectors")(onlyPoints, pointsIn2d);
   }
   bool process(const OrientedRect &bbox, const ParametrizationType &paramType, int32_t nPoints) {
     return this->get_override("process")(bbox, paramType, nPoints);
@@ -29,13 +29,13 @@ class MapFeatureWrap : public MapFeature, public wrapper<MapFeature> {
 
 class LineStringFeatureWrap : public LineStringFeature, public wrapper<LineStringFeature> {
  public:
-  VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-    return this->get_override("computeFeatureVector")(onlyPoints, pointsIn2d);
+  std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+    return this->get_override("computeFeatureVectors")(onlyPoints, pointsIn2d);
   }
   bool process(const OrientedRect &bbox, const ParametrizationType &paramType, int32_t nPoints) {
     return this->get_override("process")(bbox, paramType, nPoints);
   }
-  MatrixXd pointMatrix(bool pointsIn2d) const { return this->get_override("pointMatrix")(pointsIn2d); }
+  std::vector<MatrixXd> pointMatrices(bool pointsIn2d) const { return this->get_override("pointMatrices")(pointsIn2d); }
 };
 
 class LaneLineStringFeatureWrap : public LaneLineStringFeature, public wrapper<LaneLineStringFeature> {
@@ -46,12 +46,12 @@ class LaneLineStringFeatureWrap : public LaneLineStringFeature, public wrapper<L
                             const std::vector<Id> &laneletID, bool inverted)
       : LaneLineStringFeature(feature, mapID, type, laneletID, inverted) {}
 
-  VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-    if (override f = this->get_override("computeFeatureVector")) return f(onlyPoints, pointsIn2d);
-    return LaneLineStringFeature::computeFeatureVector(onlyPoints, pointsIn2d);
+  std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+    if (override f = this->get_override("computeFeatureVectors")) return f(onlyPoints, pointsIn2d);
+    return LaneLineStringFeature::computeFeatureVectors(onlyPoints, pointsIn2d);
   }
-  VectorXd default_computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-    return this->LaneLineStringFeature::computeFeatureVector(onlyPoints, pointsIn2d);
+  std::vector<VectorXd> default_computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+    return this->LaneLineStringFeature::computeFeatureVectors(onlyPoints, pointsIn2d);
   }
   bool process(const OrientedRect &bbox, const ParametrizationType &paramType, int32_t nPoints) {
     if (override f = this->get_override("process")) return f(bbox, paramType, nPoints);
@@ -60,11 +60,13 @@ class LaneLineStringFeatureWrap : public LaneLineStringFeature, public wrapper<L
   bool default_process(const OrientedRect &bbox, const ParametrizationType &paramType, int32_t nPoints) {
     return this->LaneLineStringFeature::process(bbox, paramType, nPoints);
   }
-  MatrixXd pointMatrix(bool pointsIn2d) const {
-    if (override f = this->get_override("pointMatrix")) return f(pointsIn2d);
-    return LaneLineStringFeature::pointMatrix(pointsIn2d);
+  std::vector<MatrixXd> pointMatrices(bool pointsIn2d) const {
+    if (override f = this->get_override("pointMatrices")) return f(pointsIn2d);
+    return LaneLineStringFeature::pointMatrices(pointsIn2d);
   }
-  MatrixXd default_pointMatrix(bool pointsIn2d) const { return this->LaneLineStringFeature::pointMatrix(pointsIn2d); }
+  std::vector<MatrixXd> default_pointMatrices(bool pointsIn2d) const {
+    return this->LaneLineStringFeature::pointMatrices(pointsIn2d);
+  }
 };
 
 class CompoundLaneLineStringFeatureWrap : public CompoundLaneLineStringFeature,
@@ -75,12 +77,12 @@ class CompoundLaneLineStringFeatureWrap : public CompoundLaneLineStringFeature,
   CompoundLaneLineStringFeatureWrap(const LaneLineStringFeatureList &features, LineStringType compoundType)
       : CompoundLaneLineStringFeature(features, compoundType) {}
 
-  VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-    if (override f = this->get_override("computeFeatureVector")) return f(onlyPoints, pointsIn2d);
-    return CompoundLaneLineStringFeature::computeFeatureVector(onlyPoints, pointsIn2d);
+  std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+    if (override f = this->get_override("computeFeatureVectors")) return f(onlyPoints, pointsIn2d);
+    return CompoundLaneLineStringFeature::computeFeatureVectors(onlyPoints, pointsIn2d);
   }
-  VectorXd default_computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-    return this->CompoundLaneLineStringFeature::computeFeatureVector(onlyPoints, pointsIn2d);
+  std::vector<VectorXd> default_computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+    return this->CompoundLaneLineStringFeature::computeFeatureVectors(onlyPoints, pointsIn2d);
   }
   bool process(const OrientedRect &bbox, const ParametrizationType &paramType, int32_t nPoints) {
     if (override f = this->get_override("process")) return f(bbox, paramType, nPoints);
@@ -89,12 +91,12 @@ class CompoundLaneLineStringFeatureWrap : public CompoundLaneLineStringFeature,
   bool default_process(const OrientedRect &bbox, const ParametrizationType &paramType, int32_t nPoints) {
     return this->CompoundLaneLineStringFeature::process(bbox, paramType, nPoints);
   }
-  MatrixXd pointMatrix(bool pointsIn2d) const {
-    if (override f = this->get_override("pointMatrix")) return f(pointsIn2d);
-    return CompoundLaneLineStringFeature::pointMatrix(pointsIn2d);
+  std::vector<MatrixXd> pointMatrices(bool pointsIn2d) const {
+    if (override f = this->get_override("pointMatrices")) return f(pointsIn2d);
+    return CompoundLaneLineStringFeature::pointMatrices(pointsIn2d);
   }
-  MatrixXd default_pointMatrix(bool pointsIn2d) const {
-    return this->CompoundLaneLineStringFeature::pointMatrix(pointsIn2d);
+  std::vector<MatrixXd> default_pointMatrices(bool pointsIn2d) const {
+    return this->CompoundLaneLineStringFeature::pointMatrices(pointsIn2d);
   }
 };
 
@@ -107,12 +109,12 @@ class LaneletFeatureWrap : public LaneletFeature, public wrapper<LaneletFeature>
       : LaneletFeature(leftBoundary, rightBoundary, centerline, mapID) {}
   LaneletFeatureWrap(const ConstLanelet &ll) : LaneletFeature(ll) {}
 
-  VectorXd computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-    if (override f = this->get_override("computeFeatureVector")) return f(onlyPoints, pointsIn2d);
-    return LaneletFeature::computeFeatureVector(onlyPoints, pointsIn2d);
+  std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+    if (override f = this->get_override("computeFeatureVectors")) return f(onlyPoints, pointsIn2d);
+    return LaneletFeature::computeFeatureVectors(onlyPoints, pointsIn2d);
   }
-  VectorXd default_computeFeatureVector(bool onlyPoints, bool pointsIn2d) const {
-    return this->LaneletFeature::computeFeatureVector(onlyPoints, pointsIn2d);
+  std::vector<VectorXd> default_computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {
+    return this->LaneletFeature::computeFeatureVectors(onlyPoints, pointsIn2d);
   }
   bool process(const OrientedRect &bbox, const ParametrizationType &paramType, int32_t nPoints) {
     if (override f = this->get_override("process")) return f(bbox, paramType, nPoints);
@@ -190,16 +192,16 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("mapID", &MapFeature::mapID)
       .add_property("initialized", &MapFeature::initialized)
       .add_property("valid", &MapFeature::valid)
-      .def("computeFeatureVector", pure_virtual(&MapFeature::computeFeatureVector))
+      .def("computeFeatureVectors", pure_virtual(&MapFeature::computeFeatureVectors))
       .def("process", pure_virtual(&MapFeature::process));
 
   class_<LineStringFeatureWrap, bases<MapFeature>, boost::noncopyable>("LineStringFeature",
                                                                        "Abstract line string feature class", no_init)
       .add_property("rawFeature",
                     make_function(&LineStringFeature::rawFeature, return_value_policy<copy_const_reference>()))
-      .def("computeFeatureVector", pure_virtual(&LineStringFeature::computeFeatureVector))
+      .def("computeFeatureVectors", pure_virtual(&LineStringFeature::computeFeatureVectors))
       .def("process", pure_virtual(&LineStringFeature::process))
-      .def("pointMatrix", pure_virtual(&LineStringFeature::pointMatrix));
+      .def("pointMatrices", pure_virtual(&LineStringFeature::pointMatrices));
 
   class_<LaneLineStringFeatureWrap, bases<LineStringFeature>, LaneLineStringFeaturePtr, boost::noncopyable>(
       "LaneLineStringFeature", "Lane line string feature class",
@@ -218,10 +220,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("laneletIDs",
                     make_function(&LaneLineStringFeature::laneletIDs, return_value_policy<copy_const_reference>()))
       .add_property("addLaneletID", &LaneLineStringFeature::addLaneletID)
-      .def("computeFeatureVector", &LaneLineStringFeature::computeFeatureVector,
-           &LaneLineStringFeatureWrap::default_computeFeatureVector)
+      .def("computeFeatureVectors", &LaneLineStringFeature::computeFeatureVectors,
+           &LaneLineStringFeatureWrap::default_computeFeatureVectors)
       .def("process", &LaneLineStringFeature::process, &LaneLineStringFeatureWrap::default_process)
-      .def("pointMatrix", &LaneLineStringFeature::pointMatrix, &LaneLineStringFeatureWrap::default_pointMatrix);
+      .def("pointMatrices", &LaneLineStringFeature::pointMatrices, &LaneLineStringFeatureWrap::default_pointMatrices);
 
   class_<LaneletFeatureWrap, bases<MapFeature>, LaneletFeaturePtr, boost::noncopyable>(
       "LaneletFeature", "Lanelet feature class that contains lower level LaneLineStringFeatures",
@@ -232,8 +234,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("rightBoundary", make_function(&LaneletFeature::rightBoundary))
       .add_property("centerline", make_function(&LaneletFeature::centerline))
       .def("setReprType", &LaneletFeature::setReprType)
-      .def("computeFeatureVector", &LaneletFeature::computeFeatureVector,
-           &LaneletFeatureWrap::default_computeFeatureVector)
+      .def("computeFeatureVectors", &LaneletFeature::computeFeatureVectors,
+           &LaneletFeatureWrap::default_computeFeatureVectors)
       .def("process", &LaneletFeature::process, &LaneletFeatureWrap::default_process);
 
   class_<CompoundLaneLineStringFeatureWrap, bases<LaneLineStringFeature>, CompoundLaneLineStringFeaturePtr,
@@ -248,11 +250,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                                           return_value_policy<copy_const_reference>()))
       .add_property("processedFeaturesValid", make_function(&CompoundLaneLineStringFeature::processedFeaturesValid,
                                                             return_value_policy<copy_const_reference>()))
-      .def("computeFeatureVector", &CompoundLaneLineStringFeature::computeFeatureVector,
-           &CompoundLaneLineStringFeatureWrap::default_computeFeatureVector)
+      .def("computeFeatureVectors", &CompoundLaneLineStringFeature::computeFeatureVectors,
+           &CompoundLaneLineStringFeatureWrap::default_computeFeatureVectors)
       .def("process", &CompoundLaneLineStringFeature::process, &CompoundLaneLineStringFeatureWrap::default_process)
-      .def("pointMatrix", &CompoundLaneLineStringFeature::pointMatrix,
-           &CompoundLaneLineStringFeatureWrap::default_pointMatrix);
+      .def("pointMatrices", &CompoundLaneLineStringFeature::pointMatrices,
+           &CompoundLaneLineStringFeatureWrap::default_pointMatrices);
 
   class_<Edge>("Edge", "Struct of a lane graph edge", init<Id, Id>())
       .def(init<>())
@@ -261,7 +263,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   {
     scope inLaneData =
-        class_<LaneData>("LaneData", "Class for holding, accessing and processing of lane data")
+        class_<LaneData, LaneDataPtr>("LaneData", "Class for holding, accessing and processing of lane data")
             .def(init<>())
             .def("build", &LaneData::build)
             .staticmethod("build")
@@ -339,15 +341,21 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   converters::convertVector<VectorXd>(true);
 
   converters::VectorToListConverter<std::vector<MatrixXd>>();
+  converters::VectorToListConverter<BasicLineStrings3d>();
   converters::VectorToListConverter<LaneLineStringFeatureList>();
   converters::VectorToListConverter<CompoundLaneLineStringFeatureList>();
   converters::VectorToListConverter<
       boost::geometry::model::ring<BasicPoint2d, true, true, std::vector, std::allocator>>();
   converters::VectorToListConverter<std::vector<double>>();
   converters::VectorToListConverter<std::vector<int>>();
+  converters::VectorToListConverter<std::vector<LaneDataPtr>>();
   converters::IterableConverter()
       .fromPython<std::vector<MatrixXd>>()
       .fromPython<BasicLineString3d>()
+      .fromPython<BasicLineStrings3d>()
+      .fromPython<std::vector<BasicPoint2d>>()
+      .fromPython<std::vector<double>>()
+      .fromPython<std::vector<LaneDataPtr>>()
       .fromPython<LaneLineStringFeatureList>()
       .fromPython<CompoundLaneLineStringFeatureList>();
   converters::MapToDictConverter<LaneLineStringFeatures>();

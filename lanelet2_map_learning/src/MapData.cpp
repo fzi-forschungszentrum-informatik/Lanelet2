@@ -7,13 +7,14 @@ namespace map_learning {
 
 using namespace internal;
 
-LaneData LaneData::build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
-  LaneData data;
-  data.initLeftBoundaries(localSubmap, localSubmapGraph);
-  data.initRightBoundaries(localSubmap, localSubmapGraph);
-  data.initLaneletFeatures(localSubmap, localSubmapGraph);
-  data.initCompoundFeatures(localSubmap, localSubmapGraph);
-  data.updateAssociatedCpdFeatureIndices();
+LaneDataPtr LaneData::build(LaneletSubmapConstPtr& localSubmap,
+                            lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+  LaneDataPtr data = std::make_shared<LaneData>();
+  data->initLeftBoundaries(localSubmap, localSubmapGraph);
+  data->initRightBoundaries(localSubmap, localSubmapGraph);
+  data->initLaneletFeatures(localSubmap, localSubmapGraph);
+  data->initCompoundFeatures(localSubmap, localSubmapGraph);
+  data->updateAssociatedCpdFeatureIndices();
   return data;
 }
 
@@ -22,7 +23,7 @@ void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
   for (const auto& ll : localSubmap->laneletLayer) {
     Id boundID = ll.leftBound3d().id();
     BasicLineString3d bound =
-        !ll.leftBound3d().inverted() ? ll.leftBound3d().basicLineString() : ll.leftBound3d().invert().basicLineString();
+        ll.leftBound3d().inverted() ? ll.leftBound3d().invert().basicLineString() : ll.leftBound3d().basicLineString();
     if (isRoadBorder(ll.leftBound3d())) {
       LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(boundID);
       if (itRoadBd != roadBorders_.end()) {
@@ -54,8 +55,8 @@ void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
   for (const auto& ll : localSubmap->laneletLayer) {
     Id boundID = ll.rightBound3d().id();
-    BasicLineString3d bound = !ll.rightBound3d().inverted() ? ll.rightBound3d().basicLineString()
-                                                            : ll.rightBound3d().invert().basicLineString();
+    BasicLineString3d bound = ll.rightBound3d().inverted() ? ll.rightBound3d().invert().basicLineString()
+                                                           : ll.rightBound3d().basicLineString();
     if (isRoadBorder(ll.rightBound3d())) {
       LaneLineStringFeatures::iterator itRoadBd = roadBorders_.find(boundID);
       if (itRoadBd != roadBorders_.end()) {
@@ -86,8 +87,9 @@ void LaneData::initLaneletFeatures(LaneletSubmapConstPtr& localSubmap,
   for (const auto& ll : localSubmap->laneletLayer) {
     LaneLineStringFeaturePtr leftBoundary = getLineStringFeatFromId(ll.leftBound().id(), ll.leftBound().inverted());
     LaneLineStringFeaturePtr rightBoundary = getLineStringFeatFromId(ll.rightBound().id(), ll.leftBound().inverted());
-    LaneLineStringFeaturePtr centerline = std::make_shared<LaneLineStringFeature>(
-        ll.centerline3d().basicLineString(), ll.centerline3d().id(), LineStringType::Centerline, Ids{ll.id()}, false);
+    LaneLineStringFeaturePtr centerline =
+        std::make_shared<LaneLineStringFeature>(ll.centerline3d().basicLineString(), ll.centerline3d().id(),
+                                                LineStringType::Centerline, Ids{ll.id()}, ll.centerline3d().inverted());
     laneletFeatures_.insert(
         {ll.id(), std::make_shared<LaneletFeature>(leftBoundary, rightBoundary, centerline, ll.id())});
   }
@@ -187,8 +189,9 @@ std::vector<CompoundElsList> LaneData::computeCompoundRightBorders(const ConstLa
 CompoundLaneLineStringFeaturePtr LaneData::computeCompoundCenterline(const ConstLanelets& path) {
   LaneLineStringFeatureList compoundCenterlines;
   for (const auto& ll : path) {
-    compoundCenterlines.push_back(std::make_shared<LaneLineStringFeature>(
-        ll.centerline3d().basicLineString(), ll.id(), LineStringType::Centerline, Ids{ll.id()}, false));
+    compoundCenterlines.push_back(std::make_shared<LaneLineStringFeature>(ll.centerline3d().basicLineString(), ll.id(),
+                                                                          LineStringType::Centerline, Ids{ll.id()},
+                                                                          ll.centerline3d().inverted()));
   }
   return std::make_shared<CompoundLaneLineStringFeature>(compoundCenterlines, LineStringType::Centerline);
 }
@@ -311,6 +314,7 @@ bool LaneData::processAll(const OrientedRect& bbox, const ParametrizationType& p
   }
 }
 
+/// TODO: INCLUDE REASSOCIATION FROM VECTOR ELEMENT TO FEATURE
 LaneData::TensorFeatureData LaneData::getTensorFeatureData(bool pointsIn2d, bool ignoreBuffer) {
   if (!tfData_.has_value() || ignoreBuffer) {
     tfData_ = LaneData::TensorFeatureData();

@@ -31,38 +31,38 @@ TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
   config.nPoints = 20;
 
   MapDataInterface parser(laneletMap, config);
-  BasicPoints2d pts{BasicPoint2d(0, -3), BasicPoint2d(3, -3), BasicPoint2d(5, -3),
-                    BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
+  std::vector<BasicPoint2d> pts{BasicPoint2d(0, -3), BasicPoint2d(3, -3), BasicPoint2d(5, -3),
+                                BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
   std::vector<double> yaws{0, 0, M_PI / 4, M_PI / 3, M_PI / 2, M_PI / 2};
 
   // auto start = std::chrono::steady_clock::now();
-  std::vector<LaneData> lDataVec = parser.laneDataBatch(pts, yaws);
+  std::vector<LaneDataPtr> lDataVec = parser.laneDataBatch(pts, yaws);
   // std::cerr << "Elapsed(micros)=" << since(start).count() << std::endl;
 
   for (size_t i = 0; i < lDataVec.size(); i++) {
     std::vector<Eigen::MatrixXd> compoundRoadBorders =
-        getPointMatrices(getValidElements(lDataVec[i].compoundRoadBorders()), true);
+        getPointMatrices(getValidElements(lDataVec[i]->compoundRoadBorders()), true);
     std::vector<Eigen::MatrixXd> compoundLaneDividers =
-        getPointMatrices(getValidElements(lDataVec[i].compoundLaneDividers()), true);
+        getPointMatrices(getValidElements(lDataVec[i]->compoundLaneDividers()), true);
     std::vector<Eigen::MatrixXd> compoundCenterlines =
-        getPointMatrices(getValidElements(lDataVec[i].compoundCenterlines()), true);
+        getPointMatrices(getValidElements(lDataVec[i]->compoundCenterlines()), true);
 
     switch (i) {
       case 0: {
-        LaneletFeatures::const_iterator itLL0 = lDataVec[i].laneletFeatures().find(2000);
-        EXPECT_TRUE(itLL0 != lDataVec[i].laneletFeatures().end());
-        LaneletFeatures::const_iterator itLL1 = lDataVec[i].laneletFeatures().find(2002);
-        EXPECT_TRUE(itLL1 == lDataVec[i].laneletFeatures().end());
+        LaneletFeatures::const_iterator itLL0 = lDataVec[i]->laneletFeatures().find(2000);
+        EXPECT_TRUE(itLL0 != lDataVec[i]->laneletFeatures().end());
+        LaneletFeatures::const_iterator itLL1 = lDataVec[i]->laneletFeatures().find(2002);
+        EXPECT_TRUE(itLL1 == lDataVec[i]->laneletFeatures().end());
         break;
       }
       case 1: {
-        LaneletFeatures::const_iterator itLL = lDataVec[i].laneletFeatures().find(2011);
-        EXPECT_TRUE(itLL != lDataVec[i].laneletFeatures().end());
+        LaneletFeatures::const_iterator itLL = lDataVec[i]->laneletFeatures().find(2011);
+        EXPECT_TRUE(itLL != lDataVec[i]->laneletFeatures().end());
         break;
       }
       case 5: {
-        LaneletFeatures::const_iterator itLL = lDataVec[i].laneletFeatures().find(2004);
-        EXPECT_TRUE(itLL == lDataVec[i].laneletFeatures().end());
+        LaneletFeatures::const_iterator itLL = lDataVec[i]->laneletFeatures().find(2004);
+        EXPECT_TRUE(itLL == lDataVec[i]->laneletFeatures().end());
         break;
       }
     }
@@ -114,23 +114,23 @@ TEST_F(MapLearningTest, MapDataSaveLoad) {
   config.nPoints = 20;
   MapDataInterface parser(laneletMap, config);
 
-  BasicPoints2d pts{BasicPoint2d(0, -3), BasicPoint2d(3, -3), BasicPoint2d(5, -3),
-                    BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
+  std::vector<BasicPoint2d> pts{BasicPoint2d(0, -3), BasicPoint2d(3, -3), BasicPoint2d(5, -3),
+                                BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
   std::vector<double> yaws{0, 0, M_PI / 4, M_PI / 3, M_PI / 2, M_PI / 2};
 
-  std::vector<LaneData> lDataVec = parser.laneDataBatch(pts, yaws);
+  std::vector<LaneDataPtr> lDataVec = parser.laneDataBatch(pts, yaws);
 
-  saveLaneData("/tmp/lane_data_save_test.xml", lDataVec);
-  std::vector<LaneData> lDataLoaded = loadLaneData("/tmp/lane_data_save_test.xml");
+  saveLaneData("/tmp/lane_data_save_test.xml", lDataVec, false);
+  std::vector<LaneDataPtr> lDataLoaded = loadLaneData("/tmp/lane_data_save_test.xml", false);
   EXPECT_EQ(lDataVec.size(), lDataLoaded.size());
-  EXPECT_EQ(lDataVec.front().compoundCenterlines().size(), lDataLoaded.front().compoundCenterlines().size());
-  EXPECT_EQ(lDataVec.front().compoundRoadBorders().size(), lDataLoaded.front().compoundRoadBorders().size());
-  EXPECT_EQ(lDataVec.back().compoundLaneDividers().size(), lDataLoaded.back().compoundLaneDividers().size());
+  EXPECT_EQ(lDataVec.front()->compoundCenterlines().size(), lDataLoaded.front()->compoundCenterlines().size());
+  EXPECT_EQ(lDataVec.front()->compoundRoadBorders().size(), lDataLoaded.front()->compoundRoadBorders().size());
+  EXPECT_EQ(lDataVec.back()->compoundLaneDividers().size(), lDataLoaded.back()->compoundLaneDividers().size());
 
   saveLaneData("/tmp/lane_data_save_test.bin", lDataVec, true);
   lDataLoaded = loadLaneData("/tmp/lane_data_save_test.bin", true);
   EXPECT_EQ(lDataVec.size(), lDataLoaded.size());
-  EXPECT_EQ(lDataVec.front().compoundCenterlines().size(), lDataLoaded.front().compoundCenterlines().size());
-  EXPECT_EQ(lDataVec.front().compoundRoadBorders().size(), lDataLoaded.front().compoundRoadBorders().size());
-  EXPECT_EQ(lDataVec.back().compoundLaneDividers().size(), lDataLoaded.back().compoundLaneDividers().size());
+  EXPECT_EQ(lDataVec.front()->compoundCenterlines().size(), lDataLoaded.front()->compoundCenterlines().size());
+  EXPECT_EQ(lDataVec.front()->compoundRoadBorders().size(), lDataLoaded.front()->compoundRoadBorders().size());
+  EXPECT_EQ(lDataVec.back()->compoundLaneDividers().size(), lDataLoaded.back()->compoundLaneDividers().size());
 }

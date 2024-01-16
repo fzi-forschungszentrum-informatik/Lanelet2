@@ -68,9 +68,9 @@ std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const Bas
 
 BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
 
-void saveLaneData(const std::string& filename, const std::vector<LaneData>& lDataVec, bool binary = false);
+void saveLaneData(const std::string& filename, const std::vector<LaneDataPtr>& lDataVec, bool binary);
 
-std::vector<LaneData> loadLaneData(const std::string& filename, bool binary = false);
+std::vector<LaneDataPtr> loadLaneData(const std::string& filename, bool binary);
 
 }  // namespace map_learning
 }  // namespace lanelet

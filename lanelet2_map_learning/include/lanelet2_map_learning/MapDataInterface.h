@@ -36,17 +36,15 @@ class MapDataInterface {
   const Configuration& config() { return config_; }
 
   void setCurrPosAndExtractSubmap(const BasicPoint2d& pt, double yaw);
-  LaneData laneData();
-  TEData teData();
+  LaneDataPtr laneData(bool processAll);
+  TEData teData(bool processAll);
 
-  std::vector<LaneData> laneDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws,
-                                      bool processAll = true);
-  std::vector<TEData> laneTEDataBatch(const BasicPoints2d& pts, const std::vector<double>& yaws,
-                                      bool processAll = true);
+  std::vector<LaneDataPtr> laneDataBatch(std::vector<BasicPoint2d> pts, std::vector<double> yaws);
+  std::vector<TEData> laneTEDataBatch(std::vector<BasicPoint2d> pts, std::vector<double> yaws);
 
  private:
-  LaneData getLaneData(LaneletSubmapConstPtr localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
-                       const BasicPoint2d& pos, double yaw, bool processAll = true);
+  LaneDataPtr getLaneData(LaneletSubmapConstPtr localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                          const BasicPoint2d& pos, double yaw, bool processAll = true);
 
   TEData getLaneTEData(LaneletSubmapConstPtr localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
                        const BasicPoint2d& pos, double yaw, bool processAll = true);
