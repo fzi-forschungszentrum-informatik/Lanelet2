@@ -97,16 +97,20 @@ void LaneData::initLaneletFeatures(LaneletSubmapConstPtr& localSubmap,
 
 // Idea: algorithm for paths that starts with LLs with no previous, splits on junctions and terminates on LLs with
 // no successors
-void getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, std::vector<ConstLanelets>& paths,
-              ConstLanelet start, ConstLanelets initPath = ConstLanelets()) {
+void LaneData::getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, std::vector<ConstLanelets>& paths,
+                        ConstLanelet start, ConstLanelets initPath) {
   initPath.push_back(start);
-  ConstLanelets successorLLs = localSubmapGraph->following(start, false);
+  ConstLanelet current = start;
+  ConstLanelets successorLLs = localSubmapGraph->following(current, false);
   while (!successorLLs.empty()) {
     for (size_t i = 1; i != successorLLs.size(); i++) {
+      edges_.insert({current.id(), Edge(current.id(), successorLLs[i].id())});
       getPaths(localSubmapGraph, paths, successorLLs[i], initPath);
     }
     initPath.push_back(successorLLs.front());
-    successorLLs = localSubmapGraph->following(successorLLs.front(), false);
+    edges_.insert({current.id(), Edge(current.id(), successorLLs.front().id())});
+    current = successorLLs.front();
+    successorLLs = localSubmapGraph->following(current, false);
   }
   paths.push_back(initPath);
 }

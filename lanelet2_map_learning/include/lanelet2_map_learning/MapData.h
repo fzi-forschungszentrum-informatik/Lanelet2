@@ -124,6 +124,8 @@ class LaneData {
   void initCompoundFeatures(LaneletSubmapConstPtr& localSubmap,
                             lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
   void updateAssociatedCpdFeatureIndices();
+  void getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, std::vector<ConstLanelets>& paths,
+                ConstLanelet start, ConstLanelets initPath = ConstLanelets());
 
   LineStringType getLineStringTypeFromId(Id id);
   LaneLineStringFeaturePtr getLineStringFeatFromId(Id id, bool inverted);
@@ -140,11 +142,14 @@ class LaneData {
 
   LaneletFeatures laneletFeatures_;
 
-  std::map<Id, std::vector<size_t>> associatedCpdRoadBorderIndices_;   // related to the "unfiltered" compound features!
-  std::map<Id, std::vector<size_t>> associatedCpdLaneDividerIndices_;  // related to the "unfiltered" compound features!
-  std::map<Id, std::vector<size_t>> associatedCpdCenterlineIndices_;   // related to the "unfiltered" compound features!
-  Edges edges_;                                                        // edge list for centerlines
-  std::string uuid_;                                                   // sample id
+  std::map<Id, std::vector<size_t>>
+      associatedCpdRoadBorderIndices_;  // relates lanelet id to the "unfiltered" compound features!
+  std::map<Id, std::vector<size_t>>
+      associatedCpdLaneDividerIndices_;  // relates lanelet id to the "unfiltered" compound features!
+  std::map<Id, std::vector<size_t>>
+      associatedCpdCenterlineIndices_;  // relates lanelet id to the "unfiltered" compound features!
+  Edges edges_;                         // edge list for centerlines
+  std::string uuid_;                    // sample id
 
   Optional<TensorFeatureData> tfData_;
 };
