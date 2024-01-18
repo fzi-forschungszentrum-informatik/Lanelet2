@@ -77,18 +77,18 @@ std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const Bas
   if (cut2d.empty()) {
     return cut3d;
   } else if (cut2d.size() > 1) {
-    std::cerr << "More than one cut line!" << std::endl;
-    std::cerr << "Raw line:" << std::endl;
-    for (const auto& pt : polyline) {
-      std::cerr << "[" << pt.x() << "," << pt.y() << "]" << std::endl;
-    }
-    for (const auto& ls : cut2d) {
-      std::cerr << "Cut line:" << std::endl;
-      for (const auto& pt : ls) {
-        std::cerr << "[" << pt.x() << "," << pt.y() << "]" << std::endl;
-      }
-      std::cerr << "--------------" << std::endl;
-    }
+    // std::cerr << "More than one cut line!" << std::endl;
+    // std::cerr << "Raw line:" << std::endl;
+    // for (const auto& pt : polyline) {
+    //   std::cerr << "[" << pt.x() << "," << pt.y() << "]" << std::endl;
+    // }
+    // for (const auto& ls : cut2d) {
+    //   std::cerr << "Cut line:" << std::endl;
+    //   for (const auto& pt : ls) {
+    //     std::cerr << "[" << pt.x() << "," << pt.y() << "]" << std::endl;
+    //   }
+    //   std::cerr << "--------------" << std::endl;
+    // }
     // throw std::runtime_error("More than one cut line!");
   }
 
