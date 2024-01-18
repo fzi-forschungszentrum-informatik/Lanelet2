@@ -283,12 +283,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
             .add_property("validCompoundRoadBorders", &LaneData::validCompoundRoadBorders)
             .add_property("validCompoundLaneDividers", &LaneData::validCompoundLaneDividers)
             .add_property("validCompoundCenterlines", &LaneData::validCompoundCenterlines)
-            .add_property("associatedCpdRoadBorderIndices", make_function(&LaneData::associatedCpdRoadBorderIndices,
-                                                                          return_value_policy<copy_const_reference>()))
-            .add_property("associatedCpdLaneDividerIndices", make_function(&LaneData::associatedCpdLaneDividerIndices,
-                                                                           return_value_policy<copy_const_reference>()))
-            .add_property("associatedCpdCenterlineIndices", make_function(&LaneData::associatedCpdCenterlineIndices,
-                                                                          return_value_policy<copy_const_reference>()))
+            .def("associatedCpdRoadBorders", &LaneData::associatedCpdRoadBorders)
+            .def("associatedCpdLaneDividers", &LaneData::associatedCpdLaneDividers)
+            .def("associatedCpdCenterlines", &LaneData::associatedCpdCenterlines)
             .add_property("laneletFeatures",
                           make_function(&LaneData::laneletFeatures, return_value_policy<copy_const_reference>()))
             .add_property("edges", make_function(&LaneData::edges, return_value_policy<copy_const_reference>()))
@@ -311,7 +308,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
         .add_property("compoundCenterlines", make_function(&LaneData::TensorFeatureData::compoundCenterlines,
                                                            return_value_policy<copy_const_reference>()))
         .add_property("uuid",
-                      make_function(&LaneData::TensorFeatureData::uuid, return_value_policy<copy_const_reference>()));
+                      make_function(&LaneData::TensorFeatureData::uuid, return_value_policy<copy_const_reference>()))
+        .def("pointMatrixCpdRoadBorder", &LaneData::TensorFeatureData::pointMatrixCpdRoadBorder)
+        .def("pointMatrixCpdLaneDivider", &LaneData::TensorFeatureData::pointMatrixCpdLaneDivider)
+        .def("pointMatrixCpdCenterline", &LaneData::TensorFeatureData::pointMatrixCpdCenterline);
   }
 
   {

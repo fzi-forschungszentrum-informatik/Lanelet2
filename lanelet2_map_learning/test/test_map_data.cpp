@@ -21,10 +21,6 @@ TEST_F(MapLearningTest, LaneData) {  // NOLINT
 
   LaneDataPtr laneData = LaneData::build(laneletSubmap, laneletMapGraph);
 
-  std::vector<Eigen::MatrixXd> rawCompoundRoadBorders = getPointMatrices(laneData->compoundRoadBorders(), true);
-  std::vector<Eigen::MatrixXd> rawCompoundLaneDividers = getPointMatrices(laneData->compoundLaneDividers(), true);
-  std::vector<Eigen::MatrixXd> rawCompoundCenterlines = getPointMatrices(laneData->compoundCenterlines(), true);
-
   bool valid = laneData->processAll(bbox, ParametrizationType::LineString, 20);
   std::vector<Eigen::MatrixXd> compoundRoadBorders = getPointMatrices(laneData->compoundRoadBorders(), true);
   std::vector<Eigen::MatrixXd> compoundLaneDividers = getPointMatrices(laneData->compoundLaneDividers(), true);
@@ -38,22 +34,22 @@ TEST_F(MapLearningTest, LaneData) {  // NOLINT
   EXPECT_EQ(compoundLaneDividers.size(), 8);
   EXPECT_EQ(compoundCenterlines.size(), 4);
 
-  EXPECT_EQ(laneData->associatedCpdRoadBorderIndices().at(2001).size(), 1);
-  size_t assoBorderIdx = laneData->associatedCpdRoadBorderIndices().at(2001).front();
-  EXPECT_EQ(laneData->compoundRoadBorders()[assoBorderIdx]->features().back()->mapID(), 1000);
-  EXPECT_EQ(laneData->compoundRoadBorders()[assoBorderIdx]->features().back()->laneletIDs().front(), 2002);
+  EXPECT_EQ(laneData->associatedCpdRoadBorders(2001).size(), 1);
+  CompoundLaneLineStringFeaturePtr assoBorder = laneData->associatedCpdRoadBorders(2001).front();
+  EXPECT_EQ(assoBorder->features().back()->mapID(), 1000);
+  EXPECT_EQ(assoBorder->features().back()->laneletIDs().front(), 2002);
 
-  EXPECT_EQ(laneData->associatedCpdLaneDividerIndices().at(2004).size(), 2);
-  EXPECT_EQ(laneData->associatedCpdLaneDividerIndices().at(2009).size(), 1);
-  size_t assoDividerIdx = laneData->associatedCpdLaneDividerIndices().at(2009).front();
-  EXPECT_EQ(laneData->compoundLaneDividers()[assoDividerIdx]->features().front()->mapID(), 1015);
-  EXPECT_EQ(laneData->compoundLaneDividers()[assoDividerIdx]->features().front()->laneletIDs().size(), 2);
+  EXPECT_EQ(laneData->associatedCpdLaneDividers(2004).size(), 2);
+  EXPECT_EQ(laneData->associatedCpdLaneDividers(2009).size(), 1);
+  CompoundLaneLineStringFeaturePtr assoDivider = laneData->associatedCpdLaneDividers(2009).front();
+  EXPECT_EQ(assoDivider->features().front()->mapID(), 1015);
+  EXPECT_EQ(assoDivider->features().front()->laneletIDs().size(), 2);
 
-  EXPECT_EQ(laneData->associatedCpdCenterlineIndices().at(2003).size(), 2);
-  EXPECT_EQ(laneData->associatedCpdCenterlineIndices().at(2000).size(), 1);
-  size_t assoCenterlineIdx = laneData->associatedCpdCenterlineIndices().at(2000).front();
-  EXPECT_EQ(laneData->compoundCenterlines()[assoCenterlineIdx]->features().front()->mapID(), 2000);
-  EXPECT_EQ(laneData->compoundCenterlines()[assoCenterlineIdx]->features().front()->laneletIDs().front(), 2000);
+  EXPECT_EQ(laneData->associatedCpdCenterlines(2003).size(), 2);
+  EXPECT_EQ(laneData->associatedCpdCenterlines(2000).size(), 1);
+  CompoundLaneLineStringFeaturePtr assoCenterline = laneData->associatedCpdCenterlines(2000).front();
+  EXPECT_EQ(assoCenterline->features().front()->mapID(), 2000);
+  EXPECT_EQ(assoCenterline->features().front()->laneletIDs().front(), 2000);
 
   // matplot::hold(matplot::on);
   // matplot::xlim({-2, 16});

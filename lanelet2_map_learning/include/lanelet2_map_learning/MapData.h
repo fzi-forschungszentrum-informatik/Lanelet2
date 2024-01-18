@@ -69,6 +69,12 @@ class LaneData {
     const std::vector<int>& compoundLaneDividerTypes() { return compoundLaneDividerTypes_; }
     const std::vector<MatrixXd>& compoundCenterlines() { return compoundCenterlines_; }
     const std::string& uuid() { return uuid_; }
+    CompoundLaneLineStringFeaturePtr pointMatrixCpdRoadBorder(
+        size_t index);  // get feature associated to point matrix index
+    CompoundLaneLineStringFeaturePtr pointMatrixCpdLaneDivider(
+        size_t index);  // get feature associated to point matrix index
+    CompoundLaneLineStringFeaturePtr pointMatrixCpdCenterline(
+        size_t index);  // get feature associated to point matrix index
     friend class LaneData;
 
    private:
@@ -80,6 +86,12 @@ class LaneData {
     std::vector<int> compoundLaneDividerTypes_;
     std::vector<MatrixXd> compoundCenterlines_;
     std::string uuid_;
+    std::map<size_t, CompoundLaneLineStringFeaturePtr>
+        pointMatrixCpdRoadBorder_;  // relates point matrix index to compound features
+    std::map<size_t, CompoundLaneLineStringFeaturePtr>
+        pointMatrixCpdLaneDivider_;  // relates point matrix index to compound features, tfData_ must be initialized
+    std::map<size_t, CompoundLaneLineStringFeaturePtr>
+        pointMatrixCpdCenterline_;  // relates point matrix index to compound features, tfData_ must be initialized
   };
 
   LaneData() noexcept : uuid_{boost::lexical_cast<std::string>(boost::uuids::random_generator()())} {}
@@ -100,17 +112,19 @@ class LaneData {
   CompoundLaneLineStringFeatureList validCompoundLaneDividers() { return getValidElements(compoundLaneDividers_); }
   CompoundLaneLineStringFeatureList validCompoundCenterlines() { return getValidElements(compoundCenterlines_); }
 
-  const std::map<Id, std::vector<size_t>>& associatedCpdRoadBorderIndices() { return associatedCpdRoadBorderIndices_; }
-  const std::map<Id, std::vector<size_t>>& associatedCpdLaneDividerIndices() {
-    return associatedCpdLaneDividerIndices_;
-  }
-  const std::map<Id, std::vector<size_t>>& associatedCpdCenterlineIndices() { return associatedCpdCenterlineIndices_; }
+  CompoundLaneLineStringFeatureList associatedCpdRoadBorders(
+      Id mapId);  // get features associated to map element with id
+  CompoundLaneLineStringFeatureList associatedCpdLaneDividers(
+      Id mapId);  // get features associated to map element with id
+  CompoundLaneLineStringFeatureList associatedCpdCenterlines(
+      Id mapId);  // get features associated to map element with id
 
   const LaneletFeatures& laneletFeatures() { return laneletFeatures_; }
   const Edges& edges() { return edges_; }
   const std::string& uuid() { return uuid_; }
 
   /// The computed data will be buffered, if the underlying features change you need to set ignoreBuffer appropriately
+  /// The data will also only be useful if you called process on the features beforehand (e.g. with processAll())
   TensorFeatureData getTensorFeatureData(bool pointsIn2d, bool ignoreBuffer);
 
   template <class Archive>
@@ -143,13 +157,14 @@ class LaneData {
   LaneletFeatures laneletFeatures_;
 
   std::map<Id, std::vector<size_t>>
-      associatedCpdRoadBorderIndices_;  // relates lanelet id to the "unfiltered" compound features!
+      associatedCpdRoadBorderIndices_;  // relates map element id to the "unfiltered" compound features!
   std::map<Id, std::vector<size_t>>
-      associatedCpdLaneDividerIndices_;  // relates lanelet id to the "unfiltered" compound features!
+      associatedCpdLaneDividerIndices_;  // relates map element id to the "unfiltered" compound features!
   std::map<Id, std::vector<size_t>>
-      associatedCpdCenterlineIndices_;  // relates lanelet id to the "unfiltered" compound features!
-  Edges edges_;                         // edge list for centerlines
-  std::string uuid_;                    // sample id
+      associatedCpdCenterlineIndices_;  // relates map element id to the "unfiltered" compound features!
+
+  Edges edges_;       // edge list for centerlines
+  std::string uuid_;  // sample id
 
   Optional<TensorFeatureData> tfData_;
 };

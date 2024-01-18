@@ -282,6 +282,7 @@ void LaneData::updateAssociatedCpdFeatureIndices() {
       for (const auto& id : indFeat->laneletIDs()) {
         associatedCpdRoadBorderIndices_[id].push_back(i);
       }
+      associatedCpdRoadBorderIndices_[indFeat->mapID()].push_back(i);
     }
   }
   for (size_t i = 0; i < compoundLaneDividers_.size(); i++) {
@@ -290,6 +291,7 @@ void LaneData::updateAssociatedCpdFeatureIndices() {
       for (const auto& id : indFeat->laneletIDs()) {
         associatedCpdLaneDividerIndices_[id].push_back(i);
       }
+      associatedCpdLaneDividerIndices_[indFeat->mapID()].push_back(i);
     }
   }
   for (size_t i = 0; i < compoundCenterlines_.size(); i++) {
@@ -318,7 +320,6 @@ bool LaneData::processAll(const OrientedRect& bbox, const ParametrizationType& p
   }
 }
 
-/// TODO: INCLUDE REASSOCIATION FROM VECTOR ELEMENT TO FEATURE
 LaneData::TensorFeatureData LaneData::getTensorFeatureData(bool pointsIn2d, bool ignoreBuffer) {
   if (!tfData_.has_value() || ignoreBuffer) {
     tfData_ = LaneData::TensorFeatureData();
@@ -334,8 +335,73 @@ LaneData::TensorFeatureData LaneData::getTensorFeatureData(bool pointsIn2d, bool
     for (const auto& ft : validCompoundLaneDividers()) {
       tfData_->compoundLaneDividerTypes_.push_back(ft->typeInt());
     }
+    size_t pointMatrixIdxRb = 0;
+    for (const auto& cpdFeat : compoundRoadBorders_) {
+      for (const auto& lString : cpdFeat->cutResampledAndTransformedFeature()) {
+        tfData_->pointMatrixCpdRoadBorder_[pointMatrixIdxRb] = cpdFeat;
+        pointMatrixIdxRb++;
+      }
+    }
+    size_t pointMatrixIdxLd = 0;
+    for (const auto& cpdFeat : compoundLaneDividers_) {
+      for (const auto& lString : cpdFeat->cutResampledAndTransformedFeature()) {
+        tfData_->pointMatrixCpdLaneDivider_[pointMatrixIdxLd] = cpdFeat;
+        pointMatrixIdxLd++;
+      }
+    }
+    size_t pointMatrixIdxCl = 0;
+    for (const auto& cpdFeat : compoundCenterlines_) {
+      for (const auto& lString : cpdFeat->cutResampledAndTransformedFeature()) {
+        tfData_->pointMatrixCpdCenterline_[pointMatrixIdxCl] = cpdFeat;
+        pointMatrixIdxCl++;
+      }
+    }
   }
   return tfData_.value();
+}
+
+CompoundLaneLineStringFeatureList associatedCpdFeats(Id mapId, const CompoundLaneLineStringFeatureList& featList,
+                                                     const std::map<Id, std::vector<size_t>>& assoIndices) {
+  CompoundLaneLineStringFeatureList assoFeats;
+  for (const auto& idx : assoIndices.at(mapId)) {
+    assoFeats.push_back(featList[idx]);
+  }
+  return assoFeats;
+}
+
+CompoundLaneLineStringFeatureList LaneData::associatedCpdRoadBorders(Id mapId) {
+  return associatedCpdFeats(mapId, compoundRoadBorders_, associatedCpdRoadBorderIndices_);
+}
+
+CompoundLaneLineStringFeatureList LaneData::associatedCpdLaneDividers(Id mapId) {
+  return associatedCpdFeats(mapId, compoundLaneDividers_, associatedCpdLaneDividerIndices_);
+}
+
+CompoundLaneLineStringFeatureList LaneData::associatedCpdCenterlines(Id mapId) {
+  return associatedCpdFeats(mapId, compoundCenterlines_, associatedCpdCenterlineIndices_);
+}
+
+CompoundLaneLineStringFeaturePtr pointMatrixCpdFeat(
+    size_t index, const std::map<size_t, CompoundLaneLineStringFeaturePtr>& assoFeats) {
+  CompoundLaneLineStringFeaturePtr feat;
+  try {
+    feat = assoFeats.at(index);
+  } catch (const std::out_of_range& e) {
+    throw std::out_of_range("A point matrix with index " + std::to_string(index) + " does not exist!");
+  }
+  return feat;
+}
+
+CompoundLaneLineStringFeaturePtr LaneData::TensorFeatureData::pointMatrixCpdRoadBorder(size_t index) {
+  return pointMatrixCpdFeat(index, pointMatrixCpdRoadBorder_);
+}
+
+CompoundLaneLineStringFeaturePtr LaneData::TensorFeatureData::pointMatrixCpdLaneDivider(size_t index) {
+  return pointMatrixCpdFeat(index, pointMatrixCpdLaneDivider_);
+}
+
+CompoundLaneLineStringFeaturePtr LaneData::TensorFeatureData::pointMatrixCpdCenterline(size_t index) {
+  return pointMatrixCpdFeat(index, pointMatrixCpdCenterline_);
 }
 
 }  // namespace map_learning
