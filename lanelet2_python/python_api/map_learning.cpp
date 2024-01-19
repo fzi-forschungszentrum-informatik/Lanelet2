@@ -186,6 +186,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("cutLineString", &cutLineString);
   def("saveLaneData", &saveLaneData);
   def("loadLaneData", &loadLaneData);
+  def("saveLaneDataMultiFile", &saveLaneDataMultiFile);
+  def("loadLaneDataMultiFile", &loadLaneDataMultiFile);
 
   class_<MapFeatureWrap, boost::noncopyable>("MapFeature", "Abstract base map feature class", no_init)
       .add_property("wasCut", &MapFeature::wasCut)
@@ -348,6 +350,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       boost::geometry::model::ring<BasicPoint2d, true, true, std::vector, std::allocator>>();
   converters::VectorToListConverter<std::vector<double>>();
   converters::VectorToListConverter<std::vector<int>>();
+  converters::VectorToListConverter<std::vector<std::string>>();
   converters::VectorToListConverter<std::vector<LaneDataPtr>>();
   converters::IterableConverter()
       .fromPython<std::vector<MatrixXd>>()
@@ -355,6 +358,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .fromPython<BasicLineStrings3d>()
       .fromPython<std::vector<BasicPoint2d>>()
       .fromPython<std::vector<double>>()
+      .fromPython<std::vector<std::string>>()
       .fromPython<std::vector<LaneDataPtr>>()
       .fromPython<LaneLineStringFeatureList>()
       .fromPython<CompoundLaneLineStringFeatureList>();

@@ -164,5 +164,59 @@ std::vector<LaneDataPtr> loadLaneData(const std::string& filename, bool binary) 
   return lDataVec;
 }
 
+void saveLaneDataMultiFile(const std::string& path, const std::vector<std::string>& filenames,
+                           const std::vector<LaneDataPtr>& lDataVec, bool binary) {
+  if (filenames.size() != lDataVec.size()) {
+    throw std::runtime_error("Unequal number of file names and LaneData objects!");
+  }
+  for (size_t i = 0; i < filenames.size(); i++) {
+    const auto& filename = filenames[i];
+    const auto& lData = lDataVec[i];
+    if (binary) {
+      std::ofstream fs(path + filename, std::ofstream::binary);
+      if (!fs.good()) {
+        throw std::runtime_error("Failed to open archive " + filename);
+      }
+      boost::archive::binary_oarchive oa(fs);
+      oa << lDataVec;
+    } else {
+      std::ofstream fs(path + filename);
+      if (!fs.good()) {
+        throw std::runtime_error("Failed to open archive " + filename);
+      }
+      boost::archive::xml_oarchive oa(fs, boost::archive::no_header);
+      oa << BOOST_SERIALIZATION_NVP(lData);
+    }
+  }
+}
+
+std::vector<LaneDataPtr> loadLaneDataMultiFile(const std::string& path, const std::vector<std::string>& filenames,
+                                               bool binary) {
+  std::vector<LaneDataPtr> lDataVec;
+  for (size_t i = 0; i < filenames.size(); i++) {
+    const auto& filename = filenames[i];
+    LaneDataPtr lData;
+    if (!fs::exists(fs::path(path + filename))) {
+      throw std::runtime_error("Could not find file under " + filename);
+    }
+    if (binary) {
+      std::ifstream fs(path + filename, std::ifstream::binary);
+      if (!fs.good()) {
+        throw std::runtime_error("Failed to open archive " + filename);
+      }
+      boost::archive::binary_iarchive ia(fs);
+      ia >> lData;
+    } else {
+      std::ifstream fs(path + filename);
+      if (!fs.good()) {
+        throw std::runtime_error("Failed to open archive " + filename);
+      }
+      boost::archive::xml_iarchive ia(fs, boost::archive::no_header);
+      ia >> BOOST_SERIALIZATION_NVP(lData);
+    }
+    lDataVec.push_back(lData);
+  }
+  return lDataVec;
+}
 }  // namespace map_learning
 }  // namespace lanelet

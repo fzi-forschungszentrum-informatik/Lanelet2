@@ -68,9 +68,17 @@ std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const Bas
 
 BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
 
-void saveLaneData(const std::string& filename, const std::vector<LaneDataPtr>& lDataVec, bool binary);
+void saveLaneData(const std::string& filename, const std::vector<LaneDataPtr>& lDataVec,
+                  bool binary);  // saves all in one file
 
-std::vector<LaneDataPtr> loadLaneData(const std::string& filename, bool binary);
+std::vector<LaneDataPtr> loadLaneData(const std::string& filename, bool binary);  // loads entire vector from one file
+
+void saveLaneDataMultiFile(const std::string& path, const std::vector<std::string>& filenames,
+                           const std::vector<LaneDataPtr>& lDataVec,
+                           bool binary);  // saves in one file per LaneData
+
+std::vector<LaneDataPtr> loadLaneDataMultiFile(const std::string& path, const std::vector<std::string>& filenames,
+                                               bool binary);  // loads from one file per LaneData
 
 }  // namespace map_learning
 }  // namespace lanelet
