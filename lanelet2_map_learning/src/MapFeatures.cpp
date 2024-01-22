@@ -29,22 +29,26 @@ LStringProcessResult processLineStringImpl(const BasicLineString3d& lstring, con
     return result;
   }
 
+  double lengthOriginal = boost::geometry::length(lstring, boost::geometry::strategy::distance::pythagoras<double>());
+  double lengthProcessed = 0;
+  for (const auto& line : cutLines) {
+    lengthProcessed =
+        lengthProcessed + boost::geometry::length(line, boost::geometry::strategy::distance::pythagoras<double>());
+  }
+  if (lengthProcessed < 1e-1) {
+    result.wasCut_ = true;
+    result.valid_ = false;
+    return result;
+  }
+  if (lengthOriginal - lengthProcessed > 1e-2) {
+    result.wasCut_ = true;
+  }
+
   for (const auto& line : cutLines) {
     result.cutFeatures.push_back(line);
     BasicLineString3d lineResampled = resampleLineString(line, nPoints);
     result.cutAndResampledFeatures.push_back(lineResampled);
     result.cutResampledAndTransformedFeatures.push_back(transformLineString(bbox, lineResampled));
-  }
-
-  double lengthOriginal = boost::geometry::length(lstring, boost::geometry::strategy::distance::pythagoras<double>());
-  double lengthProcessed = 0;
-  for (const auto& line : result.cutResampledAndTransformedFeatures) {
-    lengthProcessed =
-        lengthProcessed + boost::geometry::length(line, boost::geometry::strategy::distance::pythagoras<double>());
-  }
-
-  if (lengthOriginal - lengthProcessed > 1e-2) {
-    result.wasCut_ = true;
   }
   return result;
 }
