@@ -350,7 +350,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       boost::geometry::model::ring<BasicPoint2d, true, true, std::vector, std::allocator>>();
   converters::VectorToListConverter<std::vector<double>>();
   converters::VectorToListConverter<std::vector<int>>();
-  converters::VectorToListConverter<std::vector<std::string>>();
   converters::VectorToListConverter<std::vector<LaneDataPtr>>();
   converters::IterableConverter()
       .fromPython<std::vector<MatrixXd>>()

@@ -242,11 +242,6 @@ void insertAndCheckNewCompoundFeatures(std::vector<CompoundElsList>& compFeats,
       for (const Id& el : compEl.ids) {
         elInsertIdx[el] = firstOccIt->second;
       }
-    } else if (compFeats[firstOccIt->second].ids.size() != compEl.ids.size()) {
-      compFeats.push_back(compEl);
-      for (const Id& el : compEl.ids) {
-        elInsertIdx[el] = compFeats.size() - 1;
-      }
     }
   }
 }
