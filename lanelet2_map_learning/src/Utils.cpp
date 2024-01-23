@@ -21,9 +21,10 @@ OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudina
                     BasicPoint2d{center.x() - extentLongitudinal, center.y() - extentLateral}};
   OrientedRect axisAlignedRect;
   boost::geometry::assign_points(axisAlignedRect.bg_poly, pts);
+  boost::geometry::correct(axisAlignedRect.bg_poly);
 
   boost::geometry::strategy::transform::translate_transformer<double, 2, 2> trans1(-center.x(), -center.y());
-  boost::geometry::strategy::transform::rotate_transformer<boost::geometry::radian, double, 2, 2> rotate(yaw);
+  boost::geometry::strategy::transform::rotate_transformer<boost::geometry::radian, double, 2, 2> rotate(-yaw);
   boost::geometry::strategy::transform::translate_transformer<double, 2, 2> trans2(center.x(), center.y());
 
   OrientedRect trans1Rect;
@@ -54,6 +55,9 @@ BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t 
     throw std::runtime_error("A polyline requires at least 2 points!");
   }
   double length = boost::geometry::length(polyline, boost::geometry::strategy::distance::pythagoras<double>());
+  if (length < 1e-1) {
+    return BasicLineString3d();
+  }
   double dist = length / static_cast<double>(nPoints - 1);  // to get all points of line
   boost::geometry::model::multi_point<BasicPoint3d> bdInterp;
   boost::geometry::line_interpolate(polyline, dist, bdInterp);
@@ -121,7 +125,7 @@ std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const Bas
 
 BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline) {
   boost::geometry::strategy::transform::translate_transformer<double, 2, 2> trans1(-bbox.center.x(), -bbox.center.y());
-  boost::geometry::strategy::transform::rotate_transformer<boost::geometry::radian, double, 2, 2> rotate(-bbox.yaw);
+  boost::geometry::strategy::transform::rotate_transformer<boost::geometry::radian, double, 2, 2> rotate(bbox.yaw);
   BasicLineString3d transPolyline;
   BasicLineString3d rotatedPolyline;
   boost::geometry::transform(polyline, transPolyline, trans1);

@@ -8,14 +8,14 @@ using namespace lanelet::map_learning;
 using namespace lanelet::map_learning::tests;
 
 TEST_F(MapLearningTest, GetRotatedRect) {  // NOLINT
-  EXPECT_DOUBLE_EQ(bbox.bounds_const()[0].x(), -5);
-  EXPECT_DOUBLE_EQ(bbox.bounds_const()[0].y(), 20);
-  EXPECT_DOUBLE_EQ(bbox.bounds_const()[1].x(), 15);
-  EXPECT_DOUBLE_EQ(bbox.bounds_const()[1].y(), 20);
-  EXPECT_DOUBLE_EQ(bbox.bounds_const()[2].x(), 15);
-  EXPECT_DOUBLE_EQ(bbox.bounds_const()[2].y(), -10);
-  EXPECT_DOUBLE_EQ(bbox.bounds_const()[3].x(), -5);
-  EXPECT_DOUBLE_EQ(bbox.bounds_const()[3].y(), -10);
+  EXPECT_DOUBLE_EQ(bbox.bounds_const()[0].x(), 15);
+  EXPECT_DOUBLE_EQ(bbox.bounds_const()[0].y(), -10);
+  EXPECT_DOUBLE_EQ(bbox.bounds_const()[1].x(), -5);
+  EXPECT_DOUBLE_EQ(bbox.bounds_const()[1].y(), -10);
+  EXPECT_DOUBLE_EQ(bbox.bounds_const()[2].x(), -5);
+  EXPECT_DOUBLE_EQ(bbox.bounds_const()[2].y(), 20);
+  EXPECT_DOUBLE_EQ(bbox.bounds_const()[3].x(), 15);
+  EXPECT_DOUBLE_EQ(bbox.bounds_const()[3].y(), 20);
 }
 
 TEST_F(MapLearningTest, ExtractSubmap) {  // NOLINT

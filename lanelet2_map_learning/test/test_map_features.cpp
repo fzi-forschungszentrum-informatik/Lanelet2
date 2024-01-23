@@ -22,18 +22,18 @@ TEST_F(MapLearningTest, LaneLineStringFeature) {  // NOLINT
   std::vector<VectorXd> vec = feat.computeFeatureVectors(false, true);
   EXPECT_EQ(vec.size(), 1);
   EXPECT_EQ(vec[0].size(), 9);
-  EXPECT_NEAR(vec[0][0], 5, 10e-5);
-  EXPECT_NEAR(vec[0][1], -5, 10e-5);
-  EXPECT_NEAR(vec[0][6], 5, 10e-5);
-  EXPECT_NEAR(vec[0][7], 10, 10e-5);
+  EXPECT_NEAR(vec[0][0], -5, 10e-5);
+  EXPECT_NEAR(vec[0][1], 5, 10e-5);
+  EXPECT_NEAR(vec[0][6], -5, 10e-5);
+  EXPECT_NEAR(vec[0][7], -10, 10e-5);
   EXPECT_EQ(vec[0][8], 2);
 
   std::vector<MatrixXd> pointMat = feat.pointMatrices(false);
   EXPECT_EQ(pointMat[0].rows(), 4);
   EXPECT_EQ(pointMat[0].cols(), 3);
-  EXPECT_NEAR(pointMat[0](0, 1), -5, 10e-5);
-  EXPECT_NEAR(pointMat[0](2, 1), 5, 10e-5);
-  EXPECT_NEAR(pointMat[0](3, 1), 10, 10e-5);
+  EXPECT_NEAR(pointMat[0](0, 1), 5, 10e-5);
+  EXPECT_NEAR(pointMat[0](2, 1), -5, 10e-5);
+  EXPECT_NEAR(pointMat[0](3, 1), -10, 10e-5);
 }
 
 TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
@@ -62,9 +62,9 @@ TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
   std::vector<VectorXd> vec = llFeat.computeFeatureVectors(false, true);
   EXPECT_EQ(vec.size(), 1);
   EXPECT_EQ(vec[0].size(), 18);
-  EXPECT_NEAR(vec[0][9], -5, 10e-5);
-  EXPECT_NEAR(vec[0][10], 1, 10e-5);
-  EXPECT_NEAR(vec[0][15], 10, 10e-5);
+  EXPECT_NEAR(vec[0][9], 5, 10e-5);
+  EXPECT_NEAR(vec[0][10], -1, 10e-5);
+  EXPECT_NEAR(vec[0][15], -10, 10e-5);
   EXPECT_EQ(vec[0][17], 1);
 }
 
@@ -104,19 +104,19 @@ TEST_F(MapLearningTest, CompoundLaneLineStringFeature) {  // NOLINT
   std::vector<VectorXd> vec = cpdFeat.computeFeatureVectors(false, true);
   EXPECT_EQ(vec.size(), 1);
   EXPECT_EQ(vec[0].size(), 11);
-  EXPECT_NEAR(vec[0][1], -10, 10e-5);
-  EXPECT_NEAR(vec[0][2], 5, 10e-5);
-  EXPECT_NEAR(vec[0][3], -5, 10e-5);
-  EXPECT_NEAR(vec[0][6], 5, 10e-5);
-  EXPECT_NEAR(vec[0][7], 5, 10e-5);
+  EXPECT_NEAR(vec[0][1], 10, 10e-5);
+  EXPECT_NEAR(vec[0][2], -5, 10e-5);
+  EXPECT_NEAR(vec[0][3], 5, 10e-5);
+  EXPECT_NEAR(vec[0][6], -5, 10e-5);
+  EXPECT_NEAR(vec[0][7], -5, 10e-5);
   EXPECT_EQ(vec[0][10], 2);
 
   std::vector<MatrixXd> pointMat = cpdFeat.pointMatrices(false);
   EXPECT_EQ(pointMat.size(), 1);
   EXPECT_EQ(pointMat[0].rows(), 5);
   EXPECT_EQ(pointMat[0].cols(), 3);
-  EXPECT_NEAR(pointMat[0](0, 1), -10, 10e-5);
+  EXPECT_NEAR(pointMat[0](0, 1), 10, 10e-5);
   EXPECT_NEAR(pointMat[0](2, 1), 0, 10e-5);
-  EXPECT_NEAR(pointMat[0](3, 1), 5, 10e-5);
-  EXPECT_NEAR(pointMat[0](4, 0), 5, 10e-5);
+  EXPECT_NEAR(pointMat[0](3, 1), -5, 10e-5);
+  EXPECT_NEAR(pointMat[0](4, 0), -5, 10e-5);
 }
