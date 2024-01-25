@@ -23,9 +23,10 @@ using LaneDataPtr = std::shared_ptr<LaneData>;
 
 struct Edge {
   Edge() = default;
-  Edge(Id el1, Id el2) : el1_{el1}, el2_{el2} {}
+  Edge(Id el1, Id el2, bool isLaneChange) : el1_{el1}, el2_{el2}, isLaneChange_{isLaneChange} {}
   Id el1_;
   Id el2_;
+  bool isLaneChange_;
 };
 
 namespace internal {
@@ -40,7 +41,7 @@ struct CompoundElsList {
 };
 }  // namespace internal
 
-using Edges = std::map<Id, Edge>;  // key = id from
+using Edges = std::map<Id, std::vector<Edge>>;  // key = id from
 
 template <typename T>
 std::vector<std::shared_ptr<T>> getValidElements(const std::vector<std::shared_ptr<T>>& vec) {

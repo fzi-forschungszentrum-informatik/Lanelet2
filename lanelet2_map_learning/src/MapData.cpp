@@ -46,7 +46,7 @@ void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
     Optional<ConstLanelet> adjLeftLL = localSubmapGraph->adjacentLeft(ll);
 
     if (leftLL) {
-      edges_.insert({ll.id(), Edge(ll.id(), leftLL->id())});
+      edges_[ll.id()].push_back(Edge(ll.id(), leftLL->id(), true));
     }
   }
 }
@@ -77,7 +77,7 @@ void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
     Optional<ConstLanelet> rightLL = localSubmapGraph->right(ll);
     Optional<ConstLanelet> adjRightLL = localSubmapGraph->adjacentRight(ll);
     if (rightLL) {
-      edges_.insert({ll.id(), Edge(ll.id(), rightLL->id())});
+      edges_[ll.id()].push_back(Edge(ll.id(), rightLL->id(), true));
     }
   }
 }
@@ -116,14 +116,14 @@ void LaneData::getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
       if (isLaneletInPath(initPath, successorLLs[i])) {
         continue;
       }
-      edges_.insert({current.id(), Edge(current.id(), successorLLs[i].id())});
+      edges_[current.id()].push_back(Edge(current.id(), successorLLs[i].id(), false));
       getPaths(localSubmapGraph, paths, successorLLs[i], initPath);
     }
     if (isLaneletInPath(initPath, successorLLs.front())) {
       continue;
     }
     initPath.push_back(successorLLs.front());
-    edges_.insert({current.id(), Edge(current.id(), successorLLs.front().id())});
+    edges_[current.id()].push_back(Edge(current.id(), successorLLs.front().id(), false));
     current = successorLLs.front();
     successorLLs = localSubmapGraph->following(current, false);
   }

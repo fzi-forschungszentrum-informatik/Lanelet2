@@ -258,10 +258,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("pointMatrices", &CompoundLaneLineStringFeature::pointMatrices,
            &CompoundLaneLineStringFeatureWrap::default_pointMatrices);
 
-  class_<Edge>("Edge", "Struct of a lane graph edge", init<Id, Id>())
+  class_<Edge>("Edge", "Struct of a lane graph edge", init<Id, Id, bool>())
       .def(init<>())
       .def_readwrite("el1", &Edge::el1_)
-      .def_readwrite("el2", &Edge::el2_);
+      .def_readwrite("el2", &Edge::el2_)
+      .def_readwrite("isLaneChange", &Edge::isLaneChange_);
 
   {
     scope inLaneData =
@@ -351,6 +352,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   converters::VectorToListConverter<std::vector<double>>();
   converters::VectorToListConverter<std::vector<int>>();
   converters::VectorToListConverter<std::vector<LaneDataPtr>>();
+  converters::VectorToListConverter<std::vector<Edge>>();
   converters::IterableConverter()
       .fromPython<std::vector<MatrixXd>>()
       .fromPython<BasicLineString3d>()
@@ -363,6 +365,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .fromPython<CompoundLaneLineStringFeatureList>();
   converters::MapToDictConverter<LaneLineStringFeatures>();
   converters::MapToDictConverter<LaneletFeatures>();
+  converters::MapToDictConverter<Edges>();
   DictToMapConverter<LaneLineStringFeatures>();
   DictToMapConverter<LaneletFeatures>();
   class_<std::vector<bool>>("BoolList").def(vector_indexing_suite<std::vector<bool>>());
