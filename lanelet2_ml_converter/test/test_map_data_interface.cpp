@@ -20,7 +20,7 @@ using namespace lanelet::ml_converter::tests;
 //   return std::chrono::duration_cast<result_t>(clock_t::now() - start);
 //  }
 
-TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
+TEST_F(MLConverterTest, MapDataInterface) {  // NOLINT
   traffic_rules::TrafficRulesPtr trafficRules{
       traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)};
   MapDataInterface::Configuration config{};
@@ -103,7 +103,7 @@ TEST_F(MapLearningTest, MapDataInterface) {  // NOLINT
   }
 }
 
-TEST_F(MapLearningTest, MapDataSaveLoad) {
+TEST_F(MLConverterTest, MapDataSaveLoad) {
   traffic_rules::TrafficRulesPtr trafficRules{
       traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)};
   MapDataInterface::Configuration config{};

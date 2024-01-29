@@ -14,9 +14,6 @@ using namespace boost::python;
 using namespace lanelet;
 using namespace lanelet::ml_converter;
 
-/// TODO: ADD VIRTUAL FUNCTIONS, CONSTRUCTORS, EIGEN TO NUMPY
-/// TODO: DEBUG EIGEN SEGFAULTS FROM PYTHON
-
 class MapFeatureWrap : public MapFeature, public wrapper<MapFeature> {
  public:
   std::vector<VectorXd> computeFeatureVectors(bool onlyPoints, bool pointsIn2d) const {

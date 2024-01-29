@@ -171,7 +171,7 @@ namespace {                   // NOLINT
 static MapTestData testData;  // NOLINT
 }  // namespace
 
-class MapLearningTest : public ::testing::Test {
+class MLConverterTest : public ::testing::Test {
  public:
   const std::unordered_map<Id, Lanelet>& lanelets{testData.lanelets};
   const std::unordered_map<Id, Point3d>& points{testData.points};
@@ -182,7 +182,7 @@ class MapLearningTest : public ::testing::Test {
   const double extentLateralBbox{10};
   const double yawBbox{M_PI / 2.0};
   OrientedRect bbox;
-  MapLearningTest() : bbox{getRotatedRect(centerBbox, extentLongitudinalBbox, extentLateralBbox, yawBbox)} {}
+  MLConverterTest() : bbox{getRotatedRect(centerBbox, extentLongitudinalBbox, extentLateralBbox, yawBbox)} {}
 };
 
 }  // namespace tests

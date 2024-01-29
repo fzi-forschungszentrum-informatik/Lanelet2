@@ -7,7 +7,7 @@ using namespace lanelet;
 using namespace lanelet::ml_converter;
 using namespace lanelet::ml_converter::tests;
 
-TEST_F(MapLearningTest, LaneLineStringFeature) {  // NOLINT
+TEST_F(MLConverterTest, LaneLineStringFeature) {  // NOLINT
   BasicLineString3d polyline{BasicPoint3d{0, 0, 0}, BasicPoint3d{5, 0, 0}, BasicPoint3d{10, 0, 0},
                              BasicPoint3d{20, 0, 0}};
   LaneLineStringFeature feat(polyline, Id(123), LineStringType::Solid, Ids(1234), false);
@@ -36,7 +36,7 @@ TEST_F(MapLearningTest, LaneLineStringFeature) {  // NOLINT
   EXPECT_NEAR(pointMat[0](3, 1), -10, 10e-5);
 }
 
-TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
+TEST_F(MLConverterTest, LaneletFeature) {  // NOLINT
   BasicLineString3d leftBd{BasicPoint3d{0, 0, 0}, BasicPoint3d{5, 0, 0}, BasicPoint3d{10, 0, 0},
                            BasicPoint3d{20, 0, 0}};
   LaneLineStringFeaturePtr leftBdFeat =
@@ -68,7 +68,7 @@ TEST_F(MapLearningTest, LaneletFeature) {  // NOLINT
   EXPECT_EQ(vec[0][17], 1);
 }
 
-TEST_F(MapLearningTest, CompoundLaneLineStringFeature) {  // NOLINT
+TEST_F(MLConverterTest, CompoundLaneLineStringFeature) {  // NOLINT
   BasicLineString3d p1{BasicPoint3d{-10, 0, 0}, BasicPoint3d{-5, 0, 0}};
   LaneLineStringFeaturePtr feat1 =
       std::make_shared<LaneLineStringFeature>(p1, Id(123), LineStringType::Solid, Ids(1234), false);

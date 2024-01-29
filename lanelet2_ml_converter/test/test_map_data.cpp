@@ -11,7 +11,7 @@ using namespace lanelet;
 using namespace lanelet::ml_converter;
 using namespace lanelet::ml_converter::tests;
 
-TEST_F(MapLearningTest, LaneData) {  // NOLINT
+TEST_F(MLConverterTest, LaneData) {  // NOLINT
   traffic_rules::TrafficRulesPtr trafficRules{
       traffic_rules::TrafficRulesFactory::create(Locations::Germany, Participants::Vehicle)};
   routing::RoutingGraphConstPtr laneletMapGraph = routing::RoutingGraph::build(*laneletMap, *trafficRules);

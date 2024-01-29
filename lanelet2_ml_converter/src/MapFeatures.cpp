@@ -106,6 +106,10 @@ std::vector<MatrixXd> TEFeature::pointMatrices(bool pointsIn2d) const {
   return std::vector<MatrixXd>{toPointMatrix(rawFeature_, pointsIn2d)};
 }
 
+bool TEFeature::process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t /*unused*/) {
+  throw std::runtime_error("Not implemented yet!");
+}
+
 LaneletFeature::LaneletFeature(LaneLineStringFeaturePtr leftBoundary, LaneLineStringFeaturePtr rightBoundary,
                                LaneLineStringFeaturePtr centerline, Id mapID)
     : MapFeature(mapID), leftBoundary_{leftBoundary}, rightBoundary_{rightBoundary}, centerline_{centerline} {}
