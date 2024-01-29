@@ -25,7 +25,7 @@ export AMENT_PREFIX_PATH=${LANELET2_ROOT}
 CMAKE_ROOT=${LANELET2_ROOT}/CMakeLists.txt
 echo "cmake_minimum_required(VERSION 3.12)" > ${CMAKE_ROOT}
 echo "project(lanelet2)" >> ${CMAKE_ROOT}
-export LANELET2_PACKAGES_TOPOLOGICAL="lanelet2_core lanelet2_io lanelet2_projection lanelet2_traffic_rules lanelet2_routing lanelet2_maps lanelet2_validation lanelet2_matching lanelet2_python lanelet2_examples"
+export LANELET2_PACKAGES_TOPOLOGICAL="lanelet2_core lanelet2_io lanelet2_projection lanelet2_traffic_rules lanelet2_routing lanelet2_maps lanelet2_validation lanelet2_matching lanelet2_ml_converter lanelet2_python lanelet2_examples"
 for pkg in $LANELET2_PACKAGES_TOPOLOGICAL; do
   echo "add_subdirectory($pkg)" >> ${CMAKE_ROOT};
   echo "set(${pkg}_LIBRARIES $pkg)" >> ${CMAKE_ROOT};
