@@ -15,4 +15,4 @@ for elem in map.laneletLayer:
         elem.attributes["participant:vehicle"] = "no"
 ```
 
-For more usage examples refer to our [example package](../lanelet2_examples/README.md).
+For more usage examples refer to our [example package](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/tree/master/lanelet2_examples/README.md).

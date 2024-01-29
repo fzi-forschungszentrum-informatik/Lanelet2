@@ -19,7 +19,7 @@ The needed components to create a routing graph are:
 * **You can easily plug in your own routing cost calculation**
 * *Influences the prefered path*
 
-**Traffic Rules for a Specific Participant** (see [lanelet2_traffic_rules](../lanelet2_traffic_rules/README.md))
+**Traffic Rules for a Specific Participant** (see [lanelet2_traffic_rules](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/tree/master/lanelet2_traffic_rules/README.md))
 * Determines which lanelets/areas are passable
 * *Influences the possible paths*
 
