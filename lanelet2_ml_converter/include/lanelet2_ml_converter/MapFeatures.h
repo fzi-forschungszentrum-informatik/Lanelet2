@@ -7,11 +7,11 @@
 #include <boost/geometry.hpp>
 #include <type_traits>
 
-#include "lanelet2_map_learning/Forward.h"
-#include "lanelet2_map_learning/Types.h"
+#include "lanelet2_ml_converter/Forward.h"
+#include "lanelet2_ml_converter/Types.h"
 
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 using VectorXd = Eigen::Matrix<double, Eigen::Dynamic, 1>;
 using MatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
@@ -29,7 +29,7 @@ class MapFeature {
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) = 0;
 
   template <class Archive>
-  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::MapFeature& feat,
+  friend void boost::serialization::serialize(Archive& ar, lanelet::ml_converter::MapFeature& feat,
                                               const unsigned int /*version*/);
 
   virtual ~MapFeature() noexcept = default;
@@ -53,7 +53,7 @@ class LineStringFeature : public MapFeature {
   virtual bool process(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints) = 0;
 
   template <class Archive>
-  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LineStringFeature& feat,
+  friend void boost::serialization::serialize(Archive& ar, lanelet::ml_converter::LineStringFeature& feat,
                                               const unsigned int /*version*/);
 
   virtual ~LineStringFeature() noexcept = default;
@@ -88,7 +88,7 @@ class LaneLineStringFeature : public LineStringFeature {
   void addLaneletID(Id id) { laneletIDs_.push_back(id); }
 
   template <class Archive>
-  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LaneLineStringFeature& feat,
+  friend void boost::serialization::serialize(Archive& ar, lanelet::ml_converter::LaneLineStringFeature& feat,
                                               const unsigned int /*version*/);
 
  protected:
@@ -141,7 +141,7 @@ class LaneletFeature : public MapFeature {
   LaneLineStringFeaturePtr centerline() const { return centerline_; }
 
   template <class Archive>
-  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LaneletFeature& feat,
+  friend void boost::serialization::serialize(Archive& ar, lanelet::ml_converter::LaneletFeature& feat,
                                               const unsigned int /*version*/);
 
  private:
@@ -166,7 +166,7 @@ class CompoundLaneLineStringFeature : public LaneLineStringFeature {
   const std::vector<bool>& processedFeaturesValid() const { return processedFeaturesValid_; }
 
   template <class Archive>
-  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::CompoundLaneLineStringFeature& feat,
+  friend void boost::serialization::serialize(Archive& ar, lanelet::ml_converter::CompoundLaneLineStringFeature& feat,
                                               const unsigned int /*version*/);
 
  private:
@@ -265,5 +265,5 @@ bool processFeatures(std::vector<std::shared_ptr<T>>& featVec, const OrientedRec
 
 MatrixXd toPointMatrix(const BasicLineString3d& lString, bool pointsIn2d);
 VectorXd toFeatureVector(const BasicLineString3d& line, int typeInt, bool onlyPoints, bool pointsIn2d);
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

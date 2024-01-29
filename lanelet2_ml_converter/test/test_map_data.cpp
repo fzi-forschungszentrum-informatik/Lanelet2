@@ -2,14 +2,14 @@
 #include <lanelet2_traffic_rules/TrafficRulesFactory.h>
 // #include <matplot/matplot.h>
 
-#include "lanelet2_map_learning/MapData.h"
-#include "lanelet2_map_learning/MapFeatures.h"
+#include "lanelet2_ml_converter/MapData.h"
+#include "lanelet2_ml_converter/MapFeatures.h"
 #include "lanelet2_routing/RoutingGraph.h"
 #include "test_map.h"
 
 using namespace lanelet;
-using namespace lanelet::map_learning;
-using namespace lanelet::map_learning::tests;
+using namespace lanelet::ml_converter;
+using namespace lanelet::ml_converter::tests;
 
 TEST_F(MapLearningTest, LaneData) {  // NOLINT
   traffic_rules::TrafficRulesPtr trafficRules{

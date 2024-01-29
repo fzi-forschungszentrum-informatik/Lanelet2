@@ -3,15 +3,15 @@
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/utility/Optional.h>
 
-#include "lanelet2_map_learning/Forward.h"
-#include "lanelet2_map_learning/MapData.h"
-#include "lanelet2_map_learning/Types.h"
+#include "lanelet2_ml_converter/Forward.h"
+#include "lanelet2_ml_converter/MapData.h"
+#include "lanelet2_ml_converter/Types.h"
 #include "lanelet2_routing/RoutingGraph.h"
 
 namespace lanelet {
 class LaneletLayer;
 
-namespace map_learning {
+namespace ml_converter {
 
 class MapDataInterface {
  public:
@@ -59,5 +59,5 @@ class MapDataInterface {
   traffic_rules::TrafficRulesPtr trafficRules_;
 };
 
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

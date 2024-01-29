@@ -1,12 +1,12 @@
-#include "lanelet2_map_learning/MapFeatures.h"
+#include "lanelet2_ml_converter/MapFeatures.h"
 
 #include <boost/geometry.hpp>
 #include <type_traits>
 
-#include "lanelet2_map_learning/Utils.h"
+#include "lanelet2_ml_converter/Utils.h"
 
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 struct LStringProcessResult {
   BasicLineStrings3d cutFeatures;
@@ -276,5 +276,5 @@ VectorXd toFeatureVector(const BasicLineString3d& line, int typeInt, bool onlyPo
   }
 }
 
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

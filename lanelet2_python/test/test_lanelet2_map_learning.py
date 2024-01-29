@@ -1,7 +1,7 @@
 import unittest
 import lanelet2  # if we fail here, there is something wrong with lanelet2 registration
 from lanelet2.core import getId, Point3d, BasicPoint2d, LineString3d, Lanelet, LaneletMap
-from lanelet2.map_learning import MapDataInterface
+from lanelet2.ml_converter import MapDataInterface
 
 def get_sample_lanelet_map():
     mymap = LaneletMap()

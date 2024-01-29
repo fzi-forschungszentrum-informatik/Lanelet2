@@ -7,13 +7,13 @@
 #include <memory>
 #include <utility>
 
-#include "lanelet2_map_learning/Forward.h"
-#include "lanelet2_map_learning/Utils.h"
+#include "lanelet2_ml_converter/Forward.h"
+#include "lanelet2_ml_converter/Utils.h"
 
 /// The coordinates and relations for this test can be found in "LaneletTestMap.xml" which can be viewed in
 /// https://www.draw.io
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 namespace tests {
 
 class MapTestData {
@@ -186,5 +186,5 @@ class MapLearningTest : public ::testing::Test {
 };
 
 }  // namespace tests
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

@@ -4,7 +4,7 @@
 #include <lanelet2_routing/Forward.h>
 
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 /// @brief the distinction between left and right disappears here,
 ///        generalized to passable and not passable (adjacent)
@@ -40,29 +40,29 @@ class CompoundLaneLineStringFeature;
 class LaneletFeature;
 class LaneData;
 
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet
 
 namespace boost {
 namespace serialization {
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::map_learning::MapFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::MapFeature& feat, const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::map_learning::LineStringFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::LineStringFeature& feat, const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::map_learning::LaneLineStringFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::LaneLineStringFeature& feat, const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::map_learning::CompoundLaneLineStringFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::CompoundLaneLineStringFeature& feat, const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::map_learning::LaneletFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::LaneletFeature& feat, const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::map_learning::LaneData& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::LaneData& feat, const unsigned int /*version*/);
 
 }  // namespace serialization
 }  // namespace boost

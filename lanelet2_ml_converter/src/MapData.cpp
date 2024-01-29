@@ -1,9 +1,9 @@
-#include "lanelet2_map_learning/MapData.h"
+#include "lanelet2_ml_converter/MapData.h"
 
-#include "lanelet2_map_learning/Utils.h"
+#include "lanelet2_ml_converter/Utils.h"
 
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 using namespace internal;
 
@@ -414,5 +414,5 @@ CompoundLaneLineStringFeaturePtr LaneData::TensorFeatureData::pointMatrixCpdCent
   return pointMatrixCpdFeat(index, pointMatrixCpdCenterline_);
 }
 
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

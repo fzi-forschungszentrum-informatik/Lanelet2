@@ -3,16 +3,16 @@
 #include <map>
 #include <vector>
 
-#include "lanelet2_map_learning/MapData.h"
-#include "lanelet2_map_learning/MapDataInterface.h"
-#include "lanelet2_map_learning/MapFeatures.h"
-#include "lanelet2_map_learning/Utils.h"
+#include "lanelet2_ml_converter/MapData.h"
+#include "lanelet2_ml_converter/MapDataInterface.h"
+#include "lanelet2_ml_converter/MapFeatures.h"
+#include "lanelet2_ml_converter/Utils.h"
 #include "lanelet2_python/internal/converter.h"
 #include "lanelet2_python/internal/eigen_converter.h"
 
 using namespace boost::python;
 using namespace lanelet;
-using namespace lanelet::map_learning;
+using namespace lanelet::ml_converter;
 
 /// TODO: ADD VIRTUAL FUNCTIONS, CONSTRUCTORS, EIGEN TO NUMPY
 /// TODO: DEBUG EIGEN SEGFAULTS FROM PYTHON

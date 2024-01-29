@@ -1,4 +1,4 @@
-#include "lanelet2_map_learning/MapDataInterface.h"
+#include "lanelet2_ml_converter/MapDataInterface.h"
 
 #include <lanelet2_core/Exceptions.h>
 #include <lanelet2_core/Forward.h>
@@ -9,11 +9,11 @@
 #include <boost/geometry.hpp>
 #include <type_traits>
 
-#include "lanelet2_map_learning/MapData.h"
-#include "lanelet2_map_learning/Utils.h"
+#include "lanelet2_ml_converter/MapData.h"
+#include "lanelet2_ml_converter/Utils.h"
 
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 void MapDataInterface::setCurrPosAndExtractSubmap(const BasicPoint2d& pt, double yaw) {
   currPos_ = pt;
@@ -94,5 +94,5 @@ TEData MapDataInterface::teData(bool processAll) {
   return TEData();
 }
 
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

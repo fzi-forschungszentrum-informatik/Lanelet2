@@ -10,14 +10,14 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <type_traits>
 
-#include "lanelet2_map_learning/Forward.h"
-#include "lanelet2_map_learning/MapFeatures.h"
-#include "lanelet2_map_learning/Types.h"
+#include "lanelet2_ml_converter/Forward.h"
+#include "lanelet2_ml_converter/MapFeatures.h"
+#include "lanelet2_ml_converter/Types.h"
 #include "lanelet2_routing/RoutingGraph.h"
 #include "lanelet2_routing/internal/Graph.h"
 
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 using LaneDataPtr = std::shared_ptr<LaneData>;
 
@@ -129,7 +129,7 @@ class LaneData {
   TensorFeatureData getTensorFeatureData(bool pointsIn2d, bool ignoreBuffer);
 
   template <class Archive>
-  friend void boost::serialization::serialize(Archive& ar, lanelet::map_learning::LaneData& feat,
+  friend void boost::serialization::serialize(Archive& ar, lanelet::ml_converter::LaneData& feat,
                                               const unsigned int /*version*/);
 
  private:
@@ -184,5 +184,5 @@ class TEData {
   ///        xLane and xTE stacked, with xLane being first
 };
 
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

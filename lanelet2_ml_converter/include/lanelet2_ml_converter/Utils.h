@@ -11,7 +11,7 @@
 #include "Serialize.h"
 #include "Types.h"
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudinal, double extentLateral, double yaw);
 
@@ -80,5 +80,5 @@ void saveLaneDataMultiFile(const std::string& path, const std::vector<std::strin
 std::vector<LaneDataPtr> loadLaneDataMultiFile(const std::string& path, const std::vector<std::string>& filenames,
                                                bool binary);  // loads from one file per LaneData
 
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

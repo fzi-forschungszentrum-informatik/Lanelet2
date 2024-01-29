@@ -6,10 +6,10 @@
 #include <functional>
 #include <type_traits>
 
-#include "lanelet2_map_learning/Forward.h"
+#include "lanelet2_ml_converter/Forward.h"
 
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 enum class LaneletRepresentationType { Centerline, Boundaries };
 enum class ParametrizationType { Bezier, BezierEndpointFixed, LineString };
@@ -38,5 +38,5 @@ struct OrientedRect {
   OrientedRect() noexcept {}
 };
 
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

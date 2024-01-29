@@ -13,7 +13,7 @@
         "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_core/include/**",
         "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_examples/include/**",
         "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_io/include/**",
-        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_map_learning/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_ml_converter/include/**",
         "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_maps/include/**",
         "/home/immel/workspaces/av2_link_pred_ws/src/lanelet2_maps_mrt/include/**",
         "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_matching/include/**",

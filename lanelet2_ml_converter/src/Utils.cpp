@@ -1,4 +1,4 @@
-#include "lanelet2_map_learning/Utils.h"
+#include "lanelet2_ml_converter/Utils.h"
 
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Lanelet.h>
@@ -11,7 +11,7 @@
 
 namespace fs = boost::filesystem;
 namespace lanelet {
-namespace map_learning {
+namespace ml_converter {
 
 OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudinal, double extentLateral, double yaw) {
   BasicPoints2d pts{BasicPoint2d{center.x() - extentLongitudinal, center.y() - extentLateral},
@@ -229,5 +229,5 @@ std::vector<LaneDataPtr> loadLaneDataMultiFile(const std::string& path, const st
   }
   return lDataVec;
 }
-}  // namespace map_learning
+}  // namespace ml_converter
 }  // namespace lanelet

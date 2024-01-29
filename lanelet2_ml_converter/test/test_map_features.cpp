@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 
-#include "lanelet2_map_learning/MapFeatures.h"
+#include "lanelet2_ml_converter/MapFeatures.h"
 #include "test_map.h"
 
 using namespace lanelet;
-using namespace lanelet::map_learning;
-using namespace lanelet::map_learning::tests;
+using namespace lanelet::ml_converter;
+using namespace lanelet::ml_converter::tests;
 
 TEST_F(MapLearningTest, LaneLineStringFeature) {  // NOLINT
   BasicLineString3d polyline{BasicPoint3d{0, 0, 0}, BasicPoint3d{5, 0, 0}, BasicPoint3d{10, 0, 0},

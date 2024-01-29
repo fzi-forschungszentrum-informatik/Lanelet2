@@ -1,3 +1,3 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Changelog for package lanelet2_map_learning
+Changelog for package lanelet2_ml_converter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

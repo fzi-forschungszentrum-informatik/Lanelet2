@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 
-#include "lanelet2_map_learning/Utils.h"
+#include "lanelet2_ml_converter/Utils.h"
 #include "test_map.h"
 
 using namespace lanelet;
-using namespace lanelet::map_learning;
-using namespace lanelet::map_learning::tests;
+using namespace lanelet::ml_converter;
+using namespace lanelet::ml_converter::tests;
 
 TEST_F(MapLearningTest, GetRotatedRect) {  // NOLINT
   EXPECT_DOUBLE_EQ(bbox.bounds_const()[0].x(), 15);

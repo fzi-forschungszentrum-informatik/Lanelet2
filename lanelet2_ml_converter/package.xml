@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>lanelet2_map_learning</name>
+  <name>lanelet2_ml_converter</name>
   <version>1.2.1</version>
-  <description>Map learning module for lanelet2</description>
+  <description>Converter module to convert Lanelet2 maps into local label instances for machine learning tasks</description>
 
   <license>BSD</license>
   <maintainer email="fabian.immel@kit.edu">Fabian Immel</maintainer>
