@@ -79,16 +79,16 @@ std::vector<VectorXd> TEFeature::computeFeatureVectors(bool onlyPoints, bool poi
                             : VectorXd(3 * rawFeature_.size() + 1);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
     for (size_t i = 0; i < rawFeature_.size(); i++) {
-      vec(Eigen::seq(2 * i, 2 * i + 1)) = rawFeature_[i](Eigen::seq(0, 1));
+      vec.segment(2 * i, 2) = rawFeature_[i].segment(0, 2);
     }
   } else {
     for (size_t i = 0; i < rawFeature_.size(); i++) {
-      vec(Eigen::seq(3 * i, 3 * i + 2)) = rawFeature_[i](Eigen::seq(0, 2));
+      vec.segment(3 * i, 3) = rawFeature_[i].segment(0, 3);
     }
   }
   vec[vec.size() - 1] = static_cast<int>(teType_);
   if (onlyPoints) {
-    return std::vector<VectorXd>{vec(Eigen::seq(0, vec.size() - 2))};
+    return std::vector<VectorXd>{vec.segment(0, vec.size() - 1)};
   } else {
     return std::vector<VectorXd>{vec};
   }
@@ -142,7 +142,7 @@ VectorXd stackVector(const std::vector<VectorXd>& vec) {
   VectorXd stacked(flattenedLength);
   size_t currIndex = 0;
   for (const auto& el : vec) {
-    stacked(Eigen::seq(currIndex, currIndex + el.size())) = el;
+    stacked.segment(currIndex, el.size()) = el;
   }
   return stacked;
 }
@@ -156,7 +156,7 @@ std::vector<VectorXd> LaneletFeature::computeFeatureVectors(bool onlyPoints, boo
     std::vector<VectorXd> featureVecs(vecCenterlinePts.size());
     for (size_t i = 0; i < vecCenterlinePts.size(); i++) {
       VectorXd vec(vecCenterlinePts[i].size() + 2);  // pts vec + left and right type
-      vec(Eigen::seq(0, vecCenterlinePts.size() - 1)) = vecCenterlinePts[i];
+      vec.segment(0, vecCenterlinePts.size()) = vecCenterlinePts[i];
       vec[vec.size() - 2] = leftBoundary_->typeInt();
       vec[vec.size() - 1] = rightBoundary_->typeInt();
       featureVecs[i] = vec;
@@ -169,13 +169,13 @@ std::vector<VectorXd> LaneletFeature::computeFeatureVectors(bool onlyPoints, boo
     VectorXd rightBdPts = stackVector(vecRightBdPts);
 
     VectorXd vec(leftBdPts.size() + rightBdPts.size() + 2);  // pts vec + left and right type
-    vec(Eigen::seq(0, leftBdPts.size() - 1)) = leftBdPts;
-    vec(Eigen::seq(leftBdPts.size(), leftBdPts.size() + rightBdPts.size() - 1)) = rightBdPts;
+    vec.segment(0, leftBdPts.size()) = leftBdPts;
+    vec.segment(leftBdPts.size(), rightBdPts.size()) = rightBdPts;
     vec[vec.size() - 2] = leftBoundary_->typeInt();
     vec[vec.size() - 1] = rightBoundary_->typeInt();
 
     if (onlyPoints) {
-      return std::vector<VectorXd>{vec(Eigen::seq(0, vec.size() - 2))};
+      return std::vector<VectorXd>{vec.segment(0, vec.size() - 2)};
     } else {
       return std::vector<VectorXd>{vec};
     }
@@ -246,11 +246,11 @@ MatrixXd toPointMatrix(const BasicLineString3d& lString, bool pointsIn2d) {
       pointsIn2d ? MatrixXd(lString.size(), 2) : MatrixXd(lString.size(), 3);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
     for (size_t i = 0; i < lString.size(); i++) {
-      mat.row(i) = lString[i](Eigen::seq(0, 1));
+      mat.row(i) = lString[i].segment(0, 2);
     }
   } else {
     for (size_t i = 0; i < lString.size(); i++) {
-      mat.row(i) = lString[i](Eigen::seq(0, 2));
+      mat.row(i) = lString[i].segment(0, 3);
     }
   }
   return mat;
@@ -261,16 +261,16 @@ VectorXd toFeatureVector(const BasicLineString3d& line, int typeInt, bool onlyPo
       pointsIn2d ? VectorXd(2 * line.size() + 1) : VectorXd(3 * line.size() + 1);  // n points with 2/3 dims + type
   if (pointsIn2d == true) {
     for (size_t i = 0; i < line.size(); i++) {
-      vec(Eigen::seq(2 * i, 2 * i + 1)) = line[i](Eigen::seq(0, 1));
+      vec.segment(2 * i, 2) = line[i].segment(0, 2);
     }
   } else {
     for (size_t i = 0; i < line.size(); i++) {
-      vec(Eigen::seq(3 * i, 3 * i + 2)) = line[i](Eigen::seq(0, 2));
+      vec.segment(3 * i, 3) = line[i].segment(0, 3);
     }
   }
   vec[vec.size() - 1] = typeInt;
   if (onlyPoints) {
-    return vec(Eigen::seq(0, vec.size() - 2));
+    return vec.segment(0, vec.size() - 1);
   } else {
     return vec;
   }
