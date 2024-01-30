@@ -27,7 +27,7 @@ enable_testing()
 
 # declare dependencies
 include_directories(lanelet2_core/include lanelet2_io/include lanelet2_projection/include lanelet2_traffic_rules/include
-    lanelet2_routing/include lanelet2_validation/include)
+    lanelet2_routing/include lanelet2_validation/include lanelet2_ml_converter/include)
 add_subdirectory(lanelet2_core)
 add_subdirectory(lanelet2_io)
 add_subdirectory(lanelet2_projection)
