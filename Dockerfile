@@ -16,27 +16,27 @@ SHELL ["/bin/bash", "-c"]
 # basics
 RUN set -ex; \
     if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
-        then export PY_VERSION=python; \
-        else export PY_VERSION=python3; \
+    then export PY_VERSION=python; \
+    else export PY_VERSION=python3; \
     fi; \
     if [ "$DEV" -ne "0" ]; then \
-        export DEV_PACKAGES="clang-format-11 clang-tidy-11 clang-11 i${PY_VERSION} nano lcov"; \
+    export DEV_PACKAGES="clang-format-11 clang-tidy-11 clang-11 i${PY_VERSION} nano lcov"; \
     fi; \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        bash-completion \
-        build-essential \
-        curl \
-        git \
-        cmake \
-        keyboard-configuration \
-        locales \
-        lsb-core \
-        lib${PY_VERSION}-dev \
-        software-properties-common \
-        sudo \
-        wget \
-        ${DEV_PACKAGES} && \
+    bash-completion \
+    build-essential \
+    curl \
+    git \
+    cmake \
+    keyboard-configuration \
+    locales \
+    lsb-core \
+    lib${PY_VERSION}-dev \
+    software-properties-common \
+    sudo \
+    wget \
+    ${DEV_PACKAGES} && \
     locale-gen en_US.UTF-8 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -57,30 +57,30 @@ RUN set -ex; \
 
 # dependencies for lanelet2
 RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
-        then export PY_VERSION=python; \
-        else export PY_VERSION=python3; \
+    then export PY_VERSION=python; \
+    else export PY_VERSION=python3; \
     fi; \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        libgtest-dev \
-        libboost-all-dev \
-        libeigen3-dev \
-        libgeographic-dev \
-        libpugixml-dev \
-        libboost-python-dev \
-        ${PY_VERSION}-rospkg \
-        ros-$ROS_DISTRO-ros-environment && \
+    libgtest-dev \
+    libboost-all-dev \
+    libeigen3-dev \
+    libgeographic-dev \
+    libpugixml-dev \
+    libboost-python-dev \
+    ${PY_VERSION}-rospkg \
+    ros-$ROS_DISTRO-ros-environment && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # ros version specific dependencies
 RUN set -ex; \
     if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
-        then export PY_VERSION=python; \
-        else export PY_VERSION=python3; \
+    then export PY_VERSION=python; \
+    else export PY_VERSION=python3; \
     fi; \
     if [ "$ROS" = "ros" ]; \
-        then export ROS_DEPS="ros-$ROS_DISTRO-catkin ros-$ROS_DISTRO-rosbash ${PY_VERSION}-catkin-tools"; \
-        else export ROS_DEPS="ros-$ROS_DISTRO-ament-cmake python3-colcon-ros ros-$ROS_DISTRO-ros2cli"; \
+    then export ROS_DEPS="ros-$ROS_DISTRO-catkin ros-$ROS_DISTRO-rosbash ${PY_VERSION}-catkin-tools"; \
+    else export ROS_DEPS="ros-$ROS_DISTRO-ament-cmake python3-colcon-ros ros-$ROS_DISTRO-ros2cli"; \
     fi; \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y $ROS_DEPS && \
@@ -111,8 +111,8 @@ RUN set -ex; \
     cd /home/developer/workspace && \
     mkdir -p /home/developer/workspace/src && \
     if [ "$ROS" = "ros" ]; then \
-      source /home/developer/.bashrc && \
-      catkin init; \
+    source /home/developer/.bashrc && \
+    catkin init; \
     fi; \
     git clone https://github.com/KIT-MRT/mrt_cmake_modules.git /home/developer/workspace/src/mrt_cmake_modules
 
@@ -125,27 +125,31 @@ COPY --chown=developer:developer . /home/developer/workspace/src/lanelet2
 # update dependencies
 RUN git -C /home/developer/workspace/src/mrt_cmake_modules pull
 
+# install python dependencies (numpy)
+RUN sudo apt install pip
+RUN pip install numpy
+
 # third stage: build
 FROM lanelet2_src AS lanelet2
 
 # build
 RUN set -ex; \
     if [ "$DEV" -ne "0" ]; then \
-      export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Debug -DMRT_SANITIZER=checks -DMRT_ENABLE_COVERAGE=1"; \
+    export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Debug -DMRT_SANITIZER=checks -DMRT_ENABLE_COVERAGE=1"; \
     else \
-      export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Release"; \
+    export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Release"; \
     fi; \
     if [ "$ROS" = "ros" ]; then \
-      export CONFIGURE="catkin config --cmake-args $CMAKE_ARGS"; \
-      export BUILD_CMD="catkin build --no-status"; \
+    export CONFIGURE="catkin config --cmake-args $CMAKE_ARGS"; \
+    export BUILD_CMD="catkin build --no-status"; \
     else \
-      export CONFIGURE=true; \
-      export BUILD_CMD="colcon build --symlink-install --cmake-args $CMAKE_ARGS"; \
+    export CONFIGURE=true; \
+    export BUILD_CMD="colcon build --symlink-install --cmake-args $CMAKE_ARGS"; \
     fi; \
     source /opt/ros/$ROS_DISTRO/setup.bash && \
     env && \
     $CONFIGURE && \
     $BUILD_CMD && \
     if [ "$DEV" -eq "0" ]; then \
-      rm -rf build logs; \
+    rm -rf build logs; \
     fi
