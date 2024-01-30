@@ -67,10 +67,14 @@ RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
     libgeographic-dev \
     libpugixml-dev \
     libboost-python-dev \
+    pip \
     ${PY_VERSION}-rospkg \
     ros-$ROS_DISTRO-ros-environment && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# install python dependencies (numpy)
+RUN pip install numpy
 
 # ros version specific dependencies
 RUN set -ex; \
@@ -124,10 +128,6 @@ COPY --chown=developer:developer . /home/developer/workspace/src/lanelet2
 
 # update dependencies
 RUN git -C /home/developer/workspace/src/mrt_cmake_modules pull
-
-# install python dependencies (numpy)
-RUN sudo apt install pip
-RUN pip install numpy
 
 # third stage: build
 FROM lanelet2_src AS lanelet2
