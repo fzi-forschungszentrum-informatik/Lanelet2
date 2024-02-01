@@ -210,6 +210,7 @@ std::shared_ptr<ConstLineString3d> calculateCenterline(const ConstLineString2d& 
     // Determine right candidate
     std::tie(rightCandidate, rightCandidateDistance) =
         findClosestNonintersectingPoint(std::next(rightCurrent), leftCurrent, bounds, centerlinePoints.back(), false);
+
     // Choose the better one
     if (leftCandidateDistance && (!rightCandidateDistance || leftCandidateDistance <= rightCandidateDistance)) {
       assert(leftCandidate != leftBound.end());

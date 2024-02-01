@@ -1,0 +1,36 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/mrtros/include/**",
+        "/opt/mrtsoftware/local/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/devel/include/**",
+        "/opt/mrtsoftware/release/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_core/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_examples/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_io/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_ml_converter/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_maps/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/lanelet2_maps_mrt/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_matching/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_projection/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_python/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_routing/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_traffic_rules/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/Lanelet2/lanelet2_validation/include/**",
+        "/home/immel/workspaces/av2_link_pred_ws/src/ll2_map_graph_converter/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

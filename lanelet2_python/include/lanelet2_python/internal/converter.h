@@ -158,6 +158,17 @@ struct VectorToList {
 };
 
 template <typename T>
+struct MapToDict {
+  static PyObject* convert(const T& v) {
+    py::dict d;
+    for (auto& e : v) {
+      d[e.first] = e.second;
+    }
+    return py::incref(d.ptr());
+  }
+};
+
+template <typename T>
 struct OptionalToObject {
   static PyObject* convert(const lanelet::Optional<T>& v) {
     if (v) {
@@ -217,6 +228,9 @@ struct PyPair {
 
 template <typename T>
 using VectorToListConverter = py::to_python_converter<T, VectorToList<T>>;
+
+template <typename T>
+using MapToDictConverter = py::to_python_converter<T, MapToDict<T>>;
 
 template <typename T>
 using OptionalConverter = py::to_python_converter<lanelet::Optional<T>, OptionalToObject<T>>;

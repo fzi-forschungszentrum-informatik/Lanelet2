@@ -13,6 +13,12 @@ https://build.ros2.org/job/Hdev__lanelet2__ubuntu_jammy_amd64/lastBuild/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/lanelet2.svg?label=PyPI%20downloads)](
 https://pypi.org/project/lanelet2/)
 
+## New module :rocket: : `lanelet2_ml_converter`
+
+Convert Lanelet2 maps directly to instance labels for map perception and other map-based learning tasks! `lanelet2_ml_converter` provides local instance labels of various abstraction layers and representations accessible as numpy arrays from python. Check out the `lanelet2_ml_converter` module for more information and usage examples.
+
+**Note:** As the module is not released officially yet, to try it out you need to either build Lanelet2 with the python bindings yourself or manually install the pip wheel files from the CI artefacts (download [here](https://github.com/immel-f/Lanelet2/actions/runs/7714926040/artifacts/1206339616)).
+
 ## Overview
 
 Lanelet2 is a C++ library for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core principles to handle the upcoming challenges of future maps.
@@ -30,6 +36,7 @@ Features:
 - **Boost Geometry** support for all thinkable kinds of geometry calculations on map primitives
 - Released under the [**BSD 3-Clause license**](LICENSE)
 - Support for **ROS1, ROS2, Docker and Conan** (see instructions below)
+- Converter module to convert Lanelet2 maps into **local instance labels for machine learning tasks**.
 
 ![](lanelet2_core/doc/images/lanelet2_example_image.png)
 
@@ -181,6 +188,7 @@ Examples and common use cases in both C++ and Python can be found [here](lanelet
 * **lanelet2_routing** implements the routing graph for routing or reachable set or queries as well as collision checking
 * **lanelet2_maps** provides example maps and functionality to visualize and modify them easily in JOSM
 * **lanelet2_matching** provides functions to determine in which lanelet an object is/could be currently located
+* **lanelet2_ml_converter** converts Lanelet2 maps into local instance labels for machine learning tasks
 * **lanelet2_python** implements the python interface for lanelet2
 * **lanelet2_validation** provides checks to ensure a valid lanelet2 map
 * **lanelet2_examples** contains tutorials for working with Lanelet2 in C++ and Python
