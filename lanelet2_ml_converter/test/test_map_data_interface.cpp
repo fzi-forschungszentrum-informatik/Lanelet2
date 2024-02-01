@@ -79,9 +79,7 @@ TEST_F(MLConverterTest, MapDataInterface) {  // NOLINT
     //   y.resize(mat.rows());
     //   Eigen::VectorXd::Map(&x[0], mat.rows()) = mat.col(0);
     //   Eigen::VectorXd::Map(&y[0], mat.rows()) = mat.col(1);
-    //   matplot::plot(x, y, "r")->line_width(3);
-    // }
-    // for (const auto& mat : compoundLaneDividers) {
+    //   matplot::pltrafficRulesuto& mat : compoundLaneDividers) {
     //   std::vector<double> x;
     //   std::vector<double> y;
     //   x.resize(mat.rows());
