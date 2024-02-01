@@ -17,6 +17,8 @@ https://pypi.org/project/lanelet2/)
 
 Convert Lanelet2 maps directly to instance labels for map perception and other map-based learning tasks! `lanelet2_ml_converter` provides local instance labels of various abstraction layers and representations accessible as numpy arrays from python. Check out the `lanelet2_ml_converter` module for more information and usage examples.
 
+**Note:** As the module is not released officially yet, to try it out you need to either build Lanelet2 with the python bindings yourself or manually install the pip wheel files from the CI artefacts.
+
 ## Overview
 
 Lanelet2 is a C++ library for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core principles to handle the upcoming challenges of future maps.
