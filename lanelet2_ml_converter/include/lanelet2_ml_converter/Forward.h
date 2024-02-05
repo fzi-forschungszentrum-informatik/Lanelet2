@@ -33,11 +33,11 @@ inline int relationToInt(lanelet::routing::RelationType type) {
 enum class LaneletRepresentationType;
 enum class ParametrizationType;
 
-class MapFeature;
-class LineStringFeature;
-class LaneLineStringFeature;
-class CompoundLaneLineStringFeature;
-class LaneletFeature;
+class MapInstance;
+class LineStringInstance;
+class LaneLineStringInstance;
+class CompoundLaneLineStringInstance;
+class LaneletInstance;
 class LaneData;
 
 }  // namespace ml_converter
@@ -47,19 +47,20 @@ namespace boost {
 namespace serialization {
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::MapFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::MapInstance& feat, const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::LineStringFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::LineStringInstance& feat, const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::LaneLineStringFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::LaneLineStringInstance& feat, const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::CompoundLaneLineStringFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::CompoundLaneLineStringInstance& feat,
+               const unsigned int /*version*/);
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::LaneletFeature& feat, const unsigned int /*version*/);
+void serialize(Archive& ar, lanelet::ml_converter::LaneletInstance& feat, const unsigned int /*version*/);
 
 template <class Archive>
 void serialize(Archive& ar, lanelet::ml_converter::LaneData& feat, const unsigned int /*version*/);

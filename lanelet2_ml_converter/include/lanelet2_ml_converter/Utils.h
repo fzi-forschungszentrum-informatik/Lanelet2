@@ -13,7 +13,8 @@
 namespace lanelet {
 namespace ml_converter {
 
-OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudinal, double extentLateral, double yaw);
+OrientedRect getRotatedRect(const BasicPoint3d& center, double extentLongitudinal, double extentLateral, double yaw,
+                            bool from2dPos);
 
 LaneletSubmapConstPtr extractSubmap(LaneletMapConstPtr laneletMap, const BasicPoint2d& center,
                                     double extentLongitudinal, double extentLateral);
@@ -66,7 +67,8 @@ BasicLineString3d resampleLineString(const BasicLineString3d& polyline, int32_t 
 
 std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
 
-BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline);
+BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline, double pitch,
+                                      double roll);
 
 void saveLaneData(const std::string& filename, const std::vector<LaneDataPtr>& lDataVec,
                   bool binary);  // saves all in one file

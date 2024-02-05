@@ -5,7 +5,7 @@
 
 #include "lanelet2_ml_converter/MapData.h"
 #include "lanelet2_ml_converter/MapDataInterface.h"
-#include "lanelet2_ml_converter/MapFeatures.h"
+#include "lanelet2_ml_converter/MapInstances.h"
 #include "lanelet2_routing/RoutingGraph.h"
 #include "lanelet2_traffic_rules/TrafficRulesFactory.h"
 #include "test_map.h"
@@ -36,7 +36,7 @@ TEST_F(MLConverterTest, MapDataInterface) {  // NOLINT
   std::vector<double> yaws{0, 0, M_PI / 4, M_PI / 3, M_PI / 2, M_PI / 2};
 
   // auto start = std::chrono::steady_clock::now();
-  std::vector<LaneDataPtr> lDataVec = parser.laneDataBatch(pts, yaws);
+  std::vector<LaneDataPtr> lDataVec = parser.laneDataBatch2d(pts, yaws);
   // std::cerr << "Elapsed(micros)=" << since(start).count() << std::endl;
 
   for (size_t i = 0; i < lDataVec.size(); i++) {
@@ -49,20 +49,20 @@ TEST_F(MLConverterTest, MapDataInterface) {  // NOLINT
 
     switch (i) {
       case 0: {
-        LaneletFeatures::const_iterator itLL0 = lDataVec[i]->laneletFeatures().find(2000);
-        EXPECT_TRUE(itLL0 != lDataVec[i]->laneletFeatures().end());
-        LaneletFeatures::const_iterator itLL1 = lDataVec[i]->laneletFeatures().find(2002);
-        EXPECT_TRUE(itLL1 == lDataVec[i]->laneletFeatures().end());
+        LaneletInstances::const_iterator itLL0 = lDataVec[i]->laneletInstances().find(2000);
+        EXPECT_TRUE(itLL0 != lDataVec[i]->laneletInstances().end());
+        LaneletInstances::const_iterator itLL1 = lDataVec[i]->laneletInstances().find(2002);
+        EXPECT_TRUE(itLL1 == lDataVec[i]->laneletInstances().end());
         break;
       }
       case 1: {
-        LaneletFeatures::const_iterator itLL = lDataVec[i]->laneletFeatures().find(2011);
-        EXPECT_TRUE(itLL != lDataVec[i]->laneletFeatures().end());
+        LaneletInstances::const_iterator itLL = lDataVec[i]->laneletInstances().find(2011);
+        EXPECT_TRUE(itLL != lDataVec[i]->laneletInstances().end());
         break;
       }
       case 5: {
-        LaneletFeatures::const_iterator itLL = lDataVec[i]->laneletFeatures().find(2004);
-        EXPECT_TRUE(itLL == lDataVec[i]->laneletFeatures().end());
+        LaneletInstances::const_iterator itLL = lDataVec[i]->laneletInstances().find(2004);
+        EXPECT_TRUE(itLL == lDataVec[i]->laneletInstances().end());
         break;
       }
     }
@@ -116,7 +116,7 @@ TEST_F(MLConverterTest, MapDataSaveLoad) {
                                 BasicPoint2d(6, -5), BasicPoint2d(6, -8), BasicPoint2d(6, -11)};
   std::vector<double> yaws{0, 0, M_PI / 4, M_PI / 3, M_PI / 2, M_PI / 2};
 
-  std::vector<LaneDataPtr> lDataVec = parser.laneDataBatch(pts, yaws);
+  std::vector<LaneDataPtr> lDataVec = parser.laneDataBatch2d(pts, yaws);
 
   saveLaneData("/tmp/lane_data_save_test.xml", lDataVec, false);
   std::vector<LaneDataPtr> lDataLoaded = loadLaneData("/tmp/lane_data_save_test.xml", false);

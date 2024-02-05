@@ -19,7 +19,8 @@ TEST_F(MLConverterTest, GetRotatedRect) {  // NOLINT
 }
 
 TEST_F(MLConverterTest, ExtractSubmap) {  // NOLINT
-  LaneletSubmapConstPtr submap = extractSubmap(laneletMap, centerBbox, extentLongitudinalBbox, extentLateralBbox);
+  LaneletSubmapConstPtr submap =
+      extractSubmap(laneletMap, centerBbox.head(2), extentLongitudinalBbox, extentLateralBbox);
   EXPECT_TRUE(submap->laneletLayer.exists(2000));
   EXPECT_TRUE(submap->laneletLayer.exists(2001));
   EXPECT_TRUE(submap->laneletLayer.exists(2002));

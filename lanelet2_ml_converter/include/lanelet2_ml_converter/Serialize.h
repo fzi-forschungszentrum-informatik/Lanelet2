@@ -51,7 +51,7 @@ void serialize(Archive& ar, lanelet::ml_converter::LineStringType& type, const u
 }
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::MapFeature& feat, const unsigned int /*version*/) {
+void serialize(Archive& ar, lanelet::ml_converter::MapInstance& feat, const unsigned int /*version*/) {
   ar& BOOST_SERIALIZATION_NVP(feat.initialized_);
   ar& BOOST_SERIALIZATION_NVP(feat.wasCut_);
   ar& BOOST_SERIALIZATION_NVP(feat.valid_);
@@ -59,37 +59,38 @@ void serialize(Archive& ar, lanelet::ml_converter::MapFeature& feat, const unsig
 }
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::LineStringFeature& feat, const unsigned int /*version*/) {
-  ar& make_nvp("MapFeature", boost::serialization::base_object<lanelet::ml_converter::MapFeature>(feat));
-  ar& BOOST_SERIALIZATION_NVP(feat.rawFeature_);
+void serialize(Archive& ar, lanelet::ml_converter::LineStringInstance& feat, const unsigned int /*version*/) {
+  ar& make_nvp("MapInstance", boost::serialization::base_object<lanelet::ml_converter::MapInstance>(feat));
+  ar& BOOST_SERIALIZATION_NVP(feat.rawInstance_);
 }
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::LaneLineStringFeature& feat, const unsigned int /*version*/) {
-  ar& make_nvp("LineStringFeature", boost::serialization::base_object<lanelet::ml_converter::LineStringFeature>(feat));
-  ar& BOOST_SERIALIZATION_NVP(feat.cutFeatures_);
-  ar& BOOST_SERIALIZATION_NVP(feat.cutAndResampledFeatures_);
-  ar& BOOST_SERIALIZATION_NVP(feat.cutResampledAndTransformedFeatures_);
+void serialize(Archive& ar, lanelet::ml_converter::LaneLineStringInstance& feat, const unsigned int /*version*/) {
+  ar& make_nvp("LineStringInstance",
+               boost::serialization::base_object<lanelet::ml_converter::LineStringInstance>(feat));
+  ar& BOOST_SERIALIZATION_NVP(feat.cutInstances_);
+  ar& BOOST_SERIALIZATION_NVP(feat.cutAndResampledInstances_);
+  ar& BOOST_SERIALIZATION_NVP(feat.cutResampledAndTransformedInstances_);
   ar& BOOST_SERIALIZATION_NVP(feat.type_);
   ar& BOOST_SERIALIZATION_NVP(feat.inverted_);
   ar& BOOST_SERIALIZATION_NVP(feat.laneletIDs_);
 }
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::CompoundLaneLineStringFeature& feat,
+void serialize(Archive& ar, lanelet::ml_converter::CompoundLaneLineStringInstance& feat,
                const unsigned int /*version*/) {
-  ar& make_nvp("LaneLineStringFeature",
-               boost::serialization::base_object<lanelet::ml_converter::LaneLineStringFeature>(feat));
-  ar& BOOST_SERIALIZATION_NVP(feat.individualFeatures_);
+  ar& make_nvp("LaneLineStringInstance",
+               boost::serialization::base_object<lanelet::ml_converter::LaneLineStringInstance>(feat));
+  ar& BOOST_SERIALIZATION_NVP(feat.individualInstances_);
   ar& BOOST_SERIALIZATION_NVP(feat.pathLengthsRaw_);
   ar& BOOST_SERIALIZATION_NVP(feat.pathLengthsProcessed_);
-  ar& BOOST_SERIALIZATION_NVP(feat.processedFeaturesValid_);
+  ar& BOOST_SERIALIZATION_NVP(feat.processedInstancesValid_);
   ar& BOOST_SERIALIZATION_NVP(feat.validLengthThresh_);
 }
 
 template <class Archive>
-void serialize(Archive& ar, lanelet::ml_converter::LaneletFeature& feat, const unsigned int /*version*/) {
-  ar& make_nvp("MapFeature", boost::serialization::base_object<lanelet::ml_converter::MapFeature>(feat));
+void serialize(Archive& ar, lanelet::ml_converter::LaneletInstance& feat, const unsigned int /*version*/) {
+  ar& make_nvp("MapInstance", boost::serialization::base_object<lanelet::ml_converter::MapInstance>(feat));
   ar& BOOST_SERIALIZATION_NVP(feat.leftBoundary_);
   ar& BOOST_SERIALIZATION_NVP(feat.rightBoundary_);
   ar& BOOST_SERIALIZATION_NVP(feat.centerline_);
@@ -109,7 +110,7 @@ void serialize(Archive& ar, lanelet::ml_converter::LaneData& lData, const unsign
   ar& BOOST_SERIALIZATION_NVP(lData.compoundRoadBorders_);
   ar& BOOST_SERIALIZATION_NVP(lData.compoundLaneDividers_);
   ar& BOOST_SERIALIZATION_NVP(lData.compoundCenterlines_);
-  ar& BOOST_SERIALIZATION_NVP(lData.laneletFeatures_);
+  ar& BOOST_SERIALIZATION_NVP(lData.laneletInstances_);
   ar& BOOST_SERIALIZATION_NVP(lData.associatedCpdRoadBorderIndices_);
   ar& BOOST_SERIALIZATION_NVP(lData.associatedCpdLaneDividerIndices_);
   ar& BOOST_SERIALIZATION_NVP(lData.associatedCpdCenterlineIndices_);
@@ -122,21 +123,22 @@ void serialize(Archive& ar, lanelet::ml_converter::LaneData& lData, const unsign
 // prevent unneccessary boost serialization xml tags
 // BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneData, boost::serialization::object_serializable);
 // BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::Edge, boost::serialization::object_serializable);
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneletFeature, boost::serialization::object_serializable);
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneLineStringFeature, boost::serialization::object_serializable);
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::CompoundLaneLineStringFeature,
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneletInstance, boost::serialization::object_serializable);
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneLineStringInstance, boost::serialization::object_serializable);
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::CompoundLaneLineStringInstance,
 //                            boost::serialization::object_serializable);
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LineStringFeature, boost::serialization::object_serializable);
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::MapFeature, boost::serialization::object_serializable);
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LineStringInstance, boost::serialization::object_serializable);
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::MapInstance, boost::serialization::object_serializable);
 // BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LineStringType, boost::serialization::object_serializable);
 // BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::ParametrizationType, boost::serialization::object_serializable);
 // BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneletRepresentationType,
 // boost::serialization::object_serializable);
 //
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneLineStringFeatures, boost::serialization::object_serializable);
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneLineStringFeatureList,
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneLineStringInstances,
 // boost::serialization::object_serializable);
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::CompoundLaneLineStringFeatureList,
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneLineStringInstanceList,
+// boost::serialization::object_serializable);
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::CompoundLaneLineStringInstanceList,
 //                            boost::serialization::object_serializable);
-// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneletFeatures, boost::serialization::object_serializable);
+// BOOST_CLASS_IMPLEMENTATION(lanelet::ml_converter::LaneletInstances, boost::serialization::object_serializable);
 // BOOST_CLASS_IMPLEMENTATION(lanelet::BasicLineString3d, boost::serialization::object_serializable);

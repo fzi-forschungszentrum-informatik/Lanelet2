@@ -14,7 +14,8 @@ namespace fs = boost::filesystem;
 namespace lanelet {
 namespace ml_converter {
 
-OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudinal, double extentLateral, double yaw) {
+OrientedRect getRotatedRect(const BasicPoint3d& center, double extentLongitudinal, double extentLateral, double yaw,
+                            bool from2dPos) {
   BasicPoints2d pts{BasicPoint2d{center.x() - extentLongitudinal, center.y() - extentLateral},
                     BasicPoint2d{center.x() - extentLongitudinal, center.y() + extentLateral},
                     BasicPoint2d{center.x() + extentLongitudinal, center.y() + extentLateral},
@@ -37,6 +38,7 @@ OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudina
 
   trans2Rect.center = center;
   trans2Rect.yaw = yaw;
+  trans2Rect.from2d = from2dPos;
   return trans2Rect;
 }
 
@@ -124,13 +126,28 @@ std::vector<BasicLineString3d> cutLineString(const OrientedRect& bbox, const Bas
   return cut3d;
 }
 
-BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline) {
-  boost::geometry::strategy::transform::translate_transformer<double, 2, 2> trans1(-bbox.center.x(), -bbox.center.y());
-  boost::geometry::strategy::transform::rotate_transformer<boost::geometry::radian, double, 2, 2> rotate(bbox.yaw);
+boost::geometry::strategy::transform::matrix_transformer<double, 3, 3> getYPRMatrix(double yaw, double pitch,
+                                                                                    double roll) {
+  Eigen::AngleAxisd rollAngle(-roll, Eigen::Vector3d::UnitX());
+  Eigen::AngleAxisd pitchAngle(-pitch, Eigen::Vector3d::UnitY());
+  Eigen::AngleAxisd yawAngle(-yaw, Eigen::Vector3d::UnitZ());
+  Eigen::Quaterniond q = yawAngle * pitchAngle * rollAngle;
+  Eigen::Matrix3d rotM = q.matrix();
+  boost::geometry::strategy::transform::matrix_transformer<double, 3, 3> ypr(
+      rotM(0, 0), rotM(0, 1), rotM(0, 2), 0, rotM(1, 0), rotM(1, 1), rotM(1, 2), 0, rotM(2, 0), rotM(2, 1), rotM(2, 2),
+      0, 0, 0, 0, 1);
+  return ypr;
+}
+
+BasicLineString3d transformLineString(const OrientedRect& bbox, const BasicLineString3d& polyline, double pitch,
+                                      double roll) {
+  boost::geometry::strategy::transform::translate_transformer<double, 3, 3> trans1(-bbox.center.x(), -bbox.center.y(),
+                                                                                   -bbox.center.z());
+  boost::geometry::strategy::transform::matrix_transformer<double, 3, 3> ypr = getYPRMatrix(bbox.yaw, pitch, roll);
   BasicLineString3d transPolyline;
   BasicLineString3d rotatedPolyline;
   boost::geometry::transform(polyline, transPolyline, trans1);
-  boost::geometry::transform(transPolyline, rotatedPolyline, rotate);
+  boost::geometry::transform(transPolyline, rotatedPolyline, ypr);
   return rotatedPolyline;
 }
 

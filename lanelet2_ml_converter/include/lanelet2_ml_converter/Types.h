@@ -25,14 +25,15 @@ enum class LineStringType {
 enum class TEType { TrafficLight, TrafficSign, Unknown };
 
 struct OrientedRect {
-  BasicPoint2d center;
+  BasicPoint3d center;
   double yaw;
+  bool from2d{false};
   boost::geometry::model::polygon<BasicPoint2d> bg_poly;
   boost::geometry::model::polygon<BasicPoint2d>::ring_type& bounds() { return bg_poly.outer(); }
   const boost::geometry::model::polygon<BasicPoint2d>::ring_type& bounds_const() { return bg_poly.outer(); }
 
-  friend OrientedRect getRotatedRect(const BasicPoint2d& center, double extentLongitudinal, double extentLateral,
-                                     double yaw);
+  friend OrientedRect getRotatedRect(const BasicPoint3d& center, double extentLongitudinal, double extentLateral,
+                                     double yaw, bool from2dPos);
 
  private:
   OrientedRect() noexcept {}

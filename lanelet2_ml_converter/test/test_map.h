@@ -177,12 +177,12 @@ class MLConverterTest : public ::testing::Test {
   const std::unordered_map<Id, Point3d>& points{testData.points};
   const std::unordered_map<Id, LineString3d>& lines{testData.lines};
   const LaneletMapConstPtr laneletMap{testData.laneletMap};
-  const BasicPoint2d centerBbox{5, 5};
+  const BasicPoint3d centerBbox{5, 5, 0};
   const double extentLongitudinalBbox{15};
   const double extentLateralBbox{10};
   const double yawBbox{M_PI / 2.0};
   OrientedRect bbox;
-  MLConverterTest() : bbox{getRotatedRect(centerBbox, extentLongitudinalBbox, extentLateralBbox, yawBbox)} {}
+  MLConverterTest() : bbox{getRotatedRect(centerBbox, extentLongitudinalBbox, extentLateralBbox, yawBbox, true)} {}
 };
 
 }  // namespace tests
