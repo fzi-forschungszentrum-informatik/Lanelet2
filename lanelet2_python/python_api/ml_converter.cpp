@@ -184,16 +184,18 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   def("getRotatedRect", &getRotatedRect,
       (arg("center"), arg("extentLongitudinal"), arg("extentLateral"), arg("yaw"), arg("from2dPos")));
-  def("extractSubmap", &extractSubmap);
-  def("isRoadBorder", &isRoadBorder);
-  def("bdTypeToEnum", &bdTypeToEnum);
-  def("teTypeToEnum", &teTypeToEnum);
-  def("resampleLineString", &resampleLineString);
-  def("cutLineString", &cutLineString);
-  def("saveLaneData", &saveLaneData);
-  def("loadLaneData", &loadLaneData);
-  def("saveLaneDataMultiFile", &saveLaneDataMultiFile);
-  def("loadLaneDataMultiFile", &loadLaneDataMultiFile);
+  def("extractSubmap", &extractSubmap,
+      (arg("laneletMap"), arg("center"), arg("extentLongitudinal"), arg("extentLateral")));
+  def("isRoadBorder", &isRoadBorder, (arg("lstring")));
+  def("bdTypeToEnum", &bdTypeToEnum, (arg("lstring")));
+  def("teTypeToEnum", &teTypeToEnum, (arg("te")));
+  def("resampleLineString", &resampleLineString, (arg("polyline"), arg("nPoints")));
+  def("cutLineString", &cutLineString, (arg("bbox"), arg("polyline")));
+  def("transformLineString", &transformLineString, (arg("bbox"), arg("polyline"), arg("pitch"), arg("roll")));
+  def("saveLaneData", &saveLaneData, (arg("filename"), arg("lDataVec"), arg("binary")));
+  def("loadLaneData", &loadLaneData, (arg("filename"), arg("binary")));
+  def("saveLaneDataMultiFile", &saveLaneDataMultiFile, (arg("path"), arg("filenames"), arg("lDataVec"), arg("binary")));
+  def("loadLaneDataMultiFile", &loadLaneDataMultiFile, (arg("path"), arg("filenames"), arg("binary")));
 
   class_<MapInstanceWrap, boost::noncopyable>("MapInstance", "Abstract base map feature class", no_init)
       .add_property("wasCut", &MapInstance::wasCut)
@@ -202,7 +204,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("valid", &MapInstance::valid)
       .def("computeInstanceVectors", pure_virtual(&MapInstance::computeInstanceVectors),
            (arg("onlyPoints"), arg("pointsIn2d")))
-      .def("process", pure_virtual(&MapInstance::process));
+      .def("process", pure_virtual(&MapInstance::process),
+           (arg("bbox"), arg("paramType"), arg("nPoints"), arg("pitch") = 0, arg("roll") = 0));
 
   class_<LineStringInstanceWrap, bases<MapInstance>, boost::noncopyable>("LineStringInstance",
                                                                          "Abstract line string feature class", no_init)
@@ -210,8 +213,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                     make_function(&LineStringInstance::rawInstance, return_value_policy<copy_const_reference>()))
       .def("computeInstanceVectors", pure_virtual(&LineStringInstance::computeInstanceVectors),
            (arg("onlyPoints"), arg("pointsIn2d")))
-      .def("process", pure_virtual(&LineStringInstance::process))
-      .def("pointMatrices", pure_virtual(&LineStringInstance::pointMatrices));
+      .def("process", pure_virtual(&LineStringInstance::process),
+           (arg("bbox"), arg("paramType"), arg("nPoints"), arg("pitch") = 0, arg("roll") = 0))
+      .def("pointMatrices", pure_virtual(&LineStringInstance::pointMatrices), (arg("pointsIn2d")));
 
   class_<LaneLineStringInstanceWrap, bases<LineStringInstance>, LaneLineStringInstancePtr, boost::noncopyable>(
       "LaneLineStringInstance", "Lane line string feature class",
@@ -229,11 +233,13 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("typeInt", &LaneLineStringInstance::typeInt)
       .add_property("laneletIDs",
                     make_function(&LaneLineStringInstance::laneletIDs, return_value_policy<copy_const_reference>()))
-      .add_property("addLaneletID", &LaneLineStringInstance::addLaneletID)
+      .def("addLaneletID", &LaneLineStringInstance::addLaneletID, (arg("id")))
       .def("computeInstanceVectors", &LaneLineStringInstance::computeInstanceVectors,
            &LaneLineStringInstanceWrap::default_computeInstanceVectors, (arg("onlyPoints"), arg("pointsIn2d")))
-      .def("process", &LaneLineStringInstance::process, &LaneLineStringInstanceWrap::default_process)
-      .def("pointMatrices", &LaneLineStringInstance::pointMatrices, &LaneLineStringInstanceWrap::default_pointMatrices);
+      .def("process", &LaneLineStringInstance::process, &LaneLineStringInstanceWrap::default_process,
+           (arg("bbox"), arg("paramType"), arg("nPoints"), arg("pitch") = 0, arg("roll") = 0))
+      .def("pointMatrices", &LaneLineStringInstance::pointMatrices, &LaneLineStringInstanceWrap::default_pointMatrices,
+           (arg("pointsIn2d")));
 
   class_<LaneletInstanceWrap, bases<MapInstance>, LaneletInstancePtr, boost::noncopyable>(
       "LaneletInstance", "Lanelet feature class that contains lower level LaneLineStringInstances",
@@ -243,10 +249,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_property("leftBoundary", make_function(&LaneletInstance::leftBoundary))
       .add_property("rightBoundary", make_function(&LaneletInstance::rightBoundary))
       .add_property("centerline", make_function(&LaneletInstance::centerline))
-      .def("setReprType", &LaneletInstance::setReprType)
+      .def("setReprType", &LaneletInstance::setReprType, (arg("reprType")))
       .def("computeInstanceVectors", &LaneletInstance::computeInstanceVectors,
            &LaneletInstanceWrap::default_computeInstanceVectors, (arg("onlyPoints"), arg("pointsIn2d")))
-      .def("process", &LaneletInstance::process, &LaneletInstanceWrap::default_process);
+      .def("process", &LaneletInstance::process, &LaneletInstanceWrap::default_process,
+           (arg("bbox"), arg("paramType"), arg("nPoints"), arg("pitch") = 0, arg("roll") = 0));
 
   class_<CompoundLaneLineStringInstanceWrap, bases<LaneLineStringInstance>, CompoundLaneLineStringInstancePtr,
          boost::noncopyable>("CompoundLaneLineStringInstance",
@@ -262,9 +269,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                                              return_value_policy<copy_const_reference>()))
       .def("computeInstanceVectors", &CompoundLaneLineStringInstance::computeInstanceVectors,
            &CompoundLaneLineStringInstanceWrap::default_computeInstanceVectors, (arg("onlyPoints"), arg("pointsIn2d")))
-      .def("process", &CompoundLaneLineStringInstance::process, &CompoundLaneLineStringInstanceWrap::default_process)
+      .def("process", &CompoundLaneLineStringInstance::process, &CompoundLaneLineStringInstanceWrap::default_process,
+           (arg("bbox"), arg("paramType"), arg("nPoints"), arg("pitch") = 0, arg("roll") = 0))
       .def("pointMatrices", &CompoundLaneLineStringInstance::pointMatrices,
-           &CompoundLaneLineStringInstanceWrap::default_pointMatrices);
+           &CompoundLaneLineStringInstanceWrap::default_pointMatrices, (arg("pointsIn2d")));
 
   class_<Edge>("Edge", "Struct of a lane graph edge", init<Id, Id, bool>())
       .def(init<>())
@@ -294,14 +302,14 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
             .add_property("validCompoundRoadBorders", &LaneData::validCompoundRoadBorders)
             .add_property("validCompoundLaneDividers", &LaneData::validCompoundLaneDividers)
             .add_property("validCompoundCenterlines", &LaneData::validCompoundCenterlines)
-            .def("associatedCpdRoadBorders", &LaneData::associatedCpdRoadBorders)
-            .def("associatedCpdLaneDividers", &LaneData::associatedCpdLaneDividers)
-            .def("associatedCpdCenterlines", &LaneData::associatedCpdCenterlines)
+            .def("associatedCpdRoadBorders", &LaneData::associatedCpdRoadBorders, (arg("mapId")))
+            .def("associatedCpdLaneDividers", &LaneData::associatedCpdLaneDividers, (arg("mapId")))
+            .def("associatedCpdCenterlines", &LaneData::associatedCpdCenterlines, (arg("mapId")))
             .add_property("laneletInstances",
                           make_function(&LaneData::laneletInstances, return_value_policy<copy_const_reference>()))
             .add_property("edges", make_function(&LaneData::edges, return_value_policy<copy_const_reference>()))
             .add_property("uuid", make_function(&LaneData::uuid, return_value_policy<copy_const_reference>()))
-            .def("getTensorInstanceData", &LaneData::getTensorInstanceData);
+            .def("getTensorInstanceData", &LaneData::getTensorInstanceData, (arg("pointsIn2d"), arg("ignoreBuffer")));
 
     class_<LaneData::TensorInstanceData>("TensorInstanceData", "TensorInstanceData class for LaneData", init<>())
         .add_property("roadBorders", make_function(&LaneData::TensorInstanceData::roadBorders,
@@ -320,9 +328,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                                            return_value_policy<copy_const_reference>()))
         .add_property("uuid",
                       make_function(&LaneData::TensorInstanceData::uuid, return_value_policy<copy_const_reference>()))
-        .def("pointMatrixCpdRoadBorder", &LaneData::TensorInstanceData::pointMatrixCpdRoadBorder)
-        .def("pointMatrixCpdLaneDivider", &LaneData::TensorInstanceData::pointMatrixCpdLaneDivider)
-        .def("pointMatrixCpdCenterline", &LaneData::TensorInstanceData::pointMatrixCpdCenterline);
+        .def("pointMatrixCpdRoadBorder", &LaneData::TensorInstanceData::pointMatrixCpdRoadBorder, (arg("index")))
+        .def("pointMatrixCpdLaneDivider", &LaneData::TensorInstanceData::pointMatrixCpdLaneDivider, (arg("index")))
+        .def("pointMatrixCpdCenterline", &LaneData::TensorInstanceData::pointMatrixCpdCenterline, (arg("index")));
   }
 
   {
@@ -346,15 +354,17 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
             .def(init<LaneletMapConstPtr, MapDataInterface::Configuration>())
             .add_property("config",
                           make_function(&MapDataInterface::config, return_value_policy<copy_const_reference>()))
-            .def("setCurrPosAndExtractSubmap2d", setCurrPosAndExtractSubmap2d)
-            .def("setCurrPosAndExtractSubmap", setCurrPosAndExtractSubmap4d)
-            .def("setCurrPosAndExtractSubmap", setCurrPosAndExtractSubmap6d)
-            .def("laneData", &MapDataInterface::laneData)
-            .def("teData", &MapDataInterface::teData)
-            .def("laneDataBatch2d", laneDataBatch2d)
-            .def("laneDataBatch", laneDataBatch4d)
-            .def("laneDataBatch", laneDataBatch6d)
-            .def("laneTEDataBatch", &MapDataInterface::laneTEDataBatch);
+            .def("setCurrPosAndExtractSubmap2d", setCurrPosAndExtractSubmap2d, (arg("pt"), arg("yaw")))
+            .def("setCurrPosAndExtractSubmap", setCurrPosAndExtractSubmap4d, (arg("pt"), arg("yaw")))
+            .def("setCurrPosAndExtractSubmap", setCurrPosAndExtractSubmap6d,
+                 (arg("pt"), arg("yaw"), arg("pitch"), arg("roll")))
+            .def("laneData", &MapDataInterface::laneData, (arg("processAll")))
+            .def("teData", &MapDataInterface::teData, (arg("processAll")))
+            .def("laneDataBatch2d", laneDataBatch2d, (arg("pts"), arg("yaws")))
+            .def("laneDataBatch", laneDataBatch4d, (arg("pts"), arg("yaws")))
+            .def("laneDataBatch", laneDataBatch6d, (arg("pts"), arg("yaws"), arg("pitches"), arg("rolls")))
+            .def("laneTEDataBatch", &MapDataInterface::laneTEDataBatch,
+                 (arg("pts"), arg("yaws"), arg("pitches"), arg("rolls")));
 
     class_<MapDataInterface::Configuration>("Configuration", "Configuration class for MapDataInterface", init<>())
         .def(init<LaneletRepresentationType, ParametrizationType, double, double, int>())
@@ -396,7 +406,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   DictToMapConverter<LaneletInstances>();
   class_<std::vector<bool>>("BoolList").def(vector_indexing_suite<std::vector<bool>>());
 
-  def("toPointMatrix", &toPointMatrix);
+  def("toPointMatrix", &toPointMatrix, (arg("lString"), arg("pointsIn2d")));
 
   implicitly_convertible<routing::RoutingGraphPtr, routing::RoutingGraphConstPtr>();
 }
