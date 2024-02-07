@@ -226,6 +226,15 @@ std::map<Id, size_t>::const_iterator findFirstOccElement(const CompoundElsList& 
   return searchMap.end();
 }
 
+bool hasElementNotInOther(const CompoundElsList& elsList1, const CompoundElsList& elsList2) {
+  for (const auto& el : elsList1.ids) {
+    if (std::find(elsList2.ids.begin(), elsList2.ids.end(), el) == elsList2.ids.end()) {
+      return true;
+    }
+  }
+  return false;
+}
+
 void insertAndCheckNewCompoundInstances(std::vector<CompoundElsList>& compFeats,
                                         const std::vector<CompoundElsList>& newCompFeats,
                                         std::map<Id, size_t>& elInsertIdx) {
@@ -237,10 +246,41 @@ void insertAndCheckNewCompoundInstances(std::vector<CompoundElsList>& compFeats,
         elInsertIdx[el] = compFeats.size() - 1;
       }
     } else if ((compFeats[firstOccIt->second].ids.size() < compEl.ids.size()) &&
-               compFeats[firstOccIt->second].type == compEl.type) {
+               compFeats[firstOccIt->second].type == compEl.type &&
+               !hasElementNotInOther(compFeats[firstOccIt->second], compEl)) {
       compFeats[firstOccIt->second] = compEl;
       for (const Id& el : compEl.ids) {
         elInsertIdx[el] = firstOccIt->second;
+      }
+    } else if (compFeats[firstOccIt->second].type == compEl.type) {
+      std::vector<Id> leftoverIds;
+      std::vector<bool> leftoverInverted;
+      bool lastLeftover{false};
+      for (size_t i = 0; i < compEl.ids.size(); i++) {
+        if (!elInsertIdx.count(compEl.ids[i])) {
+          leftoverIds.push_back(compEl.ids[i]);
+          leftoverInverted.push_back(compEl.inverted[i]);
+          lastLeftover = true;
+        } else if (lastLeftover) {
+          CompoundElsList leftover(leftoverIds, leftoverInverted, compEl.type);
+          compFeats.push_back(leftover);
+          for (const Id& el : leftover.ids) {
+            elInsertIdx[el] = compFeats.size() - 1;
+          }
+          leftoverIds.clear();
+          leftoverInverted.clear();
+          lastLeftover = false;
+        }
+      }
+      if (lastLeftover) {
+        CompoundElsList leftover(leftoverIds, leftoverInverted, compEl.type);
+        compFeats.push_back(leftover);
+        for (const Id& el : leftover.ids) {
+          elInsertIdx[el] = compFeats.size() - 1;
+        }
+        leftoverIds.clear();
+        leftoverInverted.clear();
+        lastLeftover = false;
       }
     }
   }

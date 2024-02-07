@@ -13,7 +13,7 @@ https://build.ros2.org/job/Hdev__lanelet2__ubuntu_jammy_amd64/lastBuild/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/lanelet2.svg?label=PyPI%20downloads)](
 https://pypi.org/project/lanelet2/)
 
-## New module :rocket: : `lanelet2_ml_converter`
+## New experimental module :test_tube: : `lanelet2_ml_converter`
 
 Convert Lanelet2 maps directly to instance labels for map perception and other map-based learning tasks! `lanelet2_ml_converter` provides local instance labels of various abstraction layers and representations accessible as numpy arrays from python. Check out the `lanelet2_ml_converter` module for more information and usage examples.
 
