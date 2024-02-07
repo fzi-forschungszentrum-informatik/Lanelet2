@@ -2,6 +2,8 @@
 
 Converter module to convert Lanelet2 maps into local instance labels for machine learning tasks.
 
+**Note:** This module is experimental, so the documentation is still sparse and there may be breaking API changes in the future!
+
 ![](doc/summary_flowchart.png)
 
 ## Usage Examples
@@ -37,6 +39,15 @@ lanelet::ml_converter::LaneData lData = mDataIf.laneData(True);  // get the Lane
 TensorData tData = lData.getTensorInstanceData(True, False);      // get the local instance labels as Eigen mats
 ```
 
+## Features
+
+- Access lanelet map information as numpy arrays from python, in a representation directly usable for machine learning tasks
+- Compound labels for independence from map annotation artifacts
+- Full traceability to the underlying map element for all instances, including the compound instances
+- Real-time capable optimized C++ implementation (around 3 ms for one set of local instance labels)
+- Save and load generated labels in both binary and human-readable XML format
+
+
 ## Components
 
 ### `MapDataInterface`
@@ -49,7 +60,7 @@ Main interface class that is used to generate `LaneData` objects.
 
 ### `TensorInstanceData`
 
-Subclass of `LaneData` that holds all local instance label in a convenient numpy array / Eigen matrix form.
+Subclass of `LaneData` that holds all local instance labels in a convenient numpy array / Eigen matrix form.
 
 ### `LaneLineStringInstance` / `CompoundLaneLineStringInstance` / `LaneletInstance` / ...
 
