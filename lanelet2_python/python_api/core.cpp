@@ -152,6 +152,12 @@ struct ConstLaneletOrAreaToObject {
   }
 };
 
+struct ConstWeakLaneletToObject {
+  static PyObject* convert(const lanelet::ConstWeakLanelet& v) {
+    return incref(object(v.lock()).ptr());
+  }
+};
+
 template <class T>
 struct MapItem {
   using K = typename T::key_type;
@@ -658,6 +664,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   to_python_converter<LineStringOrPolygon3d, LineStringOrPolygonToObject>();
   to_python_converter<ConstLineStringOrPolygon3d, ConstLineStringOrPolygonToObject>();
   to_python_converter<ConstLaneletOrArea, ConstLaneletOrAreaToObject>();
+  to_python_converter<ConstWeakLanelet, ConstWeakLaneletToObject>();
+  
   implicitly_convertible<LineString3d, LineStringOrPolygon3d>();
   implicitly_convertible<Polygon3d, LineStringOrPolygon3d>();
   implicitly_convertible<ConstLineString3d, ConstLineStringOrPolygon3d>();
