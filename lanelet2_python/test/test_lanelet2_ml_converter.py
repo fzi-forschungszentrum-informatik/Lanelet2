@@ -22,9 +22,9 @@ class MapDataInterfaceTestCase(unittest.TestCase):
         mymap = get_sample_lanelet_map()
         pos = BasicPoint2d(1, 1)
         mDataIf = MapDataInterface(mymap)
-        mDataIf.setCurrPosAndExtractSubmap(pos, 0)
+        mDataIf.setCurrPosAndExtractSubmap2d(pos, 0)
         lData = mDataIf.laneData(True)
-        tfData = lData.getTensorFeatureData(True, False)
+        tfData = lData.getTensorInstanceData(True, False)
         self.assertEqual(len(tfData.compoundCenterlines), 2)
         self.assertEqual(tfData.compoundLaneDividerTypes[-1], 1)
 

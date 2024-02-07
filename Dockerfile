@@ -135,7 +135,7 @@ FROM lanelet2_src AS lanelet2
 # build
 RUN set -ex; \
     if [ "$DEV" -ne "0" ]; then \
-    export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Debug -DMRT_SANITIZER=checks -DMRT_ENABLE_COVERAGE=1"; \
+    export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Debug -DMRT_ENABLE_COVERAGE=1"; \
     else \
     export CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Release"; \
     fi; \
