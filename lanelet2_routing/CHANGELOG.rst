@@ -2,6 +2,11 @@
 Changelog for package lanelet2_routing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)
+* Contributors: DavUhll
+
 1.2.1 (2023-05-10)
 ------------------
 * Update thirdparty deps, rework projected point, enable python 3.10/3.11 (`#300 <https://github.com/immel-f/Lanelet2/issues/300>`_)
