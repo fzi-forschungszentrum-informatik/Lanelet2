@@ -13,6 +13,10 @@ https://build.ros2.org/job/Hdev__lanelet2__ubuntu_jammy_amd64/lastBuild/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/lanelet2.svg?label=PyPI%20downloads)](
 https://pypi.org/project/lanelet2/)
 
+## New experimental module :test_tube: : `lanelet2_ml_converter`
+
+Convert Lanelet2 maps directly to instance labels for map perception and other map-based learning tasks! `lanelet2_ml_converter` provides local instance labels of various abstraction layers and representations accessible as numpy arrays from python. Check out the [feature_ml_converter](https://github.com/fzi-forschungszentrum-informatik/Lanelet2/tree/feature_ml_converter) branch for more information, usage examples and pre-release installation options.
+
 ## Overview
 
 Lanelet2 is a C++ library for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core principles to handle the upcoming challenges of future maps.
