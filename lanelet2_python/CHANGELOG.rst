@@ -2,8 +2,8 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.2 (2024-02-09)
+------------------
 * Added missing to_python converter for ConstWeakLanelet (`#331 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/331>`_)
   Co-authored-by: Julian Brandes <JulianJakob.Brandes@bosch.com>
 * Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)
