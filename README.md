@@ -17,7 +17,7 @@ https://pypi.org/project/lanelet2/)
 
 Convert Lanelet2 maps directly to instance labels for map perception and other map-based learning tasks! `lanelet2_ml_converter` provides local instance labels of various abstraction layers and representations accessible as numpy arrays from python. Check out the `lanelet2_ml_converter` module for more information and usage examples.
 
-**Note:** As the module is not released officially yet, to try it out you need to either build Lanelet2 with the python bindings yourself or manually install the pip wheel files from the CI artefacts (download [here](https://github.com/immel-f/Lanelet2/actions/runs/7820288630/artifacts/1228128122)).
+**Note:** As the module is not released officially yet, to try it out you need to either build Lanelet2 with the python bindings yourself or manually install the pip wheel files from the CI artefacts (download [here](https://github.com/immel-f/Lanelet2/actions/runs/7876754592/artifacts/1239381043) with a logged in GitHub account).
 
 ## Overview
 
