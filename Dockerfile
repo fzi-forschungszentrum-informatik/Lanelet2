@@ -73,8 +73,8 @@ RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# install python dependencies (oldest-supported-numpy for ABI compatibility)
-RUN pip install oldest-supported-numpy
+# install python dependencies (numpy)
+RUN pip install numpy
 
 # ros version specific dependencies
 RUN set -ex; \
