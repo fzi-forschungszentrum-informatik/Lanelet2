@@ -120,7 +120,7 @@ void LaneData::getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
       getPaths(localSubmapGraph, paths, successorLLs[i], initPath);
     }
     if (isLaneletInPath(initPath, successorLLs.front())) {
-      continue;
+      break;
     }
     initPath.push_back(successorLLs.front());
     edges_[current.id()].push_back(Edge(current.id(), successorLLs.front().id(), false));
