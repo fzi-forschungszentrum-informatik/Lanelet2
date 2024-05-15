@@ -7,23 +7,28 @@ namespace ml_converter {
 
 using namespace internal;
 
-LaneDataPtr LaneData::build(LaneletSubmapConstPtr& localSubmap,
-                            lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+LaneDataPtr LaneData::build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                            bool ignoreMapElevation) {
   LaneDataPtr data = std::make_shared<LaneData>();
-  data->initLeftBoundaries(localSubmap, localSubmapGraph);
-  data->initRightBoundaries(localSubmap, localSubmapGraph);
-  data->initLaneletInstances(localSubmap, localSubmapGraph);
-  data->initCompoundInstances(localSubmap, localSubmapGraph);
+  data->initLeftBoundaries(localSubmap, localSubmapGraph, ignoreMapElevation);
+  data->initRightBoundaries(localSubmap, localSubmapGraph, ignoreMapElevation);
+  data->initLaneletInstances(localSubmap, localSubmapGraph, ignoreMapElevation);
+  data->initCompoundInstances(localSubmap, localSubmapGraph, ignoreMapElevation);
   data->updateAssociatedCpdInstanceIndices();
   return data;
 }
 
 void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
-                                  lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+                                  lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation) {
   for (const auto& ll : localSubmap->laneletLayer) {
     Id boundID = ll.leftBound3d().id();
     BasicLineString3d bound =
         ll.leftBound3d().inverted() ? ll.leftBound3d().invert().basicLineString() : ll.leftBound3d().basicLineString();
+    if (ignoreMapElevation) {
+      for (auto& pt : bound) {
+        pt[2] = 0;
+      }
+    }
     if (isRoadBorder(ll.leftBound3d())) {
       LaneLineStringInstances::iterator itRoadBd = roadBorders_.find(boundID);
       if (itRoadBd != roadBorders_.end()) {
@@ -52,11 +57,16 @@ void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
 }
 
 void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
-                                   lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+                                   lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation) {
   for (const auto& ll : localSubmap->laneletLayer) {
     Id boundID = ll.rightBound3d().id();
     BasicLineString3d bound = ll.rightBound3d().inverted() ? ll.rightBound3d().invert().basicLineString()
                                                            : ll.rightBound3d().basicLineString();
+    if (ignoreMapElevation) {
+      for (auto& pt : bound) {
+        pt[2] = 0;
+      }
+    }
     if (isRoadBorder(ll.rightBound3d())) {
       LaneLineStringInstances::iterator itRoadBd = roadBorders_.find(boundID);
       if (itRoadBd != roadBorders_.end()) {
@@ -83,13 +93,19 @@ void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
 }
 
 void LaneData::initLaneletInstances(LaneletSubmapConstPtr& localSubmap,
-                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation) {
   for (const auto& ll : localSubmap->laneletLayer) {
     LaneLineStringInstancePtr leftBoundary = getLineStringFeatFromId(ll.leftBound().id(), ll.leftBound().inverted());
     LaneLineStringInstancePtr rightBoundary = getLineStringFeatFromId(ll.rightBound().id(), ll.leftBound().inverted());
-    LaneLineStringInstancePtr centerline = std::make_shared<LaneLineStringInstance>(
-        ll.centerline3d().basicLineString(), ll.centerline3d().id(), LineStringType::Centerline, Ids{ll.id()},
-        ll.centerline3d().inverted());
+    BasicLineString3d centerlineLString = ll.centerline3d().basicLineString();
+    if (ignoreMapElevation) {
+      for (auto& pt : centerlineLString) {
+        pt[2] = 0;
+      }
+    }
+    LaneLineStringInstancePtr centerline =
+        std::make_shared<LaneLineStringInstance>(centerlineLString, ll.centerline3d().id(), LineStringType::Centerline,
+                                                 Ids{ll.id()}, ll.centerline3d().inverted());
     laneletInstances_.insert(
         {ll.id(), std::make_shared<LaneletInstance>(leftBoundary, rightBoundary, centerline, ll.id())});
   }
@@ -205,12 +221,18 @@ std::vector<CompoundElsList> LaneData::computeCompoundRightBorders(const ConstLa
   return compoundBorders;
 }
 
-CompoundLaneLineStringInstancePtr LaneData::computeCompoundCenterline(const ConstLanelets& path) {
+CompoundLaneLineStringInstancePtr LaneData::computeCompoundCenterline(const ConstLanelets& path,
+                                                                      bool ignoreMapElevation) {
   LaneLineStringInstanceList compoundCenterlines;
   for (const auto& ll : path) {
-    compoundCenterlines.push_back(std::make_shared<LaneLineStringInstance>(ll.centerline3d().basicLineString(), ll.id(),
-                                                                           LineStringType::Centerline, Ids{ll.id()},
-                                                                           ll.centerline3d().inverted()));
+    BasicLineString3d centerlineLString = ll.centerline3d().basicLineString();
+    if (ignoreMapElevation) {
+      for (auto& pt : centerlineLString) {
+        pt[2] = 0;
+      }
+    }
+    compoundCenterlines.push_back(std::make_shared<LaneLineStringInstance>(
+        centerlineLString, ll.id(), LineStringType::Centerline, Ids{ll.id()}, ll.centerline3d().inverted()));
   }
   return std::make_shared<CompoundLaneLineStringInstance>(compoundCenterlines, LineStringType::Centerline);
 }
@@ -287,7 +309,7 @@ void insertAndCheckNewCompoundInstances(std::vector<CompoundElsList>& compFeats,
 }
 
 void LaneData::initCompoundInstances(LaneletSubmapConstPtr& localSubmap,
-                                     lanelet::routing::RoutingGraphConstPtr localSubmapGraph) {
+                                     lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation) {
   std::vector<CompoundElsList> compoundedBordersAndDividers;
   std::map<Id, size_t> elInsertIdx;
 
@@ -305,7 +327,7 @@ void LaneData::initCompoundInstances(LaneletSubmapConstPtr& localSubmap,
     insertAndCheckNewCompoundInstances(compoundedBordersAndDividers, compoundedLeft, elInsertIdx);
     std::vector<CompoundElsList> compoundedRight = computeCompoundRightBorders(path);
     insertAndCheckNewCompoundInstances(compoundedBordersAndDividers, compoundedRight, elInsertIdx);
-    compoundCenterlines_.push_back(computeCompoundCenterline(path));
+    compoundCenterlines_.push_back(computeCompoundCenterline(path, ignoreMapElevation));
   }
   for (const auto& compFeat : compoundedBordersAndDividers) {
     LaneLineStringInstanceList toBeCompounded;

@@ -29,6 +29,7 @@ class MapDataInterface {
     double submapExtentLongitudinal{30};  // in driving direction
     double submapExtentLateral{15};       // in lateral direction
     int nPoints{20};
+    bool ignoreMapElevation{false};  // if true, elevation (z coordinate) in map elements is ignored and set to 0
   };
   MapDataInterface(LaneletMapConstPtr laneletMap);
   MapDataInterface(LaneletMapConstPtr laneletMap, Configuration config);

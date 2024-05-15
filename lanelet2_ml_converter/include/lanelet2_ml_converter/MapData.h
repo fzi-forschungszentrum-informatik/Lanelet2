@@ -96,7 +96,8 @@ class LaneData {
   };
 
   LaneData() noexcept : uuid_{boost::lexical_cast<std::string>(boost::uuids::random_generator()())} {}
-  static LaneDataPtr build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  static LaneDataPtr build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                           bool ignoreMapElevation = false);
   bool processAll(const OrientedRect& bbox, const ParametrizationType& paramType, int32_t nPoints, double pitch = 0,
                   double roll = 0);
 
@@ -134,12 +135,14 @@ class LaneData {
                                               const unsigned int /*version*/);
 
  private:
-  void initLeftBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
-  void initRightBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
-  void initLaneletInstances(LaneletSubmapConstPtr& localSubmap,
-                            lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+  void initLeftBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                          bool ignoreMapElevation = false);
+  void initRightBoundaries(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                           bool ignoreMapElevation = false);
+  void initLaneletInstances(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                            bool ignoreMapElevation = false);
   void initCompoundInstances(LaneletSubmapConstPtr& localSubmap,
-                             lanelet::routing::RoutingGraphConstPtr localSubmapGraph);
+                             lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation = false);
   void updateAssociatedCpdInstanceIndices();
   void getPaths(lanelet::routing::RoutingGraphConstPtr localSubmapGraph, std::vector<ConstLanelets>& paths,
                 ConstLanelet start, ConstLanelets initPath = ConstLanelets());
@@ -148,7 +151,8 @@ class LaneData {
   LaneLineStringInstancePtr getLineStringFeatFromId(Id id, bool inverted);
   std::vector<internal::CompoundElsList> computeCompoundLeftBorders(const ConstLanelets& path);
   std::vector<internal::CompoundElsList> computeCompoundRightBorders(const ConstLanelets& path);
-  CompoundLaneLineStringInstancePtr computeCompoundCenterline(const ConstLanelets& path);
+  CompoundLaneLineStringInstancePtr computeCompoundCenterline(const ConstLanelets& path,
+                                                              bool ignoreMapElevation = false);
 
   LaneLineStringInstances roadBorders_;   // auxilliary features
   LaneLineStringInstances laneDividers_;  // auxilliary features

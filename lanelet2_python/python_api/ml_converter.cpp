@@ -284,7 +284,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
     scope inLaneData =
         class_<LaneData, LaneDataPtr>("LaneData", "Class for holding, accessing and processing of lane data")
             .def(init<>())
-            .def("build", &LaneData::build)
+            .def("build", &LaneData::build,
+                 (arg("localSubmap"), arg("localSubmapGraph"), arg("ignoreMapElevation") = false))
             .staticmethod("build")
             .def("processAll", &LaneData::processAll)
             .add_property("roadBorders",
@@ -372,7 +373,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
         .def_readwrite("paramType", &MapDataInterface::Configuration::paramType)
         .def_readwrite("submapExtentLongitudinal", &MapDataInterface::Configuration::submapExtentLongitudinal)
         .def_readwrite("submapExtentLateral", &MapDataInterface::Configuration::submapExtentLateral)
-        .def_readwrite("nPoints", &MapDataInterface::Configuration::nPoints);
+        .def_readwrite("nPoints", &MapDataInterface::Configuration::nPoints)
+        .def_readwrite("ignoreMapElevation", &MapDataInterface::Configuration::ignoreMapElevation);
   }
 
   // Eigen, stl etc. converters
