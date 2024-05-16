@@ -8,19 +8,24 @@ namespace ml_converter {
 using namespace internal;
 
 LaneDataPtr LaneData::build(LaneletSubmapConstPtr& localSubmap, lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
-                            bool ignoreMapElevation) {
+                            traffic_rules::TrafficRulesPtr trafficRules, bool ignoreMapElevation) {
   LaneDataPtr data = std::make_shared<LaneData>();
-  data->initLeftBoundaries(localSubmap, localSubmapGraph, ignoreMapElevation);
-  data->initRightBoundaries(localSubmap, localSubmapGraph, ignoreMapElevation);
-  data->initLaneletInstances(localSubmap, localSubmapGraph, ignoreMapElevation);
-  data->initCompoundInstances(localSubmap, localSubmapGraph, ignoreMapElevation);
+  data->initLeftBoundaries(localSubmap, localSubmapGraph, trafficRules, ignoreMapElevation);
+  data->initRightBoundaries(localSubmap, localSubmapGraph, trafficRules, ignoreMapElevation);
+  data->initLaneletInstances(localSubmap, localSubmapGraph, trafficRules, ignoreMapElevation);
+  data->initCompoundInstances(localSubmap, localSubmapGraph, trafficRules, ignoreMapElevation);
   data->updateAssociatedCpdInstanceIndices();
   return data;
 }
 
 void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
-                                  lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation) {
+                                  lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                                  traffic_rules::TrafficRulesPtr trafficRules, bool ignoreMapElevation) {
   for (const auto& ll : localSubmap->laneletLayer) {
+    if (!trafficRules->canPass(ll)) {
+      continue;
+    }
+
     Id boundID = ll.leftBound3d().id();
     BasicLineString3d bound =
         ll.leftBound3d().inverted() ? ll.leftBound3d().invert().basicLineString() : ll.leftBound3d().basicLineString();
@@ -57,8 +62,13 @@ void LaneData::initLeftBoundaries(LaneletSubmapConstPtr& localSubmap,
 }
 
 void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
-                                   lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation) {
+                                   lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                                   traffic_rules::TrafficRulesPtr trafficRules, bool ignoreMapElevation) {
   for (const auto& ll : localSubmap->laneletLayer) {
+    if (!trafficRules->canPass(ll)) {
+      continue;
+    }
+
     Id boundID = ll.rightBound3d().id();
     BasicLineString3d bound = ll.rightBound3d().inverted() ? ll.rightBound3d().invert().basicLineString()
                                                            : ll.rightBound3d().basicLineString();
@@ -93,8 +103,13 @@ void LaneData::initRightBoundaries(LaneletSubmapConstPtr& localSubmap,
 }
 
 void LaneData::initLaneletInstances(LaneletSubmapConstPtr& localSubmap,
-                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation) {
+                                    lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                                    traffic_rules::TrafficRulesPtr trafficRules, bool ignoreMapElevation) {
   for (const auto& ll : localSubmap->laneletLayer) {
+    if (!trafficRules->canPass(ll)) {
+      continue;
+    }
+
     LaneLineStringInstancePtr leftBoundary = getLineStringFeatFromId(ll.leftBound().id(), ll.leftBound().inverted());
     LaneLineStringInstancePtr rightBoundary = getLineStringFeatFromId(ll.rightBound().id(), ll.leftBound().inverted());
     BasicLineString3d centerlineLString = ll.centerline3d().basicLineString();
@@ -309,12 +324,17 @@ void insertAndCheckNewCompoundInstances(std::vector<CompoundElsList>& compFeats,
 }
 
 void LaneData::initCompoundInstances(LaneletSubmapConstPtr& localSubmap,
-                                     lanelet::routing::RoutingGraphConstPtr localSubmapGraph, bool ignoreMapElevation) {
+                                     lanelet::routing::RoutingGraphConstPtr localSubmapGraph,
+                                     traffic_rules::TrafficRulesPtr trafficRules, bool ignoreMapElevation) {
   std::vector<CompoundElsList> compoundedBordersAndDividers;
   std::map<Id, size_t> elInsertIdx;
 
   std::vector<ConstLanelets> paths;
   for (const auto& ll : localSubmap->laneletLayer) {
+    if (!trafficRules->canPass(ll)) {
+      continue;
+    }
+
     ConstLanelets previousLLs = localSubmapGraph->previous(ll, false);
     ConstLanelets successorLLs = localSubmapGraph->following(ll, false);
     if (previousLLs.empty()) {
