@@ -285,7 +285,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
         class_<LaneData, LaneDataPtr>("LaneData", "Class for holding, accessing and processing of lane data")
             .def(init<>())
             .def("build", &LaneData::build,
-                 (arg("localSubmap"), arg("localSubmapGraph"), arg("ignoreMapElevation") = false))
+                 (arg("localSubmap"), arg("localSubmapGraph"), arg("trafficRules"), arg("ignoreMapElevation") = false))
             .staticmethod("build")
             .def("processAll", &LaneData::processAll)
             .add_property("roadBorders",

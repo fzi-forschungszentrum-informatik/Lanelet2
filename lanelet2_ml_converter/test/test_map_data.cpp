@@ -19,7 +19,7 @@ TEST_F(MLConverterTest, LaneData) {  // NOLINT
   lls.insert(lls.end(), laneletMap->laneletLayer.begin(), laneletMap->laneletLayer.end());
   LaneletSubmapConstPtr laneletSubmap = utils::createConstSubmap(lls, {});
 
-  LaneDataPtr laneData = LaneData::build(laneletSubmap, laneletMapGraph);
+  LaneDataPtr laneData = LaneData::build(laneletSubmap, laneletMapGraph, trafficRules);
 
   bool valid = laneData->processAll(bbox, ParametrizationType::LineString, 20);
   std::vector<Eigen::MatrixXd> compoundRoadBorders = getPointMatrices(laneData->compoundRoadBorders(), true);
