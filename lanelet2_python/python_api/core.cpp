@@ -700,6 +700,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(IsConstPrimitive<ConstPoint2d>())
       .add_property("x", getXWrapper<ConstPoint2d>, "x coordinate")
       .add_property("y", getYWrapper<ConstPoint2d>, "y coordinate")
+      .def(
+          "__repr__", +[](const ConstPoint2d& p) { return makeRepr("ConstPoint2d", p.id(), p.x(), p.y(), repr(p.attributes())); })
       .def("basicPoint", &ConstPoint2d::basicPoint, return_internal_reference<>(),
            "Returns a plain 2D point primitive (no ID, no attributes) for efficient geometry operations");
   class_<Point2d, bases<ConstPoint2d>>(
@@ -796,8 +798,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "returned in reversed order")
       .def(
           "__repr__",
-          +[](const ConstLineString3d& ls) {
-            return makeRepr("LineString3d", ls.id(), repr(list(ls)), repr(ls.attributes()));
+          +[](const LineString2d& ls) {
+            return makeRepr("LineString2d", ls.id(), repr(list(ls)), repr(ls.attributes()));
           })
       .def(IsLineString<LineString2d>());
 
