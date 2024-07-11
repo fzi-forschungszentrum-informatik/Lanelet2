@@ -665,7 +665,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   to_python_converter<ConstLineStringOrPolygon3d, ConstLineStringOrPolygonToObject>();
   to_python_converter<ConstLaneletOrArea, ConstLaneletOrAreaToObject>();
   to_python_converter<ConstWeakLanelet, ConstWeakLaneletToObject>();
-  
+
   implicitly_convertible<LineString3d, LineStringOrPolygon3d>();
   implicitly_convertible<Polygon3d, LineStringOrPolygon3d>();
   implicitly_convertible<ConstLineString3d, ConstLineStringOrPolygon3d>();
