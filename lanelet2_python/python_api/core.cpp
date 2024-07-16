@@ -693,17 +693,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(
           "__repr__", +[](const RuleParameterMap& r) { return makeRepr("RuleParameterMap", repr(dict(r))); });
 
-  class_<ArcCoordinates>("ArcCoordinates", "Coordinates along an arc", init<>())
-      .def(init<double, double>("Create arc coordinates from length and distance", (arg("length"), arg("distance"))))
-      .def_readwrite("length", &ArcCoordinates::length, "length along arc")
-      .def_readwrite("distance", &ArcCoordinates::distance, "signed distance to arc (left is positive")
-      .def(
-          "__repr__", +[](const ArcCoordinates& ac) {
-            // return "ArcCoordinates(" + std::to_string(ac.length) + ", " + std::to_string(ac.distance) +
-            //        ")";
-            return makeRepr("ArcCoordinates", ac.length, ac.distance);
-            });
-
   class_<ConstPoint2d>("ConstPoint2d",
                        "Immutable 2D point primitive. It can not be instanciated from python but is returned from a "
                        "few lanelet2 algorithms",
