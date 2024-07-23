@@ -6,6 +6,7 @@
 #include <lanelet2_core/geometry/Polygon.h>
 #include <lanelet2_core/geometry/RegulatoryElement.h>
 
+#include <boost/make_shared.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/geometries/register/multi_linestring.hpp>
 
@@ -289,8 +290,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("area", boost::geometry::area<ConstHybridPolygon2d>);
 
   class_<ArcCoordinates>("ArcCoordinates", "Coordinates along an arc", init<>())
-      .def(init<ArcCoordinates>("Create arc coordinates", arg("coordinates")))
-      .def(init<double, double>("Create arc coordinates from length and distance", (arg("length"), arg("distance"))))
+      .def("__init__", make_constructor(
+                           +[](double length, double distance) {
+                             return boost::make_shared<ArcCoordinates>(ArcCoordinates{length, distance});
+                           },
+                           default_call_policies(),
+                           (arg("length") = 0., arg("distance") = 0.)))
       .def_readwrite("length", &ArcCoordinates::length, "length along arc")
       .def_readwrite("distance", &ArcCoordinates::distance, "signed distance to arc (left is positive")
       .def(

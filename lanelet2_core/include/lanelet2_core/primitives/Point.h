@@ -98,9 +98,6 @@ inline BasicPoint2d to2D(const BasicPoint3d& primitive) {
 struct ArcCoordinates {
   double length{0.};    //!< length along linestring
   double distance{0.};  //!< signed distance to linestring (left=positive)
-  ArcCoordinates() = default;
-  ArcCoordinates(const ArcCoordinates& ac) : length(ac.length), distance(ac.distance) {};
-  ArcCoordinates(double len, double dist) : length(len), distance(dist){};
 };
 
 //! Common data management class for all Point primitives.
