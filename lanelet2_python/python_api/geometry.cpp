@@ -6,7 +6,6 @@
 #include <lanelet2_core/geometry/Polygon.h>
 #include <lanelet2_core/geometry/RegulatoryElement.h>
 
-#include <boost/make_shared.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/geometries/register/multi_linestring.hpp>
 
@@ -289,10 +288,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("area", boost::geometry::area<BasicPolygon2d>);
   def("area", boost::geometry::area<ConstHybridPolygon2d>);
 
-  class_<ArcCoordinates>("ArcCoordinates", "Coordinates along an arc", init<>())
+  class_<ArcCoordinates>("ArcCoordinates", "Coordinates along an arc", no_init)
       .def("__init__", make_constructor(
                            +[](double length, double distance) {
-                             return boost::make_shared<ArcCoordinates>(ArcCoordinates{length, distance});
+                             return std::make_shared<ArcCoordinates>(ArcCoordinates{length, distance});
                            },
                            default_call_policies(),
                            (arg("length") = 0., arg("distance") = 0.)))
