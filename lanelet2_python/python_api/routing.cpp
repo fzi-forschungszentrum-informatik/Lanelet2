@@ -193,7 +193,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "shortest path between 'start' and 'end' using intermediate points",
            (arg("start"), arg("via"), arg("end"), arg("routingCostId") = 0, arg("withLaneChanges") = true))
       .def("routingRelation", &RoutingGraph::routingRelation, "relation between two lanelets excluding 'conflicting'",
-           (arg("from"), arg("to")))
+           (arg("from"), arg("to"), arg("includeConflicting") = false))
       .def("following", &RoutingGraph::following, "lanelets that can be reached from this lanelet", lltAndLc)
       .def("followingRelations", &RoutingGraph::followingRelations, "relations to following lanelets", lltAndLc)
       .def("previous", &RoutingGraph::previous, "previous lanelets of this lanelet", lltAndLc)
