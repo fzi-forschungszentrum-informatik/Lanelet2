@@ -192,7 +192,7 @@ double Route::length2d() const {
 
 size_t Route::numLanes() const {
   std::set<LaneId> lanes;
-  auto& g = graph_->get();
+  const auto& g = graph_->get();
   for (auto v : g.vertex_set()) {
     lanes.emplace(g[v].laneId);
   }
@@ -342,7 +342,7 @@ ConstLaneletOrAreas Route::conflictingInMap(const ConstLanelet& lanelet) const {
 }
 
 ConstLaneletOrAreas lanelet::routing::Route::allConflictingInMap() const {
-  auto& g = graph_->get();
+  const auto& g = graph_->get();
   return utils::concatenateRange(g.vertex_set(), [&](auto v) {
     auto& conf = g[v].conflictingInMap;
     return std::make_pair(std::begin(conf), std::end(conf));
@@ -369,7 +369,7 @@ Route::Errors Route::checkValidity(bool throwOnError) const {
     }
   }
   // Check if all relations are back and forth
-  auto g = graph_->get();
+  const auto& g = graph_->get();
   auto edges = boost::edges(g);
   std::for_each(edges.first, edges.second, [&](internal::RouteGraph::Edge e) {
     // get reverse edge
