@@ -413,6 +413,12 @@ TYPED_TEST(AllLineStringsTest, segmentsInverse) {  // NOLINT
 TYPED_TEST(TwoDPointsTest, checkCurvature) {
   EXPECT_DOUBLE_EQ(1., geometry::curvature2d(this->p1, this->p2, this->p3));
   EXPECT_DOUBLE_EQ(std::numeric_limits<double>::infinity(), geometry::curvature2d(this->p1, this->p2, this->p4));
+  EXPECT_DOUBLE_EQ(1., geometry::curvature2d(this->p3, this->p2, this->p1));
+  EXPECT_DOUBLE_EQ(std::numeric_limits<double>::infinity(), geometry::curvature2d(this->p3, this->p2, this->p4));
+  EXPECT_DOUBLE_EQ(1., geometry::signedCurvature2d(this->p1, this->p2, this->p3));
+  EXPECT_DOUBLE_EQ(std::numeric_limits<double>::infinity(), geometry::signedCurvature2d(this->p1, this->p2, this->p4));
+  EXPECT_DOUBLE_EQ(-1., geometry::signedCurvature2d(this->p3, this->p2, this->p1));
+  EXPECT_DOUBLE_EQ(std::numeric_limits<double>::infinity(), geometry::signedCurvature2d(this->p3, this->p2, this->p4));
 }
 
 TYPED_TEST(TwoDLineStringsTest, signedDistance) {  // NOLINT
