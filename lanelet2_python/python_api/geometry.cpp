@@ -288,6 +288,12 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("area", boost::geometry::area<BasicPolygon2d>);
   def("area", boost::geometry::area<ConstHybridPolygon2d>);
 
+  def("curvature2d", lg::curvature2d<BasicPoint2d>);
+  def("curvature2d", lg::curvature2d<ConstPoint2d>);
+
+  def("signedCurvature2d", lg::signedCurvature2d<BasicPoint2d>);
+  def("signedCurvature2d", lg::signedCurvature2d<ConstPoint2d>);
+
   class_<ArcCoordinates>("ArcCoordinates", "Coordinates along an arc", no_init)
       .def("__init__", make_constructor(
                            +[](double length, double distance) {

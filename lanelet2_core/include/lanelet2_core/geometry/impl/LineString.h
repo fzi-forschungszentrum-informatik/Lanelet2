@@ -703,6 +703,11 @@ double signedDistance(const LineString2dT& lineString, const BasicPoint2d& p) {
 
 template <typename Point2dT>
 double curvature2d(const Point2dT& p1, const Point2dT& p2, const Point2dT& p3) {
+  return std::fabs(signedCurvature2d(p1, p2, p3));
+}
+
+template <typename Point2dT>
+double signedCurvature2d(const Point2dT& p1, const Point2dT& p2, const Point2dT& p3) {
   // see https://en.wikipedia.org/wiki/Menger_curvature#Definition
   const double area = 0.5 * ((p2.x() - p1.x()) * (p3.y() - p1.y()) - (p2.y() - p1.y()) * (p3.x() - p1.x()));
   const double side1 = distance(p1, p2);
@@ -712,7 +717,7 @@ double curvature2d(const Point2dT& p1, const Point2dT& p2, const Point2dT& p3) {
   if (product < 1e-20) {
     return std::numeric_limits<double>::infinity();
   }
-  return std::fabs(4 * area / product);
+  return 4 * area / product;
 }
 
 template <typename LineString2dT>
