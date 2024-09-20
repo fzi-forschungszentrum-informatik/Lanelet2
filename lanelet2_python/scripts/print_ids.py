@@ -21,7 +21,7 @@ map = lanelet2.io.load(args.filename, proj)
 layers = {"Points": map.pointLayer, "Line Strings": map.lineStringLayer, "Polygons": map.polygonLayer,
           "Lanelets": map.laneletLayer, "Areas": map.areaLayer, "Regulatory Elements": map.regulatoryElementLayer}
 
-for layer_name, layer in layers.iteritems():
+for layer_name, layer in layers.items():
     if not args.has_id:
         print_layer(layer, layer_name)
     else:
