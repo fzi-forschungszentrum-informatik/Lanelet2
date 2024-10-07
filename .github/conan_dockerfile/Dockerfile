@@ -10,6 +10,12 @@ RUN sudo -E apt-get update \
   libbz2-dev libreadline-dev libsqlite3-dev curl \
   libncursesw5-dev xz-utils libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
+# ensure that pyenv is aware of all available python versions
+RUN cd $(pyenv root) \
+  && git pull \
+  && pyenv rehash \
+  && pyenv install --list
+
 # setup python environment
 ARG PY_VERSION=3.8
 RUN pyenv install -s $PY_VERSION \
