@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         # this should be kept in sync with ci.yaml
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         include:
           - python-version: "3.8"
             boost-version: "1.75.0"
@@ -31,6 +31,10 @@ jobs:
             platform-version: manylinux_2_31_x86_64
             image-version: conanio/gcc10:latest
           - python-version: "3.11"
+            boost-version: "1.81.0"
+            platform-version: manylinux_2_31_x86_64
+            image-version: conanio/gcc10:latest
+          - python-version: "3.12"
             boost-version: "1.81.0"
             platform-version: manylinux_2_31_x86_64
             image-version: conanio/gcc10:latest
@@ -82,7 +86,7 @@ jobs:
     strategy:
       matrix:
         # test only on currently supported version
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         os: ["ubuntu-22.04", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
     steps:

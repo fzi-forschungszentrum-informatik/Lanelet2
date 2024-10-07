@@ -184,7 +184,7 @@ jobs:
         # to reach 2_27, we need a gcc7.
         # to build python>3.10, we need boost>1.75.
         # to build boost>1.81 we need a gcc>10.
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         include:
           - python-version: "3.8"
             boost-version: "1.75.0"
@@ -199,6 +199,10 @@ jobs:
             platform-version: manylinux_2_31_x86_64
             image-version: conanio/gcc10:latest 
           - python-version: "3.11"
+            boost-version: "1.81.0"
+            platform-version: manylinux_2_31_x86_64
+            image-version: conanio/gcc10:latest
+          - python-version: "3.12"
             boost-version: "1.81.0"
             platform-version: manylinux_2_31_x86_64
             image-version: conanio/gcc10:latest
