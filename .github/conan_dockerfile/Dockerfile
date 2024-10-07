@@ -27,10 +27,13 @@ RUN mkdir src
 WORKDIR /home/conan/src
 COPY --chown=1000:1001 . lanelet2/
 
+# ensure that we use libstdc++11
+RUN conan profile update settings.compiler.libcxx=libstdc++11 default
+
 # provide conan dependency for python dependencies from bincrafters
 # Since the last remote version of the package does not work with this conan
 # version and the remote caches are not available any more, we build it locally.
-RUN conan create -s compiler.libcxx=libstdc++11 /home/conan/src/lanelet2/conan_dependencies/conan-python_dev_config . bincrafters/stable
+RUN conan create /home/conan/src/lanelet2/conan_dependencies/conan-python_dev_config . bincrafters/stable
 
 
 FROM lanelet2_conan_deps as lanelet2_conan
