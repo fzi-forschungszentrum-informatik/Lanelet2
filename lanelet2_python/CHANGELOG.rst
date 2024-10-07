@@ -2,6 +2,10 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.2 (2024-10-07)
+------------------
+* Add support for python 3.12
+
 1.2.1 (2023-05-10)
 ------------------
 * Improve python core module (`#293 <https://github.com/immel-f/Lanelet2/issues/293>`_)

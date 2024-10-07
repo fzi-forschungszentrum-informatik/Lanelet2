@@ -2,6 +2,9 @@
 Changelog for package lanelet2_routing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.2 (2024-10-07)
+------------------
+
 1.2.1 (2023-05-10)
 ------------------
 * Update thirdparty deps, rework projected point, enable python 3.10/3.11 (`#300 <https://github.com/immel-f/Lanelet2/issues/300>`_)
