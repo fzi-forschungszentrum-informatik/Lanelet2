@@ -8,6 +8,14 @@ on:
       - "**"
   # Run tests for any PRs.
   pull_request:
+  # allow to run manually on button-press
+  workflow_dispatch:
+  # run this regularly on main branch
+  schedule:
+    - cron: "0 4 * * 1" # Every Monday at 4am
+    - cron: "0 4 * * 3" # Every Wednesday at 4am
+    - cron: "0 4 * * 5" # Every Friday at 4am
+
 
 jobs:
   formatting:
