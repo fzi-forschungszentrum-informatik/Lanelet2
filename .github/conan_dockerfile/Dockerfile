@@ -18,8 +18,8 @@ RUN pyenv update \
 RUN pip install "conan~=2.8.0" catkin_pkg "numpy<2.0" wheel auditwheel cmake
 
 # install patchelf
-RUN wget https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0-x86_64.tar.gz \
-  && tar -xzf patchelf-0.18.0-x86_64.tar.gz \
+RUN wget https://github.com/NixOS/patchelf/releases/download/0.17.2/patchelf-0.17.2-x86_64.tar.gz \
+  && tar -xzf patchelf-0.17.2-x86_64.tar.gz \
   && sudo -E ln -s $HOME/bin/patchelf /bin/patchelf \
   && patchelf --version
 
