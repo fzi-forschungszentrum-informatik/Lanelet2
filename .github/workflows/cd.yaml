@@ -127,7 +127,7 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
 
   deploy-pages:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: github.ref == 'refs/heads/master'
     concurrency: deploy-${{ github.ref }}
     steps:
