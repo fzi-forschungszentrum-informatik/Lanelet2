@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>LinestringTagging - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "LinestringTagging";
+    var mkdocs_page_input_path = "lanelet2_core/LinestringTagging.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">LinestringTagging</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#as-lane-boundary">As Lane Boundary</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#lane-change">Lane Change</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#more-optional-tags">More, Optional Tags</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#individual-dashes">Individual Dashes</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#symbols">Symbols</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#traffic-signs">Traffic Signs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#traffic-lights">Traffic Lights</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Detailed Documentation &raquo;</li>
+        
+      
+    
+    <li>LinestringTagging</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_core/LinestringTagging.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="tagging-linestrings">Tagging Linestrings</h1>
+<p>This page tells you about the general tags that you should use to annotate your map.</p>
+<p><strong>Note:</strong> All tags are always lowercase.</p>
+<p>In general there are three different context in which linestrings are used: As lanelet/area boundary, as a Symbol on the road or as traffic sign/light.</p>
+<p>Linestrings are generally characterized by their centerline.</p>
+<h2 id="as-lane-boundary">As Lane Boundary</h2>
+<p>Tagging linestrings as lane boundary correctly is important, because Lanelet2 uses the type to determine possible lane changes. If Lanelet2 cannot determine the type, Lanelet2 will assume that lane changes are not possible. Here is a list of the most important ones:</p>
+<table>
+<thead>
+<tr>
+<th><strong>type</strong></th>
+<th><strong>subtype</strong></th>
+<th><strong>description</strong></th>
+<th><strong>lane change?</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line_thin</td>
+<td>solid</td>
+<td>a solid lane marking</td>
+<td>no</td>
+</tr>
+<tr>
+<td>line_thin</td>
+<td>solid_solid</td>
+<td>a double solid lane marking</td>
+<td>no</td>
+</tr>
+<tr>
+<td>line_thin</td>
+<td>dashed</td>
+<td>a dashed lane marking</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>line_thin</td>
+<td>dashed_solid</td>
+<td>a marking that is dashed on the left and solid on the right</td>
+<td>left-&gt;right: yes</td>
+</tr>
+<tr>
+<td>line_thin</td>
+<td>solid_dashed</td>
+<td>the other way around</td>
+<td>right-&gt;left: yes</td>
+</tr>
+<tr>
+<td>line_thick</td>
+<td>same as above for thin</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>curbstone</td>
+<td>high</td>
+<td>a curbstone that is to high for a vehicle to drive over</td>
+<td>no</td>
+</tr>
+<tr>
+<td>curbstone</td>
+<td>low</td>
+<td>curb that is low and can be driven for a vehicle</td>
+<td>no</td>
+</tr>
+<tr>
+<td>virtual</td>
+<td>-</td>
+<td>a non-physical lane boundary, intended mainly for intersections</td>
+<td>no</td>
+</tr>
+<tr>
+<td>road_border</td>
+<td>-</td>
+<td>the end of the road.</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>Notice the difference between curbstone and road_border: A road border indicates the end of potentially passable area (e.g. start of vegetation) while a curbstone means that there is passable space (e.g. sidewalk) on the other side of the curb.</p>
+<p>There are much more tags (all imply lane changing is not possible):
+* guard_rail
+* wall
+* fence
+* zebra_marking (lanelets for pedestrians)
+* pedestrian_marking (lines on pedestrian crossings)
+* bike_marking (i.e. dashed line for bikes)
+* keepout
+* virtual
+* jersey_barrier
+* gate
+* door
+* rail (trains...)</p>
+<p>Feel free to "invent" new types if these do not satisfy your needs, but be aware that future parts of Lanelet2 might make use of the tags mentioned here (e.g. to precisely predict participants) and will fail to interpret custom types.</p>
+<h3 id="lane-change">Lane Change</h3>
+<p>If you are unhappy with the types derived by default, you can overwrite it with these tags:
+* lane_change=yes (lane change in both directions possible) <em>OR</em>
+* lane_change:left=<yes/no>, lane_change:right=<yes/no>. Both pairs have to be set if this is used.</p>
+<h3 id="more-optional-tags">More, Optional Tags</h3>
+<ul>
+<li><strong>width</strong> with of the line (in m). The linestring then represents the <em>centerline</em> of the object.</li>
+<li><strong>height</strong> height of line (in m). The linestring then represents the <em>lower outline/lowest edge</em> of the object.</li>
+<li><strong>temporary</strong> to indicate lines from construction sites (yes/no).</li>
+<li><strong>color</strong> of the lane marking. White is the default.</li>
+</ul>
+<h3 id="individual-dashes">Individual Dashes</h3>
+<p>Since dashed lines are represented by a full connecting line and not as individual dashes, the information about the position of the dashes is lost. To keep the information, individual points that mark the start and end points of the linestring can be tagged. The <code>type</code> tag is used for that. <code>type=begin</code> marks the begin of the dash (in the orientation of the linestring), <code>type=end</code> marks the end. Other values can be used for other types:
+* pole (to mark the position of individual poles on guardrails or fences)
+* dot (to mark dots that form line markings)</p>
+<h2 id="symbols">Symbols</h2>
+<p>There can be many different symbols so the selection here is of course incomplete. Symbols can be relevant for some traffic rules</p>
+<p><strong>Arrows</strong> have type="arrow" and a subtype for the direction:
+subtype:
+* left
+* right
+* straight
+* straight_left
+* straight_right
+* left_right</p>
+<p>Other types:
+* stop_line
+* zig-zag
+* lift_gate
+* bump
+* 30/50/70 (for speed limits on the road)</p>
+<p>The symbol can be represented either by its outline or by its centerline. If it is represented by the centerline, the linestring must only contain two points to avoid confusion with the outline.</p>
+<h2 id="traffic-signs">Traffic Signs</h2>
+<p>Traffic signs all have <code>type=traffic_sign</code>. Additionally, they have a "subtype"-tag that contains the actual type of the traffic sign. This subtype is encoded as ISO 3166 region code + traffic sign number (e.g. <code>subtype=de206</code> <a href="https://de.wikipedia.org/wiki/Bildtafel_der_Verkehrszeichen_in_der_Bundesrepublik_Deutschland_seit_2017#Gefahrzeichen_nach_Anlage_1_(zu_%C2%A7_40_Absatz_6_und_7_StVO)">for a German stop sign</a> or <code>subtype=usR1-1</code> <a href="https://en.wikipedia.org/wiki/Road_signs_in_the_United_States#R1_Series:_Stop_and_Yield">for a US stop sign</a>).</p>
+<p>Traffic signs can be represented either by their outline (as polygon) or by a linestring where the first point is the left edge of the sign and the last point is the right edge of the sign. Optionally the height tag can be used to encode the size of the sign in z (not the height above ground, use the z-coordinate for that). The linestring marks the <em>lower edge</em> of the sign.</p>
+<h2 id="traffic-lights">Traffic Lights</h2>
+<p>Traffic signs have <code>type=traffic_light</code>. Similar to traffic signs, they can be represented either by a polygon or a linestring.</p>
+<p>The <code>subtype</code> tag can be used to add further information on the traffic light:
+* red_yellow_green
+* red_yellow
+* red
+* etc.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../RegulatoryElementTagging/" class="btn btn-neutral float-right" title="RegulatoryElementTagging">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../LaneletPrimitives/" class="btn btn-neutral" title="LaneletPrimitives"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../LaneletPrimitives/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../RegulatoryElementTagging/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>lanelet2_maps - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "lanelet2_maps";
+    var mkdocs_page_input_path = "lanelet2_maps.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">lanelet2_maps</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#editing-lanelet2-maps">Editing Lanelet2 maps</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reading-and-writing-to-osm">Reading and Writing to OSM</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#points">Points</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#linestrings">LineStrings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#polygons">Polygons</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#lanelets">Lanelets</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#areas">Areas</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#regulatory-elements">Regulatory Elements</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>lanelet2_maps</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_maps.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="lanelet2-maps">Lanelet2 Maps</h1>
+<p>This repo contains tools for creating and modifying maps.</p>
+<h2 id="editing-lanelet2-maps">Editing Lanelet2 maps</h2>
+<p>Lanelet2 maps are best edited using the OpenStreetMap-Editor <a href="https://josm.openstreetmap.de/">JOSM</a>. The josm folder of this package contains styles and presets for simple set-up.</p>
+<p>This repository contains two stylesheets. One for visualizing the physical layer of the map (the markings and borders) and one for visualizing the lanelet/area layer.</p>
+<p>To use them in JOSM:
+- Unzip the images in <code>style_images.zip</code> (containing images for traffic signs)
+- Under Preferences-&gt;Map Settings -&gt; Map Paint styles -&gt; add (+) select <code>lanelets.mapcss</code> and <code>lines.mapcss</code> to add the lanelet2 styles to JOSM.
+- Under Preferences-&gt;Map Settings -&gt; Tagging Presets -&gt; add (+) select <code>laneletpresets.xml</code> to add the lanelet2 tagging style to JOSM</p>
+<p>After that, you can access the presets via Presets-&gt;lanelet2. For faster access, add them to the toolbar in Preferences-&gt;Toolbar customization.</p>
+<h2 id="reading-and-writing-to-osm">Reading and Writing to OSM</h2>
+<p>Lanelet2 utilizes the <a href="https://wiki.openstreetmap.org/wiki/OSM_XML">osm xml format</a> as default format to read and write map data. To do this, a simple mapping is done by the library to "transform" lanelet primitives into osm primitives. The Id will be the Id of the primitive (we recommend to use positive Ids, because some OSM editors treat negative Ids as something modifiable and will continue to change them), attributes will be translated to tags of the OSM primitive.</p>
+<h3 id="points">Points</h3>
+<p>Points are directly transformed to OSM <em>Nodes</em>. The "ele" tag is used to represent the z-coordinate of the point. It denotes the distance to the earth ellipsoid in WGS84.</p>
+<h3 id="linestrings">LineStrings</h3>
+<p>LineStrings are transformed to OSM <em>Ways</em>.</p>
+<h3 id="polygons">Polygons</h3>
+<p>Polygons are OSM <em>Ways</em> as well but are identified by a tag <em>area=yes</em>. Start point = end point is not sufficient and also not necessary.</p>
+<h3 id="lanelets">Lanelets</h3>
+<p>Lanelets are represented as OSM <em>relations</em> with a tag <code>type=lanelet</code>.
+- The right bound is a relation member of type <em>way</em> with role <code>right</code>
+- The left bound is a relation member of type <em>way</em> with role <code>left</code>
+- The centerline (if present) is a relation member of type <em>way</em> with role <code>centerline</code>
+- All regulatory elements are relation members of type <em>relation</em> with the role <code>regulatory_element</code></p>
+<p>If there are more members to the lanelet relation than the mentioned ones, Lanelet2 will raise an error.</p>
+<h3 id="areas">Areas</h3>
+<p>Areas are represented as OSM <em>relations</em> by making use of the <em>multipolygon</em> representation. They have a tag <code>type=multipolygon</code>. The outer bound is an ordered list of relations with the role <code>outer</code>, the inner bounds are an ordered list of relations with the role <code>inner</code>. Lanelet2 parses the inner bounds in this order and starts a new hole whenever the last point of one linestring matches the first one.</p>
+<h3 id="regulatory-elements">Regulatory Elements</h3>
+<p>Regulatory elements are also represented as OSM <em>relations</em> with <code>type=regulatory_element</code> the parameters of a role are directly translated to relations.</p>
+<p>All other relations (with no type or a wrong type) will be ignored when parsing .osm data.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../lanelet2_matching/" class="btn btn-neutral float-right" title="lanelet2_matching">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../lanelet2_io/" class="btn btn-neutral" title="lanelet2_io"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../lanelet2_io/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../lanelet2_matching/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
