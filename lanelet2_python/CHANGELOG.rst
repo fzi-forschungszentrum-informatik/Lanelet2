@@ -2,6 +2,24 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Migrate conanfile to conan2 (`#364 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/364>`_)
+* Add missing argument in RoutingGraph.routingRelation python interface (`#349 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/349>`_)
+  Co-authored-by: poggenhans <f.poggenhans@web.de>
+* Add/fix python repr interface for 2d lines/points (`#348 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/348>`_)
+  * Add/fix python repr interface for 2d lines/points
+  * Remove whitespace
+  ---------
+  Co-authored-by: poggenhans <f.poggenhans@web.de>
+* Improve ArcCoordinates interface (`#351 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/351>`_)
+  * improve python interface for ArcCoordinates
+  Co-authored-by: poggenhans <f.poggenhans@web.de>
+* Added missing to_python converter for ConstWeakLanelet (`#331 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/331>`_)
+  Co-authored-by: Julian Brandes <JulianJakob.Brandes@bosch.com>
+* Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)
+* Contributors: DavUhll, Julian, johannes-fischer, poggenhans
+
 1.2.1 (2023-05-10)
 ------------------
 * Improve python core module (`#293 <https://github.com/immel-f/Lanelet2/issues/293>`_)
