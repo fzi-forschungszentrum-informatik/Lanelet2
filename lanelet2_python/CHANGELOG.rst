@@ -2,8 +2,8 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.2 (2024-10-23)
+------------------
 * Migrate conanfile to conan2 (`#364 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/364>`_)
 * Add missing argument in RoutingGraph.routingRelation python interface (`#349 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/349>`_)
   Co-authored-by: poggenhans <f.poggenhans@web.de>

@@ -2,8 +2,8 @@
 Changelog for package lanelet2_projection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.2 (2024-10-23)
+------------------
 * Fix `#324 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/324>`_: exception thrown when using GeocentricProjector (`#325 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/325>`_)
 * Contributors: Michał Antkiewicz
 

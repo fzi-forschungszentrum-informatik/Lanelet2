@@ -2,8 +2,8 @@
 Changelog for package lanelet2_routing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.2 (2024-10-23)
+------------------
 * Prevent unintended modification of graph in lanelet::routing::Route (`#352 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/352>`_)
 * Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)
 * Contributors: DavUhll, poggenhans
