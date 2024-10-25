@@ -2,6 +2,11 @@
 Changelog for package lanelet2_traffic_rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.2 (2024-10-25)
+------------------
+* Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)
+* Contributors: DavUhll
+
 1.2.1 (2023-05-10)
 ------------------
 
