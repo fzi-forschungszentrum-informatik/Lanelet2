@@ -2,8 +2,8 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.2 (2024-10-25)
+------------------
 * Update print_ids.py to Python3 (`#357 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/357>`_)
 * Implement signed curvature (`#355 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/355>`_)
 * Migrate conanfile to conan2 (`#364 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/364>`_)

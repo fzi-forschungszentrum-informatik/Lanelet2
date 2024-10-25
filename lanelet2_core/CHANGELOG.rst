@@ -2,8 +2,8 @@
 Changelog for package lanelet2_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.2 (2024-10-25)
+------------------
 * Implement signed curvature (`#355 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/355>`_)
 * Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)
 * Update RegulatoryElementTagging.md (`#316 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/316>`_)
