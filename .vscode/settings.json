@@ -1,0 +1,10 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/immel/workspaces/ll2_wheel_ws/devel/lib/python3/dist-packages",
+        "/opt/mrtros/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/immel/workspaces/ll2_wheel_ws/devel/lib/python3/dist-packages",
+        "/opt/mrtros/lib/python3/dist-packages"
+    ]
+}
