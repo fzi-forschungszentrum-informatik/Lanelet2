@@ -1036,6 +1036,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__len__", &LaneletSequence::size, "Number of lanelets in this sequence")
       .def("inverted", &LaneletSequence::inverted, "True if this lanelet sequence is inverted")
       .def(
+          "__str__", +[](const LaneletSequence& s) { return makeRepr("LaneletSequence", s.lanelets()); })
+      .def(
           "__repr__", +[](const LaneletSequence& s) { return makeRepr("LaneletSequence", repr(object(s.lanelets()))); })
       .def("__getitem__", wrappers::getItem<LaneletSequence>, return_internal_reference<>(),
            "Returns a lanelet in the sequence");
