@@ -457,6 +457,8 @@ inline boost::optional<ConstArea> RegulatoryElement::find<ConstArea>(Id id) cons
 }
 
 std::ostream& operator<<(std::ostream& stream, const RegulatoryElement& obj);
+std::ostream& operator<<(std::ostream& stream, const RuleParameterMap& map);
+std::ostream& operator<<(std::ostream& stream, const ConstRuleParameterMap& map);
 
 template <>
 inline std::vector<ConstLanelet> RegulatoryElement::getParameters(const std::string& role) const {
