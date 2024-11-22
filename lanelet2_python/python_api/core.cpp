@@ -467,6 +467,13 @@ std::string repr(const AttributeMap& a) {
   return repr(object(a));
 }
 
+std::string repr(const RuleParameterMap& r) {
+  if (r.empty()) {
+    return {};
+  }
+  return repr(object(r));
+}
+
 std::string repr(const ConstRuleParameterMap& r) {
   if (r.empty()) {
     return {};
@@ -474,30 +481,39 @@ std::string repr(const ConstRuleParameterMap& r) {
   return repr(object(r));
 }
 
-std::string safeRepr(const RuleParameter& p) {
-  if (p.type() == typeid(WeakLanelet)) {
-    // repr(lanelet) inside a traffic rule can result in a circular repr call between the lanelet and the traffic rule
-    // RecursionError: maximum recursion depth exceeded while calling a Python object
-    return "Lanelet(" + strRepr(object(p)) + ")";
-  }
-  return repr(object(p));
-}
 
-std::string safeRepr(const ConstRuleParameter& p) {
-  if (p.type() == typeid(ConstWeakLanelet)) {
-    // repr(lanelet) inside a traffic rule can result in a circular repr call between the lanelet and the traffic rule
-    // RecursionError: maximum recursion depth exceeded while calling a Python object
-    return "Lanelet(" + strRepr(object(p)) + ")";
+struct RuleParameterReprVisitor : public RuleParameterVisitor {
+  std::string getRepr(const ConstRuleParameter& from) {
+    boost::apply_visitor(*this, from);
+    return this->repr_;
   }
-  return repr(object(p));
-}
+  void operator()(const ConstPoint3d& p) override { repr_ = repr(object(p)); }
+  void operator()(const ConstLineString3d& ls) override { repr_ = repr(object(ls)); }
+  void operator()(const ConstPolygon3d& p) override { repr_ = repr(object(p)); }
+  void operator()(const ConstWeakLanelet& ll) override {
+    if (ll.expired()) {
+      return;
+    }
+    // print str representation to avoid circular dependency between lanelet and traffic rules, otherwise:
+    // RecursionError: maximum recursion depth exceeded while calling a Python object
+    repr_ = strRepr(object(ll.lock()));
+  }
+  void operator()(const ConstWeakArea& ar) override {
+    if (ar.expired()) {
+      return;
+    }
+    repr_ = strRepr(object(ar.lock()));
+  }
+  private:
+  std::string repr_{};
+};
 
 std::string repr(const RuleParameters& p) {
-  return "[" + boost::algorithm::join(utils::transform(p, [](const auto& elem) { return safeRepr(elem); }), ", ") + "]";
+  return "[" + boost::algorithm::join(utils::transform(p, [](const auto& elem) { return RuleParameterReprVisitor().getRepr(elem); }), ", ") + "]";
 }
 
 std::string repr(const ConstRuleParameters& p) {
-  return "[" + boost::algorithm::join(utils::transform(p, [](const auto& elem) { return safeRepr(elem); }), ", ") + "]";
+  return "[" + boost::algorithm::join(utils::transform(p, [](const auto& elem) { return RuleParameterReprVisitor().getRepr(elem); }), ", ") + "]";
 }
 
 std::string repr(const RegulatoryElementConstPtrs& regelems) {
