@@ -1,6 +1,6 @@
 import unittest
 import lanelet2  # if we fail here, there is something wrong with registration
-from lanelet2.core import AttributeMap, getId, BasicPoint2d, Point3d, LineString3d, Lanelet, RegulatoryElement, TrafficLight, LaneletMap, createMapFromLanelets
+from lanelet2.core import AttributeMap, getId, BasicPoint2d, Point3d, LineString3d, Lanelet, RegulatoryElement, RightOfWay, TrafficLight, LaneletMap, createMapFromLanelets
 from lanelet2.geometry import distance, intersects2d, boundingBox2d, to2D, intersection
 
 
@@ -30,12 +30,12 @@ def getLaneletMap():
     return createMapFromLanelets([lanelet])
 
 
-def checkPrimitiveId(testClass, primitive):
+def checkPrimitiveId(testClass: unittest.TestCase, primitive: Lanelet):
     primitive.id = 30
     testClass.assertEqual(primitive.id, 30)
 
 
-def checkPrimitiveAttributes(testClass, primitive):
+def checkPrimitiveAttributes(testClass: unittest.TestCase, primitive: Lanelet):
     lenBefore = len(primitive.attributes)
     primitive.attributes["newkey"] = "newvalue"
     testClass.assertEqual(lenBefore + 1, len(primitive.attributes))
@@ -65,6 +65,22 @@ class LaneletApiTestCase(unittest.TestCase):
         self.assertEqual(len(llt.trafficLights()), 1)
         self.assertEqual(len(llt.trafficSigns()), 0)
         self.assertEqual(len(llt.regulatoryElements), 1)
+    
+    def test_lanelet_repr(self):
+        llt = getLanelet()
+        llt_from_repr = eval(repr(llt))
+        self.assertEqual(llt.id, llt_from_repr.id)
+        self.assertEqual(llt.leftBound.id, llt_from_repr.leftBound.id)
+        self.assertEqual(llt.rightBound.id, llt_from_repr.rightBound.id)
+        self.assertEqual(llt.attributes, llt_from_repr.attributes)
+
+    def test_lanelet_repr_regelem_cycle(self):
+        llt = getLanelet()
+        llt2 = getLanelet()
+        regelem = RightOfWay(getId(), AttributeMap(), [llt], [llt2])
+        llt.addRegulatoryElement(regelem)
+        self.assertIn("Lanelet(id=0,", repr(llt))
+        self.assertIn(f"RightOfWay(id={regelem.id},", repr(regelem))
 
 
 class LaneletMapApiTestCase(unittest.TestCase):
