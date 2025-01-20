@@ -4,6 +4,7 @@
 #include <boost/make_shared.hpp>
 
 #include "lanelet2_python/internal/converter.h"
+#include "lanelet2_python/internal/repr.h"
 
 using namespace boost::python;
 using namespace lanelet;
@@ -55,6 +56,7 @@ Optional<T> objectToOptional(const object& o) {
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   auto trafficRules = import("lanelet2.traffic_rules");
   using namespace lanelet::routing;
+  using namespace lanelet::python;
 
   using converters::IterableConverter;
   using converters::OptionalConverter;
@@ -115,6 +117,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           "getRemainingLane",
           +[](const LaneletPath& self, const ConstLanelet& llt) { return self.getRemainingLane(llt); },
           "get the sequence of remaining lanelets without a lane change")
+      .def(
+          "__repr__",
+          +[](const LaneletPath& self) {
+            return makeRepr("LaneletPath", repr(list(ConstLanelets{self.begin(), self.end()})));
+          })
       .def(self == self)   // NOLINT
       .def(self != self);  // NOLINT
 
@@ -280,7 +287,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LaneletRelation>("LaneletRelation")
       .def_readwrite("lanelet", &LaneletRelation::lanelet)
-      .def_readwrite("relationType", &LaneletRelation::relationType);
+      .def_readwrite("relationType", &LaneletRelation::relationType)
+      .def(
+          "__repr__", +[](const LaneletRelation& self) {
+            return makeRepr("LaneletRelation", repr(object(self.lanelet)), repr(object(self.relationType)));
+          });
 
   enum_<RelationType>("RelationType")
       .value("Successor", RelationType::Successor)
@@ -332,5 +343,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           +[](Route& self, const ConstLanelet& from, object func) { self.forEachPredecessor(from, std::move(func)); },
           "similar to forEachSuccessor but instead goes backwards along the routing graph",
           (arg("lanelet"), arg("func")))
+      .def("__contains__", &Route::contains, "Checks if a specific lanelet is part of the route", (arg("lanelet")))
       .def("checkValidity", &Route::checkValidity, "perform sanity check on the route");
 }

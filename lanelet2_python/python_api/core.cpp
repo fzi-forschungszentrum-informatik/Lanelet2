@@ -44,7 +44,7 @@ std::string repr(const RegulatoryElementConstPtrs& regelems) {
 }
 
 template <typename LaneletT>
-std::string makeLaneletRepr(const std::string& displayName, bool withRegelems, const LaneletT& llt) {
+std::string makeLaneletRepr(const std::string& displayName, bool withRegelems, LaneletT& llt) {
   if (withRegelems) {
     return makeRepr("Lanelet", llt.id(), repr(object(llt.leftBound())), repr(object(llt.rightBound())),
                     repr(llt.attributes()), repr(ConstLanelet(llt).regulatoryElements()));
@@ -54,7 +54,7 @@ std::string makeLaneletRepr(const std::string& displayName, bool withRegelems, c
 }
 
 template <typename AreaT>
-std::string makeAreaRepr(const std::string& displayName, bool withRegelems, const AreaT& area) {
+std::string makeAreaRepr(const std::string& displayName, bool withRegelems, AreaT& area) {
   if (withRegelems) {
     return makeRepr("Area", area.id(), repr(object(area.outerBound())), repr(object(area.innerBounds())),
                     repr(area.attributes()), repr(ConstArea(area).regulatoryElements()));
@@ -813,7 +813,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "returned in reversed order")
       .def(
           "__repr__",
-          +[](const LineString2d& ls) {
+          +[](LineString2d& ls) {
             return makeRepr("LineString2d", ls.id(), repr(list(ls)), repr(ls.attributes()));
           })
       .def(IsLineString<LineString2d>());
@@ -849,7 +849,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "points returned in reversed order")
       .def(
           "__repr__",
-          +[](const LineString3d& ls) {
+          +[](LineString3d& ls) {
             return makeRepr("LineString3d", ls.id(), repr(list(ls)), repr(ls.attributes()));
           })
       .def(IsLineString<LineString3d>())
@@ -931,7 +931,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                        "Create from an ID, the boundary points and (optionally) attributes"))
       .def(
           "__repr__",
-          +[](const Polygon2d& p) { return makeRepr("Polygon2d", p.id(), repr(list(p)), repr(p.attributes())); })
+          +[](Polygon2d& p) { return makeRepr("Polygon2d", p.id(), repr(list(p)), repr(p.attributes())); })
       .def(IsLineString<Polygon2d>())
       .def(IsPrimitive<Polygon2d>());
 
@@ -941,7 +941,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       init<Id, Points3d, AttributeMap>((arg("id"), arg("points"), arg("attributes") = AttributeMap())))
       .def(
           "__repr__",
-          +[](const Polygon3d& p) { return makeRepr("Polygon3d", p.id(), repr(list(p)), repr(p.attributes())); })
+          +[](Polygon3d& p) { return makeRepr("Polygon3d", p.id(), repr(list(p)), repr(p.attributes())); })
       .def(IsLineString<Polygon3d>())
       .def(IsPrimitive<Polygon3d>());
 

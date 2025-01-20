@@ -79,8 +79,8 @@ class LaneletApiTestCase(unittest.TestCase):
         llt2 = getLanelet()
         regelem = RightOfWay(getId(), AttributeMap(), [llt], [llt2])
         llt.addRegulatoryElement(regelem)
-        self.assertIn("Lanelet(id=0,", repr(llt))
-        self.assertIn(f"RightOfWay(id={regelem.id},", repr(regelem))
+        self.assertIn(f"Lanelet({llt.id}", repr(llt))
+        self.assertIn(f"RightOfWay({regelem.id},", repr(regelem))
 
 
 class LaneletMapApiTestCase(unittest.TestCase):
