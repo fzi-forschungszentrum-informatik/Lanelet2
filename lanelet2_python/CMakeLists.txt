@@ -34,6 +34,9 @@ if (PROJECT_PYTHON_SOURCE_FILES_SRC)
     mrt_add_python_api( lanelet2
         FILES ${PROJECT_PYTHON_SOURCE_FILES_SRC}
         )
+    _mrt_get_python_destination(PROJECT_PYTHON_DESTINATION)
+    mrt_glob_files(PROJECT_PYTHON_STUBS "typings/lanelet2/*.pyi")
+    install(FILES ${PROJECT_PYTHON_STUBS} DESTINATION ${PROJECT_PYTHON_DESTINATION}/lanelet2)
 endif()
 
 ############################

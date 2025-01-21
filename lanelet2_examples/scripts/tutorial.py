@@ -162,30 +162,31 @@ def part4reading_and_writing():
     map.add(lanelet)
     path = os.path.join(tempfile.mkdtemp(), 'mapfile.osm')
     # Select a suitable projector depending on the data source
-    ## UtmProjector: (0,0,0) is at the provided lat/lon on the WGS84 ellipsoid
+    # UtmProjector: (0,0,0) is at the provided lat/lon on the WGS84 ellipsoid
     projector = UtmProjector(lanelet2.io.Origin(49, 8.4))
-    ## MarcatorProjector: (0,0,0) is at the provided lat/lon on the mercator cylinder
+    # MarcatorProjector: (0,0,0) is at the provided lat/lon on the mercator cylinder
     projector = MercatorProjector(lanelet2.io.Origin(49, 8.4))
-    ## LocalCartesianProjector: (0,0,0) is at the provided origin (including elevation)
+    # LocalCartesianProjector: (0,0,0) is at the provided origin (including elevation)
     projector = LocalCartesianProjector(lanelet2.io.Origin(49, 8.4, 123))
 
     # Writing the map to a file
-    ## 1. Write with the given projector and use default parameters
+    # 1. Write with the given projector and use default parameters
     lanelet2.io.write(path, map, projector)
 
-    ## 2. Write and get the possible errors
+    # 2. Write and get the possible errors
     write_errors = lanelet2.io.writeRobust(path, map, projector)
     assert not write_errors
 
-    ## 3. Write using the default spherical mercator projector at the giver origin
-    ## This was the default projection in Lanelet1. Use is not recommended.
+    # 3. Write using the default spherical mercator projector at the giver origin
+    # This was the default projection in Lanelet1. Use is not recommended.
     lanelet2.io.write(path, map, lanelet2.io.Origin(49, 8.4))
 
-    ## 4. Write using the given projector and override the default values of the optional parameters for JOSM
+    # 4. Write using the given projector and override the default values of the optional parameters for JOSM
     params = {
-               "josm_upload": "true",          # value for the attribute "upload", default is "false"
-               "josm_format_elevation": "true"  # whether to limit up to 2 decimals, default is the same as for lat/lon
-             };
+        "josm_upload": "true",          # value for the attribute "upload", default is "false"
+        # whether to limit up to 2 decimals, default is the same as for lat/lon
+        "josm_format_elevation": "true"
+    }
     lanelet2.io.write(path, map, projector, params)
 
     # Loading the map from a file
@@ -193,7 +194,7 @@ def part4reading_and_writing():
     assert not load_errors
     assert loadedMap.laneletLayer.exists(lanelet.id)
 
-    ## GeocentricProjector: the origin is the centre of the Earth
+    # GeocentricProjector: the origin is the centre of the Earth
     gc_projector = GeocentricProjector()
     write_errors = lanelet2.io.writeRobust(path, map, gc_projector)
     assert not write_errors
@@ -228,6 +229,7 @@ def part6routing():
     # here we query a route through the lanelets and get all the vehicle lanelets that conflict with the shortest path
     # in that route
     route = graph.getRoute(lanelet, toLanelet)
+    assert route
     path = route.shortestPath()
     confLlts = [llt for llt in route.allConflictingInMap() if llt not in path]
     assert len(confLlts) > 0
@@ -236,11 +238,11 @@ def part6routing():
     assert hasPathFromTo(graph, lanelet, toLanelet)
 
 
-def hasPathFromTo(graph, start, target):
+def hasPathFromTo(graph: lanelet2.routing.RoutingGraph, start: lanelet2.core.Lanelet, target: lanelet2.core.Lanelet):
     class TargetFound(BaseException):
         pass
 
-    def raiseIfDestination(visitInformation):
+    def raiseIfDestination(visitInformation: lanelet2.routing.LaneletVisitInformation):
         # this function is called for every successor of lanelet with a LaneletVisitInformation object.
         # if the function returns true, the search continues with the successors of this lanelet.
         # Otherwise, the followers will not be visited through this lanelet, but could still be visited through
@@ -256,15 +258,15 @@ def hasPathFromTo(graph, start, target):
         return True
 
 
-def get_linestring_at_x(x):
+def get_linestring_at_x(x: float):
     return LineString3d(getId(), [Point3d(getId(), x, i, 0) for i in range(0, 3)])
 
 
-def get_linestring_at_y(y):
+def get_linestring_at_y(y: float):
     return LineString3d(getId(), [Point3d(getId(), i, y, 0) for i in range(0, 3)])
 
 
-def get_a_lanelet(index=0):
+def get_a_lanelet(index: int = 0):
     return Lanelet(getId(),
                    get_linestring_at_y(2+index),
                    get_linestring_at_y(0+index))
