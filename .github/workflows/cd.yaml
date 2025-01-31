@@ -72,7 +72,7 @@ jobs:
       - name: Store wheel
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ matrix.python-version }}
           path: dist/
 
   test:
@@ -87,7 +87,8 @@ jobs:
       - name: Restore wheel
         uses: actions/download-artifact@v4
         with:
-          name: dist
+          pattern: dist-*
+          merge-multiple: true
           path: dist/
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -112,7 +113,8 @@ jobs:
       - name: Restore wheel
         uses: actions/download-artifact@v4
         with:
-          name: dist
+          pattern: dist-*
+          merge-multiple: true
           path: dist/
 
       - name: Release
