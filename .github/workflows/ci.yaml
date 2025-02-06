@@ -11,6 +11,7 @@ on:
 
 permissions:
   issues: write
+  contents: write
 
 jobs:
   formatting:
