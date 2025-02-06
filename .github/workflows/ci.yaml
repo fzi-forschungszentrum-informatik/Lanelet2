@@ -9,6 +9,9 @@ on:
   # Run tests for any PRs.
   pull_request:
 
+permissions:
+  issues: write
+
 jobs:
   formatting:
     runs-on: ubuntu-latest
