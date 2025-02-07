@@ -54,7 +54,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   auto core = import("lanelet2.core");
 
   class_<SpeedLimitInformation>("SpeedLimitInformation", "Current speed limit as returned by a traffic rule object")
-      .def("__init__", makeSpeedLimit,
+      .def("__init__", makeSpeedLimit, (arg("speedLimitMPS"), arg("isMandatory") = true),
            "Initialize from speed limit [m/s] and bool if speedlimit is "
            "mandatory")
       .add_property("speedLimit", getVelocity, setVelocity, "velocity in km/h")
@@ -102,7 +102,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .add_static_property("Pedestrian", asString<Participants::Pedestrian>)
       .add_static_property("Train", asString<Participants::Train>);
 
-  def("create", createTrafficRulesWrapper,
+  def("create", createTrafficRulesWrapper, (arg("location"), arg("participant")),
       "Create a traffic rules object from location and participant string (see "
       "Locations and Participants class");
 }

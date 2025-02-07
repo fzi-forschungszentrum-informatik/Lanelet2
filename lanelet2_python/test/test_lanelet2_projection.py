@@ -36,7 +36,7 @@ class MatchingApiTestCase(unittest.TestCase):
         gps_point = utm_projector.reverse(utm_point)
         self.assertEqual(round(gps_point.lat, 5), self.origin_lat)
         self.assertEqual(round(gps_point.lon, 5), self.origin_lon)
-        self.assertEqual(round(gps_point.alt, 5), self.origin_ele)
+        self.assertEqual(round(gps_point.ele, 5), self.origin_ele)
 
     def test_LocalCartesianProjector(self):
         # NOTE: the projected plane is tangential to the WGS84 ellipsoid
@@ -54,7 +54,7 @@ class MatchingApiTestCase(unittest.TestCase):
         gps_point = local_cartesian_projector.reverse(local_cartesian_point)
         self.assertEqual(round(gps_point.lat, self.decimals), self.origin_lat)
         self.assertEqual(round(gps_point.lon, self.decimals), self.origin_lon)
-        self.assertEqual(round(gps_point.alt, self.decimals), self.origin_ele)
+        self.assertEqual(round(gps_point.ele, self.decimals), self.origin_ele)
 
     def test_GeocentricProjector(self):
         geocentric_projector = GeocentricProjector()
@@ -67,7 +67,7 @@ class MatchingApiTestCase(unittest.TestCase):
         gps_point = geocentric_projector.reverse(self.origin_ecef)
         self.assertEqual(round(gps_point.lat, self.decimals), self.origin_lat)
         self.assertEqual(round(gps_point.lon, self.decimals), self.origin_lon)
-        self.assertEqual(round(gps_point.alt, self.decimals), self.origin_ele)
+        self.assertEqual(round(gps_point.ele, self.decimals), self.origin_ele)
 
 
 if __name__ == '__main__':
