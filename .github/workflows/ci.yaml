@@ -9,6 +9,10 @@ on:
   # Run tests for any PRs.
   pull_request:
 
+permissions:
+  issues: write
+  contents: write
+
 jobs:
   formatting:
     runs-on: ubuntu-latest
@@ -170,11 +174,11 @@ jobs:
           docker rm -f lanelet2_test_${{ matrix.rosdistro }}_lcov;
 
       - name: Report code coverage
-        uses: immel-f/github-actions-report-lcov@v0.1.11
+        uses: immel-f/github-actions-report-lcov@v0.1.13
         if: ${{ matrix.rosdistro == 'noetic' }}
         with:
           coverage-files: ./lcov/full_coverage.lcov
-          artifact-name: code-coverage-report
+          artifact-name: 
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   full_conan_installation:
