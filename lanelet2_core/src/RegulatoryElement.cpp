@@ -176,15 +176,31 @@ std::ostream& operator<<(std::ostream& stream, const RegulatoryElement& obj) {
   stream << "[id: " << obj.id();
   if (!obj.empty()) {
     stream << ", parameters: ";
-    for (auto& param : obj.getParameters()) {
+    stream << obj.getParameters();
+  }
+  return stream << ']';
+}
+
+std::ostream& operator<<(std::ostream& stream, const RuleParameterMap& map) {
+  for (const auto& param : map) {
       stream << '{' << param.first << ':' << ' ';
       for (auto& rule : param.second) {
         stream << GetIdVisitor::id(rule) << ' ';
       }
       stream << '}';
     }
-  }
-  return stream << ']';
+  return stream;
+}
+
+std::ostream& operator<<(std::ostream& stream, const ConstRuleParameterMap& map) {
+  for (const auto& param : map) {
+      stream << '{' << param.first << ':' << ' ';
+      for (auto& rule : param.second) {
+        stream << GetIdVisitor::id(rule) << ' ';
+      }
+      stream << '}';
+    }
+  return stream;
 }
 
 template <>
