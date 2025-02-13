@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>lanelet2_routing - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "lanelet2_routing";
+    var mkdocs_page_input_path = "lanelet2_routing.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">lanelet2_routing</a>
+    <ul class="current">
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_core/RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>lanelet2_routing</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_routing.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="lanelet2-routing">Lanelet2 routing</h1>
+<p>The routing module for lanelet2.</p>
+<p>For a short version of this you can also look at <a href="https://htmlpreview.github.io/?https://github.com/fzi-forschungszentrum-informatik/Lanelet2/blob/master/lanelet2_routing/doc/lanelet2_routing.html">the presentation</a>. If some images do not render correctly, please clone the repository and open the html file in your browser.</p>
+<p>This readme covers some basics. The API offers more than that.</p>
+<h1 id="1-components-and-vocabulary">1. Components and Vocabulary</h1>
+<h2 id="how-to-create-a-routing-graph">How to create a Routing Graph</h2>
+<p><img alt="" src="doc/images/components.png" /></p>
+<p>The needed components to create a routing graph are:</p>
+<p><strong>Routing Cost Modules:</strong>
+* They generically determine the routing cost for travelling along a lanelet/area
+* Can be e.g. length, travel time
+* You can dynamically select between them when querying the routing graph
+* <strong>You can easily plug in your own routing cost calculation</strong>
+* <em>Influences the prefered path</em></p>
+<p><strong>Traffic Rules for a Specific Participant</strong> (see <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/tree/master/lanelet2_traffic_rules/README.md">lanelet2_traffic_rules</a>)
+* Determines which lanelets/areas are passable
+* <em>Influences the possible paths</em></p>
+<p><strong>Lanelet Map:</strong> (see <a href="../lanelet2_core/README.md">lanelet2_core</a>)
+* Map with Lanelets, Areas, Regulatory Elements, ...</p>
+<h2 id="relations">Relations</h2>
+<p>Lanelets that are part of a routing graph can have relations to each other:
+<img alt="" src="doc/images/max-hose.png" /></p>
+<p>The possible relations are:
+    * <code>left</code>, <code>right</code> (reachable via lane change)
+    * <code>adjacent left</code>, <code>adjacent right</code> (lanelets that are neighbours but not reachable via lane change)
+    * <code>succeeding</code> (relation between two subsequent lanelets)
+    * <code>conflicting</code> (intersecting lanelets/areas)
+    * <code>area</code> (reachable area to lanelet/area relation)</p>
+<h2 id="route-vs-path-vs-sequence">Route vs Path vs Sequence</h2>
+<p>When querying data in the routing graph, you will come across the terms <em>route</em>, <em>path</em> and <em>sequence</em>. In contrast to a simple set of lanelets (data-wise a vector of lanelets), they have a special meaning and are data-wise different classes.</p>
+<p>A <em>route</em> means all the lanelets that can be used to a destination without driving a different road. They can be connected by a generic sequence of lane changes and successors.</p>
+<p>A <em>path</em> (LaneletPath or LaneletOrAreaPath) is an ordered list of Lanelets/Areas that lead to the destination. They can be connected by lane changes.</p>
+<p>A <em>sequence</em> (LaneletSequence) is a sequence of subsequent Lanelets that is not separated by a lane change (think of it as a <em>lane</em>). It does not necessary lead to a destination, instead it ends when a lane change is required. In the example image, the lanelets A, D, B form a valid <em>sequence</em> (and also a valid <em>path</em>), while the lanelets A, D, E are a valid <em>path</em>, but not a valid <em>sequence</em>.</p>
+<p><img alt="" src="doc/images/shortest_path_and_route.png" /></p>
+<h1 id="2-code-usage">2. Code Usage</h1>
+<h2 id="create-a-routing-graph">Create a Routing Graph</h2>
+<pre><code class="language-cpp">using namespace lanelet;
+
+// Load a map
+LaneletMapPtr map = load(&quot;map.osm&quot;, Origin({49, 8})); // origin has to be close to the map data in lat/lon coordinates
+
+// Initialize traffic rules
+TrafficRulesPtr trafficRules{TrafficRulesFactory::instance().create(Locations::Germany, Participants::Vehicle)};
+
+// Optional: Initalize routing costs
+double laneChangeCost = 2;
+RoutingCostPtrs costPtrs{std::make_shared&lt;RoutingCostDistance&gt;(laneChangeCost)};
+
+// Optional: Initialize config for routing graph:
+RoutingGraph::Configuration routingGraphConf;
+routingGraphConf.emplace(std::make_pair(RoutingGraph::ParticipantHeight, Attribute(&quot;2.&quot;)));
+
+// Create routing graph
+RoutingGraphPtr graph = RoutingGraph::build(map, trafficRules /*, costPtrs, routingGraphConf*/);
+</code></pre>
+<ul>
+<li>The traffic rules object represents the view from which the map will be interpreted. Doing routing with vehicle traffic
+rules will yield different results than routing with e.g. bicycle traffic rules.</li>
+<li>Routing for bicycles might include lanelets that are not available to (motorized)vehicles and vice versa.</li>
+</ul>
+<p>The python interface works similarly:</p>
+<pre><code class="language-python">import lanelet2
+map = lanelet2.io.load(&quot;map.osm&quot;, lanelet2.io.Origin(49, 8))
+trafficRules = lanelet2.traffic_rules.create(lanelet2.traffic_rules.Locations.Germany, lanelet2.traffic_rules.Participants.Vehicle)
+graph = lanelet2.routing.RoutingGraph(map, trafficRules)
+</code></pre>
+<h2 id="get-a-shortest-path">Get a shortest path</h2>
+<pre><code class="language-cpp">Optional&lt;routing::LaneletPath&gt; shortestPath = graph-&gt;shortestPath(fromLanelet, toLanelet);
+</code></pre>
+<ul>
+<li><code>Optional</code> will be uninitialized (false) if there's no path</li>
+<li>there's also <code>shortestPathWithVia</code></li>
+</ul>
+<p>in python:</p>
+<pre><code class="language-python">shortestPath = graph.shortestPath(fromLanelet, toLanelet)
+</code></pre>
+<p>In python, shortestPath simply returns <code>None</code> if there is no path.</p>
+<h2 id="get-and-write-a-route">Get and write a route</h2>
+<pre><code class="language-cpp">    Optional&lt;Route&gt; route = graph-&gt;getRoute(fromLanelet, toLanelet, routingCostId);
+    if (route) {
+        LaneletSubmapConstPtr routeMap = route-&gt;laneletSubmap();
+        write(&quot;route.osm&quot;, *routeMap-&gt;laneletMap(), Origin({49, 8}));
+    }
+</code></pre>
+<ul>
+<li><code>Optional</code> will be uninitialized (false) if there's no route</li>
+</ul>
+<p>Note that there is a semantic difference between a <code>LaneletSubmap</code> and a <code>LaneletMap</code>. While a LaneletSubmap only contains
+the things you explicitly added, the <code>LaneletMap</code> also contains all the things referred by them (the Points, Linestrings, things referred by RegulatoryElements).
+The <code>LaneletSubmap</code> in this case only contains the Lanelets of the route. But since this is not sufficient for writing, you need to transform it into a regular <code>LaneletMap</code> first.</p>
+<p>The written map will therefore not only contain the Lanelets but also their RegulatoryElements.
+If these RegulatoryElements contain other Lanelets, these Lanelets will be part of the written map as well, even if they are not on the route.</p>
+<p>in python:</p>
+<pre><code class="language-python">route = graph.getRoute(fromLanelet, toLanelet, routingCostId)
+if route:
+    laneletSubmap = route.laneletSubmap()
+    lanelet2.io.write(&quot;route.osm&quot;, laneletSubmap.laneletMap(), lanelet2.io.Origin(49, 8)))
+</code></pre>
+<h2 id="get-a-reachable-set-of-lanelets">Get a reachable set of lanelets</h2>
+<pre><code class="language-cpp">double maxRoutingCost{100};
+ConstLanelets reachableSet = graph-&gt;reachableSet(lanelet, maxRoutingCost, routingCostId);
+</code></pre>
+<h2 id="left-right-following-lanelets">Left, Right, Following Lanelets</h2>
+<pre><code class="language-cpp">// Get routable left lanelet if it exists
+Optional&lt;ConstLanelet&gt; left{graph-&gt;left(fromLanelet)};
+// Get non-routable left lanelet if it exists
+Optional&lt;ConstLanelet&gt; adjacentLeft{graph-&gt;adjacentLeft(fromLanelet)};
+// Get following lanelets
+ConstLanelets following{graph-&gt;following(fromLanelet)};
+</code></pre>
+<ul>
+<li>Also available: <code>right</code>, <code>adjacentRight</code>, <code>lefts</code>, <code>rights</code>, <code>conflicting</code></li>
+</ul>
+<p>Alternatively:
+ or queries that return relations:</p>
+<pre><code class="language-cpp">// Get relations to all left lanelets
+LaneletRelations leftRelations = graph-&gt;leftRelations(
+                                                fromLanelet);
+</code></pre>
+<p>There's <code>leftRelations</code> that returns a vector of pairs of LaneletRelations whereas RelationType can be 'left' or 'adjacentLeft' in this case</p>
+<h2 id="more">More</h2>
+<p>This is just a quick walkthrough. Advanced examples can be found in <a href="../lanelet2_examples/README.md">lanelet2_examples</a>.</p>
+<h1 id="3-export-and-debugging-routing-graphs">3. Export and Debugging Routing Graphs</h1>
+<p><img alt="" src="doc/images/lanelet_map_routing_graph.png" /></p>
+<h2 id="laneletmap-with-routing-information">LaneletMap with Routing Information</h2>
+<pre><code class="language-cpp">LaneletMapConstPtr debugLaneletMap = graph-&gt;getDebugLaneletMap(RoutingCostId(0));
+write(std::string(&quot;routing_graph.osm&quot;), *debugLaneletMap);
+</code></pre>
+<p>This one is best viewed in <a href="https://josm.openstreetmap.de/">JOSM</a> and using a custom map style css which is to be found in <code>res/routing.mapcss</code>. <a href="https://josm.openstreetmap.de/attachment/wiki/Styles/addstyle.gif">This gif</a> shows, how to add a style to JOSM, except that one needs to press the <code>+</code> button in the configuration menu and specify the file.</p>
+<p>Most of the information is to be found in the attributes. The line strings that connect lanelets do have a direction. The name of the forth-direction is generally to be found left/above the line and the reverse relation right/under the string.</p>
+<h2 id="dot-graphviz-and-graphml-xml-based-file-export">DOT (GraphViz) and GraphML (xml-based) file export</h2>
+<pre><code class="language-cpp">graph-&gt;exportGraphViz(&quot;~/graph.gv&quot;);
+graph-&gt;exportGraphML(&quot;~/graph.graphml&quot;);
+</code></pre>
+<p>These can then be viewed with a graph viewer like <a href="https://gephi.org/">Gephi</a>. The downside compared to the laneletMap export is, that the lanelets aren't localized.</p>
+<h1 id="4-routes">4. Routes</h1>
+<p>Example route through <code>Oststadtkreisel</code>:</p>
+<p><img alt="" src="doc/images/lanelet_map_route_oststadtkreisel_small.jpg" /></p>
+<p>Output of <code>getDebugLaneletMap()</code> function:</p>
+<p><img alt="" src="doc/images/lanelet_map_route.png" /></p>
+<h2 id="example-relational-queries-on-routes">Example Relational Queries on Routes:</h2>
+<pre><code class="language-cpp">// Get left lanelet of example lanelet 'll'
+Optional&lt;ConstLaneletRelation&gt; left = route-&gt;leftRelation(ll);
+// Get conflicting lanelets of 'll'
+ConstLanelets conflicting = route-&gt;conflictingInRoute(ll);
+
+</code></pre>
+<p>Note that a route just returns relations to lanelets that can be used to reach the goal.</p>
+<h2 id="other-example-queries">Other example queries:</h2>
+<pre><code class="language-cpp">// Get underlying shortest path
+Optional&lt;routing::LaneletPath&gt; shortestPath = route-&gt;shortestPath();
+// Get the full lane of a given lanelet 'll'
+LaneletSequence fullLane = route-&gt;fullLane(ll);
+// Get remaining lane of a given lanelet 'll'
+LaneletSequence remainingLane = route-&gt;remainingLane(ll);
+</code></pre>
+<h1 id="5-interconnect-routing-graphs-of-different-participants">5. Interconnect Routing Graphs of Different Participants</h1>
+<p>A <code>RoutingGraphContainer</code> can be used to <em>connect</em> graphs of different participants to get information about conflicting lanelets.</p>
+<h2 id="create-a-routinggraphcontainer">Create a RoutingGraphContainer</h2>
+<pre><code class="language-cpp">std::vector&lt;RoutingGraphPtr&gt; graphs;
+graphs.emplace_back(vehicleGraphLaneletMap);
+graphs.emplace_back(pedestrianGraphLaneletMap);
+RoutingGraphContainer container(graphs);
+</code></pre>
+<h2 id="example-queries">Example Queries</h2>
+<p>The last parameter <em>participantHeight</em> is optional and decides whether conflicting lanelets are determined in 2D or 3D.</p>
+<h3 id="query-for-a-single-lanelet">Query for a single lanelet</h3>
+<pre><code class="language-cpp">double heightClearance{4.}; // Height of the traffic participant
+// Query a single graph for conflicting lanelets
+size_t routingGraphId{0};   // E.g. 0 for the first graph
+ConstLanelets conflictingVehicle{container-&gt;conflictingInGraph(bridgeLanelet, routingGraphId, heightClearance)};
+// Query all graphs for conflicting lanelets
+RoutingGraphContainer::ConflictingInGraphs conflicting{container-&gt;conflictingInGraphs(bridgeLanelet, heightClearance)};
+</code></pre>
+<h3 id="query-for-a-whole-route">Query for a Whole Route</h3>
+<pre><code class="language-cpp">// Conflicting lanelets of a route in a single graph
+ConstLanelets conflictingVehicle{container-&gt;conflictingOfRouteInGraph(routePtr, routingGraphId)};
+// Conflicting lanelets of a route in all graphs
+RoutingGraphContainer::ConflictingInGraphs result{container-&gt;conflictingOfRouteInGraphs(routePtr, heightClearance)};
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../lanelet2_traffic_rules/" class="btn btn-neutral float-right" title="lanelet2_traffic_rules">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../lanelet2_python/" class="btn btn-neutral" title="lanelet2_python"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../lanelet2_python/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../lanelet2_traffic_rules/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
