@@ -55,7 +55,7 @@ using LaneletOrAreaPaths = std::vector<LaneletOrAreaPath>;
 //! symmetry. When a is left of b, b can be either right or adjacent right to b.
 enum class RelationType : uint8_t {
   None = 0,                 //!< No relation
-  Successor = 0b1,          //!< A (the only) direct, reachable successor. Not merging and not diverging.
+  Successor = 0b1,          //!< A direct, reachable successor
   Left = 0b10,              //!< (the only) directly adjacent, reachable left neighbour
   Right = 0b100,            //!< (the only) directly adjacent, reachable right neighbour
   AdjacentLeft = 0b1000,    //!< directly adjacent, unreachable left neighbor
