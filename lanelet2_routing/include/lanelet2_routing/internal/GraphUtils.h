@@ -237,11 +237,17 @@ class ConflictingSectionFilter {
         return;
       }
       auto type = (*g_)[edge].relation;
-      auto neighbourTypes = RelationType::Left | RelationType::Right;
-      auto conflictTypes = RelationType::Conflicting | RelationType::AdjacentLeft | RelationType::AdjacentRight;
+      const auto neighbourTypes = RelationType::Left | RelationType::Right;
+      const auto conflictTypes = RelationType::Conflicting | RelationType::AdjacentLeft | RelationType::AdjacentRight;
       if ((type & (neighbourTypes)) != RelationType::None) {
-        auto outEdge = boost::edge(boost::target(edge, *g_), boost::source(edge, *g_), *g_);
-        auto reverseIsNeigh = outEdge.second && ((*g_)[outEdge.first].relation & neighbourTypes) != RelationType::None;
+        // The following is basically equivalent to interating over reverse edges like below, but this doesn't compile
+        // due to a boost::graph bug:
+        // boost::edge_range(boost::target(edge, *g_), boost::source(edge, *g_), *g_);
+        auto outEdges = boost::out_edges(boost::target(edge, *g_), *g_);
+        auto reverseIsNeigh = std::any_of(outEdges.first, outEdges.second, [&](auto outEdge) {
+          return boost::target(outEdge, *g_) == boost::source(edge, *g_) &&
+                 ((*g_)[outEdge].relation & neighbourTypes) != RelationType::None;
+        });
         isNeighbour |= reverseIsNeigh;
         isConflicting |= !isNeighbour;
       }

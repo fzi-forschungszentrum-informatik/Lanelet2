@@ -11,7 +11,7 @@ using namespace lanelet::routing::tests;
 template <Id FromId, Id ToId, Id... ViaIds>
 class TestRoute : public GermanVehicleGraph {
  public:
-  explicit TestRoute(uint16_t routingCostId = 0, bool withLaneChanges = true) {
+  explicit TestRoute(uint16_t routingCostId = 0, bool withLaneChanges = true) : withLaneChanges{withLaneChanges} {
     Ids viaIds{ViaIds...};
     start = lanelets.at(From);
     end = lanelets.at(To);
@@ -21,6 +21,7 @@ class TestRoute : public GermanVehicleGraph {
     EXPECT_TRUE(!!optRoute);
     route = std::move(*optRoute);
   }
+  bool withLaneChanges{true};
   ConstLanelet start;
   ConstLanelet end;
   ConstLanelets via;
@@ -68,6 +69,15 @@ using AllRoutes =
 TYPED_TEST_SUITE(AllRoutesTest, AllRoutes);
 
 TYPED_TEST(AllRoutesTest, CheckValidity) { EXPECT_NO_THROW(this->route.checkValidity()); }  // NOLINT
+TYPED_TEST(AllRoutesTest, CheckEquality) {
+  // This ensures that the same route is computed no matter the routing cost id
+  auto route2 = this->graph->getRouteVia(this->start, this->via, this->end, 2, this->withLaneChanges);
+  EXPECT_TRUE(!!route2);
+  auto map0 = this->route.laneletSubmap();
+  auto map2 = route2->laneletSubmap();
+  EXPECT_TRUE(std::equal(map0->laneletLayer.begin(), map0->laneletLayer.end(), map2->laneletLayer.begin(),
+                         map2->laneletLayer.end()));
+}
 
 TYPED_TEST(AllRoutesTest, ShortestMapInDebugMap) {
   const auto map{this->route.getDebugLaneletMap()};
