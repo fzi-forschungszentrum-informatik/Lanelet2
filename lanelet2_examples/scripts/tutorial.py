@@ -6,7 +6,7 @@ import lanelet2
 from lanelet2.core import (AllWayStop, AttributeMap, BasicPoint2d,
                            BoundingBox2d, Lanelet, LaneletMap,
                            LaneletWithStopLine, LineString3d, Point2d, Point3d,
-                           RightOfWay, TrafficLight, getId)
+                           RightOfWay, TrafficLight, getId, createMapFromLanelets)
 from lanelet2.projection import (UtmProjector, MercatorProjector,
                                  LocalCartesianProjector, GeocentricProjector)
 
@@ -150,7 +150,7 @@ def part3lanelet_map():
     assert len(map.pointLayer.search(searchBox)) > 1
 
     # you can also create a map from a list of primitives (replace Lanelets by the other types)
-    mapBulk = lanelet2.core.createMapFromLanelets([get_a_lanelet()])
+    mapBulk = createMapFromLanelets([get_a_lanelet()])
     assert len(mapBulk.laneletLayer) == 1
 
 
@@ -236,6 +236,17 @@ def part6routing():
 
     # for more complex queries, you can use the forEachSuccessor function and pass it a function object
     assert hasPathFromTo(graph, lanelet, toLanelet)
+
+    # it is also possible to create custom routing costs to influence the routing.
+    # Note that this will be much slower than the costs implemented in C++, but it
+    # is useful for prototyping and testing.
+    class ConstantCost(lanelet2.routing.RoutingCost):
+        def getCostSucceeding(self, rules, from_lanelet, to_lanelet):
+            return 1
+
+        def getCostLaneChange(self, rules, from_lanelet, to_lanelet):
+            return 1
+    graph = lanelet2.routing.RoutingGraph(map, traffic_rules, [ConstantCost()])
 
 
 def hasPathFromTo(graph: lanelet2.routing.RoutingGraph, start: lanelet2.core.Lanelet, target: lanelet2.core.Lanelet):
