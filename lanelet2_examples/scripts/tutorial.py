@@ -229,6 +229,7 @@ def part6routing():
     # here we query a route through the lanelets and get all the vehicle lanelets that conflict with the shortest path
     # in that route
     route = graph.getRoute(lanelet, toLanelet)
+    assert route
     path = route.shortestPath()
     confLlts = [llt for llt in route.allConflictingInMap() if llt not in path]
     assert len(confLlts) > 0
@@ -248,11 +249,11 @@ def part6routing():
     graph = lanelet2.routing.RoutingGraph(map, traffic_rules, [ConstantCost()])
 
 
-def hasPathFromTo(graph, start, target):
+def hasPathFromTo(graph: lanelet2.routing.RoutingGraph, start: lanelet2.core.Lanelet, target: lanelet2.core.Lanelet):
     class TargetFound(BaseException):
         pass
 
-    def raiseIfDestination(visitInformation):
+    def raiseIfDestination(visitInformation: lanelet2.routing.LaneletVisitInformation):
         # this function is called for every successor of lanelet with a LaneletVisitInformation object.
         # if the function returns true, the search continues with the successors of this lanelet.
         # Otherwise, the followers will not be visited through this lanelet, but could still be visited through
@@ -268,15 +269,15 @@ def hasPathFromTo(graph, start, target):
         return True
 
 
-def get_linestring_at_x(x):
+def get_linestring_at_x(x: float):
     return LineString3d(getId(), [Point3d(getId(), x, i, 0) for i in range(0, 3)])
 
 
-def get_linestring_at_y(y):
+def get_linestring_at_y(y: float):
     return LineString3d(getId(), [Point3d(getId(), i, y, 0) for i in range(0, 3)])
 
 
-def get_a_lanelet(index=0):
+def get_a_lanelet(index: int = 0):
     return Lanelet(getId(),
                    get_linestring_at_y(2+index),
                    get_linestring_at_y(0+index))

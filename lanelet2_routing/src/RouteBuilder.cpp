@@ -307,7 +307,9 @@ class RouteConstructionVisitor : public boost::default_bfs_visitor {
       // In this case we have to adjust lane Ids
       setLaneIdFromTo(routeGraph()[*destVertex].laneId, routeGraph()[sourceElem_].laneId);
     }
-    routeGraph_->addEdge(sourceElem_, *destVertex, g[e]);
+    auto edgeInfo = g[e];
+    edgeInfo.costId = 0;
+    routeGraph_->addEdge(sourceElem_, *destVertex, edgeInfo);
   }
   void finish_vertex(LaneletVertexId v, const OnRouteGraph& g) {  // NOLINT
     // now that all neighbours are known, now is the time to add lanelets that conflict in the whole graph
