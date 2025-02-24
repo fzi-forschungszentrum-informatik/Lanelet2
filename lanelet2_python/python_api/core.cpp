@@ -12,11 +12,22 @@
 #include "lanelet2_core/Attribute.h"
 #include "lanelet2_core/Forward.h"
 #include "lanelet2_core/primitives/Area.h"
+#include "lanelet2_core/primitives/Polygon.h"
+#include "lanelet2_core/primitives/Primitive.h"
 #include "lanelet2_python/internal/converter.h"
 #include "lanelet2_python/internal/repr.h"
 
 using namespace boost::python;
 using namespace lanelet;
+
+// std::hash is not defined for ConstHybridPolygon2d/3d, so we need to define it ourselves
+namespace std {
+template <>
+struct hash<lanelet::ConstHybridPolygon2d> : public lanelet::HashBase<lanelet::ConstHybridPolygon2d> {};
+template <>
+struct hash<lanelet::ConstHybridPolygon3d> : public lanelet::HashBase<lanelet::ConstHybridPolygon3d> {};
+}  // namespace std
+
 
 namespace lanelet {
 namespace python {
@@ -24,6 +35,7 @@ class ReprWrapper {
  public:
   ReprWrapper(const std::string& text) : text_(text) {}
   std::string operator()() const { return text_; }
+
 
  private:
   std::string text_;
@@ -958,6 +970,30 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def(IsConstLineString<CompoundPolygon3d>())
       .def("lineStrings", &CompoundPolygon3d::lineStrings, "The linestrings in this polygon")
       .def("ids", &CompoundPolygon3d::ids, "List of the ids of the linestrings");
+
+  class_<ConstHybridPolygon2d>("ConstHybridPolygon2d",
+                               "A 2D Polygon that behaves like a normal BasicPolygon (i.e. returns BasicPoints), "
+                               "but still has an ID and attributes.",
+                               init<ConstPolygon2d>(arg("polygon"), "Create from a 2D polygon"))
+      .def(
+          "__repr__",
+          +[](const ConstHybridPolygon2d& p) {
+            return makeRepr("ConstHybridPolygon2d", p.id(), repr(list(p)), repr(p.attributes()));
+          })
+      .def(IsConstLineString<ConstHybridPolygon2d, false>())
+      .def(IsConstPrimitive<ConstHybridPolygon2d>());
+
+  class_<ConstHybridPolygon3d>("ConstHybridPolygon3d",
+                               "A 3D Polygon that behaves like a normal BasicPolygon (i.e. returns BasicPoints), "
+                               "but still has an ID and attributes.",
+                               init<ConstPolygon3d>(arg("polygon"), "Create from a 3D polygon"))
+      .def(
+          "__repr__",
+          +[](const ConstHybridPolygon3d& p) {
+            return makeRepr("ConstHybridPolygon3d", p.id(), repr(list(p)), repr(p.attributes()));
+          })
+      .def(IsConstLineString<ConstHybridPolygon3d, false>())
+      .def(IsConstPrimitive<ConstHybridPolygon3d>());
 
   class_<ConstLanelet>(
       "ConstLanelet",
