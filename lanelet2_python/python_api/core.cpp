@@ -5,6 +5,7 @@
 #include <lanelet2_core/primitives/LaneletSequence.h>
 #include <lanelet2_core/primitives/RegulatoryElement.h>
 
+#include <boost/algorithm/string/join.hpp>
 #include <boost/python/object_core.hpp>
 #include <boost/python/return_by_value.hpp>
 #include <boost/python/return_internal_reference.hpp>
@@ -464,11 +465,65 @@ std::string repr(const object& o) {
   return call<std::string>(repr.ptr(), o);
 }
 
+std::string strRepr(const object& o) {
+  object str = import("builtins").attr("str");
+  return call<std::string>(str.ptr(), o);
+}
+
 std::string repr(const AttributeMap& a) {
   if (a.empty()) {
     return {};
   }
   return repr(object(a));
+}
+
+std::string repr(const RuleParameterMap& r) {
+  if (r.empty()) {
+    return {};
+  }
+  return repr(object(r));
+}
+
+std::string repr(const ConstRuleParameterMap& r) {
+  if (r.empty()) {
+    return {};
+  }
+  return repr(object(r));
+}
+
+
+struct RuleParameterReprVisitor : public RuleParameterVisitor {
+  std::string getRepr(const ConstRuleParameter& from) {
+    boost::apply_visitor(*this, from);
+    return this->repr_;
+  }
+  void operator()(const ConstPoint3d& p) override { repr_ = repr(object(p)); }
+  void operator()(const ConstLineString3d& ls) override { repr_ = repr(object(ls)); }
+  void operator()(const ConstPolygon3d& p) override { repr_ = repr(object(p)); }
+  void operator()(const ConstWeakLanelet& ll) override {
+    if (ll.expired()) {
+      return;
+    }
+    // print str representation to avoid circular dependency between lanelet and traffic rules, otherwise:
+    // RecursionError: maximum recursion depth exceeded while calling a Python object
+    repr_ = strRepr(object(ll.lock()));
+  }
+  void operator()(const ConstWeakArea& ar) override {
+    if (ar.expired()) {
+      return;
+    }
+    repr_ = strRepr(object(ar.lock()));
+  }
+  private:
+  std::string repr_{};
+};
+
+std::string repr(const RuleParameters& p) {
+  return "[" + boost::algorithm::join(utils::transform(p, [](const auto& elem) { return RuleParameterReprVisitor().getRepr(elem); }), ", ") + "]";
+}
+
+std::string repr(const ConstRuleParameters& p) {
+  return "[" + boost::algorithm::join(utils::transform(p, [](const auto& elem) { return RuleParameterReprVisitor().getRepr(elem); }), ", ") + "]";
 }
 
 std::string repr(const RegulatoryElementConstPtrs& regelems) {
@@ -695,13 +750,15 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                            "primitives with that role (parameters).",
                            init<>("Create empty rule parameter map"))
       .def(IsHybridMap<RuleParameterMap>())
+      .def(self_ns::str(self_ns::self))
       .def(
-          "__repr__", +[](const RuleParameterMap& r) { return makeRepr("RuleParameterMap", repr(dict(r))); });
+          "__repr__", +[](const RuleParameterMap& r) { return makeRepr("RuleParameterMap", "{" + boost::algorithm::join(utils::transform(r, [](const auto& elem) { return "'" + elem.first + "': " + repr((elem.second)); }), ", ") + "}"); });
 
   class_<ConstRuleParameterMap>("ConstRuleParameterMap", init<>("ConstRuleParameterMap()"))
       .def(IsHybridMap<ConstRuleParameterMap>())
+      .def(self_ns::str(self_ns::self))
       .def(
-          "__repr__", +[](const RuleParameterMap& r) { return makeRepr("RuleParameterMap", repr(dict(r))); });
+          "__repr__", +[](const ConstRuleParameterMap& r) { return makeRepr("RuleParameterMap", "{" + boost::algorithm::join(utils::transform(r, [](const auto& elem) { return "'" + elem.first + "': " + repr((elem.second)); }), ", ") + "}"); });
 
   class_<ConstPoint2d>("ConstPoint2d",
                        "Immutable 2D point primitive. It can not be instanciated from python but is returned from a "
@@ -1070,6 +1127,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__len__", &LaneletSequence::size, "Number of lanelets in this sequence")
       .def("inverted", &LaneletSequence::inverted, "True if this lanelet sequence is inverted")
       .def(
+          "__str__", +[](const LaneletSequence& s) { return makeRepr("LaneletSequence", s.lanelets()); })
+      .def(
           "__repr__", +[](const LaneletSequence& s) { return makeRepr("LaneletSequence", repr(object(s.lanelets()))); })
       .def("__getitem__", wrappers::getItem<LaneletSequence>, return_internal_reference<>(),
            "Returns a lanelet in the sequence");
@@ -1213,7 +1272,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("__len__", &RegulatoryElement::size)
       .def(
           "__repr__", +[](RegulatoryElement& r) {
-            return makeRepr("RegulatoryElement", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+            return makeRepr("RegulatoryElement", r.id(), repr(r.getParameters()), repr(r.attributes()));
           });
   register_ptr_to_python<RegulatoryElementConstPtr>();
 
@@ -1236,7 +1295,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Removes a given traffic light, returns true on success")
       .def(
           "__repr__", +[](TrafficLight& r) {
-            return makeRepr("TrafficLight", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+            return makeRepr("TrafficLight", r.id(), repr(r.getParameters()), repr(r.attributes()));
           });
   implicitly_convertible<std::shared_ptr<TrafficLight>, RegulatoryElementPtr>();
 
@@ -1275,7 +1334,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Removes the yielding lanelet, returns true on success.")
       .def(
           "__repr__", +[](RightOfWay& r) {
-            return makeRepr("RightOfWay", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+            return makeRepr("RightOfWay", r.id(), repr(r.getParameters()), repr(r.attributes()));
           });
   implicitly_convertible<std::shared_ptr<RightOfWay>, RegulatoryElementPtr>();
 
@@ -1307,7 +1366,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Removes a lanelet from the all way stop, returns True on success.")
       .def(
           "__repr__", +[](AllWayStop& r) {
-            return makeRepr("AllWayStop", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+            return makeRepr("AllWayStop", r.id(), repr(r.getParameters()), repr(r.attributes()));
           });
   implicitly_convertible<std::shared_ptr<AllWayStop>, RegulatoryElementPtr>();
 
@@ -1369,7 +1428,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
            "Returns types of the cancelling traffic signs (a list of strings) if it exists.")
       .def(
           "__repr__", +[](TrafficSign& r) {
-            return makeRepr("TrafficSign", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+            return makeRepr("TrafficSign", r.id(), repr(r.getParameters()), repr(r.attributes()));
           });
 
   implicitly_convertible<std::shared_ptr<TrafficSign>, RegulatoryElementPtr>();
@@ -1385,7 +1444,7 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
                                          arg("refLines") = LineStrings3d(), arg("cancelLines") = LineStrings3d())))
       .def(
           "__repr__", +[](SpeedLimit& r) {
-            return makeRepr("SpeedLimit", r.id(), repr(dict(r.constData()->parameters)), repr(r.attributes()));
+            return makeRepr("SpeedLimit", r.id(), repr(r.getParameters()), repr(r.attributes()));
           });
 
   class_<PrimitiveLayer<Area>, boost::noncopyable>("PrimitiveLayerArea", no_init);        // NOLINT
