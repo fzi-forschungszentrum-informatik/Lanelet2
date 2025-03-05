@@ -276,7 +276,7 @@ struct LineStringsCoordinate {
 };
 
 /**
- * @brief makeIndexedSegmenTree create search tree of segments
+ * @brief makeIndexedSegmentTree create search tree of segments
  * @param lineString line string that the segments will be created from
  * @throws InvalidInputError if the line string size is below 2
  * @return a search tree
@@ -299,12 +299,12 @@ inline SegmentTree makeSegmentTree(const LineString2dT& lineString) {
 }
 
 /**
- * @brief makeIndexedSegmenTree create search tree of segments with indices
+ * @brief makeIndexedSegmentTree create search tree of segments with indices
  * @param lineString line string that the segments will be created from
  * @throws InvalidInputError if the line string size is below 2
  * @return a search tree
  */
-inline IndexedSegmentTree makeIndexedSegmenTree(const BasicLineString2d& lineString) {
+inline IndexedSegmentTree makeIndexedSegmentTree(const BasicLineString2d& lineString) {
   if (lineString.size() < 2) {
     throw InvalidInputError("Need line string size of at least 2 to make tree");
   }
@@ -317,6 +317,9 @@ inline IndexedSegmentTree makeIndexedSegmenTree(const BasicLineString2d& lineStr
   tree.insert(segContainer);
   return tree;
 }
+
+[[deprecated("Use makeIndexedSegmentTree instead")]]
+constexpr auto makeIndexedSegmenTree = makeIndexedSegmentTree;
 
 /**
  * @brief getLowestSAbove find self-intersection nearest to the given start point along a segment
@@ -395,7 +398,7 @@ inline BasicLineString2d removeSelfIntersections(const BasicLineString2d& lineSt
   if (lineString.size() <= 3) {
     return lineString;
   }
-  auto tree = makeIndexedSegmenTree(lineString);
+  auto tree = makeIndexedSegmentTree(lineString);
   double lastS{0.};
   BasicLineString2d newLS{lineString.front()};
   size_t i = 0;
