@@ -4,6 +4,7 @@
 #include <boost/make_shared.hpp>
 
 #include "lanelet2_python/internal/converter.h"
+#include "lanelet2_python/internal/repr.h"
 
 using namespace boost::python;
 using namespace lanelet;
@@ -52,9 +53,58 @@ Optional<T> objectToOptional(const object& o) {
   return o == object() ? Optional<T>{} : Optional<T>{extract<T>(o)()};
 }
 
+class RoutingCostBaseWrapper : public lanelet::routing::RoutingCost, public wrapper<lanelet::routing::RoutingCost> {
+ public:
+  double getCostSucceeding(const traffic_rules::TrafficRules& trafficRules, const ConstLaneletOrArea& from,
+                           const ConstLaneletOrArea& to) const noexcept override {
+    return this->get_override("getCostSucceeding")(boost::ref(trafficRules), from, to);
+  }
+
+  double getCostLaneChange(const traffic_rules::TrafficRules& trafficRules, const ConstLanelets& from,
+                           const ConstLanelets& to) const noexcept override {
+    return this->get_override("getCostLaneChange")(boost::ref(trafficRules), from, to);
+  }
+};
+
+template <typename BaseT>
+class RoutingCostWrapper : public BaseT, public wrapper<BaseT> {
+ public:
+  RoutingCostWrapper(const BaseT& base) : BaseT(base) {}
+  RoutingCostWrapper(double laneChangeCost, double minLaneChange) : BaseT(laneChangeCost, minLaneChange) {}
+
+  double getCostSucceeding(const traffic_rules::TrafficRules& trafficRules, const ConstLaneletOrArea& from,
+                           const ConstLaneletOrArea& to) const noexcept override {
+    const auto o = this->get_override("getCostSucceeding");
+    if (o) {
+      return o(boost::ref(trafficRules), from, to);
+    }
+    return BaseT::getCostSucceeding(trafficRules, from, to);
+  }
+
+  double defaultGetCostSucceeding(const traffic_rules::TrafficRules& trafficRules, const ConstLaneletOrArea& from,
+                                  const ConstLaneletOrArea& to) const {
+    return BaseT::getCostSucceeding(trafficRules, from, to);
+  }
+
+  double getCostLaneChange(const traffic_rules::TrafficRules& trafficRules, const ConstLanelets& from,
+                           const ConstLanelets& to) const noexcept override {
+    const auto o = this->get_override("getCostLaneChange");
+    if (o) {
+      return o(boost::ref(trafficRules), from, to);
+    }
+    return BaseT::getCostLaneChange(trafficRules, from, to);
+  }
+
+  double defaultGetCostLaneChange(const traffic_rules::TrafficRules& trafficRules, const ConstLanelets& from,
+                                  const ConstLanelets& to) const {
+    return BaseT::getCostLaneChange(trafficRules, from, to);
+  }
+};
+
 BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   auto trafficRules = import("lanelet2.traffic_rules");
   using namespace lanelet::routing;
+  using namespace lanelet::python;
 
   using converters::IterableConverter;
   using converters::OptionalConverter;
@@ -77,16 +127,38 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   implicitly_convertible<LaneletMapPtr, LaneletMapConstPtr>();
 
   // Routing costs
-  class_<RoutingCost, boost::noncopyable, std::shared_ptr<RoutingCost>>(  // NOLINT
-      "RoutingCost", "Object for calculating routing costs between lanelets", no_init);
+  class_<RoutingCostBaseWrapper, boost::noncopyable>(  // NOLINT
+      "RoutingCost", "Object for calculating routing costs between lanelets")
+      .def("getCostSucceeding", pure_virtual(&RoutingCost::getCostSucceeding),
+           "Get the cost of the transition from one to another lanelet", (arg("trafficRules"), arg("from"), arg("to")))
+      .def("getCostLaneChange", pure_virtual(&RoutingCost::getCostLaneChange),
+           "Get the cost of the lane change between two adjacent lanelets",
+           (arg("trafficRules"), arg("from"), arg("to")));
+  register_ptr_to_python<std::shared_ptr<RoutingCost>>();
 
-  class_<RoutingCostDistance, bases<RoutingCost>, std::shared_ptr<RoutingCostDistance>>(  // NOLINT
+  class_<RoutingCostWrapper<RoutingCostDistance>, bases<RoutingCost>>(  // NOLINT
       "RoutingCostDistance", "Distance based routing cost calculation object",
-      init<double, double>((arg("laneChangeCost"), arg("minLaneChangeDistance") = 0)));
+      init<double, double>((arg("laneChangeCost"), arg("minLaneChangeDistance") = 0)))
+      .def("getCostSucceeding", &RoutingCostDistance::getCostSucceeding,
+           &RoutingCostWrapper<RoutingCostDistance>::defaultGetCostSucceeding,
+           "Get the cost of the transition from one to another lanelet", (arg("trafficRules"), arg("from"), arg("to")))
+      .def("getCostLaneChange", &RoutingCostDistance::getCostLaneChange,
+           &RoutingCostWrapper<RoutingCostDistance>::defaultGetCostLaneChange,
+           "Get the cost of the lane change between two adjacent lanelets",
+           (arg("trafficRules"), arg("from"), arg("to")));
+  register_ptr_to_python<std::shared_ptr<RoutingCostDistance>>();
 
-  class_<RoutingCostTravelTime, bases<RoutingCost>, std::shared_ptr<RoutingCostTravelTime>>(  // NOLINT
+  class_<RoutingCostWrapper<RoutingCostTravelTime>, bases<RoutingCost>>(  // NOLINT
       "RoutingCostTravelTime", "Travel time based routing cost calculation object",
-      init<double, double>((arg("laneChangeCost"), arg("minLaneChangeTime") = 0)));
+      init<double, double>((arg("laneChangeCost"), arg("minLaneChangeTime") = 0)))
+      .def("getCostSucceeding", &RoutingCostTravelTime::getCostSucceeding,
+           &RoutingCostWrapper<RoutingCostTravelTime>::defaultGetCostSucceeding,
+           "Get the cost of the transition from one to another lanelet", (arg("trafficRules"), arg("from"), arg("to")))
+      .def("getCostLaneChange", &RoutingCostTravelTime::getCostLaneChange,
+           &RoutingCostWrapper<RoutingCostTravelTime>::defaultGetCostLaneChange,
+           "Get the cost of the lane change between two adjacent lanelets",
+           (arg("trafficRules"), arg("from"), arg("to")));
+  register_ptr_to_python<std::shared_ptr<RoutingCostTravelTime>>();
 
   auto possPCost = static_cast<LaneletPaths (RoutingGraph::*)(const ConstLanelet&, double, RoutingCostId, bool) const>(
       &RoutingGraph::possiblePaths);
@@ -115,6 +187,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           "getRemainingLane",
           +[](const LaneletPath& self, const ConstLanelet& llt) { return self.getRemainingLane(llt); },
           "get the sequence of remaining lanelets without a lane change")
+      .def(
+          "__repr__",
+          +[](const LaneletPath& self) {
+            return makeRepr("LaneletPath", repr(list(ConstLanelets{self.begin(), self.end()})));
+          })
       .def(self == self)   // NOLINT
       .def(self != self);  // NOLINT
 
@@ -280,7 +357,11 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   class_<LaneletRelation>("LaneletRelation")
       .def_readwrite("lanelet", &LaneletRelation::lanelet)
-      .def_readwrite("relationType", &LaneletRelation::relationType);
+      .def_readwrite("relationType", &LaneletRelation::relationType)
+      .def(
+          "__repr__", +[](const LaneletRelation& self) {
+            return makeRepr("LaneletRelation", repr(object(self.lanelet)), repr(object(self.relationType)));
+          });
 
   enum_<RelationType>("RelationType")
       .value("Successor", RelationType::Successor)
@@ -332,5 +413,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
           +[](Route& self, const ConstLanelet& from, object func) { self.forEachPredecessor(from, std::move(func)); },
           "similar to forEachSuccessor but instead goes backwards along the routing graph",
           (arg("lanelet"), arg("func")))
+      .def("__contains__", &Route::contains, "Checks if a specific lanelet is part of the route", (arg("lanelet")))
       .def("checkValidity", &Route::checkValidity, "perform sanity check on the route");
 }
