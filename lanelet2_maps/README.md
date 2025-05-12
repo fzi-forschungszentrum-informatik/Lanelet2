@@ -38,7 +38,7 @@ Lanelets are represented as OSM *relations* with a tag `type=lanelet`.
 If there are more members to the lanelet relation than the mentioned ones, Lanelet2 will raise an error.
 
 ### Areas
-Areas are represented as OSM *relations* by making use of the *multipolygon* representation. They have a tag `type=multipolygon`. The outer bound is an ordered list of relations with the role `outer`, the inner bounds are an ordered list of relations with the role `inner`. Lanelet2 parses the inner bounds in this order and starts a new hole whenever the last point of one linestring matches the first one.
+Areas are represented as OSM *relations* by making use of the *multipolygon* representation. They have a tag `type=multipolygon`. The outer bound is an ordered list of relation members with the roles `outer`, the inner bounds are an ordered list of relation members with the roles `inner`. Lanelet2 parses the inner bounds in this order and starts a new hole whenever the last point of one linestring matches the first one.
 
 ### Regulatory Elements
 Regulatory elements are also represented as OSM *relations* with `type=regulatory_element` the parameters of a role are directly translated to relations.
