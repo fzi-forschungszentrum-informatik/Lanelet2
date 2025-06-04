@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import lanelet2
 import sys
@@ -23,12 +23,20 @@ if __name__ == "__main__":
                  "pedestrian": lanelet2.traffic_rules.Participants.Pedestrian,
                  "train": lanelet2.traffic_rules.Participants.Train}
     proj = lanelet2.projection.UtmProjector(lanelet2.io.Origin(args.lat, args.lon))
-    laneletmap = lanelet2.io.load(args.filename, proj)
-
     routing_cost = lanelet2.routing.RoutingCostDistance(0.)  # zero cost for lane changes
     traffic_rules = lanelet2.traffic_rules.create(lanelet2.traffic_rules.Locations.Germany,
                                                   rules_map[args.participant])
     graph = lanelet2.routing.RoutingGraph(laneletmap, traffic_rules, [routing_cost])
     debug_map = graph.getDebugLaneletMap()
+
+    # Create mapping from lanelet ID to lanelet point representation in debug map
+    debug_lanelets = {pt.id: pt for pt in debug_map.pointLayer}
+
+    # Add one_way attribute to check for routing directions
+    for ll in laneletmap.laneletLayer:
+        is_one_way = traffic_rules.isOneWay(ll)
+        debug_ll_point = debug_lanelets.get(ll.id)
+        if debug_ll_point is not None:
+            debug_ll_point.attributes["one_way"] = "yes" if is_one_way else "no"
 
     lanelet2.io.write(args.output, debug_map, proj)
