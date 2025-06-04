@@ -31,4 +31,14 @@ if __name__ == "__main__":
     graph = lanelet2.routing.RoutingGraph(laneletmap, traffic_rules, [routing_cost])
     debug_map = graph.getDebugLaneletMap()
 
+    # Create mapping from lanelet ID to lanelet point representation in debug map
+    debug_lanelets = {pt.id: pt for pt in debug_map.pointLayer}
+
+    # Add one_way attribute to check for routing directions
+    for ll in laneletmap.laneletLayer:
+        is_one_way = traffic_rules.isOneWay(ll)
+        debug_ll_point = debug_lanelets.get(ll.id)
+        if debug_ll_point is not None:
+            debug_ll_point.attributes["one_way"] = "yes" if is_one_way else "no"
+
     lanelet2.io.write(args.output, debug_map, proj)
