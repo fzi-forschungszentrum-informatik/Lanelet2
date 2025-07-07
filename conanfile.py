@@ -15,7 +15,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/mrt_cmake_modules-extras.cmake)
 """
 
 cmake_lists = """
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5.1)
 project(lanelet2)
 if(POLICY CMP0079)
   cmake_policy(SET CMP0079 NEW) # allows to do target_link_libraries on targets from subdirs
