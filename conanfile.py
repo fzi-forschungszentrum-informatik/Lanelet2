@@ -130,6 +130,7 @@ class Lanelet2Conan(ConanFile):
         "lanelet2_traffic_rules",
         "lanelet2_routing",
         "lanelet2_validation",
+        'lanelet2_ml_converter'
     ]
 
     def layout(self):
