@@ -7,6 +7,7 @@
 #include <memory>
 #include <utility>
 
+#include "RoutingCost.h"
 #include "lanelet2_routing/Forward.h"
 #include "lanelet2_routing/RoutingGraph.h"
 
@@ -21,7 +22,8 @@ inline RoutingGraphPtr setUpGermanVehicleGraph(LaneletMap& map, double laneChang
   traffic_rules::TrafficRulesPtr trafficRules{traffic_rules::TrafficRulesFactory::create(
       Locations::Germany, Participants::Vehicle, traffic_rules::TrafficRules::Configuration())};
   RoutingCostPtrs costPtrs{std::make_shared<RoutingCostDistance>(laneChangeCost, minLaneChangeLength),
-                           std::make_shared<RoutingCostTravelTime>(laneChangeCost)};
+                           std::make_shared<RoutingCostTravelTime>(laneChangeCost),
+                           std::make_shared<RoutingCostDistance>(laneChangeCost, minLaneChangeLength)};
   RoutingGraph::Configuration configuration;
   configuration.insert(std::make_pair(RoutingGraph::ParticipantHeight, participantHeight));
   return RoutingGraph::build(map, *trafficRules, costPtrs, configuration);
@@ -496,7 +498,7 @@ class GermanVehicleGraph : public RoutingGraphTest {
 
  public:
   RoutingGraphConstPtr graph{testData.vehicleGraph};
-  uint8_t numCostModules{2};
+  uint8_t numCostModules{3};
 };
 
 class GermanPedestrianGraph : public RoutingGraphTest {

@@ -11,22 +11,44 @@ DESCRIPTION = "Map handling framework for automated driving."
 MAINTAINER = "Fabian Immel"
 MAINTAINER_EMAIL = "fabian.immel@kit.edu"
 URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2"
-LICENSE = "BSD"
 DOWNLOAD_URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2/releases/tag/{{ version }}"
 VERSION = "{{ version }}"
-this_directory = Path(__file__).parent
-long_description = (this_directory /"src" / "lanelet2" / "README.md").read_text()
+long_description = """
+Lanelet2 is a C++-based framework for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core principles to handle the upcoming challenges of future maps.
+
+Features:
+- **2D and 3D** support
+- **Consistent modification**: if one point is modified, all owning objects see the change
+- Supports **lane changes**, routing through areas, etc.
+- **Separated routing** for pedestrians, vehicles, bikes, etc.
+- Many **customization points** to add new traffic rules, routing costs, parsers, etc.
+- **Simple convenience functions** for common tasks when handling maps
+- **Accurate Projection** between the lat/lon geographic world and local metric coordinates
+- **IO Interface** for reading and writing e.g. *osm* data formats (this does not mean it can deal with *osm maps*)
+- **Python** bindings for the whole C++ interface
+- **Boost Geometry** support for all thinkable kinds of geometry calculations on map primitives
+- Released under the **BSD 3-Clause license**
+"""
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: Unix",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+]
+
 
 class ExtModules(list):
     def __bool__(self):
         return True
 
 setup(name=DISTNAME,
+      classifiers=classifiers,
       description=DESCRIPTION,
       maintainer=MAINTAINER,
       maintainer_email=MAINTAINER_EMAIL,
       url=URL,
-      license=LICENSE,
       download_url=DOWNLOAD_URL,
       version=VERSION,
       packages=["lanelet2"],

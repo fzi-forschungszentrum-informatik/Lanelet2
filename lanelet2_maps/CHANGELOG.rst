@@ -2,6 +2,11 @@
 Changelog for package lanelet2_maps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.2 (2024-10-25)
+------------------
+* bugfix speed limit preset in laneletpresets.xml (`#318 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/318>`_)
+* Contributors: R-Fehler
+
 1.2.1 (2023-05-10)
 ------------------
 

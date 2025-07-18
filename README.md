@@ -143,26 +143,23 @@ catkin build
 If unsure, see the [Dockerfile](Dockerfile) or the [travis build log](https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2). It shows the full installation process, with subsequent build and test based on a docker image with a clean Ubuntu installation.
 
 ### Manual, experimental installation using conan
+**Note: Updated instructions for conan2!**
 For non-catkin users, we also offer a conan based install process. Its experimental and might not work on all platforms, especially Windows.
 Since conan handles installing all C++ dependencies, all you need is a cloned repository, conan itself and a few python dependencies:
 ```bash
 pip install conan catkin_pkg numpy
-conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan # required for python bindings
-conan config set general.revisions_enabled=1 # requried to use bincrafters remote
 git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
 cd lanelet2
 ```
 
 From here, just use the default conan build/install procedure, e.g.:
 ```bash
-conan source .
-conan create . lanelet2/stable --build=missing
+conan create . --build=missing
 ```
 Different from the conan defaults, we build lanelet2 and boost as shared libraries, because otherwise the lanelet2's plugin mechanisms as well as boost::python will fail. E.g. loading maps will not be possible and the python API will not be usable.
 
-To be able to use the python bindings, you have to make conan export the PYTHONPATH for lanelet2:
+To be able to use the python bindings, you have to make conan export the PYTHONPATH for lanelet2 after `conan create`:
 ```bash
-conan install lanelet2/0.0.0@lanelet2/stable --build=missing -g virtualenv # replace 0.0.0 with the version shown by conan
 source activate.sh
 python -c "import lanelet2" # or whatever you want to do
 source deactivate.sh
