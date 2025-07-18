@@ -9,6 +9,7 @@
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/geometries/register/multi_linestring.hpp>
 
+#include "lanelet2_core/primitives/CompoundPolygon.h"
 #include "lanelet2_python/internal/converter.h"
 
 BOOST_GEOMETRY_REGISTER_MULTI_LINESTRING(lanelet::LineStrings2d)
@@ -96,6 +97,7 @@ object to2D(object o) {
   TO2D_AS(Polygon3d)
   TO2D_AS(ConstPolygon3d)
   TO2D_AS(CompoundLineString3d)
+  TO2D_AS(CompoundPolygon3d)
   return o;
 }
 
@@ -110,6 +112,7 @@ object to3D(object o) {
   TO3D_AS(Polygon2d)
   TO3D_AS(ConstPolygon2d)
   TO3D_AS(CompoundLineString2d)
+  TO3D_AS(CompoundPolygon2d)
   return o;
 }
 #undef TO2D_AS
@@ -193,8 +196,6 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       "distance", +[](const ConstLanelet& llt1, const ConstLanelet& llt2) { return lg::distance2d(llt1, llt2); });
   def(
       "distance", +[](const BasicPoint2d& p, const ConstLanelet& llt) { return lg::distance2d(llt, p); });
-  def(
-      "distance", +[](const ConstLanelet& llt2, const ConstLanelet& llt1) { return lg::distance2d(llt1, llt2); });
 
   // p2area
   def(
@@ -216,12 +217,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("distance", lg::distance<CompoundLineString3d, ConstPoint3d>);
   def("distance", lg::distance<ConstPoint3d, ConstLineString3d>);
   def("distance", lg::distance<ConstLineString3d, ConstPoint3d>);
-  def("distance", lg::distance<ConstPoint3d, CompoundLineString3d>);
-  def("distance", lg::distance<CompoundLineString3d, ConstPoint3d>);
 
   // p2lines
-  def("distanceToLines", distancePointToLss<ConstPoint2d>);
-  def("distanceToLines", distancePointToLss<BasicPoint2d>);
   def("distanceToLines", distancePointToLss<ConstPoint2d>);
   def("distanceToLines", distancePointToLss<BasicPoint2d>);
 
@@ -288,9 +285,28 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
   def("area", boost::geometry::area<BasicPolygon2d>);
   def("area", boost::geometry::area<ConstHybridPolygon2d>);
 
-  class_<ArcCoordinates>("ArcCoordinates", "Coordinates along an arc", init<>())
+  def("curvature2d", lg::curvature2d<BasicPoint2d>);
+  def("curvature2d", lg::curvature2d<ConstPoint2d>);
+
+  def("signedCurvature2d", lg::signedCurvature2d<BasicPoint2d>);
+  def("signedCurvature2d", lg::signedCurvature2d<ConstPoint2d>);
+
+  class_<ArcCoordinates>("ArcCoordinates", "Coordinates along an arc", no_init)
+      .def("__init__", make_constructor(
+                           +[](double length, double distance) {
+                             return std::make_shared<ArcCoordinates>(ArcCoordinates{length, distance});
+                           },
+                           default_call_policies(),
+                           (arg("length") = 0., arg("distance") = 0.)))
       .def_readwrite("length", &ArcCoordinates::length, "length along arc")
-      .def_readwrite("distance", &ArcCoordinates::distance, "signed distance to arc (left is positive");
+      .def_readwrite("distance", &ArcCoordinates::distance, "signed distance to arc (left is positive")
+      .def(
+          "__eq__", +[](const ArcCoordinates& ac1,
+                        const ArcCoordinates& ac2) { return ac1.length == ac2.length && ac1.distance == ac2.distance; })
+      .def(
+          "__repr__", +[](const ArcCoordinates& ac) {
+            return "ArcCoordinates(" + std::to_string(ac.length) + ", " + std::to_string(ac.distance) + ")";
+          });
 
   def("toArcCoordinates", lg::toArcCoordinates<ConstLineString2d>,
       "Project a point into arc coordinates of the linestring");

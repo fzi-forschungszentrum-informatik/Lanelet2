@@ -19,19 +19,18 @@ jobs:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
         include:
           - python-version: "3.8"
-            boost-version: "1.75.0"
             platform-version: manylinux_2_27_x86_64
             image-version: conanio/gcc7:latest
           - python-version: "3.9"
-            boost-version: "1.75.0"
             platform-version: manylinux_2_27_x86_64
             image-version: conanio/gcc7:latest
           - python-version: "3.10"
-            boost-version: "1.81.0"
             platform-version: manylinux_2_31_x86_64
             image-version: conanio/gcc10:latest
           - python-version: "3.11"
-            boost-version: "1.81.0"
+            platform-version: manylinux_2_31_x86_64
+            image-version: conanio/gcc10:latest
+          - python-version: "3.12"
             platform-version: manylinux_2_31_x86_64
             image-version: conanio/gcc10:latest
     runs-on: ubuntu-latest
@@ -52,7 +51,6 @@ jobs:
             FROM=${{ matrix.image-version }}
             PY_VERSION=${{ matrix.python-version }}
             PLATFORM=${{ matrix.platform-version }}
-            CONAN_ARGS=--require-override=boost/${{ matrix.boost-version }}
 
       - name: Create output directory
         run: mkdir -p ${{ github.workspace }}/output
@@ -72,9 +70,9 @@ jobs:
             sudo cp -r $HOME/dist/* /dist
 
       - name: Store wheel
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ matrix.python-version }}
           path: dist/
 
   test:
@@ -82,21 +80,27 @@ jobs:
     strategy:
       matrix:
         # test only on currently supported version
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
-        os: ["ubuntu-22.04", "ubuntu-20.04"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        os: ["ubuntu-20.04", "ubuntu-22.04", "ubuntu-24.04"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Restore wheel
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: dist
+          pattern: dist-*
+          merge-multiple: true
           path: dist/
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install wheel 24.04
+        # use dist/ directory as package source instead of pypi.org
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
+        run: pip install lanelet2 --break-system-packages --no-index --find-links dist/
       - name: Install wheel
         # use dist/ directory as package source instead of pypi.org
+        if: ${{ matrix.os != 'ubuntu-24.04' }}
         run: pip install lanelet2 --no-index --find-links dist/
       - name: Test wheel
         run: python -c "import lanelet2; assert lanelet2.core.Point2d(0, 0, 0) is not None"
@@ -107,9 +111,10 @@ jobs:
     needs: [build, test]
     steps:
       - name: Restore wheel
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: dist
+          pattern: dist-*
+          merge-multiple: true
           path: dist/
 
       - name: Release
@@ -124,7 +129,7 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
 
   deploy-pages:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: github.ref == 'refs/heads/master'
     concurrency: deploy-${{ github.ref }}
     steps:

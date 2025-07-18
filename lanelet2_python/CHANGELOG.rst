@@ -2,13 +2,33 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.2 (2024-10-25)
+------------------
+* Update print_ids.py to Python3 (`#357 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/357>`_)
+* Implement signed curvature (`#355 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/355>`_)
+* Migrate conanfile to conan2 (`#364 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/364>`_)
+* Add missing argument in RoutingGraph.routingRelation python interface (`#349 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/349>`_)
+  Co-authored-by: poggenhans 
+* Add/fix python repr interface for 2d lines/points (`#348 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/348>`_)
+  * Add/fix python repr interface for 2d lines/points
+  * Remove whitespace
+  ---------
+  Co-authored-by: poggenhans 
+* Improve ArcCoordinates interface (`#351 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/351>`_)
+  * improve python interface for ArcCoordinates
+  Co-authored-by: poggenhans 
+* Added missing to_python converter for ConstWeakLanelet (`#331 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/331>`_)
+  Co-authored-by: Julian Brandes 
+* Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)
+* Contributors: DavUhll, Julian, R-Fehler, johannes-fischer, poggenhans
+
 1.2.1 (2023-05-10)
 ------------------
 * Improve python core module (`#293 <https://github.com/immel-f/Lanelet2/issues/293>`_)
   Improve lanelet2.core python wrappers
   add docstrings, named arguments and __repr_\_ methods to core primitives in python, fix bugs and add more initialization options
   ---------
-  Co-authored-by: Fabian Poggenhans <fabian.poggenhans@partner.kit.edu>
+  Co-authored-by: Fabian Poggenhans 
 * Add readme to PyPi package description and fix readme icons (`#283 <https://github.com/immel-f/Lanelet2/issues/283>`_)
 * Build lanelet2 wheel and publish in GH release and PyPI (`#278 <https://github.com/immel-f/Lanelet2/issues/278>`_)
 * Contributors: Jan Rudolph, immel-f, poggenhans
