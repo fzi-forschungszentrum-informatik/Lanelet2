@@ -325,9 +325,9 @@ const std::string& TrafficRules::participant() const { return config_.at("partic
 const std::string& TrafficRules::location() const { return config_.at("location").value(); }
 
 Optional<bool> GenericTrafficRules::canPass(const std::string& type, const std::string& /*location*/) const {
-  using ParticantsMap = std::map<std::string, std::vector<std::string>>;
+  using ParticipantsMap = std::map<std::string, std::vector<std::string>>;
   using Value = AttributeValueString;
-  const static ParticantsMap ParticipantMap{
+  const static ParticipantsMap ParticipantMap{
       {"", {Participants::Vehicle}},
       {Value::Road, {Participants::Vehicle, Participants::Bicycle}},
       {Value::Highway, {Participants::Vehicle}},
