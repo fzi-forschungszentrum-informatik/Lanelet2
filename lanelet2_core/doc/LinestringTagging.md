@@ -73,6 +73,7 @@ subtype:
 
 Other types:
 * stop_line
+* yield_line
 * zig-zag
 * lift_gate
 * bump
