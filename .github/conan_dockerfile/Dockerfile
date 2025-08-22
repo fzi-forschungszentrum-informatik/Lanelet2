@@ -3,6 +3,7 @@ ARG FROM=conanio/gcc10:latest
 FROM ${FROM} AS lanelet2_conan_deps
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV CMAKE_POLICY_VERSION_MINIMUM 3.5
 
 # install requirements for python installation
 RUN sudo -E apt-get update \
