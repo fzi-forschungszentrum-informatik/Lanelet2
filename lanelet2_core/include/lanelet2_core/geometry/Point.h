@@ -22,6 +22,7 @@ BOOST_GEOMETRY_REGISTER_POINT_2D_CONST(lanelet::ConstPoint2d, double, cs::cartes
 BOOST_GEOMETRY_REGISTER_POINT_3D(lanelet::Point3d, double, cs::cartesian, x(), y(), z())
 BOOST_GEOMETRY_REGISTER_POINT_3D_CONST(lanelet::ConstPoint3d, double, cs::cartesian, x(), y(), z())
 
+#if BOOST_VERSION < 108700
 namespace boost {
 namespace geometry {
 // Help boost with type deduction for proxies
@@ -37,6 +38,7 @@ struct robust_point_type<const lanelet::BasicPoint2d, detail::no_rescale_policy>
 
 }  // namespace geometry
 }  // namespace boost
+#endif
 
 namespace lanelet {
 namespace geometry {
