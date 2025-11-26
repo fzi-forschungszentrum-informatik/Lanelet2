@@ -31,7 +31,7 @@ RUN set -ex; \
         cmake \
         keyboard-configuration \
         locales \
-        lsb-core \
+        lsb-release \
         lib${PY_VERSION}-dev \
         software-properties-common \
         sudo \
