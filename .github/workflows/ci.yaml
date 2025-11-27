@@ -45,7 +45,7 @@ jobs:
       - name: Run clang formatting check
         run: |
           set -ex
-          docker run -i --rm lanelet2_src find . -name "*.cpp" -o -name "*.h" -execdir clang-format-11 -n -Werror --style=file {} +
+          docker run -i --rm lanelet2_src find . -name "*.cpp" -o -name "*.h" -execdir clang-format -n -Werror --style=file {} +
   
   lint:
     needs: formatting
