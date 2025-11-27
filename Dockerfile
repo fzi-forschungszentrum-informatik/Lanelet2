@@ -60,11 +60,15 @@ RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
         then export PY_VERSION=python; \
         else export PY_VERSION=python3; \
     fi; \
+    GEOGRAPHIC_SUFFIX= \
+    if [ ${DISTRIBUTION} = "24.04" ]; then \
+        GEOGRAPHIC_SUFFIX="lib"; \
+    fi; \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libgtest-dev \
         libboost-all-dev \
         libeigen3-dev \
-        libgeographic-dev \
+        libgeographic${GEOGRAPHIC_SUFFIX}-dev \
         libpugixml-dev \
         libboost-python-dev \
         ${PY_VERSION}-rospkg \
