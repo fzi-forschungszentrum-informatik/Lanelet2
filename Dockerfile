@@ -60,9 +60,9 @@ RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
         then export PY_VERSION=python; \
         else export PY_VERSION=python3; \
     fi; \
-    GEOGRAPHIC_SUFFIX= \
+    export GEOGRAPHIC_SUFFIX="" ; \
     if [ ${DISTRIBUTION} = "24.04" ]; then \
-        GEOGRAPHIC_SUFFIX="lib"; \
+        export GEOGRAPHIC_SUFFIX="lib"; \
     fi; \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libgtest-dev \
@@ -100,7 +100,7 @@ RUN useradd --create-home --groups sudo --shell /bin/bash developer && \
 
 # environment, dependencies and entry points
 USER developer
-ENV HOME /home/developer
+ENV HOME=/home/developer
 WORKDIR /home/developer/workspace
 
 RUN set -ex; \
