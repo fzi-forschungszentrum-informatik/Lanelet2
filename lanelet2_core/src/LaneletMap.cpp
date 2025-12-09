@@ -462,6 +462,53 @@ void PrimitiveLayer<RegulatoryElementPtr>::add(const PrimitiveLayer<RegulatoryEl
 }
 
 template <typename T>
+void PrimitiveLayer<T>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    for (const auto& elem : *prim_it) {
+      remove_from_multimap(tree_->usage.ownedLookup, *prim_it, elem);
+    }
+    this->elements_.erase(element);
+  }
+}
+
+template <>
+void PrimitiveLayer<Area>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    tree_->usage.remove(*prim_it);
+    this->elements_.erase(element);
+  }
+}
+
+template <>
+void PrimitiveLayer<Lanelet>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    tree_->usage.remove(*prim_it);
+    this->elements_.erase(element);
+  }
+}
+
+template <>
+void PrimitiveLayer<Point3d>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    tree_->usage.remove(*prim_it);
+    this->elements_.erase(element);
+  }
+}
+
+template <>
+void PrimitiveLayer<RegulatoryElementPtr>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    tree_->usage.remove(*prim_it);
+    this->elements_.erase(element);
+  }
+}
+
+template <typename T>
 std::vector<typename PrimitiveLayer<T>::ConstPrimitiveT> PrimitiveLayer<T>::findUsages(
     const traits::ConstPrimitiveType<traits::OwnedT<PrimitiveLayer<T>::PrimitiveT>>& primitive) const {
   return forEachMatchInMultiMap<traits::ConstPrimitiveType<typename PrimitiveLayer<T>::PrimitiveT>>(
