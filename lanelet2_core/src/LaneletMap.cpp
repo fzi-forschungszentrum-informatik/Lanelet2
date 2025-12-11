@@ -774,6 +774,86 @@ void LaneletMap::add(Point3d point) {
   pointLayer.add(point);
 }
 
+bool LaneletMap::removeIfUnused(const RegulatoryElementConstPtr& regElem) {
+  if (regElem) {
+    if (not laneletLayer.findUsages(regElem).empty()) {
+      return false;
+    }
+    if (not areaLayer.findUsages(regElem).empty()) {
+      return false;
+    }
+    regulatoryElementLayer.remove(regElem->id());
+    return true;
+  }
+
+  return false;
+}
+
+void LaneletMap::remove(const RegulatoryElementConstPtr& regElem) {
+  if (regElem) {
+    auto llts = laneletLayer.findUsages(regElem);
+    for (auto& llt : llts) {
+      llt.removeRegulatoryElement(utils::removeConst(regElem));
+    }
+    laneletLayer.tree_->usage.regElemLookup.erase(regElem);
+
+    auto areas = areaLayer.findUsages(regElem);
+    for (auto& area : areas) {
+      area.removeRegulatoryElement(utils::removeConst(regElem));
+    }
+    areaLayer.tree_->usage.regElemLookup.erase(regElem);
+
+    regulatoryElementLayer.remove(regElem->id());
+  }
+}
+
+bool LaneletMap::removeIfUnused(const ConstLanelet& lanelet) {
+  laneletLayer.remove(lanelet.id());
+  return true;
+}
+
+bool LaneletMap::removeIfUnused(const ConstArea& area) {
+  areaLayer.remove(area.id());
+  return true;
+}
+
+bool LaneletMap::removeIfUnused(const ConstPolygon3d& polygon) {
+  polygonLayer.remove(polygon.id());
+  return true;
+}
+
+bool LaneletMap::removeIfUnused(const ConstLineString3d& lineString) {
+  if (not laneletLayer.findUsages(lineString).empty()) {
+    return false;
+  }
+  if (not laneletLayer.findUsages(lineString.invert()).empty()) {
+    return false;
+  }
+
+  if (not areaLayer.findUsages(lineString).empty()) {
+    return false;
+  }
+  if (not areaLayer.findUsages(lineString.invert()).empty()) {
+    return false;
+  }
+
+  lineStringLayer.remove(lineString.id());
+  return true;
+}
+
+bool LaneletMap::removeIfUnused(const ConstPoint3d& point) {
+  if (not lineStringLayer.findUsages(point).empty()) {
+    return false;
+  }
+
+  if (not polygonLayer.findUsages(point).empty()) {
+    return false;
+  }
+
+  pointLayer.remove(point.id());
+  return true;
+}
+
 void LaneletSubmap::add(Lanelet lanelet) {
   checkId(lanelet);
   utils::forEach(lanelet.regulatoryElements(), [&](auto& regElem) { this->trackParameters(*regElem); });
