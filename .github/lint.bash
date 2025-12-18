@@ -35,4 +35,4 @@ cmake $LANELET2_ROOT -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCATKIN_ENABLE_TESTING=1
 popd
 
 # run clang-tidy
-find . -name "*.cpp" -print0 | xargs -0 -I{} -P$(nproc --all) clang-tidy-11 -p $BUILD_DIR {}
+find . -name "*.cpp" -print0 | xargs -0 -I{} -P$(nproc --all) clang-tidy -p $BUILD_DIR {}

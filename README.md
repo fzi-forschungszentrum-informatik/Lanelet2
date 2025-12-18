@@ -117,6 +117,7 @@ sudo apt-get install ros-melodic-rospack ros-melodic-catkin ros-melodic-mrt-cmak
 ```bash
 sudo apt-get install libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
 ```
+NOTE: On Ubuntu 24.04 and later, install `libgeographiclib-dev` instead of `libgeographic-dev`.
 
 **On 16.04 and below**, `mrt_cmake_modules` is not available in ROS and you have to clone it into your workspace (`git clone https://github.com/KIT-MRT/mrt_cmake_modules.git`).
 

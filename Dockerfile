@@ -20,7 +20,7 @@ RUN set -ex; \
         else export PY_VERSION=python3; \
     fi; \
     if [ "$DEV" -ne "0" ]; then \
-        export DEV_PACKAGES="clang-format-11 clang-tidy-11 clang-11 i${PY_VERSION} nano lcov"; \
+        export DEV_PACKAGES="clang-format clang-tidy clang i${PY_VERSION} nano lcov"; \
     fi; \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -31,7 +31,7 @@ RUN set -ex; \
         cmake \
         keyboard-configuration \
         locales \
-        lsb-core \
+        lsb-release \
         lib${PY_VERSION}-dev \
         software-properties-common \
         sudo \
@@ -60,11 +60,15 @@ RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
         then export PY_VERSION=python; \
         else export PY_VERSION=python3; \
     fi; \
+    if [ "${DISTRIBUTION}" = "24.04" ]; \
+        then export LIB_GEOGRAPHIC_PACKAGE="libgeographiclib-dev"; \
+        else export LIB_GEOGRAPHIC_PACKAGE="libgeographic-dev" ; \
+    fi; \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libgtest-dev \
         libboost-all-dev \
         libeigen3-dev \
-        libgeographic-dev \
+        ${LIB_GEOGRAPHIC_PACKAGE} \
         libpugixml-dev \
         libboost-python-dev \
         ${PY_VERSION}-rospkg \
@@ -96,7 +100,7 @@ RUN useradd --create-home --groups sudo --shell /bin/bash developer && \
 
 # environment, dependencies and entry points
 USER developer
-ENV HOME /home/developer
+ENV HOME=/home/developer
 WORKDIR /home/developer/workspace
 
 RUN set -ex; \
