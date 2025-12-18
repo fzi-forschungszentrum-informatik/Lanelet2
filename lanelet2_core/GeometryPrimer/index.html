@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>GeometryPrimer - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "GeometryPrimer";
+    var mkdocs_page_input_path = "lanelet2_core/GeometryPrimer.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">GeometryPrimer</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#using-lanelet-primitives-in-boostgeometry">Using Lanelet Primitives in Boost.Geometry</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#understanding-boost-geometrys-errors">Understanding Boost Geometry's Errors</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Detailed Documentation &raquo;</li>
+        
+      
+    
+    <li>GeometryPrimer</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_core/GeometryPrimer.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="geometry-calculations-with-lanelet2">Geometry Calculations With Lanelet2</h1>
+<p>Lanelet2 primitives interface with <a href="https://github.com/boostorg/geometry">Boost.Geometry</a>. Boost.Geometry offers almost all common geometry calculations and is very fast. One downside is that not all algorithms work well with normal Lanelet2 primitives (see below). Another downside is that Boost.Geometry is compile-time heavy and is thus not included in the normal lanelet2 headers. To use geometry calculations, include the respective geometry header, e.g. <code>geometry/LineString.h</code>. </p>
+<p>Thanks to boost, all common geometry algorithms are available out of the box. E.g. you can compute distances between points, linestrings, polygons, etc in all combinations in (mostly) all dimensions.</p>
+<p>There are usually two different kinds of algorithms: The one that Boost implements (like <code>distance</code>) and the one that Lanelet2 implements (mostly on top of Boost), like <code>boundingBox2d</code>. When using the first kind, you should read the lines below, while the second kind can be used without further reading.</p>
+<p>For a list of algorithms that are available, please refer too Boost's documentation or look through lanelet's geometry headers (or doxygen). All algorithms there have a small description.</p>
+<h2 id="using-lanelet-primitives-in-boostgeometry">Using Lanelet Primitives in Boost.Geometry</h2>
+<p>Lanelet2 offers every geometrical primitive in three flavors, each for 2D and 3D. Because they are just pointers to the actual data, they can be converted without actually copying data:
+* <strong>Mutable</strong> (e.g. <code>LineString2d</code>): Are mutable, returned members are mutable (unless the object is const, then they are also immutable)
+* <strong>Const</strong> (e.g. <code>ConstLineString2d</code>): These are immutable, returned members (e.g. points of linestring) are also immutable
+* <strong>Hybrid</strong> (e.g. <code>ConstHybridLineString2d</code>): Also immutable, returned members are not lanelet primitives (e.g. <code>BasicPoint2d</code>). <em>If in doubt, use this one</em>.</p>
+<p>Let us consider these types one by one. The first one (<strong>mutable</strong>) has the property that it behaves differently (i.e. returns different types) when used <code>const</code> or <code>non-const</code>. This is an issue for some of Boost.Geometry algorithms, because they sometimes accept const and sometimes non-const objects and therefore get the type wrong. Even if they get the type right, Boost is not fully compatible with the concept that copied primitives still refer to the same data and might therefore accidentally modify the wrong data. Therefore algorithms that modify the input (e.g. <code>correct</code>) are possible, but there is no 100% guarantee they work as expected (across all versions of Boost).</p>
+<p>The <strong>const</strong> version does not have the risk of accidentally modifying the wrong data (because they are always immutable), however some algorithms that should not modify the data still try to instanciate templates in which the data <em>can</em> be modified. This results in longish compiler errors (and this might change from Boost version to Boost version). Algorithms that modify the input data (such as <code>correct</code>) can not be used because of the constness.</p>
+<p>The <strong>hybrid</strong> version returns non-lanelet objects (BasicPoint2d/3d), which are fully compatible with Boost. This is the best solution for almost all geometry calculations. However, algorithms that mutate the primitive itself (such as <code>correct</code>) are not possible because the hybrid versions themselves are immutable (no points can be deleted or added).</p>
+<p>In summary:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>For example</th>
+<th>Use for Boost.Geometry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mutable</td>
+<td>LineString2d</td>
+<td>Only for mutating algorithms, but use with care</td>
+</tr>
+<tr>
+<td>Const</td>
+<td>ConstLineString2d</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Hybrid</td>
+<td>ConstHybridLineString2d</td>
+<td>Yes, safe to use if they compile</td>
+</tr>
+</tbody>
+</table>
+<h2 id="understanding-boost-geometrys-errors">Understanding Boost Geometry's Errors</h2>
+<p>Boost geometry is known for outputting endless lines of compiler errors when used in the wrong way. Here are some hints to find out what you did wrong (sometimes you have to look closely for the actual error in many lines of instanciated templates). They are related to GCC's error messages, but other compilers will output similar stuff:
+* Something about "no member named 'set' in boost::geometry::traits::access [...]: You used a const primitive (or you used a mutable primitive and Boost converted it into a const by a mistake). Try using the hybrid version.
+* Some error including "NOT_IMPLEMENTED_FOR_THIS_POINT_TYPE" together with some *no matching function for call to assertion failed": This is a very generic error and the error message may be misleading. One reason could be that you forgot to include some <code>lanelet2_core/geometry</code> headers. Other reasons could be that you used the function on a primitive it was not implemented for (refer to Boosts documentation for that) or that it was not implemented for this particular dimension. Especially 3D operations are often not implemented in boost::geometry.
+* Something with "You mixed matrices of different sizes". This is actually an error from <code>Eigen</code>. It means you passed a <code>BasicPoint3d</code> where a <code>BasicPoint2d</code> was expected (or vice versa).
+* Something with "no matching member function for call to '_init1'", also from <code>Eigen</code>: You passed a wrong type where a BasicPoint2d/3d was expected.
+* Some error in <code>boost::assert_dimension_equal</code>: You passed a 2d primitive to Boost where a 3d primitive was expected (or vice versa).</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Lanelet1Compability/" class="btn btn-neutral float-right" title="Lanelet1Compability">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Architecture/" class="btn btn-neutral" title="Architecture"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../Architecture/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../Lanelet1Compability/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
