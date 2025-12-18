@@ -16,7 +16,8 @@ ARG PY_VERSION=3.12
 RUN pyenv update \
   && pyenv install -s $PY_VERSION \
   && pyenv global $PY_VERSION
-RUN pip install "conan~=2.8.0" catkin_pkg "numpy<2.0" wheel auditwheel cmake
+RUN pip install "conan~=2.8.0" catkin_pkg oldest-supported-numpy wheel auditwheel cmake
+# oldest-supported-numpy for ABI compatibility
 
 # install patchelf
 RUN wget https://github.com/NixOS/patchelf/releases/download/0.17.2/patchelf-0.17.2-x86_64.tar.gz \
