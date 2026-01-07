@@ -99,6 +99,11 @@ jobs:
             os: 24.04
             ros: ros2
     steps:
+      - name: Delete unnecessary tools folder
+        run: rm -rf /opt/hostedtoolcache
+      
+      - uses: actions/checkout@v3
+        
       - name: Setup docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
