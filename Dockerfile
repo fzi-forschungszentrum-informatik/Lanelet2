@@ -65,11 +65,16 @@ RUN set -ex; \
         then export LIB_GEOGRAPHIC_PACKAGE="libgeographiclib-dev"; \
         else export LIB_GEOGRAPHIC_PACKAGE="libgeographic-dev" ; \
     fi; \
+    if [ "$(lsb_release -sc)" = "jammy" ] ||[ "$(lsb_release -sc)" = "noble" ]; \
+        then export LIB_OMP="libomp-dev"; \
+        else export LIB_OMP="" ; \
+    fi; \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libgtest-dev \
         libboost-all-dev \
         libeigen3-dev \
         ${LIB_GEOGRAPHIC_PACKAGE} \
+        ${LIB_OMP} \
         libpugixml-dev \
         libboost-python-dev \
         ${PY_VERSION}-rospkg \
