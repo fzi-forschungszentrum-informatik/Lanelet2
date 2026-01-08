@@ -56,11 +56,12 @@ RUN set -ex; \
     echo "deb [signed-by=$KEY_FILE] http://packages.ros.org/${ROS}/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros.list
 
 # dependencies for lanelet2
-RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
+RUN set -ex; \
+    if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
         then export PY_VERSION=python; \
         else export PY_VERSION=python3; \
     fi; \
-    if [ "${DISTRIBUTION}" = "24.04" ]; \
+    if [ "$(lsb_release -sc)" = "noble" ]; \
         then export LIB_GEOGRAPHIC_PACKAGE="libgeographiclib-dev"; \
         else export LIB_GEOGRAPHIC_PACKAGE="libgeographic-dev" ; \
     fi; \
