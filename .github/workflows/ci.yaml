@@ -145,7 +145,7 @@ jobs:
 
       - name: Build Lanelet2 (skip lcov)
         uses: docker/build-push-action@v3
-        if: ${{ matrix.rosdistro == 'humble' || matrix.rosdistro == 'galactic' }}
+        if: ${{ matrix.rosdistro == 'jazzy' || matrix.rosdistro == 'humble' || matrix.rosdistro == 'galactic' }}
         with:
           builder: ${{ steps.buildx.outputs.name }}
           tags: lanelet2:${{ matrix.rosdistro }}
