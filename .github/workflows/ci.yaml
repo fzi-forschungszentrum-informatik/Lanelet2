@@ -45,7 +45,7 @@ jobs:
       - name: Run clang formatting check
         run: |
           set -ex
-          docker run -i --rm lanelet2_src find . -name "*.cpp" -o -name "*.h" -execdir clang-format-11 -n -Werror --style=file {} +
+          docker run -i --rm lanelet2_src find . -name "*.cpp" -o -name "*.h" -execdir clang-format -n -Werror --style=file {} +
   
   lint:
     needs: formatting
@@ -84,7 +84,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        rosdistro: [noetic, galactic, humble]
+        rosdistro: [noetic, galactic, humble, jazzy]
         include:
           - rosdistro: noetic
             os: 20.04
@@ -94,6 +94,9 @@ jobs:
             ros: ros2
           - rosdistro: humble
             os: 22.04
+            ros: ros2
+          - rosdistro: jazzy
+            os: 24.04
             ros: ros2
     steps:
       - name: Delete unnecessary tools folder
@@ -142,7 +145,7 @@ jobs:
 
       - name: Build Lanelet2 (skip lcov)
         uses: docker/build-push-action@v3
-        if: ${{ matrix.rosdistro == 'humble' || matrix.rosdistro == 'galactic' }}
+        if: ${{ matrix.rosdistro == 'jazzy' || matrix.rosdistro == 'humble' || matrix.rosdistro == 'galactic' }}
         with:
           builder: ${{ steps.buildx.outputs.name }}
           tags: lanelet2:${{ matrix.rosdistro }}
@@ -193,7 +196,7 @@ jobs:
         # to reach 2_27, we need a gcc7.
         # to build python>3.10, we need boost>1.75.
         # to build boost>1.81 we need a gcc>10.
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
         include:
           - python-version: "3.8"
             platform-version: manylinux_2_27_x86_64
@@ -208,6 +211,9 @@ jobs:
             platform-version: manylinux_2_31_x86_64
             image-version: conanio/gcc10:latest
           - python-version: "3.12"
+            platform-version: manylinux_2_31_x86_64
+            image-version: conanio/gcc10:latest
+          - python-version: "3.13"
             platform-version: manylinux_2_31_x86_64
             image-version: conanio/gcc10:latest
     runs-on: ubuntu-latest

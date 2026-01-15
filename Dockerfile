@@ -20,7 +20,7 @@ RUN set -ex; \
         else export PY_VERSION=python3; \
     fi; \
     if [ "$DEV" -ne "0" ]; then \
-        export DEV_PACKAGES="clang-format-11 clang-tidy-11 clang-11 i${PY_VERSION} nano lcov"; \
+        export DEV_PACKAGES="clang-format clang-tidy clang i${PY_VERSION} nano lcov"; \
     fi; \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -31,7 +31,7 @@ RUN set -ex; \
         cmake \
         keyboard-configuration \
         locales \
-        lsb-core \
+        lsb-release \
         lib${PY_VERSION}-dev \
         software-properties-common \
         sudo \
@@ -56,15 +56,25 @@ RUN set -ex; \
     echo "deb [signed-by=$KEY_FILE] http://packages.ros.org/${ROS}/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros.list
 
 # dependencies for lanelet2
-RUN if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
+RUN set -ex; \
+    if [ "${ROS_DISTRO}" = "melodic" ] || [ "${ROS_DISTRO}" = "kinetic" ]; \
         then export PY_VERSION=python; \
         else export PY_VERSION=python3; \
+    fi; \
+    if [ "$(lsb_release -sc)" = "noble" ]; \
+        then export LIB_GEOGRAPHIC_PACKAGE="libgeographiclib-dev"; \
+        else export LIB_GEOGRAPHIC_PACKAGE="libgeographic-dev" ; \
+    fi; \
+    if [ "$(lsb_release -sc)" = "jammy" ] ||[ "$(lsb_release -sc)" = "noble" ]; \
+        then export LIB_OMP="libomp-dev"; \
+        else export LIB_OMP="" ; \
     fi; \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libgtest-dev \
         libboost-all-dev \
         libeigen3-dev \
-        libgeographic-dev \
+        ${LIB_GEOGRAPHIC_PACKAGE} \
+        ${LIB_OMP} \
         libpugixml-dev \
         libboost-python-dev \
         ${PY_VERSION}-rospkg \
@@ -96,7 +106,7 @@ RUN useradd --create-home --groups sudo --shell /bin/bash developer && \
 
 # environment, dependencies and entry points
 USER developer
-ENV HOME /home/developer
+ENV HOME=/home/developer
 WORKDIR /home/developer/workspace
 
 RUN set -ex; \
