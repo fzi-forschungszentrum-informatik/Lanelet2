@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>lanelet2_core - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "lanelet2_core";
+    var mkdocs_page_input_path = "lanelet2_core.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">lanelet2_core</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>lanelet2_core</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_core.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="lanelet2-core">Lanelet2 Core</h1>
+<p>For an overview on the Lanelet2 architecture, see <a href="doc/Architecture.md">here</a></p>
+<p>This package contains the core library of Lanelet2:
+- The <a href="doc/LaneletPrimitives.md">basic primitives</a>, including LaneletMap
+- <a href="doc/GeometryPrimer.md">Geometry functions</a></p>
+<p>For usage examples, please refer to the <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/tree/master/lanelet2_examples/README.md">lanelet2_examples</a> package.</p>
+<h2 id="debugging">Debugging</h2>
+<p>Debugging Lanelet objects can be annoying, because they are very deeply nested.
+To improve this, Lanelet2 offers helpers for <strong>GDB</strong> and <strong>QtCreator</strong>. Have a look <a href="./res">here</a>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../lanelet2_examples/" class="btn btn-neutral float-right" title="lanelet2_examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../lanelet2_examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Map_Projections_Coordinate_Systems - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Map_Projections_Coordinate_Systems";
+    var mkdocs_page_input_path = "lanelet2_projection/Map_Projections_Coordinate_Systems.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_core/">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_core/Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_core/GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_core/Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_core/LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_core/LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_core/LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_core/RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Map_Projections_Coordinate_Systems</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lanelet2s-conventions">Lanelet2's conventions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#map-files-osm">Map Files (.osm)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#internal-data">Internal Data</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gps-data">GPS Data</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#wip-a-short-primer-on-the-most-common-projections">WIP: A short primer on the most common projections</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#lanelet1-projection">Lanelet1 Projection?</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#wgs84-gps-coordinates-latlon">WGS84 (GPS coordinates, lat/lon, ...)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#utm-eastnorth">UTM (east/north)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#web-mercator">Web Mercator</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#links">Links</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#things-to-know">Things to know</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#height-related-stuff">Height-related stuff</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Detailed Documentation &raquo;</li>
+        
+      
+    
+    <li>Map_Projections_Coordinate_Systems</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_projection/Map_Projections_Coordinate_Systems.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="maps-projections-and-coordinate-reference-systems-crss">Maps, Projections and Coordinate Reference Systems (CRSs)</h1>
+<h3 id="introduction">Introduction</h3>
+<p>So, we just store .osm files in LatLon (like GPS) and Lanelet2 converts them to UTM (by default UTM32N), right? Why is there a file for explaining that?<br />
+Not so fast, my young boy!</p>
+<p>Let's say we stand on this point and want to know where we are. Let's get our GPS device out, measure the point and we know it, right?<br />
+Just for the moment. You're still too fast.</p>
+<p>But, I already incorporated ionospheric distortions, multi-path effects and did a long-time measurement!<br />
+Well, you still stand in Europe, but your data might very well live in the center of the earth.</p>
+<p>What do you mean?<br />
+Look, your GPS device gives you LatLon in the GPS's WGS84 frame, which is fixed to the earth, but the tectonic plate you're standing on is drifting relative to it with about 2.5 cm per year or more than 0.5 m(!) since 1989.</p>
+<p>Ok, so what do you propose?</p>
+<h3 id="lanelet2s-conventions">Lanelet2's conventions</h3>
+<h4 id="map-files-osm">Map Files (.osm)</h4>
+<p>.osm maps are stored in EPSG:4258, i.e. we use LatLon as usual, but we define them to be coupled to the European Reference Frame ETRF89. The frame was congruent with ITRF (and somehow WGS84), but is drifting away now. As we do not want to shift our maps every few years, we fix them in ETRF which is good enough (roughly &lt;1 cm local deviation).</p>
+<p>So, what does that mean for me?<br />
+For editing in JOSM, we can either pick WGS84 as projection or use EPSG:4258 by EPSG code.<br />
+This is due to the facts that<br />
+1.) JOSM doesn't incorporate the tectonic shift between WGS84/ITRF (WGS84 is not supposed to be much more accurate than 1 m, but it is aligned with ITRF at an accuracy of &lt;0.1 m) and ETRF89 and<br />
+2.) the difference between the WGS84 and the GRS80 ellipsoids (GRS80 is the basis for EPSG:4258/ETRF89) is &lt;0.1 mm (even for us that is precise enough).</p>
+<p>What do I need to think of when importing public OpenStreetMap data?<br />
+OSM data is by default defined in WGS84, thus you need to incorporate a time-dependent tectonic plate shift. This is supposed to be an option for you in Lanelet2, however you might still need to wiggle around the data a bit as most OpenStreetMap mapper do not care about that 0.5 m difference between ETRF89 and WGS84.</p>
+<h4 id="internal-data">Internal Data</h4>
+<p>Lanelet2 loads and reprojects .osm maps to a UTM, but still leaves them in ETRF89, i.e. we use projection EPSG:25832.  </p>
+<h4 id="gps-data">GPS Data</h4>
+<p>GPS data is in WGS84 and normally temporarily distorted by ionospheric distortions. So, either you compensate both the ionospheric distortions <em>and</em> the continental drift using e.g. SAPOS or you still need to correct the time-dependent drift after compensating for the ionospheric distortions.</p>
+<p>Martin Lauer already implemented the time-dependent shift, but this you be either an (open) dependency of LLT2 or become part of it (Martin already agreed with it).</p>
+<h3 id="wip-a-short-primer-on-the-most-common-projections">WIP: A short primer on the most common projections</h3>
+<h4 id="lanelet1-projection">Lanelet1 Projection?</h4>
+<p>What's about the projection used in liblanelet (v1)?<br />
+It is Mercator but with a customly selected reference point. Would have the advantage of backward compatibility.</p>
+<h4 id="wgs84-gps-coordinates-latlon">WGS84 (GPS coordinates, lat/lon, ...)</h4>
+<p>OSM <strong>data</strong> is stored in WGS84 (aka EPSG:4326) as are GPS positions by definition. It assumes the Earth is an ellipsoid (the corrected WGS84/EGM96; it's quite ok) and references the height w.r.t. this ellipsoid as <em>altitude</em>. However, as we assume that the map is ground-located, we'll refer to this as <em>elevation</em> (as it's done in the <a href="http://wiki.openstreetmap.org/wiki/Key:ele">OSM</a> <a href="http://wiki.openstreetmap.org/wiki/Altitude">standard</a>).</p>
+<h4 id="utm-eastnorth">UTM (east/north)</h4>
+<p>By default, UTM is the projection which you probably want to use for everything.</p>
+<p>Why? It's metric, distances are usually (i.e. within some distance (~180 km) to the reference meridian) okay, i.e. they are at most 0.04 % too short (at the reference meridian) which is 40 cm on 1 km, and the conversion from e.g. WGS84 to UTM is precise up to several nm (yes, nanometers!) if you use Karney's GeographicLib with TransverseMercatorExact as projection.</p>
+<p>Due to that reason, we use UTM as projection for internal data representation in Lanelet2 with a default of UTM32N. However, we do not use EPSG:32632 (which is what UTM32N commonly refers to) as one could expect, but EPSG:25832. This means that we stay local to the ETRF89 and thus fixed to the European tectonic plate, but everything else is the same as with the 'normal' UTM32N. The WGS84/GRS80 (EPSG:32632/EPSG:25832) ellipsoid difference is negligible (&lt;0.1 mm).</p>
+<h4 id="web-mercator">Web Mercator</h4>
+<p>Google Maps, Bing Maps and OSM <em>Tiles</em> are in Web Mercator. This is similar to WGS84, but uses a spherical assumptions. This is <strong>not</strong> supposed to be used in Lanelet2.</p>
+<h3 id="links">Links</h3>
+<h4 id="things-to-know">Things to know</h4>
+<p><a href="https://www.ordnancesurvey.co.uk/docs/support/guide-coordinate-systems-great-britain.pdf">A guide to coordinate systems (in great britain)</a><br />
+<a href="https://link.springer.com/article/10.1007%2Fs00190-011-0445-3">Transverse Mercator with an accuracy of a few nanometers</a> <a href="https://arxiv.org/pdf/1002.1417.pdf">arXiv Mirror</a><br />
+<a href="https://link.springer.com/article/10.1007%2Fs00190-012-0578-z">Algorithms for geodesics</a> <a href="https://arxiv.org/pdf/1109.4448.pdf">arXiv Mirror</a><br />
+<a href="https://arxiv.org/pdf/1102.1215.pdf">Geodesics on an ellipsoid of revolution</a>
+<a href="https://geographiclib.sourceforge.io/">Karney's GeographicLib</a><br />
+<a href="https://en.wikipedia.org/wiki/Vincenty%27s_formulae">Vincenty's Formulae</a> (Note: Karney's work and his solution to the inverse Geodesic problem (given two points, what's the distance?) obliterate Vincenty's method. Only the performance should be compared as Vincenty's method is already sufficiently accurate for our use cases.)</p>
+<h4 id="height-related-stuff">Height-related stuff</h4>
+<p><a href="http://www.killetsoft.de/t_1009_d.htm">Sind die Bezugssysteme WGS84 und ETRS89 wirklich gleich?</a><br />
+<a href="https://vdatum.noaa.gov/docs/datums.html">A tutorial on Datums</a><br />
+<a href="http://wiki.openstreetmap.org/wiki/Key:ele">Elevation in OSM</a><br />
+<a href="http://wiki.openstreetmap.org/wiki/Altitude">Altitude in OSM</a><br />
+<a href="http://www.esri.com/news/arcuser/0703/geoid1of3.html">Mean Sea Level, GPS, and the Geoid</a>  </p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../../lanelet2_core/RegulatoryElementTagging/" class="btn btn-neutral" title="RegulatoryElementTagging"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../lanelet2_core/RegulatoryElementTagging/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

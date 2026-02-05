@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href=".">Home</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#within-ros">Within ROS</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#without-ros">Without ROS</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#note">Note:</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-docker">Using Docker</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#manual-installation">Manual installation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dependencies">Dependencies</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#building">Building</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#manual-experimental-installation-using-conan">Manual, experimental installation using conan</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#python3">Python3</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#packages">Packages</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_core/">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_core/Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_core/GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_core/Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_core/LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_core/LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_core/LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_core/RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="lanelet2">Lanelet2</h1>
+<p><a href="https://github.com/fzi-forschungszentrum-informatik/lanelet2/actions/workflows/ci.yaml"><img alt="CI" src="https://github.com/fzi-forschungszentrum-informatik/lanelet2/actions/workflows/ci.yaml/badge.svg" /></a>
+<a href="https://github.com/fzi-forschungszentrum-informatik/lanelet2/actions/workflows/cd.yaml"><img alt="CD" src="https://github.com/fzi-forschungszentrum-informatik/lanelet2/actions/workflows/cd.yaml/badge.svg" /></a>
+<a href="https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/"><img alt="Build Status ROS focal/noetic" src="https://build.ros.org/job/Ndev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS%20noetic%20%28on%20focal%29" /></a>
+<a href="https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/"><img alt="Build Status ROS2 focal/foxy" src="https://build.ros2.org/job/Fdev__lanelet2__ubuntu_focal_amd64/lastBuild/badge/icon?subject=ROS2%20foxy%20%28on%20focal%29" /></a>
+<a href="https://build.ros2.org/job/Hdev__lanelet2__ubuntu_jammy_amd64/lastBuild/"><img alt="Build Status ROS2 jammy/humble" src="https://build.ros2.org/job/Hdev__lanelet2__ubuntu_jammy_amd64/lastBuild/badge/icon?subject=ROS2%20humble%20%28on%20jammy%29" /></a>
+<a href="https://pypi.org/project/lanelet2/"><img alt="PyPI Downloads" src="https://img.shields.io/pypi/dm/lanelet2.svg?label=PyPI%20downloads" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>Lanelet2 is a C++ library for handling map data in the context of automated driving. It is designed to utilize high-definition map data in order to efficiently handle the challenges posed to a vehicle in complex traffic scenarios. Flexibility and extensibility are some of the core principles to handle the upcoming challenges of future maps.</p>
+<p>Features:
+- <strong>2D and 3D</strong> support
+- <strong>Consistent modification</strong>: if one point is modified, all owning objects see the change
+- Supports <strong>lane changes</strong>, routing through areas, etc.
+- <strong>Separated routing</strong> for pedestrians, vehicles, bikes, etc.
+- Many <strong>customization points</strong> to add new traffic rules, routing costs, parsers, etc.
+- <strong>Simple convenience functions</strong> for common tasks when handling maps
+- <strong>Accurate Projection</strong> between the lat/lon geographic world and local metric coordinates
+- <strong>IO Interface</strong> for reading and writing e.g. <em>osm</em> data formats (this does not mean it can deal with <em>osm maps</em>)
+- <strong>Python</strong> bindings for the whole C++ interface
+- <strong>Boost Geometry</strong> support for all thinkable kinds of geometry calculations on map primitives
+- Released under the <a href="LICENSE"><strong>BSD 3-Clause license</strong></a>
+- Support for <strong>ROS1, ROS2, Docker and Conan</strong> (see instructions below)</p>
+<p><img alt="" src="lanelet2_core/doc/images/lanelet2_example_image.png" /></p>
+<p>Lanelet2 is the successor of the old <a href="https://github.com/phbender/liblanelet/tree/master/libLanelet">liblanelet</a> that was developed in 2013. If you know Lanelet1, you might be interested in <a href="lanelet2_core/doc/Lanelet1Compability.md">reading this</a>.</p>
+<h2 id="documentation">Documentation</h2>
+<p>You can find more documentation in the individual packages and in doxygen comments. Here is an overview on the most important topics:
+- <a href="lanelet2_core/doc/LaneletPrimitives.md">Here</a> is more information on the basic primitives that make up a Lanelet2 map.
+- <a href="lanelet2_core/doc/Architecture.md">Read here</a> for a primer on the <strong>software architecture</strong> of lanelet2.
+- There is also some <a href="lanelet2_core/doc/GeometryPrimer.md">documentation</a> on the geometry calculations you can do with lanelet2 primitives.
+- If you are interested in Lanelet2's <strong>projections</strong>, you will find more <a href="lanelet2_projection/doc/Map_Projections_Coordinate_Systems.md">here</a>.
+- To get more information on how to create valid maps, see <a href="lanelet2_maps/README.md">here</a>.</p>
+<p>You can also find the documentation at this <a href="https://fzi-forschungszentrum-informatik.github.io/Lanelet2">link</a>.</p>
+<h2 id="installation">Installation</h2>
+<h3 id="within-ros">Within ROS</h3>
+<p>Lanelet2 has been released for ROS. Just install <code>ros-[distribution]-lanelet2</code>, e.g.:</p>
+<pre><code>sudo apt install ros-noetic-lanelet2
+</code></pre>
+<h3 id="without-ros">Without ROS</h3>
+<p>Outside of ROS, Lanelet2 can be installed from PyPI. Note that currently only Python 3.8-3.11 linux builds are available and that Python 3.10+ is only supported for recent linux distributions such as Ubuntu 20.04+.</p>
+<pre><code>pip install lanelet2
+</code></pre>
+<h4 id="note">Note:</h4>
+<p>If you receive the error</p>
+<pre><code>ERROR: Could not find a version that satisfies the requirement lanelet2 (from versions: none)
+ERROR: No matching distribution found for lanelet2
+</code></pre>
+<p>during installation, even when using e.g. python 3.9 or 3.8 on a somewhat recent linux such as Ubuntu 18.04 or newer, your pip version is probably too old, 
+as e.g. the pip version that comes with apt on Ubuntu 20.04 (20.0.2) is not recent enough for the provided package.</p>
+<p>In this case you need to simply update pip with </p>
+<pre><code>pip3 install -U pip 
+</code></pre>
+<h3 id="using-docker">Using Docker</h3>
+<p>There is a Docker container from which you can test things out:</p>
+<pre><code>docker build -t lanelet2 .                    # builds a docker image named &quot;lanelet2&quot;
+docker run -it --rm lanelet2:latest /bin/bash # starts the docker image
+python -c &quot;import lanelet2&quot;                   # quick check to see everything is fine
+</code></pre>
+<p>The docker image contains a link to your local lanelet2, so you can work and see changes (almost) at the same time. Work with two screens, one local and one on docker. Make your code changes locally, then run again <code>catkin build</code> on docker to recompile the code (update python modules).</p>
+<h3 id="manual-installation">Manual installation</h3>
+<p>In case you want to build it in your own way (without the above Docker image) use these instructions.</p>
+<p>Lanelet2 relies mainly on <a href="https://catkin-tools.readthedocs.io/en/latest/index.html">Catkin</a> for building and is targeted towards Linux.</p>
+<p>At least <strong>C++14</strong> is required.</p>
+<h3 id="dependencies">Dependencies</h3>
+<p>Besides <a href="https://catkin-tools.readthedocs.io/en/latest/index.html">Catkin</a>, the dependencies are
+* <code>Boost</code> (from 1.58)
+* <code>eigen3</code>
+* <a href="https://github.com/KIT-MRT/mrt_cmake_modules"><code>mrt_cmake_modules</code></a>, a CMake helper library
+* <code>pugixml</code> (for lanelet2_io)
+* <code>boost-python, python2 or python3</code> (for lanelet2_python)
+* <code>geographiclib</code> (for lanelet2_projection)
+* <code>rosbash</code> (for lanelet2_examples)</p>
+<p>For Ubuntu, the steps are the following:
+* <a href="http://wiki.ros.org/ROS/Installation">Set up ROS</a>, and install at least <code>rospack</code>, <code>catkin</code> and <code>mrt_cmake_modules</code> (e.g. <code>ros-melodic-rospack</code>, <code>ros-melodic-catkin</code>, <code>ros-melodic-mrt-cmake-modules</code>):</p>
+<pre><code>sudo apt-get install ros-melodic-rospack ros-melodic-catkin ros-melodic-mrt-cmake-modules
+</code></pre>
+<ul>
+<li>Install the dependencies above:</li>
+</ul>
+<pre><code class="language-bash">sudo apt-get install libboost-dev libeigen3-dev libgeographic-dev libpugixml-dev libpython-dev libboost-python-dev python-catkin-tools
+</code></pre>
+<p>NOTE: On Ubuntu 24.04 and later, install <code>libgeographiclib-dev</code> instead of <code>libgeographic-dev</code>.</p>
+<p><strong>On 16.04 and below</strong>, <code>mrt_cmake_modules</code> is not available in ROS and you have to clone it into your workspace (<code>git clone https://github.com/KIT-MRT/mrt_cmake_modules.git</code>).</p>
+<h3 id="building">Building</h3>
+<p>As usual with Catkin, after you have sourced the ros installation, you have to create a workspace and clone all required packages there. Then you can build.</p>
+<pre><code class="language-shell">source /opt/ros/$ROS_DISTRO/setup.bash
+mkdir catkin_ws &amp;&amp; cd catkin_ws &amp;&amp; mkdir src
+catkin init
+catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo # build in release mode (or whatever you prefer)
+cd src
+git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
+cd ..
+catkin build
+</code></pre>
+<p>If unsure, see the <a href="Dockerfile">Dockerfile</a> or the <a href="https://travis-ci.org/fzi-forschungszentrum-informatik/Lanelet2">travis build log</a>. It shows the full installation process, with subsequent build and test based on a docker image with a clean Ubuntu installation.</p>
+<h3 id="manual-experimental-installation-using-conan">Manual, experimental installation using conan</h3>
+<p><strong>Note: Updated instructions for conan2!</strong>
+For non-catkin users, we also offer a conan based install process. Its experimental and might not work on all platforms, especially Windows.
+Since conan handles installing all C++ dependencies, all you need is a cloned repository, conan itself and a few python dependencies:</p>
+<pre><code class="language-bash">pip install conan catkin_pkg numpy
+git clone https://github.com/fzi-forschungszentrum-informatik/lanelet2.git
+cd lanelet2
+</code></pre>
+<p>From here, just use the default conan build/install procedure, e.g.:</p>
+<pre><code class="language-bash">conan create . --build=missing
+</code></pre>
+<p>Different from the conan defaults, we build lanelet2 and boost as shared libraries, because otherwise the lanelet2's plugin mechanisms as well as boost::python will fail. E.g. loading maps will not be possible and the python API will not be usable.</p>
+<p>To be able to use the python bindings, you have to make conan export the PYTHONPATH for lanelet2 after <code>conan create</code>:</p>
+<pre><code class="language-bash">source activate.sh
+python -c &quot;import lanelet2&quot; # or whatever you want to do
+source deactivate.sh
+</code></pre>
+<h3 id="python3">Python3</h3>
+<p>The python bindings are build for your default python installation by default (which currently is python2 on most systems). To build for python3 instead of python2, create a python3 virtualenv before initializing the workspace with <code>catkin init</code>. The command <code>python</code> should point to <code>python3</code>.</p>
+<p>After <code>catkin init</code> run <code>catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPYTHON_VERSION=3.6</code> to make sure that the correct python version is used. Then build and use as usual.</p>
+<p><em>Note: With bionic and beyond, the apt package <code>python3-catkin-tools</code> conflicts with ROS melodic and should not be used. Use either the python2 version or use pip to install the python3 version.</em></p>
+<h2 id="examples">Examples</h2>
+<p>Examples and common use cases in both C++ and Python can be found <a href="lanelet2_examples/README.md">here</a>.</p>
+<h2 id="packages">Packages</h2>
+<ul>
+<li><strong>lanelet2</strong> is the meta-package for the whole lanelet2 framework</li>
+<li><strong>lanelet2_core</strong> implements the basic library with all the primitives, geometry calculations and the LanletMap object</li>
+<li><strong>lanelet2_io</strong> is responsible for reading and writing lanelet maps</li>
+<li><strong>lanelet2_traffic_rules</strong> provides support to interpret the traffic rules encoded in a map</li>
+<li><strong>lanelet2_projection</strong> for projecting maps from WGS84 (lat/lon) to local metric coordinates</li>
+<li><strong>lanelet2_routing</strong> implements the routing graph for routing or reachable set or queries as well as collision checking</li>
+<li><strong>lanelet2_maps</strong> provides example maps and functionality to visualize and modify them easily in JOSM</li>
+<li><strong>lanelet2_matching</strong> provides functions to determine in which lanelet an object is/could be currently located</li>
+<li><strong>lanelet2_python</strong> implements the python interface for lanelet2</li>
+<li><strong>lanelet2_validation</strong> provides checks to ensure a valid lanelet2 map</li>
+<li><strong>lanelet2_examples</strong> contains tutorials for working with Lanelet2 in C++ and Python</li>
+</ul>
+<h2 id="citation">Citation</h2>
+<p>If you are using Lanelet2 for scientific research, we would be pleased if you would cite our <a href="http://www.mrt.kit.edu/z/publ/download/2018/Poggenhans2018Lanelet2.pdf">publication</a>:</p>
+<pre><code class="language-latex">@inproceedings{poggenhans2018lanelet2,
+  title     = {Lanelet2: A High-Definition Map Framework for the Future of Automated Driving},
+  author    = {Poggenhans, Fabian and Pauls, Jan-Hendrik and Janosovits, Johannes and Orf, Stefan and Naumann, Maximilian and Kuhnt, Florian and Mayr, Matthias},
+  booktitle = {Proc.\ IEEE Intell.\ Trans.\ Syst.\ Conf.},
+  year      = {2018},
+  address   = {Hawaii, USA},
+  owner     = {poggenhans},
+  month     = {November},
+  Url={http://www.mrt.kit.edu/z/publ/download/2018/Poggenhans2018Lanelet2.pdf}
+}
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lanelet2_core/" class="btn btn-neutral float-right" title="lanelet2_core">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+      <span><a href="lanelet2_core/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme_extra.js" defer></script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.2.3
+Build Date UTC : 2026-02-05 13:56:51.389748+00:00
+-->
