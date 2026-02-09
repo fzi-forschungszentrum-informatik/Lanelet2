@@ -238,6 +238,10 @@ class RegulatoryElement  // NOLINT
   //! applies a visitor to every parameter in the regulatory element
   void applyVisitor(RuleParameterVisitor& visitor) const;
 
+  //! Remove the referencement of this primitive.
+  template <typename T>
+  void remove(Id id);
+
  protected:
   const_iterator begin() const { return constData()->parameters.begin(); }
   const_iterator end() const { return constData()->parameters.end(); }
@@ -416,6 +420,16 @@ Optional<T> RegulatoryElement::find(Id id) const {
     }
   }
   return {};
+}
+
+template <typename T>
+void RegulatoryElement::remove(Id id) {
+  for (auto& params : parameters()) {
+    auto& primitiveList = params.second;
+    primitiveList.erase(std::remove_if(primitiveList.begin(), primitiveList.end(),
+                                       [id](const auto& param) { return utils::getId(param) == id; }),
+                        primitiveList.end());
+  }
 }
 
 template <>
