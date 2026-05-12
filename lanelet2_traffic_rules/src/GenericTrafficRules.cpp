@@ -270,6 +270,8 @@ SpeedLimitInformation getSpeedLimitFromType(const AttributeMap& attributes, cons
       {{Value::Nonurban, Value::Highway}, &CountrySpeedLimits::vehicleNonurbanHighway},
       {{Value::Urban, Value::PlayStreet}, &CountrySpeedLimits::playStreet},
       {{Value::Nonurban, Value::PlayStreet}, &CountrySpeedLimits::playStreet},
+      {{Value::Urban, Value::BusLane}, &CountrySpeedLimits::vehicleUrbanRoad},
+      {{Value::Nonurban, Value::BusLane}, &CountrySpeedLimits::vehicleNonurbanRoad},
       {{Value::Urban, Value::Exit}, &CountrySpeedLimits::vehicleUrbanRoad},
   };
   if (participant == Participants::Pedestrian) {
@@ -334,6 +336,7 @@ Optional<bool> GenericTrafficRules::canPass(const std::string& type, const std::
       {Value::BicycleLane, {Participants::Bicycle}},
       {Value::PlayStreet, {Participants::Pedestrian, Participants::Bicycle, Participants::Vehicle}},
       {Value::EmergencyLane, {Participants::VehicleEmergency}},
+      {Value::BusLane, {Participants::VehicleBus, Participants::VehicleEmergency, Participants::VehicleTaxi}},
       {Value::Exit, {Participants::Pedestrian, Participants::Bicycle, Participants::Vehicle}},
       {Value::Walkway, {Participants::Pedestrian}},
       {Value::Crosswalk, {Participants::Pedestrian}},
