@@ -2,6 +2,12 @@
 Changelog for package lanelet2_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Enable subclassing of RoutingCost from python (`#384 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/384>`_)
+* Add pyi stub files for python interface (`#385 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/385>`_)
+* Contributors: poggenhans
+
 1.2.2 (2024-10-25)
 ------------------
 * Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)

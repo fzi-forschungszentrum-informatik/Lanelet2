@@ -2,6 +2,11 @@
 Changelog for package lanelet2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Increase minimum CMake version and remove Ubuntu 20.04 pip tests to fix CI pipeline (`#401 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/401>`_)
+* Contributors: Fabian Immel
+
 1.2.2 (2024-10-25)
 ------------------
 

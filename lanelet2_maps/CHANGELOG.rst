@@ -2,6 +2,12 @@
 Changelog for package lanelet2_maps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* lanelet2_maps: Remove empty C++ library (`#406 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/406>`_)
+* Fine-tune the phrasing of area description (`#398 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/398>`_)
+* Contributors: Michael Hoss, Michal Sojka
+
 1.2.2 (2024-10-25)
 ------------------
 * bugfix speed limit preset in laneletpresets.xml (`#318 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/318>`_)
