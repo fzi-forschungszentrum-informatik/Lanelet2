@@ -2,8 +2,8 @@
 Changelog for package lanelet2_traffic_rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.3 (2026-06-16)
+------------------
 * Added BusLane to ParticipantMap with participants: Bus, Emergency, and Taxi, and to SpeedLimitLookup. (`#414 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/414>`_)
 * Fix typo ParticantsMap => ParticipantsMap (`#395 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/395>`_)
 * Contributors: Edgar Sepp, Kotaro Yoshimoto

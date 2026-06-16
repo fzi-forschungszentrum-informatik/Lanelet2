@@ -2,8 +2,8 @@
 Changelog for package lanelet2_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.3 (2026-06-16)
+------------------
 * add driving direction (one_way) info to debug routing graph osm output (`#400 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/400>`_)
 * More repr, fix infinite loop when calling repr on a lanele->regelem->lanelet cycle (`#383 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/383>`_)
 * Enable subclassing of RoutingCost from python (`#384 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/384>`_)

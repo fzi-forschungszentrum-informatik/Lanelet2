@@ -2,8 +2,8 @@
 Changelog for package lanelet2_maps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.3 (2026-06-16)
+------------------
 * lanelet2_maps: Remove empty C++ library (`#406 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/406>`_)
 * Fine-tune the phrasing of area description (`#398 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/398>`_)
 * Contributors: Michael Hoss, Michal Sojka
