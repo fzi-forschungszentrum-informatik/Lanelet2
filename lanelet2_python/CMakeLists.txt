@@ -36,7 +36,7 @@ if (PROJECT_PYTHON_SOURCE_FILES_SRC)
         )
     _mrt_get_python_destination(PROJECT_PYTHON_DESTINATION)
     mrt_glob_files(PROJECT_PYTHON_STUBS "typings/lanelet2/*.pyi")
-    install(FILES ${PROJECT_PYTHON_STUBS} DESTINATION ${PROJECT_PYTHON_DESTINATION}/lanelet2)
+    install(FILES ${PROJECT_PYTHON_STUBS} typings/lanelet2/py.typed DESTINATION ${PROJECT_PYTHON_DESTINATION}/lanelet2)
 endif()
 
 ############################

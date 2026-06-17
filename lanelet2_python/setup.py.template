@@ -36,6 +36,7 @@ classifiers = [
     "Operating System :: Unix",
     "Programming Language :: Python :: 3",
     "Programming Language :: C++",
+    "Typing :: Typed",
 ]
 
 
@@ -52,8 +53,8 @@ setup(name=DISTNAME,
       download_url=DOWNLOAD_URL,
       version=VERSION,
       packages=["lanelet2"],
-      # Include pre-compiled extension
-      package_data={"lanelet2": ["*"]},
+      # Include pre-compiled extension and type stubs (PEP 561)
+      package_data={"lanelet2": ["*", "*.pyi", "py.typed"]},
       ext_modules=ExtModules(),
       has_ext_modules=lambda: True,
       long_description=long_description,
