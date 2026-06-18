@@ -2,6 +2,11 @@
 Changelog for package lanelet2_routing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.3 (2026-06-16)
+------------------
+* Fix route calculation when using nonzero cost id (`#382 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/382>`_)
+* Contributors: poggenhans
+
 1.2.2 (2024-10-25)
 ------------------
 * Prevent unintended modification of graph in lanelet::routing::Route (`#352 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/352>`_)

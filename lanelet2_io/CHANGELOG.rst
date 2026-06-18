@@ -2,6 +2,9 @@
 Changelog for package lanelet2_io
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.3 (2026-06-16)
+------------------
+
 1.2.2 (2024-10-25)
 ------------------
 * Build documentation with mkdocs (`#321 <https://github.com/fzi-forschungszentrum-informatik/Lanelet2/issues/321>`_)
