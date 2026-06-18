@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Architecture - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Architecture";
+    var mkdocs_page_input_path = "lanelet2_core/Architecture.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Architecture</a>
+    <ul class="current">
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Detailed Documentation &raquo;</li>
+        
+      
+    
+    <li>Architecture</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_core/Architecture.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="architecture">Architecture</h1>
+<p>This file describes the technical architecture of Lanelet2. For information on the representation of Lanelet2 and its primitives, please read first <a href="../LaneletPrimitives/">here</a>.</p>
+<h1 id="principles">Principles</h1>
+<h2 id="data-sharing">Data sharing</h2>
+<p>In Lanelet2, everything that has an ID is unique across the whole map. Because multiple primitives can reference the same element, it is not possible to duplicate/copy the information of a Lanelet primitive. If that was possible, modifying the information would leave the map in an invalid state, because other elements that reference it would not be notified of the change.</p>
+<p>To solve this issue, Lanelet2's primitive do not actually store data. Instead, they hold a <em>pointer</em> to the real, uncopyable data object. This means they only provide a <em>view</em> on the underlying map data. This means that Lanelet2 primitives can be copied without regret, because all copies still point to the same underlying data object. If the data is modified through one of the primtives, all other copies can observe the change.</p>
+<p>This results in some interesting properties. Firstly, primitives can be copied extremely fast, because only the pointer is copied, not the data. Secondly, this means that we can provide different views on the data. One example is that we can give you a 2D view and a 3D view on the data, e.g. a Point2d that returns x and y coordinates but not the z coordinate. You can convert this point back to Point3d without losing information, because in the underlying data, the z-coordinate was always there. Linestrings behave similar. A <code>LineString3d</code> returns <code>Point3d</code>, a <code>LineString2d</code> gives you <code>Point2d</code>.</p>
+<p>We can also easily <em>invert</em> Linestrings and Lanelets with this technique. An inverted Linestring simply returns the underlying data in reversed order. You will not even notice it is inverted, because it still behaves in the same way as a non-inverted one. The effort of creating the inverted Linestring is - you guessed it - just the effort of copying a pointer!</p>
+<p>Like this we can make sure that modifying the map is always consistent. All primitives will observe the change. However, there are two exceptions to this, and they are related to caching: The <strong>centerline</strong> of a Lanelet is calculated based on the left and right bound at the time it was first requested. If the points of a left or right bound were modified, the Lanelet does not notice the change and returns the outdated centerline. You have to reset the centerline of the Lanelet yourself. The second issue is within the <code>LaneletMap</code> container. It holds some precalculated tree structures to efficiently query closest points or usages of a point. If one of the points is modified, the query will still run on the old tree structure. So the general message is: When you plan to modify the map, know what you are doing!</p>
+<h2 id="composability">Composability</h2>
+<p>Since Lanelet2's primitives, especially <em>Lanelets</em> represent an atomic section of the map, it is often important to compose these atomic parts together to create <em>compound</em> objects. These compound primitives behave in the same way as the primitives they are composed of, but internally access the primitive's data. This is also driven by the pointer-based concept introduced above: The compound objects simply hold a list of pointers instead of a single one. As an example, you can compose multiple <code>Linestring3d</code> to one <code>CompoundLineString3d</code>. It behaves like a single Linestring, gives you its <code>size()</code> in points and access to the individual points while still internally accessing the data of the actual Linestrings. You can also compose polygons from Linestrings, <code>LaneletSet</code> from Lanelets, and so on.</p>
+<h2 id="const-correctness">Const correctness</h2>
+<p>Since modifying the map can make cached data invalid, and since modifications affect the whole map, Lanelet2 offers some protection against unwanted modification. This is related to <em>const correctness</em>: If an object is passed to a function as <code>const</code>, not only the data of the object itself is immutable, but also the data derived from it and all the copies that you make.</p>
+<p>E.g., if a function accepts a Linestring as <code>ConstLinestring3d</code>, its data is guaranteed to be immutable. If you access a point of the Linestring, you get a <code>ConstPoint3d</code>, that allows you to access its data, but not modify it. It is not possible to convert a <code>ConstPoint3d</code> back to a <code>Point3d</code>. This means, if you call a function that accepts a <code>const LineString3d</code> or even a <code>ConstLineString3d</code>, it is guaranteed that your map data will not be modified.</p>
+<h2 id="modularity">Modularity</h2>
+<p>We are aware of the fact that roads can be very different in different countries and different places. Some things can be hard to squeeze into the typical map format. Also, the requirements on the map can be very different. To account for this, we tried to make Lanelet2 as flexible as possible by adding customization points where you can plugin your customized solution. Also the modularity of Lanelet2 aims to make it as simple as possible to add new functionality in the future.</p>
+<p>Part of the flexibility concept is that the tags that are used on objects can be extended without any limits. This way you can easily add more specific information to your maps that you are missing. New, custom regulatory elements can be added to account for difficult traffic situations. Also Lanelet2 can be extended for different countries and different road participants by adding new <code>TrafficRules</code> objects which are used by Lanelet2 to interpret the map data. New parsers and writers for new map formats can be added and registered while still using the same good old <code>load</code>/<code>write</code> function.</p>
+<h2 id="geometry-calculations">Geometry calculations</h2>
+<p>Lanelet2's objects are meant to be directly usable for geometry calculations. They are all registered with boost::geometry, meaning the follwing is easily possible: <code>double d = boost::geometry::distance(laneletPoint1, laneletPoint2)</code>. If laneletPoint1/2 is a 2D point, you will get the result in 2D, else in 3D.</p>
+<p>However, there are limitations to this that originate from the fact that the ConstCorrectness concept and boost::geometry do not play well with each other, because boost::geometry gets confused by the different point types used when things are used in a const and a non-const context. If you want to know more how to solve this problem and avoid pages and pages of compiler errors from boost's feared template code, read our <a href="../GeometryPrimer/">Geometry Primer</a> on this.</p>
+<h1 id="overview-and-interaction">Overview and Interaction</h1>
+<p>If you don't know Lanelet2's basic primitives yet, better read <a href="../LaneletPrimitives/">here</a> first!</p>
+<p>Here, we want to introduce the basic terms and objects that you will be confronted with when using Lanelet2 and how they interact:
+* <strong>Primitive</strong> any Lanelet2 primitive and their derivates (<code>Lanelet</code>, <code>ConstLanelet</code>, <code>LineString2d</code>, etc)
+* <strong>LaneletMap</strong> a <code>LaneletMap</code> is the basic storage container for primitives. It is separated in layers, one for each primitive type and offers different ways to access its data (by a <code>BoundingBox</code>, by ID, by nearest point, etc). It does <strong>not</strong> provide routing functionality.
+* <strong>TrafficRules</strong> a traffic rules object interprets the map. E.g., it reports if a Lanelet <code>isPassable</code>, or if lane changes are possible between two Lanelets. A traffic rule object interprets the map from the perspective of one road participant type. A vehicle <code>TrafficRule</code> object will therefore give completely different results on a specific Lanelet than a pedestrian <code>TrafficRule</code> object.
+* <strong>RoutingCost</strong> these classes are used by the routing graph to determine costs when driving from one Lanelet/area to another one. It could be by travelled distance, by travel time but there are no limits for more advanced routing cost functions. You can also choose the cost of lane changes so that routes with few, preferably long lane changes are preferred.
+* <strong>RoutingGraph</strong> a routing graph is built from a <code>LaneletMap</code>, <code>TrafficRules</code> and <code>RoutingCost</code> objects. One routing graph is only for one single participant: The one that the <code>TrafficRules</code> belong to. With the routing graph, you can make all kinds of queries to determine where you or someone else can go/drive.
+* <strong>Route</strong> a route is something returned by the graph when you query a route from A to B. It contains a structure of all the Lanelets that you can use along the way with the lowest routing cost, including all possible lane changes.
+* <strong>LaneletPath</strong> or <strong>Path</strong> in general is a sequence of Lanelets returned by the RoutingGraph that are directly adjacent and have the lowest routing cost to the destination. "Adjacent" means that they can also be connected by a lane change, not only by following the Lanelet in a straight direction.
+* <strong>LaneletSequence</strong> a list of directly succeeding Lanelets that can be reached without lane changes. A <strong>LaneletSequence</strong> is the special case of a <strong>LaneletPath</strong> where no lane change is necessary.
+* <strong>Projector</strong> projectors are used by the IO module to convert between maps that store date in the WGS84 (lat/lon) format and the local coordinates used by Lanelet2. There are many different projections that all have different properties, so you should choose the one that fits best to you. If in doubt, use UTM.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../GeometryPrimer/" class="btn btn-neutral float-right" title="GeometryPrimer">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../lanelet2_validation/" class="btn btn-neutral" title="lanelet2_validation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../lanelet2_validation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../GeometryPrimer/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
