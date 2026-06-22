@@ -214,6 +214,18 @@ LaneletMapUPtr createMapFromConst(const ConstLaneletsT& fromLanelets, const Cons
       fromAreas, [](const ConstArea& ar) { return Area(std::const_pointer_cast<AreaData>(ar.constData())); });
   return utils::createMap(lanelets, areas);
 }
+
+const auto remove_from_multimap = [](auto& lookup, const auto& prim, const auto& elem) {
+  auto range = lookup.equal_range(elem);
+  for (auto it = range.first; it != range.second;) {
+    if (it->second == prim) {
+      // Erase the entry, returns an iterator to the next element
+      it = lookup.erase(it);
+    } else {
+      ++it;
+    }
+  }
+};
 }  // namespace
 }  // namespace lanelet
 
@@ -225,6 +237,11 @@ struct UsageLookup {
       ownedLookup.insert(std::make_pair(elem, prim));
     }
   }
+  void remove(const T& prim) {
+    for (const auto& elem : prim) {
+      remove_from_multimap(ownedLookup, prim, elem);
+    }
+  }
   std::unordered_multimap<traits::ConstPrimitiveType<traits::OwnedT<T>>, T> ownedLookup;
 };
 
@@ -234,6 +251,13 @@ struct UsageLookup<RegulatoryElementPtr> {
     for (const auto& param : prim->getParameters()) {
       for (const auto& rule : param.second) {
         ownedLookup.insert(std::make_pair(rule, prim));
+      }
+    }
+  }
+  void remove(const RegulatoryElementPtr& prim) {
+    for (const auto& param : prim->getParameters()) {
+      for (const auto& rule : param.second) {
+        remove_from_multimap(ownedLookup, prim, rule);
       }
     }
   }
@@ -253,6 +277,19 @@ struct UsageLookup<Area> {
       regElemLookup.insert(std::make_pair(elem, area));
     }
   }
+  void remove(Area area) {
+    const auto remove_element = [this, area](auto elem) { remove_from_multimap(ownedLookup, area, elem); };
+
+    utils::forEach(area.outerBound(), remove_element);
+
+    for (const auto& innerBound : area.innerBounds()) {
+      utils::forEach(innerBound, remove_element);
+    }
+
+    for (const auto& elem : area.regulatoryElements()) {
+      remove_from_multimap(regElemLookup, area, elem);
+    }
+  }
   std::unordered_multimap<ConstLineString3d, Area> ownedLookup;
   std::unordered_multimap<RegulatoryElementConstPtr, Area> regElemLookup;
 };
@@ -265,6 +302,13 @@ struct UsageLookup<Lanelet> {
       regElemLookup.insert(std::make_pair(elem, ll));
     }
   }
+  void remove(Lanelet ll) {
+    remove_from_multimap(ownedLookup, ll, ll.leftBound());
+    remove_from_multimap(ownedLookup, ll, ll.rightBound());
+    for (const auto& elem : ll.regulatoryElements()) {
+      remove_from_multimap(regElemLookup, ll, elem);
+    }
+  }
   std::unordered_multimap<ConstLineString3d, Lanelet> ownedLookup;
   std::unordered_multimap<RegulatoryElementConstPtr, Lanelet> regElemLookup;
 };
@@ -272,6 +316,7 @@ struct UsageLookup<Lanelet> {
 template <>
 struct UsageLookup<Point3d> {
   void add(const Point3d& /*unused*/) {}
+  void remove(const Point3d& /*unused*/) {}
 };
 
 template <typename T>
@@ -414,6 +459,53 @@ void PrimitiveLayer<RegulatoryElementPtr>::add(const PrimitiveLayer<RegulatoryEl
   tree_->usage.add(element);
   elements_.insert({element->id(), element});
   tree_->insert(element);
+}
+
+template <typename T>
+void PrimitiveLayer<T>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    for (const auto& elem : *prim_it) {
+      remove_from_multimap(tree_->usage.ownedLookup, *prim_it, elem);
+    }
+    this->elements_.erase(element);
+  }
+}
+
+template <>
+void PrimitiveLayer<Area>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    tree_->usage.remove(*prim_it);
+    this->elements_.erase(element);
+  }
+}
+
+template <>
+void PrimitiveLayer<Lanelet>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    tree_->usage.remove(*prim_it);
+    this->elements_.erase(element);
+  }
+}
+
+template <>
+void PrimitiveLayer<Point3d>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    tree_->usage.remove(*prim_it);
+    this->elements_.erase(element);
+  }
+}
+
+template <>
+void PrimitiveLayer<RegulatoryElementPtr>::remove(Id element) {
+  if (const auto prim_it = this->find(element); prim_it != this->end()) {
+    tree_->erase(*prim_it);
+    tree_->usage.remove(*prim_it);
+    this->elements_.erase(element);
+  }
 }
 
 template <typename T>
@@ -680,6 +772,86 @@ void LaneletMap::add(Point3d point) {
     utils::registerId(point.id());
   }
   pointLayer.add(point);
+}
+
+bool LaneletMap::removeIfUnused(const RegulatoryElementConstPtr& regElem) {
+  if (regElem) {
+    if (not laneletLayer.findUsages(regElem).empty()) {
+      return false;
+    }
+    if (not areaLayer.findUsages(regElem).empty()) {
+      return false;
+    }
+    regulatoryElementLayer.remove(regElem->id());
+    return true;
+  }
+
+  return false;
+}
+
+void LaneletMap::remove(const RegulatoryElementConstPtr& regElem) {
+  if (regElem) {
+    auto llts = laneletLayer.findUsages(regElem);
+    for (auto& llt : llts) {
+      llt.removeRegulatoryElement(utils::removeConst(regElem));
+    }
+    laneletLayer.tree_->usage.regElemLookup.erase(regElem);
+
+    auto areas = areaLayer.findUsages(regElem);
+    for (auto& area : areas) {
+      area.removeRegulatoryElement(utils::removeConst(regElem));
+    }
+    areaLayer.tree_->usage.regElemLookup.erase(regElem);
+
+    regulatoryElementLayer.remove(regElem->id());
+  }
+}
+
+bool LaneletMap::removeIfUnused(const ConstLanelet& lanelet) {
+  laneletLayer.remove(lanelet.id());
+  return true;
+}
+
+bool LaneletMap::removeIfUnused(const ConstArea& area) {
+  areaLayer.remove(area.id());
+  return true;
+}
+
+bool LaneletMap::removeIfUnused(const ConstPolygon3d& polygon) {
+  polygonLayer.remove(polygon.id());
+  return true;
+}
+
+bool LaneletMap::removeIfUnused(const ConstLineString3d& lineString) {
+  if (not laneletLayer.findUsages(lineString).empty()) {
+    return false;
+  }
+  if (not laneletLayer.findUsages(lineString.invert()).empty()) {
+    return false;
+  }
+
+  if (not areaLayer.findUsages(lineString).empty()) {
+    return false;
+  }
+  if (not areaLayer.findUsages(lineString.invert()).empty()) {
+    return false;
+  }
+
+  lineStringLayer.remove(lineString.id());
+  return true;
+}
+
+bool LaneletMap::removeIfUnused(const ConstPoint3d& point) {
+  if (not lineStringLayer.findUsages(point).empty()) {
+    return false;
+  }
+
+  if (not polygonLayer.findUsages(point).empty()) {
+    return false;
+  }
+
+  pointLayer.remove(point.id());
+  return true;
 }
 
 void LaneletSubmap::add(Lanelet lanelet) {
