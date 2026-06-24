@@ -34,4 +34,17 @@ cp -r "$lanelet2_routing_dir/doc" "$dest_dir/lanelet2_routing"
 cp "$lanelet2_traffic_rules_dir/README.md" "$dest_dir/lanelet2_traffic_rules.md"
 cp "$lanelet2_validation_dir/README.md" "$dest_dir/lanelet2_validation.md"
 
+# Fix image paths in copied markdown files.
+# When README.md files are copied into docs/, their relative image paths break
+# because the "doc" directories are copied and renamed to the package name
+# (e.g. lanelet2_routing/doc -> docs/lanelet2_routing). The image references
+# in the markdown still point to the original relative paths, so we rewrite
+# them to match the new directory structure.
+
+# docs/index.md: "lanelet2_core/doc/images/..." -> "lanelet2_core/images/..."
+sed -i 's|lanelet2_core/doc/images/|lanelet2_core/images/|g' "$dest_dir/index.md"
+
+# docs/lanelet2_routing.md: "doc/images/..." -> "lanelet2_routing/images/..."
+sed -i 's|doc/images/|lanelet2_routing/images/|g' "$dest_dir/lanelet2_routing.md"
+
 echo "Documentation files copied to the docs folder."
