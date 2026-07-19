@@ -234,12 +234,14 @@ class PathsOutOfRouteFinder {
     auto isAdjacentToRoute = [&](LaneletVertexId v) {
       auto inEdges = boost::in_edges(v, g);
       auto outEdges = boost::out_edges(v, g);
-      constexpr auto Adjacent =
-          RelationType::Left | RelationType::Right | RelationType::AdjacentLeft | RelationType::AdjacentRight;
       return std::any_of(inEdges.first, inEdges.second,
-                         [&](auto e) { return hasRelation<Adjacent>(g, e) && has(*llts_, boost::source(e, g)); }) ||
+                         [&](auto e) { return hasRelation<RelationType::Left | RelationType::Right |
+                                                   RelationType::AdjacentLeft | RelationType::AdjacentRight>(g, e) &&
+                                             has(*llts_, boost::source(e, g)); }) ||
              std::any_of(outEdges.first, outEdges.second,
-                         [&](auto e) { return hasRelation<Adjacent>(g, e) && has(*llts_, boost::target(e, g)); });
+                         [&](auto e) { return hasRelation<RelationType::Left | RelationType::Right |
+                                                   RelationType::AdjacentLeft | RelationType::AdjacentRight>(g, e) &&
+                                             has(*llts_, boost::target(e, g)); });
     };
     return std::all_of(path.begin(), path.end(), isAdjacentToRoute);
   }
