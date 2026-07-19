@@ -55,6 +55,10 @@ mrt_add_library(${PROJECT_NAME}
     SOURCES ${PROJECT_SOURCE_FILES_SRC}
     )
 
+target_compile_options(${PROJECT_NAME} INTERFACE
+  $<$<CXX_COMPILER_ID:MSVC>:/bigobj>
+)
+
 #############
 ## Install ##
 #############
