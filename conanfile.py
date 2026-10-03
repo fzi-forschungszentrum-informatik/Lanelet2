@@ -1,9 +1,9 @@
 import os
 import sys
 import xml.etree.ElementTree as ET
-from distutils.sysconfig import get_python_lib
 from io import StringIO
 from pathlib import Path
+from sysconfig import get_path
 
 from conan import ConanFile
 from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
@@ -164,7 +164,11 @@ class Lanelet2Conan(ConanFile):
 
     def _pythonpath(self):
         return os.path.relpath(
-            get_python_lib(prefix=self.package_folder), start=self.package_folder
+            get_path(
+                "purelib",
+                vars={"base": self.package_folder, "platbase": self.package_folder},
+            ),
+            start=self.package_folder,
         )
 
     def source(self):
