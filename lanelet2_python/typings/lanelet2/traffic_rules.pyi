@@ -89,6 +89,15 @@ class TrafficRules:
         """
         ...
 
+    def canCrossBoundary(self, boundary: lanelet2.core.ConstLineString3d, towardsLeft: bool) -> bool:
+        """
+        Determines if this participant may cross a lane boundary.
+
+        Unlike canChangeLane, this does not require two passable, adjacent lanelets.
+        towardsLeft is True when the participant is moving to its left.
+        """
+        ...
+
     def speedLimit(self, obj: Union[lanelet2.core.ConstLanelet, lanelet2.core.ConstArea]) -> SpeedLimitInformation:
         """
         Get speed limit of this lanelet or area.

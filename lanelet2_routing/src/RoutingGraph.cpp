@@ -31,6 +31,7 @@ namespace routing {
 
 #if __cplusplus < 201703L
 constexpr const char RoutingGraph::ParticipantHeight[];
+constexpr const char RoutingGraph::AllowLaneChangeAcrossBicycleLane[];
 #endif
 
 namespace {

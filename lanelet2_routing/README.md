@@ -37,6 +37,24 @@ The possible relations are:
     * `conflicting` (intersecting lanelets/areas)
     * `area` (reachable area to lanelet/area relation)
 
+### Lane change across a bicycle lane
+
+This is an opt-in feature: pass `RoutingGraph::Configuration{{RoutingGraph::AllowLaneChangeAcrossBicycleLane, true}}` to `RoutingGraph::build`. It is disabled by default so that existing routing graphs are unaffected by upgrading.
+
+When enabled and a `subtype=bicycle_lane` lanelet sits between two passable lanelets and **both** of its bounds allow a lane change in that direction, the vehicle routing graph connects those passable lanelets with a `left` / `right` relation. The bicycle lane itself is not a vertex of the vehicle graph (`canPass` is false for vehicles).
+
+Boundary crossing uses the usual vehicle marking table:
+
+* `line_thin` / `line_thick` + `dashed` → both directions
+* the same types + `solid` → blocked
+* `dashed_solid` / `solid_dashed` → one direction
+* `type=virtual` → not crossable unless a `lane_change` / `lane_change:left` / `lane_change:right` override is set
+* `type=bike_marking` + `subtype=dashed` → both directions; `subtype=solid` (or missing) → blocked
+
+`RoutingGraph::getRoute` and `besides` pick this relation up automatically: both vehicle lanes appear in the route and in `besides()`. The intervening bicycle lane is **not** in `route->laneletSubmap()`. Unioning those polygons therefore leaves a strip-shaped hole where the bike lane is. A corridor envelope from the outer bounds of `besides()` still spans that strip in XY.
+
+Bicycle routing graphs keep the bicycle lane as a vertex and do not add this skip-over.
+
 ## Route vs Path vs Sequence
 When querying data in the routing graph, you will come across the terms _route_, _path_ and _sequence_. In contrast to a simple set of lanelets (data-wise a vector of lanelets), they have a special meaning and are data-wise different classes.
 

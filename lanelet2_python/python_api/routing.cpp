@@ -1,3 +1,4 @@
+#include <lanelet2_core/Attribute.h>
 #include <lanelet2_routing/Route.h>
 #include <lanelet2_routing/RoutingGraph.h>
 
@@ -8,6 +9,33 @@
 
 using namespace boost::python;
 using namespace lanelet;
+
+struct DictToRoutingConfigurationConverter {
+  DictToRoutingConfigurationConverter() {
+    converter::registry::push_back(&convertible, &construct, type_id<routing::RoutingGraph::Configuration>());
+  }
+  static void* convertible(PyObject* obj) {
+    if (!PyDict_CheckExact(obj)) {  // NOLINT
+      return nullptr;
+    }
+    return obj;
+  }
+  static void construct(PyObject* obj, converter::rvalue_from_python_stage1_data* data) {
+    dict d(borrowed(obj));
+    list keys = d.keys();
+    list values = d.values();
+    routing::RoutingGraph::Configuration config;
+    for (auto i = 0u; i < len(keys); ++i) {
+      std::string key = extract<std::string>(keys[i]);
+      std::string value = extract<std::string>(values[i]);
+      config.emplace(key, Attribute(value));
+    }
+    using StorageType = converter::rvalue_from_python_storage<routing::RoutingGraph::Configuration>;
+    void* storage = reinterpret_cast<StorageType*>(data)->storage.bytes;  // NOLINT
+    new (storage) routing::RoutingGraph::Configuration(config);
+    data->convertible = storage;
+  }
+};
 
 Optional<std::shared_ptr<lanelet::routing::Route>> getRouteWrapper(const lanelet::routing::RoutingGraph& self,
                                                                    const ConstLanelet& from, const ConstLanelet& to,
@@ -33,14 +61,18 @@ Optional<std::shared_ptr<lanelet::routing::Route>> getRouteViaWrapper(const lane
 }
 
 routing::RoutingGraphPtr makeRoutingGraph(LaneletMap& laneletMap, const traffic_rules::TrafficRules& trafficRules,
-                                          const routing::RoutingCostPtrs& routingCosts) {
-  return routing::RoutingGraph::build(laneletMap, trafficRules, routingCosts);
+                                          const routing::RoutingCostPtrs& routingCosts,
+                                          const Optional<routing::RoutingGraph::Configuration>& configuration) {
+  return routing::RoutingGraph::build(laneletMap, trafficRules, routingCosts,
+                                      configuration.get_value_or(routing::RoutingGraph::Configuration()));
 }
 
 routing::RoutingGraphPtr makeRoutingGraphSubmap(LaneletSubmap& laneletMap,
                                                 const traffic_rules::TrafficRules& trafficRules,
-                                                const routing::RoutingCostPtrs& routingCosts) {
-  return routing::RoutingGraph::build(laneletMap, trafficRules, routingCosts);
+                                                const routing::RoutingCostPtrs& routingCosts,
+                                                const Optional<routing::RoutingGraph::Configuration>& configuration) {
+  return routing::RoutingGraph::build(laneletMap, trafficRules, routingCosts,
+                                      configuration.get_value_or(routing::RoutingGraph::Configuration()));
 }
 
 template <typename T>
@@ -121,6 +153,9 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
 
   // Register interable conversions.
   IterableConverter().fromPython<RoutingCostPtrs>();
+  DictToRoutingConfigurationConverter();
+  OptionalConverter<RoutingGraph::Configuration>();
+  converters::ToOptionalConverter().fromPython<RoutingGraph::Configuration>();
 
   implicitly_convertible<std::shared_ptr<RoutingCostDistance>, RoutingCostPtr>();
   implicitly_convertible<std::shared_ptr<RoutingCostTravelTime>, RoutingCostPtr>();
@@ -254,12 +289,16 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       no_init)
       .def("__init__",
            make_constructor(makeRoutingGraph, default_call_policies(),
-                            (arg("laneletMap"), arg("trafficRules"), arg("routingCost") = defaultRoutingCosts())),
-           "Initialization with default routing costs")
+                            (arg("laneletMap"), arg("trafficRules"), arg("routingCost") = defaultRoutingCosts(),
+                             arg("configuration") = Optional<RoutingGraph::Configuration>{})),
+           "Initialization with default routing costs. 'configuration' is a dict of string key/value pairs, e.g. "
+           "{'participant_height': '2.'} or {'allow_lane_change_across_bicycle_lane': 'true'}")
       .def("__init__",
            make_constructor(makeRoutingGraphSubmap, default_call_policies(),
-                            (arg("laneletSubmap"), arg("trafficRules"), arg("routingCost") = defaultRoutingCosts())),
-           "Initialization from a submap")
+                            (arg("laneletSubmap"), arg("trafficRules"), arg("routingCost") = defaultRoutingCosts(),
+                             arg("configuration") = Optional<RoutingGraph::Configuration>{})),
+           "Initialization from a submap. 'configuration' is a dict of string key/value pairs, e.g. "
+           "{'participant_height': '2.'} or {'allow_lane_change_across_bicycle_lane': 'true'}")
       .def("getRoute", getRouteWrapper, "driving route from 'start' to 'end' lanelet",
            (arg("from"), arg("to"), arg("routingCostId") = 0, arg("withLaneChanges") = true))
       .def("getRouteVia", getRouteViaWrapper, "driving route from 'start' to 'end' lanelet using the 'via' lanelets",

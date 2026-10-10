@@ -530,6 +530,48 @@ TEST_F(GermanTrafficRulesVehicle, canLaneChangeRightExplicitly) {  // NOLINT
   EXPECT_FALSE(germanVehicle->canChangeLane(lanelet, left));
   EXPECT_TRUE(germanVehicle->canChangeLane(left, lanelet));
 }
+
+TEST_F(GermanTrafficRulesVehicle, canCrossDashedBikeMarking) {  // NOLINT
+  ls3.setAttribute(Attr::Type, Value::BikeMarking);
+  ls3.setAttribute(Attr::Subtype, Value::Dashed);
+  EXPECT_TRUE(germanVehicle->canCrossBoundary(ls3, true));
+  EXPECT_TRUE(germanVehicle->canCrossBoundary(ls3, false));
+}
+
+TEST_F(GermanTrafficRulesVehicle, canNotCrossSolidBikeMarking) {  // NOLINT
+  ls3.setAttribute(Attr::Type, Value::BikeMarking);
+  ls3.setAttribute(Attr::Subtype, Value::Solid);
+  EXPECT_FALSE(germanVehicle->canCrossBoundary(ls3, true));
+  EXPECT_FALSE(germanVehicle->canCrossBoundary(ls3, false));
+}
+
+TEST_F(GermanTrafficRulesVehicle, canNotCrossBikeMarkingWithoutSubtype) {  // NOLINT
+  ls3.setAttribute(Attr::Type, Value::BikeMarking);
+  EXPECT_FALSE(germanVehicle->canCrossBoundary(ls3, true));
+  EXPECT_FALSE(germanVehicle->canCrossBoundary(ls3, false));
+}
+
+TEST_F(GermanTrafficRulesVehicle, canNotCrossVirtualBoundary) {  // NOLINT
+  ls3.setAttribute(Attr::Type, Value::Virtual);
+  EXPECT_FALSE(germanVehicle->canCrossBoundary(ls3, true));
+  EXPECT_FALSE(germanVehicle->canCrossBoundary(ls3, false));
+}
+
+TEST_F(GermanTrafficRulesVehicle, canNotChangeLaneIntoBicycleLane) {  // NOLINT
+  left.setAttribute(Attr::Subtype, Value::BicycleLane);
+  ls3.setAttribute(Attr::Type, Value::BikeMarking);
+  ls3.setAttribute(Attr::Subtype, Value::Dashed);
+  EXPECT_FALSE(germanVehicle->canChangeLane(lanelet, left));
+  EXPECT_FALSE(germanVehicle->canChangeLane(left, lanelet));
+}
+
+TEST_F(GermanTrafficRulesBike, canChangeLaneIntoBicycleLaneViaDashedBikeMarking) {  // NOLINT
+  left.setAttribute(Attr::Subtype, Value::BicycleLane);
+  ls3.setAttribute(Attr::Type, Value::BikeMarking);
+  ls3.setAttribute(Attr::Subtype, Value::Dashed);
+  EXPECT_TRUE(germanBike->canChangeLane(lanelet, left));
+  EXPECT_TRUE(germanBike->canChangeLane(left, lanelet));
+}
 }  // namespace lane_change
 
 namespace other {

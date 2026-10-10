@@ -62,6 +62,14 @@ class GenericTrafficRules : public TrafficRules {  // NOLINT
    */
   bool canChangeLane(const ConstLanelet& from, const ConstLanelet& to) const override;
 
+  /**
+   * @brief determines if this participant may cross a lane boundary
+   *
+   * Unlike canChangeLane, this does not require two passable, adjacent lanelets. towardsLeft is true when the
+   * participant is moving to its left.
+   */
+  bool canCrossBoundary(const ConstLineString3d& boundary, bool towardsLeft) const override;
+
   //! returns speed limit on this lanelet.
   SpeedLimitInformation speedLimit(const ConstLanelet& lanelet) const override;
 
