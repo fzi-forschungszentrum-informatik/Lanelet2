@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>LaneletAndAreaTagging - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "LaneletAndAreaTagging";
+    var mkdocs_page_input_path = "lanelet2_core/LaneletAndAreaTagging.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">LaneletAndAreaTagging</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#subtype-and-location">Subtype and Location</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#overriding">Overriding</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#example">Example</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#other-optional-tags">Other, Optional Tags</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lanelet-specific">Lanelet Specific</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#direction">Direction</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#area-specific">Area Specific</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#more-subtypes">More subtypes</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../RegulatoryElementTagging/">RegulatoryElementTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Detailed Documentation &raquo;</li>
+        
+      
+    
+    <li>LaneletAndAreaTagging</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_core/LaneletAndAreaTagging.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="tagging-lanelets-and-areas">Tagging Lanelets and Areas</h1>
+<p>This page explains the general mapping scheme for Lanelets. The tags are used by Lanelet2 to infer information on the traffic rules. All Lanelets and areas must be "self sustained" which means that all traffic restrictions that apply to a Lanelet must be determined just by looking at the Lanelet. The following important informations have to be determinable:</p>
+<ul>
+<li>The driving direction (only for Lanelets, by default assumed to be one-directional)</li>
+<li>The road users that the Lanelet is intended to be used by (by default vehicles only)</li>
+<li>The speed limit (by default the maximum speed for urban regions)</li>
+</ul>
+<p>In Lanelet2 no tag is mandatory, but if you want your map to behave reasonably, you should make sure that at least the above listed items can be correctly inferred.</p>
+<h2 id="subtype-and-location">Subtype and Location</h2>
+<p>The <strong>subtype</strong> tag determines what the actual type of the Lanelet is. It is used to determine the participants that are allowed to use the Lanelet as well as partly to determine the speed limit in the absence of <em>SpeedLimit</em> regulatory elements. The location tag is used to distinguish between urban and nonurban regions which can (depending on the country) affect the speed limit.</p>
+<p>The <em>subtype</em> tag is not set, <em>lane</em> is assumed. If <em>location</em> is not set, urban is assumed. Note that speed limits can be <em>mandatory</em> or <em>non-mandatory</em>. Non-mandatory speed limits  are only recommendations. The determined speed limit is the minimum of the actual speed limit and the average speed of a participant on this road type. If it was based on average speed, it is assumed to be non-mandatory.</p>
+<p>Note that the values in the following table are just the values inferred by default. The actual interpretation depends on the chosen <code>TrafficRule</code>object in <code>lanelet2_traffic_rules</code>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>subtype</strong></th>
+<th><strong>location</strong></th>
+<th><strong>description</strong></th>
+<th><strong>Inferred Participants</strong></th>
+<th><strong>Speed limit</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>road</strong></td>
+<td><strong>urban</strong></td>
+<td>A part of a road in urban region</td>
+<td>All vehicles and bikes</td>
+<td>City speed limit</td>
+</tr>
+<tr>
+<td><strong>road</strong></td>
+<td><strong>nonurban</strong></td>
+<td>A part of a road in nonurban region</td>
+<td>All vehicles and bikes</td>
+<td>Nonurban speed limit</td>
+</tr>
+<tr>
+<td><strong>highway</strong></td>
+<td><strong>urban</strong></td>
+<td>A part of a highway in urban region</td>
+<td>All vehicles</td>
+<td>Urban highway limit</td>
+</tr>
+<tr>
+<td><strong>highway</strong></td>
+<td><strong>nonurban</strong></td>
+<td>A part of a highway in nonurban region</td>
+<td>All vehicles</td>
+<td>Nonurban highway limit</td>
+</tr>
+<tr>
+<td><strong>play_street</strong></td>
+<td><strong>-</strong></td>
+<td>A part of a play street</td>
+<td>Vehicles, bikes, pedestrians</td>
+<td>play street speed limit</td>
+</tr>
+<tr>
+<td><strong>emergency_lane</strong></td>
+<td><strong>-</strong></td>
+<td>Lane for emergency vehicles</td>
+<td>Emergency vehicles</td>
+<td>Average emergency vehicle speed</td>
+</tr>
+<tr>
+<td><strong>bus_lane</strong></td>
+<td><strong>urban</strong></td>
+<td>Lane for buses</td>
+<td>Bus, Emergency, Taxi</td>
+<td>City speed limit</td>
+</tr>
+<tr>
+<td><strong>bus_lane</strong></td>
+<td><strong>nonurban</strong></td>
+<td>Lane for buses</td>
+<td>Bus, Emergency, Taxi</td>
+<td>Nonurban speed limit</td>
+</tr>
+<tr>
+<td><strong>bicycle_lane</strong></td>
+<td><strong>-</strong></td>
+<td>A lane that is usable only for bikes</td>
+<td>Bikes</td>
+<td>Average bike speed</td>
+</tr>
+<tr>
+<td><strong>exit</strong></td>
+<td><strong>urban</strong></td>
+<td>Exit area of a house or garage that crosses the crosswalk</td>
+<td>Vehicles, bikes, pedestrians</td>
+<td>Urban speed limit</td>
+</tr>
+<tr>
+<td><strong>walkway</strong></td>
+<td><strong>-</strong></td>
+<td>A part of a way for pedestrians</td>
+<td>Pedestrians</td>
+<td>Average pedestrian walking speed</td>
+</tr>
+<tr>
+<td><strong>shared_walkway</strong></td>
+<td><strong>-</strong></td>
+<td>A way shared by bikes and pedestrians</td>
+<td>Bikes, Pedestrians</td>
+<td>Average bike/pedestrian speed</td>
+</tr>
+<tr>
+<td><strong>crosswalk</strong></td>
+<td><strong>-</strong></td>
+<td>A part of a crosswalk</td>
+<td>Pedestrians</td>
+<td>Average pedestrian walking speed</td>
+</tr>
+<tr>
+<td><strong>stairs</strong></td>
+<td><strong>-</strong></td>
+<td>Well ... stairs</td>
+<td>Pedestrians</td>
+<td>Average pedestrian walking speed</td>
+</tr>
+</tbody>
+</table>
+<h3 id="overriding">Overriding</h3>
+<p>Since the inferred information above might be incorrect in some situations, it can be overridden by explicitly specifying participants or speed limit. If one of the participants is set like this, the <em>subtype</em> and <em>location</em> tags are ignored and all other participants are assumed to be disallowed. The allowed participants then have to be set one by one.</p>
+<p>The following particiants can be used to define individual special situations. They are prefixed with the type of information they are supposed to override. Values are always <em>yes</em> or <em>no</em>:
+* vehicle (affects all "motorized" participants) <em>OR</em>
+  * vehicle:car <em>OR</em>
+    * vehicle:&#8203;car:electric
+    * vehicle:&#8203;car:combustion
+  * vehicle:bus
+  * vehicle:truck
+  * vehicle:motorcycle
+  * vehicle:taxi
+  * vehicle:emergency
+* pedestrian
+* bicycle</p>
+<p>To override the participant information, prefix the participants with <em>participant:</em>, e.g. <em>participant:vehicle:car=yes</em>. This would allow only cars on this Lanelet/area.</p>
+<p>The normal <em>vehicle</em> tag can not be combined with any <em>vehicle:xxx</em> tag. If one of the <em>vehicle:xxx</em> tags is defined, all other <em>vehicle:xxx</em> tags must be set individually.</p>
+<p>The speed limit can be overridden separately by using the follwing tags (<em>speed_limit</em> must be set, <em>speed_limit_mandatory</em> is optional):
+* <em>speed_limit</em> (any velocity, preferably with unit, e.g. <code>5 km/h</code>, no unit is inferred as <code>km/h</code>)
+* <em>speed_limit_mandatory</em> (yes or no, default is yes)</p>
+<p>For an even finer overriding behaviour, use <em>speed_limit:xxx</em> and <em>speed_limit_mandatory:xxx</em>, where xxx is one of the participants from above. If the fine overriding is used and no match can be found for the current participant, <em>speed_limit</em> is returned. If it is not set, 0 km/h is returned.</p>
+<p>Note that the speed limit can be overriden by <code>RegulatoryElements</code>.</p>
+<p>The general rule of thumb should be to <strong>avoid the overriding mechanism</strong> where possible. The information can be transported much cleaner by either creating a new <code>TrafficRule</code> class that covers road types that we do not cover or by using <code>RegulatoryElements</code>.</p>
+<h4 id="example">Example</h4>
+<p>Consider a lanelet with the following tags:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Tag</strong></th>
+<th><strong>value</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>lanelet</td>
+</tr>
+<tr>
+<td>subtype</td>
+<td>road</td>
+</tr>
+<tr>
+<td>location</td>
+<td>urban</td>
+</tr>
+<tr>
+<td>participant:vehicle:taxi</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>participant:vehicle:bus</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>participant:pedestrian</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>one_way:pedestrian</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>Since overriding is used, the subtype/location combination is ignored when determining allowed participants. This means that only the following participants are allowed: Taxi, Bus, Pedestrian. Because the speed limit is not overridden, it could be determined (depending on the country) as 50 km/h (the speed limit for vehicles in cities) for taxis and buses and as non-mandatory 4km/h for pedestrians, since the average walking speed of a pedestrian is assumed to be 4 km/h which is smaller than 50 km/h.</p>
+<p>The <em>one_way</em> tag - see the section "Direction" below - allows pedestrians in both directions (which is generally a good idea).</p>
+<h2 id="other-optional-tags">Other, Optional Tags</h2>
+<ul>
+<li>road_name (the name of the road)</li>
+<li>road_surface (dirt, asphalt, concrete, ...)</li>
+<li>region: the ISO 3166-2 code for the country in which this Lanelet/area is situated. The traffic rules might check this tag to ensure they are working on the correct part of the map.</li>
+</ul>
+<h2 id="lanelet-specific">Lanelet Specific</h2>
+<p>All Lanelets have <code>type=lanelet</code>. If the tag is not present, it will be added when saving to .osm, because this is a requirement for writing from/to osm files.</p>
+<p>Note that the lane change restrictions are not inferred based on the Lanelet tags, but on the tags on the borders. See <a href="../LinestringTagging/">here</a> for more info.</p>
+<h3 id="direction">Direction</h3>
+<p>By default, Lanelets are one-directional. The direction is determined by the order in which the left and right bound is set. Whether a Lanelet is one- or bi-directional is determined by the <em>one_way</em> tag. If it is set to <em>no</em>, the Lanelet is bidirectional. The <em>one_way</em> tag can be further specialized to define the direction for different participants. This can be done by appending the type of the participant (as in Overriding), e.g. <code>one_way:bicycle=no</code>. This would mean that the Lanelet is one-directional for all participants, except bicycles. <code>one_way</code> and <code>one_way:xxxx</code> can not be used in combination.</p>
+<p>Pedestrians use Lanelets always bi-directional, unless overridden.</p>
+<h2 id="area-specific">Area Specific</h2>
+<p>All areas have <code>type=multipolygon</code> (!) for compability reasons with the osm file format. <code>type=area</code> is possible too but will be overwritten when writing map data to an .osm file.</p>
+<h3 id="more-subtypes">More subtypes</h3>
+<p>Additionally to the <em>subtypes</em> described above, other tags can be used to define the environment of a road:
+* parking
+* freespace (road area without a purpose)
+* vegetation
+* keepout
+* building
+* traffic_island</p>
+<p>These tags can be interpreted by special <code>TrafficRule</code> objects to determine the drivable space (e.g. for parking maneuvers or emergency situations).</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../LaneletPrimitives/" class="btn btn-neutral float-right" title="LaneletPrimitives">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Lanelet1Compability/" class="btn btn-neutral" title="Lanelet1Compability"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../Lanelet1Compability/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../LaneletPrimitives/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

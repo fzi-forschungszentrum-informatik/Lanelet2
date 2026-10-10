@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>RegulatoryElementTagging - Lanelet2</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "RegulatoryElementTagging";
+    var mkdocs_page_input_path = "lanelet2_core/RegulatoryElementTagging.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Lanelet2</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">lanelet2_core</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_examples/">lanelet2_examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_io/">lanelet2_io</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_maps/">lanelet2_maps</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_matching/">lanelet2_matching</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/">lanelet2_projection</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_python/">lanelet2_python</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_routing/">lanelet2_routing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_traffic_rules/">lanelet2_traffic_rules</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_validation/">lanelet2_validation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Detailed Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../Architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../GeometryPrimer/">GeometryPrimer</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Lanelet1Compability/">Lanelet1Compability</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletAndAreaTagging/">LaneletAndAreaTagging</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LaneletPrimitives/">LaneletPrimitives</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LinestringTagging/">LinestringTagging</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">RegulatoryElementTagging</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#tags">Tags</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#subtype">Subtype</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#other-optional-tags">Other, Optional Tags</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#basic-regulatory-elements">Basic Regulatory Elements</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#traffic-sign">Traffic Sign</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#speed-limit">Speed Limit</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#traffic-light">Traffic Light</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#right-of-way">Right of Way</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#all-way-stop">All Way Stop</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#osm-xml-examples">OSM XML Examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#traffic-light_1">Traffic Light</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#speed-limit_1">Speed Limit</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#all-way-stop_1">All Way Stop</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../lanelet2_projection/Map_Projections_Coordinate_Systems/">Map_Projections_Coordinate_Systems</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Lanelet2</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Detailed Documentation &raquo;</li>
+        
+      
+    
+    <li>RegulatoryElementTagging</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/edit/master/docs/lanelet2_core/RegulatoryElementTagging.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="tagging-regulatory-elements">Tagging Regulatory Elements</h1>
+<p>Regulatory Elements are divided into categories. The most common ones are <code>TrafficLight</code>, <code>TrafficSign</code>, <code>SpeedLimit</code> and <code>RightOfWay</code>, which are already included in the core library, but there are many more ways to model restrictions on lanelets and areas. More might be added in the future and also users are able to add own regulatory elements by inheriting from the generic <code>RegulatoryElement</code> class and registering the new type using the <code>RegisterRegulatoryElement</code> class.</p>
+<p>This document describes the generic layout of a Regulatory Element and shows how the common Regulatory Elements are structured.</p>
+<h2 id="tags">Tags</h2>
+<p>Regulatory Elements always have <code>type=regulatory_element</code>. If this tag is not present, Lanelet2 will add it when writing to an .osm file.</p>
+<h3 id="subtype">Subtype</h3>
+<p>The <code>subtype</code> tag helps Lanelet2 to distinguish between the different regulatory elements. For the basic Regulatory Elements this would be:
+* <em>traffic_sign</em>
+* <em>traffic_light</em>
+* <em>speed_limit</em>
+* <em>right_of_way</em>
+* <em>all_way_stop</em></p>
+<h3 id="other-optional-tags">Other, Optional Tags</h3>
+<p>The following tags can be used to add more information to a Regulatory Element (of course you can add you own to enhance your map and implement a new <code>TrafficRule</code> object that implements them). The default values for the tag are highlighted.</p>
+<ul>
+<li><em>dynamic</em> (yes/<strong>no</strong>): Indicates that this Regulatory Element might change its meaning based on a condition. Examples would be a road that is closed on weekends. Or a speed limit that is only in action if the road is wet. By default, Lanelet2 cannot handle dynamic Regulatory Elements and will ignore them. Specialized traffic rule classes could be implemented that use background information (such as the current time) to resolve dynamic Regulatory Elements.</li>
+<li><em>fallback</em> (yes/<strong>no</strong>): Indicates that this Regulatory Element has a lower priority than another Regulatory Element. Examples are right of way regulations that become valid if the traffic lights of an intersection are out of order.</li>
+</ul>
+<h2 id="parameters">Parameters</h2>
+<p>The main feature of a Regulatory Element is that it can reference other parts of the map that are important for the traffic restriction that they represent. These parts are called <em>parameters</em> of a Regulatory Element. Every parameter is characterized by a role (a string) that explains what he expresses within the Regulatory Element. Multiple parameters can have the same role if they do not contradict.</p>
+<p>An example of parameters are the traffic lights that referenced by the <em>refers</em> role of a <code>TrafficLight</code> Regulatory Element. These are the traffic lights that a vehicle has to pay attention to when driving along a specific lanelet/area that has this Regulatory Elements. Because parameters with the same role cannot contradict, this means all traffic lights must refer to the same driving direction within that intersection.</p>
+<p>The most common roles that are used across all regulatory elements are:
+* <em>refers</em>: The primitive(s) that are the very origin of the restriction. Traffic lights/signs, et cetera. Most Regulatory Elements need a <em>refers</em> role.
+* <em>cancels</em>: The primitive(s) that mark the end of the restriction (if applicable).
+* <em>ref_line</em>: The line (usually a LineString) from which a restrictions becomes valid. If not used, that usually means that the whole lanelet/area is affected by the restriction. However, there are exceptions, e.g. for traffic lights the stop line is the <em>end</em> of the lanelet.
+* <em>cancel_line</em>: The line (usally a LineString) from which a restriction is no longer in place (if applicable)</p>
+<h2 id="basic-regulatory-elements">Basic Regulatory Elements</h2>
+<h3 id="traffic-sign">Traffic Sign</h3>
+<p>A traffic sign generically expresses a restriction that is expressed by a traffic sign. The <em>refers</em> part refers to traffic signs that form the rule. The <em>cancels</em> parameter then refers to traffic signs that mark the end of the restriction expressed by the sign (e.g. the end of no-overtaking section). The <em>ref_line</em> and <em>cancel_line</em> parameters can then be used to define the exact start and end points of the rule. The LineStrings referenced by that do not necessarily need to have an intersection with the referencing lanelet or Area. If they do, the rule is valid from/to this intersection point. If not, the rule is valid for the whole lanelet/area.</p>
+<h3 id="speed-limit">Speed Limit</h3>
+<p>Speed limits work very similar to traffic signs. If they are put up by a traffic sign, they simply reference this traffic sign. Similar for the <em>ref_line</em> and the <em>cancels</em> role. The <code>TrafficRules</code> class then takes care of interpreting the speed limit from the <code>subtype</code> of the referenced traffic sign.</p>
+<p>Alternatively, if the speed limit does not originate from a traffic sign, a <code>sign_type</code> tag can be used to define the speed limit. The value should contain the unit, eg "50 km/h". mph or mps or similar units are possible as well. If no unit is given, km/h is assumed.</p>
+<h3 id="traffic-light">Traffic Light</h3>
+<p>Traffic lights are also similar to traffic signs. Instead of a sign, the light itself is referenced as <em>refers</em> parameter. The <em>cancels</em> and <em>cancels_line</em> role have no meaning for traffic lights. The <em>ref_line</em> can reference the respective stop line. If they are not present, the stop line is implicitly at the end of the lanelet or Area.</p>
+<h3 id="right-of-way">Right of Way</h3>
+<p>By default, intersecting lanelets are treated as a "first come first served" situation, meaning that the vehicle that arrives first at the intersection point has right of way. The <code>RightOfWay</code> Regulatory Element changes this. It has three roles:
+* <em>yield</em>: References the lanelets that have to yield
+* <em>right_of_way</em>: the lanelets that have the right of way over the yielding ones
+* <em>ref_line</em>: The lines where vehicles that are crossing a <em>yield</em> lanelet have to stop at. If not set, this is the end of the <em>yield</em> lanelet.</p>
+<p>Only one lanelet of a chain of lanelets that belong to the same lane have to be referenced. Generally this is the last lanelet that can be undoubtedly assigned to one specific intersection arm (i.e. the last lanelet before the intersection begins). All lanelets that are mentioned by the right of way Regulatory Element also have to reference the regulatory element.</p>
+<h3 id="all-way-stop">All Way Stop</h3>
+<p>While in a <em>Right of Way</em> regelem, the right of way only depends on the lanelet, the right of way in an <a href="https://en.wikipedia.org/wiki/All-way_stop">All-Way Stop</a> regelem depends on the order of arrival and the route through the intersection. Therefore, all lanelets are potentially yield lanelets. All approaching vehicles have to stop before entering the intersection.
+The intersection entry is either defined by one stop line for each lanelet or is otherwise determined by the end of each lanelet. To avoid confusion when matching lanelets and stop lines, an <em>All Way Stop</em> regelem is only valid if either no lanelet has a stop line or all lanelets have exactly one.
+The following roles are used in an all way stop:
+* <em>yield</em>: References the lanelets that might have to yield
+* <em>ref_line</em>: The lines where <em>yield</em> lanelets have to stop. This either empty or has the same order and size as the number of lanelets in <em>yield</em>.
+* <em>refers</em>: The traffic sign(s) that constitute this rule</p>
+<p>All lanelets referenced in this regelem also have to reference this regelem.</p>
+<h2 id="osm-xml-examples">OSM XML Examples</h2>
+<p>Below are some examples of regulatory element relations as they might look in lanelet2's OSM XML format.</p>
+<h3 id="traffic-light_1">Traffic Light</h3>
+<pre><code class="language-xml">&lt;relation id='1'&gt;
+  &lt;tag k='type' v='regulatory_element' /&gt;
+  &lt;tag k='subtype' v='traffic_light' /&gt;
+  &lt;!-- stop line --&gt;
+  &lt;member type='way' ref='2' role='ref_line' /&gt;
+  &lt;!-- traffic light --&gt;
+  &lt;member type='way' ref='3' role='refers' /&gt;
+&lt;/relation&gt;
+</code></pre>
+<h3 id="speed-limit_1">Speed Limit</h3>
+<pre><code class="language-xml">&lt;relation id='1'&gt;
+  &lt;tag k='subtype' v='speed_limit' /&gt;
+  &lt;tag k='type' v='regulatory_element' /&gt;
+  &lt;!-- Traffic sign(s) that constitute this rule --&gt;
+  &lt;member type='way' ref='2' role='refers' /&gt;
+&lt;/relation&gt;
+</code></pre>
+<h3 id="all-way-stop_1">All Way Stop</h3>
+<p>Below is an example of a 4-way stop intersection.</p>
+<pre><code class="language-xml">&lt;relation id='1'&gt;
+  &lt;tag k='type' v='regulatory_element' /&gt;
+  &lt;tag k='subtype' v='all_way_stop' /&gt;
+  &lt;!-- Lanelets participating in the 4-way stop --&gt;
+  &lt;member type='relation' ref='2' role='yield' /&gt;
+  &lt;member type='relation' ref='3' role='yield' /&gt;
+  &lt;member type='relation' ref='4' role='yield' /&gt;
+  &lt;member type='relation' ref='5' role='yield' /&gt;
+  &lt;!-- Traffic signs that constitute this rule --&gt;
+  &lt;member type='way' ref='6' role='refers' /&gt;
+  &lt;member type='way' ref='7' role='refers' /&gt;
+  &lt;member type='way' ref='8' role='refers' /&gt;
+  &lt;member type='way' ref='9' role='refers' /&gt;
+  &lt;!-- stop lines for the lanelets (same order as lanelets) --&gt;
+  &lt;member type='way' ref='10' role='ref_line' /&gt;
+  &lt;member type='way' ref='11' role='ref_line' /&gt;
+  &lt;member type='way' ref='12' role='ref_line' /&gt;
+  &lt;member type='way' ref='13' role='ref_line' /&gt;
+&lt;/relation&gt;
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../lanelet2_projection/Map_Projections_Coordinate_Systems/" class="btn btn-neutral float-right" title="Map_Projections_Coordinate_Systems">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../LinestringTagging/" class="btn btn-neutral" title="LinestringTagging"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fzi-forschungszentrum-informatik/Lanelet2/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../LinestringTagging/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../lanelet2_projection/Map_Projections_Coordinate_Systems/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
