@@ -8,8 +8,8 @@ from pathlib import Path
 
 DISTNAME = "lanelet2"
 DESCRIPTION = "Map handling framework for automated driving."
-MAINTAINER = "Fabian Immel"
-MAINTAINER_EMAIL = "fabian.immel@kit.edu"
+MAINTAINER = "Jonas Merkert"
+MAINTAINER_EMAIL = "jonas.merkert@kit.edu"
 URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2"
 DOWNLOAD_URL = "https://github.com/fzi-forschungszentrum-informatik/Lanelet2/releases/tag/{{ version }}"
 VERSION = "{{ version }}"

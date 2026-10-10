@@ -1,7 +1,7 @@
 import os
 import sys
+import sysconfig
 import xml.etree.ElementTree as ET
-from distutils.sysconfig import get_python_lib
 from io import StringIO
 from pathlib import Path
 
@@ -149,6 +149,8 @@ class Lanelet2Conan(ConanFile):
         tc.variables["PYTHON_VERSION"] = py_version
         tc.variables["PYTHON_EXECUTABLE"] = py_exec
         tc.variables["MRT_CMAKE_ENV"] = "sh env PYTHONPATH=" + py_exec
+        # mrt_cmake_modules determines this via distutils, which is gone since python 3.12
+        tc.variables["MRT_PYTHON_INSTALL_DESTINATION"] = self._pythonpath()
         tc.generate()
         self._set_env(self.runenv)
 
@@ -164,8 +166,12 @@ class Lanelet2Conan(ConanFile):
 
     def _pythonpath(self):
         return os.path.relpath(
-            get_python_lib(prefix=self.package_folder), start=self.package_folder
-        )
+            sysconfig.get_path(
+                "purelib",
+                scheme="nt" if os.name == "nt" else "posix_prefix",
+                vars={"base": "."},
+            )
+        ).replace(os.sep, "/")
 
     def source(self):
         if not os.path.exists("mrt_cmake_modules"):

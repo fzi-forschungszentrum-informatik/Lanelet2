@@ -6,6 +6,7 @@
   <description>Lanelet2 core module</description>
 
   <license>BSD</license>
+  <maintainer email="jonas.merkert@kit.edu">Jonas Merkert</maintainer>
   <maintainer email="fabian.immel@kit.edu">Fabian Immel</maintainer>
   <maintainer email="frank.bieder@kit.edu">Frank Bieder</maintainer>
   <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>

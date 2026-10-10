@@ -6,6 +6,8 @@
   <description>Lanelet2 projection library for lat/lon to local x/y conversion</description>
 
   <license>BSD</license>
+  <maintainer email="jonas.merkert@kit.edu">Jonas Merkert</maintainer>
+  <maintainer email="fabian.immel@kit.edu">Fabian Immel</maintainer>
   <maintainer email="jan-hendrik.pauls@kit.edu">Jan-Hendrik Pauls</maintainer>
   <author email="maximilian.naumann@kit.edu">Maximilian Naumann</author>
   <author email="fabian.poggenhans@kit.edu">Fabian Poggenhans</author>
