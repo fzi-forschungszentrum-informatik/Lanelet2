@@ -55,16 +55,16 @@ class SphericalMercatorProjector : public Projector {
  public:
   using Projector::Projector;
   BasicPoint3d forward(const GPSPoint& p) const override {
-    const auto scale = std::cos(origin().position.lat * M_PI / 180.0);
-    const double x{scale * p.lon * M_PI * EarthRadius / 180.0};
-    const double y{scale * EarthRadius * std::log(std::tan((90.0 + p.lat) * M_PI / 360.0))};
+    const auto scale = std::cos(origin().position.lat * Pi / 180.0);
+    const double x{scale * p.lon * Pi * EarthRadius / 180.0};
+    const double y{scale * EarthRadius * std::log(std::tan((90.0 + p.lat) * Pi / 360.0))};
     return {x, y, p.ele};
   }
 
   GPSPoint reverse(const BasicPoint3d& p) const override {
-    const double scale = std::cos(origin().position.lat * M_PI / 180.0);
-    const double lon = p.x() * 180.0 / (M_PI * EarthRadius * scale);
-    const double lat = 360.0 * std::atan(std::exp(p.y() / (EarthRadius * scale))) / M_PI - 90.0;
+    const double scale = std::cos(origin().position.lat * Pi / 180.0);
+    const double lon = p.x() * 180.0 / (Pi * EarthRadius * scale);
+    const double lat = 360.0 * std::atan(std::exp(p.y() / (EarthRadius * scale))) / Pi - 90.0;
     return {lat, lon, p.z()};
   }
 

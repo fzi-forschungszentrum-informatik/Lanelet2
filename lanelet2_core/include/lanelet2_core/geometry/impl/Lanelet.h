@@ -21,8 +21,8 @@ struct GetGeometry<T, IfLL<T, void>> {
 };
 }  // namespace internal
 
-template <typename LaneletT>
-IfLL<LaneletT, bool> inside(const LaneletT& lanelet, const BasicPoint2d& point) {
+template <typename LaneletT, IfLL<LaneletT, int>>
+bool inside(const LaneletT& lanelet, const BasicPoint2d& point) {
   return boost::geometry::covered_by(point, lanelet.polygon2d());
 }
 
@@ -36,22 +36,22 @@ double distanceToCenterline3d(const LaneletT& lanelet, const BasicPoint3d& point
   return distance(lanelet.centerline3d(), point);
 }
 
-template <typename LaneletT>
-IfLL<LaneletT, BoundingBox2d> boundingBox2d(const LaneletT& lanelet) {
+template <typename LaneletT, IfLL<LaneletT, int>>
+BoundingBox2d boundingBox2d(const LaneletT& lanelet) {
   BoundingBox2d bb = boundingBox2d(lanelet.leftBound2d());
   bb.extend(boundingBox2d(lanelet.rightBound2d()));
   return bb;
 }
 
-template <typename LaneletT>
-IfLL<LaneletT, BoundingBox3d> boundingBox3d(const LaneletT& lanelet) {
+template <typename LaneletT, IfLL<LaneletT, int>>
+BoundingBox3d boundingBox3d(const LaneletT& lanelet) {
   BoundingBox3d bb = boundingBox3d(lanelet.leftBound3d());
   bb.extend(boundingBox3d(lanelet.rightBound3d()));
   return bb;
 }
 
-template <typename Lanelet1T, typename Lanelet2T>
-IfLL<Lanelet1T, bool> intersects2d(const Lanelet1T& lanelet, const Lanelet2T& otherLanelet) {
+template <typename Lanelet1T, typename Lanelet2T, IfLL<Lanelet1T, int>>
+bool intersects2d(const Lanelet1T& lanelet, const Lanelet2T& otherLanelet) {
   if (lanelet.constData() == otherLanelet.constData()) {
     return true;
   }

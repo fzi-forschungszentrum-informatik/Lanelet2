@@ -13,6 +13,10 @@ namespace lanelet {
 namespace routing {
 namespace internal {
 namespace {
+constexpr auto AllowedRouteRelation = RelationType::Successor | RelationType::Left | RelationType::Right;
+constexpr auto AdjacentRelation =
+    RelationType::Left | RelationType::Right | RelationType::AdjacentLeft | RelationType::AdjacentRight;
+
 template <typename Graph, typename StartVertex, typename Visitor>
 void breadthFirstSearch(const Graph& g, StartVertex v, Visitor vis) {
   SparseColorMap cm;
@@ -214,8 +218,7 @@ class PathsOutOfRouteFinder {
     for (auto newVertex : newConflictingVertices_) {
       auto inEdges = boost::in_edges(newVertex, g_);
       auto connectsToRoute = [&](auto e) {
-        constexpr auto AllowedRelation = RelationType::Successor | RelationType::Left | RelationType::Right;
-        return hasRelation<AllowedRelation>(g_, e) && has(*llts_, boost::source(e, g_));
+        return hasRelation<AllowedRouteRelation>(g_, e) && has(*llts_, boost::source(e, g_));
       };
       if (std::any_of(inEdges.first, inEdges.second, connectsToRoute)) {
         iterRoute_.forEachPath(newVertex, testIfPathIsPermitted);
@@ -234,12 +237,14 @@ class PathsOutOfRouteFinder {
     auto isAdjacentToRoute = [&](LaneletVertexId v) {
       auto inEdges = boost::in_edges(v, g);
       auto outEdges = boost::out_edges(v, g);
-      constexpr auto Adjacent =
-          RelationType::Left | RelationType::Right | RelationType::AdjacentLeft | RelationType::AdjacentRight;
       return std::any_of(inEdges.first, inEdges.second,
-                         [&](auto e) { return hasRelation<Adjacent>(g, e) && has(*llts_, boost::source(e, g)); }) ||
+                         [&](auto e) {
+                           return hasRelation<AdjacentRelation>(g, e) && has(*llts_, boost::source(e, g));
+                         }) ||
              std::any_of(outEdges.first, outEdges.second,
-                         [&](auto e) { return hasRelation<Adjacent>(g, e) && has(*llts_, boost::target(e, g)); });
+                         [&](auto e) {
+                           return hasRelation<AdjacentRelation>(g, e) && has(*llts_, boost::target(e, g));
+                         });
     };
     return std::all_of(path.begin(), path.end(), isAdjacentToRoute);
   }

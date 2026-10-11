@@ -10,8 +10,8 @@ namespace geometry {
  * @param point point to check
  * @return true if the point is within or at the border, false otherwise
  */
-template <typename LaneletT>
-IfLL<LaneletT, bool> inside(const LaneletT& lanelet, const BasicPoint2d& point);
+template <typename LaneletT, IfLL<LaneletT, int> = 0>
+bool inside(const LaneletT& lanelet, const BasicPoint2d& point);
 
 /**
  * @brief approximates length by sampling points along left bound
@@ -68,16 +68,16 @@ double distanceToCenterline3d(const LaneletT& lanelet, const BasicPoint3d& point
  *
  * Linear on number of points.
  */
-template <typename LaneletT>
-IfLL<LaneletT, BoundingBox2d> boundingBox2d(const LaneletT& lanelet);
+template <typename LaneletT, IfLL<LaneletT, int> = 0>
+BoundingBox2d boundingBox2d(const LaneletT& lanelet);
 
 /**
  * @brief calculates 3d bounding box
  * @param lanelet lanelet to calculate it from.
  * @return the bounding box
  */
-template <typename LaneletT>
-IfLL<LaneletT, BoundingBox3d> boundingBox3d(const LaneletT& lanelet);
+template <typename LaneletT, IfLL<LaneletT, int> = 0>
+BoundingBox3d boundingBox3d(const LaneletT& lanelet);
 
 /**
  * @brief test whether two lanelets intersect in 2d.
@@ -89,8 +89,8 @@ IfLL<LaneletT, BoundingBox3d> boundingBox3d(const LaneletT& lanelet);
  * This also returns true if the two lanelets only touch each other. Use
  * overlaps if you do not want this.
  */
-template <typename Lanelet1T, typename Lanelet2T>
-IfLL<Lanelet1T, bool> intersects2d(const Lanelet1T& lanelet, const Lanelet2T& otherLanelet);
+template <typename Lanelet1T, typename Lanelet2T, IfLL<Lanelet1T, int> = 0>
+bool intersects2d(const Lanelet1T& lanelet, const Lanelet2T& otherLanelet);
 
 /**
  * @brief test whether two lanelets overlap in 2d.

@@ -475,8 +475,8 @@ inline BasicLineString2d shiftConvexSharp(const LineString2dT& lineString, const
   }
   BasicPoint2d firstP = shiftPerpendicular(lineString, idx, distance, true, pv);
   BasicPoint2d lastP = shiftPerpendicular(lineString, idx, distance, false, pv);
-  auto alpha = M_PI - std::acos(pv.following.dot(pv.preceding) / (pv.preceding.norm() * pv.following.norm()));
-  auto overshoot = distance * std::tan(M_PI_4 - alpha / 4);
+  auto alpha = Pi - std::acos(pv.following.dot(pv.preceding) / (pv.preceding.norm() * pv.following.norm()));
+  auto overshoot = distance * std::tan(PiQuarter - alpha / 4);
   return {firstP + pv.preceding.normalized() * overshoot, lastP - pv.following.normalized() * overshoot};
 }
 
@@ -799,8 +799,8 @@ IfLS<LineString3dT, std::pair<BasicPoint3d, BasicPoint3d>> projectedPoint3d(cons
   return internal::projectedPoint3d(traits::toHybrid(l1), traits::toHybrid(l2));
 }
 
-template <typename LineString3d1T, typename LineString3d2T>
-IfLS2<LineString3d1T, LineString3d2T, double> distance3d(const LineString3d1T& l1, const LineString3d2T& l2) {
+template <typename LineString3d1T, typename LineString3d2T, IfLS2<LineString3d1T, LineString3d2T, int> = 0>
+double distance3d(const LineString3d1T& l1, const LineString3d2T& l2) {
   auto projPoint = internal::projectedPoint3d(traits::toHybrid(traits::to3D(l1)), traits::toHybrid(traits::to3D(l2)));
   return (projPoint.first - projPoint.second).norm();
 }

@@ -50,7 +50,9 @@ double positiveFloatModulo(double x, double y) {
 }
 
 // from https://github.com/coincar-sim/util_eigen_geometry/blob/release/src/util_eigen_geometry.cpp
-double normalizeAngleRadians(double x) { return positiveFloatModulo((x + M_PI), 2.0 * M_PI) - M_PI; }
+double normalizeAngleRadians(double x) {
+  return positiveFloatModulo((x + lanelet::Pi), 2.0 * lanelet::Pi) - lanelet::Pi;
+}
 
 // from https://github.com/coincar-sim/util_eigen_geometry/blob/release/src/util_eigen_geometry.cpp
 double angleDifference(double targetAngle, double sourceAngle) {

@@ -12,8 +12,8 @@ namespace geometry {
  * @param point point to check
  * @return true if the point is within or at the border, false otherwise
  */
-template <typename AreaT>
-IfAr<AreaT, bool> inside(const AreaT& area, const BasicPoint2d& point);
+template <typename AreaT, IfAr<AreaT, int> = 0>
+bool inside(const AreaT& area, const BasicPoint2d& point);
 
 /**
  * @brief calculates an up-right 2d bounding box
@@ -22,30 +22,30 @@ IfAr<AreaT, bool> inside(const AreaT& area, const BasicPoint2d& point);
  *
  * Linear on number of points.
  */
-template <typename AreaT>
-IfAr<AreaT, BoundingBox2d> boundingBox2d(const AreaT& area);
+template <typename AreaT, IfAr<AreaT, int> = 0>
+BoundingBox2d boundingBox2d(const AreaT& area);
 
 /**
  * @brief calculates 3d bounding box
  * @param area area to calculate it from.
  * @return the bounding box
  */
-template <typename AreaT>
-IfAr<AreaT, BoundingBox3d> boundingBox3d(const AreaT& area);
+template <typename AreaT, IfAr<AreaT, int> = 0>
+BoundingBox3d boundingBox3d(const AreaT& area);
 
 //! test whether two areas intersect in 2d.
-template <typename Area1T, typename Area2T>
-IfAr<Area1T, bool> intersects2d(const Area1T& area, const Area2T& otherArea);
+template <typename Area1T, typename Area2T, IfAr<Area1T, int> = 0>
+bool intersects2d(const Area1T& area, const Area2T& otherArea);
 
 //! test whether two areas overlap in 2d (common area < 0).
 //! This is an approximation that ignores the holes of the areas!
-template <typename AreaT>
-IfAr<AreaT, bool> overlaps2d(const AreaT& area, const AreaT& otherArea);
+template <typename AreaT, IfAr<AreaT, int> = 0>
+bool overlaps2d(const AreaT& area, const AreaT& otherArea);
 
 //! test whether two areas overlap in 3d.
 //! This is an approximation that uses the overlap of the outer bound
-template <typename AreaT>
-IfAr<AreaT, bool> overlaps3d(const AreaT& area, const AreaT& otherArea, double heightTolerance);
+template <typename AreaT, IfAr<AreaT, int> = 0>
+bool overlaps3d(const AreaT& area, const AreaT& otherArea, double heightTolerance);
 
 //! test whether an area and a lanelet overlap in 2d
 //! This is an approximation that uses the overlap of the outer bound

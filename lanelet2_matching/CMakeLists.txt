@@ -3,10 +3,17 @@ set(MRT_PKG_VERSION 4.0.0)
 cmake_minimum_required(VERSION 3.5.1)
 project(lanelet2_matching)
 
+if(WIN32 AND MSVC)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 ###################
 ## Find packages ##
 ###################
 find_package(mrt_cmake_modules REQUIRED)
+if(WIN32 AND ROS_VERSION EQUAL 1)
+  set(MRT_CMAKE_ENV ${CATKIN_ENV})
+endif()
 include(UseMrtStdCompilerFlags)
 include(GatherDeps)
 
@@ -63,7 +70,7 @@ mrt_install(PROGRAMS scripts FILES res data ${PROJECT_INSTALL_FILES})
 ## Testing ##
 #############
 # Add test targets for cpp and python tests
-if (CATKIN_ENABLE_TESTING)
+if (CATKIN_ENABLE_TESTING AND NOT CATKIN_SKIP_TESTING)
     mrt_add_tests(test)
     mrt_add_nosetests(test)
 endif()

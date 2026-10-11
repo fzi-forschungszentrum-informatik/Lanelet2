@@ -312,7 +312,7 @@ struct PrimitiveLayer<Point3d>::Tree {
   using TreeNode = std::pair<BasicPoint2d, Point3d>;
   using RTree = bgi::rtree<TreeNode, bgi::quadratic<16>>;
   static TreeNode treeNode(const Point3d& p) { return {Point2d(p).basicPoint(), p}; }
-  explicit Tree(const PrimitiveLayer::Map& primitives) {
+  explicit Tree(const PrimitiveLayer<Point3d>::Map& primitives) {
     std::vector<TreeNode> nodes;
     nodes.reserve(primitives.size());
     std::transform(primitives.begin(), primitives.end(), std::back_inserter(nodes),

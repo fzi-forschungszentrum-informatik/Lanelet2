@@ -245,14 +245,14 @@ IfPoly<Polygon3dT, double> distanceToBorder3d(const Polygon3dT& poly1, const Pol
  *
  * @return The enclosing axis aligned bounding box of all points.
  */
-template <typename Polygon3dT>
-IfPoly<Polygon3dT, BoundingBox3d> boundingBox3d(const Polygon3dT& polygon);
+template <typename Polygon3dT, IfPoly<Polygon3dT, int> = 0>
+BoundingBox3d boundingBox3d(const Polygon3dT& polygon);
 
-template <typename Polygon2dT>
-IfPoly<Polygon2dT, BoundingBox2d> boundingBox2d(const Polygon2dT& polygon);
+template <typename Polygon2dT, IfPoly<Polygon2dT, int> = 0>
+BoundingBox2d boundingBox2d(const Polygon2dT& polygon);
 
-template <typename Polygon3dT>
-IfPoly<Polygon3dT, BoundingBox3d> boundingBox3d(const Polygon3dT& polygon) {
+template <typename Polygon3dT, IfPoly<Polygon3dT, int>>
+BoundingBox3d boundingBox3d(const Polygon3dT& polygon) {
   static_assert(traits::is3D<Polygon3dT>(), "Please call this function with a 3D type!");
   BoundingBox3d bb;
   for (const auto& p : polygon) {
@@ -261,8 +261,8 @@ IfPoly<Polygon3dT, BoundingBox3d> boundingBox3d(const Polygon3dT& polygon) {
   return bb;
 }
 
-template <typename Polygon2dT>
-IfPoly<Polygon2dT, BoundingBox2d> boundingBox2d(const Polygon2dT& polygon) {
+template <typename Polygon2dT, IfPoly<Polygon2dT, int>>
+BoundingBox2d boundingBox2d(const Polygon2dT& polygon) {
   static_assert(traits::is2D<Polygon2dT>(), "Please call this function with a 2D type!");
   BoundingBox2d bb;
   for (const auto& p : polygon) {

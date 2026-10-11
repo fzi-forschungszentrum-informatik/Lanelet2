@@ -112,7 +112,7 @@ TEST_F(MatchingUtilitiesBase, absoluteHull) {  // NOLINT
   matching::Object2d obj;
 
   obj.pose.translation() = BasicPoint2d{10, 0};                         //!< at point x=10 y=0
-  obj.pose.linear() = Eigen::Rotation2D<double>(-1.5 * M_PI).matrix();  //!< rotated by pi/2 (=-3pi/2)
+  obj.pose.linear() = Eigen::Rotation2D<double>(-1.5 * Pi).matrix();  //!< rotated by pi/2 (=-3pi/2)
 
   obj.absoluteHull = absoluteHull(matching::Hull2d{BasicPoint2d{-0.5, -1}, BasicPoint2d{2, 1}}, obj.pose);
 
@@ -126,7 +126,7 @@ TEST_F(MatchingUtilitiesBase, absoluteHull) {  // NOLINT
 TEST_F(MatchingUtilitiesBase, findWithin) {  // NOLINT
   matching::Object2d obj;
   obj.pose.translation() = lanelet::BasicPoint2d(2.05, 1.);
-  obj.pose.linear() = Eigen::Rotation2D<double>(150. / 180. * M_PI).matrix();
+  obj.pose.linear() = Eigen::Rotation2D<double>(150. / 180. * Pi).matrix();
 
   EXPECT_EQ(2ul, matching::utils::findWithin(map->laneletLayer, obj, 0.1).size());
 
@@ -143,7 +143,7 @@ TEST_F(MatchingUtilitiesBase, findWithin) {  // NOLINT
 TEST_F(MatchingUtilitiesBase, getMahalanobisDistSq) {  // NOLINT
   matching::ObjectWithCovariance2d obj;
   obj.pose.translation() = lanelet::BasicPoint2d(2.05, 1.);
-  obj.pose.linear() = Eigen::Rotation2D<double>(1. / 180. * M_PI).matrix();  // one degree orientation
+  obj.pose.linear() = Eigen::Rotation2D<double>(1. / 180. * Pi).matrix();  // one degree orientation
   obj.absoluteHull = absoluteHull(
       matching::Hull2d{BasicPoint2d{-1, -0.9}, BasicPoint2d{2, -0.9}, BasicPoint2d{2, 0.9}, BasicPoint2d{1, 0.9}},
       obj.pose);
@@ -158,7 +158,7 @@ TEST_F(MatchingUtilitiesBase, getMahalanobisDistSq) {  // NOLINT
       << "should throw on determinant = zero";
 
   obj.positionCovariance = matching::PositionCovariance2d::Identity() * 2.;
-  obj.vonMisesKappa = 1. / (10. / 180. * M_PI);  // covariance of 10 degrees
+  obj.vonMisesKappa = 1. / (10. / 180. * Pi);  // covariance of 10 degrees
 
   double mahaDist21 = getMahalanobisDistSq(map->laneletLayer.get(21), obj);
   EXPECT_NEAR(0.011, mahaDist21, 10e-2);
@@ -171,12 +171,12 @@ class MatchingBase : public MatchingUtilitiesBase {
  public:
   MatchingBase() {
     obj.pose.translation() = lanelet::BasicPoint2d(1., 1.);
-    obj.pose.linear() = Eigen::Rotation2D<double>(90.1 / 180. * M_PI).matrix();
+    obj.pose.linear() = Eigen::Rotation2D<double>(90.1 / 180. * Pi).matrix();
     obj.absoluteHull = absoluteHull(
         matching::Hull2d{BasicPoint2d{-1, -0.9}, BasicPoint2d{2, -0.9}, BasicPoint2d{2, 0.9}, BasicPoint2d{1, 0.9}},
         obj.pose);
     obj.positionCovariance = matching::PositionCovariance2d::Identity() * 2.;
-    obj.vonMisesKappa = 1. / (10. / 180. * M_PI);  // covariance of 10 degrees
+    obj.vonMisesKappa = 1. / (10. / 180. * Pi);  // covariance of 10 degrees
   }
   matching::ObjectWithCovariance2d obj;
 };

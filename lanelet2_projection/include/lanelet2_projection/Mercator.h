@@ -17,25 +17,25 @@ class Mercator : public Projector {
  private:
   static BasicPoint3d rawForward(const GPSPoint& p) {
     double lat = std::min(89.5, std::max(p.lat, -89.5));
-    double phi = lat * M_PI / 180.0;
+    double phi = lat * Pi / 180.0;
     double con = Eccent * std::sin(phi);
     con = std::pow((1.0 - con) / (1.0 + con), 0.5 * Eccent);
-    double ts = std::tan(0.5 * (M_PI * 0.5 - phi)) / con;
+    double ts = std::tan(0.5 * (Pi * 0.5 - phi)) / con;
     const double y = -RMajor * std::log(ts);
-    const double x = RMajor * p.lon * M_PI / 180.;
+    const double x = RMajor * p.lon * Pi / 180.;
     return {x, y, p.ele};
   }
   static GPSPoint rawReverse(const BasicPoint3d& p) {
     double ts = std::exp(-p.y() / RMajor);
-    double phi = M_PI / 2 - 2 * std::atan(ts);
+    double phi = Pi / 2 - 2 * std::atan(ts);
     double dphi = 1.0;
     for (int i = 0; fabs(dphi) > 0.000000001 && i < 15; i++) {
       double con = Eccent * sin(phi);
-      dphi = M_PI / 2 - 2 * atan(ts * pow((1.0 - con) / (1.0 + con), 0.5 * Eccent)) - phi;
+      dphi = Pi / 2 - 2 * atan(ts * pow((1.0 - con) / (1.0 + con), 0.5 * Eccent)) - phi;
       phi += dphi;
     }
-    const double lat = 180 / M_PI * phi;
-    const double lon = 180 / M_PI * p.x() / RMajor;
+    const double lat = 180 / Pi * phi;
+    const double lon = 180 / Pi * p.x() / RMajor;
     return {lat, lon, p.z()};
   }
 

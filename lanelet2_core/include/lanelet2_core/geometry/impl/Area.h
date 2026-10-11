@@ -16,36 +16,36 @@ struct GetGeometry<T, IfAr<T, void>> {
 };
 }  // namespace internal
 
-template <typename AreaT>
-IfAr<AreaT, bool> inside(const AreaT& area, const BasicPoint2d& point) {
+template <typename AreaT, IfAr<AreaT, int>>
+bool inside(const AreaT& area, const BasicPoint2d& point) {
   return boost::geometry::covered_by(point, area.basicPolygonWithHoles2d());
 }
 
-template <typename AreaT>
-IfAr<AreaT, BoundingBox2d> boundingBox2d(const AreaT& area) {
+template <typename AreaT, IfAr<AreaT, int>>
+BoundingBox2d boundingBox2d(const AreaT& area) {
   return boundingBox2d(traits::to2D(area.outerBoundPolygon()));
 }
 
-template <typename AreaT>
-IfAr<AreaT, BoundingBox3d> boundingBox3d(const AreaT& area) {
+template <typename AreaT, IfAr<AreaT, int>>
+BoundingBox3d boundingBox3d(const AreaT& area) {
   return boundingBox3d(area.outerBoundPolygon());
 }
 
-template <typename Area1T, typename Area2T>
-IfAr<Area1T, bool> intersects2d(const Area1T& area, const Area2T& otherArea) {
+template <typename Area1T, typename Area2T, IfAr<Area1T, int>>
+bool intersects2d(const Area1T& area, const Area2T& otherArea) {
   if (area == otherArea) {
     return true;
   }
   return intersects(area.basicPolygonWithHoles2d(), otherArea.basicPolygonWithHoles2d());
 }
 
-template <typename AreaT>
-IfAr<AreaT, bool> overlaps2d(const AreaT& area, const AreaT& otherArea) {
+template <typename AreaT, IfAr<AreaT, int>>
+bool overlaps2d(const AreaT& area, const AreaT& otherArea) {
   return overlaps2d(traits::to2D(area.outerBoundPolygon()), traits::to2D(otherArea.outerBoundPolygon()));
 }
 
-template <typename AreaT>
-IfAr<AreaT, bool> overlaps3d(const AreaT& area, const AreaT& otherArea, double heightTolerance) {
+template <typename AreaT, IfAr<AreaT, int>>
+bool overlaps3d(const AreaT& area, const AreaT& otherArea, double heightTolerance) {
   return overlaps3d(area.outerBoundPolygon(), otherArea.outerBoundPolygon(), heightTolerance);
 }
 

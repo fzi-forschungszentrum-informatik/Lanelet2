@@ -394,8 +394,8 @@ inline BasicPolygon2d to2D<BasicPolygon3d>(const BasicPolygon3d& primitive) {
   return p2d;
 }
 
-template <typename PolygonT>
-std::enable_if_t<traits::isPolygonT<PolygonT>(), BasicPolygon2d> toBasicPolygon2d(const PolygonT& t) {
+template <typename PolygonT, std::enable_if_t<traits::isPolygonT<PolygonT>(), int> = 0>
+BasicPolygon2d toBasicPolygon2d(const PolygonT& t) {
   return traits::to2D(t).basicPolygon();
 }
 
@@ -411,8 +411,8 @@ inline BasicPolygon2d toBasicPolygon2d<BasicPolygon3d>(const BasicPolygon3d& t) 
 
 inline BasicPolygon2d toBasicPolygon2d(BasicPolygon2d&& t) { return std::move(t); }
 
-template <typename PolygonT>
-std::enable_if_t<traits::isPolygonT<PolygonT>(), BasicPolygon3d> toBasicPolygon3d(const PolygonT& t) {
+template <typename PolygonT, std::enable_if_t<traits::isPolygonT<PolygonT>(), int> = 0>
+BasicPolygon3d toBasicPolygon3d(const PolygonT& t) {
   return traits::to3D(t).basicPolygon();
 }
 

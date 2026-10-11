@@ -65,7 +65,7 @@ void replaceIterator(Vector& v, const Iterator& replace, const Iterator& by) {
  */
 template <typename ValueT, typename PairArrayT, PairArrayT PairArray>
 class HybridMap {
-  using Array = detail::ArrayView<PairArrayT, PairArray>;
+  using Array = lanelet::detail::ArrayView<PairArrayT, PairArray>;
 
  public:
   using Map = std::map<std::string, ValueT>;
@@ -82,19 +82,19 @@ class HybridMap {
   HybridMap() noexcept = default;
   HybridMap(HybridMap&& rhs) noexcept : m_(std::move(rhs.m_)), v_{std::move(rhs.v_)} {
     // move invalidates no iterators except end
-    detail::replaceIterator(v_, rhs.m_.end(), m_.end());
+    lanelet::detail::replaceIterator(v_, rhs.m_.end(), m_.end());
   }
   HybridMap& operator=(HybridMap&& rhs) noexcept {
     m_ = std::move(rhs.m_);
     v_ = std::move(rhs.v_);
     // move invalidates no iterators except end
-    detail::replaceIterator(v_, rhs.m_.end(), m_.end());
+    lanelet::detail::replaceIterator(v_, rhs.m_.end(), m_.end());
     return *this;
   }
-  HybridMap(const HybridMap& rhs) : m_{rhs.m_}, v_{detail::copyIterators(rhs.v_, rhs.m_, m_)} {}
+  HybridMap(const HybridMap& rhs) : m_{rhs.m_}, v_{lanelet::detail::copyIterators(rhs.v_, rhs.m_, m_)} {}
   HybridMap& operator=(const HybridMap& rhs) {
     m_ = rhs.m_;
-    v_ = detail::copyIterators(rhs.v_, rhs.m_, m_);
+    v_ = lanelet::detail::copyIterators(rhs.v_, rhs.m_, m_);
     return *this;
   }
   HybridMap(const std::initializer_list<std::pair<const std::string, ValueT>>& list) {

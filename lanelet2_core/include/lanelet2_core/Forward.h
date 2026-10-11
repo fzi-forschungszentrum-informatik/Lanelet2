@@ -199,6 +199,9 @@ using Id = int64_t;
 constexpr Id InvalId = 0;  //!< indicates a primitive that is not part of a map
 using Ids = std::vector<Id>;
 
+constexpr double Pi = 3.14159265358979323846;
+constexpr double PiQuarter = Pi / 4.;
+
 // Velocity definitions
 namespace units {
 using MPS = boost::units::unit<boost::units::velocity_dimension, boost::units::si::system>;

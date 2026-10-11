@@ -51,12 +51,12 @@ MapAndObject getSampleMapAndObject() {
   // create an object
   matching::ObjectWithCovariance2d obj;
   obj.pose.translation() = map->pointLayer.get(41656).basicPoint2d();
-  obj.pose.linear() = Eigen::Rotation2D<double>(150. / 180. * M_PI).matrix();
+  obj.pose.linear() = Eigen::Rotation2D<double>(150. / 180. * Pi).matrix();
   obj.absoluteHull = absoluteHull(
       matching::Hull2d{BasicPoint2d{-1, -0.9}, BasicPoint2d{2, -0.9}, BasicPoint2d{2, 0.9}, BasicPoint2d{1, 0.9}},
       obj.pose);
   obj.positionCovariance = matching::PositionCovariance2d::Identity() * 2.;
-  obj.vonMisesKappa = 1. / (10. / 180. * M_PI);  // covariance of 10 degrees
+  obj.vonMisesKappa = 1. / (10. / 180. * Pi);  // covariance of 10 degrees
 
   return MapAndObject{map, obj};
 }

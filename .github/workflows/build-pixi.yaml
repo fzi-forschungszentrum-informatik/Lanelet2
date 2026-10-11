@@ -1,0 +1,31 @@
+name: pixi
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build-${{ matrix.rosdistro }}-${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        rosdistro: [noetic, humble, jazzy, kilted, rolling]
+        runner: [ubuntu-latest, macos-15, windows-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install pixi
+        uses: prefix-dev/setup-pixi@v0.10.0
+        with:
+          pixi-version: v0.72.0
+          run-install: false
+
+      - name: Build workspace
+        run: pixi install --environment ${{ matrix.rosdistro }}

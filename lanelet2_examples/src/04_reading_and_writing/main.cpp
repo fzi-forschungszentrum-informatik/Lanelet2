@@ -15,12 +15,20 @@ namespace {
 std::string exampleMapPath = std::string(PKG_DIR) + "/../lanelet2_maps/res/mapping_example.osm";
 
 std::string tempfile(const std::string& name) {
+#ifdef _WIN32
+  char tmpName[L_tmpnam_s];
+  if (tmpnam_s(tmpName, sizeof(tmpName)) != 0) {
+    throw lanelet::IOError("Failed to open a temporary file for writing");
+  }
+  return std::string(tmpName) + '_' + name;
+#else
   char tmpDir[] = "/tmp/lanelet2_example_XXXXXX";
   auto* file = mkdtemp(tmpDir);
   if (file == nullptr) {
     throw lanelet::IOError("Failed to open a temporary file for writing");
   }
   return std::string(file) + '/' + name;
+#endif
 }
 }  // namespace
 

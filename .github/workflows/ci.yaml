@@ -19,16 +19,16 @@ jobs:
     steps:
       - name: Setup docker buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v4
 
       - name: Setup docker cache
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: /tmp/.docker-cache
           key: ${{runner.os}}-docker-humble
 
       - name: Build dependencies
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           builder: ${{ steps.buildx.outputs.name }}
           tags: lanelet2_src
@@ -53,16 +53,16 @@ jobs:
     steps:
       - name: Setup docker buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v4
 
       - name: Setup docker cache
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: /tmp/.docker-cache
           key: ${{runner.os}}-docker-humble
 
       - name: Build dependencies
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           builder: ${{ steps.buildx.outputs.name }}
           tags: lanelet2_src
@@ -102,20 +102,20 @@ jobs:
       - name: Delete unnecessary tools folder
         run: rm -rf /opt/hostedtoolcache
       
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         
       - name: Setup docker buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v4
 
       - name: Setup docker cache
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: /tmp/.docker-cache
           key: ${{runner.os}}-docker-${{ matrix.rosdistro }}
 
       - name: Build dependencies
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           builder: ${{ steps.buildx.outputs.name }}
           tags: lanelet2_base:${{ matrix.rosdistro }}
@@ -129,7 +129,7 @@ jobs:
           target: lanelet2_deps
 
       - name: Build Lanelet2
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         if: ${{ matrix.rosdistro == 'noetic' }}
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -144,7 +144,7 @@ jobs:
           target: lanelet2
 
       - name: Build Lanelet2 (skip lcov)
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         if: ${{ matrix.rosdistro == 'jazzy' || matrix.rosdistro == 'humble' || matrix.rosdistro == 'galactic' }}
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -175,14 +175,19 @@ jobs:
           docker run -i --name lanelet2_test_${{ matrix.rosdistro }}_lcov lanelet2_${{ matrix.rosdistro }}_post_run /home/developer/workspace/src/lanelet2/.github/lcov_merge.bash;
           mkdir -p ./lcov;
           docker cp lanelet2_test_${{ matrix.rosdistro }}_lcov:$(docker inspect --format='{{.Config.WorkingDir}}' lanelet2_test_${{ matrix.rosdistro }}_lcov)/lcov/full_coverage.lcov ./lcov/full_coverage.lcov;
+          sed -i "s|/home/developer/workspace/src/lanelet2|${GITHUB_WORKSPACE}|g" ./lcov/full_coverage.lcov;
 
       - name: Cleanup Docker Container
         run: |
           docker rm -f lanelet2_test_${{ matrix.rosdistro }};
           docker rm -f lanelet2_test_${{ matrix.rosdistro }}_lcov;
 
+      - name: Install lcov
+        if: ${{ matrix.rosdistro == 'noetic' }}
+        run: sudo apt-get update && sudo apt-get install --yes lcov
+
       - name: Report code coverage
-        uses: immel-f/github-actions-report-lcov@v0.1.13
+        uses: zgosalvez/github-actions-report-lcov@v7.1.0
         if: ${{ matrix.rosdistro == 'noetic' }}
         with:
           coverage-files: ./lcov/full_coverage.lcov
@@ -220,10 +225,10 @@ jobs:
     steps:
       - name: Setup docker buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v4
 
       - name: Build dependencies
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           builder: ${{ steps.buildx.outputs.name }}
           file: .github/conan_dockerfile/Dockerfile

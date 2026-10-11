@@ -1,0 +1,96 @@
+[workspace]
+channels = [
+  "https://prefix.dev/pixi-build-backends",
+  "https://prefix.dev/conda-forge",
+]
+name = "lanelet2"
+platforms = ["linux-64", "osx-arm64", "win-64"]
+preview = ["pixi-build"]
+
+[feature.noetic]
+channels = ["robostack-noetic"]
+
+[feature.noetic.dependencies]
+ros-noetic-lanelet2 = { path = "lanelet2/package.xml" }
+ros-noetic-lanelet2-core = { path = "lanelet2_core/package.xml" }
+ros-noetic-lanelet2-examples = { path = "lanelet2_examples/package.xml" }
+ros-noetic-lanelet2-io = { path = "lanelet2_io/package.xml" }
+ros-noetic-lanelet2-maps = { path = "lanelet2_maps/package.xml" }
+ros-noetic-lanelet2-matching = { path = "lanelet2_matching/package.xml" }
+ros-noetic-lanelet2-projection = { path = "lanelet2_projection/package.xml" }
+ros-noetic-lanelet2-python = { path = "lanelet2_python/package.xml" }
+ros-noetic-lanelet2-routing = { path = "lanelet2_routing/package.xml" }
+ros-noetic-lanelet2-traffic-rules = { path = "lanelet2_traffic_rules/package.xml" }
+ros-noetic-lanelet2-validation = { path = "lanelet2_validation/package.xml" }
+
+[feature.humble]
+channels = ["https://prefix.dev/robostack-humble"]
+
+[feature.humble.dependencies]
+ros-humble-lanelet2 = { path = "lanelet2/package.xml" }
+ros-humble-lanelet2-core = { path = "lanelet2_core/package.xml" }
+ros-humble-lanelet2-examples = { path = "lanelet2_examples/package.xml" }
+ros-humble-lanelet2-io = { path = "lanelet2_io/package.xml" }
+ros-humble-lanelet2-maps = { path = "lanelet2_maps/package.xml" }
+ros-humble-lanelet2-matching = { path = "lanelet2_matching/package.xml" }
+ros-humble-lanelet2-projection = { path = "lanelet2_projection/package.xml" }
+ros-humble-lanelet2-python = { path = "lanelet2_python/package.xml" }
+ros-humble-lanelet2-routing = { path = "lanelet2_routing/package.xml" }
+ros-humble-lanelet2-traffic-rules = { path = "lanelet2_traffic_rules/package.xml" }
+ros-humble-lanelet2-validation = { path = "lanelet2_validation/package.xml" }
+
+[feature.jazzy]
+channels = ["https://prefix.dev/robostack-jazzy"]
+
+[feature.jazzy.dependencies]
+ros-jazzy-lanelet2 = { path = "lanelet2/package.xml" }
+ros-jazzy-lanelet2-core = { path = "lanelet2_core/package.xml" }
+ros-jazzy-lanelet2-examples = { path = "lanelet2_examples/package.xml" }
+ros-jazzy-lanelet2-io = { path = "lanelet2_io/package.xml" }
+ros-jazzy-lanelet2-maps = { path = "lanelet2_maps/package.xml" }
+ros-jazzy-lanelet2-matching = { path = "lanelet2_matching/package.xml" }
+ros-jazzy-lanelet2-projection = { path = "lanelet2_projection/package.xml" }
+ros-jazzy-lanelet2-python = { path = "lanelet2_python/package.xml" }
+ros-jazzy-lanelet2-routing = { path = "lanelet2_routing/package.xml" }
+ros-jazzy-lanelet2-traffic-rules = { path = "lanelet2_traffic_rules/package.xml" }
+ros-jazzy-lanelet2-validation = { path = "lanelet2_validation/package.xml" }
+
+[feature.kilted]
+channels = ["https://prefix.dev/robostack-kilted"]
+
+[feature.kilted.dependencies]
+ros-kilted-lanelet2 = { path = "lanelet2/package.xml" }
+ros-kilted-lanelet2-core = { path = "lanelet2_core/package.xml" }
+ros-kilted-lanelet2-examples = { path = "lanelet2_examples/package.xml" }
+ros-kilted-lanelet2-io = { path = "lanelet2_io/package.xml" }
+ros-kilted-lanelet2-maps = { path = "lanelet2_maps/package.xml" }
+ros-kilted-lanelet2-matching = { path = "lanelet2_matching/package.xml" }
+ros-kilted-lanelet2-projection = { path = "lanelet2_projection/package.xml" }
+ros-kilted-lanelet2-python = { path = "lanelet2_python/package.xml" }
+ros-kilted-lanelet2-routing = { path = "lanelet2_routing/package.xml" }
+ros-kilted-lanelet2-traffic-rules = { path = "lanelet2_traffic_rules/package.xml" }
+ros-kilted-lanelet2-validation = { path = "lanelet2_validation/package.xml" }
+
+[feature.rolling]
+channels = ["https://prefix.dev/robostack-rolling"]
+
+[feature.rolling.dependencies]
+ros-rolling-lanelet2 = { path = "lanelet2/package.xml" }
+ros-rolling-lanelet2-core = { path = "lanelet2_core/package.xml" }
+ros-rolling-lanelet2-examples = { path = "lanelet2_examples/package.xml" }
+ros-rolling-lanelet2-io = { path = "lanelet2_io/package.xml" }
+ros-rolling-lanelet2-maps = { path = "lanelet2_maps/package.xml" }
+ros-rolling-lanelet2-matching = { path = "lanelet2_matching/package.xml" }
+ros-rolling-lanelet2-projection = { path = "lanelet2_projection/package.xml" }
+ros-rolling-lanelet2-python = { path = "lanelet2_python/package.xml" }
+ros-rolling-lanelet2-routing = { path = "lanelet2_routing/package.xml" }
+ros-rolling-lanelet2-traffic-rules = { path = "lanelet2_traffic_rules/package.xml" }
+ros-rolling-lanelet2-validation = { path = "lanelet2_validation/package.xml" }
+
+[environments]
+default = { features = ["jazzy"], solve-group = "jazzy" }
+noetic = ["noetic"]
+humble = ["humble"]
+jazzy = { features = ["jazzy"], solve-group = "jazzy" }
+kilted = ["kilted"]
+rolling = ["rolling"]

@@ -7,8 +7,15 @@ project(lanelet2_python)
 ## Find packages ##
 ###################
 find_package(mrt_cmake_modules REQUIRED)
+if(WIN32 AND ROS_VERSION EQUAL 1)
+  set(MRT_CMAKE_ENV ${CATKIN_ENV})
+endif()
 include(UseMrtStdCompilerFlags)
 include(GatherDeps)
+
+if(MSVC)
+  add_compile_options(/bigobj)
+endif()
 
 # You can add a custom.cmake in order to add special handling for this package. E.g. you can do:
 # list(REMOVE_ITEM DEPENDEND_PACKAGES <package name 1> <package name 2> ...)
@@ -66,7 +73,7 @@ mrt_install(PROGRAMS scripts FILES res data ${PROJECT_INSTALL_FILES})
 ## Testing ##
 #############
 # Add test targets for cpp and python tests
-if (CATKIN_ENABLE_TESTING)
+if (CATKIN_ENABLE_TESTING AND NOT CATKIN_SKIP_TESTING)
     mrt_add_tests(test)
     mrt_add_nosetests(test)
 endif()
