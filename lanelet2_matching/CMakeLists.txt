@@ -3,6 +3,10 @@ set(MRT_PKG_VERSION 4.0.0)
 cmake_minimum_required(VERSION 3.5.1)
 project(lanelet2_matching)
 
+if(WIN32 AND MSVC)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 ###################
 ## Find packages ##
 ###################
@@ -50,6 +54,10 @@ mrt_glob_files(PROJECT_SOURCE_FILES_SRC "src/*.cpp" "src/*.cu")
 mrt_add_library(${PROJECT_NAME}
     INCLUDES ${PROJECT_HEADER_FILES_INC} ${PROJECT_SOURCE_FILES_INC}
     SOURCES ${PROJECT_SOURCE_FILES_SRC}
+    )
+
+target_compile_definitions(${PROJECT_NAME}
+    PUBLIC "$<$<CXX_COMPILER_ID:MSVC>:_USE_MATH_DEFINES>"
     )
 
 #############
