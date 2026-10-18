@@ -4,7 +4,12 @@
 #include <lanelet2_io/io_handlers/Writer.h>
 #include <lanelet2_projection/UTM.h>
 
+#ifdef _WIN32
+#include <direct.h>
+#include <io.h>
+#else
 #include <cstdio>
+#endif
 
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
@@ -15,12 +20,23 @@ namespace {
 std::string exampleMapPath = std::string(PKG_DIR) + "/../lanelet2_maps/res/mapping_example.osm";
 
 std::string tempfile(const std::string& name) {
+#ifdef _WIN32
+  char tmpDir[] = "C:\\tmp\\lanelet2_example_XXXXXX";
+  if (_mktemp_s(tmpDir, sizeof(tmpDir)) != 0) {
+    throw std::runtime_error("Failed to create a unique temporary directory name");
+  }
+  if (_mkdir(tmpDir) != 0) {
+    throw std::runtime_error("Failed to create temporary directory");
+  }
+  return std::string(tmpDir) + '\\' + name;
+#else
   char tmpDir[] = "/tmp/lanelet2_example_XXXXXX";
   auto* file = mkdtemp(tmpDir);
   if (file == nullptr) {
     throw lanelet::IOError("Failed to open a temporary file for writing");
   }
   return std::string(file) + '/' + name;
+#endif
 }
 }  // namespace
 
