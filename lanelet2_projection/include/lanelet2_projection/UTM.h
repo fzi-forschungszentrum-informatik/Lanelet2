@@ -12,6 +12,13 @@ class UtmProjector : public Projector {
 
   GPSPoint reverse(const BasicPoint3d& utm) const override;
 
+  //! UTM zone of the origin, all points are projected into this zone
+  int zone() const { return zone_; }
+  //! true if the origin is in the northern hemisphere
+  bool isInNorthernHemisphere() const { return isInNorthernHemisphere_; }
+  //! UTM coordinates of the origin that are subtracted from the projected points ((0, 0) if useOffset is false)
+  BasicPoint2d offset() const { return {xOffset_, yOffset_}; }
+
  private:
   int zone_{};
   bool isInNorthernHemisphere_{true}, useOffset_{}, throwInPaddingArea_{};

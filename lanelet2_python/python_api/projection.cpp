@@ -21,5 +21,10 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
          bases<Projector>>("LocalCartesianProjector", init<Origin>("origin"));
   class_<projection::UtmProjector, std::shared_ptr<projection::UtmProjector>,  // NOLINT
          bases<Projector>>("UtmProjector", init<Origin>("origin"))
-      .def(init<Origin, bool, bool>("UtmProjector(origin, useOffset, throwInPaddingArea)"));
+      .def(init<Origin, bool, bool>("UtmProjector(origin, useOffset, throwInPaddingArea)"))
+      .def("zone", &projection::UtmProjector::zone, "UTM zone of the origin")
+      .def("isInNorthernHemisphere", &projection::UtmProjector::isInNorthernHemisphere,
+           "True if the origin is in the northern hemisphere")
+      .def("offset", &projection::UtmProjector::offset,
+           "UTM coordinates of the origin subtracted from projected points ((0, 0) if useOffset is false)");
 }

@@ -38,6 +38,12 @@ class MatchingApiTestCase(unittest.TestCase):
         self.assertEqual(round(gps_point.lon, 5), self.origin_lon)
         self.assertEqual(round(gps_point.ele, 5), self.origin_ele)
 
+        self.assertEqual(utm_projector.zone(), 32)
+        self.assertTrue(utm_projector.isInNorthernHemisphere())
+        offset = utm_projector.offset()
+        self.assertAlmostEqual(offset.x, 457386.382, places=3)
+        self.assertAlmostEqual(offset.y, 5429219.051, places=3)
+
     def test_LocalCartesianProjector(self):
         # NOTE: the projected plane is tangential to the WGS84 ellipsoid
         # but it is at the given elevation above the ellipsoid

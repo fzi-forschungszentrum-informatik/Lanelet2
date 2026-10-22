@@ -45,6 +45,22 @@ TEST_F(UTMProjectionTest, TestReverse) {  // NOLINT
   ASSERT_NEAR(gpsPoint.lon, originLon, 0.00001);
 }
 
+TEST_F(UTMProjectionTest, TestZoneAndOffset) {  // NOLINT
+  UtmProjector projector(origin);
+  ASSERT_EQ(projector.zone(), 32);
+  ASSERT_TRUE(projector.isInNorthernHemisphere());
+  ASSERT_NEAR(projector.offset().x(), originX, 0.001);
+  ASSERT_NEAR(projector.offset().y(), originY, 0.001);
+
+  UtmProjector projectorNoOffset(origin, false);
+  ASSERT_EQ(projectorNoOffset.offset().x(), 0.);
+  ASSERT_EQ(projectorNoOffset.offset().y(), 0.);
+
+  UtmProjector southProjector(Origin({-33.8688, 151.2093}));  // Sydney, zone 56 south
+  ASSERT_EQ(southProjector.zone(), 56);
+  ASSERT_FALSE(southProjector.isInNorthernHemisphere());
+}
+
 TEST_F(UTMProjectionTest, TestForwardOutOfHemisphere) {  // NOLINT
   // origin is in northern hemisphere
   double latTest = -originLat;                                       // southern hemisphere
