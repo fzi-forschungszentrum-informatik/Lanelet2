@@ -78,6 +78,18 @@ TEST_F(RegulatoryElementTest, findWorks) {  // NOLINT
   EXPECT_FALSE(!!regelem->find<ConstPoint3d>(ll1.id()));
 }
 
+TEST_F(RegulatoryElementTest, removeWorks) {  // NOLINT
+  auto regelem = getGenericRegelem();
+  EXPECT_FALSE(regelem->empty());
+  EXPECT_TRUE(utils::contains(regelem->roles(), RoleNameString::Cancels));
+  auto cancelLines = regelem->getParameters<ConstLineString3d>(RoleNameString::Cancels);
+  EXPECT_TRUE(cancelLines.size() == 1);
+  EXPECT_TRUE(cancelLines[0] == ls1);
+  regelem->remove<ConstLineString3d>(ls1.id());
+  EXPECT_TRUE(regelem->getParameters<ConstLineString3d>(RoleNameString::Cancels).empty());
+  EXPECT_FALSE(regelem->find<ConstLineString3d>(ls1.id()));
+}
+
 TEST_F(RegulatoryElementTest, boundingBox2dWorks) {  // NOLINT
   auto regelem = getGenericRegelem();
   auto bbox = geometry::boundingBox2d(regelem);

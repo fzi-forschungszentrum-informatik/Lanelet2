@@ -435,6 +435,70 @@ class LaneletMap : public LaneletMapLayers {
    * sure that the id has not already been for a different element.
    */
   void add(Point3d point);
+
+  /**
+   * @brief remove the regulatory element from the map, as well as
+   * its ownership in the lanelet and area.
+   */
+  void remove(const RegulatoryElementConstPtr& regElem);
+
+  /**
+   * @brief remove the regulatory element from the map if unused.
+   * @return true if the element was removed, false otherwise
+   *
+   * An regulatory element is unused when own by no lanelets nor areas
+   */
+  bool removeIfUnused(const RegulatoryElementConstPtr& regElem);
+
+  /**
+   * @brief remove the lanelet from the map if unused.
+   * @return true if the element was removed, false otherwise
+   *
+   * A lanelet is always unused so removal cannot fail
+   * Note: the lanelet may still be referenced by a regulatory element as parameters
+   * See RegulatoryElement.remove<ConstLanelet>(Id) to remove the references
+   */
+  bool removeIfUnused(const ConstLanelet& lanelet);
+
+  /**
+   * @brief remove the area from the map if unused.
+   * @return true if the element was removed, false otherwise
+   *
+   * An area is always unused so removal cannot fail
+   * Note: the area may still be referenced by a regulatory element as parameters.
+   * See RegulatoryElement.remove<ConstArea>(Id) to remove the references
+   */
+  bool removeIfUnused(const ConstArea& area);
+
+  /**
+   * @brief remove the polygon from the map if unused.
+   * @return true if the element was removed, false otherwise
+   *
+   * A polygon is always unused so removal cannot fail
+   * Note: the polygon may still be referenced by a regulatory element as parameters
+   * See RegulatoryElement.remove<ConstPolygon3d>(Id) to remove the references
+   */
+  bool removeIfUnused(const ConstPolygon3d& polygon);
+
+  /**
+   * @brief remove the lineString from the map if unused.
+   * @return true if the element was removed, false otherwise
+   *
+   * A lineString is unused when not owned by any lanelet nor area (inverted included)
+   * Note: the lineString may still be referenced by a regulatory element as parameters
+   * See RegulatoryElement.remove<ConstLineString3d>(Id) to remove the references
+   */
+  bool removeIfUnused(const ConstLineString3d& lineString);
+
+  /**
+   * @brief remove the point from the map if unused.
+   * @return true if the element was removed, false otherwise
+   *
+   * A point is unused when not owned by any lineString nor polygon
+   * Note: the lineString may still be referenced by a regulatory element as parameters
+   * See RegulatoryElement.remove<ConstPoint3d>(Id) to remove the references
+   */
+  bool removeIfUnused(const ConstPoint3d& point);
 };
 
 /**
