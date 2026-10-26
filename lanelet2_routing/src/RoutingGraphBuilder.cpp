@@ -4,6 +4,8 @@
 #include <lanelet2_core/geometry/Area.h>
 #include <lanelet2_core/geometry/Lanelet.h>
 
+#include <set>
+#include <string>
 #include <unordered_map>
 
 #include "lanelet2_routing/Exceptions.h"
@@ -95,6 +97,9 @@ RoutingGraphUPtr RoutingGraphBuilder::build(const LaneletMapLayers& laneletMapLa
   auto passableLanelets = getPassableLanelets(laneletMapLayers.laneletLayer, trafficRules_);
   auto passableAreas = getPassableAreas(laneletMapLayers.areaLayer, trafficRules_);
   auto passableMap = utils::createConstSubmap(passableLanelets, passableAreas);
+  if (allowLaneChangeAcrossBicycleLane()) {
+    indexNonPassableBicycleLanes(laneletMapLayers.laneletLayer, passableLanelets);
+  }
   appendBidirectionalLanelets(passableLanelets);
   addLaneletsToGraph(passableLanelets);
   addAreasToGraph(passableAreas);
@@ -202,12 +207,20 @@ void RoutingGraphBuilder::addSidewayEdge(LaneChangeLaneletsCollector& laneChange
   };
   auto sideOf = pointsToLanelets_.equal_range(orderedIdPair(bound.front().id(), bound.back().id()));
   for (auto it = sideOf.first; it != sideOf.second; ++it) {
-    if (ll != it->second && !hasEdge(ll, it->second) && directlySideway(it->second)) {
+    if (ll == it->second || hasEdge(ll, it->second) || !directlySideway(it->second)) {
+      continue;
+    }
+    if (isInGraph(it->second)) {
       if (trafficRules_.canChangeLane(ll, it->second)) {
         // we process lane changes later, when we know all lanelets that can participate in lane change
         laneChangeLanelets.add(ll, it->second);
       } else {
         assignCosts(ll, it->second, relation);
+      }
+    } else if (isBikeLane(it->second)) {
+      auto beyond = findPassableLaneletBeyondBicycleLane(ll, it->second, bound, relation);
+      if (beyond && !hasEdge(ll, *beyond)) {
+        laneChangeLanelets.add(ll, *beyond);
       }
     }
   }
@@ -321,6 +334,58 @@ Optional<double> RoutingGraphBuilder::participantHeight() const {
   }
   return {};
 }
+
+bool RoutingGraphBuilder::allowLaneChangeAcrossBicycleLane() const {
+  auto flag = config_.find(RoutingGraph::AllowLaneChangeAcrossBicycleLane);
+  if (flag != config_.end()) {
+    return flag->second.asBool().get_value_or(false);
+  }
+  return false;
+}
+
+void RoutingGraphBuilder::indexNonPassableBicycleLanes(const LaneletLayer& allLanelets,
+                                                       const ConstLanelets& passableLanelets) {
+  std::set<Id> passableIds;
+  for (const auto& ll : passableLanelets) {
+    passableIds.insert(ll.id());
+  }
+  for (const auto& ll : allLanelets) {
+    if (passableIds.count(ll.id()) == 0 && isBikeLane(ll)) {
+      addPointsToSearchIndex(ll);
+    }
+  }
+}
+
+Optional<ConstLanelet> RoutingGraphBuilder::findPassableLaneletBeyondBicycleLane(
+    const ConstLanelet& from, const ConstLanelet& bikeLane, const ConstLineString3d& sharedBound,
+    const RelationType& relation) const {
+  const bool toLeft = relation == RelationType::AdjacentLeft;
+  const auto sharedKey = orderedIdPair(sharedBound.front().id(), sharedBound.back().id());
+  const auto leftKey = orderedIdPair(bikeLane.leftBound().front().id(), bikeLane.leftBound().back().id());
+  const ConstLineString3d farBound = (leftKey == sharedKey) ? bikeLane.rightBound() : bikeLane.leftBound();
+  if (!trafficRules_.canCrossBoundary(sharedBound, toLeft) || !trafficRules_.canCrossBoundary(farBound, toLeft)) {
+    return {};
+  }
+  auto candidates = pointsToLanelets_.equal_range(orderedIdPair(farBound.front().id(), farBound.back().id()));
+  for (auto it = candidates.first; it != candidates.second; ++it) {
+    const ConstLanelet& candidate = it->second;
+    if (candidate == from || candidate == bikeLane) {
+      continue;
+    }
+    const bool onFarSide =
+        toLeft ? geometry::leftOf(candidate, bikeLane) : geometry::rightOf(candidate, bikeLane);
+    if (onFarSide && isInGraph(candidate)) {
+      return candidate;
+    }
+  }
+  return {};
+}
+
+bool RoutingGraphBuilder::isBikeLane(const ConstLanelet& ll) {
+  return ll.attributeOr(AttributeName::Subtype, std::string()) == AttributeValueString::BicycleLane;
+}
+
+bool RoutingGraphBuilder::isInGraph(const ConstLanelet& ll) const { return static_cast<bool>(graph_->getVertex(ll)); }
 
 void RoutingGraphBuilder::addPointsToSearchIndex(const ConstLanelet& ll) {
   using PointLaneletPair = std::pair<IdPair, ConstLanelet>;

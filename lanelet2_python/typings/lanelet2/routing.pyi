@@ -1,6 +1,8 @@
-from typing import Any, Iterator, Optional, Union, Callable, List, overload
+from typing import Any, Dict, Iterator, Optional, Union, Callable, List, overload
 import lanelet2.core
 import lanelet2.traffic_rules
+
+Configuration = Dict[str, str]
 
 
 class RoutingCost:
@@ -182,11 +184,17 @@ class RoutingGraph:
     Main class of the routing module that holds routing information and can be queried.
     """
 
-    def __init__(self, lanelet_map: Union[lanelet2.core.LaneletMap, lanelet2.core.LaneletSubmap], traffic_rules: lanelet2.traffic_rules.TrafficRules, routing_costs: Optional[List['RoutingCost']] = None) -> None:
+    def __init__(self, lanelet_map: Union[lanelet2.core.LaneletMap, lanelet2.core.LaneletSubmap], traffic_rules: lanelet2.traffic_rules.TrafficRules, routing_costs: Optional[List['RoutingCost']] = None, configuration: Optional[Configuration] = None) -> None:
         """
         Initialize RoutingGraph with a lanelet map, traffic rules, and optional routing costs.
 
         If no routing costs are given, RoutingCostDistance and RoutingCostTravelTime will be used.
+
+        'configuration' is a dict of string key/value pairs. Known keys:
+          - 'participant_height': the height of the participant, used to filter conflicting lanelets/areas by height
+          - 'allow_lane_change_across_bicycle_lane': set to 'true' to allow a vehicle lane change relation to be
+            created across a non-passable bicycle lane whose bounds are both crossable (e.g. dashed bike markings).
+            Disabled by default.
         """
         ...
 

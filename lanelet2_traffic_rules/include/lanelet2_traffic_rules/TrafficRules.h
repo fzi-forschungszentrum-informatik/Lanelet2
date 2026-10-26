@@ -61,6 +61,18 @@ class TrafficRules {  // NOLINT
    */
   virtual bool canChangeLane(const ConstLanelet& from, const ConstLanelet& to) const = 0;
 
+  /**
+   * @brief determines if this participant may cross a lane boundary
+   *
+   * Unlike canChangeLane, this does not require two passable, adjacent lanelets. It only evaluates the boundary
+   * marking (and lane_change* overrides). towardsLeft is true when the participant is moving to its left.
+   *
+   * This has a default implementation (returning false) for backwards compatibility with existing TrafficRules
+   * implementations that predate this function. Override it to support routing across otherwise non-passable
+   * lanelets (e.g. vehicle lane changes across a bicycle lane).
+   */
+  virtual bool canCrossBoundary(const ConstLineString3d& boundary, bool towardsLeft) const;
+
   //! returns speed limit on this lanelet.
   virtual SpeedLimitInformation speedLimit(const ConstLanelet& lanelet) const = 0;
 

@@ -72,6 +72,9 @@ class RoutingGraph {
   using Configuration = std::map<std::string, Attribute>;  ///< Used to provide a configuration
   //! Defined configuration attributes
   static constexpr const char ParticipantHeight[] = "participant_height";
+  //! Set to true to allow a lane change relation to be created across a non-passable bicycle lane whose bounds are
+  //! both crossable (e.g. dashed bike markings). Disabled by default to keep existing routing graphs unchanged.
+  static constexpr const char AllowLaneChangeAcrossBicycleLane[] = "allow_lane_change_across_bicycle_lane";
 
   /** @brief Main constructor with optional configuration.
    *  @param laneletMap Map that should be used to build the graph

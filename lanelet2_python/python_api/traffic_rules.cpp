@@ -74,6 +74,8 @@ BOOST_PYTHON_MODULE(PYTHON_API_MODULE_NAME) {  // NOLINT
       .def("canPass", canPassFromToWrapper<ConstArea, ConstLanelet>)
       .def("canChangeLane", &TrafficRules::canChangeLane,
            "determines if a lane change can be made between two lanelets")
+      .def("canCrossBoundary", &TrafficRules::canCrossBoundary,
+           "determines if this participant may cross a lane boundary (towardsLeft=true means a change to the left)")
       .def("speedLimit", speedLimitWrapper<ConstLanelet>, "get speed limit of this lanelet")
       .def("speedLimit", speedLimitWrapper<ConstArea>, "get speed limit of this lanelet")
       .def("isOneWay", isOneWayWrapper, "returns whether a lanelet can be driven in one direction only")

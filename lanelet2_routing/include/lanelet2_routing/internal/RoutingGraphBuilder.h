@@ -40,8 +40,22 @@ class RoutingGraphBuilder {
   void addAreaEdge(const ConstArea& area, const LaneletLayer& passableLanelets);
   void addAreaEdge(const ConstArea& area, const AreaLayer& passableAreas);
 
+  //! Index non-passable bicycle_lane geometry so addSidewayEdge can look past it
+  void indexNonPassableBicycleLanes(const LaneletLayer& allLanelets, const ConstLanelets& passableLanelets);
+
+  //! One-hop lookup of a passable neighbor on the far side of a bicycle lane
+  Optional<ConstLanelet> findPassableLaneletBeyondBicycleLane(const ConstLanelet& from, const ConstLanelet& bikeLane,
+                                                              const ConstLineString3d& sharedBound,
+                                                              const RelationType& relation) const;
+
+  static bool isBikeLane(const ConstLanelet& ll);
+  bool isInGraph(const ConstLanelet& ll) const;
+
   //! Helper function to read the participant height from the configuration
   Optional<double> participantHeight() const;
+
+  //! Helper function to read whether lane changes across a bicycle lane are enabled from the configuration
+  bool allowLaneChangeAcrossBicycleLane() const;
 
   //! Adds the first and last points of a lanelet to the search index
   void addPointsToSearchIndex(const ConstLanelet& ll);
