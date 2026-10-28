@@ -290,6 +290,7 @@ struct AttributeValueString {
   static constexpr const char BikeMarking[] = "bike_marking";
   static constexpr const char Keepout[] = "keepout";
   static constexpr const char StopLine[] = "stop_line";
+  static constexpr const char YieldLine[] = "yield_line";
   static constexpr const char Virtual[] = "virtual";
   static constexpr const char Visualization[] = "visualization";
   static constexpr const char ZigZag[] = "zig-zag";

@@ -174,6 +174,7 @@ constexpr const char AttributeValueString::PedestrianMarking[];
 constexpr const char AttributeValueString::BikeMarking[];
 constexpr const char AttributeValueString::Keepout[];
 constexpr const char AttributeValueString::StopLine[];
+constexpr const char AttributeValueString::YieldLine[];
 constexpr const char AttributeValueString::Virtual[];
 constexpr const char AttributeValueString::Visualization[];
 constexpr const char AttributeValueString::ZigZag[];
